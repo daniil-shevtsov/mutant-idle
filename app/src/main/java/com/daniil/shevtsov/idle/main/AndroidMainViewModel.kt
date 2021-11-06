@@ -23,7 +23,7 @@ class AndroidMainViewModel @Inject constructor(
             .map { resource ->
                 ResourceModelMapper.map(
                     resource = resource,
-                    name = "Mass",
+                    name = "Blood",
                 )
             }
             .onEach { resource ->

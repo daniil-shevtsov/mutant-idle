@@ -36,7 +36,7 @@ fun Upgrade(upgrade: UpgradeModel) {
     }
     val priceText = when (upgrade.status) {
         UpgradeStatusModel.Bought -> "Bought"
-        else -> "100"
+        else -> upgrade.price.value
     }
     Column(
         modifier = Modifier

@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.main.ui
 
 import com.daniil.shevtsov.idle.main.ui.resource.ResourceModel
+import com.daniil.shevtsov.idle.main.ui.upgrade.PriceModel
 import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeModel
 import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeStatusModel
 
@@ -23,6 +24,7 @@ internal fun upgradePreview(
     id = id,
     title = title,
     subtitle = subtitle,
+    price = PriceModel("75"),
     status = status,
 )
 
