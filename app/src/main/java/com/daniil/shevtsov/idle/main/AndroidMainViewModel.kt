@@ -17,7 +17,12 @@ class AndroidMainViewModel @Inject constructor(
 
     init {
         observeResource()
-            .map(ResourceModelMapper::map)
+            .map { resource ->
+                ResourceModelMapper.map(
+                    resource = resource,
+                    name = "Mass",
+                )
+            }
             .onEach { resource ->
                 _state.value = MainViewState.Success(
                     resource = resource

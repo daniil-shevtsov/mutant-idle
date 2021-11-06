@@ -4,9 +4,13 @@ import com.daniil.shevtsov.idle.main.domain.resource.Resource
 
 internal object ResourceModelMapper {
 
-    fun map(resource: Resource) = with(resource) {
+    fun map(
+        resource: Resource,
+        name: String,
+    ) = with(resource) {
         ResourceModel(
-            text = value.toString(),
+            name = name,
+            value = value.toString(),
         )
     }
 

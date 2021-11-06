@@ -19,7 +19,8 @@ import com.daniil.shevtsov.idle.main.AndroidMainViewModel
 fun MainPreview() {
     val state = MainViewState.Success(
         resource = ResourceModel(
-            text = "123.0"
+            name = "123.0",
+            value = "123.0",
         )
     )
     MainContent(state = state)
@@ -62,5 +63,5 @@ fun SuccessContent(state: MainViewState.Success) {
 fun Resource(
     model: ResourceModel,
 ) {
-    Text("Blob: ${model.text}")
+    Text("${model.name}: ${model.value}")
 }

@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.main.ui
 
 data class ResourceModel(
-    val text: String,
+    val name: String,
+    val value: String,
 )
