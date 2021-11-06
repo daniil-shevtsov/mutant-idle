@@ -4,7 +4,7 @@ import com.daniil.shevtsov.idle.main.domain.resource.UpdateResourceUseCase
 import com.daniil.shevtsov.idle.main.domain.time.ObserveTimeUseCase
 import com.daniil.shevtsov.idle.main.domain.time.StartTimeUseCase
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
@@ -18,12 +18,13 @@ class IdleGameViewModel @Inject constructor(
     fun onStart() {
         scope.launch {
             startTime()
-
+        }
+        scope.launch {
             observeTime()
                 .onEach { time ->
                     updateResource(time)
                 }
-                .launchIn(scope)
+                .collect()
         }
     }
 

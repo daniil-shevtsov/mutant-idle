@@ -76,6 +76,10 @@ dependencies {
         kapt(daggerCompiler)
     }
 
+    with(Deps.Logging) {
+        implementation(timber)
+    }
+
     with(Deps.NavigationComponent) {
         implementation(uiKtx)
         implementation(fragmentKtx)

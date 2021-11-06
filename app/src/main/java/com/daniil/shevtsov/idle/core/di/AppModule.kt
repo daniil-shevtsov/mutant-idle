@@ -16,8 +16,10 @@ import dagger.Module
 interface AppModule {
 
     @Binds
+    @AppScope
     fun resourceRepository(impl: ResourceRepositoryImpl): ResourceRepository
 
     @Binds
+    @AppScope
     fun timeProvider(impl: TimeProviderImpl): TimeProvider
 }

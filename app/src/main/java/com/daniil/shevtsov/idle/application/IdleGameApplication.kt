@@ -5,6 +5,7 @@ import com.daniil.shevtsov.idle.common.di.initKoin
 import com.daniil.shevtsov.idle.core.di.DaggerAppComponent
 import com.daniil.shevtsov.idle.core.di.koin.appModule
 import org.koin.core.Koin
+import timber.log.Timber
 import javax.inject.Inject
 
 class IdleGameApplication : Application() {
@@ -23,6 +24,8 @@ class IdleGameApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        Timber.plant(Timber.DebugTree())
 
         koin = initKoin {
             modules(appModule)
