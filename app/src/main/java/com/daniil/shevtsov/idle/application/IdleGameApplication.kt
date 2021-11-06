@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.application
 
 import android.app.Application
 import com.daniil.shevtsov.idle.common.di.initKoin
+import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.core.di.DaggerAppComponent
 import com.daniil.shevtsov.idle.core.di.koin.appModule
 import org.koin.core.Koin
@@ -15,6 +16,7 @@ class IdleGameApplication : Application() {
             .factory()
             .create(
                 appContext = applicationContext,
+                balanceConfig = createBalanceConfig(),
             )
     }
 
@@ -40,4 +42,10 @@ class IdleGameApplication : Application() {
         viewModel.onCleared()
         super.onTerminate()
     }
+
+    private fun createBalanceConfig() = BalanceConfig(
+        tickRateMillis = 100L,
+        resourcePerTick = 2.0,
+    )
+
 }

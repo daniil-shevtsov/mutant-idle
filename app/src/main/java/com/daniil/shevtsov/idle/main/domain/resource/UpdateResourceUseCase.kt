@@ -4,13 +4,17 @@ import com.daniil.shevtsov.idle.main.data.time.Time
 import javax.inject.Inject
 
 class UpdateResourceUseCase @Inject constructor(
+    private val calculateResourceValue: CalculateResourceValueUseCase,
     private val resourceRepository: ResourceRepository,
 ) {
     suspend operator fun invoke(
         timePassed: Time
     ) {
-        val oldResource = resourceRepository.getCurrentResource()
-        val newResource = Resource(value = oldResource.value + 1 * timePassed.value)
-        resourceRepository.setNewResource(newResource)
+        val newValue = calculateResourceValue(
+            oldValue = resourceRepository.getCurrentResource().value,
+            passedTicks = timePassed.value,
+        )
+
+        resourceRepository.setNewResource(Resource(value = newValue))
     }
 }

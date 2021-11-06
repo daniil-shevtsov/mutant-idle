@@ -109,6 +109,7 @@ dependencies {
     }
 
     with(Deps.UnitTest) {
+        testImplementation(assertk)
         testImplementation(coroutinesTest)
         testImplementation(jupiter)
         testImplementation(mockk)
