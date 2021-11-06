@@ -1,0 +1,35 @@
+package com.daniil.shevtsov.idle.application
+
+import com.daniil.shevtsov.idle.main.domain.resource.UpdateResourceUseCase
+import com.daniil.shevtsov.idle.main.domain.time.ObserveTimeUseCase
+import com.daniil.shevtsov.idle.main.domain.time.StartTimeUseCase
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
+
+class IdleGameViewModel @Inject constructor(
+    private val startTime: StartTimeUseCase,
+    private val observeTime: ObserveTimeUseCase,
+    private val updateResource: UpdateResourceUseCase,
+) {
+    private val scope = CoroutineScope(Job() + Dispatchers.Main)
+
+    fun onStart() {
+        scope.launch {
+            startTime()
+        }
+        scope.launch {
+            observeTime()
+                .onEach { time ->
+                    updateResource(time)
+                }
+                .collect()
+        }
+    }
+
+    fun onCleared() {
+        scope.cancel()
+    }
+
+}

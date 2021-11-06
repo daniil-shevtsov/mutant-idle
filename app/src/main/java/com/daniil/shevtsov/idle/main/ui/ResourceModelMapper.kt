@@ -1,6 +1,6 @@
 package com.daniil.shevtsov.idle.main.ui
 
-import com.daniil.shevtsov.idle.main.domain.Resource
+import com.daniil.shevtsov.idle.main.domain.resource.Resource
 
 internal object ResourceModelMapper {
 

@@ -28,6 +28,7 @@ object Versions {
 
     const val shadow = "7.0.0"
 
+    const val timber = "5.0.1"
     const val turbine = "0.6.1"
 
     const val viewBindingDelegate = "1.4.6"
@@ -80,6 +81,10 @@ object Deps {
     object Dagger {
         const val dagger = "com.google.dagger:dagger:${Versions.dagger}"
         const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
+    }
+
+    object Logging {
+        const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
     }
 
     object NavigationComponent {

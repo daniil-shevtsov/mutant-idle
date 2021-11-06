@@ -76,6 +76,10 @@ dependencies {
         kapt(daggerCompiler)
     }
 
+    with(Deps.Logging) {
+        implementation(timber)
+    }
+
     with(Deps.NavigationComponent) {
         implementation(uiKtx)
         implementation(fragmentKtx)
@@ -105,6 +109,7 @@ dependencies {
     }
 
     with(Deps.UnitTest) {
+        testImplementation(assertk)
         testImplementation(coroutinesTest)
         testImplementation(jupiter)
         testImplementation(mockk)

@@ -1,4 +1,4 @@
-package com.daniil.shevtsov.idle.main.data
+package com.daniil.shevtsov.idle.main.data.resource
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,12 +9,14 @@ class ResourceStorage @Inject constructor() {
 
     private val savedResource = MutableStateFlow(createInitial())
 
-    fun setNewValue(resource: ResourceDto) {
-        savedResource.value = resource
+    suspend fun setNewValue(resource: ResourceDto) {
+        savedResource.emit(resource)
     }
+
+    suspend fun getCurrentValue() = savedResource.value
 
     fun observeChange(): Flow<ResourceDto> = savedResource.asStateFlow()
 
 
-    private fun createInitial() = ResourceDto(value = 0L)
+    private fun createInitial() = ResourceDto(value = 0.0)
 }
