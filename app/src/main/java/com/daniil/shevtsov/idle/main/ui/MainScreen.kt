@@ -9,7 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.daniil.shevtsov.idle.main.AndroidMainViewModel
+import com.daniil.shevtsov.idle.main.MainViewModel
 import com.daniil.shevtsov.idle.main.ui.resource.ResourcePanel
 import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeList
 
@@ -25,7 +25,7 @@ fun MainPreview() {
 
 @Composable
 fun MainScreen(
-    viewModel: AndroidMainViewModel
+    viewModel: MainViewModel
 ) {
     val viewState by viewModel.state.collectAsState()
     MainContent(state = viewState)

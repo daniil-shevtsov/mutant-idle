@@ -10,7 +10,7 @@ import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeModelMapper
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
-class AndroidMainViewModel @Inject constructor(
+class MainViewModel @Inject constructor(
     private val observeResource: ObserveResourceUseCase,
     private val observeUpgrades: ObserveUpgradesUseCase,
 ) : ViewModel() {
