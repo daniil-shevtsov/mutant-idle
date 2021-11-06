@@ -9,9 +9,11 @@ class ResourceStorage @Inject constructor() {
 
     private val savedResource = MutableStateFlow(createInitial())
 
-    fun setNewValue(resource: ResourceDto) {
-        savedResource.value = resource
+    suspend fun setNewValue(resource: ResourceDto) {
+        savedResource.emit(resource)
     }
+
+    suspend fun getCurrentValue() = savedResource.value
 
     fun observeChange(): Flow<ResourceDto> = savedResource.asStateFlow()
 

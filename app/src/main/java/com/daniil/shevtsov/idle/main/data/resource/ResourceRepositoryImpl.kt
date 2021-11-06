@@ -13,4 +13,13 @@ class ResourceRepositoryImpl @Inject constructor(
     override fun observeResource(): Flow<Resource> {
         return storage.observeChange().map(ResourceMapper::map)
     }
+
+    override suspend fun getCurrentResource(): Resource {
+        return storage.getCurrentValue()
+            .let(ResourceMapper::map)
+    }
+
+    override suspend fun setNewResource(resource: Resource) {
+        storage.setNewValue(resource.let(ResourceDtoMapper::map))
+    }
 }
