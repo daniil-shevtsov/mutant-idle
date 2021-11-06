@@ -1,4 +1,4 @@
-package com.daniil.shevtsov.idle.main.ui
+package com.daniil.shevtsov.idle.main.ui.resource
 
 import com.daniil.shevtsov.idle.main.domain.resource.Resource
 

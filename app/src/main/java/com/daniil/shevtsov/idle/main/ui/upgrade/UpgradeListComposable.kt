@@ -10,29 +10,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.main.ui.Pallete
+import com.daniil.shevtsov.idle.main.ui.upgradeListPreview
 
 @Preview
 @Composable
 fun UpgradeListPreview() {
-    val upgrades = listOf(
-        UpgradeModel(
-            id = 0L,
-            title = "Hand-sword",
-            subtitle = "Transform your hand into a sharp blade"
-        ),
-        UpgradeModel(
-            id = 1L,
-            title = "Fangs",
-            subtitle = "Grow very sharp fangs. They are almost useless without stronger jaws though"
-        ),
-        UpgradeModel(
-            id = 2L,
-            title = "Iron jaws",
-            subtitle = "Your jaws become stronger than any shark"
-        ),
-    )
-
-    UpgradeList(upgradeList = upgrades)
+    UpgradeList(upgradeList = upgradeListPreview())
 }
 
 @Composable

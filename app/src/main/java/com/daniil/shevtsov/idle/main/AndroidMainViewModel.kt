@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.daniil.shevtsov.idle.main.domain.resource.ObserveResourceUseCase
 import com.daniil.shevtsov.idle.main.ui.MainViewState
-import com.daniil.shevtsov.idle.main.ui.ResourceModelMapper
+import com.daniil.shevtsov.idle.main.ui.resource.ResourceModelMapper
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 

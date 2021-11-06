@@ -13,16 +13,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.main.ui.Pallete
-import com.daniil.shevtsov.idle.main.ui.ResourceModel
+import com.daniil.shevtsov.idle.main.ui.resourcePreview
 
 @Preview
 @Composable
 fun ResourcePreview() {
     ResourceComposable(
-        resource = ResourceModel(
-            name = "Blood",
-            value = "10 000",
-        )
+        resource = resourcePreview()
     )
 }
 

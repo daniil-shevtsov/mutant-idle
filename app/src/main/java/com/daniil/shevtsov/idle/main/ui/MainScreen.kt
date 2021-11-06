@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.daniil.shevtsov.idle.main.AndroidMainViewModel
+import com.daniil.shevtsov.idle.main.ui.resource.ResourceModel
 
 @Preview(
     widthDp = 320,
@@ -17,12 +18,7 @@ import com.daniil.shevtsov.idle.main.AndroidMainViewModel
 )
 @Composable
 fun MainPreview() {
-    val state = MainViewState.Success(
-        resource = ResourceModel(
-            name = "123.0",
-            value = "123.0",
-        )
-    )
+    val state = viewStatePreview()
     MainContent(state = state)
 }
 
@@ -52,8 +48,9 @@ fun LoadingContent() {
 
 @Composable
 fun SuccessContent(state: MainViewState.Success) {
-    Surface(modifier = Modifier
-        .background(Color.White)
+    Surface(
+        modifier = Modifier
+            .background(Color.White)
     ) {
         Resource(state.resource)
     }

@@ -12,16 +12,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.main.ui.Pallete
+import com.daniil.shevtsov.idle.main.ui.upgradePreview
 
 @Preview
 @Composable
 fun UpgradePreview() {
-    val upgrade = UpgradeModel(
-        id = 0L,
-        title = "Hand-sword",
-        subtitle = "Transform your hand into sharp blade"
-    )
-    Upgrade(upgrade = upgrade)
+    Upgrade(upgrade = upgradePreview())
 }
 
 @Composable
