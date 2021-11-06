@@ -1,5 +1,9 @@
 package com.daniil.shevtsov.idle.main.ui
 
-data class MainViewState(
-    val resource: ResourceModel
-)
+sealed class MainViewState {
+    object Loading : MainViewState()
+
+    data class Success(
+        val resource: ResourceModel,
+    ) : MainViewState()
+}

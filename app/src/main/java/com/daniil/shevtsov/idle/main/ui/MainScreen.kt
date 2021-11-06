@@ -18,6 +18,20 @@ fun MainScreen(
 fun MainContent(
     state: MainViewState
 ) {
+    when (state) {
+        is MainViewState.Loading -> LoadingContent()
+        is MainViewState.Success -> SuccessContent(state)
+    }
+
+}
+
+@Composable
+fun LoadingContent() {
+    Text("Loading")
+}
+
+@Composable
+fun SuccessContent(state: MainViewState.Success) {
     Resource(state.resource)
 }
 
