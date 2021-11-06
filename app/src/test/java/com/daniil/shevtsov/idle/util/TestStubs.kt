@@ -6,12 +6,12 @@ import com.daniil.shevtsov.idle.main.domain.resource.Resource
 
 fun balanceConfig(
     tickRateMillis: Long = 1L,
-    resourcePerTick: Double = 1.0,
+    resourcePerMillisecond: Double = 1.0,
 ) = BalanceConfig(
     tickRateMillis = tickRateMillis,
-    resourcePerTick = resourcePerTick,
+    resourcePerMillisecond = resourcePerMillisecond,
 )
 
 fun time(value: Long = 0L) = Time(value = value)
 
-fun resource(value: Long = 0L) = Resource(value = value)
+fun resource(value: Double = 0.0) = Resource(value = value)

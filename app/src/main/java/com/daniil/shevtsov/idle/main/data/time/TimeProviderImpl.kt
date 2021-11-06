@@ -9,10 +9,13 @@ class TimeProviderImpl @Inject constructor() : TimeProvider {
 
     private val passingTime = MutableStateFlow(Duration.ZERO)
 
-    override suspend fun startUpdatingItemWith(interval: Duration) {
+    override suspend fun startUpdatingItemWith(
+        interval: Duration
+    ) {
         timerFlow(interval)
             .onEach { duration ->
-                passingTime.emit(duration)
+                val passed = duration.inWholeMilliseconds / interval.inWholeMilliseconds
+                passingTime.emit(Duration.milliseconds(passed))
             }
             .collect()
     }

@@ -18,5 +18,5 @@ class ResourceStorage @Inject constructor() {
     fun observeChange(): Flow<ResourceDto> = savedResource.asStateFlow()
 
 
-    private fun createInitial() = ResourceDto(value = 0L)
+    private fun createInitial() = ResourceDto(value = 0.0)
 }

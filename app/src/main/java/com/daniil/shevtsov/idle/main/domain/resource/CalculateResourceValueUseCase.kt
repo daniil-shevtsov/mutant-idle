@@ -8,10 +8,10 @@ class CalculateResourceValueUseCase @Inject constructor(
 ) {
 
     operator fun invoke(
-        oldValue: Long,
+        oldValue: Double,
         passedTicks: Long,
-    ): Long {
-        return oldValue + passedTicks * balanceConfig.resourcePerTick.toLong()
+    ): Double {
+        return oldValue + passedTicks * balanceConfig.resourcePerMillisecond
     }
 
 }

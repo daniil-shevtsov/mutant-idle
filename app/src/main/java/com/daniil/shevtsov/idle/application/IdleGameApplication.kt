@@ -45,7 +45,7 @@ class IdleGameApplication : Application() {
 
     private fun createBalanceConfig() = BalanceConfig(
         tickRateMillis = 100L,
-        resourcePerTick = 2.0,
+        resourcePerMillisecond = 0.002,
     )
 
 }
