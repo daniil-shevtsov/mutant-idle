@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.daniil.shevtsov.idle.main.AndroidMainViewModel
 import com.daniil.shevtsov.idle.main.ui.resource.ResourcePanel
@@ -52,7 +51,7 @@ fun LoadingContent() {
 fun SuccessContent(state: MainViewState.Success) {
     Column(
         modifier = Modifier
-            .background(Color.White)
+            .background(Pallete.DarkGray)
     ) {
         ResourcePanel(state.resource)
         UpgradeList(

@@ -8,6 +8,6 @@ sealed class MainViewState {
 
     data class Success(
         val resource: ResourceModel,
-        val upgrades: List<UpgradeModel> = emptyList(),
+        val upgrades: List<UpgradeModel>,
     ) : MainViewState()
 }
