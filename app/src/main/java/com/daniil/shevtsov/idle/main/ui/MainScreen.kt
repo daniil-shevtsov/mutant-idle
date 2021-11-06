@@ -39,5 +39,5 @@ fun SuccessContent(state: MainViewState.Success) {
 fun Resource(
     model: ResourceModel,
 ) {
-    Text(model.text)
+    Text("Blob: ${model.text}")
 }
