@@ -1,7 +1,8 @@
 package com.daniil.shevtsov.idle.main.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.material.Surface
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -10,7 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.daniil.shevtsov.idle.main.AndroidMainViewModel
-import com.daniil.shevtsov.idle.main.ui.resource.ResourceModel
+import com.daniil.shevtsov.idle.main.ui.resource.ResourcePanel
+import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeList
 
 @Preview(
     widthDp = 320,
@@ -48,17 +50,14 @@ fun LoadingContent() {
 
 @Composable
 fun SuccessContent(state: MainViewState.Success) {
-    Surface(
+    Column(
         modifier = Modifier
             .background(Color.White)
     ) {
-        Resource(state.resource)
+        ResourcePanel(state.resource)
+        UpgradeList(
+            upgradeList = state.upgrades,
+            modifier = Modifier.fillMaxHeight()
+        )
     }
-}
-
-@Composable
-fun Resource(
-    model: ResourceModel,
-) {
-    Text("${model.name}: ${model.value}")
 }

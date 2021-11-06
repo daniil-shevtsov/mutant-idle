@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.main.ui.resource
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -18,17 +19,18 @@ import com.daniil.shevtsov.idle.main.ui.resourcePreview
 @Preview
 @Composable
 fun ResourcePreview() {
-    ResourceComposable(
+    ResourcePanel(
         resource = resourcePreview()
     )
 }
 
 @Composable
-fun ResourceComposable(
+fun ResourcePanel(
     resource: ResourceModel,
 ) {
     Row(
         modifier = Modifier
+            .fillMaxWidth()
             .background(Pallete.Red)
             .padding(4.dp),
         verticalAlignment = Alignment.CenterVertically,

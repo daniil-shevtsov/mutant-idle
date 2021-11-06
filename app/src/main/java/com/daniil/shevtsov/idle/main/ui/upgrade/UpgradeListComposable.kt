@@ -19,7 +19,10 @@ fun UpgradeListPreview() {
 }
 
 @Composable
-fun UpgradeList(upgradeList: List<UpgradeModel>) {
+fun UpgradeList(
+    upgradeList: List<UpgradeModel>,
+    modifier: Modifier = Modifier,
+) {
     LazyColumn(
         content = {
             items(items = upgradeList) { upgrade ->
@@ -27,7 +30,7 @@ fun UpgradeList(upgradeList: List<UpgradeModel>) {
             }
         },
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier
+        modifier = modifier
             .background(Pallete.DarkGray)
             .padding(4.dp)
     )
