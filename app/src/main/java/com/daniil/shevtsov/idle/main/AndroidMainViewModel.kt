@@ -2,7 +2,7 @@ package com.daniil.shevtsov.idle.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.daniil.shevtsov.idle.main.domain.ObserveResourceUseCase
+import com.daniil.shevtsov.idle.main.domain.resource.ObserveResourceUseCase
 import com.daniil.shevtsov.idle.main.ui.MainViewState
 import com.daniil.shevtsov.idle.main.ui.ResourceModelMapper
 import kotlinx.coroutines.flow.*

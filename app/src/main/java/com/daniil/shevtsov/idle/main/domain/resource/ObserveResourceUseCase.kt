@@ -1,4 +1,4 @@
-package com.daniil.shevtsov.idle.main.domain
+package com.daniil.shevtsov.idle.main.domain.resource
 
 import javax.inject.Inject
 

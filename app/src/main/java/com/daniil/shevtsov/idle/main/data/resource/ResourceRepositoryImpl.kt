@@ -1,7 +1,7 @@
-package com.daniil.shevtsov.idle.main.data
+package com.daniil.shevtsov.idle.main.data.resource
 
-import com.daniil.shevtsov.idle.main.domain.Resource
-import com.daniil.shevtsov.idle.main.domain.ResourceRepository
+import com.daniil.shevtsov.idle.main.domain.resource.Resource
+import com.daniil.shevtsov.idle.main.domain.resource.ResourceRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

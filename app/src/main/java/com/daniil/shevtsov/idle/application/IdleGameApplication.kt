@@ -1,10 +1,11 @@
-package com.daniil.shevtsov.idle.core
+package com.daniil.shevtsov.idle.application
 
 import android.app.Application
 import com.daniil.shevtsov.idle.common.di.initKoin
 import com.daniil.shevtsov.idle.core.di.DaggerAppComponent
 import com.daniil.shevtsov.idle.core.di.koin.appModule
 import org.koin.core.Koin
+import javax.inject.Inject
 
 class IdleGameApplication : Application() {
     lateinit var koin: Koin
@@ -16,11 +17,24 @@ class IdleGameApplication : Application() {
             )
     }
 
+    @Inject
+    lateinit var viewModel: IdleGameViewModel
+
+
     override fun onCreate() {
         super.onCreate()
 
         koin = initKoin {
             modules(appModule)
         }.koin
+
+        appComponent.inject(this)
+
+        viewModel.onStart()
+    }
+
+    override fun onTerminate() {
+        viewModel.onCleared()
+        super.onTerminate()
     }
 }

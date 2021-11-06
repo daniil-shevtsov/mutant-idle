@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.core.di
 
 import android.content.Context
+import com.daniil.shevtsov.idle.application.IdleGameApplication
 import com.daniil.shevtsov.idle.main.MainFragment
 import dagger.BindsInstance
 import dagger.Component
@@ -21,4 +22,5 @@ interface AppComponent {
     }
 
     fun inject(mainFragment: MainFragment)
+    fun inject(application: IdleGameApplication)
 }

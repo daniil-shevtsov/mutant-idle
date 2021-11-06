@@ -1,4 +1,4 @@
-package com.daniil.shevtsov.idle.main.data
+package com.daniil.shevtsov.idle.main.data.resource
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
