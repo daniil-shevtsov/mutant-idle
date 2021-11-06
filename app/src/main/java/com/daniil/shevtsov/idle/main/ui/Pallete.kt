@@ -10,4 +10,7 @@ object Pallete {
 
     @Stable
     val DarkRed = Color(0xFF750404)
+
+    @Stable
+    val DarkGray = Color(0xFF2F1B1B)
 }
