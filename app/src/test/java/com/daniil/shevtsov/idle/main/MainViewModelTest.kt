@@ -6,12 +6,14 @@ import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.MainCoroutineExtension
 import com.daniil.shevtsov.idle.main.domain.resource.ObserveResourceUseCase
+import com.daniil.shevtsov.idle.main.domain.upgrade.BuyUpgradeUseCase
 import com.daniil.shevtsov.idle.main.domain.upgrade.ObserveUpgradesUseCase
 import com.daniil.shevtsov.idle.main.ui.MainViewState
 import com.daniil.shevtsov.idle.main.ui.resource.ResourceModel
 import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeModel
 import com.daniil.shevtsov.idle.util.resource
 import com.daniil.shevtsov.idle.util.upgrade
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
@@ -27,6 +29,7 @@ internal class MainViewModelTest {
 
     private val observeResource: ObserveResourceUseCase = mockk()
     private val observeUpgrades: ObserveUpgradesUseCase = mockk()
+    private val buyUpgrade: BuyUpgradeUseCase = mockk()
 
     private val viewModel: MainViewModel by lazy { createViewModel() }
 
@@ -56,9 +59,19 @@ internal class MainViewModelTest {
         }
     }
 
+    @Test
+    fun `should buy upgrade when clicked and affordable`() = runBlockingTest {
+        every { observeUpgrades() } returns flowOf(listOf(upgrade(id = 1L)))
+
+        viewModel.handleAction(MainViewAction.UpgradeSelected(id = 1L))
+
+        coVerify { buyUpgrade(id = 1L) }
+    }
+
     private fun createViewModel() = MainViewModel(
         observeResource = observeResource,
         observeUpgrades = observeUpgrades,
+        buyUpgrade = buyUpgrade,
     )
 
 }
