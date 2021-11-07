@@ -3,7 +3,7 @@ package com.daniil.shevtsov.idle.core.di.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.daniil.shevtsov.idle.core.di.AppScope
-import com.daniil.shevtsov.idle.main.AndroidMainViewModel
+import com.daniil.shevtsov.idle.main.MainViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -13,8 +13,8 @@ interface ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(AndroidMainViewModel::class)
-    fun bindMainViewModel(viewModelAndroid: AndroidMainViewModel): ViewModel
+    @ViewModelKey(MainViewModel::class)
+    fun bindMainViewModel(viewModel: MainViewModel): ViewModel
 
     @Binds
     @AppScope

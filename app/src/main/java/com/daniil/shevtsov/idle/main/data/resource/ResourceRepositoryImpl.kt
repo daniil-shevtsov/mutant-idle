@@ -19,7 +19,15 @@ class ResourceRepositoryImpl @Inject constructor(
             .let(ResourceMapper::map)
     }
 
-    override suspend fun setNewResource(resource: Resource) {
-        storage.setNewValue(resource.let(ResourceDtoMapper::map))
+    override suspend fun increaseBy(value: Double) {
+        val oldValue = storage.getCurrentValue()
+        val newValue = oldValue + value
+        storage.setNewValue(newValue)
+    }
+
+    override suspend fun decreaseBy(value: Double) {
+        val oldValue = storage.getCurrentValue()
+        val newValue = oldValue - value
+        storage.setNewValue(newValue)
     }
 }

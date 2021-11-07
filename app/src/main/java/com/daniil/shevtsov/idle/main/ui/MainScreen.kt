@@ -9,7 +9,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.daniil.shevtsov.idle.main.AndroidMainViewModel
+import com.daniil.shevtsov.idle.main.MainViewAction
+import com.daniil.shevtsov.idle.main.MainViewModel
 import com.daniil.shevtsov.idle.main.ui.resource.ResourcePanel
 import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeList
 
@@ -25,19 +26,32 @@ fun MainPreview() {
 
 @Composable
 fun MainScreen(
-    viewModel: AndroidMainViewModel
+    viewModel: MainViewModel
 ) {
     val viewState by viewModel.state.collectAsState()
-    MainContent(state = viewState)
+    MainContent(
+        state = viewState,
+        onUpgradeSelected = { upgradeId ->
+            viewModel.handleAction(
+                MainViewAction.UpgradeSelected(
+                    upgradeId
+                )
+            )
+        }
+    )
 }
 
 @Composable
 fun MainContent(
-    state: MainViewState
+    state: MainViewState,
+    onUpgradeSelected: (upgradeId: Long) -> Unit = {},
 ) {
     when (state) {
         is MainViewState.Loading -> LoadingContent()
-        is MainViewState.Success -> SuccessContent(state)
+        is MainViewState.Success -> SuccessContent(
+            state = state,
+            onUpgradeSelected = onUpgradeSelected,
+        )
     }
 
 }
@@ -48,7 +62,10 @@ fun LoadingContent() {
 }
 
 @Composable
-fun SuccessContent(state: MainViewState.Success) {
+fun SuccessContent(
+    state: MainViewState.Success,
+    onUpgradeSelected: (upgradeId: Long) -> Unit = {},
+) {
     Column(
         modifier = Modifier
             .background(Pallete.DarkGray)
@@ -56,6 +73,7 @@ fun SuccessContent(state: MainViewState.Success) {
         ResourcePanel(state.resource)
         UpgradeList(
             upgradeList = state.upgrades,
+            onUpgradeSelected = onUpgradeSelected,
             modifier = Modifier.fillMaxHeight()
         )
     }
