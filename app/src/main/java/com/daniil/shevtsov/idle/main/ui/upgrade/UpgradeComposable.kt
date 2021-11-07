@@ -15,14 +15,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.main.ui.Pallete
-import com.daniil.shevtsov.idle.main.ui.upgradePreview
+import com.daniil.shevtsov.idle.main.ui.upgradePreviewStub
 
 @Preview
 @Composable
 fun UpgradePreview() {
     Column {
         UpgradeStatusModel.values().forEach { status ->
-            Upgrade(upgrade = upgradePreview(status = status))
+            Upgrade(upgrade = upgradePreviewStub(status = status))
         }
     }
 

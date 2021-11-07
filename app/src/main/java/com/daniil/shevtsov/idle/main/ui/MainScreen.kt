@@ -19,7 +19,7 @@ import com.daniil.shevtsov.idle.main.ui.shop.Shop
 )
 @Composable
 fun MainPreview() {
-    val state = viewStatePreview()
+    val state = viewStatePreviewStub()
     MainContent(state = state)
 }
 

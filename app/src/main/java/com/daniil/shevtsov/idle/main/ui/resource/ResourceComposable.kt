@@ -14,13 +14,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.main.ui.Pallete
-import com.daniil.shevtsov.idle.main.ui.resourcePreview
+import com.daniil.shevtsov.idle.main.ui.resourcePreviewStub
 
 @Preview
 @Composable
 fun ResourcePreview() {
     ResourcePanel(
-        resource = resourcePreview()
+        resource = resourcePreviewStub()
     )
 }
 

@@ -9,28 +9,28 @@ import com.daniil.shevtsov.idle.main.ui.upgrade.PriceModel
 import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeModel
 import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeStatusModel
 
-internal fun viewStatePreview() = MainViewState.Success(
-    resource = resourcePreview(),
-    actionState = actionStatePreview(),
-    shop = shopStatePreview(),
+internal fun viewStatePreviewStub() = MainViewState.Success(
+    resource = resourcePreviewStub(),
+    actionState = actionStatePreviewStub(),
+    shop = shopStatePreviewStub(),
 )
 
-internal fun resourcePreview() = ResourceModel(
+internal fun resourcePreviewStub() = ResourceModel(
     name = "Blood",
     value = "10 000",
 )
 
-internal fun actionStatePreview() = ActionsState(
+internal fun actionStatePreviewStub() = ActionsState(
     actionPanes = emptyList()
 )
 
-internal fun actionPanePreview() = ActionPane(
+internal fun actionPanePreviewStub() = ActionPane(
     actions = (0..10).map { index ->
-        actionPreview(id = index.toLong(), title = "action $index")
+        actionPreviewStub(id = index.toLong(), title = "action $index")
     }
 )
 
-internal fun actionPreview(
+internal fun actionPreviewStub(
     id: Long = 0L,
     title: String = "",
 ) = ActionModel(
@@ -38,15 +38,15 @@ internal fun actionPreview(
     title = title,
 )
 
-internal fun shopStatePreview(
+internal fun shopStatePreviewStub(
 
 ) = ShopState(
     upgradeLists = (0..3).map{ index ->
-        upgradeListPreview().map { it.copy(title = "$index ${it.title}") }
+        upgradeListPreviewStub().map { it.copy(title = "$index ${it.title}") }
     }
 )
 
-internal fun upgradePreview(
+internal fun upgradePreviewStub(
     id: Long = 0L,
     title: String = "Hand-sword",
     subtitle: String = "Transform your hand into a sharp blade",
@@ -59,18 +59,18 @@ internal fun upgradePreview(
     status = status,
 )
 
-internal fun upgradeListPreview() = listOf(
-    upgradePreview(
+internal fun upgradeListPreviewStub() = listOf(
+    upgradePreviewStub(
         id = 0L,
         title = "Hand-sword",
         subtitle = "Transform your hand into a sharp blade"
     ),
-    upgradePreview(
+    upgradePreviewStub(
         id = 1L,
         title = "Fangs",
         subtitle = "Grow very sharp fangs. They are almost useless without stronger jaws though"
     ),
-    upgradePreview(
+    upgradePreviewStub(
         id = 2L,
         title = "Iron jaws",
         subtitle = "Your jaws become stronger than any shark"

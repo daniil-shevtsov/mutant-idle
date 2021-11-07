@@ -17,13 +17,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.main.ui.Pallete
-import com.daniil.shevtsov.idle.main.ui.actionPanePreview
-import com.daniil.shevtsov.idle.main.ui.actionPreview
+import com.daniil.shevtsov.idle.main.ui.actionPanePreviewStub
+import com.daniil.shevtsov.idle.main.ui.actionPreviewStub
 
 @Preview
 @Composable
 fun ActionPreview() {
-    Action(action = actionPreview(title = "Lol Kek"))
+    Action(action = actionPreviewStub(title = "Lol Kek"))
 }
 
 @Preview(
@@ -32,7 +32,7 @@ fun ActionPreview() {
 )
 @Composable
 fun ActionPanePreview() {
-    ActionPane(pane = actionPanePreview())
+    ActionPane(pane = actionPanePreviewStub())
 }
 
 @Composable

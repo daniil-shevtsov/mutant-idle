@@ -10,12 +10,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.main.ui.Pallete
-import com.daniil.shevtsov.idle.main.ui.upgradeListPreview
+import com.daniil.shevtsov.idle.main.ui.upgradeListPreviewStub
 
 @Preview
 @Composable
 fun UpgradeListPreview() {
-    UpgradeList(upgradeList = upgradeListPreview())
+    UpgradeList(upgradeList = upgradeListPreviewStub())
 }
 
 @Composable
