@@ -30,16 +30,22 @@ internal fun actionPanePreviewStub(
     paneIndex: Int? = null
 ) = ActionPane(
     actions = (0..10).map { index ->
-        actionPreviewStub(id = index.toLong(), title = "action ${paneIndex ?: 0}$index")
+        actionPreviewStub(
+            id = index.toLong(),
+            title = "Action ${paneIndex ?: 0}$index",
+            subtitle = "Some very very very very long text",
+        )
     }
 )
 
 internal fun actionPreviewStub(
     id: Long = 0L,
-    title: String = "",
+    title: String = "Lol Kek",
+    subtitle: String = "Some very very very very long text",
 ) = ActionModel(
     id = id,
     title = title,
+    subtitle = subtitle,
 )
 
 internal fun shopStatePreviewStub(

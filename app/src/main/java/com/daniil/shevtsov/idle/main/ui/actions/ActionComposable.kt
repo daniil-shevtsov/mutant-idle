@@ -1,13 +1,14 @@
 package com.daniil.shevtsov.idle.main.ui.actions
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,7 +23,7 @@ import com.google.accompanist.pager.HorizontalPager
 @Preview
 @Composable
 fun ActionPreview() {
-    Action(action = actionPreviewStub(title = "Lol Kek"))
+    Action(action = actionPreviewStub())
 }
 
 @Preview(
@@ -63,7 +64,7 @@ fun ActionPane(
         items(pane.actions) { action ->
             Action(
                 action = action,
-                modifier = modifier.wrapContentSize(),
+                modifier = modifier,
             )
         }
     }
@@ -82,19 +83,26 @@ fun Action(
             .background(Pallete.DarkRed)
             .padding(4.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .size(80.dp)
-                .background(Color.Black)
-        )
         Text(
             text = action.title,
             color = Color.White,
-            fontSize = 16.sp,
+            fontSize = 24.sp,
             modifier = Modifier
-                .align(Alignment.CenterHorizontally)
+                .fillMaxWidth()
                 .background(Pallete.DarkRed)
                 .padding(4.dp)
+                .padding(start = 4.dp)
+        )
+        Text(
+            text = action.subtitle,
+            color = Color.Black,
+            fontSize = 16.sp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(4.dp)
+                .padding(start = 4.dp)
+                .padding(bottom = 4.dp)
         )
     }
 }
