@@ -69,7 +69,7 @@ fun SuccessContent(
 ) {
     Column(
         modifier = Modifier
-            .background(Pallete.DarkGray),
+            .background(Pallete.Red),
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
         ResourcePanel(state.resource)

@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.main.ui.Pallete
 import com.daniil.shevtsov.idle.main.ui.actionPreviewStub
 import com.daniil.shevtsov.idle.main.ui.actionStatePreviewStub
+import com.daniil.shevtsov.idle.main.ui.innerBorder
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 
@@ -43,7 +44,14 @@ fun ActionSection(
 ) {
     HorizontalPager(
         count = state.actionPanes.size,
-        modifier = modifier,
+        modifier = modifier
+            .background(Pallete.Red)
+            .padding(4.dp)
+            .innerBorder(
+                lightColor = Pallete.LightRed,
+                darkColor = Pallete.DarkRed
+            )
+            .background(Pallete.DarkGray),
     ) { paneIndex ->
         val actionPane = state.actionPanes[paneIndex]
         ActionPane(
@@ -59,7 +67,7 @@ fun ActionPane(
 ) {
     LazyVerticalGrid(
         cells = GridCells.Fixed(count = 2),
-        modifier = modifier.background(Pallete.DarkGray)
+        modifier = modifier
     ) {
         items(pane.actions) { action ->
             Action(

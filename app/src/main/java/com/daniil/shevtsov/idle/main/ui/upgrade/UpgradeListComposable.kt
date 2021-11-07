@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.main.ui.Pallete
 import com.daniil.shevtsov.idle.main.ui.upgradeListPreviewStub
 
-@Preview
+@Preview(heightDp = 270)
 @Composable
 fun UpgradeListPreview() {
     UpgradeList(upgradeList = upgradeListPreviewStub())
@@ -36,6 +36,6 @@ fun UpgradeList(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier
             .background(Pallete.DarkGray)
-            .padding(4.dp)
+            .padding(start = 4.dp, end = 4.dp, top = 4.dp)
     )
 }
