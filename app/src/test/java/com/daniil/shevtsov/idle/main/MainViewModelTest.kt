@@ -37,7 +37,7 @@ internal class MainViewModelTest {
     }
 
     @Test
-    fun `lol - kek`() = runBlockingTest {
+    fun `should for correct initial state`() = runBlockingTest {
         every { observeResource() } returns flowOf(resource(value = 2.0))
         every { observeUpgrades() } returns flowOf(listOf(upgrade(id = 1L)))
 
