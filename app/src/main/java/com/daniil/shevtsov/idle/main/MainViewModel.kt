@@ -8,6 +8,7 @@ import com.daniil.shevtsov.idle.main.domain.upgrade.ObserveUpgradesUseCase
 import com.daniil.shevtsov.idle.main.domain.upgrade.Upgrade
 import com.daniil.shevtsov.idle.main.domain.upgrade.UpgradeStatus
 import com.daniil.shevtsov.idle.main.ui.MainViewState
+import com.daniil.shevtsov.idle.main.ui.actions.ActionsState
 import com.daniil.shevtsov.idle.main.ui.resource.ResourceModelMapper
 import com.daniil.shevtsov.idle.main.ui.shop.ShopState
 import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeModelMapper
@@ -33,6 +34,7 @@ class MainViewModel @Inject constructor(
                         resource = resource,
                         name = "Blood",
                     ),
+                    actionState = createActionState(),
                     shop = observeUpgrades()
                         .firstOrNull()
                         .orEmpty()
@@ -68,6 +70,10 @@ class MainViewModel @Inject constructor(
     }
 
     private fun initViewState(): MainViewState = MainViewState.Loading
+
+    private fun createActionState() = ActionsState(
+        actionPanes = emptyList()
+    )
 
     private fun Upgrade.mapStatus(resource: Double): UpgradeStatusModel {
         val statusModel = when {

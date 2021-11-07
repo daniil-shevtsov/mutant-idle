@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.main.ui
 
+import com.daniil.shevtsov.idle.main.ui.actions.ActionsState
 import com.daniil.shevtsov.idle.main.ui.resource.ResourceModel
 import com.daniil.shevtsov.idle.main.ui.shop.ShopState
 import com.daniil.shevtsov.idle.main.ui.upgrade.PriceModel
@@ -8,12 +9,17 @@ import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeStatusModel
 
 internal fun viewStatePreview() = MainViewState.Success(
     resource = resourcePreview(),
+    actionState = actionStatePreview(),
     shop = shopStatePreview(),
 )
 
 internal fun resourcePreview() = ResourceModel(
     name = "Blood",
     value = "10 000",
+)
+
+internal fun actionStatePreview() = ActionsState(
+    actionPanes = emptyList()
 )
 
 internal fun shopStatePreview(
