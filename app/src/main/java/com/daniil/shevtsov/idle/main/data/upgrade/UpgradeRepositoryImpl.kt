@@ -7,14 +7,19 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
+//TODO: Replace with real logic
 class UpgradeRepositoryImpl @Inject constructor() : UpgradeRepository {
 
     override fun observe(): Flow<List<Upgrade>> {
-        val upgrades = createUpgrades() + createUpgrades() + createUpgrades()
+        val upgrades = createUpgrades()
         return flowOf(upgrades)
     }
 
-    //TODO: Replace with real logic
+    override suspend fun getUpgradeBy(id: Long): Upgrade? {
+        return createUpgrades().map { it.id to it }.toMap()[id]
+    }
+
+
     private fun createUpgrades() = listOf(
         Upgrade(
             id = 0L,

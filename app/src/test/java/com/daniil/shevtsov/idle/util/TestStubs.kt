@@ -20,12 +20,12 @@ fun upgrade(
     id: Long = 0L,
     title: String = "",
     subtitle: String = "",
-    price: Price = price(),
+    price: Double = 0.0,
 ) = Upgrade(
     id = id,
     title = title,
     subtitle = subtitle,
-    price = price,
+    price = price(value = price),
 )
 
 fun price(value: Double = 0.0) = Price(

@@ -4,4 +4,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface UpgradeRepository {
     fun observe(): Flow<List<Upgrade>>
+    suspend fun getUpgradeBy(id: Long): Upgrade?
 }
