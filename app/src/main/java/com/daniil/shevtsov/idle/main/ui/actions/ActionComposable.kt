@@ -36,6 +36,15 @@ fun ActionPanesPreview() {
     ActionSection(state = actionStatePreviewStub())
 }
 
+@Preview(
+    widthDp = 400,
+    heightDp = 400,
+)
+@Composable
+fun ActionPanesPreviewWithOneItem() {
+    ActionSection(state = ActionsState(listOf(ActionPane(listOf(actionPreviewStub())))))
+}
+
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ActionSection(
