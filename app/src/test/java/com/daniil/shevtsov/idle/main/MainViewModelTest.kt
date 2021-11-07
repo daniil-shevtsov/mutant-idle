@@ -94,27 +94,28 @@ internal class MainViewModelTest {
     }
 
     @Test
-    fun `should mark upgrade as not affordable if its price higher than resource`() = runBlockingTest {
-        every { observeUpgrades() } returns flowOf(
-            listOf(
-                upgrade(
-                    id = 1L,
-                    price = 150.0,
-                    status = UpgradeStatus.NotBought
+    fun `should mark upgrade as not affordable if its price higher than resource`() =
+        runBlockingTest {
+            every { observeUpgrades() } returns flowOf(
+                listOf(
+                    upgrade(
+                        id = 1L,
+                        price = 150.0,
+                        status = UpgradeStatus.NotBought
+                    )
                 )
             )
-        )
-        every { observeResource() } returns flowOf(resource(value = 50.0))
+            every { observeResource() } returns flowOf(resource(value = 50.0))
 
-        viewModel.state.test {
-            val state = expectMostRecentItem()
-            assertThat(state)
-                .isInstanceOf(MainViewState.Success::class)
-                .prop(MainViewState.Success::upgrades)
-                .extracting(UpgradeModel::status)
-                .containsExactly(UpgradeStatusModel.NotAffordable)
+            viewModel.state.test {
+                val state = expectMostRecentItem()
+                assertThat(state)
+                    .isInstanceOf(MainViewState.Success::class)
+                    .prop(MainViewState.Success::upgrades)
+                    .extracting(UpgradeModel::status)
+                    .containsExactly(UpgradeStatusModel.NotAffordable)
+            }
         }
-    }
 
     @Test
     fun `should mark upgrade as bought if it is bought`() = runBlockingTest {
@@ -136,6 +137,31 @@ internal class MainViewModelTest {
                 .prop(MainViewState.Success::upgrades)
                 .extracting(UpgradeModel::status)
                 .containsExactly(UpgradeStatusModel.Bought)
+        }
+    }
+
+    @Test
+    fun `should sort upgrades by status`() = runBlockingTest {
+        every { observeUpgrades() } returns flowOf(
+            listOf(
+                upgrade(id = 1L, price = 150.0, status = UpgradeStatus.Bought),
+                upgrade(id = 2L, price = 150.0, status = UpgradeStatus.NotBought),
+                upgrade(id = 3L, price = 25.0, status = UpgradeStatus.NotBought),
+            )
+        )
+        every { observeResource() } returns flowOf(resource(value = 50.0))
+
+        viewModel.state.test {
+            val state = expectMostRecentItem()
+            assertThat(state)
+                .isInstanceOf(MainViewState.Success::class)
+                .prop(MainViewState.Success::upgrades)
+                .extracting(UpgradeModel::status)
+                .containsExactly(
+                    UpgradeStatusModel.Affordable,
+                    UpgradeStatusModel.NotAffordable,
+                    UpgradeStatusModel.Bought,
+                )
         }
     }
 

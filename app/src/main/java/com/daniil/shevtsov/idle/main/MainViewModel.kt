@@ -40,7 +40,14 @@ class MainViewModel @Inject constructor(
                                 upgrade = upgrade,
                                 status = upgrade.mapStatus(resource.value)
                             )
-                        },
+                        }
+                        .sortedBy {
+                            when(it.status) {
+                                UpgradeStatusModel.Affordable -> 0
+                                UpgradeStatusModel.NotAffordable -> 1
+                                UpgradeStatusModel.Bought -> 2
+                            }
+                        }
                 )
             }
             .launchIn(viewModelScope)

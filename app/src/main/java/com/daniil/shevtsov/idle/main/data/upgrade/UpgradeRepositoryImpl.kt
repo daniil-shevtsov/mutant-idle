@@ -39,7 +39,7 @@ class UpgradeRepositoryImpl @Inject constructor() : UpgradeRepository {
             id = 0L,
             title = "Hand-sword",
             subtitle = "Transform your hand into a sharp blade",
-            price = Price(value = 150.0),
+            price = Price(value = 50.0),
             status = UpgradeStatus.NotBought,
         ),
         Upgrade(
@@ -53,7 +53,7 @@ class UpgradeRepositoryImpl @Inject constructor() : UpgradeRepository {
             id = 2L,
             title = "Iron jaws",
             subtitle = "Your jaws become stronger than any shark",
-            price = Price(value = 70.0),
+            price = Price(value = 10.0),
             status = UpgradeStatus.NotBought,
         ),
     ).associateBy { it.id }
