@@ -29,7 +29,7 @@ internal class MainViewModelTest {
 
     private val observeResource: ObserveResourceUseCase = mockk()
     private val observeUpgrades: ObserveUpgradesUseCase = mockk()
-    private val buyUpgrade: BuyUpgradeUseCase = mockk()
+    private val buyUpgrade: BuyUpgradeUseCase = mockk(relaxUnitFun = true)
 
     private val viewModel: MainViewModel by lazy { createViewModel() }
 

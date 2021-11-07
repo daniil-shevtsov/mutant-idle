@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ResourceRepository {
     suspend fun getCurrentResource(): Resource
-    suspend fun setNewResource(resource: Resource)
+    suspend fun increaseBy(value: Double)
+    suspend fun decreaseBy(value: Double)
     fun observeResource(): Flow<Resource>
 }
