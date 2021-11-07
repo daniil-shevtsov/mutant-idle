@@ -8,7 +8,7 @@ import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeStatusModel
 
 internal fun viewStatePreview() = MainViewState.Success(
     resource = resourcePreview(),
-    upgrades = upgradeListPreview(),
+    shop = shopStatePreview(),
 )
 
 internal fun resourcePreview() = ResourceModel(

@@ -11,6 +11,7 @@ import com.daniil.shevtsov.idle.main.domain.upgrade.ObserveUpgradesUseCase
 import com.daniil.shevtsov.idle.main.domain.upgrade.UpgradeStatus
 import com.daniil.shevtsov.idle.main.ui.MainViewState
 import com.daniil.shevtsov.idle.main.ui.resource.ResourceModel
+import com.daniil.shevtsov.idle.main.ui.shop.ShopState
 import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeModel
 import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeStatusModel
 import com.daniil.shevtsov.idle.util.resource
@@ -54,7 +55,9 @@ internal class MainViewModelTest {
                     prop(MainViewState.Success::resource)
                         .prop(ResourceModel::value)
                         .isEqualTo("2.0")
-                    prop(MainViewState.Success::upgrades)
+                    prop(MainViewState.Success::shop)
+                        .prop(ShopState::upgradeLists)
+                        .index(0)
                         .extracting(UpgradeModel::id)
                         .containsExactly(1L)
                 }
@@ -87,7 +90,9 @@ internal class MainViewModelTest {
             val state = expectMostRecentItem()
             assertThat(state)
                 .isInstanceOf(MainViewState.Success::class)
-                .prop(MainViewState.Success::upgrades)
+                .prop(MainViewState.Success::shop)
+                .prop(ShopState::upgradeLists)
+                .index(0)
                 .extracting(UpgradeModel::status)
                 .containsExactly(UpgradeStatusModel.Affordable)
         }
@@ -111,7 +116,9 @@ internal class MainViewModelTest {
                 val state = expectMostRecentItem()
                 assertThat(state)
                     .isInstanceOf(MainViewState.Success::class)
-                    .prop(MainViewState.Success::upgrades)
+                    .prop(MainViewState.Success::shop)
+                    .prop(ShopState::upgradeLists)
+                    .index(0)
                     .extracting(UpgradeModel::status)
                     .containsExactly(UpgradeStatusModel.NotAffordable)
             }
@@ -134,7 +141,9 @@ internal class MainViewModelTest {
             val state = expectMostRecentItem()
             assertThat(state)
                 .isInstanceOf(MainViewState.Success::class)
-                .prop(MainViewState.Success::upgrades)
+                .prop(MainViewState.Success::shop)
+                .prop(ShopState::upgradeLists)
+                .index(0)
                 .extracting(UpgradeModel::status)
                 .containsExactly(UpgradeStatusModel.Bought)
         }
@@ -155,7 +164,9 @@ internal class MainViewModelTest {
             val state = expectMostRecentItem()
             assertThat(state)
                 .isInstanceOf(MainViewState.Success::class)
-                .prop(MainViewState.Success::upgrades)
+                .prop(MainViewState.Success::shop)
+                .prop(ShopState::upgradeLists)
+                .index(0)
                 .extracting(UpgradeModel::status)
                 .containsExactly(
                     UpgradeStatusModel.Affordable,

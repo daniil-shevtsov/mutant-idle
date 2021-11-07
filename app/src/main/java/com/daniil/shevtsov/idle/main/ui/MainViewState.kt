@@ -1,13 +1,13 @@
 package com.daniil.shevtsov.idle.main.ui
 
 import com.daniil.shevtsov.idle.main.ui.resource.ResourceModel
-import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeModel
+import com.daniil.shevtsov.idle.main.ui.shop.ShopState
 
 sealed class MainViewState {
     object Loading : MainViewState()
 
     data class Success(
         val resource: ResourceModel,
-        val upgrades: List<UpgradeModel>,
+        val shop: ShopState,
     ) : MainViewState()
 }

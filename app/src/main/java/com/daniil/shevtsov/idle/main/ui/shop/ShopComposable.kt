@@ -18,13 +18,14 @@ fun ShopPreview() {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Shop(
-    shop: ShopState
+    shop: ShopState,
+    onUpgradeSelected: (upgradeId: Long) -> Unit = {},
 ) {
     HorizontalPager(count = shop.upgradeLists.size) { pageIndex ->
         val upgradeList = shop.upgradeLists[pageIndex]
         UpgradeList(
             upgradeList = upgradeList,
-            onUpgradeSelected = { },
+            onUpgradeSelected = onUpgradeSelected,
             modifier = Modifier.fillMaxHeight()
         )
     }

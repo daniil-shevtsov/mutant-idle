@@ -9,6 +9,7 @@ import com.daniil.shevtsov.idle.main.domain.upgrade.Upgrade
 import com.daniil.shevtsov.idle.main.domain.upgrade.UpgradeStatus
 import com.daniil.shevtsov.idle.main.ui.MainViewState
 import com.daniil.shevtsov.idle.main.ui.resource.ResourceModelMapper
+import com.daniil.shevtsov.idle.main.ui.shop.ShopState
 import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeModelMapper
 import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeStatusModel
 import kotlinx.coroutines.flow.*
@@ -32,7 +33,7 @@ class MainViewModel @Inject constructor(
                         resource = resource,
                         name = "Blood",
                     ),
-                    upgrades = observeUpgrades()
+                    shop = observeUpgrades()
                         .firstOrNull()
                         .orEmpty()
                         .map { upgrade ->
@@ -48,6 +49,7 @@ class MainViewModel @Inject constructor(
                                 UpgradeStatusModel.Bought -> 2
                             }
                         }
+                        .let { ShopState(upgradeLists = listOf(it)) }
                 )
             }
             .launchIn(viewModelScope)

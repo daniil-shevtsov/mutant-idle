@@ -2,7 +2,6 @@ package com.daniil.shevtsov.idle.main.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -12,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.daniil.shevtsov.idle.main.MainViewAction
 import com.daniil.shevtsov.idle.main.MainViewModel
 import com.daniil.shevtsov.idle.main.ui.resource.ResourcePanel
-import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeList
+import com.daniil.shevtsov.idle.main.ui.shop.Shop
 
 @Preview(
     widthDp = 320,
@@ -71,11 +70,6 @@ fun SuccessContent(
             .background(Pallete.DarkGray)
     ) {
         ResourcePanel(state.resource)
-//        Shop(state.shop)
-        UpgradeList(
-            upgradeList = state.upgrades,
-            onUpgradeSelected = onUpgradeSelected,
-            modifier = Modifier.fillMaxHeight()
-        )
+        Shop(state.shop, onUpgradeSelected)
     }
 }
