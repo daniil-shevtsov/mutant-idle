@@ -77,18 +77,31 @@ class MainViewModel @Inject constructor(
         actionPanes = listOf(
             ActionPane(
                 actions = listOf(
-                    ActionModel(id = 0L, title = "Work"),
-                    ActionModel(id = 1L, title = "Buy a pet"),
-                    ActionModel(id = 2L, title = "Eat food"),
-                    ActionModel(id = 3L, title = "Pay rent"),
+                    ActionModel(id = 0L, title = "Work", subtitle = "The sun is high"),
+                    ActionModel(id = 1L, title = "Buy a pet", subtitle = "It's so cute"),
+                    ActionModel(id = 2L, title = "Eat food", subtitle = "It's not much"),
+                    ActionModel(id = 3L, title = "Buy Groceries", subtitle = "It's a short walk"),
+                    ActionModel(
+                        id = 4L,
+                        title = "Order Groceries",
+                        subtitle = "I can hide at home"
+                    ),
                 )
             ),
             ActionPane(
                 actions = listOf(
-                    ActionModel(id = 100L, title = "Work"),
-                    ActionModel(id = 101L, title = "Eat a pet"),
-                    ActionModel(id = 102L, title = "Capture man"),
-                    ActionModel(id = 103L, title = "Eat man"),
+                    ActionModel(id = 100L, title = "Grow", subtitle = "Cultivating mass"),
+                    ActionModel(id = 101L, title = "Eat a pet", subtitle = "It's time is up"),
+                    ActionModel(
+                        id = 102L,
+                        title = "Capture a person",
+                        subtitle = "I think I can do it if I grow enough"
+                    ),
+                    ActionModel(
+                        id = 103L,
+                        title = "Eat captured person",
+                        subtitle = "Finally some good fucking food"
+                    ),
                 )
             ),
         )
