@@ -1,5 +1,7 @@
 package com.daniil.shevtsov.idle.main.ui
 
+import com.daniil.shevtsov.idle.main.ui.actions.ActionModel
+import com.daniil.shevtsov.idle.main.ui.actions.ActionPane
 import com.daniil.shevtsov.idle.main.ui.actions.ActionsState
 import com.daniil.shevtsov.idle.main.ui.resource.ResourceModel
 import com.daniil.shevtsov.idle.main.ui.shop.ShopState
@@ -20,6 +22,20 @@ internal fun resourcePreview() = ResourceModel(
 
 internal fun actionStatePreview() = ActionsState(
     actionPanes = emptyList()
+)
+
+internal fun actionPanePreview() = ActionPane(
+    actions = (0..10).map { index ->
+        actionPreview(id = index.toLong(), title = "action $index")
+    }
+)
+
+internal fun actionPreview(
+    id: Long = 0L,
+    title: String = "",
+) = ActionModel(
+    id = id,
+    title = title,
 )
 
 internal fun shopStatePreview(
