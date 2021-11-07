@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.main.ui
 
 import com.daniil.shevtsov.idle.main.ui.resource.ResourceModel
+import com.daniil.shevtsov.idle.main.ui.shop.ShopState
 import com.daniil.shevtsov.idle.main.ui.upgrade.PriceModel
 import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeModel
 import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeStatusModel
@@ -13,6 +14,14 @@ internal fun viewStatePreview() = MainViewState.Success(
 internal fun resourcePreview() = ResourceModel(
     name = "Blood",
     value = "10 000",
+)
+
+internal fun shopStatePreview(
+
+) = ShopState(
+    upgradeLists = (0..3).map{ index ->
+        upgradeListPreview().map { it.copy(title = "$index ${it.title}") }
+    }
 )
 
 internal fun upgradePreview(

@@ -71,6 +71,7 @@ fun SuccessContent(
             .background(Pallete.DarkGray)
     ) {
         ResourcePanel(state.resource)
+//        Shop(state.shop)
         UpgradeList(
             upgradeList = state.upgrades,
             onUpgradeSelected = onUpgradeSelected,

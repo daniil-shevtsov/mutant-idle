@@ -71,6 +71,10 @@ dependencies {
         implementation(material)
     }
 
+    with(Deps.Accompanist) {
+        implementation(pager)
+    }
+
     with(Deps.Dagger) {
         implementation(dagger)
         kapt(daggerCompiler)
