@@ -1,10 +1,7 @@
 package com.daniil.shevtsov.idle.main.ui.actions
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
@@ -29,7 +26,7 @@ fun ActionPreview() {
 }
 
 @Preview(
-    widthDp = 200,
+    widthDp = 400,
     heightDp = 400,
 )
 @Composable
@@ -61,10 +58,13 @@ fun ActionPane(
 ) {
     LazyVerticalGrid(
         cells = GridCells.Fixed(count = 2),
-        modifier = Modifier.background(Pallete.DarkGray)
+        modifier = modifier.background(Pallete.DarkGray)
     ) {
         items(pane.actions) { action ->
-            Action(action)
+            Action(
+                action = action,
+                modifier = modifier.wrapContentSize(),
+            )
         }
     }
 }
@@ -72,9 +72,10 @@ fun ActionPane(
 @Composable
 fun Action(
     action: ActionModel,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(4.dp)
             .background(Pallete.Red)
             .padding(4.dp)
