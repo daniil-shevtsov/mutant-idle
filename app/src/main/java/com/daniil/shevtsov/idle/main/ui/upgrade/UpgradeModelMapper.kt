@@ -8,7 +8,8 @@ internal object UpgradeModelMapper {
             id = id,
             title = title,
             subtitle = subtitle,
-            price = PriceModel(value = price.value.toString())
+            price = PriceModel(value = price.value.toString()),
+            status = status,
         )
     }
 }

@@ -7,9 +7,7 @@ import com.daniil.shevtsov.idle.util.balanceConfig
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CalculateResourceIncreaseUseCaseTest {
 
     private val calculateResourceIncrease: CalculateResourceIncreaseUseCase by lazy {

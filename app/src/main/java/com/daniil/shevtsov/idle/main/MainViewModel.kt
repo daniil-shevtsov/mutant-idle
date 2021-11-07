@@ -60,10 +60,13 @@ class MainViewModel @Inject constructor(
 
     private fun initViewState(): MainViewState = MainViewState.Loading
 
-    private fun Upgrade.mapStatus(resource: Double) = when {
-        status == UpgradeStatus.Bought -> UpgradeStatusModel.Bought
-        price.value <= resource -> UpgradeStatusModel.Affordable
-        else -> UpgradeStatusModel.NotAffordable
+    private fun Upgrade.mapStatus(resource: Double): UpgradeStatusModel {
+        val statusModel = when {
+            status == UpgradeStatus.Bought -> UpgradeStatusModel.Bought
+            price.value <= resource -> UpgradeStatusModel.Affordable
+            else -> UpgradeStatusModel.NotAffordable
+        }
+        return statusModel
     }
 
 }

@@ -5,6 +5,7 @@ import com.daniil.shevtsov.idle.main.data.time.Time
 import com.daniil.shevtsov.idle.main.domain.resource.Resource
 import com.daniil.shevtsov.idle.main.domain.upgrade.Price
 import com.daniil.shevtsov.idle.main.domain.upgrade.Upgrade
+import com.daniil.shevtsov.idle.main.domain.upgrade.UpgradeStatus
 
 fun balanceConfig(
     tickRateMillis: Long = 1L,
@@ -21,11 +22,13 @@ fun upgrade(
     title: String = "",
     subtitle: String = "",
     price: Double = 0.0,
+    status: UpgradeStatus = UpgradeStatus.NotBought,
 ) = Upgrade(
     id = id,
     title = title,
     subtitle = subtitle,
     price = price(value = price),
+    status = status,
 )
 
 fun price(value: Double = 0.0) = Price(
