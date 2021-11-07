@@ -5,4 +5,5 @@ data class Upgrade(
     val title: String,
     val subtitle: String,
     val price: Price,
+    val status: UpgradeStatus,
 )

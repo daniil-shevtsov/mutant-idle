@@ -11,7 +11,8 @@ class BuyUpgradeUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(id: Long) {
-        val upgrade = getUpgradeBy(id)
+        val upgrade = getUpgradeBy(id) ?: return
+
         val upgradePrice = upgrade.price.value
         val currentResource = getCurrentResource().value
 

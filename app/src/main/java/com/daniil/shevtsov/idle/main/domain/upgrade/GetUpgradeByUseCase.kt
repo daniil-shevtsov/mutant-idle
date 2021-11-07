@@ -5,7 +5,7 @@ import javax.inject.Inject
 class GetUpgradeByUseCase @Inject constructor(
     private val upgradeRepository: UpgradeRepository,
 ) {
-    suspend operator fun invoke(id: Long): Upgrade {
-        return upgradeRepository.getUpgradeBy(id)!!
+    suspend operator fun invoke(id: Long): Upgrade? {
+        return upgradeRepository.getUpgradeBy(id)
     }
 }
