@@ -20,8 +20,12 @@ fun ShopPreview() {
 fun Shop(
     shop: ShopState,
     onUpgradeSelected: (upgradeId: Long) -> Unit = {},
+    modifier: Modifier = Modifier,
 ) {
-    HorizontalPager(count = shop.upgradeLists.size) { pageIndex ->
+    HorizontalPager(
+        count = shop.upgradeLists.size,
+        modifier = modifier,
+    ) { pageIndex ->
         val upgradeList = shop.upgradeLists[pageIndex]
         UpgradeList(
             upgradeList = upgradeList,

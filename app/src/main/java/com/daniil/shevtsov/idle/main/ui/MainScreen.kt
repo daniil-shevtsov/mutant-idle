@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.main.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -10,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.daniil.shevtsov.idle.main.MainViewAction
 import com.daniil.shevtsov.idle.main.MainViewModel
+import com.daniil.shevtsov.idle.main.ui.actions.ActionSection
 import com.daniil.shevtsov.idle.main.ui.resource.ResourcePanel
 import com.daniil.shevtsov.idle.main.ui.shop.Shop
 
@@ -67,9 +69,18 @@ fun SuccessContent(
 ) {
     Column(
         modifier = Modifier
-            .background(Pallete.DarkGray)
+            .background(Pallete.DarkGray),
+        verticalArrangement = Arrangement.SpaceEvenly,
     ) {
         ResourcePanel(state.resource)
-        Shop(state.shop, onUpgradeSelected)
+        ActionSection(
+            state = state.actionState,
+            modifier = Modifier.weight(0.5f),
+        )
+        Shop(
+            shop = state.shop,
+            onUpgradeSelected = onUpgradeSelected,
+            modifier = Modifier.weight(0.5f),
+        )
     }
 }

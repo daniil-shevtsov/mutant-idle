@@ -41,8 +41,12 @@ fun ActionPanesPreview() {
 @Composable
 fun ActionSection(
     state: ActionsState,
+    modifier: Modifier = Modifier,
 ) {
-    HorizontalPager(count = state.actionPanes.size) { paneIndex ->
+    HorizontalPager(
+        count = state.actionPanes.size,
+        modifier = modifier,
+    ) { paneIndex ->
         val actionPane = state.actionPanes[paneIndex]
         ActionPane(
             pane = actionPane,
