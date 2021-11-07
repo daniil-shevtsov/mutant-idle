@@ -22,11 +22,15 @@ fun UpgradeListPreview() {
 fun UpgradeList(
     upgradeList: List<UpgradeModel>,
     modifier: Modifier = Modifier,
+    onUpgradeSelected: (upgradeId: Long) -> Unit = {},
 ) {
     LazyColumn(
         content = {
             items(items = upgradeList) { upgrade ->
-                Upgrade(upgrade)
+                Upgrade(
+                    upgrade = upgrade,
+                    onClicked = { onUpgradeSelected(upgrade.id) }
+                )
             }
         },
         verticalArrangement = Arrangement.spacedBy(8.dp),

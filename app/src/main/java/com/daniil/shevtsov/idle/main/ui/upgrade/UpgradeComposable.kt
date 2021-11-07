@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.main.ui.upgrade
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,7 +29,10 @@ fun UpgradePreview() {
 }
 
 @Composable
-fun Upgrade(upgrade: UpgradeModel) {
+fun Upgrade(
+    upgrade: UpgradeModel,
+    onClicked: () -> Unit = {},
+) {
     val priceColor = when (upgrade.status) {
         UpgradeStatusModel.Affordable -> Color.White
         UpgradeStatusModel.NotAffordable -> Color.Black
@@ -41,6 +45,7 @@ fun Upgrade(upgrade: UpgradeModel) {
     Column(
         modifier = Modifier
             .background(Pallete.Red)
+            .clickable { onClicked() }
             .padding(4.dp),
     ) {
         Box {
