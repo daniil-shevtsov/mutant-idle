@@ -29,6 +29,4 @@ fun Shop(
             modifier = Modifier.fillMaxHeight()
         )
     }
-
-
 }

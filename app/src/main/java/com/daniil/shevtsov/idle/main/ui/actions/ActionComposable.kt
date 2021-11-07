@@ -17,8 +17,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.main.ui.Pallete
-import com.daniil.shevtsov.idle.main.ui.actionPanePreviewStub
 import com.daniil.shevtsov.idle.main.ui.actionPreviewStub
+import com.daniil.shevtsov.idle.main.ui.actionStatePreviewStub
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
 
 @Preview
 @Composable
@@ -31,13 +33,27 @@ fun ActionPreview() {
     heightDp = 400,
 )
 @Composable
-fun ActionPanePreview() {
-    ActionPane(pane = actionPanePreviewStub())
+fun ActionPanesPreview() {
+    ActionSection(state = actionStatePreviewStub())
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun ActionSection(
+    state: ActionsState,
+) {
+    HorizontalPager(count = state.actionPanes.size) { paneIndex ->
+        val actionPane = state.actionPanes[paneIndex]
+        ActionPane(
+            pane = actionPane,
+        )
+    }
 }
 
 @Composable
 fun ActionPane(
-    pane: ActionPane
+    pane: ActionPane,
+    modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
         cells = GridCells.Fixed(count = 2),

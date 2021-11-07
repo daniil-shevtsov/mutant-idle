@@ -21,12 +21,16 @@ internal fun resourcePreviewStub() = ResourceModel(
 )
 
 internal fun actionStatePreviewStub() = ActionsState(
-    actionPanes = emptyList()
+    actionPanes = (0..3).map { paneIndex ->
+        actionPanePreviewStub(paneIndex = paneIndex)
+    }
 )
 
-internal fun actionPanePreviewStub() = ActionPane(
+internal fun actionPanePreviewStub(
+    paneIndex: Int? = null
+) = ActionPane(
     actions = (0..10).map { index ->
-        actionPreviewStub(id = index.toLong(), title = "action $index")
+        actionPreviewStub(id = index.toLong(), title = "action ${paneIndex ?: 0}$index")
     }
 )
 
@@ -41,7 +45,7 @@ internal fun actionPreviewStub(
 internal fun shopStatePreviewStub(
 
 ) = ShopState(
-    upgradeLists = (0..3).map{ index ->
+    upgradeLists = (0..3).map { index ->
         upgradeListPreviewStub().map { it.copy(title = "$index ${it.title}") }
     }
 )
