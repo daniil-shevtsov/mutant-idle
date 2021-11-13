@@ -1,8 +1,8 @@
 package com.daniil.shevtsov.idle.main.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -11,8 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.daniil.shevtsov.idle.main.MainViewAction
 import com.daniil.shevtsov.idle.main.MainViewModel
+import com.daniil.shevtsov.idle.main.ui.actions.ActionSection
 import com.daniil.shevtsov.idle.main.ui.resource.ResourcePanel
-import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeList
+import com.daniil.shevtsov.idle.main.ui.shop.Shop
 
 @Preview(
     widthDp = 320,
@@ -20,7 +21,7 @@ import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeList
 )
 @Composable
 fun MainPreview() {
-    val state = viewStatePreview()
+    val state = viewStatePreviewStub()
     MainContent(state = state)
 }
 
@@ -44,12 +45,14 @@ fun MainScreen(
 @Composable
 fun MainContent(
     state: MainViewState,
+    onActionClicked: (actionId: Long) -> Unit = {},
     onUpgradeSelected: (upgradeId: Long) -> Unit = {},
 ) {
     when (state) {
         is MainViewState.Loading -> LoadingContent()
         is MainViewState.Success -> SuccessContent(
             state = state,
+            onActionClicked = onActionClicked,
             onUpgradeSelected = onUpgradeSelected,
         )
     }
@@ -64,17 +67,24 @@ fun LoadingContent() {
 @Composable
 fun SuccessContent(
     state: MainViewState.Success,
+    onActionClicked: (actionId: Long) -> Unit = {},
     onUpgradeSelected: (upgradeId: Long) -> Unit = {},
 ) {
     Column(
         modifier = Modifier
-            .background(Pallete.DarkGray)
+            .background(Pallete.Red),
+        verticalArrangement = Arrangement.SpaceEvenly,
     ) {
         ResourcePanel(state.resource)
-        UpgradeList(
-            upgradeList = state.upgrades,
+        ActionSection(
+            state = state.actionState,
+            onActionClicked = onActionClicked,
+            modifier = Modifier.weight(0.5f),
+        )
+        Shop(
+            shop = state.shop,
             onUpgradeSelected = onUpgradeSelected,
-            modifier = Modifier.fillMaxHeight()
+            modifier = Modifier.weight(0.5f),
         )
     }
 }

@@ -5,6 +5,8 @@ object Versions {
 
     const val assertk = "0.24"
 
+    const val accompanist = "0.20.2"
+
     const val compose = "1.0.5"
     const val composeMultiplatform = "1.0.0-alpha08"
 
@@ -51,6 +53,9 @@ object Deps {
         const val material = "com.google.android.material:material:${Versions.material}"
     }
 
+    object Accompanist {
+        const val pager = "com.google.accompanist:accompanist-pager:${Versions.accompanist}"
+    }
 
     object Compose {
         const val ui = "androidx.compose.ui:ui:${Versions.compose}"

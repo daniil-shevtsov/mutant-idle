@@ -14,13 +14,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.main.ui.Pallete
-import com.daniil.shevtsov.idle.main.ui.resourcePreview
+import com.daniil.shevtsov.idle.main.ui.innerBorder
+import com.daniil.shevtsov.idle.main.ui.resourcePreviewStub
 
 @Preview
 @Composable
 fun ResourcePreview() {
     ResourcePanel(
-        resource = resourcePreview()
+        resource = resourcePreviewStub()
     )
 }
 
@@ -36,7 +37,16 @@ fun ResourcePanel(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Text(text = resource.name,fontSize = 24.sp, color = Color.White)
-        Text(text = resource.value,fontSize = 16.sp, modifier = Modifier.background(Color.White).padding(4.dp))
+        Text(text = resource.name, fontSize = 24.sp, color = Color.White)
+        Text(
+            text = resource.value, fontSize = 16.sp, modifier =
+            Modifier
+                .innerBorder(
+                    lightColor = Pallete.LightRed,
+                    darkColor = Pallete.DarkRed
+                )
+                .background(Color.White)
+                .padding(4.dp)
+        )
     }
 }

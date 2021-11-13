@@ -8,7 +8,11 @@ import com.daniil.shevtsov.idle.main.domain.upgrade.ObserveUpgradesUseCase
 import com.daniil.shevtsov.idle.main.domain.upgrade.Upgrade
 import com.daniil.shevtsov.idle.main.domain.upgrade.UpgradeStatus
 import com.daniil.shevtsov.idle.main.ui.MainViewState
+import com.daniil.shevtsov.idle.main.ui.actions.ActionModel
+import com.daniil.shevtsov.idle.main.ui.actions.ActionPane
+import com.daniil.shevtsov.idle.main.ui.actions.ActionsState
 import com.daniil.shevtsov.idle.main.ui.resource.ResourceModelMapper
+import com.daniil.shevtsov.idle.main.ui.shop.ShopState
 import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeModelMapper
 import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeStatusModel
 import kotlinx.coroutines.flow.*
@@ -32,7 +36,8 @@ class MainViewModel @Inject constructor(
                         resource = resource,
                         name = "Blood",
                     ),
-                    upgrades = observeUpgrades()
+                    actionState = createActionState(),
+                    shop = observeUpgrades()
                         .firstOrNull()
                         .orEmpty()
                         .map { upgrade ->
@@ -42,12 +47,13 @@ class MainViewModel @Inject constructor(
                             )
                         }
                         .sortedBy {
-                            when(it.status) {
+                            when (it.status) {
                                 UpgradeStatusModel.Affordable -> 0
                                 UpgradeStatusModel.NotAffordable -> 1
                                 UpgradeStatusModel.Bought -> 2
                             }
                         }
+                        .let { ShopState(upgradeLists = listOf(it)) }
                 )
             }
             .launchIn(viewModelScope)
@@ -56,6 +62,7 @@ class MainViewModel @Inject constructor(
     fun handleAction(action: MainViewAction) {
         when (action) {
             is MainViewAction.UpgradeSelected -> handleUpgradeSelected(action)
+            is MainViewAction.ActionClicked -> handleActionClicked(action)
         }
     }
 
@@ -65,7 +72,46 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    private fun handleActionClicked(action: MainViewAction.ActionClicked) {
+        TODO("Not yet implemented")
+    }
+
     private fun initViewState(): MainViewState = MainViewState.Loading
+
+    private fun createActionState() = ActionsState(
+        actionPanes = listOf(
+            ActionPane(
+                actions = listOf(
+                    ActionModel(id = 0L, title = "Work", subtitle = "The sun is high"),
+                    ActionModel(id = 1L, title = "Buy a pet", subtitle = "It's so cute"),
+                    ActionModel(id = 2L, title = "Eat food", subtitle = "It's not much"),
+                    ActionModel(id = 3L, title = "Buy Groceries", subtitle = "It's a short walk"),
+                    ActionModel(
+                        id = 4L,
+                        title = "Order Groceries",
+                        subtitle = "I can hide at home"
+                    ),
+                )
+            ),
+            ActionPane(
+                actions = listOf(
+                    ActionModel(id = 100L, title = "Grow", subtitle = "Cultivating mass"),
+                    ActionModel(id = 101L, title = "Eat a pet", subtitle = "Its time is up"),
+                    ActionModel(id = 104L, title = "Hunt for rats", subtitle = "Surely there are some"),
+                    ActionModel(
+                        id = 102L,
+                        title = "Capture a person",
+                        subtitle = "I think I can do it if I grow enough"
+                    ),
+                    ActionModel(
+                        id = 103L,
+                        title = "Eat captured person",
+                        subtitle = "Finally some good fucking food"
+                    ),
+                )
+            ),
+        )
+    )
 
     private fun Upgrade.mapStatus(resource: Double): UpgradeStatusModel {
         val statusModel = when {
