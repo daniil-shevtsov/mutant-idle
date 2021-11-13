@@ -45,12 +45,14 @@ fun MainScreen(
 @Composable
 fun MainContent(
     state: MainViewState,
+    onActionClicked: (actionId: Long) -> Unit = {},
     onUpgradeSelected: (upgradeId: Long) -> Unit = {},
 ) {
     when (state) {
         is MainViewState.Loading -> LoadingContent()
         is MainViewState.Success -> SuccessContent(
             state = state,
+            onActionClicked = onActionClicked,
             onUpgradeSelected = onUpgradeSelected,
         )
     }
@@ -65,6 +67,7 @@ fun LoadingContent() {
 @Composable
 fun SuccessContent(
     state: MainViewState.Success,
+    onActionClicked: (actionId: Long) -> Unit = {},
     onUpgradeSelected: (upgradeId: Long) -> Unit = {},
 ) {
     Column(
@@ -75,6 +78,7 @@ fun SuccessContent(
         ResourcePanel(state.resource)
         ActionSection(
             state = state.actionState,
+            onActionClicked = onActionClicked,
             modifier = Modifier.weight(0.5f),
         )
         Shop(

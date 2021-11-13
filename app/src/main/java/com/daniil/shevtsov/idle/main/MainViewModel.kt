@@ -62,6 +62,7 @@ class MainViewModel @Inject constructor(
     fun handleAction(action: MainViewAction) {
         when (action) {
             is MainViewAction.UpgradeSelected -> handleUpgradeSelected(action)
+            is MainViewAction.ActionClicked -> handleActionClicked(action)
         }
     }
 
@@ -69,6 +70,10 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             buyUpgrade(id = action.id)
         }
+    }
+
+    private fun handleActionClicked(action: MainViewAction.ActionClicked) {
+        TODO("Not yet implemented")
     }
 
     private fun initViewState(): MainViewState = MainViewState.Loading
@@ -91,7 +96,7 @@ class MainViewModel @Inject constructor(
             ActionPane(
                 actions = listOf(
                     ActionModel(id = 100L, title = "Grow", subtitle = "Cultivating mass"),
-                    ActionModel(id = 101L, title = "Eat a pet", subtitle = "It's time is up"),
+                    ActionModel(id = 101L, title = "Eat a pet", subtitle = "Its time is up"),
                     ActionModel(id = 104L, title = "Hunt for rats", subtitle = "Surely there are some"),
                     ActionModel(
                         id = 102L,

@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.main.ui.actions
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -50,6 +51,7 @@ fun ActionPanesPreviewWithOneItem() {
 fun ActionSection(
     state: ActionsState,
     modifier: Modifier = Modifier,
+    onActionClicked: (actionId: Long) -> Unit = {},
 ) {
     HorizontalPager(
         count = state.actionPanes.size,
@@ -65,6 +67,7 @@ fun ActionSection(
         val actionPane = state.actionPanes[paneIndex]
         ActionPane(
             pane = actionPane,
+            onActionClicked = onActionClicked,
         )
     }
 }
@@ -72,6 +75,7 @@ fun ActionSection(
 @Composable
 fun ActionPane(
     pane: ActionPane,
+    onActionClicked: (actionId: Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
@@ -81,6 +85,7 @@ fun ActionPane(
         items(pane.actions) { action ->
             Action(
                 action = action,
+                onClicked = {onActionClicked(action.id)},
                 modifier = modifier,
             )
         }
@@ -91,6 +96,7 @@ fun ActionPane(
 fun Action(
     action: ActionModel,
     modifier: Modifier = Modifier,
+    onClicked: () -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -99,6 +105,7 @@ fun Action(
             .padding(4.dp)
             .background(Pallete.DarkRed)
             .padding(4.dp)
+            .clickable { onClicked() }
     ) {
         Text(
             text = action.title,
