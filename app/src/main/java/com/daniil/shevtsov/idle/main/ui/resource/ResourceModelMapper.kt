@@ -1,6 +1,8 @@
 package com.daniil.shevtsov.idle.main.ui.resource
 
 import com.daniil.shevtsov.idle.main.domain.resource.Resource
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 internal object ResourceModelMapper {
 
@@ -10,8 +12,14 @@ internal object ResourceModelMapper {
     ) = with(resource) {
         ResourceModel(
             name = name,
-            value = value.toString(),
+            value = value.formatRound(),
         )
     }
+
+    private fun Double.formatRound(
+
+    ): String = DecimalFormat("#.###")
+        .apply { roundingMode = RoundingMode.CEILING }
+        .format(this)
 
 }
