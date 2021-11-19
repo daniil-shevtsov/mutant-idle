@@ -52,9 +52,9 @@ internal class MainViewModelTest {
             assertThat(state)
                 .isInstanceOf(MainViewState.Success::class)
                 .all {
-                    prop(MainViewState.Success::resource)
-                        .prop(ResourceModel::value)
-                        .isEqualTo("2.0")
+                    prop(MainViewState.Success::resources)
+                        .extracting(ResourceModel::value)
+                        .containsExactly("2")
                     prop(MainViewState.Success::shop)
                         .prop(ShopState::upgradeLists)
                         .index(0)

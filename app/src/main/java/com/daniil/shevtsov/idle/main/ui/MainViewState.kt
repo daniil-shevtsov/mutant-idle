@@ -8,7 +8,7 @@ sealed class MainViewState {
     object Loading : MainViewState()
 
     data class Success(
-        val resource: ResourceModel,
+        val resources: List<ResourceModel>,
         val actionState: ActionsState,
         val shop: ShopState,
     ) : MainViewState()

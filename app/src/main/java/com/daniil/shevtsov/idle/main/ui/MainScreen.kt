@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.daniil.shevtsov.idle.main.MainViewAction
 import com.daniil.shevtsov.idle.main.MainViewModel
 import com.daniil.shevtsov.idle.main.ui.actions.ActionSection
-import com.daniil.shevtsov.idle.main.ui.resource.ResourcePanel
+import com.daniil.shevtsov.idle.main.ui.resource.ResourcePane
 import com.daniil.shevtsov.idle.main.ui.shop.Shop
 
 @Preview(
@@ -75,7 +75,7 @@ fun SuccessContent(
             .background(Pallete.Red),
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
-        ResourcePanel(state.resource)
+        ResourcePane(state.resources)
         ActionSection(
             state = state.actionState,
             onActionClicked = onActionClicked,

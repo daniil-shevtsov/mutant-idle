@@ -10,7 +10,7 @@ import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeModel
 import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeStatusModel
 
 internal fun viewStatePreviewStub() = MainViewState.Success(
-    resource = resourcePreviewStub(),
+    resources = listOf(resourcePreviewStub()),
     actionState = actionStatePreviewStub(),
     shop = shopStatePreviewStub(),
 )

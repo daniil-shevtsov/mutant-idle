@@ -32,10 +32,10 @@ class MainViewModel @Inject constructor(
         observeResource()
             .onEach { resource ->
                 _state.value = MainViewState.Success(
-                    resource = ResourceModelMapper.map(
+                    resources = listOf(ResourceModelMapper.map(
                         resource = resource,
                         name = "Blood",
-                    ),
+                    )),
                     actionState = createActionState(),
                     shop = observeUpgrades()
                         .firstOrNull()
