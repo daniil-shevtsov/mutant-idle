@@ -18,18 +18,18 @@ internal class ObserveResourceUseCaseTest {
 
     val barrier = Barrier
 
+    private val balanceConfig = BalanceConfig(
+        tickRateMillis = 1L,
+        resourcePerMillisecond = 2.0,
+    )
+
     object Barrier {
 
         private lateinit var observeResourceUseCase: ObserveResourceUseCase
         private lateinit var updateResourceUseCase: UpdateResourceUseCase
         private lateinit var getCurrentResourceUseCase: GetCurrentResourceUseCase
 
-        fun create() {
-            val balanceConfig = BalanceConfig(
-                tickRateMillis = 1L,
-                resourcePerMillisecond = 2.0,
-            )
-
+        fun create(balanceConfig: BalanceConfig) {
             val storage = ResourceStorage()
             val repository = ResourceRepositoryImpl(
                 storage = storage
@@ -57,12 +57,21 @@ internal class ObserveResourceUseCaseTest {
 
     @BeforeEach
     fun onSetup() {
-        barrier.create()
+        barrier.create(balanceConfig)
     }
 
     @Test
     fun `should return 0 for resource initially`() = runBlockingTest {
         assertThat(barrier.getCurrentResource()).isEqualTo(Resource(0.0))
+    }
+
+    @Test
+    fun `should update resource by value after tick passed`() = runBlockingTest {
+        barrier.updateResource(Time(balanceConfig.tickRateMillis))
+        assertThat(barrier.getCurrentResource()).isEqualTo(Resource(balanceConfig.resourcePerMillisecond))
+
+        barrier.updateResource(Time(balanceConfig.tickRateMillis))
+        assertThat(barrier.getCurrentResource()).isEqualTo(Resource(balanceConfig.resourcePerMillisecond * 2))
     }
 
 
