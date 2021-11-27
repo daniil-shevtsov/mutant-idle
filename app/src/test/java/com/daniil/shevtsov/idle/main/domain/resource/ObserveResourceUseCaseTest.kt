@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.main.domain.resource
 
+import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.daniil.shevtsov.idle.MainCoroutineExtension
@@ -74,5 +75,18 @@ internal class ObserveResourceUseCaseTest {
         assertThat(barrier.getCurrentResource()).isEqualTo(Resource(balanceConfig.resourcePerMillisecond * 2))
     }
 
+    @Test
+    fun `should got new values of resource to observer`() = runBlockingTest {
+
+        barrier.observeResource().test {
+            assertThat(awaitItem()).isEqualTo(Resource(0.0))
+
+            barrier.updateResource(Time(balanceConfig.tickRateMillis))
+            assertThat(awaitItem()).isEqualTo(Resource(balanceConfig.resourcePerMillisecond))
+
+            barrier.updateResource(Time(balanceConfig.tickRateMillis))
+            assertThat(awaitItem()).isEqualTo(Resource(balanceConfig.resourcePerMillisecond * 2))
+        }
+    }
 
 }
