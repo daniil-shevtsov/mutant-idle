@@ -23,4 +23,15 @@ internal class ResourceStorageTest {
         assertThat(storage.getCurrentValue()).isEqualTo(0.0)
     }
 
+    @Test
+    fun `should update value correctly`() = runBlockingTest {
+        assertThat(storage.getCurrentValue()).isEqualTo(0.0)
+
+        storage.setNewValue(2.0)
+        assertThat(storage.getCurrentValue()).isEqualTo(2.0)
+
+        storage.setNewValue(4.0)
+        assertThat(storage.getCurrentValue()).isEqualTo(4.0)
+    }
+
 }
