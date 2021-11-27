@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.main.data.resource
 
+import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.daniil.shevtsov.idle.MainCoroutineExtension
@@ -32,6 +33,19 @@ internal class ResourceStorageTest {
 
         storage.setNewValue(4.0)
         assertThat(storage.getCurrentValue()).isEqualTo(4.0)
+    }
+
+    @Test
+    fun `should get new values to observers`() = runBlockingTest {
+        storage.observeChange().test {
+            assertThat(awaitItem()).isEqualTo(0.0)
+
+            storage.setNewValue(2.0)
+            assertThat(awaitItem()).isEqualTo(2.0)
+
+            storage.setNewValue(4.0)
+            assertThat(awaitItem()).isEqualTo(4.0)
+        }
     }
 
 }
