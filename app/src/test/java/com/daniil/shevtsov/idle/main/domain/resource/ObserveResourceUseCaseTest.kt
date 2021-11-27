@@ -40,9 +40,7 @@ internal class ObserveResourceUseCaseTest {
                 resourceRepository = repository
             )
             updateResourceUseCase = UpdateResourceUseCase(
-                calculateResourceIncrease = CalculateResourceIncreaseUseCase(
-                    balanceConfig = balanceConfig
-                ),
+                balanceConfig = balanceConfig,
                 resourceRepository = repository
             )
             getCurrentResourceUseCase = GetCurrentResourceUseCase(
