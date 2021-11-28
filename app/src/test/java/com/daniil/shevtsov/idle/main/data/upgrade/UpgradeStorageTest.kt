@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
+import assertk.assertions.isNull
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.MainCoroutineExtension
 import com.daniil.shevtsov.idle.main.domain.upgrade.Upgrade
@@ -43,6 +44,17 @@ internal class UpgradeStorageTest {
             .isNotNull()
             .prop(Upgrade::id)
             .isEqualTo(1)
+    }
+
+    @Test
+    fun `should return null by id if no such upgrade`() = runBlockingTest {
+        val initialUpgrades = listOf(upgrade(id = 0), upgrade(id = 1))
+        storage = UpgradeStorage(initialUpgrades)
+
+        val upgrade = storage.getUpgradeById(4)
+
+        assertThat(upgrade)
+            .isNull()
     }
 
 }
