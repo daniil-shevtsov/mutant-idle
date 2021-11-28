@@ -47,7 +47,6 @@ internal class ResourceBehaviorTest {
 
     @Test
     fun `should got new values of resource to observer`() = runBlockingTest {
-
         behavior.observeResource().test {
             assertThat(awaitItem()).isEqualTo(Resource(0.0))
 
