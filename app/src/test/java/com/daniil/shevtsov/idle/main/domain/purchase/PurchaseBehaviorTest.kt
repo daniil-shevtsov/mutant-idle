@@ -14,8 +14,15 @@ internal class PurchaseBehaviorTest {
     @Test
     fun `should buy upgrade if it's affordable`() {
         val upgrade = upgrade(price = 2.0, status = UpgradeStatus.NotBought)
-        val result = buyUpgrade(upgrade, forPrice = upgrade.price, whileResourceIs = Resource(4.0))
+        val result = buyUpgrade(upgrade = upgrade, currentResource = Resource(4.0))
         assertThat(result).prop(Upgrade::status).isEqualTo(UpgradeStatus.Bought)
+    }
+
+    @Test
+    fun `should not buy upgrade if it's not affordable`() {
+        val upgrade = upgrade(price = 10.0, status = UpgradeStatus.NotBought)
+        val result = buyUpgrade(upgrade = upgrade, currentResource = Resource(4.0))
+        assertThat(result).prop(Upgrade::status).isEqualTo(UpgradeStatus.NotBought)
     }
 
 }
