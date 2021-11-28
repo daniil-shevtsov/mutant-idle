@@ -27,7 +27,7 @@ internal class ObserveResourceUseCaseTest {
     object Barrier {
 
         private lateinit var observeResourceUseCase: ObserveResourceUseCase
-        private lateinit var updateResourceUseCase: UpdateResourceUseCase
+        private lateinit var updateResourcesUseCase: UpdateResourcesUseCase
         private lateinit var getCurrentResourceUseCase: GetCurrentResourceUseCase
 
         fun create(balanceConfig: BalanceConfig) {
@@ -39,7 +39,7 @@ internal class ObserveResourceUseCaseTest {
             observeResourceUseCase = ObserveResourceUseCase(
                 resourceRepository = repository
             )
-            updateResourceUseCase = UpdateResourceUseCase(
+            updateResourcesUseCase = UpdateResourcesUseCase(
                 balanceConfig = balanceConfig,
                 resourceRepository = repository
             )
@@ -49,7 +49,7 @@ internal class ObserveResourceUseCaseTest {
         }
 
         fun observeResource() = observeResourceUseCase()
-        suspend fun updateResource(timePassed: Time) = updateResourceUseCase(timePassed)
+        suspend fun updateResource(timePassed: Time) = updateResourcesUseCase(timePassed)
         suspend fun getCurrentResource() = getCurrentResourceUseCase()
 
     }
