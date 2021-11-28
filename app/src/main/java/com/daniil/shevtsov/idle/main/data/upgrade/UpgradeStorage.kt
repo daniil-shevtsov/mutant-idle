@@ -15,4 +15,9 @@ class UpgradeStorage(
         return upgrades.map { it.values.toList() }
     }
 
+    fun getUpgradeById(id: Long): Upgrade? {
+        val upgradeMap = upgrades.value
+        return upgradeMap[id]
+    }
+
 }
