@@ -6,9 +6,9 @@ import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.MainCoroutineExtension
 import com.daniil.shevtsov.idle.core.BalanceConfig
+import com.daniil.shevtsov.idle.main.data.resource.ResourceBehavior
 import com.daniil.shevtsov.idle.main.data.time.Time
 import com.daniil.shevtsov.idle.main.domain.resource.ObserveResourceUseCase
-import com.daniil.shevtsov.idle.main.domain.resource.ObserveResourceUseCaseTest
 import com.daniil.shevtsov.idle.main.domain.resource.Resource
 import com.daniil.shevtsov.idle.main.domain.resource.ResourceSource
 import com.daniil.shevtsov.idle.main.domain.upgrade.BuyUpgradeUseCase
@@ -43,7 +43,7 @@ internal class MainViewModelTest {
     }
 
 
-    private val resourceBarrier = ObserveResourceUseCaseTest.Barrier
+    private val resourceBarrier = ResourceBehavior
     private val observeUpgrades: ObserveUpgradesUseCase = mockk()
     private val buyUpgrade: BuyUpgradeUseCase = mockk(relaxUnitFun = true)
 
