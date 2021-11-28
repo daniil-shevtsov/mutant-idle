@@ -6,6 +6,7 @@ import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.MainCoroutineExtension
 import com.daniil.shevtsov.idle.core.BalanceConfig
+import com.daniil.shevtsov.idle.main.data.time.Time
 import com.daniil.shevtsov.idle.main.domain.resource.ObserveResourceUseCase
 import com.daniil.shevtsov.idle.main.domain.resource.ObserveResourceUseCaseTest
 import com.daniil.shevtsov.idle.main.domain.resource.Resource
@@ -66,9 +67,12 @@ internal class MainViewModelTest {
         usedResourceSource = observeResourceMock
     }
 
+    private fun useRealSource() {
+        usedResourceSource = observeResourceReal
+    }
+
     @Test
     fun `should for correct initial state`() = runBlockingTest {
-        usedResourceSource = observeResourceReal
         every { observeUpgrades() } returns flowOf(listOf(upgrade(id = 1L)))
 
         viewModel.state.test {
@@ -91,6 +95,7 @@ internal class MainViewModelTest {
     @Test
     fun `should buy upgrade when clicked and affordable`() = runBlockingTest {
         every { observeUpgrades() } returns flowOf(listOf(upgrade(id = 1L)))
+        useRealSource()
 
         viewModel.handleAction(MainViewAction.UpgradeSelected(id = 1L))
 
@@ -108,7 +113,8 @@ internal class MainViewModelTest {
                 )
             )
         )
-        every { observeResourceMock() } returns flowOf(resource(value = 50.0))
+        resourceBarrier.updateResource(Time(1000))
+        useRealSource()
 
         viewModel.state.test {
             val state = expectMostRecentItem()
