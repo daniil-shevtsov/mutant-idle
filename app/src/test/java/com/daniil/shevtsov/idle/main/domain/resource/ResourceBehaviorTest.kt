@@ -6,6 +6,7 @@ import assertk.assertions.isEqualTo
 import com.daniil.shevtsov.idle.MainCoroutineExtension
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.main.data.resource.ResourceBehavior
+import com.daniil.shevtsov.idle.main.data.resource.ResourceStorage
 import com.daniil.shevtsov.idle.main.data.time.Time
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.BeforeEach
@@ -15,7 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(MainCoroutineExtension::class)
 internal class ResourceBehaviorTest {
 
-    val behavior = ResourceBehavior
+    private lateinit var behavior: ResourceBehavior
 
     private val balanceConfig = BalanceConfig(
         tickRateMillis = 1L,
@@ -24,7 +25,10 @@ internal class ResourceBehaviorTest {
 
     @BeforeEach
     fun onSetup() {
-        behavior.create(balanceConfig)
+        behavior = ResourceBehavior(
+            balanceConfig = balanceConfig,
+            storage = ResourceStorage(),
+        )
     }
 
     @Test

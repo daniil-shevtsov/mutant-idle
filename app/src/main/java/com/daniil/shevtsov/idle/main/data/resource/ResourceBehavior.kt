@@ -5,15 +5,18 @@ import com.daniil.shevtsov.idle.main.data.time.Time
 import com.daniil.shevtsov.idle.main.domain.resource.ObserveResourceUseCase
 import com.daniil.shevtsov.idle.main.domain.resource.UpdateResourcesUseCase
 import com.daniil.shevtsov.idle.main.ui.resource.GetCurrentResourceUseCase
+import javax.inject.Inject
 
-object ResourceBehavior {
+class ResourceBehavior @Inject constructor(
+    private val balanceConfig: BalanceConfig,
+    private val storage: ResourceStorage,
+) {
 
     private lateinit var observeResourceUseCase: ObserveResourceUseCase
     private lateinit var updateResourcesUseCase: UpdateResourcesUseCase
     private lateinit var getCurrentResourceUseCase: GetCurrentResourceUseCase
 
-    fun create(balanceConfig: BalanceConfig) {
-        val storage = ResourceStorage()
+    init {
         val repository = ResourceRepositoryImpl(
             storage = storage
         )

@@ -7,6 +7,7 @@ import assertk.assertions.*
 import com.daniil.shevtsov.idle.MainCoroutineExtension
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.main.data.resource.ResourceBehavior
+import com.daniil.shevtsov.idle.main.data.resource.ResourceStorage
 import com.daniil.shevtsov.idle.main.data.time.Time
 import com.daniil.shevtsov.idle.main.domain.resource.ObserveResourceUseCase
 import com.daniil.shevtsov.idle.main.domain.resource.Resource
@@ -42,8 +43,6 @@ internal class MainViewModelTest {
         }
     }
 
-
-    private val resourceBarrier = ResourceBehavior
     private val observeUpgrades: ObserveUpgradesUseCase = mockk()
     private val buyUpgrade: BuyUpgradeUseCase = mockk(relaxUnitFun = true)
 
@@ -54,6 +53,11 @@ internal class MainViewModelTest {
         resourcePerMillisecond = 2.0,
     )
 
+    private val resourceBarrier = ResourceBehavior(
+        balanceConfig = balanceConfig,
+        storage = ResourceStorage(),
+    )
+
     private val viewModel: MainViewModel by lazy { createViewModel() }
 
     @BeforeEach
@@ -61,8 +65,6 @@ internal class MainViewModelTest {
         clearAllMocks()
         every { observeResourceMock() } returns flowOf(resource(value = 0.0))
         every { observeUpgrades() } returns flowOf(emptyList())
-
-        resourceBarrier.create(balanceConfig)
 
         usedResourceSource = observeResourceMock
     }
