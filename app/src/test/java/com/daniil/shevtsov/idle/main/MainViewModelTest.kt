@@ -8,6 +8,7 @@ import com.daniil.shevtsov.idle.MainCoroutineExtension
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.main.domain.resource.ObserveResourceUseCase
 import com.daniil.shevtsov.idle.main.domain.resource.ObserveResourceUseCaseTest
+import com.daniil.shevtsov.idle.main.domain.resource.Resource
 import com.daniil.shevtsov.idle.main.domain.resource.ResourceSource
 import com.daniil.shevtsov.idle.main.domain.upgrade.BuyUpgradeUseCase
 import com.daniil.shevtsov.idle.main.domain.upgrade.ObserveUpgradesUseCase
@@ -23,6 +24,7 @@ import io.mockk.clearAllMocks
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.BeforeEach
@@ -33,6 +35,13 @@ import org.junit.jupiter.api.extension.ExtendWith
 internal class MainViewModelTest {
 
     private val observeResourceMock: ObserveResourceUseCase = mockk()
+    private val observeResourceReal: ResourceSource = object : ResourceSource {
+        override fun invoke(): Flow<Resource> {
+            return resourceBarrier.observeResource()
+        }
+    }
+
+
     private val resourceBarrier = ObserveResourceUseCaseTest.Barrier
     private val observeUpgrades: ObserveUpgradesUseCase = mockk()
     private val buyUpgrade: BuyUpgradeUseCase = mockk(relaxUnitFun = true)
@@ -59,7 +68,7 @@ internal class MainViewModelTest {
 
     @Test
     fun `should for correct initial state`() = runBlockingTest {
-        every { observeResourceMock() } returns flowOf(resource(value = 2.0))
+        usedResourceSource = observeResourceReal
         every { observeUpgrades() } returns flowOf(listOf(upgrade(id = 1L)))
 
         viewModel.state.test {
@@ -69,7 +78,7 @@ internal class MainViewModelTest {
                 .all {
                     prop(MainViewState.Success::resources)
                         .extracting(ResourceModel::value)
-                        .containsExactly("2")
+                        .containsExactly("0")
                     prop(MainViewState.Success::shop)
                         .prop(ShopState::upgradeLists)
                         .index(0)
