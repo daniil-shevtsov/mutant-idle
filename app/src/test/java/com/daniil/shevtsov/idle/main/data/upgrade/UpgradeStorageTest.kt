@@ -26,7 +26,6 @@ internal class UpgradeStorageTest {
 
         storage.observeAll().test {
             assertThat(awaitItem()).isEqualTo(initialUpgrades)
-            awaitComplete()
         }
     }
 

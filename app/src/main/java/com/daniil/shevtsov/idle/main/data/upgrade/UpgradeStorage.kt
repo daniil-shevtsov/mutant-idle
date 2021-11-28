@@ -2,14 +2,17 @@ package com.daniil.shevtsov.idle.main.data.upgrade
 
 import com.daniil.shevtsov.idle.main.domain.upgrade.Upgrade
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 
 class UpgradeStorage(
-    private val initialUpgrades: List<Upgrade>
+    initialUpgrades: List<Upgrade>
 ) {
+    private val upgrades: MutableStateFlow<Map<Long, Upgrade>> =
+        MutableStateFlow(initialUpgrades.associateBy { it.id })
 
     fun observeAll(): Flow<List<Upgrade>> {
-        return flowOf(initialUpgrades)
+        return upgrades.map { it.values.toList() }
     }
 
 }
