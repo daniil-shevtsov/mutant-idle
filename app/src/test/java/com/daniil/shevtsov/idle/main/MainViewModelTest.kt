@@ -8,6 +8,7 @@ import com.daniil.shevtsov.idle.MainCoroutineExtension
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.main.domain.resource.ObserveResourceUseCase
 import com.daniil.shevtsov.idle.main.domain.resource.ObserveResourceUseCaseTest
+import com.daniil.shevtsov.idle.main.domain.resource.ResourceSource
 import com.daniil.shevtsov.idle.main.domain.upgrade.BuyUpgradeUseCase
 import com.daniil.shevtsov.idle.main.domain.upgrade.ObserveUpgradesUseCase
 import com.daniil.shevtsov.idle.main.domain.upgrade.UpgradeStatus
@@ -36,6 +37,8 @@ internal class MainViewModelTest {
     private val observeUpgrades: ObserveUpgradesUseCase = mockk()
     private val buyUpgrade: BuyUpgradeUseCase = mockk(relaxUnitFun = true)
 
+    private var usedResourceSource: ResourceSource = observeResourceMock
+
     private val balanceConfig = BalanceConfig(
         tickRateMillis = 1L,
         resourcePerMillisecond = 2.0,
@@ -50,6 +53,8 @@ internal class MainViewModelTest {
         every { observeUpgrades() } returns flowOf(emptyList())
 
         resourceBarrier.create(balanceConfig)
+
+        usedResourceSource = observeResourceMock
     }
 
     @Test
@@ -187,7 +192,7 @@ internal class MainViewModelTest {
     }
 
     private fun createViewModel() = MainViewModel(
-        observeResource = observeResourceMock,
+        observeResource = usedResourceSource,
         observeUpgrades = observeUpgrades,
         buyUpgrade = buyUpgrade,
     )

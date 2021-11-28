@@ -4,8 +4,8 @@ import javax.inject.Inject
 
 class ObserveResourceUseCase @Inject constructor(
     private val resourceRepository: ResourceRepository,
-) {
+) : ResourceSource {
 
-    operator fun invoke() = resourceRepository.observeResource()
+    override operator fun invoke() = resourceRepository.observeResource()
 
 }

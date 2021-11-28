@@ -5,7 +5,9 @@ import com.daniil.shevtsov.idle.main.data.resource.ResourceRepositoryImpl
 import com.daniil.shevtsov.idle.main.data.time.TimeProvider
 import com.daniil.shevtsov.idle.main.data.time.TimeProviderImpl
 import com.daniil.shevtsov.idle.main.data.upgrade.UpgradeRepositoryImpl
+import com.daniil.shevtsov.idle.main.domain.resource.ObserveResourceUseCase
 import com.daniil.shevtsov.idle.main.domain.resource.ResourceRepository
+import com.daniil.shevtsov.idle.main.domain.resource.ResourceSource
 import com.daniil.shevtsov.idle.main.domain.upgrade.UpgradeRepository
 import dagger.Binds
 import dagger.Module
@@ -24,6 +26,10 @@ interface AppModule {
     @Binds
     @AppScope
     fun upgradeRepository(impl: UpgradeRepositoryImpl): UpgradeRepository
+
+    @Binds
+    @AppScope
+    fun resourceSource(impl: ObserveResourceUseCase): ResourceSource
 
     @Binds
     @AppScope
