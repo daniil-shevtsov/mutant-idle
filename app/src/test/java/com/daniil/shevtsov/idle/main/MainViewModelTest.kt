@@ -5,7 +5,9 @@ import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.MainCoroutineExtension
+import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.main.domain.resource.ObserveResourceUseCase
+import com.daniil.shevtsov.idle.main.domain.resource.ObserveResourceUseCaseTest
 import com.daniil.shevtsov.idle.main.domain.upgrade.BuyUpgradeUseCase
 import com.daniil.shevtsov.idle.main.domain.upgrade.ObserveUpgradesUseCase
 import com.daniil.shevtsov.idle.main.domain.upgrade.UpgradeStatus
@@ -29,22 +31,30 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(MainCoroutineExtension::class)
 internal class MainViewModelTest {
 
-    private val observeResource: ObserveResourceUseCase = mockk()
+    private val observeResourceMock: ObserveResourceUseCase = mockk()
+    private val resourceBarrier = ObserveResourceUseCaseTest.Barrier
     private val observeUpgrades: ObserveUpgradesUseCase = mockk()
     private val buyUpgrade: BuyUpgradeUseCase = mockk(relaxUnitFun = true)
+
+    private val balanceConfig = BalanceConfig(
+        tickRateMillis = 1L,
+        resourcePerMillisecond = 2.0,
+    )
 
     private val viewModel: MainViewModel by lazy { createViewModel() }
 
     @BeforeEach
     fun onSetup() {
         clearAllMocks()
-        every { observeResource() } returns flowOf(resource(value = 0.0))
+        every { observeResourceMock() } returns flowOf(resource(value = 0.0))
         every { observeUpgrades() } returns flowOf(emptyList())
+
+        resourceBarrier.create(balanceConfig)
     }
 
     @Test
     fun `should for correct initial state`() = runBlockingTest {
-        every { observeResource() } returns flowOf(resource(value = 2.0))
+        every { observeResourceMock() } returns flowOf(resource(value = 2.0))
         every { observeUpgrades() } returns flowOf(listOf(upgrade(id = 1L)))
 
         viewModel.state.test {
@@ -84,7 +94,7 @@ internal class MainViewModelTest {
                 )
             )
         )
-        every { observeResource() } returns flowOf(resource(value = 50.0))
+        every { observeResourceMock() } returns flowOf(resource(value = 50.0))
 
         viewModel.state.test {
             val state = expectMostRecentItem()
@@ -110,7 +120,7 @@ internal class MainViewModelTest {
                     )
                 )
             )
-            every { observeResource() } returns flowOf(resource(value = 50.0))
+            every { observeResourceMock() } returns flowOf(resource(value = 50.0))
 
             viewModel.state.test {
                 val state = expectMostRecentItem()
@@ -135,7 +145,7 @@ internal class MainViewModelTest {
                 )
             )
         )
-        every { observeResource() } returns flowOf(resource(value = 50.0))
+        every { observeResourceMock() } returns flowOf(resource(value = 50.0))
 
         viewModel.state.test {
             val state = expectMostRecentItem()
@@ -158,7 +168,7 @@ internal class MainViewModelTest {
                 upgrade(id = 3L, price = 25.0, status = UpgradeStatus.NotBought),
             )
         )
-        every { observeResource() } returns flowOf(resource(value = 50.0))
+        every { observeResourceMock() } returns flowOf(resource(value = 50.0))
 
         viewModel.state.test {
             val state = expectMostRecentItem()
@@ -177,7 +187,7 @@ internal class MainViewModelTest {
     }
 
     private fun createViewModel() = MainViewModel(
-        observeResource = observeResource,
+        observeResource = observeResourceMock,
         observeUpgrades = observeUpgrades,
         buyUpgrade = buyUpgrade,
     )
