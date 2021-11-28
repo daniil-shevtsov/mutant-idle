@@ -140,7 +140,7 @@ internal class MainViewModelTest {
                     )
                 )
             )
-            every { observeResourceMock() } returns flowOf(resource(value = 50.0))
+            useRealSource()
 
             viewModel.state.test {
                 val state = expectMostRecentItem()
@@ -165,7 +165,8 @@ internal class MainViewModelTest {
                 )
             )
         )
-        every { observeResourceMock() } returns flowOf(resource(value = 50.0))
+        useRealSource()
+        resourceBarrier.updateResource(Time(200))
 
         viewModel.state.test {
             val state = expectMostRecentItem()
@@ -189,6 +190,8 @@ internal class MainViewModelTest {
             )
         )
         every { observeResourceMock() } returns flowOf(resource(value = 50.0))
+        useRealSource()
+        resourceBarrier.updateResource(Time(50 * balanceConfig.tickRateMillis))
 
         viewModel.state.test {
             val state = expectMostRecentItem()
