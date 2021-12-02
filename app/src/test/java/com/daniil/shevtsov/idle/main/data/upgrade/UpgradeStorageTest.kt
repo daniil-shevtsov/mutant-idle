@@ -8,6 +8,7 @@ import assertk.assertions.isNull
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.MainCoroutineExtension
 import com.daniil.shevtsov.idle.main.domain.upgrade.Upgrade
+import com.daniil.shevtsov.idle.main.domain.upgrade.UpgradeStatus
 import com.daniil.shevtsov.idle.util.upgrade
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.BeforeEach
@@ -55,6 +56,20 @@ internal class UpgradeStorageTest {
 
         assertThat(upgrade)
             .isNull()
+    }
+
+    @Test
+    fun `should update upgrade by id`() = runBlockingTest {
+        val initialUpgrades = listOf(upgrade(id = 0, status = UpgradeStatus.NotBought))
+        storage = UpgradeStorage(initialUpgrades)
+
+        val upgrade = upgrade(id = 0, status = UpgradeStatus.Bought)
+        storage.updateUpgrade(id = 0, newValue = upgrade)
+
+        assertThat(storage.getUpgradeById(id = 0))
+            .isNotNull()
+            .prop(Upgrade::status)
+            .isEqualTo(UpgradeStatus.Bought)
     }
 
 }

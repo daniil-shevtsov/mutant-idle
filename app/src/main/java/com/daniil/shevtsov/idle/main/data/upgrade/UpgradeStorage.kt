@@ -20,4 +20,13 @@ class UpgradeStorage(
         return upgradeMap[id]
     }
 
+    fun updateUpgrade(id: Long, newValue: Upgrade) {
+        val upgradeMap = upgrades.value
+        val modifiedMap = upgradeMap
+            .toMutableMap()
+            .apply { put(id, newValue) }
+            .toMap()
+        upgrades.value = modifiedMap
+    }
+
 }
