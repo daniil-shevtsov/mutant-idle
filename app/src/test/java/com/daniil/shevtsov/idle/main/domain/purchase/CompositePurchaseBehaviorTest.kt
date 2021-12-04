@@ -42,4 +42,30 @@ internal class CompositePurchaseBehaviorTest {
             .isEqualTo(50.0)
     }
 
+    @Test
+    fun `when buying nonaffordable upgrade - then don't do anything`() = runBlockingTest {
+        val upgradeId = 1L
+        val resourceStorage = ResourceStorage()
+        val upgradeStorage = UpgradeStorage(
+            initialUpgrades = listOf(
+                upgrade(id = upgradeId, price = 250.0)
+            )
+        )
+        resourceStorage.setNewValue(75.0)
+
+        behavior.buyUpgrade(
+            upgradeStorage = upgradeStorage,
+            resourceStorage = resourceStorage,
+            upgradeId = upgradeId,
+        )
+
+        assertThat(upgradeStorage.getUpgradeById(id = upgradeId))
+            .isNotNull()
+            .prop(Upgrade::status)
+            .isEqualTo(UpgradeStatus.NotBought)
+
+        assertThat(resourceStorage.getCurrentValue())
+            .isEqualTo(75.0)
+    }
+
 }
