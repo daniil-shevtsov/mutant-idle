@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.daniil.shevtsov.idle.main.data.upgrade.UpgradeBehavior
 import com.daniil.shevtsov.idle.main.data.upgrade.UpgradeStorage
 import com.daniil.shevtsov.idle.main.domain.resource.ResourceSource
 import com.daniil.shevtsov.idle.main.domain.upgrade.BuyUpgradeUseCase
@@ -73,6 +74,15 @@ class MainViewModel @Inject constructor(
     private fun handleUpgradeSelected(action: MainViewAction.UpgradeSelected) {
         viewModelScope.launch {
             buyUpgrade(id = action.id)
+            //TODO: Replace with composite behavior
+            UpgradeBehavior.updateById(
+                storage = upgradeStorage,
+                id = action.id,
+                newUpgrade =  UpgradeBehavior.getById(
+                    storage = upgradeStorage,
+                    id = action.id,
+                )?.copy(status = UpgradeStatus.Bought)!!
+            )
         }
     }
 

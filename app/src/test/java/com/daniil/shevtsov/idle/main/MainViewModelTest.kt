@@ -37,7 +37,12 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(MainCoroutineExtension::class)
 internal class MainViewModelTest {
 
-    private val upgradeStorage = UpgradeStorage(initialUpgrades = emptyList())
+    private val upgradeStorage = UpgradeStorage(initialUpgrades = listOf(
+        upgrade(id = 0L),
+        upgrade(id = 1L, price = 25.0),
+        upgrade(id = 2L, price = 150.0),
+        upgrade(id = 3L, price = 10.0),
+    ))
     private val observeResourceMock: ObserveResourceUseCase = mockk()
     private val observeResourceReal: ResourceSource = object : ResourceSource {
         override fun invoke(): Flow<Resource> {
@@ -77,7 +82,7 @@ internal class MainViewModelTest {
 
     @Test
     fun `should for correct initial state`() = runBlockingTest {
-        every { observeUpgrades() } returns flowOf(listOf(upgrade(id = 1L)))
+        every { observeUpgrades() } returns flowOf(listOf(upgrade(id = 0L)))
 
         viewModel.state.test {
             val state = expectMostRecentItem()
@@ -91,7 +96,7 @@ internal class MainViewModelTest {
                         .prop(ShopState::upgradeLists)
                         .index(0)
                         .extracting(UpgradeModel::id)
-                        .containsExactly(1L)
+                        .containsExactly(0L)
                 }
         }
     }
@@ -99,6 +104,7 @@ internal class MainViewModelTest {
     @Test
     fun `should buy upgrade when clicked and affordable`() = runBlockingTest {
         every { observeUpgrades() } returns flowOf(listOf(upgrade(id = 1L)))
+        resourceBarrier.updateResource(Time(1000))
         useRealSource()
 
         viewModel.handleAction(MainViewAction.UpgradeSelected(id = 1L))
