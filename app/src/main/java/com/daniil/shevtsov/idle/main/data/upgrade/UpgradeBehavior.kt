@@ -12,4 +12,8 @@ object UpgradeBehavior {
     fun getById(storage: UpgradeStorage, id: Long): Upgrade? {
         return storage.getUpgradeById(id)
     }
+
+    fun updateById(storage: UpgradeStorage, id: Long, newUpgrade: Upgrade) {
+        storage.updateUpgrade(id = id, newValue = newUpgrade)
+    }
 }

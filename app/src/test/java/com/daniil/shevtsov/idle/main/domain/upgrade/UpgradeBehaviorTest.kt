@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.main.domain.upgrade
 import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
 import assertk.assertions.isNull
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.main.data.upgrade.UpgradeBehavior
@@ -63,10 +64,25 @@ internal class UpgradeBehaviorTest {
             initialUpgrades = initialUpgrades
         )
 
-        val upgrade = behavior.getById(storage, 2L)
+        val upgrade = behavior.getById(storage = storage, id = 2L)
 
         assertThat(upgrade)
             .isNull()
+    }
+
+    @Test
+    fun `when update by id and present - then update it`() = runBlockingTest {
+        val initialUpgrades = listOf(upgrade(id = 0, status = UpgradeStatus.NotBought))
+        val storage = UpgradeStorage(initialUpgrades)
+
+        val newUpgrade = upgrade(id = 0, status = UpgradeStatus.Bought)
+
+        behavior.updateById(storage = storage, id = 0L, newUpgrade = newUpgrade)
+
+        assertThat(storage.getUpgradeById(id = 0))
+            .isNotNull()
+            .prop(Upgrade::status)
+            .isEqualTo(UpgradeStatus.Bought)
     }
 
 }
