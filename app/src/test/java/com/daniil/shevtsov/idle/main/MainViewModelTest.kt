@@ -7,12 +7,9 @@ import assertk.assertions.*
 import com.daniil.shevtsov.idle.MainCoroutineExtension
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.main.data.resource.NewResourceBehavior
-import com.daniil.shevtsov.idle.main.data.resource.ResourceBehavior
 import com.daniil.shevtsov.idle.main.data.resource.ResourceStorage
 import com.daniil.shevtsov.idle.main.data.time.Time
 import com.daniil.shevtsov.idle.main.data.upgrade.UpgradeStorage
-import com.daniil.shevtsov.idle.main.domain.resource.Resource
-import com.daniil.shevtsov.idle.main.domain.resource.ResourceSource
 import com.daniil.shevtsov.idle.main.domain.upgrade.Upgrade
 import com.daniil.shevtsov.idle.main.domain.upgrade.UpgradeStatus
 import com.daniil.shevtsov.idle.main.ui.MainViewState
@@ -22,7 +19,6 @@ import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeModel
 import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeStatusModel
 import com.daniil.shevtsov.idle.util.upgrade
 import io.mockk.clearAllMocks
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -41,22 +37,9 @@ internal class MainViewModelTest {
     )
     private val resourceStorage = ResourceStorage()
 
-    private val observeResourceReal: ResourceSource = object : ResourceSource {
-        override fun invoke(): Flow<Resource> {
-            return resourceBarrier.observeResource()
-        }
-    }
-
-    private var usedResourceSource: ResourceSource = observeResourceReal
-
     private val balanceConfig = BalanceConfig(
         tickRateMillis = 1L,
         resourcePerMillisecond = 2.0,
-    )
-
-    private val resourceBarrier = ResourceBehavior(
-        balanceConfig = balanceConfig,
-        storage = ResourceStorage(),
     )
 
     private val viewModel: MainViewModel by lazy { createViewModel() }
@@ -64,10 +47,6 @@ internal class MainViewModelTest {
     @BeforeEach
     fun onSetup() {
         clearAllMocks()
-    }
-
-    private fun useRealSource() {
-        usedResourceSource = observeResourceReal
     }
 
     @Test
@@ -91,9 +70,7 @@ internal class MainViewModelTest {
 
     @Test
     fun `should buy upgrade when clicked and affordable`() = runBlockingTest {
-        resourceBarrier.updateResource(Time(1000))
         NewResourceBehavior.updateResource(resourceStorage, Time(1000), balanceConfig.resourcePerMillisecond)
-        useRealSource()
 
         viewModel.handleAction(MainViewAction.UpgradeSelected(id = 1L))
 
@@ -105,13 +82,11 @@ internal class MainViewModelTest {
 
     @Test
     fun `should mark upgrade as affordable if its price less than resource`() = runBlockingTest {
-        resourceBarrier.updateResource(Time(1000))
         NewResourceBehavior.updateResource(
             storage = resourceStorage,
             passedTime = Time(1000),
             rate = balanceConfig.resourcePerMillisecond,
         )
-        useRealSource()
 
         viewModel.state.test {
             val state = expectMostRecentItem()
@@ -130,8 +105,6 @@ internal class MainViewModelTest {
     @Test
     fun `should mark upgrade as not affordable if its price higher than resource`() =
         runBlockingTest {
-            useRealSource()
-
             viewModel.state.test {
                 val state = expectMostRecentItem()
                 assertThat(state)
@@ -148,8 +121,6 @@ internal class MainViewModelTest {
 
     @Test
     fun `should mark upgrade as bought if it is bought`() = runBlockingTest {
-        useRealSource()
-        resourceBarrier.updateResource(Time(200))
         NewResourceBehavior.updateResource(
             storage = resourceStorage,
             passedTime = Time(200),
@@ -157,7 +128,7 @@ internal class MainViewModelTest {
         )
 
         viewModel.handleAction(MainViewAction.UpgradeSelected(id = 2L))
-        resourceBarrier.updateResource(Time(201))
+
         NewResourceBehavior.updateResource(
             storage = resourceStorage,
             passedTime = Time(201),
@@ -180,8 +151,6 @@ internal class MainViewModelTest {
 
     @Test
     fun `should sort upgrades by status`() = runBlockingTest {
-        useRealSource()
-        resourceBarrier.updateResource(Time(50))
         NewResourceBehavior.updateResource(
             storage = resourceStorage,
             passedTime = Time(50),
@@ -189,7 +158,7 @@ internal class MainViewModelTest {
         )
 
         viewModel.handleAction(MainViewAction.UpgradeSelected(id = 1L))
-        resourceBarrier.updateResource(Time(1))
+
         NewResourceBehavior.updateResource(
             storage = resourceStorage,
             passedTime = Time(1),
