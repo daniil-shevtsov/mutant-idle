@@ -144,7 +144,7 @@ internal class MainViewModelTest {
             every { observeUpgrades() } returns flowOf(
                 listOf(
                     upgrade(
-                        id = 1L,
+                        id = 2L,
                         price = 150.0,
                         status = UpgradeStatus.NotBought
                     )
@@ -169,7 +169,7 @@ internal class MainViewModelTest {
         every { observeUpgrades() } returns flowOf(
             listOf(
                 upgrade(
-                    id = 1L,
+                    id = 2L,
                     price = 150.0,
                     status = UpgradeStatus.Bought
                 )
