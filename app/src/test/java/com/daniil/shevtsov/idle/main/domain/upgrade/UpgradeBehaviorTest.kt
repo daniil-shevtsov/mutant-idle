@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.main.domain.upgrade
 import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import assertk.assertions.isNull
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.main.data.upgrade.UpgradeBehavior
 import com.daniil.shevtsov.idle.main.data.upgrade.UpgradeStorage
@@ -36,7 +37,7 @@ internal class UpgradeBehaviorTest {
     }
 
     @Test
-    fun `when get by id and present - and present then return it`() = runBlockingTest {
+    fun `when get by id and present - then return it`() = runBlockingTest {
         val initialUpgrades = listOf(
             upgrade(id = 0L),
             upgrade(id = 1L),
@@ -50,6 +51,22 @@ internal class UpgradeBehaviorTest {
         assertThat(upgrade)
             .prop(Upgrade::id)
             .isEqualTo(0L)
+    }
+
+    @Test
+    fun `when get by id and not present - then return null`() = runBlockingTest {
+        val initialUpgrades = listOf(
+            upgrade(id = 0L),
+            upgrade(id = 1L),
+        )
+        val storage = UpgradeStorage(
+            initialUpgrades = initialUpgrades
+        )
+
+        val upgrade = behavior.getById(storage, 2L)
+
+        assertThat(upgrade)
+            .isNull()
     }
 
 }

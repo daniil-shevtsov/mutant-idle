@@ -9,7 +9,7 @@ object UpgradeBehavior {
         return storage.observeAll()
     }
 
-    fun getById(storage: UpgradeStorage, id: Long): Upgrade {
-        return storage.getUpgradeById(id)!!
+    fun getById(storage: UpgradeStorage, id: Long): Upgrade? {
+        return storage.getUpgradeById(id)
     }
 }
