@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.main.domain.upgrade
 import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import assertk.assertions.prop
 import com.daniil.shevtsov.idle.main.data.upgrade.UpgradeBehavior
 import com.daniil.shevtsov.idle.main.data.upgrade.UpgradeStorage
 import com.daniil.shevtsov.idle.util.upgrade
@@ -32,6 +33,23 @@ internal class UpgradeBehaviorTest {
             assertThat(awaitItem())
                 .isEqualTo(initialUpgrades)
         }
+    }
+
+    @Test
+    fun `when get by id and present - and present then return it`() = runBlockingTest {
+        val initialUpgrades = listOf(
+            upgrade(id = 0L),
+            upgrade(id = 1L),
+        )
+        val storage = UpgradeStorage(
+            initialUpgrades = initialUpgrades
+        )
+
+        val upgrade = behavior.getById(storage, 0L)
+
+        assertThat(upgrade)
+            .prop(Upgrade::id)
+            .isEqualTo(0L)
     }
 
 }
