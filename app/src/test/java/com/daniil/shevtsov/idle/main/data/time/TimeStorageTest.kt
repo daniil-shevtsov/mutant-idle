@@ -6,6 +6,7 @@ import assertk.assertions.isEqualTo
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import kotlin.time.Duration
 
 internal class TimeStorageTest {
 
@@ -18,30 +19,30 @@ internal class TimeStorageTest {
 
     @Test
     fun `should return 0 initially as current value`() = runBlockingTest {
-        assertThat(storage.getCurrentValue()).isEqualTo(0.0)
+        assertThat(storage.getCurrentValue()).isEqualTo(Duration.ZERO)
     }
 
     @Test
     fun `should update value correctly`() = runBlockingTest {
-        assertThat(storage.getCurrentValue()).isEqualTo(0.0)
+        assertThat(storage.getCurrentValue()).isEqualTo(Duration.ZERO)
 
-        storage.setNewValue(2.0)
-        assertThat(storage.getCurrentValue()).isEqualTo(2.0)
+        storage.setNewValue(Duration.milliseconds(2L))
+        assertThat(storage.getCurrentValue()).isEqualTo(Duration.milliseconds(2L))
 
-        storage.setNewValue(4.0)
-        assertThat(storage.getCurrentValue()).isEqualTo(4.0)
+        storage.setNewValue(Duration.milliseconds(4L))
+        assertThat(storage.getCurrentValue()).isEqualTo(Duration.milliseconds(4L))
     }
 
     @Test
     fun `should get new values to observers`() = runBlockingTest {
         storage.observeChange().test {
-            assertThat(awaitItem()).isEqualTo(0.0)
+            assertThat(awaitItem()).isEqualTo(Duration.ZERO)
 
-            storage.setNewValue(2.0)
-            assertThat(awaitItem()).isEqualTo(2.0)
+            storage.setNewValue(Duration.milliseconds(2L))
+            assertThat(awaitItem()).isEqualTo(Duration.milliseconds(2L))
 
-            storage.setNewValue(4.0)
-            assertThat(awaitItem()).isEqualTo(4.0)
+            storage.setNewValue(Duration.milliseconds(4L))
+            assertThat(awaitItem()).isEqualTo(Duration.milliseconds(4L))
         }
     }
 
