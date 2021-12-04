@@ -2,10 +2,11 @@ package com.daniil.shevtsov.idle.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.daniil.shevtsov.idle.main.data.resource.NewResourceBehavior
+import com.daniil.shevtsov.idle.main.data.resource.ResourceStorage
 import com.daniil.shevtsov.idle.main.data.upgrade.UpgradeBehavior
 import com.daniil.shevtsov.idle.main.data.upgrade.UpgradeStorage
-import com.daniil.shevtsov.idle.main.domain.resource.ResourceSource
-import com.daniil.shevtsov.idle.main.domain.upgrade.BuyUpgradeUseCase
+import com.daniil.shevtsov.idle.main.domain.purchase.CompositePurchaseBehavior
 import com.daniil.shevtsov.idle.main.domain.upgrade.Upgrade
 import com.daniil.shevtsov.idle.main.domain.upgrade.UpgradeStatus
 import com.daniil.shevtsov.idle.main.ui.MainViewState
@@ -22,15 +23,14 @@ import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
     private val upgradeStorage: UpgradeStorage,
-    private val observeResource: ResourceSource,
-    private val buyUpgrade: BuyUpgradeUseCase,
+    private val resourceStorage: ResourceStorage,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(initViewState())
     val state = _state.asStateFlow()
 
     init {
-        observeResource()
+        NewResourceBehavior.observeResource(resourceStorage)
             .onEach { resource ->
                 _state.value = MainViewState.Success(
                     resources = listOf(
@@ -71,15 +71,10 @@ class MainViewModel @Inject constructor(
 
     private fun handleUpgradeSelected(action: MainViewAction.UpgradeSelected) {
         viewModelScope.launch {
-            buyUpgrade(id = action.id)
-            //TODO: Replace with composite behavior
-            UpgradeBehavior.updateById(
-                storage = upgradeStorage,
-                id = action.id,
-                newUpgrade =  UpgradeBehavior.getById(
-                    storage = upgradeStorage,
-                    id = action.id,
-                )?.copy(status = UpgradeStatus.Bought)!!
+            CompositePurchaseBehavior.buyUpgrade(
+                upgradeStorage = upgradeStorage,
+                resourceStorage = resourceStorage,
+                upgradeId = action.id,
             )
         }
     }
