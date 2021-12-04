@@ -6,7 +6,6 @@ import com.daniil.shevtsov.idle.main.data.upgrade.UpgradeBehavior
 import com.daniil.shevtsov.idle.main.data.upgrade.UpgradeStorage
 import com.daniil.shevtsov.idle.main.domain.resource.ResourceSource
 import com.daniil.shevtsov.idle.main.domain.upgrade.BuyUpgradeUseCase
-import com.daniil.shevtsov.idle.main.domain.upgrade.ObserveUpgradesUseCase
 import com.daniil.shevtsov.idle.main.domain.upgrade.Upgrade
 import com.daniil.shevtsov.idle.main.domain.upgrade.UpgradeStatus
 import com.daniil.shevtsov.idle.main.ui.MainViewState
@@ -24,7 +23,6 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val upgradeStorage: UpgradeStorage,
     private val observeResource: ResourceSource,
-    private val observeUpgrades: ObserveUpgradesUseCase,
     private val buyUpgrade: BuyUpgradeUseCase,
 ) : ViewModel() {
 

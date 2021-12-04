@@ -14,8 +14,6 @@ import com.daniil.shevtsov.idle.main.domain.resource.ObserveResourceUseCase
 import com.daniil.shevtsov.idle.main.domain.resource.Resource
 import com.daniil.shevtsov.idle.main.domain.resource.ResourceSource
 import com.daniil.shevtsov.idle.main.domain.upgrade.BuyUpgradeUseCase
-import com.daniil.shevtsov.idle.main.domain.upgrade.ObserveUpgradesUseCase
-import com.daniil.shevtsov.idle.main.domain.upgrade.UpgradeStatus
 import com.daniil.shevtsov.idle.main.ui.MainViewState
 import com.daniil.shevtsov.idle.main.ui.resource.ResourceModel
 import com.daniil.shevtsov.idle.main.ui.shop.ShopState
@@ -37,12 +35,14 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(MainCoroutineExtension::class)
 internal class MainViewModelTest {
 
-    private val upgradeStorage = UpgradeStorage(initialUpgrades = listOf(
-        upgrade(id = 0L),
-        upgrade(id = 1L, price = 25.0),
-        upgrade(id = 2L, price = 150.0),
-        upgrade(id = 3L, price = 10.0),
-    ))
+    private val upgradeStorage = UpgradeStorage(
+        initialUpgrades = listOf(
+            upgrade(id = 0L),
+            upgrade(id = 1L, price = 25.0),
+            upgrade(id = 2L, price = 150.0),
+            upgrade(id = 3L, price = 10.0),
+        )
+    )
     private val observeResourceMock: ObserveResourceUseCase = mockk()
     private val observeResourceReal: ResourceSource = object : ResourceSource {
         override fun invoke(): Flow<Resource> {
@@ -50,7 +50,6 @@ internal class MainViewModelTest {
         }
     }
 
-    private val observeUpgrades: ObserveUpgradesUseCase = mockk()
     private val buyUpgrade: BuyUpgradeUseCase = mockk(relaxUnitFun = true)
 
     private var usedResourceSource: ResourceSource = observeResourceMock
@@ -71,7 +70,6 @@ internal class MainViewModelTest {
     fun onSetup() {
         clearAllMocks()
         every { observeResourceMock() } returns flowOf(resource(value = 0.0))
-        every { observeUpgrades() } returns flowOf(emptyList())
 
         usedResourceSource = observeResourceMock
     }
@@ -82,8 +80,6 @@ internal class MainViewModelTest {
 
     @Test
     fun `should for correct initial state`() = runBlockingTest {
-        every { observeUpgrades() } returns flowOf(listOf(upgrade(id = 0L)))
-
         viewModel.state.test {
             val state = expectMostRecentItem()
             assertThat(state)
@@ -103,7 +99,6 @@ internal class MainViewModelTest {
 
     @Test
     fun `should buy upgrade when clicked and affordable`() = runBlockingTest {
-        every { observeUpgrades() } returns flowOf(listOf(upgrade(id = 1L)))
         resourceBarrier.updateResource(Time(1000))
         useRealSource()
 
@@ -114,15 +109,6 @@ internal class MainViewModelTest {
 
     @Test
     fun `should mark upgrade as affordable if its price less than resource`() = runBlockingTest {
-        every { observeUpgrades() } returns flowOf(
-            listOf(
-                upgrade(
-                    id = 1L,
-                    price = 25.0,
-                    status = UpgradeStatus.NotBought
-                )
-            )
-        )
         resourceBarrier.updateResource(Time(1000))
         useRealSource()
 
@@ -143,15 +129,6 @@ internal class MainViewModelTest {
     @Test
     fun `should mark upgrade as not affordable if its price higher than resource`() =
         runBlockingTest {
-            every { observeUpgrades() } returns flowOf(
-                listOf(
-                    upgrade(
-                        id = 2L,
-                        price = 150.0,
-                        status = UpgradeStatus.NotBought
-                    )
-                )
-            )
             useRealSource()
 
             viewModel.state.test {
@@ -170,15 +147,6 @@ internal class MainViewModelTest {
 
     @Test
     fun `should mark upgrade as bought if it is bought`() = runBlockingTest {
-        every { observeUpgrades() } returns flowOf(
-            listOf(
-                upgrade(
-                    id = 2L,
-                    price = 150.0,
-                    status = UpgradeStatus.Bought
-                )
-            )
-        )
         useRealSource()
         resourceBarrier.updateResource(Time(200))
 
@@ -201,13 +169,6 @@ internal class MainViewModelTest {
 
     @Test
     fun `should sort upgrades by status`() = runBlockingTest {
-        every { observeUpgrades() } returns flowOf(
-            listOf(
-                upgrade(id = 1L, price = 150.0, status = UpgradeStatus.Bought),
-                upgrade(id = 2L, price = 150.0, status = UpgradeStatus.NotBought),
-                upgrade(id = 3L, price = 25.0, status = UpgradeStatus.NotBought),
-            )
-        )
         every { observeResourceMock() } returns flowOf(resource(value = 50.0))
         useRealSource()
         resourceBarrier.updateResource(Time(50))
@@ -235,7 +196,6 @@ internal class MainViewModelTest {
     private fun createViewModel() = MainViewModel(
         upgradeStorage = upgradeStorage,
         observeResource = usedResourceSource,
-        observeUpgrades = observeUpgrades,
         buyUpgrade = buyUpgrade,
     )
 
