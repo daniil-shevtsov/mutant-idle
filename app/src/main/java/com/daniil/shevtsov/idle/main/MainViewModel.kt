@@ -42,7 +42,7 @@ class MainViewModel @Inject constructor(
                         )
                     ),
                     actionState = createActionState(),
-                    shop = observeUpgrades()
+                    shop = UpgradeBehavior.observeAll(storage = upgradeStorage)
                         .firstOrNull()
                         .orEmpty()
                         .map { upgrade ->

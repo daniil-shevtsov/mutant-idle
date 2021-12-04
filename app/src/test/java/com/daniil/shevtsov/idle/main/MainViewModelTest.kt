@@ -96,7 +96,7 @@ internal class MainViewModelTest {
                         .prop(ShopState::upgradeLists)
                         .index(0)
                         .extracting(UpgradeModel::id)
-                        .containsExactly(0L)
+                        .containsExactly(0L, 1L, 2L, 3L)
                 }
         }
     }
@@ -133,8 +133,10 @@ internal class MainViewModelTest {
                 .prop(MainViewState.Success::shop)
                 .prop(ShopState::upgradeLists)
                 .index(0)
-                .extracting(UpgradeModel::status)
-                .containsExactly(UpgradeStatusModel.Affordable)
+                .any {
+                    it.prop(UpgradeModel::id).isEqualTo(1L)
+                    it.prop(UpgradeModel::status).isEqualTo(UpgradeStatusModel.Affordable)
+                }
         }
     }
 
@@ -159,8 +161,10 @@ internal class MainViewModelTest {
                     .prop(MainViewState.Success::shop)
                     .prop(ShopState::upgradeLists)
                     .index(0)
-                    .extracting(UpgradeModel::status)
-                    .containsExactly(UpgradeStatusModel.NotAffordable)
+                    .any {
+                        it.prop(UpgradeModel::id).isEqualTo(2L)
+                        it.prop(UpgradeModel::status).isEqualTo(UpgradeStatusModel.NotAffordable)
+                    }
             }
         }
 
@@ -178,6 +182,9 @@ internal class MainViewModelTest {
         useRealSource()
         resourceBarrier.updateResource(Time(200))
 
+        viewModel.handleAction(MainViewAction.UpgradeSelected(id = 2L))
+        resourceBarrier.updateResource(Time(201))
+
         viewModel.state.test {
             val state = expectMostRecentItem()
             assertThat(state)
@@ -185,8 +192,10 @@ internal class MainViewModelTest {
                 .prop(MainViewState.Success::shop)
                 .prop(ShopState::upgradeLists)
                 .index(0)
-                .extracting(UpgradeModel::status)
-                .containsExactly(UpgradeStatusModel.Bought)
+                .any {
+                    it.prop(UpgradeModel::id).isEqualTo(2L)
+                    it.prop(UpgradeModel::status).isEqualTo(UpgradeStatusModel.Bought)
+                }
         }
     }
 
@@ -201,7 +210,10 @@ internal class MainViewModelTest {
         )
         every { observeResourceMock() } returns flowOf(resource(value = 50.0))
         useRealSource()
-        resourceBarrier.updateResource(Time(50 * balanceConfig.tickRateMillis))
+        resourceBarrier.updateResource(Time(50))
+
+        viewModel.handleAction(MainViewAction.UpgradeSelected(id = 1L))
+        resourceBarrier.updateResource(Time(1))
 
         viewModel.state.test {
             val state = expectMostRecentItem()
@@ -212,6 +224,7 @@ internal class MainViewModelTest {
                 .index(0)
                 .extracting(UpgradeModel::status)
                 .containsExactly(
+                    UpgradeStatusModel.Affordable,
                     UpgradeStatusModel.Affordable,
                     UpgradeStatusModel.NotAffordable,
                     UpgradeStatusModel.Bought,
