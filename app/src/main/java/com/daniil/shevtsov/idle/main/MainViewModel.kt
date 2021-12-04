@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.daniil.shevtsov.idle.main.data.upgrade.UpgradeStorage
 import com.daniil.shevtsov.idle.main.domain.resource.ResourceSource
 import com.daniil.shevtsov.idle.main.domain.upgrade.BuyUpgradeUseCase
 import com.daniil.shevtsov.idle.main.domain.upgrade.ObserveUpgradesUseCase
@@ -20,6 +21,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
+    private val upgradeStorage: UpgradeStorage,
     private val observeResource: ResourceSource,
     private val observeUpgrades: ObserveUpgradesUseCase,
     private val buyUpgrade: BuyUpgradeUseCase,

@@ -9,6 +9,7 @@ import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.main.data.resource.ResourceBehavior
 import com.daniil.shevtsov.idle.main.data.resource.ResourceStorage
 import com.daniil.shevtsov.idle.main.data.time.Time
+import com.daniil.shevtsov.idle.main.data.upgrade.UpgradeStorage
 import com.daniil.shevtsov.idle.main.domain.resource.ObserveResourceUseCase
 import com.daniil.shevtsov.idle.main.domain.resource.Resource
 import com.daniil.shevtsov.idle.main.domain.resource.ResourceSource
@@ -36,6 +37,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(MainCoroutineExtension::class)
 internal class MainViewModelTest {
 
+    private val upgradeStorage = UpgradeStorage(initialUpgrades = emptyList())
     private val observeResourceMock: ObserveResourceUseCase = mockk()
     private val observeResourceReal: ResourceSource = object : ResourceSource {
         override fun invoke(): Flow<Resource> {
@@ -212,6 +214,7 @@ internal class MainViewModelTest {
     }
 
     private fun createViewModel() = MainViewModel(
+        upgradeStorage = upgradeStorage,
         observeResource = usedResourceSource,
         observeUpgrades = observeUpgrades,
         buyUpgrade = buyUpgrade,

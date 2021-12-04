@@ -4,8 +4,9 @@ import com.daniil.shevtsov.idle.main.domain.upgrade.Upgrade
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class UpgradeStorage(
+class UpgradeStorage @Inject constructor(
     initialUpgrades: List<Upgrade>
 ) {
     private val upgrades: MutableStateFlow<Map<Long, Upgrade>> =
