@@ -16,11 +16,11 @@ import kotlin.time.Duration
 
 class IdleGameViewModel @Inject constructor(
     private val balanceConfig: BalanceConfig,
+    private val timeStorage: TimeStorage,
+    private val resourceStorage: ResourceStorage,
     private val startTime: StartTimeUseCase,
     private val observeTime: ObserveTimeUseCase,
     private val updateResources: UpdateResourcesUseCase,
-    private val timeStorage: TimeStorage,
-    private val resourceStorage: ResourceStorage,
 ) {
     private val scope = CoroutineScope(Job() + Dispatchers.Main)
 

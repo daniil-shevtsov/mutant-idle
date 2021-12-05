@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.application
 
 import com.daniil.shevtsov.idle.MainCoroutineExtension
 import com.daniil.shevtsov.idle.core.BalanceConfig
+import com.daniil.shevtsov.idle.main.data.resource.ResourceStorage
 import com.daniil.shevtsov.idle.main.data.time.TimeStorage
 import io.mockk.mockk
 import kotlinx.coroutines.test.runBlockingTest
@@ -18,6 +19,7 @@ internal class IdleGameViewModelTest {
     )
 
     private val timeStorage = TimeStorage()
+    private val resourceStorage = ResourceStorage()
 
     @Test
     fun kek() = runBlockingTest {
@@ -26,9 +28,10 @@ internal class IdleGameViewModelTest {
 
     private fun createViewModel() = IdleGameViewModel(
         balanceConfig = balanceConfig,
+        timeStorage = timeStorage,
+        resourceStorage = resourceStorage,
         startTime = mockk(),
         observeTime = mockk(),
         updateResources = mockk(),
-        timeStorage = timeStorage,
     )
 }
