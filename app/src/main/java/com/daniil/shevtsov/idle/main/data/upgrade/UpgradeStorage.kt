@@ -1,11 +1,13 @@
 package com.daniil.shevtsov.idle.main.data.upgrade
 
+import com.daniil.shevtsov.idle.core.di.AppScope
 import com.daniil.shevtsov.idle.main.domain.upgrade.Upgrade
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+@AppScope
 class UpgradeStorage @Inject constructor(
     initialUpgrades: List<Upgrade>
 ) {

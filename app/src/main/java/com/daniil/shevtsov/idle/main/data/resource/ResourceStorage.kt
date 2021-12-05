@@ -1,10 +1,12 @@
 package com.daniil.shevtsov.idle.main.data.resource
 
+import com.daniil.shevtsov.idle.core.di.AppScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
+@AppScope
 class ResourceStorage @Inject constructor() {
 
     private val savedResource = MutableStateFlow(createInitial())
