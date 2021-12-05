@@ -18,16 +18,29 @@ class IdleGameViewModel @Inject constructor(
     private val timeStorage: TimeStorage,
     private val resourceStorage: ResourceStorage,
 ) {
-    private val scope = CoroutineScope(Job() + Dispatchers.Main)
+    private val scope = CoroutineScope(Job() + Dispatchers.Main.immediate)
 
-    fun onStart() {
+    suspend fun onSuspendStart(until: Duration = Duration.INFINITE) {
+        startTime(until)
+        doEverythingElse()
+    }
+
+    fun onStart(until: Duration = Duration.INFINITE) {
         scope.launch {
-            TimeBehavior.startEmitingTime(
-                timeStorage = timeStorage,
-                interval = Duration.milliseconds(balanceConfig.tickRateMillis),
-                until = Duration.INFINITE,
-            )
+            startTime(until)
         }
+        doEverythingElse()
+    }
+
+    private suspend fun startTime(until: Duration) {
+        TimeBehavior.startEmitingTime(
+            timeStorage = timeStorage,
+            interval = Duration.milliseconds(balanceConfig.tickRateMillis),
+            until = until,
+        )
+    }
+
+    private fun doEverythingElse() {
         scope.launch {
             TimeBehavior.observeTime(timeStorage)
                 .map { Time(it.inWholeMilliseconds) }

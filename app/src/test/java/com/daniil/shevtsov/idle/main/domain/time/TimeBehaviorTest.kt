@@ -13,7 +13,7 @@ internal class TimeBehaviorTest {
     private val behavior = TimeBehavior
 
     @Test
-    fun `should emit time until`() = runBlockingTest {
+    fun `should emit time until given`() = runBlockingTest {
         val timeStorage = TimeStorage()
         val interval = Duration.milliseconds(1L)
 
