@@ -4,7 +4,6 @@ import com.daniil.shevtsov.idle.MainCoroutineExtension
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.main.data.resource.ResourceStorage
 import com.daniil.shevtsov.idle.main.data.time.TimeStorage
-import io.mockk.mockk
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -24,14 +23,13 @@ internal class IdleGameViewModelTest {
     @Test
     fun kek() = runBlockingTest {
         viewModel.onStart()
+
+        viewModel.onCleared()
     }
 
     private fun createViewModel() = IdleGameViewModel(
         balanceConfig = balanceConfig,
         timeStorage = timeStorage,
         resourceStorage = resourceStorage,
-        startTime = mockk(),
-        observeTime = mockk(),
-        updateResources = mockk(),
     )
 }
