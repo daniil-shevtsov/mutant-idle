@@ -35,7 +35,7 @@ internal class IdleGameViewModelTest {
 
     @Test
     @Disabled("Some day I will understand coroutines well enough")
-    fun `should update time after game started`() = runBlocking {
+    fun `should update time after game started real`() = runBlocking {
         timeStorage.observeChange().test {
             viewModel.onStart(until = Duration.milliseconds(4L))
 
@@ -50,7 +50,7 @@ internal class IdleGameViewModelTest {
     }
 
     @Test
-    fun `should update time after game started suspend`() = runBlockingTest {
+    fun `should update time after game started`() = runBlockingTest {
         timeStorage.observeChange().test {
             viewModel.onSuspendStart(until = Duration.milliseconds(4L))
 
@@ -59,6 +59,18 @@ internal class IdleGameViewModelTest {
             assertThat(awaitItem()).isEqualTo(Duration.milliseconds(2L))
             assertThat(awaitItem()).isEqualTo(Duration.milliseconds(3L))
             assertThat(awaitItem()).isEqualTo(Duration.milliseconds(4L))
+
+            viewModel.onCleared()
+        }
+    }
+
+    @Test
+    fun `should update resource after game started`() = runBlockingTest {
+        resourceStorage.observeChange().test {
+            viewModel.onSuspendStart(until = Duration.milliseconds(4L))
+
+            assertThat(awaitItem()).isEqualTo(0.0)
+            assertThat(awaitItem()).isEqualTo(8.0)
 
             viewModel.onCleared()
         }
