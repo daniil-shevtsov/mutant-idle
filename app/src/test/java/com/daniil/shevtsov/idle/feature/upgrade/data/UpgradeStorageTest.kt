@@ -1,4 +1,4 @@
-package com.daniil.shevtsov.idle.main.data.upgrade
+package com.daniil.shevtsov.idle.feature.upgrade.data
 
 import app.cash.turbine.test
 import assertk.assertThat
@@ -7,7 +7,6 @@ import assertk.assertions.isNotNull
 import assertk.assertions.isNull
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.MainCoroutineExtension
-import com.daniil.shevtsov.idle.feature.upgrade.data.UpgradeStorage
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.util.upgrade

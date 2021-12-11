@@ -1,17 +1,17 @@
-package com.daniil.shevtsov.idle.main.domain.purchase
+package com.daniil.shevtsov.idle.feature.shop.domain
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
-import com.daniil.shevtsov.idle.feature.shop.domain.CompositePurchaseBehavior
 import com.daniil.shevtsov.idle.feature.upgrade.data.UpgradeStorage
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.util.upgrade
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test
+
 
 internal class CompositePurchaseBehaviorTest {
 

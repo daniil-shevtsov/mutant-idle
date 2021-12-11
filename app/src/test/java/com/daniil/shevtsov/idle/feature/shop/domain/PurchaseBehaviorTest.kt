@@ -1,10 +1,9 @@
-package com.daniil.shevtsov.idle.main.domain.purchase
+package com.daniil.shevtsov.idle.feature.shop.domain
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
-import com.daniil.shevtsov.idle.feature.shop.domain.PurchaseBehavior
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.util.upgrade

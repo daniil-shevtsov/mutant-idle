@@ -1,4 +1,4 @@
-package com.daniil.shevtsov.idle.main
+package com.daniil.shevtsov.idle.feature.main.presentation
 
 import app.cash.turbine.test
 import assertk.all
@@ -6,9 +6,6 @@ import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.MainCoroutineExtension
 import com.daniil.shevtsov.idle.core.BalanceConfig
-import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
-import com.daniil.shevtsov.idle.feature.main.presentation.MainViewModel
-import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.NewResourceBehavior
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel

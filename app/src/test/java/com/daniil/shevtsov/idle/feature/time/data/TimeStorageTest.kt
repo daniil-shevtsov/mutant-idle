@@ -1,9 +1,8 @@
-package com.daniil.shevtsov.idle.main.data.time
+package com.daniil.shevtsov.idle.feature.time.data
 
 import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.daniil.shevtsov.idle.feature.time.data.TimeStorage
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
