@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
+import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMapper
@@ -38,6 +39,7 @@ class MainViewModel @Inject constructor(
                             name = "Blood",
                         )
                     ),
+                    ratio = HumanityRatioModel(name = "Human", percent = 0.0),
                     actionState = createActionState(),
                     shop = UpgradeBehavior.observeAll(storage = upgradeStorage)
                         .firstOrNull()

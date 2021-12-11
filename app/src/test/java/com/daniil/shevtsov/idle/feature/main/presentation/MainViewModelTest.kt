@@ -6,6 +6,7 @@ import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.MainCoroutineExtension
 import com.daniil.shevtsov.idle.core.BalanceConfig
+import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
@@ -58,6 +59,11 @@ internal class MainViewModelTest {
                     prop(MainViewState.Success::resources)
                         .extracting(ResourceModel::value)
                         .containsExactly("0")
+                    prop(MainViewState.Success::ratio)
+                        .all {
+                            prop(HumanityRatioModel::name).isEqualTo("Human")
+                            prop(HumanityRatioModel::percent).isEqualTo(0.0)
+                        }
                     prop(MainViewState.Success::shop)
                         .prop(ShopState::upgradeLists)
                         .index(0)
