@@ -1,11 +1,11 @@
 package com.daniil.shevtsov.idle.application
 
 import com.daniil.shevtsov.idle.core.BalanceConfig
-import com.daniil.shevtsov.idle.main.data.resource.NewResourceBehavior
-import com.daniil.shevtsov.idle.main.data.resource.ResourceStorage
-import com.daniil.shevtsov.idle.main.data.time.Time
-import com.daniil.shevtsov.idle.main.data.time.TimeStorage
-import com.daniil.shevtsov.idle.main.domain.time.TimeBehavior
+import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
+import com.daniil.shevtsov.idle.feature.resource.domain.NewResourceBehavior
+import com.daniil.shevtsov.idle.feature.time.data.TimeStorage
+import com.daniil.shevtsov.idle.feature.time.domain.Time
+import com.daniil.shevtsov.idle.feature.time.domain.TimeBehavior
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map

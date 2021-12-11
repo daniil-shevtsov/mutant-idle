@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.daniil.shevtsov.idle.MainCoroutineExtension
+import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

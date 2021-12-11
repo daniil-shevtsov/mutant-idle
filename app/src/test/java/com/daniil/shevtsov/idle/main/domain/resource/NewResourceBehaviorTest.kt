@@ -4,9 +4,10 @@ import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.daniil.shevtsov.idle.core.BalanceConfig
-import com.daniil.shevtsov.idle.main.data.resource.NewResourceBehavior
-import com.daniil.shevtsov.idle.main.data.resource.ResourceStorage
-import com.daniil.shevtsov.idle.main.data.time.Time
+import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
+import com.daniil.shevtsov.idle.feature.resource.domain.NewResourceBehavior
+import com.daniil.shevtsov.idle.feature.resource.domain.Resource
+import com.daniil.shevtsov.idle.feature.time.domain.Time
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test
 

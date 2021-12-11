@@ -5,9 +5,9 @@ import com.daniil.shevtsov.idle.common.di.initKoin
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.core.di.DaggerAppComponent
 import com.daniil.shevtsov.idle.core.di.koin.appModule
-import com.daniil.shevtsov.idle.main.domain.upgrade.Price
-import com.daniil.shevtsov.idle.main.domain.upgrade.Upgrade
-import com.daniil.shevtsov.idle.main.domain.upgrade.UpgradeStatus
+import com.daniil.shevtsov.idle.feature.upgrade.domain.Price
+import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
+import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import org.koin.core.Koin
 import timber.log.Timber
 import javax.inject.Inject

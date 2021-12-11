@@ -1,11 +1,11 @@
 package com.daniil.shevtsov.idle.util
 
 import com.daniil.shevtsov.idle.core.BalanceConfig
-import com.daniil.shevtsov.idle.main.data.time.Time
-import com.daniil.shevtsov.idle.main.domain.resource.Resource
-import com.daniil.shevtsov.idle.main.domain.upgrade.Price
-import com.daniil.shevtsov.idle.main.domain.upgrade.Upgrade
-import com.daniil.shevtsov.idle.main.domain.upgrade.UpgradeStatus
+import com.daniil.shevtsov.idle.feature.resource.domain.Resource
+import com.daniil.shevtsov.idle.feature.time.domain.Time
+import com.daniil.shevtsov.idle.feature.upgrade.domain.Price
+import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
+import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 
 fun balanceConfig(
     tickRateMillis: Long = 1L,

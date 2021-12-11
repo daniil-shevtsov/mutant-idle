@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/MainFragment"
-        android:name="com.daniil.shevtsov.idle.main.MainFragment"
+        android:name="com.daniil.shevtsov.idle.feature.main.view.MainFragment"
         android:label="@string/main_fragment_label"
         tools:layout="@layout/fragment_main">
 

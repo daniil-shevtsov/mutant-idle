@@ -6,8 +6,10 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import assertk.assertions.isNull
 import assertk.assertions.prop
-import com.daniil.shevtsov.idle.main.data.upgrade.UpgradeBehavior
-import com.daniil.shevtsov.idle.main.data.upgrade.UpgradeStorage
+import com.daniil.shevtsov.idle.feature.upgrade.data.UpgradeStorage
+import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
+import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeBehavior
+import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.util.upgrade
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.BeforeEach

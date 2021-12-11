@@ -1,8 +1,8 @@
 package com.daniil.shevtsov.idle.core.di
 
 import com.daniil.shevtsov.idle.core.di.viewmodel.ViewModelModule
-import com.daniil.shevtsov.idle.main.data.time.TimeProvider
-import com.daniil.shevtsov.idle.main.data.time.TimeProviderImpl
+import com.daniil.shevtsov.idle.feature.time.data.TimeProvider
+import com.daniil.shevtsov.idle.feature.time.data.TimeProviderImpl
 import dagger.Binds
 import dagger.Module
 
