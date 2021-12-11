@@ -1,4 +1,4 @@
-package com.daniil.shevtsov.idle.main.ui.actions
+package com.daniil.shevtsov.idle.feature.action.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,12 +16,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Pallete
+import com.daniil.shevtsov.idle.core.ui.actionPreviewStub
+import com.daniil.shevtsov.idle.core.ui.actionStatePreviewStub
+import com.daniil.shevtsov.idle.core.ui.innerBorder
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
-import com.daniil.shevtsov.idle.main.ui.actionPreviewStub
-import com.daniil.shevtsov.idle.main.ui.actionStatePreviewStub
-import com.daniil.shevtsov.idle.main.ui.innerBorder
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 

@@ -1,4 +1,4 @@
-package com.daniil.shevtsov.idle.main.ui
+package com.daniil.shevtsov.idle.core.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding

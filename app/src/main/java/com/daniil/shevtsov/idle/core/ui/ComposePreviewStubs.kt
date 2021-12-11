@@ -1,4 +1,4 @@
-package com.daniil.shevtsov.idle.main.ui
+package com.daniil.shevtsov.idle.core.ui
 
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane

@@ -1,4 +1,4 @@
-package com.daniil.shevtsov.idle.main.ui.upgrade
+package com.daniil.shevtsov.idle.feature.upgrade.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,9 +15,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Pallete
+import com.daniil.shevtsov.idle.core.ui.upgradePreviewStub
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
-import com.daniil.shevtsov.idle.main.ui.upgradePreviewStub
 
 @Preview
 @Composable

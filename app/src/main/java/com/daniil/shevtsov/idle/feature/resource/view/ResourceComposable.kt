@@ -1,4 +1,4 @@
-package com.daniil.shevtsov.idle.main.ui.resource
+package com.daniil.shevtsov.idle.feature.resource.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -11,9 +11,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Pallete
+import com.daniil.shevtsov.idle.core.ui.innerBorder
+import com.daniil.shevtsov.idle.core.ui.resourcePreviewStub
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
-import com.daniil.shevtsov.idle.main.ui.innerBorder
-import com.daniil.shevtsov.idle.main.ui.resourcePreviewStub
 
 @Preview
 @Composable

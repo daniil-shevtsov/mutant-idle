@@ -1,4 +1,4 @@
-package com.daniil.shevtsov.idle.main.ui.upgrade
+package com.daniil.shevtsov.idle.feature.upgrade.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.Pallete
+import com.daniil.shevtsov.idle.core.ui.upgradeListPreviewStub
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
-import com.daniil.shevtsov.idle.main.ui.upgradeListPreviewStub
 
 @Preview(heightDp = 270)
 @Composable

@@ -11,7 +11,6 @@ import com.daniil.shevtsov.idle.R
 import com.daniil.shevtsov.idle.application.IdleGameApplication
 import com.daniil.shevtsov.idle.databinding.FragmentMainBinding
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewModel
-import com.daniil.shevtsov.idle.main.ui.MainScreen
 import javax.inject.Inject
 
 class MainFragment : Fragment(R.layout.fragment_main) {

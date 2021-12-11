@@ -1,4 +1,4 @@
-package com.daniil.shevtsov.idle.main.ui.shop
+package com.daniil.shevtsov.idle.feature.shop.view
 
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
@@ -7,10 +7,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.Pallete
+import com.daniil.shevtsov.idle.core.ui.innerBorder
+import com.daniil.shevtsov.idle.core.ui.shopStatePreviewStub
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
-import com.daniil.shevtsov.idle.main.ui.innerBorder
-import com.daniil.shevtsov.idle.main.ui.shopStatePreviewStub
-import com.daniil.shevtsov.idle.main.ui.upgrade.UpgradeList
+import com.daniil.shevtsov.idle.feature.upgrade.view.UpgradeList
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 

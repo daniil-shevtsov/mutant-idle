@@ -1,4 +1,4 @@
-package com.daniil.shevtsov.idle.main.ui
+package com.daniil.shevtsov.idle.feature.main.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -10,12 +10,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.daniil.shevtsov.idle.core.ui.Pallete
+import com.daniil.shevtsov.idle.core.ui.viewStatePreviewStub
+import com.daniil.shevtsov.idle.feature.action.view.ActionSection
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewModel
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
-import com.daniil.shevtsov.idle.main.ui.actions.ActionSection
-import com.daniil.shevtsov.idle.main.ui.resource.ResourcePane
-import com.daniil.shevtsov.idle.main.ui.shop.Shop
+import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
+import com.daniil.shevtsov.idle.feature.shop.view.Shop
 
 @Preview(
     widthDp = 320,
