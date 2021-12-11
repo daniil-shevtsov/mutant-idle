@@ -5,7 +5,7 @@ import com.daniil.shevtsov.idle.feature.time.domain.Time
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-object NewResourceBehavior {
+object ResourceBehavior {
 
     suspend fun getCurrentResource(storage: ResourceStorage): Resource {
         return storage.getCurrentValue().let(::Resource)

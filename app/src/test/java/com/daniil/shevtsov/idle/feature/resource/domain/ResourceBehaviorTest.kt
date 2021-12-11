@@ -9,9 +9,9 @@ import com.daniil.shevtsov.idle.feature.time.domain.Time
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test
 
-class NewResourceBehaviorTest {
+class ResourceBehaviorTest {
 
-    private val behavior = NewResourceBehavior
+    private val behavior = ResourceBehavior
 
     private val balanceConfig = BalanceConfig(
         tickRateMillis = 1L,

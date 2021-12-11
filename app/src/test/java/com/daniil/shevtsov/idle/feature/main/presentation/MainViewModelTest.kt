@@ -7,7 +7,7 @@ import assertk.assertions.*
 import com.daniil.shevtsov.idle.MainCoroutineExtension
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
-import com.daniil.shevtsov.idle.feature.resource.domain.NewResourceBehavior
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
 import com.daniil.shevtsov.idle.feature.time.domain.Time
@@ -69,7 +69,7 @@ internal class MainViewModelTest {
 
     @Test
     fun `should buy upgrade when clicked and affordable`() = runBlockingTest {
-        NewResourceBehavior.updateResource(resourceStorage, Time(1000), balanceConfig.resourcePerMillisecond)
+        ResourceBehavior.updateResource(resourceStorage, Time(1000), balanceConfig.resourcePerMillisecond)
 
         viewModel.handleAction(MainViewAction.UpgradeSelected(id = 1L))
 
@@ -81,7 +81,7 @@ internal class MainViewModelTest {
 
     @Test
     fun `should mark upgrade as affordable if its price less than resource`() = runBlockingTest {
-        NewResourceBehavior.updateResource(
+        ResourceBehavior.updateResource(
             storage = resourceStorage,
             passedTime = Time(1000),
             rate = balanceConfig.resourcePerMillisecond,
@@ -120,7 +120,7 @@ internal class MainViewModelTest {
 
     @Test
     fun `should mark upgrade as bought if it is bought`() = runBlockingTest {
-        NewResourceBehavior.updateResource(
+        ResourceBehavior.updateResource(
             storage = resourceStorage,
             passedTime = Time(200),
             rate = balanceConfig.resourcePerMillisecond,
@@ -128,7 +128,7 @@ internal class MainViewModelTest {
 
         viewModel.handleAction(MainViewAction.UpgradeSelected(id = 2L))
 
-        NewResourceBehavior.updateResource(
+        ResourceBehavior.updateResource(
             storage = resourceStorage,
             passedTime = Time(201),
             rate = balanceConfig.resourcePerMillisecond,
@@ -150,7 +150,7 @@ internal class MainViewModelTest {
 
     @Test
     fun `should sort upgrades by status`() = runBlockingTest {
-        NewResourceBehavior.updateResource(
+        ResourceBehavior.updateResource(
             storage = resourceStorage,
             passedTime = Time(50),
             rate = balanceConfig.resourcePerMillisecond,
@@ -158,7 +158,7 @@ internal class MainViewModelTest {
 
         viewModel.handleAction(MainViewAction.UpgradeSelected(id = 1L))
 
-        NewResourceBehavior.updateResource(
+        ResourceBehavior.updateResource(
             storage = resourceStorage,
             passedTime = Time(1),
             rate = balanceConfig.resourcePerMillisecond,

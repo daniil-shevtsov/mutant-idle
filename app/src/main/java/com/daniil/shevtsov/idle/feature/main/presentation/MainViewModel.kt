@@ -6,7 +6,7 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
-import com.daniil.shevtsov.idle.feature.resource.domain.NewResourceBehavior
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMapper
 import com.daniil.shevtsov.idle.feature.shop.domain.CompositePurchaseBehavior
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
@@ -29,7 +29,7 @@ class MainViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
-        NewResourceBehavior.observeResource(resourceStorage)
+        ResourceBehavior.observeResource(resourceStorage)
             .onEach { resource ->
                 _state.value = MainViewState.Success(
                     resources = listOf(

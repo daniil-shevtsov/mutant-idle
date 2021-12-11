@@ -1,7 +1,7 @@
 package com.daniil.shevtsov.idle.feature.shop.domain
 
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
-import com.daniil.shevtsov.idle.feature.resource.domain.NewResourceBehavior
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
 import com.daniil.shevtsov.idle.feature.upgrade.data.UpgradeStorage
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeBehavior
 
@@ -13,7 +13,7 @@ object CompositePurchaseBehavior {
     ) {
         val upgrade = upgradeStorage.getUpgradeById(id = upgradeId)!!
 
-        val currentResource = NewResourceBehavior.getCurrentResource(resourceStorage)
+        val currentResource = ResourceBehavior.getCurrentResource(resourceStorage)
 
         if(upgrade.price.value <= currentResource.value) {
             val boughtUpgrade = PurchaseBehavior.buyUpgrade(
@@ -25,7 +25,7 @@ object CompositePurchaseBehavior {
                 id = upgradeId,
                 newUpgrade =  boughtUpgrade,
             )
-            NewResourceBehavior.decreaseResource(
+            ResourceBehavior.decreaseResource(
                 storage = resourceStorage,
                 amount = upgrade.price.value,
             )

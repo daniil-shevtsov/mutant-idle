@@ -2,7 +2,7 @@ package com.daniil.shevtsov.idle.application
 
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
-import com.daniil.shevtsov.idle.feature.resource.domain.NewResourceBehavior
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
 import com.daniil.shevtsov.idle.feature.time.data.TimeStorage
 import com.daniil.shevtsov.idle.feature.time.domain.Time
 import com.daniil.shevtsov.idle.feature.time.domain.TimeBehavior
@@ -45,7 +45,7 @@ class IdleGameViewModel @Inject constructor(
             TimeBehavior.observeTime(timeStorage)
                 .map { Time(it.inWholeMilliseconds) }
                 .onEach { time ->
-                    NewResourceBehavior.updateResource(
+                    ResourceBehavior.updateResource(
                         storage = resourceStorage,
                         passedTime = time,
                         rate = balanceConfig.resourcePerMillisecond,
