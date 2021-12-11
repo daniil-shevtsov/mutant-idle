@@ -4,6 +4,7 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
+import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.PriceModel
@@ -19,6 +20,11 @@ internal fun viewStatePreviewStub() = MainViewState.Success(
 internal fun resourcePreviewStub() = ResourceModel(
     name = "Blood",
     value = "10 000",
+)
+
+internal fun humanityRatioStub() = HumanityRatioModel(
+    name = "Lol",
+    percent = 0.5,
 )
 
 internal fun actionStatePreviewStub() = ActionsState(
