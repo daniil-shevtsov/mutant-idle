@@ -19,11 +19,10 @@ internal class CompositePurchaseBehaviorTest {
 
     private val behavior = CompositePurchaseBehavior
 
-    private val upgradeId = 1L
     private val resourceStorage = ResourceStorage()
-    private val upgradeStorage = UpgradeStorage(
+    private var upgradeStorage = UpgradeStorage(
         initialUpgrades = listOf(
-            upgrade(id = upgradeId, price = 25.0)
+            upgrade(id = 1L, price = 25.0)
         )
     )
     private val mutantRatioStorage = MutantRatioStorage()
@@ -38,10 +37,10 @@ internal class CompositePurchaseBehaviorTest {
             upgradeStorage = upgradeStorage,
             resourceStorage = resourceStorage,
             mutantRatioStorage = mutantRatioStorage,
-            upgradeId = upgradeId,
+            upgradeId = 1L,
         )
 
-        assertThat(upgradeStorage.getUpgradeById(id = upgradeId))
+        assertThat(upgradeStorage.getUpgradeById(id = 1L))
             .isNotNull()
             .prop(Upgrade::status)
             .isEqualTo(UpgradeStatus.Bought)
@@ -49,9 +48,9 @@ internal class CompositePurchaseBehaviorTest {
 
     @Test
     fun `when buying upgrade - then update resource`() = runBlockingTest {
-        val upgradeStorage = UpgradeStorage(
+        upgradeStorage = UpgradeStorage(
             initialUpgrades = listOf(
-                upgrade(id = upgradeId, price = 25.0)
+                upgrade(id = 1L, price = 25.0)
             )
         )
 
@@ -62,7 +61,7 @@ internal class CompositePurchaseBehaviorTest {
             upgradeStorage = upgradeStorage,
             resourceStorage = resourceStorage,
             mutantRatioStorage = mutantRatioStorage,
-            upgradeId = upgradeId,
+            upgradeId = 1L,
         )
 
         assertThat(resourceStorage.getCurrentValue())
@@ -71,9 +70,9 @@ internal class CompositePurchaseBehaviorTest {
 
     @Test
     fun `when buying upgrade - then update mutant ratio`() = runBlockingTest {
-        val upgradeStorage = UpgradeStorage(
+        upgradeStorage = UpgradeStorage(
             initialUpgrades = listOf(
-                upgrade(id = upgradeId, price = 10.0)
+                upgrade(id = 1L, price = 10.0)
             )
         )
 
@@ -84,7 +83,7 @@ internal class CompositePurchaseBehaviorTest {
             upgradeStorage = upgradeStorage,
             resourceStorage = resourceStorage,
             mutantRatioStorage = mutantRatioStorage,
-            upgradeId = upgradeId,
+            upgradeId = 1L,
         )
 
         assertThat(mutantRatioStorage.getCurrentValue())
@@ -93,9 +92,9 @@ internal class CompositePurchaseBehaviorTest {
 
     @Test
     fun `when buying upgrade and had some ratio - then increase it`() = runBlockingTest {
-        val upgradeStorage = UpgradeStorage(
+        upgradeStorage = UpgradeStorage(
             initialUpgrades = listOf(
-                upgrade(id = upgradeId, price = 10.0)
+                upgrade(id = 1L, price = 10.0)
             )
         )
 
@@ -107,7 +106,7 @@ internal class CompositePurchaseBehaviorTest {
             upgradeStorage = upgradeStorage,
             resourceStorage = resourceStorage,
             mutantRatioStorage = mutantRatioStorage,
-            upgradeId = upgradeId,
+            upgradeId = 1L,
         )
 
         assertThat(mutantRatioStorage.getCurrentValue())
@@ -116,9 +115,9 @@ internal class CompositePurchaseBehaviorTest {
 
     @Test
     fun `when buying nonaffordable upgrade - then don't do anything`() = runBlockingTest {
-        val upgradeStorage = UpgradeStorage(
+        upgradeStorage = UpgradeStorage(
             initialUpgrades = listOf(
-                upgrade(id = upgradeId, price = 250.0)
+                upgrade(id = 1L, price = 250.0)
             )
         )
         resourceStorage.setNewValue(75.0)
@@ -128,10 +127,10 @@ internal class CompositePurchaseBehaviorTest {
             upgradeStorage = upgradeStorage,
             resourceStorage = resourceStorage,
             mutantRatioStorage = mutantRatioStorage,
-            upgradeId = upgradeId,
+            upgradeId = 1L,
         )
 
-        assertThat(upgradeStorage.getUpgradeById(id = upgradeId))
+        assertThat(upgradeStorage.getUpgradeById(id = 1L))
             .isNotNull()
             .prop(Upgrade::status)
             .isEqualTo(UpgradeStatus.NotBought)
