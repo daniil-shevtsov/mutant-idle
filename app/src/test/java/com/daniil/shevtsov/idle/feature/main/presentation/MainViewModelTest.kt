@@ -167,7 +167,11 @@ internal class MainViewModelTest {
         upgradeStorage = UpgradeStorage(initialUpgrades = listOf(upgrade(id = 0L, price = 10.0)))
 
         viewModel.handleAction(MainViewAction.UpgradeSelected(id = 0L))
-
+        ResourceBehavior.updateResource( //TODO: Observe all changes and get rid of this hack
+            storage = resourceStorage,
+            passedTime = Time(201),
+            rate = balanceConfig.resourcePerMillisecond,
+        )
         viewModel.state.test {
             val state = expectMostRecentItem()
             assertThat(state)
@@ -179,6 +183,7 @@ internal class MainViewModelTest {
     }
 
     private fun createViewModel() = MainViewModel(
+        balanceConfig = balanceConfig,
         upgradeStorage = upgradeStorage,
         resourceStorage = resourceStorage,
         mutantRatioStorage = mutantRatioStorage,

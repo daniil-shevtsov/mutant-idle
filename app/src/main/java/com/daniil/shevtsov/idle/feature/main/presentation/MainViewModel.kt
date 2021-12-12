@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.feature.main.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
@@ -23,6 +24,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
+    private val balanceConfig: BalanceConfig,
     private val upgradeStorage: UpgradeStorage,
     private val resourceStorage: ResourceStorage,
     private val mutantRatioStorage: MutantRatioStorage,
@@ -41,7 +43,7 @@ class MainViewModel @Inject constructor(
                             name = "Blood",
                         )
                     ),
-                    ratio = HumanityRatioModel(name = "Human", percent = 0.0),
+                    ratio = HumanityRatioModel(name = "Human", percent = mutantRatioStorage.getCurrentValue()),
                     actionState = createActionState(),
                     shop = UpgradeBehavior.observeAll(storage = upgradeStorage)
                         .firstOrNull()
@@ -75,6 +77,7 @@ class MainViewModel @Inject constructor(
     private fun handleUpgradeSelected(action: MainViewAction.UpgradeSelected) {
         viewModelScope.launch {
             CompositePurchaseBehavior.buyUpgrade(
+                balanceConfig = balanceConfig,
                 upgradeStorage = upgradeStorage,
                 resourceStorage = resourceStorage,
                 mutantRatioStorage = mutantRatioStorage,
