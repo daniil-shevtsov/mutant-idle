@@ -4,6 +4,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import assertk.assertions.prop
+import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
 import com.daniil.shevtsov.idle.feature.upgrade.data.UpgradeStorage
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
@@ -26,11 +27,14 @@ internal class CompositePurchaseBehaviorTest {
                 upgrade(id = upgradeId, price = 25.0)
             )
         )
+        val mutantRatioStorage = MutantRatioStorage()
+
         resourceStorage.setNewValue(75.0)
 
         behavior.buyUpgrade(
             upgradeStorage = upgradeStorage,
             resourceStorage = resourceStorage,
+            mutantRatioStorage = mutantRatioStorage,
             upgradeId = upgradeId,
         )
 
@@ -52,11 +56,13 @@ internal class CompositePurchaseBehaviorTest {
                 upgrade(id = upgradeId, price = 250.0)
             )
         )
+        val mutantRatioStorage = MutantRatioStorage()
         resourceStorage.setNewValue(75.0)
 
         behavior.buyUpgrade(
             upgradeStorage = upgradeStorage,
             resourceStorage = resourceStorage,
+            mutantRatioStorage = mutantRatioStorage,
             upgradeId = upgradeId,
         )
 

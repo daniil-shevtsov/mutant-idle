@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
+import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
@@ -24,6 +25,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val upgradeStorage: UpgradeStorage,
     private val resourceStorage: ResourceStorage,
+    private val mutantRatioStorage: MutantRatioStorage,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(initViewState())
@@ -75,6 +77,7 @@ class MainViewModel @Inject constructor(
             CompositePurchaseBehavior.buyUpgrade(
                 upgradeStorage = upgradeStorage,
                 resourceStorage = resourceStorage,
+                mutantRatioStorage = mutantRatioStorage,
                 upgradeId = action.id,
             )
         }

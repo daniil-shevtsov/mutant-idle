@@ -10,9 +10,11 @@ import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 fun balanceConfig(
     tickRateMillis: Long = 1L,
     resourcePerMillisecond: Double = 1.0,
+    resourceSpentForFullMutant: Double = 1000.0,
 ) = BalanceConfig(
     tickRateMillis = tickRateMillis,
     resourcePerMillisecond = resourcePerMillisecond,
+    resourceSpentForFullMutant = resourceSpentForFullMutant,
 )
 
 fun time(value: Long = 0L) = Time(value = value)

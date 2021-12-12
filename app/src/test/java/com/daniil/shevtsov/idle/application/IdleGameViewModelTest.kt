@@ -4,9 +4,9 @@ import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.daniil.shevtsov.idle.MainCoroutineExtension
-import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
 import com.daniil.shevtsov.idle.feature.time.data.TimeStorage
+import com.daniil.shevtsov.idle.util.balanceConfig
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Disabled
@@ -18,7 +18,7 @@ import kotlin.time.Duration
 internal class IdleGameViewModelTest {
     private val viewModel: IdleGameViewModel by lazy { createViewModel() }
 
-    private val balanceConfig = BalanceConfig(
+    private val balanceConfig = balanceConfig(
         tickRateMillis = 1L,
         resourcePerMillisecond = 2.0,
     )

@@ -5,7 +5,7 @@ import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.MainCoroutineExtension
-import com.daniil.shevtsov.idle.core.BalanceConfig
+import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
@@ -17,6 +17,7 @@ import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
+import com.daniil.shevtsov.idle.util.balanceConfig
 import com.daniil.shevtsov.idle.util.upgrade
 import io.mockk.clearAllMocks
 import kotlinx.coroutines.test.runBlockingTest
@@ -27,7 +28,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(MainCoroutineExtension::class)
 internal class MainViewModelTest {
 
-    private val upgradeStorage = UpgradeStorage(
+    private var upgradeStorage = UpgradeStorage(
         initialUpgrades = listOf(
             upgrade(id = 0L),
             upgrade(id = 1L, price = 25.0),
@@ -36,10 +37,12 @@ internal class MainViewModelTest {
         )
     )
     private val resourceStorage = ResourceStorage()
+    private val mutantRatioStorage = MutantRatioStorage()
 
-    private val balanceConfig = BalanceConfig(
+    private val balanceConfig = balanceConfig(
         tickRateMillis = 1L,
         resourcePerMillisecond = 2.0,
+        resourceSpentForFullMutant = 100.0,
     )
 
     private val viewModel: MainViewModel by lazy { createViewModel() }
@@ -75,7 +78,11 @@ internal class MainViewModelTest {
 
     @Test
     fun `should buy upgrade when clicked and affordable`() = runBlockingTest {
-        ResourceBehavior.updateResource(resourceStorage, Time(1000), balanceConfig.resourcePerMillisecond)
+        ResourceBehavior.updateResource(
+            resourceStorage,
+            Time(1000),
+            balanceConfig.resourcePerMillisecond
+        )
 
         viewModel.handleAction(MainViewAction.UpgradeSelected(id = 1L))
 
@@ -155,41 +162,26 @@ internal class MainViewModelTest {
     }
 
     @Test
-    fun `should sort upgrades by status`() = runBlockingTest {
-        ResourceBehavior.updateResource(
-            storage = resourceStorage,
-            passedTime = Time(50),
-            rate = balanceConfig.resourcePerMillisecond,
-        )
+    fun `should update human ratio after upgrade bought`() = runBlockingTest {
+        resourceStorage.setNewValue(resource = 10.0)
+        upgradeStorage = UpgradeStorage(initialUpgrades = listOf(upgrade(id = 0L, price = 10.0)))
 
-        viewModel.handleAction(MainViewAction.UpgradeSelected(id = 1L))
-
-        ResourceBehavior.updateResource(
-            storage = resourceStorage,
-            passedTime = Time(1),
-            rate = balanceConfig.resourcePerMillisecond,
-        )
+        viewModel.handleAction(MainViewAction.UpgradeSelected(id = 0L))
 
         viewModel.state.test {
             val state = expectMostRecentItem()
             assertThat(state)
                 .isInstanceOf(MainViewState.Success::class)
-                .prop(MainViewState.Success::shop)
-                .prop(ShopState::upgradeLists)
-                .index(0)
-                .extracting(UpgradeModel::status)
-                .containsExactly(
-                    UpgradeStatusModel.Affordable,
-                    UpgradeStatusModel.Affordable,
-                    UpgradeStatusModel.NotAffordable,
-                    UpgradeStatusModel.Bought,
-                )
+                .prop(MainViewState.Success::ratio)
+                .prop(HumanityRatioModel::percent)
+                .isEqualTo(0.10)
         }
     }
 
     private fun createViewModel() = MainViewModel(
         upgradeStorage = upgradeStorage,
         resourceStorage = resourceStorage,
+        mutantRatioStorage = mutantRatioStorage,
     )
 
 }

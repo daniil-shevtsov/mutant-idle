@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.feature.shop.domain
 
+import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
 import com.daniil.shevtsov.idle.feature.upgrade.data.UpgradeStorage
@@ -9,6 +10,7 @@ object CompositePurchaseBehavior {
     suspend fun buyUpgrade(
         upgradeStorage: UpgradeStorage,
         resourceStorage: ResourceStorage,
+        mutantRatioStorage: MutantRatioStorage,
         upgradeId: Long
     ) {
         val upgrade = upgradeStorage.getUpgradeById(id = upgradeId)!!
@@ -29,6 +31,7 @@ object CompositePurchaseBehavior {
                 storage = resourceStorage,
                 amount = upgrade.price.value,
             )
+            mutantRatioStorage.setNewValue(0.0)
         }
     }
 }

@@ -3,9 +3,9 @@ package com.daniil.shevtsov.idle.feature.resource.domain
 import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
 import com.daniil.shevtsov.idle.feature.time.domain.Time
+import com.daniil.shevtsov.idle.util.balanceConfig
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test
 
@@ -13,7 +13,7 @@ class ResourceBehaviorTest {
 
     private val behavior = ResourceBehavior
 
-    private val balanceConfig = BalanceConfig(
+    private val balanceConfig = balanceConfig(
         tickRateMillis = 1L,
         resourcePerMillisecond = 2.0,
     )

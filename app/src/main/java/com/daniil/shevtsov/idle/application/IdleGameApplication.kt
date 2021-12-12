@@ -50,6 +50,7 @@ class IdleGameApplication : Application() {
     private fun createBalanceConfig() = BalanceConfig(
         tickRateMillis = 100L,
         resourcePerMillisecond = 0.002,
+        resourceSpentForFullMutant = 1000.0,
     )
 
     private fun createInitialUpgrades() = listOf(
