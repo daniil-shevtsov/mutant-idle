@@ -156,9 +156,30 @@ internal class MainViewModelTest {
 
     @Test
     fun `should update ratio names correctly`() = runBlockingTest {
+        upgradeStorage = UpgradeStorage(
+            initialUpgrades = listOf(
+                upgrade(id = 0L, price = 10.0),
+                upgrade(id = 1L, price = 30.0),
+                upgrade(id = 2L, price = 40.0),
+                upgrade(id = 3L, price = 20.0),
+            )
+        )
+        resourceStorage.setNewValue(resource = 1000.0)
+
         viewModel.state.test {
-            val state = awaitItem()
-            assertThat(state).hasRatioName("Human")
+            assertThat(awaitItem()).hasRatioName("Human")
+
+            viewModel.handleAction(MainViewAction.UpgradeSelected(id = 0L))
+            assertThat(awaitItem()).hasRatioName("Dormant")
+
+            viewModel.handleAction(MainViewAction.UpgradeSelected(id = 1L))
+            assertThat(awaitItem()).hasRatioName("Hidden")
+
+            viewModel.handleAction(MainViewAction.UpgradeSelected(id = 2L))
+            assertThat(awaitItem()).hasRatioName("Covert")
+
+            viewModel.handleAction(MainViewAction.UpgradeSelected(id = 3L))
+            assertThat(awaitItem()).hasRatioName("Honest")
         }
     }
 
