@@ -12,7 +12,6 @@ import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.util.balanceConfig
 import com.daniil.shevtsov.idle.util.upgrade
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
@@ -20,24 +19,18 @@ internal class CompositePurchaseBehaviorTest {
 
     private val behavior = CompositePurchaseBehavior
 
+    private val upgradeId = 1L
     private val resourceStorage = ResourceStorage()
-
-    @BeforeEach
-    fun onSetup() {
-
-    }
+    private val upgradeStorage = UpgradeStorage(
+        initialUpgrades = listOf(
+            upgrade(id = upgradeId, price = 25.0)
+        )
+    )
+    private val mutantRatioStorage = MutantRatioStorage()
+    private val balanceConfig = balanceConfig(resourceSpentForFullMutant = 100.0)
 
     @Test
     fun `when buying upgrade - then update its status`() = runBlockingTest {
-        val upgradeId = 1L
-        val upgradeStorage = UpgradeStorage(
-            initialUpgrades = listOf(
-                upgrade(id = upgradeId, price = 25.0)
-            )
-        )
-        val mutantRatioStorage = MutantRatioStorage()
-        val balanceConfig = balanceConfig(resourceSpentForFullMutant = 100.0)
-
         resourceStorage.setNewValue(75.0)
 
         behavior.buyUpgrade(
@@ -56,14 +49,11 @@ internal class CompositePurchaseBehaviorTest {
 
     @Test
     fun `when buying upgrade - then update resource`() = runBlockingTest {
-        val upgradeId = 1L
         val upgradeStorage = UpgradeStorage(
             initialUpgrades = listOf(
                 upgrade(id = upgradeId, price = 25.0)
             )
         )
-        val mutantRatioStorage = MutantRatioStorage()
-        val balanceConfig = balanceConfig(resourceSpentForFullMutant = 100.0)
 
         resourceStorage.setNewValue(75.0)
 
@@ -81,14 +71,11 @@ internal class CompositePurchaseBehaviorTest {
 
     @Test
     fun `when buying upgrade - then update mutant ratio`() = runBlockingTest {
-        val upgradeId = 1L
         val upgradeStorage = UpgradeStorage(
             initialUpgrades = listOf(
                 upgrade(id = upgradeId, price = 10.0)
             )
         )
-        val mutantRatioStorage = MutantRatioStorage()
-        val balanceConfig = balanceConfig(resourceSpentForFullMutant = 100.0)
 
         resourceStorage.setNewValue(75.0)
 
@@ -106,14 +93,11 @@ internal class CompositePurchaseBehaviorTest {
 
     @Test
     fun `when buying upgrade and had some ratio - then increase it`() = runBlockingTest {
-        val upgradeId = 1L
         val upgradeStorage = UpgradeStorage(
             initialUpgrades = listOf(
                 upgrade(id = upgradeId, price = 10.0)
             )
         )
-        val mutantRatioStorage = MutantRatioStorage()
-        val balanceConfig = balanceConfig(resourceSpentForFullMutant = 100.0)
 
         resourceStorage.setNewValue(75.0)
         mutantRatioStorage.setNewValue(0.25)
@@ -132,14 +116,11 @@ internal class CompositePurchaseBehaviorTest {
 
     @Test
     fun `when buying nonaffordable upgrade - then don't do anything`() = runBlockingTest {
-        val upgradeId = 1L
         val upgradeStorage = UpgradeStorage(
             initialUpgrades = listOf(
                 upgrade(id = upgradeId, price = 250.0)
             )
         )
-        val mutantRatioStorage = MutantRatioStorage()
-        val balanceConfig = balanceConfig(resourceSpentForFullMutant = 100.0)
         resourceStorage.setNewValue(75.0)
 
         behavior.buyUpgrade(
