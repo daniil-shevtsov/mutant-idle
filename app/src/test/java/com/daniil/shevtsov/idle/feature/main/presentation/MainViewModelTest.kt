@@ -157,12 +157,8 @@ internal class MainViewModelTest {
     @Test
     fun `should update ratio names correctly`() = runBlockingTest {
         viewModel.state.test {
-            val state = expectMostRecentItem()
-            assertThat(state)
-                .isInstanceOf(MainViewState.Success::class)
-                .prop(MainViewState.Success::ratio)
-                .prop(HumanityRatioModel::name)
-                .isEqualTo("Human")
+            val state = awaitItem()
+            assertThat(state).hasRatioName("Human")
         }
     }
 
@@ -178,5 +174,11 @@ internal class MainViewModelTest {
             .prop(MainViewState.Success::shop)
             .prop(ShopState::upgradeLists)
             .index(0)
+
+    private fun Assert<MainViewState>.hasRatioName(expectedName: String) =
+        isInstanceOf(MainViewState.Success::class)
+            .prop(MainViewState.Success::ratio)
+            .prop(HumanityRatioModel::name)
+            .isEqualTo(expectedName)
 
 }
