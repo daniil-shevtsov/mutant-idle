@@ -20,16 +20,18 @@ internal class CompositePurchaseBehaviorTest {
     private val behavior = CompositePurchaseBehavior
 
     private val resourceStorage = ResourceStorage()
-    private var upgradeStorage = UpgradeStorage(
-        initialUpgrades = listOf(
-            upgrade(id = 1L, price = 25.0)
-        )
-    )
+    private var upgradeStorage = UpgradeStorage(initialUpgrades = emptyList())
     private val mutantRatioStorage = MutantRatioStorage()
     private val balanceConfig = balanceConfig(resourceSpentForFullMutant = 100.0)
 
     @Test
     fun `when buying upgrade - then update its status`() = runBlockingTest {
+        upgradeStorage = UpgradeStorage(
+            initialUpgrades = listOf(
+                upgrade(id = 1L, price = 25.0)
+            )
+        )
+
         resourceStorage.setNewValue(75.0)
 
         behavior.buyUpgrade(
@@ -114,7 +116,7 @@ internal class CompositePurchaseBehaviorTest {
     }
 
     @Test
-    fun `when buying nonaffordable upgrade - then don't do anything`() = runBlockingTest {
+    fun `when trying to buy unaffordable upgrade - then don't do anything`() = runBlockingTest {
         upgradeStorage = UpgradeStorage(
             initialUpgrades = listOf(
                 upgrade(id = 1L, price = 250.0)
@@ -137,6 +139,9 @@ internal class CompositePurchaseBehaviorTest {
 
         assertThat(resourceStorage.getCurrentValue())
             .isEqualTo(75.0)
+
+        assertThat(mutantRatioStorage.getCurrentValue())
+            .isEqualTo(0.0)
     }
 
 }
