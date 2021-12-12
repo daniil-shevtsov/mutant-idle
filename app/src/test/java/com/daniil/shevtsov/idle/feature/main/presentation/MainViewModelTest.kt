@@ -154,6 +154,18 @@ internal class MainViewModelTest {
         }
     }
 
+    @Test
+    fun `should update ratio names correctly`() = runBlockingTest {
+        viewModel.state.test {
+            val state = expectMostRecentItem()
+            assertThat(state)
+                .isInstanceOf(MainViewState.Success::class)
+                .prop(MainViewState.Success::ratio)
+                .prop(HumanityRatioModel::name)
+                .isEqualTo("Human")
+        }
+    }
+
     private fun createViewModel() = MainViewModel(
         balanceConfig = balanceConfig,
         upgradeStorage = upgradeStorage,
