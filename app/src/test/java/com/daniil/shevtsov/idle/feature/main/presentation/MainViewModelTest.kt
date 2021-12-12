@@ -133,31 +133,19 @@ internal class MainViewModelTest {
 
     @Test
     fun `should mark upgrade as bought if it is bought`() = runBlockingTest {
-        ResourceBehavior.updateResource(
-            storage = resourceStorage,
-            passedTime = Time(200),
-            rate = balanceConfig.resourcePerMillisecond,
-        )
+        resourceStorage.setNewValue(resource = 10.0)
+        upgradeStorage = UpgradeStorage(initialUpgrades = listOf(upgrade(id = 0L, price = 10.0)))
 
-        viewModel.handleAction(MainViewAction.UpgradeSelected(id = 2L))
-
-        ResourceBehavior.updateResource(
-            storage = resourceStorage,
-            passedTime = Time(201),
-            rate = balanceConfig.resourcePerMillisecond,
-        )
+        viewModel.handleAction(MainViewAction.UpgradeSelected(id = 0L))
 
         viewModel.state.test {
-            val state = expectMostRecentItem()
-            assertThat(state)
+            assertThat(expectMostRecentItem())
                 .isInstanceOf(MainViewState.Success::class)
                 .prop(MainViewState.Success::shop)
                 .prop(ShopState::upgradeLists)
                 .index(0)
-                .any {
-                    it.prop(UpgradeModel::id).isEqualTo(2L)
-                    it.prop(UpgradeModel::status).isEqualTo(UpgradeStatusModel.Bought)
-                }
+                .extracting(UpgradeModel::id, UpgradeModel::status)
+                .containsExactly(0L to UpgradeStatusModel.Bought)
         }
     }
 
@@ -167,11 +155,7 @@ internal class MainViewModelTest {
         upgradeStorage = UpgradeStorage(initialUpgrades = listOf(upgrade(id = 0L, price = 10.0)))
 
         viewModel.handleAction(MainViewAction.UpgradeSelected(id = 0L))
-        ResourceBehavior.updateResource( //TODO: Observe all changes and get rid of this hack
-            storage = resourceStorage,
-            passedTime = Time(201),
-            rate = balanceConfig.resourcePerMillisecond,
-        )
+
         viewModel.state.test {
             val state = expectMostRecentItem()
             assertThat(state)
