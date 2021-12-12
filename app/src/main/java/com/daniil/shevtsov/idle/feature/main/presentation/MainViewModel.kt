@@ -9,6 +9,7 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
+import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMapper
 import com.daniil.shevtsov.idle.feature.shop.domain.CompositePurchaseBehavior
@@ -34,35 +35,42 @@ class MainViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
-        ResourceBehavior.observeResource(resourceStorage)
-            .onEach { resource ->
-                _state.value = MainViewState.Success(
-                    resources = listOf(
-                        ResourceModelMapper.map(
-                            resource = resource,
-                            name = "Blood",
+        combine(
+            ResourceBehavior.observeResource(resourceStorage),
+            mutantRatioStorage.observeChange(),
+            UpgradeBehavior.observeAll(upgradeStorage),
+        ) { resource: Resource, mutantRatio: Double, upgrades: List<Upgrade> ->
+            MainViewState.Success(
+                resources = listOf(
+                    ResourceModelMapper.map(
+                        resource = resource,
+                        name = "Blood",
+                    )
+                ),
+                ratio = HumanityRatioModel(
+                    name = "Human",
+                    percent = mutantRatio
+                ),
+                actionState = createActionState(),
+                shop = upgrades
+                    .map { upgrade ->
+                        UpgradeModelMapper.map(
+                            upgrade = upgrade,
+                            status = upgrade.mapStatus(resource.value)
                         )
-                    ),
-                    ratio = HumanityRatioModel(name = "Human", percent = mutantRatioStorage.getCurrentValue()),
-                    actionState = createActionState(),
-                    shop = UpgradeBehavior.observeAll(storage = upgradeStorage)
-                        .firstOrNull()
-                        .orEmpty()
-                        .map { upgrade ->
-                            UpgradeModelMapper.map(
-                                upgrade = upgrade,
-                                status = upgrade.mapStatus(resource.value)
-                            )
+                    }
+                    .sortedBy {
+                        when (it.status) {
+                            UpgradeStatusModel.Affordable -> 0
+                            UpgradeStatusModel.NotAffordable -> 1
+                            UpgradeStatusModel.Bought -> 2
                         }
-                        .sortedBy {
-                            when (it.status) {
-                                UpgradeStatusModel.Affordable -> 0
-                                UpgradeStatusModel.NotAffordable -> 1
-                                UpgradeStatusModel.Bought -> 2
-                            }
-                        }
-                        .let { ShopState(upgradeLists = listOf(it)) }
-                )
+                    }
+                    .let { ShopState(upgradeLists = listOf(it)) }
+            )
+        }
+            .onEach { viewState ->
+                _state.value = viewState
             }
             .launchIn(viewModelScope)
     }
