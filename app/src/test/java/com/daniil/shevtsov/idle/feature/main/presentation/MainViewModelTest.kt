@@ -8,10 +8,8 @@ import com.daniil.shevtsov.idle.MainCoroutineExtension
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
-import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
-import com.daniil.shevtsov.idle.feature.time.domain.Time
 import com.daniil.shevtsov.idle.feature.upgrade.data.UpgradeStorage
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
@@ -78,15 +76,12 @@ internal class MainViewModelTest {
 
     @Test
     fun `should buy upgrade when clicked and affordable`() = runBlockingTest {
-        ResourceBehavior.updateResource(
-            resourceStorage,
-            Time(1000),
-            balanceConfig.resourcePerMillisecond
-        )
+        resourceStorage.setNewValue(resource = 10.0)
+        upgradeStorage = UpgradeStorage(initialUpgrades = listOf(upgrade(id = 0L, price = 5.0)))
 
-        viewModel.handleAction(MainViewAction.UpgradeSelected(id = 1L))
+        viewModel.handleAction(MainViewAction.UpgradeSelected(id = 0L))
 
-        assertThat(upgradeStorage.getUpgradeById(id = 1L))
+        assertThat(upgradeStorage.getUpgradeById(id = 0L))
             .isNotNull()
             .prop(Upgrade::status)
             .isEqualTo(UpgradeStatus.Bought)
@@ -94,11 +89,8 @@ internal class MainViewModelTest {
 
     @Test
     fun `should mark upgrade as affordable if its price less than resource`() = runBlockingTest {
-        ResourceBehavior.updateResource(
-            storage = resourceStorage,
-            passedTime = Time(1000),
-            rate = balanceConfig.resourcePerMillisecond,
-        )
+        resourceStorage.setNewValue(resource = 10.0)
+        upgradeStorage = UpgradeStorage(initialUpgrades = listOf(upgrade(id = 0L, price = 5.0)))
 
         viewModel.state.test {
             val state = expectMostRecentItem()
@@ -107,16 +99,17 @@ internal class MainViewModelTest {
                 .prop(MainViewState.Success::shop)
                 .prop(ShopState::upgradeLists)
                 .index(0)
-                .any {
-                    it.prop(UpgradeModel::id).isEqualTo(1L)
-                    it.prop(UpgradeModel::status).isEqualTo(UpgradeStatusModel.Affordable)
-                }
+                .extracting(UpgradeModel::id, UpgradeModel::status)
+                .containsExactly(0L to UpgradeStatusModel.Affordable)
         }
     }
 
     @Test
     fun `should mark upgrade as not affordable if its price higher than resource`() =
         runBlockingTest {
+            resourceStorage.setNewValue(resource = 10.0)
+            upgradeStorage = UpgradeStorage(initialUpgrades = listOf(upgrade(id = 0L, price = 20.0)))
+
             viewModel.state.test {
                 val state = expectMostRecentItem()
                 assertThat(state)
@@ -124,10 +117,8 @@ internal class MainViewModelTest {
                     .prop(MainViewState.Success::shop)
                     .prop(ShopState::upgradeLists)
                     .index(0)
-                    .any {
-                        it.prop(UpgradeModel::id).isEqualTo(2L)
-                        it.prop(UpgradeModel::status).isEqualTo(UpgradeStatusModel.NotAffordable)
-                    }
+                    .extracting(UpgradeModel::id, UpgradeModel::status)
+                    .containsExactly(0L to UpgradeStatusModel.NotAffordable)
             }
         }
 
