@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.feature.main.presentation
 
 import app.cash.turbine.test
+import assertk.Assert
 import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
@@ -99,10 +100,7 @@ internal class MainViewModelTest {
         viewModel.state.test {
             val state = expectMostRecentItem()
             assertThat(state)
-                .isInstanceOf(MainViewState.Success::class)
-                .prop(MainViewState.Success::shop)
-                .prop(ShopState::upgradeLists)
-                .index(0)
+                .extractingUpgrades()
                 .extracting(UpgradeModel::id, UpgradeModel::status)
                 .containsExactly(0L to UpgradeStatusModel.Affordable)
         }
@@ -118,10 +116,7 @@ internal class MainViewModelTest {
             viewModel.state.test {
                 val state = expectMostRecentItem()
                 assertThat(state)
-                    .isInstanceOf(MainViewState.Success::class)
-                    .prop(MainViewState.Success::shop)
-                    .prop(ShopState::upgradeLists)
-                    .index(0)
+                    .extractingUpgrades()
                     .extracting(UpgradeModel::id, UpgradeModel::status)
                     .containsExactly(0L to UpgradeStatusModel.NotAffordable)
             }
@@ -136,10 +131,7 @@ internal class MainViewModelTest {
 
         viewModel.state.test {
             assertThat(expectMostRecentItem())
-                .isInstanceOf(MainViewState.Success::class)
-                .prop(MainViewState.Success::shop)
-                .prop(ShopState::upgradeLists)
-                .index(0)
+                .extractingUpgrades()
                 .extracting(UpgradeModel::id, UpgradeModel::status)
                 .containsExactly(0L to UpgradeStatusModel.Bought)
         }
@@ -168,5 +160,11 @@ internal class MainViewModelTest {
         resourceStorage = resourceStorage,
         mutantRatioStorage = mutantRatioStorage,
     )
+
+    private fun Assert<MainViewState>.extractingUpgrades() =
+        isInstanceOf(MainViewState.Success::class)
+            .prop(MainViewState.Success::shop)
+            .prop(ShopState::upgradeLists)
+            .index(0)
 
 }
