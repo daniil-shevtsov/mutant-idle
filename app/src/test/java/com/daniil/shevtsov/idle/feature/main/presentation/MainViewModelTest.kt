@@ -27,12 +27,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 internal class MainViewModelTest {
 
     private var upgradeStorage = UpgradeStorage(
-        initialUpgrades = listOf(
-            upgrade(id = 0L),
-            upgrade(id = 1L, price = 25.0),
-            upgrade(id = 2L, price = 150.0),
-            upgrade(id = 3L, price = 10.0),
-        )
+        initialUpgrades = emptyList()
     )
     private val resourceStorage = ResourceStorage()
     private val mutantRatioStorage = MutantRatioStorage()
@@ -51,7 +46,16 @@ internal class MainViewModelTest {
     }
 
     @Test
-    fun `should for correct initial state`() = runBlockingTest {
+    fun `should form correct initial state`() = runBlockingTest {
+        upgradeStorage = UpgradeStorage(
+            initialUpgrades = listOf(
+                upgrade(id = 0L),
+                upgrade(id = 1L, price = 25.0),
+                upgrade(id = 2L, price = 150.0),
+                upgrade(id = 3L, price = 10.0),
+            )
+        )
+
         viewModel.state.test {
             val state = expectMostRecentItem()
             assertThat(state)
@@ -108,7 +112,8 @@ internal class MainViewModelTest {
     fun `should mark upgrade as not affordable if its price higher than resource`() =
         runBlockingTest {
             resourceStorage.setNewValue(resource = 10.0)
-            upgradeStorage = UpgradeStorage(initialUpgrades = listOf(upgrade(id = 0L, price = 20.0)))
+            upgradeStorage =
+                UpgradeStorage(initialUpgrades = listOf(upgrade(id = 0L, price = 20.0)))
 
             viewModel.state.test {
                 val state = expectMostRecentItem()
