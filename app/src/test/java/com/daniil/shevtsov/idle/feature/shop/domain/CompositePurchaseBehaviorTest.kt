@@ -12,6 +12,7 @@ import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.util.balanceConfig
 import com.daniil.shevtsov.idle.util.upgrade
 import kotlinx.coroutines.test.runBlockingTest
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
@@ -19,10 +20,16 @@ internal class CompositePurchaseBehaviorTest {
 
     private val behavior = CompositePurchaseBehavior
 
+    private val resourceStorage = ResourceStorage()
+
+    @BeforeEach
+    fun onSetup() {
+
+    }
+
     @Test
     fun `when buying upgrade - then update its status`() = runBlockingTest {
         val upgradeId = 1L
-        val resourceStorage = ResourceStorage()
         val upgradeStorage = UpgradeStorage(
             initialUpgrades = listOf(
                 upgrade(id = upgradeId, price = 25.0)
@@ -50,7 +57,6 @@ internal class CompositePurchaseBehaviorTest {
     @Test
     fun `when buying upgrade - then update resource`() = runBlockingTest {
         val upgradeId = 1L
-        val resourceStorage = ResourceStorage()
         val upgradeStorage = UpgradeStorage(
             initialUpgrades = listOf(
                 upgrade(id = upgradeId, price = 25.0)
@@ -76,7 +82,6 @@ internal class CompositePurchaseBehaviorTest {
     @Test
     fun `when buying upgrade - then update mutant ratio`() = runBlockingTest {
         val upgradeId = 1L
-        val resourceStorage = ResourceStorage()
         val upgradeStorage = UpgradeStorage(
             initialUpgrades = listOf(
                 upgrade(id = upgradeId, price = 10.0)
@@ -102,7 +107,6 @@ internal class CompositePurchaseBehaviorTest {
     @Test
     fun `when buying upgrade and had some ratio - then increase it`() = runBlockingTest {
         val upgradeId = 1L
-        val resourceStorage = ResourceStorage()
         val upgradeStorage = UpgradeStorage(
             initialUpgrades = listOf(
                 upgrade(id = upgradeId, price = 10.0)
@@ -129,7 +133,6 @@ internal class CompositePurchaseBehaviorTest {
     @Test
     fun `when buying nonaffordable upgrade - then don't do anything`() = runBlockingTest {
         val upgradeId = 1L
-        val resourceStorage = ResourceStorage()
         val upgradeStorage = UpgradeStorage(
             initialUpgrades = listOf(
                 upgrade(id = upgradeId, price = 250.0)
