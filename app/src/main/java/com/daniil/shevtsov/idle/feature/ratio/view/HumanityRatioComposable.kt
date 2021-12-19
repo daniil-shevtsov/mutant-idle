@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.humanityRatioStub
+import com.daniil.shevtsov.idle.core.ui.protrusive
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 
 @Preview
@@ -40,24 +41,39 @@ fun MutantRatioPane(
             color = Color.White,
             textAlign = TextAlign.Center
         )
-        Box {
-            Box(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .height(40.dp)
-                    .cavitary(
-                        lightColor = Pallete.LightRed,
-                        darkColor = Pallete.DarkRed
-                    )
-                    .background(Color.White),
-            )
-            Box(
-                modifier = modifier
-                    .fillMaxWidth(fraction = model.percent.toFloat())
-                    .height(40.dp)
-                    .padding(4.dp)
-                    .background(Pallete.Red),
-            )
-        }
+        MyProgressBar(
+            progressPercentage = model.percent.toFloat(),
+            modifier = modifier,
+        )
+    }
+}
+
+@Composable
+private fun MyProgressBar(
+    progressPercentage: Float,
+    modifier: Modifier = Modifier,
+) {
+    Box {
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(40.dp)
+                .cavitary(
+                    lightColor = Pallete.LightRed,
+                    darkColor = Pallete.DarkRed
+                )
+                .background(Color.White),
+        )
+        Box(
+            modifier = modifier
+                .fillMaxWidth(fraction = progressPercentage)
+                .height(40.dp)
+                .padding(4.dp)
+                .protrusive(
+                    lightColor = Pallete.LightRed,
+                    darkColor = Pallete.DarkRed
+                )
+                .background(Pallete.Red),
+        )
     }
 }
