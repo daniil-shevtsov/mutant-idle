@@ -54,6 +54,7 @@ object Deps {
     }
 
     object Accompanist {
+        const val insets = "com.google.accompanist:accompanist-insets:${Versions.accompanist}"
         const val pager = "com.google.accompanist:accompanist-pager:${Versions.accompanist}"
     }
 

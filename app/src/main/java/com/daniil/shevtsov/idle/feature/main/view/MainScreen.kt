@@ -3,6 +3,8 @@ package com.daniil.shevtsov.idle.feature.main.view
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -18,6 +20,7 @@ import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
 import com.daniil.shevtsov.idle.feature.ratio.view.MutantRatioPane
 import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
 import com.daniil.shevtsov.idle.feature.shop.view.Shop
+import com.google.accompanist.insets.statusBarsHeight
 
 @Preview(
     widthDp = 320,
@@ -79,6 +82,11 @@ fun SuccessContent(
             .background(Pallete.Red),
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
+        Spacer(
+            Modifier
+                .statusBarsHeight()
+                .fillMaxWidth()
+        )
         ResourcePane(state.resources)
         MutantRatioPane(state.ratio)
         ActionSection(

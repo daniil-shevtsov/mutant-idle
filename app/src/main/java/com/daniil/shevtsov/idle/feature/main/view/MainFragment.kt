@@ -11,6 +11,7 @@ import com.daniil.shevtsov.idle.R
 import com.daniil.shevtsov.idle.application.IdleGameApplication
 import com.daniil.shevtsov.idle.databinding.FragmentMainBinding
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewModel
+import com.google.accompanist.insets.ProvideWindowInsets
 import javax.inject.Inject
 
 class MainFragment : Fragment(R.layout.fragment_main) {
@@ -35,7 +36,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         with(binding) {
             composeView.setContent {
-                MainScreen(viewModel = viewModel)
+                ProvideWindowInsets {
+                    MainScreen(viewModel = viewModel)
+                }
             }
         }
     }
