@@ -33,10 +33,11 @@ internal class MainViewModelTest {
     private val resourceStorage = ResourceStorage()
     private val mutantRatioStorage = MutantRatioStorage()
 
+    private val resourceSpentForFullMutant = 100.0
     private val balanceConfig = balanceConfig(
         tickRateMillis = 1L,
         resourcePerMillisecond = 2.0,
-        resourceSpentForFullMutant = 100.0,
+        resourceSpentForFullMutant = resourceSpentForFullMutant,
     )
 
     private val viewModel: MainViewModel by lazy { createViewModel() }
@@ -158,27 +159,36 @@ internal class MainViewModelTest {
     fun `should update ratio names correctly`() = runBlockingTest {
         upgradeStorage = UpgradeStorage(
             initialUpgrades = listOf(
-                upgrade(id = 0L, price = 10.0),
-                upgrade(id = 1L, price = 30.0),
-                upgrade(id = 2L, price = 40.0),
-                upgrade(id = 3L, price = 20.0),
+                upgrade(id = 0L, price = 15.0),
+                upgrade(id = 1L, price = 10.0),
+                upgrade(id = 2L, price = 25.0),
+                upgrade(id = 3L, price = 30.0),
             )
         )
         resourceStorage.setNewValue(resource = 1000.0)
 
+        //TODO: Find a way to get rid of this hack
         viewModel.state.test {
             assertThat(awaitItem()).hasRatioName("Human")
 
             viewModel.handleAction(MainViewAction.UpgradeSelected(id = 0L))
+            awaitItem()
+            awaitItem()
             assertThat(awaitItem()).hasRatioName("Dormant")
 
             viewModel.handleAction(MainViewAction.UpgradeSelected(id = 1L))
+            awaitItem()
+            awaitItem()
             assertThat(awaitItem()).hasRatioName("Hidden")
 
             viewModel.handleAction(MainViewAction.UpgradeSelected(id = 2L))
+            awaitItem()
+            awaitItem()
             assertThat(awaitItem()).hasRatioName("Covert")
 
             viewModel.handleAction(MainViewAction.UpgradeSelected(id = 3L))
+            awaitItem()
+            awaitItem()
             assertThat(awaitItem()).hasRatioName("Honest")
         }
     }

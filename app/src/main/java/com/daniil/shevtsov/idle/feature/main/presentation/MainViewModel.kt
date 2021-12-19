@@ -40,7 +40,7 @@ class MainViewModel @Inject constructor(
             mutantRatioStorage.observeChange(),
             UpgradeBehavior.observeAll(upgradeStorage),
         ) { resource: Resource, mutantRatio: Double, upgrades: List<Upgrade> ->
-            MainViewState.Success(
+            val newViewState = MainViewState.Success(
                 resources = listOf(
                     ResourceModelMapper.map(
                         resource = resource,
@@ -48,7 +48,7 @@ class MainViewModel @Inject constructor(
                     )
                 ),
                 ratio = HumanityRatioModel(
-                    name = "Human",
+                    name = getNameForRatio(mutantRatio),
                     percent = mutantRatio
                 ),
                 actionState = createActionState(),
@@ -68,11 +68,23 @@ class MainViewModel @Inject constructor(
                     }
                     .let { ShopState(upgradeLists = listOf(it)) }
             )
+            newViewState
         }
             .onEach { viewState ->
                 _state.value = viewState
             }
             .launchIn(viewModelScope)
+    }
+
+    private fun getNameForRatio(mutantRatio: Double): String {
+        val name =  when {
+            mutantRatio < 0.15 -> "Human"
+            mutantRatio < 0.25 -> "Dormant"
+            mutantRatio < 0.50 -> "Hidden"
+            mutantRatio < 0.80 -> "Covert"
+            else -> "Honest"
+        }
+        return name
     }
 
     fun handleAction(action: MainViewAction) {
