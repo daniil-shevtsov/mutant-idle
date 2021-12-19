@@ -1,28 +1,55 @@
 package com.daniil.shevtsov.idle.application
 
-import com.daniil.shevtsov.idle.main.domain.resource.UpdateResourceUseCase
-import com.daniil.shevtsov.idle.main.domain.time.ObserveTimeUseCase
-import com.daniil.shevtsov.idle.main.domain.time.StartTimeUseCase
+import com.daniil.shevtsov.idle.core.BalanceConfig
+import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
+import com.daniil.shevtsov.idle.feature.time.data.TimeStorage
+import com.daniil.shevtsov.idle.feature.time.domain.Time
+import com.daniil.shevtsov.idle.feature.time.domain.TimeBehavior
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
+import kotlin.time.Duration
 
 class IdleGameViewModel @Inject constructor(
-    private val startTime: StartTimeUseCase,
-    private val observeTime: ObserveTimeUseCase,
-    private val updateResource: UpdateResourceUseCase,
+    private val balanceConfig: BalanceConfig,
+    private val timeStorage: TimeStorage,
+    private val resourceStorage: ResourceStorage,
 ) {
-    private val scope = CoroutineScope(Job() + Dispatchers.Main)
+    private val scope = CoroutineScope(Job() + Dispatchers.Main.immediate)
 
-    fun onStart() {
+    suspend fun onSuspendStart(until: Duration = Duration.INFINITE) {
+        startTime(until)
+        doEverythingElse()
+    }
+
+    fun onStart(until: Duration = Duration.INFINITE) {
         scope.launch {
-            startTime()
+            startTime(until)
         }
+        doEverythingElse()
+    }
+
+    private suspend fun startTime(until: Duration) {
+        TimeBehavior.startEmitingTime(
+            timeStorage = timeStorage,
+            interval = Duration.milliseconds(balanceConfig.tickRateMillis),
+            until = until,
+        )
+    }
+
+    private fun doEverythingElse() {
         scope.launch {
-            observeTime()
+            TimeBehavior.observeTime(timeStorage)
+                .map { Time(it.inWholeMilliseconds) }
                 .onEach { time ->
-                    updateResource(time)
+                    ResourceBehavior.updateResource(
+                        storage = resourceStorage,
+                        passedTime = time,
+                        rate = balanceConfig.resourcePerMillisecond,
+                    )
                 }
                 .collect()
         }

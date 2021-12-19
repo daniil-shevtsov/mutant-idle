@@ -72,6 +72,7 @@ dependencies {
     }
 
     with(Deps.Accompanist) {
+        implementation(insets)
         implementation(pager)
     }
 

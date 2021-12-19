@@ -3,7 +3,8 @@ package com.daniil.shevtsov.idle.core.di
 import android.content.Context
 import com.daniil.shevtsov.idle.application.IdleGameApplication
 import com.daniil.shevtsov.idle.core.BalanceConfig
-import com.daniil.shevtsov.idle.main.MainFragment
+import com.daniil.shevtsov.idle.feature.main.view.MainFragment
+import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import dagger.BindsInstance
 import dagger.Component
 
@@ -20,6 +21,7 @@ interface AppComponent {
         fun create(
             @BindsInstance appContext: Context,
             @BindsInstance balanceConfig: BalanceConfig,
+            @BindsInstance initialUpgrades: List<Upgrade>,
         ): AppComponent
     }
 
