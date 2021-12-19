@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.Pallete
-import com.daniil.shevtsov.idle.core.ui.innerBorder
+import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.shopStatePreviewStub
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
 import com.daniil.shevtsov.idle.feature.upgrade.view.UpgradeList
@@ -33,7 +33,7 @@ fun Shop(
         count = shop.upgradeLists.size,
         modifier = modifier
             .padding(4.dp)
-            .innerBorder(
+            .cavitary(
                 lightColor = Pallete.LightRed,
                 darkColor = Pallete.DarkRed
             ),

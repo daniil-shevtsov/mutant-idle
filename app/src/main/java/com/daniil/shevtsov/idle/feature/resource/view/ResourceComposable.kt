@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Pallete
-import com.daniil.shevtsov.idle.core.ui.innerBorder
+import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.resourcePreviewStub
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 
@@ -56,7 +56,7 @@ fun ResourcePanel(
             text = resource.value, fontSize = 16.sp, modifier =
             Modifier
                 .fillMaxWidth()
-                .innerBorder(
+                .cavitary(
                     lightColor = Pallete.LightRed,
                     darkColor = Pallete.DarkRed
                 )

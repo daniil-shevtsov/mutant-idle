@@ -15,6 +15,7 @@ import com.daniil.shevtsov.idle.feature.action.view.ActionSection
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewModel
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
+import com.daniil.shevtsov.idle.feature.ratio.view.MutantRatioPane
 import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
 import com.daniil.shevtsov.idle.feature.shop.view.Shop
 
@@ -79,6 +80,7 @@ fun SuccessContent(
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
         ResourcePane(state.resources)
+        MutantRatioPane(state.ratio)
         ActionSection(
             state = state.actionState,
             onActionClicked = onActionClicked,
