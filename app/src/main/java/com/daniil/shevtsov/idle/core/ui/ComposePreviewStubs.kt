@@ -24,7 +24,7 @@ internal fun resourcePreviewStub() = ResourceModel(
 )
 
 internal fun humanityRatioStub() = HumanityRatioModel(
-    name = "Lol",
+    name = "Dormant",
     percent = 0.5,
 )
 
