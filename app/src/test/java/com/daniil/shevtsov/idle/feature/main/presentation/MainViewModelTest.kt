@@ -167,29 +167,20 @@ internal class MainViewModelTest {
         )
         resourceStorage.setNewValue(resource = 1000.0)
 
-        //TODO: Find a way to get rid of this hack
         viewModel.state.test {
             assertThat(awaitItem()).hasRatioName("Human")
 
             viewModel.handleAction(MainViewAction.UpgradeSelected(id = 0L))
-            awaitItem()
-            awaitItem()
-            assertThat(awaitItem()).hasRatioName("Dormant")
+            assertThat(expectMostRecentItem()).hasRatioName("Dormant")
 
             viewModel.handleAction(MainViewAction.UpgradeSelected(id = 1L))
-            awaitItem()
-            awaitItem()
-            assertThat(awaitItem()).hasRatioName("Hidden")
+            assertThat(expectMostRecentItem()).hasRatioName("Hidden")
 
             viewModel.handleAction(MainViewAction.UpgradeSelected(id = 2L))
-            awaitItem()
-            awaitItem()
-            assertThat(awaitItem()).hasRatioName("Covert")
+            assertThat(expectMostRecentItem()).hasRatioName("Covert")
 
             viewModel.handleAction(MainViewAction.UpgradeSelected(id = 3L))
-            awaitItem()
-            awaitItem()
-            assertThat(awaitItem()).hasRatioName("Honest")
+            assertThat(expectMostRecentItem()).hasRatioName("Honest")
         }
     }
 
