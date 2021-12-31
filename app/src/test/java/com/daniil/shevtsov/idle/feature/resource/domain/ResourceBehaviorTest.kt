@@ -28,36 +28,42 @@ class ResourceBehaviorTest {
 
     @Test
     fun `should return 0 for resource initially`() = runBlockingTest {
-        assertThat(behavior.getCurrentResource(storage = storage,
-            resourcesStorage = resourcesStorage)).isEqualTo(Resource(value = 0.0))
+        assertThat(behavior.getCurrentResource(resourcesStorage = resourcesStorage))
+            .isEqualTo(Resource(value = 0.0))
     }
 
     @Test
     fun `should update resource by value after tick passed`() = runBlockingTest {
         behavior.updateResource(
-            storage = storage,
             resourcesStorage = resourcesStorage,
             passedTime = Time(balanceConfig.tickRateMillis),
             rate = balanceConfig.resourcePerMillisecond,
         )
-        assertThat(behavior.getCurrentResource(storage = storage, resourcesStorage = resourcesStorage)).isEqualTo(Resource(value = balanceConfig.resourcePerMillisecond))
+        assertThat(
+            behavior.getCurrentResource(
+                resourcesStorage = resourcesStorage
+            )
+        ).isEqualTo(Resource(value = balanceConfig.resourcePerMillisecond))
 
         behavior.updateResource(
-            storage = storage,
             resourcesStorage = resourcesStorage,
             passedTime = Time(balanceConfig.tickRateMillis),
             rate = balanceConfig.resourcePerMillisecond,
         )
-        assertThat(behavior.getCurrentResource(storage = storage, resourcesStorage = resourcesStorage)).isEqualTo(Resource(value = balanceConfig.resourcePerMillisecond * 2))
+        assertThat(
+            behavior.getCurrentResource(
+
+                resourcesStorage = resourcesStorage
+            )
+        ).isEqualTo(Resource(value = balanceConfig.resourcePerMillisecond * 2))
     }
 
     @Test
     fun `should got new values of resource to observer`() = runBlockingTest {
-        behavior.observeResource(storage = storage, resourcesStorage = resourcesStorage).test {
+        behavior.observeResource(resourcesStorage = resourcesStorage).test {
             assertThat(awaitItem()).isEqualTo(Resource(value = 0.0))
 
             behavior.updateResource(
-                storage = storage,
                 resourcesStorage = resourcesStorage,
                 passedTime = Time(balanceConfig.tickRateMillis),
                 rate = balanceConfig.resourcePerMillisecond,
@@ -65,7 +71,6 @@ class ResourceBehaviorTest {
             assertThat(awaitItem()).isEqualTo(Resource(value = balanceConfig.resourcePerMillisecond))
 
             behavior.updateResource(
-                storage = storage,
                 resourcesStorage = resourcesStorage,
                 passedTime = Time(balanceConfig.tickRateMillis),
                 rate = balanceConfig.resourcePerMillisecond,
@@ -77,19 +82,22 @@ class ResourceBehaviorTest {
     @Test
     fun `should decrease resource by value`() = runBlockingTest {
         behavior.updateResource(
-            storage = storage,
             resourcesStorage = resourcesStorage,
             passedTime = Time(200),
             rate = 1.0,
         )
 
         behavior.decreaseResource(
-            storage = storage,
             resourcesStorage = resourcesStorage,
             amount = 50.0,
         )
 
-        assertThat(behavior.getCurrentResource(storage = storage, resourcesStorage = resourcesStorage))
+        assertThat(
+            behavior.getCurrentResource(
+
+                resourcesStorage = resourcesStorage
+            )
+        )
             .isEqualTo(Resource(value = 150.0))
     }
 

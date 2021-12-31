@@ -1,6 +1,5 @@
 package com.daniil.shevtsov.idle.feature.resource.domain
 
-import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.time.domain.Time
 import kotlinx.coroutines.flow.Flow
@@ -8,15 +7,13 @@ import kotlinx.coroutines.flow.map
 
 object ResourceBehavior {
 
-    suspend fun getCurrentResource(
-        storage: ResourceStorage,
+    fun getCurrentResource(
         resourcesStorage: ResourcesStorage,
     ): Resource {
         return resourcesStorage.getByKey(key = ResourceKey.Blood)!!
     }
 
-    suspend fun updateResource(
-        storage: ResourceStorage,
+    fun updateResource(
         resourcesStorage: ResourcesStorage,
         passedTime: Time,
         rate: Double,
@@ -24,7 +21,6 @@ object ResourceBehavior {
         val oldResource = resourcesStorage.getByKey(key = ResourceKey.Blood)!!
         val oldValue = oldResource.value
         val newValue = oldValue + passedTime.value * rate
-        storage.setNewValue(newValue)
 
         resourcesStorage.updateByKey(
             key = ResourceKey.Blood,
@@ -33,21 +29,18 @@ object ResourceBehavior {
     }
 
     fun observeResource(
-        storage: ResourceStorage,
         resourcesStorage: ResourcesStorage,
     ): Flow<Resource> {
         return resourcesStorage.observeAll().map { it.find { it.key == ResourceKey.Blood }!! }
     }
 
     suspend fun decreaseResource(
-        storage: ResourceStorage,
         amount: Double,
         resourcesStorage: ResourcesStorage,
     ) {
         val oldResource = resourcesStorage.getByKey(key = ResourceKey.Blood)!!
         val oldValue = oldResource.value
         val newValue = oldValue - amount
-        storage.setNewValue(newValue)
 
         resourcesStorage.updateByKey(
             key = ResourceKey.Blood,
@@ -55,15 +48,13 @@ object ResourceBehavior {
         )
     }
 
-    suspend fun applyResourceChange(
-        storage: ResourceStorage,
+    fun applyResourceChange(
         amount: Double,
         resourcesStorage: ResourcesStorage,
     ) {
         val oldResource = resourcesStorage.getByKey(key = ResourceKey.Blood)!!
         val oldValue = oldResource.value
         val newValue = oldValue + amount
-        storage.setNewValue(newValue)
 
         resourcesStorage.updateByKey(
             key = ResourceKey.Blood,

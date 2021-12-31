@@ -46,7 +46,6 @@ class MainViewModel @Inject constructor(
         combine(
             ResourceBehavior.observeResource(
                 resourcesStorage = resourcesStorage,
-                storage = resourceStorage
             ),
             mutantRatioStorage.observeChange(),
             UpgradeBehavior.observeAll(upgradeStorage),
@@ -125,7 +124,6 @@ class MainViewModel @Inject constructor(
 
             if (selectedAction != null) {
                 ResourceBehavior.applyResourceChange(
-                    storage = resourceStorage,
                     resourcesStorage = resourcesStorage,
                     amount = selectedAction.resourceChange,
                 )
