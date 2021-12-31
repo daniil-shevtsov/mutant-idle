@@ -115,7 +115,7 @@ internal class MainViewModelTest {
 
     @Test
     fun `should buy upgrade when clicked and affordable`() = runBlockingTest {
-        resourceStorage.setNewValue(resource = 10.0)
+        setInitialResourceValue(10.0)
         upgradeStorage = UpgradeStorage(initialUpgrades = listOf(upgrade(id = 0L, price = 5.0)))
 
         viewModel.handleAction(MainViewAction.UpgradeSelected(id = 0L))
@@ -128,7 +128,7 @@ internal class MainViewModelTest {
 
     @Test
     fun `should mark upgrade as affordable if its price less than resource`() = runBlockingTest {
-        resourceStorage.setNewValue(resource = 10.0)
+        setInitialResourceValue(10.0)
         upgradeStorage = UpgradeStorage(initialUpgrades = listOf(upgrade(id = 0L, price = 5.0)))
 
         viewModel.state.test {
@@ -143,7 +143,7 @@ internal class MainViewModelTest {
     @Test
     fun `should mark upgrade as not affordable if its price higher than resource`() =
         runBlockingTest {
-            resourceStorage.setNewValue(resource = 10.0)
+            setInitialResourceValue(10.0)
             upgradeStorage =
                 UpgradeStorage(initialUpgrades = listOf(upgrade(id = 0L, price = 20.0)))
 
@@ -158,7 +158,7 @@ internal class MainViewModelTest {
 
     @Test
     fun `should mark upgrade as bought if it is bought`() = runBlockingTest {
-        resourceStorage.setNewValue(resource = 10.0)
+        setInitialResourceValue(10.0)
         upgradeStorage = UpgradeStorage(initialUpgrades = listOf(upgrade(id = 0L, price = 10.0)))
 
         viewModel.handleAction(MainViewAction.UpgradeSelected(id = 0L))
@@ -173,7 +173,7 @@ internal class MainViewModelTest {
 
     @Test
     fun `should update human ratio after upgrade bought`() = runBlockingTest {
-        resourceStorage.setNewValue(resource = 10.0)
+        setInitialResourceValue(10.0)
         upgradeStorage = UpgradeStorage(initialUpgrades = listOf(upgrade(id = 0L, price = 10.0)))
 
         viewModel.handleAction(MainViewAction.UpgradeSelected(id = 0L))
@@ -186,6 +186,12 @@ internal class MainViewModelTest {
                 .prop(HumanityRatioModel::percent)
                 .isEqualTo(0.10)
         }
+    }
+
+    private suspend fun setInitialResourceValue(value: Double) {
+        resourceStorage.setNewValue(resource = value)
+        val resource = resourcesStorage.getByKey(key = ResourceKey.Blood)
+        resourcesStorage.updateByKey(key = ResourceKey.Blood, newValue = resource!!.copy(value = value))
     }
 
     @Test
