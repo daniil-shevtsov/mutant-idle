@@ -40,11 +40,13 @@ fun action(
     title: String = "",
     subtitle: String = "",
     actionType: ActionType = ActionType.Human,
+    resourceChange: Double = 0.0,
 ) = Action(
     id = id,
     title = title,
     subtitle = subtitle,
     actionType = actionType,
+    resourceChange = resourceChange,
 )
 
 fun price(value: Double = 0.0) = Price(

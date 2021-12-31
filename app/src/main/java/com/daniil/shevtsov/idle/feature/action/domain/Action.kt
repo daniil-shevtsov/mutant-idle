@@ -5,4 +5,5 @@ data class Action(
     val title: String,
     val subtitle: String,
     val actionType: ActionType,
+    val resourceChange: Double = 0.0,
 )

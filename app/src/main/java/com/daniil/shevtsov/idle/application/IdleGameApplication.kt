@@ -98,6 +98,7 @@ class IdleGameApplication : Application() {
             title = "Eat food",
             subtitle = "It's not much",
             actionType = ActionType.Human,
+            resourceChange = 5.0,
         ),
         Action(
             id = 3L,
@@ -114,16 +115,19 @@ class IdleGameApplication : Application() {
         Action(
             id = 5L, title = "Grow", subtitle = "Cultivating mass",
             actionType = ActionType.Mutant,
+            resourceChange = 15.0,
         ),
         Action(
             id = 6L, title = "Eat a pet", subtitle = "Its time is up",
             actionType = ActionType.Mutant,
+            resourceChange = 10.0,
         ),
         Action(
             id = 7L,
             title = "Hunt for rats",
             subtitle = "Surely there are some",
             actionType = ActionType.Mutant,
+            resourceChange = 5.0,
         ),
         Action(
             id = 8L,
@@ -136,6 +140,7 @@ class IdleGameApplication : Application() {
             title = "Eat captured person",
             subtitle = "Finally some good fucking food",
             actionType = ActionType.Mutant,
+            resourceChange = 25.0,
         ),
     )
 

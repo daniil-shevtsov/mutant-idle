@@ -209,6 +209,19 @@ internal class MainViewModelTest {
         }
     }
 
+    @Test
+    fun `should update resource when action clicked`() = runBlockingTest {
+        resourceStorage.setNewValue(resource = 1000.0)
+
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .isInstanceOf(MainViewState.Success::class)
+                .prop(MainViewState.Success::resources)
+                .extracting(ResourceModel::value)
+                .containsExactly("1000")
+        }
+    }
+
     private fun createViewModel() = MainViewModel(
         balanceConfig = balanceConfig,
         upgradeStorage = upgradeStorage,
