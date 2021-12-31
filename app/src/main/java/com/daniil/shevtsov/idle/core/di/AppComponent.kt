@@ -5,6 +5,7 @@ import com.daniil.shevtsov.idle.application.IdleGameApplication
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.main.view.MainFragment
+import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import dagger.BindsInstance
 import dagger.Component
@@ -24,6 +25,7 @@ interface AppComponent {
             @BindsInstance balanceConfig: BalanceConfig,
             @BindsInstance initialUpgrades: List<Upgrade>,
             @BindsInstance initialActions: List<Action>,
+            @BindsInstance initialResources: List<Resource>,
         ): AppComponent
     }
 

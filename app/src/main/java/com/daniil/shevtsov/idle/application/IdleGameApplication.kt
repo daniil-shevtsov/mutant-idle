@@ -7,6 +7,8 @@ import com.daniil.shevtsov.idle.core.di.DaggerAppComponent
 import com.daniil.shevtsov.idle.core.di.koin.appModule
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.ActionType
+import com.daniil.shevtsov.idle.feature.resource.domain.Resource
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Price
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
@@ -24,6 +26,7 @@ class IdleGameApplication : Application() {
                 balanceConfig = createBalanceConfig(),
                 initialUpgrades = createInitialUpgrades(),
                 initialActions = createInitialActions(),
+                initialResources = createInitialResources(),
             )
     }
 
@@ -142,6 +145,10 @@ class IdleGameApplication : Application() {
             actionType = ActionType.Mutant,
             resourceChange = 25.0,
         ),
+    )
+
+    private fun createInitialResources() = listOf(
+        Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0)
     )
 
 }
