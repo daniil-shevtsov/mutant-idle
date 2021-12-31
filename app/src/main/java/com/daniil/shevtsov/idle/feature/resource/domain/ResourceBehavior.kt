@@ -20,7 +20,14 @@ object ResourceBehavior {
     ) {
         val oldValue = storage.getCurrentValue()
         val newValue = oldValue + passedTime.value * rate
-        return storage.setNewValue(newValue)
+
+        storage.setNewValue(newValue)
+
+        val oldResource = resourcesStorage.getByKey(key = ResourceKey.Blood)
+        resourcesStorage.updateByKey(
+            key = ResourceKey.Blood,
+            newValue = oldResource!!.copy(value = newValue)
+        )
     }
 
     fun observeResource(
@@ -37,7 +44,14 @@ object ResourceBehavior {
     ) {
         val oldValue = storage.getCurrentValue()
         val newValue = oldValue - amount
-        return storage.setNewValue(newValue)
+
+        storage.setNewValue(newValue)
+
+        val oldResource = resourcesStorage.getByKey(key = ResourceKey.Blood)
+        resourcesStorage.updateByKey(
+            key = ResourceKey.Blood,
+            newValue = oldResource!!.copy(value = newValue)
+        )
     }
 
     suspend fun applyResourceChange(
@@ -47,7 +61,14 @@ object ResourceBehavior {
     ) {
         val oldValue = storage.getCurrentValue()
         val newValue = oldValue + amount
-        return storage.setNewValue(newValue)
+
+        storage.setNewValue(newValue)
+
+        val oldResource = resourcesStorage.getByKey(key = ResourceKey.Blood)
+        resourcesStorage.updateByKey(
+            key = ResourceKey.Blood,
+            newValue = oldResource!!.copy(value = newValue)
+        )
     }
 
 }

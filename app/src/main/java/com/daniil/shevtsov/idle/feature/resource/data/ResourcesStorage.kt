@@ -24,7 +24,7 @@ class ResourcesStorage @Inject constructor(
         return map[key]
     }
 
-    fun updateAction(key: ResourceKey, newValue: Resource) {
+    fun updateByKey(key: ResourceKey, newValue: Resource) {
         val map = storedData.value
         val modifiedMap = map
             .toMutableMap()
