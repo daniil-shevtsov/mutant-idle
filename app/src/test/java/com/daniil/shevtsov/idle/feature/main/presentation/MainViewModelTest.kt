@@ -188,8 +188,7 @@ internal class MainViewModelTest {
         }
     }
 
-    private suspend fun setInitialResourceValue(value: Double) {
-        resourceStorage.setNewValue(resource = value)
+    private fun setInitialResourceValue(value: Double) {
         val resource = resourcesStorage.getByKey(key = ResourceKey.Blood)
         resourcesStorage.updateByKey(key = ResourceKey.Blood, newValue = resource!!.copy(value = value))
     }

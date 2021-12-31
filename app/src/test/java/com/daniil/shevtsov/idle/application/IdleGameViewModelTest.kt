@@ -6,7 +6,6 @@ import assertk.assertions.index
 import assertk.assertions.isEqualTo
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.MainCoroutineExtension
-import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
@@ -29,7 +28,6 @@ internal class IdleGameViewModelTest {
     )
 
     private val timeStorage = TimeStorage()
-    private val resourceStorage = ResourceStorage()
     private val resourcesStorage = ResourcesStorage(
         initialResources = listOf(
             Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0)
@@ -95,7 +93,6 @@ internal class IdleGameViewModelTest {
     private fun createViewModel() = IdleGameViewModel(
         balanceConfig = balanceConfig,
         timeStorage = timeStorage,
-        resourceStorage = resourceStorage,
         resourcesStorage = resourcesStorage,
     )
 }
