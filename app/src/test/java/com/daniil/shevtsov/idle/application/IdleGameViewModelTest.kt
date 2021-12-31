@@ -2,7 +2,9 @@ package com.daniil.shevtsov.idle.application
 
 import app.cash.turbine.test
 import assertk.assertThat
+import assertk.assertions.index
 import assertk.assertions.isEqualTo
+import assertk.assertions.prop
 import com.daniil.shevtsov.idle.MainCoroutineExtension
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
@@ -74,11 +76,17 @@ internal class IdleGameViewModelTest {
 
     @Test
     fun `should update resource after game started`() = runBlockingTest {
-        resourceStorage.observeChange().test {
+        resourcesStorage.observeAll().test {
             viewModel.onSuspendStart(until = Duration.milliseconds(4L))
 
-            assertThat(awaitItem()).isEqualTo(0.0)
-            assertThat(awaitItem()).isEqualTo(8.0)
+            assertThat(awaitItem())
+                .index(0)
+                .prop(Resource::value)
+                .isEqualTo(0.0)
+            assertThat(awaitItem())
+                .index(0)
+                .prop(Resource::value)
+                .isEqualTo(8.0)
 
             viewModel.onCleared()
         }
