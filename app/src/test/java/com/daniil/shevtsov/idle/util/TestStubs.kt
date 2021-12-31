@@ -4,6 +4,7 @@ import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.ActionType
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.time.domain.Time
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Price
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
@@ -53,4 +54,12 @@ fun price(value: Double = 0.0) = Price(
     value = value,
 )
 
-fun resource(value: Double = 0.0) = Resource(value = value)
+fun resource(
+    key: ResourceKey = ResourceKey.Blood,
+    name: String = "",
+    value: Double = 0.0,
+) = Resource(
+    key = key,
+    name = name,
+    value = value,
+)

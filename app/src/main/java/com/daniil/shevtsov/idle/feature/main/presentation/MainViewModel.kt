@@ -53,7 +53,7 @@ class MainViewModel @Inject constructor(
                 resources = listOf(
                     ResourceModelMapper.map(
                         resource = resource,
-                        name = "Blood",
+                        name = resource.name,
                     )
                 ),
                 ratio = HumanityRatioModel(

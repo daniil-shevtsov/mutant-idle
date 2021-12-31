@@ -3,9 +3,11 @@ package com.daniil.shevtsov.idle.feature.resource.domain
 import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.time.domain.Time
 import com.daniil.shevtsov.idle.util.balanceConfig
+import com.daniil.shevtsov.idle.util.resource
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test
 
@@ -15,7 +17,7 @@ class ResourceBehaviorTest {
 
     private val resourcesStorage = ResourcesStorage(
         initialResources = listOf(
-            Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0)
+            resource(key = ResourceKey.Blood, name = "Blood", value = 0.0)
         )
     )
 
@@ -27,7 +29,8 @@ class ResourceBehaviorTest {
     @Test
     fun `should return 0 for resource initially`() = runBlockingTest {
         assertThat(behavior.getCurrentResource(resourcesStorage = resourcesStorage))
-            .isEqualTo(Resource(value = 0.0))
+            .prop(Resource::value)
+            .isEqualTo(0.0)
     }
 
     @Test
@@ -41,7 +44,9 @@ class ResourceBehaviorTest {
             behavior.getCurrentResource(
                 resourcesStorage = resourcesStorage
             )
-        ).isEqualTo(Resource(value = balanceConfig.resourcePerMillisecond))
+        )
+            .prop(Resource::value)
+            .isEqualTo(balanceConfig.resourcePerMillisecond)
 
         behavior.updateResource(
             resourcesStorage = resourcesStorage,
@@ -53,27 +58,31 @@ class ResourceBehaviorTest {
 
                 resourcesStorage = resourcesStorage
             )
-        ).isEqualTo(Resource(value = balanceConfig.resourcePerMillisecond * 2))
+        ).prop(Resource::value)
+            .isEqualTo(balanceConfig.resourcePerMillisecond * 2)
     }
 
     @Test
     fun `should got new values of resource to observer`() = runBlockingTest {
         behavior.observeResource(resourcesStorage = resourcesStorage).test {
-            assertThat(awaitItem()).isEqualTo(Resource(value = 0.0))
+            assertThat(awaitItem()).prop(Resource::value)
+                .isEqualTo(0.0)
 
             behavior.updateResource(
                 resourcesStorage = resourcesStorage,
                 passedTime = Time(balanceConfig.tickRateMillis),
                 rate = balanceConfig.resourcePerMillisecond,
             )
-            assertThat(awaitItem()).isEqualTo(Resource(value = balanceConfig.resourcePerMillisecond))
+            assertThat(awaitItem()).prop(Resource::value)
+                .isEqualTo(balanceConfig.resourcePerMillisecond)
 
             behavior.updateResource(
                 resourcesStorage = resourcesStorage,
                 passedTime = Time(balanceConfig.tickRateMillis),
                 rate = balanceConfig.resourcePerMillisecond,
             )
-            assertThat(awaitItem()).isEqualTo(Resource(value = balanceConfig.resourcePerMillisecond * 2))
+            assertThat(awaitItem()).prop(Resource::value)
+                .isEqualTo(balanceConfig.resourcePerMillisecond * 2)
         }
     }
 
@@ -95,8 +104,8 @@ class ResourceBehaviorTest {
 
                 resourcesStorage = resourcesStorage
             )
-        )
-            .isEqualTo(Resource(value = 150.0))
+        ).prop(Resource::value)
+            .isEqualTo(150.0)
     }
 
 }

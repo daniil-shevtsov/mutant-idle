@@ -1,7 +1,7 @@
 package com.daniil.shevtsov.idle.feature.resource.domain
 
 data class Resource(
-    val key : ResourceKey = ResourceKey.Blood,
-    val name: String = "Blood",
+    val key : ResourceKey,
+    val name: String,
     val value: Double,
 )
