@@ -76,8 +76,7 @@ internal class CompositePurchaseBehaviorTest {
             upgradeId = 1L,
         )
 
-        assertThat(resourceStorage.getCurrentValue())
-            .isEqualTo(50.0)
+        assertFinalResource(50.0)
     }
 
     @Test
@@ -150,8 +149,7 @@ internal class CompositePurchaseBehaviorTest {
             .prop(Upgrade::status)
             .isEqualTo(UpgradeStatus.NotBought)
 
-        assertThat(resourceStorage.getCurrentValue())
-            .isEqualTo(75.0)
+        assertFinalResource(75.0)
 
         assertThat(mutantRatioStorage.getCurrentValue())
             .isEqualTo(0.0)
@@ -161,6 +159,20 @@ internal class CompositePurchaseBehaviorTest {
         value: Double
     ) {
         resourceStorage.setNewValue(value)
+        val resource = resourcesStorage.getByKey(key = ResourceKey.Blood)!!
+        resourcesStorage.updateByKey(
+            key = ResourceKey.Blood,
+            newValue = resource.copy(value = value)
+        )
+    }
+
+    private suspend fun assertFinalResource(value: Double) {
+        assertThat(resourceStorage.getCurrentValue())
+            .isEqualTo(value)
+        assertThat(resourcesStorage.getByKey(key = ResourceKey.Blood))
+            .isNotNull()
+            .prop(Resource::value)
+            .isEqualTo(value)
     }
 
 }
