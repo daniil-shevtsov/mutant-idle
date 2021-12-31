@@ -30,6 +30,7 @@ internal fun humanityRatioStub() = HumanityRatioModel(
 )
 
 internal fun suspicionStub() = SuspicionModel(
+    title = "Investigation",
     percent = 0.5
 )
 
