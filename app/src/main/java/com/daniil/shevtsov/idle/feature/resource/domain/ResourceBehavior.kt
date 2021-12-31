@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.map
 object ResourceBehavior {
 
     suspend fun getCurrentResource(storage: ResourceStorage): Resource {
-        return storage.getCurrentValue().let(::Resource)
+        return storage.getCurrentValue().let { Resource(value = it) }
     }
 
     suspend fun updateResource(
@@ -22,7 +22,7 @@ object ResourceBehavior {
     }
 
     fun observeResource(storage: ResourceStorage): Flow<Resource> {
-        return storage.observeChange().map(::Resource)
+        return storage.observeChange().map { Resource(value = it) }
     }
 
     suspend fun decreaseResource(storage: ResourceStorage, amount: Double) {
