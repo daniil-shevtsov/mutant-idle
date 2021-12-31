@@ -7,6 +7,7 @@ import com.daniil.shevtsov.idle.feature.action.data.ActionsStorage
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.ActionBehavior
 import com.daniil.shevtsov.idle.feature.action.domain.ActionType
+import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
@@ -120,22 +121,10 @@ class MainViewModel @Inject constructor(
 
     private fun List<Action>.toActionState() = ActionsState(
         humanActionPane = ActionPane(
-            actions = filter { it.actionType == ActionType.Human }.map {
-                ActionModel(
-                    id = it.id,
-                    title = it.title,
-                    subtitle = it.subtitle,
-                )
-            }
+            actions = filter { it.actionType == ActionType.Human }.map { it.toModel() }
         ),
         mutantActionPane = ActionPane(
-            actions = filter { it.actionType == ActionType.Mutant }.map {
-                ActionModel(
-                    id = it.id,
-                    title = it.title,
-                    subtitle = it.subtitle,
-                )
-            }
+            actions = filter { it.actionType == ActionType.Mutant }.map { it.toModel() }
         )
     )
 
@@ -147,5 +136,15 @@ class MainViewModel @Inject constructor(
         }
         return statusModel
     }
+
+    private fun Action.toModel() = ActionModel(
+        id = id,
+        title = title,
+        subtitle = subtitle,
+        icon = when (actionType) {
+            ActionType.Human -> ActionIcon.Human
+            ActionType.Mutant -> ActionIcon.Mutant
+        }
+    )
 
 }

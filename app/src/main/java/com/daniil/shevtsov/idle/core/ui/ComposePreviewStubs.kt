@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.core.ui
 
+import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
@@ -35,18 +36,19 @@ internal fun suspicionStub() = SuspicionModel(
 )
 
 internal fun actionStatePreviewStub() = ActionsState(
-    humanActionPane = actionPanePreviewStub(paneIndex = 0),
-    mutantActionPane = actionPanePreviewStub(paneIndex = 1),
+    humanActionPane = actionPanePreviewStub(icon = ActionIcon.Human),
+    mutantActionPane = actionPanePreviewStub(icon = ActionIcon.Mutant),
 )
 
 internal fun actionPanePreviewStub(
-    paneIndex: Int? = null
+    icon: ActionIcon,
 ) = ActionPane(
     actions = (0..10).map { index ->
         actionPreviewStub(
             id = index.toLong(),
-            title = "Action ${paneIndex ?: 0}$index",
+            title = "${icon.name} action",
             subtitle = "Some very very very very long text",
+            actionIcon = icon,
         )
     }
 )
@@ -55,10 +57,12 @@ internal fun actionPreviewStub(
     id: Long = 0L,
     title: String = "Lol Kek",
     subtitle: String = "Some very very very very long text",
+    actionIcon: ActionIcon = ActionIcon.Human,
 ) = ActionModel(
     id = id,
     title = title,
     subtitle = subtitle,
+    icon = actionIcon,
 )
 
 internal fun shopStatePreviewStub(

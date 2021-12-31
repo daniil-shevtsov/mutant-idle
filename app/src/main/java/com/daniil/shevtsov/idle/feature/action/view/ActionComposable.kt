@@ -22,6 +22,7 @@ import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.actionPreviewStub
 import com.daniil.shevtsov.idle.core.ui.actionStatePreviewStub
 import com.daniil.shevtsov.idle.core.ui.cavitary
+import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
@@ -83,7 +84,7 @@ fun ActionPane(
         items(pane.actions) { action ->
             Action(
                 action = action,
-                onClicked = {onActionClicked(action.id)},
+                onClicked = { onActionClicked(action.id) },
                 modifier = modifier,
             )
         }
@@ -106,11 +107,16 @@ fun Action(
             .clickable { onClicked() },
         verticalArrangement = spacedBy(4.dp)
     ) {
+        val actionIcon = when (action.icon) {
+            ActionIcon.Human -> "\uD83D\uDE42"
+            ActionIcon.Mutant -> "\uD83D\uDC79"
+        }
+
         Row(
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Top,
             horizontalArrangement = spacedBy(8.dp)
         ) {
-            Text(text = "\uD83D\uDC79", fontSize = 24.sp)
+            Text(text = actionIcon, fontSize = 24.sp)
             Text(
                 text = action.title,
                 color = Color.White,
