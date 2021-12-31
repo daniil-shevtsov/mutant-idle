@@ -167,8 +167,6 @@ internal class CompositePurchaseBehaviorTest {
     }
 
     private suspend fun assertFinalResource(value: Double) {
-        assertThat(resourceStorage.getCurrentValue())
-            .isEqualTo(value)
         assertThat(resourcesStorage.getByKey(key = ResourceKey.Blood))
             .isNotNull()
             .prop(Resource::value)

@@ -21,15 +21,14 @@ object ResourceBehavior {
         passedTime: Time,
         rate: Double,
     ) {
-        val oldValue = storage.getCurrentValue()
+        val oldResource = resourcesStorage.getByKey(key = ResourceKey.Blood)!!
+        val oldValue = oldResource.value
         val newValue = oldValue + passedTime.value * rate
-
         storage.setNewValue(newValue)
 
-        val oldResource = resourcesStorage.getByKey(key = ResourceKey.Blood)
         resourcesStorage.updateByKey(
             key = ResourceKey.Blood,
-            newValue = oldResource!!.copy(value = newValue)
+            newValue = oldResource.copy(value = newValue)
         )
     }
 
@@ -45,15 +44,14 @@ object ResourceBehavior {
         amount: Double,
         resourcesStorage: ResourcesStorage,
     ) {
-        val oldValue = storage.getCurrentValue()
+        val oldResource = resourcesStorage.getByKey(key = ResourceKey.Blood)!!
+        val oldValue = oldResource.value
         val newValue = oldValue - amount
-
         storage.setNewValue(newValue)
 
-        val oldResource = resourcesStorage.getByKey(key = ResourceKey.Blood)
         resourcesStorage.updateByKey(
             key = ResourceKey.Blood,
-            newValue = oldResource!!.copy(value = newValue)
+            newValue = oldResource.copy(value = newValue)
         )
     }
 
@@ -62,15 +60,14 @@ object ResourceBehavior {
         amount: Double,
         resourcesStorage: ResourcesStorage,
     ) {
-        val oldValue = storage.getCurrentValue()
+        val oldResource = resourcesStorage.getByKey(key = ResourceKey.Blood)!!
+        val oldValue = oldResource.value
         val newValue = oldValue + amount
-
         storage.setNewValue(newValue)
 
-        val oldResource = resourcesStorage.getByKey(key = ResourceKey.Blood)
         resourcesStorage.updateByKey(
             key = ResourceKey.Blood,
-            newValue = oldResource!!.copy(value = newValue)
+            newValue = oldResource.copy(value = newValue)
         )
     }
 
