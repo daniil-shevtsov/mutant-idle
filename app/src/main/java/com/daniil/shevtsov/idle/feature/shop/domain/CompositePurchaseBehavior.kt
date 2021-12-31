@@ -19,7 +19,7 @@ object CompositePurchaseBehavior {
     ) {
         val upgrade = upgradeStorage.getUpgradeById(id = upgradeId)!!
 
-        val currentResource = ResourceBehavior.getCurrentResource(resourceStorage)
+        val currentResource = ResourceBehavior.getCurrentResource(storage = resourceStorage, resourcesStorage = resourcesStorage)
 
         if(upgrade.price.value <= currentResource.value) {
             val boughtUpgrade = PurchaseBehavior.buyUpgrade(

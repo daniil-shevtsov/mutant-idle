@@ -8,7 +8,11 @@ import kotlinx.coroutines.flow.map
 
 object ResourceBehavior {
 
-    suspend fun getCurrentResource(storage: ResourceStorage): Resource {
+    suspend fun getCurrentResource(
+        storage: ResourceStorage,
+        resourcesStorage: ResourcesStorage,
+    ): Resource {
+//        return resourcesStorage.getByKey(ResourceKey.Blood)!!
         return storage.getCurrentValue().let { Resource(value = it) }
     }
 
@@ -35,6 +39,7 @@ object ResourceBehavior {
         resourcesStorage: ResourcesStorage,
     ): Flow<Resource> {
         return storage.observeChange().map { Resource(value = it) }
+//        return resourcesStorage.observeAll().map { it.find { it.key == ResourceKey.Blood }!! }
     }
 
     suspend fun decreaseResource(
