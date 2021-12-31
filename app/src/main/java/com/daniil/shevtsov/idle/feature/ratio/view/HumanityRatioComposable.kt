@@ -1,7 +1,10 @@
 package com.daniil.shevtsov.idle.feature.ratio.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -12,9 +15,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Pallete
-import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.humanityRatioStub
-import com.daniil.shevtsov.idle.core.ui.protrusive
+import com.daniil.shevtsov.idle.core.ui.widgets.MyProgressBar
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 
 @Preview
@@ -51,32 +53,3 @@ fun MutantRatioPane(
     }
 }
 
-@Composable
-private fun MyProgressBar(
-    progressPercentage: Float,
-    modifier: Modifier = Modifier,
-) {
-    Box {
-        Box(
-            modifier = modifier
-                .fillMaxWidth()
-                .height(40.dp)
-                .cavitary(
-                    lightColor = Pallete.LightRed,
-                    darkColor = Pallete.DarkRed
-                )
-                .background(Color.White),
-        )
-        Box(
-            modifier = modifier
-                .fillMaxWidth(fraction = progressPercentage)
-                .height(40.dp)
-                .padding(4.dp)
-                .protrusive(
-                    lightColor = Pallete.LightRed,
-                    darkColor = Pallete.DarkRed
-                )
-                .background(Pallete.Red),
-        )
-    }
-}
