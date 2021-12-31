@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.feature.shop.domain
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
+import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
 import com.daniil.shevtsov.idle.feature.upgrade.data.UpgradeStorage
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeBehavior
@@ -12,6 +13,7 @@ object CompositePurchaseBehavior {
         balanceConfig: BalanceConfig,
         upgradeStorage: UpgradeStorage,
         resourceStorage: ResourceStorage,
+        resourcesStorage: ResourcesStorage,
         mutantRatioStorage: MutantRatioStorage,
         upgradeId: Long
     ) {
@@ -31,6 +33,7 @@ object CompositePurchaseBehavior {
             )
             ResourceBehavior.decreaseResource(
                 storage = resourceStorage,
+                resourcesStorage = resourcesStorage,
                 amount = upgrade.price.value,
             )
             mutantRatioStorage.setNewValue(mutantRatioStorage.getCurrentValue() + upgrade.price.value / balanceConfig.resourceSpentForFullMutant)

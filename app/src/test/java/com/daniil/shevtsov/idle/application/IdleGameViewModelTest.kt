@@ -5,6 +5,9 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.daniil.shevtsov.idle.MainCoroutineExtension
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
+import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
+import com.daniil.shevtsov.idle.feature.resource.domain.Resource
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.time.data.TimeStorage
 import com.daniil.shevtsov.idle.util.balanceConfig
 import kotlinx.coroutines.runBlocking
@@ -25,6 +28,11 @@ internal class IdleGameViewModelTest {
 
     private val timeStorage = TimeStorage()
     private val resourceStorage = ResourceStorage()
+    private val resourcesStorage = ResourcesStorage(
+        initialResources = listOf(
+            Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0)
+        )
+    )
 
     @Test
     fun `temporary e2e test`() = runBlockingTest {
@@ -80,5 +88,6 @@ internal class IdleGameViewModelTest {
         balanceConfig = balanceConfig,
         timeStorage = timeStorage,
         resourceStorage = resourceStorage,
+        resourcesStorage = resourcesStorage,
     )
 }

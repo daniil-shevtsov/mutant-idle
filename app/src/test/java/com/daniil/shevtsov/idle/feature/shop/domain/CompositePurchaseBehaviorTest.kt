@@ -6,6 +6,9 @@ import assertk.assertions.isNotNull
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
+import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
+import com.daniil.shevtsov.idle.feature.resource.domain.Resource
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.upgrade.data.UpgradeStorage
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
@@ -20,6 +23,11 @@ internal class CompositePurchaseBehaviorTest {
     private val behavior = CompositePurchaseBehavior
 
     private val resourceStorage = ResourceStorage()
+    private val resourcesStorage = ResourcesStorage(
+        initialResources = listOf(
+            Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0)
+        )
+    )
     private var upgradeStorage = UpgradeStorage(initialUpgrades = emptyList())
     private val mutantRatioStorage = MutantRatioStorage()
     private val balanceConfig = balanceConfig(resourceSpentForFullMutant = 100.0)
@@ -38,6 +46,7 @@ internal class CompositePurchaseBehaviorTest {
             balanceConfig = balanceConfig,
             upgradeStorage = upgradeStorage,
             resourceStorage = resourceStorage,
+            resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
             upgradeId = 1L,
         )
@@ -62,6 +71,7 @@ internal class CompositePurchaseBehaviorTest {
             balanceConfig = balanceConfig,
             upgradeStorage = upgradeStorage,
             resourceStorage = resourceStorage,
+            resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
             upgradeId = 1L,
         )
@@ -84,6 +94,7 @@ internal class CompositePurchaseBehaviorTest {
             balanceConfig = balanceConfig,
             upgradeStorage = upgradeStorage,
             resourceStorage = resourceStorage,
+            resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
             upgradeId = 1L,
         )
@@ -107,6 +118,7 @@ internal class CompositePurchaseBehaviorTest {
             balanceConfig = balanceConfig,
             upgradeStorage = upgradeStorage,
             resourceStorage = resourceStorage,
+            resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
             upgradeId = 1L,
         )
@@ -128,6 +140,7 @@ internal class CompositePurchaseBehaviorTest {
             balanceConfig = balanceConfig,
             upgradeStorage = upgradeStorage,
             resourceStorage = resourceStorage,
+            resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
             upgradeId = 1L,
         )

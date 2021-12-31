@@ -37,6 +37,7 @@ class ResourceBehaviorTest {
 
         behavior.updateResource(
             storage = storage,
+            resourcesStorage = resourcesStorage,
             passedTime = Time(balanceConfig.tickRateMillis),
             rate = balanceConfig.resourcePerMillisecond,
         )
@@ -44,6 +45,7 @@ class ResourceBehaviorTest {
 
         behavior.updateResource(
             storage = storage,
+            resourcesStorage = resourcesStorage,
             passedTime = Time(balanceConfig.tickRateMillis),
             rate = balanceConfig.resourcePerMillisecond,
         )
@@ -59,6 +61,7 @@ class ResourceBehaviorTest {
 
             behavior.updateResource(
                 storage = storage,
+                resourcesStorage = resourcesStorage,
                 passedTime = Time(balanceConfig.tickRateMillis),
                 rate = balanceConfig.resourcePerMillisecond,
             )
@@ -66,6 +69,7 @@ class ResourceBehaviorTest {
 
             behavior.updateResource(
                 storage = storage,
+                resourcesStorage = resourcesStorage,
                 passedTime = Time(balanceConfig.tickRateMillis),
                 rate = balanceConfig.resourcePerMillisecond,
             )
@@ -79,12 +83,14 @@ class ResourceBehaviorTest {
 
         behavior.updateResource(
             storage = storage,
+            resourcesStorage = resourcesStorage,
             passedTime = Time(200),
             rate = 1.0,
         )
 
         behavior.decreaseResource(
             storage = storage,
+            resourcesStorage = resourcesStorage,
             amount = 50.0,
         )
 

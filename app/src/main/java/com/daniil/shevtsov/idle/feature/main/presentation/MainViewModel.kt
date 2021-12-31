@@ -44,7 +44,10 @@ class MainViewModel @Inject constructor(
 
     init {
         combine(
-            ResourceBehavior.observeResource(resourcesStorage = resourcesStorage, storage = resourceStorage),
+            ResourceBehavior.observeResource(
+                resourcesStorage = resourcesStorage,
+                storage = resourceStorage
+            ),
             mutantRatioStorage.observeChange(),
             UpgradeBehavior.observeAll(upgradeStorage),
             ActionBehavior.observeAll(actionsStorage),
@@ -109,6 +112,7 @@ class MainViewModel @Inject constructor(
                 balanceConfig = balanceConfig,
                 upgradeStorage = upgradeStorage,
                 resourceStorage = resourceStorage,
+                resourcesStorage = resourcesStorage,
                 mutantRatioStorage = mutantRatioStorage,
                 upgradeId = action.id,
             )
@@ -119,8 +123,12 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             val selectedAction = ActionBehavior.getById(actionsStorage, action.id)
 
-            if(selectedAction != null) {
-                ResourceBehavior.applyResourceChange(resourceStorage, selectedAction.resourceChange)
+            if (selectedAction != null) {
+                ResourceBehavior.applyResourceChange(
+                    storage = resourceStorage,
+                    resourcesStorage = resourcesStorage,
+                    amount = selectedAction.resourceChange,
+                )
             }
         }
     }

@@ -8,15 +8,13 @@ import kotlinx.coroutines.flow.map
 
 object ResourceBehavior {
 
-    private val hackStorage = ResourcesStorage(emptyList())
-
     suspend fun getCurrentResource(storage: ResourceStorage): Resource {
         return storage.getCurrentValue().let { Resource(value = it) }
     }
 
     suspend fun updateResource(
         storage: ResourceStorage,
-        resourcesStorage: ResourcesStorage = hackStorage,
+        resourcesStorage: ResourcesStorage,
         passedTime: Time,
         rate: Double,
     ) {
@@ -35,7 +33,7 @@ object ResourceBehavior {
     suspend fun decreaseResource(
         storage: ResourceStorage,
         amount: Double,
-        resourcesStorage: ResourcesStorage = hackStorage,
+        resourcesStorage: ResourcesStorage,
     ) {
         val oldValue = storage.getCurrentValue()
         val newValue = oldValue - amount
@@ -45,7 +43,7 @@ object ResourceBehavior {
     suspend fun applyResourceChange(
         storage: ResourceStorage,
         amount: Double,
-        resourcesStorage: ResourcesStorage = hackStorage,
+        resourcesStorage: ResourcesStorage,
     ) {
         val oldValue = storage.getCurrentValue()
         val newValue = oldValue + amount

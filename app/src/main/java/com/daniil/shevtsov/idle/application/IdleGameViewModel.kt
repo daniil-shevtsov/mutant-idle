@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.application
 
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
+import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
 import com.daniil.shevtsov.idle.feature.time.data.TimeStorage
 import com.daniil.shevtsov.idle.feature.time.domain.Time
@@ -17,6 +18,7 @@ class IdleGameViewModel @Inject constructor(
     private val balanceConfig: BalanceConfig,
     private val timeStorage: TimeStorage,
     private val resourceStorage: ResourceStorage,
+    private val resourcesStorage: ResourcesStorage,
 ) {
     private val scope = CoroutineScope(Job() + Dispatchers.Main.immediate)
 
@@ -47,6 +49,7 @@ class IdleGameViewModel @Inject constructor(
                 .onEach { time ->
                     ResourceBehavior.updateResource(
                         storage = resourceStorage,
+                        resourcesStorage = resourcesStorage,
                         passedTime = time,
                         rate = balanceConfig.resourcePerMillisecond,
                     )
