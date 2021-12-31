@@ -3,7 +3,6 @@ package com.daniil.shevtsov.idle.feature.resource.domain
 import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.time.domain.Time
 import com.daniil.shevtsov.idle.util.balanceConfig
@@ -14,7 +13,6 @@ class ResourceBehaviorTest {
 
     private val behavior = ResourceBehavior
 
-    private val storage = ResourceStorage()
     private val resourcesStorage = ResourcesStorage(
         initialResources = listOf(
             Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0)

@@ -13,7 +13,6 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
-import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
@@ -42,7 +41,7 @@ internal class MainViewModelTest {
     private var actionsStorage = ActionsStorage(
         initialActions = emptyList()
     )
-    private val resourceStorage = ResourceStorage()
+
     private val resourcesStorage = ResourcesStorage(
         initialResources = listOf(
             Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0)
@@ -252,7 +251,6 @@ internal class MainViewModelTest {
         balanceConfig = balanceConfig,
         upgradeStorage = upgradeStorage,
         actionsStorage = actionsStorage,
-        resourceStorage = resourceStorage,
         resourcesStorage = resourcesStorage,
         mutantRatioStorage = mutantRatioStorage,
     )

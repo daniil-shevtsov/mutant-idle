@@ -5,7 +5,6 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
-import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
@@ -22,7 +21,6 @@ internal class CompositePurchaseBehaviorTest {
 
     private val behavior = CompositePurchaseBehavior
 
-    private val resourceStorage = ResourceStorage()
     private val resourcesStorage = ResourcesStorage(
         initialResources = listOf(
             Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0)
@@ -153,7 +151,6 @@ internal class CompositePurchaseBehaviorTest {
     private suspend fun setInitialResource(
         value: Double
     ) {
-        resourceStorage.setNewValue(value)
         val resource = resourcesStorage.getByKey(key = ResourceKey.Blood)!!
         resourcesStorage.updateByKey(
             key = ResourceKey.Blood,
