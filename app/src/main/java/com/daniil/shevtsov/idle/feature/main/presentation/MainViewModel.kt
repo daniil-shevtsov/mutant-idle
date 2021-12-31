@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.feature.main.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.daniil.shevtsov.idle.core.BalanceConfig
+import com.daniil.shevtsov.idle.feature.action.data.ActionsStorage
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
@@ -27,6 +28,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val balanceConfig: BalanceConfig,
     private val upgradeStorage: UpgradeStorage,
+    private val actionsStorage: ActionsStorage,
     private val resourceStorage: ResourceStorage,
     private val mutantRatioStorage: MutantRatioStorage,
 ) : ViewModel() {

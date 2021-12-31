@@ -5,6 +5,7 @@ import com.daniil.shevtsov.idle.common.di.initKoin
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.core.di.DaggerAppComponent
 import com.daniil.shevtsov.idle.core.di.koin.appModule
+import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Price
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
@@ -21,6 +22,7 @@ class IdleGameApplication : Application() {
                 appContext = applicationContext,
                 balanceConfig = createBalanceConfig(),
                 initialUpgrades = createInitialUpgrades(),
+                initialActions = createInitialActions(),
             )
     }
 
@@ -76,5 +78,7 @@ class IdleGameApplication : Application() {
             status = UpgradeStatus.NotBought,
         ),
     )
+
+    private fun createInitialActions() = emptyList<Action>()
 
 }

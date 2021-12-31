@@ -6,6 +6,7 @@ import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.MainCoroutineExtension
+import com.daniil.shevtsov.idle.feature.action.data.ActionsStorage
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
@@ -29,6 +30,9 @@ internal class MainViewModelTest {
 
     private var upgradeStorage = UpgradeStorage(
         initialUpgrades = emptyList()
+    )
+    private var actionsStorage = ActionsStorage(
+        initialActions = emptyList()
     )
     private val resourceStorage = ResourceStorage()
     private val mutantRatioStorage = MutantRatioStorage()
@@ -187,6 +191,7 @@ internal class MainViewModelTest {
     private fun createViewModel() = MainViewModel(
         balanceConfig = balanceConfig,
         upgradeStorage = upgradeStorage,
+        actionsStorage = actionsStorage,
         resourceStorage = resourceStorage,
         mutantRatioStorage = mutantRatioStorage,
     )
