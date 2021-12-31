@@ -16,6 +16,7 @@ import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
+import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMapper
 import com.daniil.shevtsov.idle.feature.shop.domain.CompositePurchaseBehavior
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
@@ -55,7 +56,7 @@ class MainViewModel @Inject constructor(
                         resource = resource,
                         name = resource.name,
                     )
-                ),
+                ) + listOf(ResourceModel(name = "Money", value = "0")),
                 ratio = HumanityRatioModel(
                     name = getNameForRatio(mutantRatio),
                     percent = mutantRatio

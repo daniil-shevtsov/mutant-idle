@@ -148,7 +148,8 @@ class IdleGameApplication : Application() {
     )
 
     private fun createInitialResources() = listOf(
-        Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0)
+        Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0),
+        Resource(key = ResourceKey.Money, name = "Money", value = 0.0),
     )
 
 }

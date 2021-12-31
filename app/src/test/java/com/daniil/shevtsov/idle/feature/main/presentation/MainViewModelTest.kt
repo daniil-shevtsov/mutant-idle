@@ -44,7 +44,8 @@ internal class MainViewModelTest {
 
     private val resourcesStorage = ResourcesStorage(
         initialResources = listOf(
-            Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0)
+            Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0),
+            Resource(key = ResourceKey.Money, name = "Money", value = 0.0),
         )
     )
     private val mutantRatioStorage = MutantRatioStorage()
@@ -86,8 +87,8 @@ internal class MainViewModelTest {
                 .isInstanceOf(MainViewState.Success::class)
                 .all {
                     prop(MainViewState.Success::resources)
-                        .extracting(ResourceModel::value)
-                        .containsExactly("0")
+                        .extracting(ResourceModel::name, ResourceModel::value)
+                        .containsExactly("Blood" to "0", "Money" to "0")
                     prop(MainViewState.Success::ratio)
                         .all {
                             prop(HumanityRatioModel::name).isEqualTo("Human")
@@ -189,7 +190,10 @@ internal class MainViewModelTest {
 
     private fun setInitialResourceValue(value: Double) {
         val resource = resourcesStorage.getByKey(key = ResourceKey.Blood)
-        resourcesStorage.updateByKey(key = ResourceKey.Blood, newValue = resource!!.copy(value = value))
+        resourcesStorage.updateByKey(
+            key = ResourceKey.Blood,
+            newValue = resource!!.copy(value = value)
+        )
     }
 
     @Test
@@ -222,7 +226,7 @@ internal class MainViewModelTest {
     }
 
     @Test
-    fun `should update resource when action clicked`() = runBlockingTest {
+    fun `should update blood when action clicked`() = runBlockingTest {
         setInitialResourceValue(value = 1000.0)
         actionsStorage = ActionsStorage(
             initialActions = listOf(
@@ -232,18 +236,14 @@ internal class MainViewModelTest {
 
         viewModel.state.test {
             assertThat(expectMostRecentItem())
-                .isInstanceOf(MainViewState.Success::class)
-                .prop(MainViewState.Success::resources)
-                .extracting(ResourceModel::value)
-                .containsExactly("1000")
+                .extractingBlood()
+                .isEqualTo("1000")
 
             viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
 
             assertThat(expectMostRecentItem())
-                .isInstanceOf(MainViewState.Success::class)
-                .prop(MainViewState.Success::resources)
-                .extracting(ResourceModel::value)
-                .containsExactly("1050")
+                .extractingBlood()
+                .isEqualTo("1050")
         }
     }
 
@@ -266,5 +266,15 @@ internal class MainViewModelTest {
             .prop(MainViewState.Success::ratio)
             .prop(HumanityRatioModel::name)
             .isEqualTo(expectedName)
+
+    private fun Assert<MainViewState>.extractingResources() =
+        isInstanceOf(MainViewState.Success::class)
+            .prop(MainViewState.Success::resources)
+
+    private fun Assert<MainViewState>.extractingBlood() =
+        isInstanceOf(MainViewState.Success::class)
+            .prop(MainViewState.Success::resources)
+            .index(0)
+            .prop(ResourceModel::value)
 
 }
