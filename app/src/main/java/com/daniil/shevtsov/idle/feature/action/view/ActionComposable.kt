@@ -2,7 +2,9 @@ package com.daniil.shevtsov.idle.feature.action.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.GridCells
@@ -10,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -100,18 +103,24 @@ fun Action(
             .padding(4.dp)
             .background(Pallete.DarkRed)
             .padding(4.dp)
-            .clickable { onClicked() }
+            .clickable { onClicked() },
+        verticalArrangement = spacedBy(4.dp)
     ) {
-        Text(
-            text = action.title,
-            color = Color.White,
-            fontSize = 24.sp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Pallete.DarkRed)
-                .padding(4.dp)
-                .padding(start = 4.dp)
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = spacedBy(8.dp)
+        ) {
+            Text(text = "\uD83D\uDC79", fontSize = 24.sp)
+            Text(
+                text = action.title,
+                color = Color.White,
+                fontSize = 24.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Pallete.DarkRed)
+            )
+        }
+
         Text(
             text = action.subtitle,
             color = Color.Black,
