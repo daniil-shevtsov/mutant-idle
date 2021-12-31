@@ -12,8 +12,8 @@ object ResourceBehavior {
         storage: ResourceStorage,
         resourcesStorage: ResourcesStorage,
     ): Resource {
-//        return resourcesStorage.getByKey(key = ResourceKey.Blood)!!
-        return storage.getCurrentValue().let { Resource(value = it) }
+        return resourcesStorage.getByKey(key = ResourceKey.Blood)!!
+//        return storage.getCurrentValue().let { Resource(value = it) }
     }
 
     suspend fun updateResource(

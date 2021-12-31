@@ -204,7 +204,7 @@ internal class MainViewModelTest {
                 upgrade(id = 3L, price = 30.0),
             )
         )
-        resourceStorage.setNewValue(resource = 1000.0)
+        setInitialResourceValue(value = 1000.0)
 
         viewModel.state.test {
             assertThat(awaitItem()).hasRatioName("Human")
@@ -225,7 +225,7 @@ internal class MainViewModelTest {
 
     @Test
     fun `should update resource when action clicked`() = runBlockingTest {
-        resourceStorage.setNewValue(resource = 1000.0)
+        setInitialResourceValue(value = 1000.0)
         actionsStorage = ActionsStorage(
             initialActions = listOf(
                 action(id = 1L, resourceChange = 50.0)
