@@ -13,7 +13,6 @@ object ResourceBehavior {
         resourcesStorage: ResourcesStorage,
     ): Resource {
         return resourcesStorage.getByKey(key = ResourceKey.Blood)!!
-//        return storage.getCurrentValue().let { Resource(value = it) }
     }
 
     suspend fun updateResource(
@@ -38,8 +37,7 @@ object ResourceBehavior {
         storage: ResourceStorage,
         resourcesStorage: ResourcesStorage,
     ): Flow<Resource> {
-        return storage.observeChange().map { Resource(value = it) }
-//        return resourcesStorage.observeAll().map { it.find { it.key == ResourceKey.Blood }!! }
+        return resourcesStorage.observeAll().map { it.find { it.key == ResourceKey.Blood }!! }
     }
 
     suspend fun decreaseResource(
