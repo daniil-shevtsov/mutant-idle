@@ -1,6 +1,8 @@
 package com.daniil.shevtsov.idle.util
 
 import com.daniil.shevtsov.idle.core.BalanceConfig
+import com.daniil.shevtsov.idle.feature.action.domain.Action
+import com.daniil.shevtsov.idle.feature.action.domain.ActionType
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.time.domain.Time
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Price
@@ -31,6 +33,18 @@ fun upgrade(
     subtitle = subtitle,
     price = price(value = price),
     status = status,
+)
+
+fun action(
+    id: Long = 0L,
+    title: String = "",
+    subtitle: String = "",
+    actionType: ActionType = ActionType.Human,
+) = Action(
+    id = id,
+    title = title,
+    subtitle = subtitle,
+    actionType = actionType,
 )
 
 fun price(value: Double = 0.0) = Price(

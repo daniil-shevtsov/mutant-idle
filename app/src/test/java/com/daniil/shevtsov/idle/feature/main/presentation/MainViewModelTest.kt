@@ -7,6 +7,10 @@ import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.MainCoroutineExtension
 import com.daniil.shevtsov.idle.feature.action.data.ActionsStorage
+import com.daniil.shevtsov.idle.feature.action.domain.ActionType
+import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
+import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
+import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
@@ -17,6 +21,7 @@ import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
+import com.daniil.shevtsov.idle.util.action
 import com.daniil.shevtsov.idle.util.balanceConfig
 import com.daniil.shevtsov.idle.util.upgrade
 import io.mockk.clearAllMocks
@@ -61,6 +66,12 @@ internal class MainViewModelTest {
                 upgrade(id = 3L, price = 10.0),
             )
         )
+        actionsStorage = ActionsStorage(
+            initialActions = listOf(
+                action(id = 0L, title = "human action", actionType = ActionType.Human),
+                action(id = 1L, title = "mutant action", actionType = ActionType.Mutant),
+            )
+        )
 
         viewModel.state.test {
             val state = expectMostRecentItem()
@@ -80,6 +91,16 @@ internal class MainViewModelTest {
                         .index(0)
                         .extracting(UpgradeModel::id)
                         .containsExactly(0L, 1L, 2L, 3L)
+                    prop(MainViewState.Success::actionState)
+                        .prop(ActionsState::humanActionPane)
+                        .prop(ActionPane::actions)
+                        .extracting(ActionModel::title)
+                        .containsExactly("human action")
+                    prop(MainViewState.Success::actionState)
+                        .prop(ActionsState::mutantActionPane)
+                        .prop(ActionPane::actions)
+                        .extracting(ActionModel::title)
+                        .containsExactly("mutant action")
                 }
         }
     }

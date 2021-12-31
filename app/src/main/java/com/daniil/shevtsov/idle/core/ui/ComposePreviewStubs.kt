@@ -35,9 +35,8 @@ internal fun suspicionStub() = SuspicionModel(
 )
 
 internal fun actionStatePreviewStub() = ActionsState(
-    actionPanes = (0..3).map { paneIndex ->
-        actionPanePreviewStub(paneIndex = paneIndex)
-    }
+    humanActionPane = actionPanePreviewStub(paneIndex = 0),
+    mutantActionPane = actionPanePreviewStub(paneIndex = 1),
 )
 
 internal fun actionPanePreviewStub(

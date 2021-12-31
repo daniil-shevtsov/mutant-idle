@@ -40,15 +40,6 @@ fun ActionPanesPreview() {
     ActionSection(state = actionStatePreviewStub())
 }
 
-@Preview(
-    widthDp = 400,
-    heightDp = 400,
-)
-@Composable
-fun ActionPanesPreviewWithOneItem() {
-    ActionSection(state = ActionsState(listOf(ActionPane(listOf(actionPreviewStub())))))
-}
-
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ActionSection(
@@ -56,8 +47,9 @@ fun ActionSection(
     modifier: Modifier = Modifier,
     onActionClicked: (actionId: Long) -> Unit = {},
 ) {
+    val actionPanes = listOf(state.humanActionPane, state.mutantActionPane)
     HorizontalPager(
-        count = state.actionPanes.size,
+        count = actionPanes.size,
         modifier = modifier
             .background(Pallete.Red)
             .padding(4.dp)
@@ -67,7 +59,7 @@ fun ActionSection(
             )
             .background(Pallete.DarkGray),
     ) { paneIndex ->
-        val actionPane = state.actionPanes[paneIndex]
+        val actionPane = actionPanes[paneIndex]
         ActionPane(
             pane = actionPane,
             onActionClicked = onActionClicked,
