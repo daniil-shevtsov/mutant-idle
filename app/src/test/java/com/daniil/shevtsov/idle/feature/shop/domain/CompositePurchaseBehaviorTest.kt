@@ -45,7 +45,6 @@ internal class CompositePurchaseBehaviorTest {
         behavior.buyUpgrade(
             balanceConfig = balanceConfig,
             upgradeStorage = upgradeStorage,
-            resourceStorage = resourceStorage,
             resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
             upgradeId = 1L,
@@ -70,7 +69,6 @@ internal class CompositePurchaseBehaviorTest {
         behavior.buyUpgrade(
             balanceConfig = balanceConfig,
             upgradeStorage = upgradeStorage,
-            resourceStorage = resourceStorage,
             resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
             upgradeId = 1L,
@@ -92,7 +90,6 @@ internal class CompositePurchaseBehaviorTest {
         behavior.buyUpgrade(
             balanceConfig = balanceConfig,
             upgradeStorage = upgradeStorage,
-            resourceStorage = resourceStorage,
             resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
             upgradeId = 1L,
@@ -116,7 +113,6 @@ internal class CompositePurchaseBehaviorTest {
         behavior.buyUpgrade(
             balanceConfig = balanceConfig,
             upgradeStorage = upgradeStorage,
-            resourceStorage = resourceStorage,
             resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
             upgradeId = 1L,
@@ -138,7 +134,6 @@ internal class CompositePurchaseBehaviorTest {
         behavior.buyUpgrade(
             balanceConfig = balanceConfig,
             upgradeStorage = upgradeStorage,
-            resourceStorage = resourceStorage,
             resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
             upgradeId = 1L,

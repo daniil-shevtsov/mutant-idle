@@ -110,7 +110,6 @@ class MainViewModel @Inject constructor(
             CompositePurchaseBehavior.buyUpgrade(
                 balanceConfig = balanceConfig,
                 upgradeStorage = upgradeStorage,
-                resourceStorage = resourceStorage,
                 resourcesStorage = resourcesStorage,
                 mutantRatioStorage = mutantRatioStorage,
                 upgradeId = action.id,

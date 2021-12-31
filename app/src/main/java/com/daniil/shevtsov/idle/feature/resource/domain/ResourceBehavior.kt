@@ -34,7 +34,7 @@ object ResourceBehavior {
         return resourcesStorage.observeAll().map { it.find { it.key == ResourceKey.Blood }!! }
     }
 
-    suspend fun decreaseResource(
+    fun decreaseResource(
         amount: Double,
         resourcesStorage: ResourcesStorage,
     ) {
