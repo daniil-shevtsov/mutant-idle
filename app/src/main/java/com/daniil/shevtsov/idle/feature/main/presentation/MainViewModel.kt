@@ -114,7 +114,13 @@ class MainViewModel @Inject constructor(
     }
 
     private fun handleActionClicked(action: MainViewAction.ActionClicked) {
-        TODO("Not yet implemented")
+        viewModelScope.launch {
+            val selectedAction = ActionBehavior.getById(actionsStorage, action.id)
+
+            if(selectedAction != null) {
+                ResourceBehavior.applyResourceChange(resourceStorage, selectedAction.resourceChange)
+            }
+        }
     }
 
     private fun initViewState(): MainViewState = MainViewState.Loading

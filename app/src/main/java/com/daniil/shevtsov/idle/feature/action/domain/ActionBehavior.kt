@@ -9,4 +9,8 @@ object ActionBehavior {
         return storage.observeAll()
     }
 
+    fun getById(storage: ActionsStorage, actionId: Long): Action? {
+        return storage.getActionById(actionId)
+    }
+
 }

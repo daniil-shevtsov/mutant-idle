@@ -31,4 +31,10 @@ object ResourceBehavior {
         return storage.setNewValue(newValue)
     }
 
+    suspend fun applyResourceChange(storage: ResourceStorage, amount: Double) {
+        val oldValue = storage.getCurrentValue()
+        val newValue = oldValue + amount
+        return storage.setNewValue(newValue)
+    }
+
 }

@@ -212,6 +212,11 @@ internal class MainViewModelTest {
     @Test
     fun `should update resource when action clicked`() = runBlockingTest {
         resourceStorage.setNewValue(resource = 1000.0)
+        actionsStorage = ActionsStorage(
+            initialActions = listOf(
+                action(id = 1L, resourceChange = 50.0)
+            )
+        )
 
         viewModel.state.test {
             assertThat(expectMostRecentItem())
@@ -219,6 +224,14 @@ internal class MainViewModelTest {
                 .prop(MainViewState.Success::resources)
                 .extracting(ResourceModel::value)
                 .containsExactly("1000")
+
+            viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
+
+            assertThat(expectMostRecentItem())
+                .isInstanceOf(MainViewState.Success::class)
+                .prop(MainViewState.Success::resources)
+                .extracting(ResourceModel::value)
+                .containsExactly("1050")
         }
     }
 
