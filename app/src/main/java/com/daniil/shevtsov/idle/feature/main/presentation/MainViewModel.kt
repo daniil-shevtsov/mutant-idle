@@ -16,7 +16,7 @@ import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
-import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMapper
 import com.daniil.shevtsov.idle.feature.shop.domain.CompositePurchaseBehavior
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
@@ -45,18 +45,22 @@ class MainViewModel @Inject constructor(
         combine(
             ResourceBehavior.observeResource(
                 resourcesStorage = resourcesStorage,
+                key = ResourceKey.Blood,
+            ),
+            ResourceBehavior.observeAllResources(
+                resourcesStorage = resourcesStorage,
             ),
             mutantRatioStorage.observeChange(),
             UpgradeBehavior.observeAll(upgradeStorage),
             ActionBehavior.observeAll(actionsStorage),
-        ) { resource: Resource, mutantRatio: Double, upgrades: List<Upgrade>, actions: List<Action> ->
+        ) { blood: Resource, resources: List<Resource>, mutantRatio: Double, upgrades: List<Upgrade>, actions: List<Action> ->
             val newViewState = MainViewState.Success(
-                resources = listOf(
+                resources = resources.map { resource ->
                     ResourceModelMapper.map(
                         resource = resource,
                         name = resource.name,
                     )
-                ) + listOf(ResourceModel(name = "Money", value = "0")),
+                },
                 ratio = HumanityRatioModel(
                     name = getNameForRatio(mutantRatio),
                     percent = mutantRatio
@@ -66,7 +70,7 @@ class MainViewModel @Inject constructor(
                     .map { upgrade ->
                         UpgradeModelMapper.map(
                             upgrade = upgrade,
-                            status = upgrade.mapStatus(resource.value)
+                            status = upgrade.mapStatus(blood.value)
                         )
                     }
                     .sortedBy {

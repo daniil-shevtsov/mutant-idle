@@ -28,10 +28,13 @@ object ResourceBehavior {
         )
     }
 
+    fun observeAllResources(resourcesStorage: ResourcesStorage) = resourcesStorage.observeAll()
+
     fun observeResource(
         resourcesStorage: ResourcesStorage,
+        key: ResourceKey,
     ): Flow<Resource> {
-        return resourcesStorage.observeAll().map { it.find { it.key == ResourceKey.Blood }!! }
+        return resourcesStorage.observeAll().map { it.find { it.key == key }!! }
     }
 
     fun decreaseResource(

@@ -64,8 +64,12 @@ class ResourceBehaviorTest {
 
     @Test
     fun `should got new values of resource to observer`() = runBlockingTest {
-        behavior.observeResource(resourcesStorage = resourcesStorage).test {
-            assertThat(awaitItem()).prop(Resource::value)
+        behavior.observeResource(
+            resourcesStorage = resourcesStorage,
+            key = ResourceKey.Blood,
+        ).test {
+            assertThat(awaitItem())
+                .prop(Resource::value)
                 .isEqualTo(0.0)
 
             behavior.updateResource(
