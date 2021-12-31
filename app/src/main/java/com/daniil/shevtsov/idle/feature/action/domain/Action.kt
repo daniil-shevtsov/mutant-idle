@@ -4,4 +4,5 @@ data class Action(
     val id: Long,
     val title: String,
     val subtitle: String,
+    val actionType: ActionType,
 )

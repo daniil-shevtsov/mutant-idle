@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.action.data.ActionsStorage
+import com.daniil.shevtsov.idle.feature.action.domain.Action
+import com.daniil.shevtsov.idle.feature.action.domain.ActionType
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
@@ -79,7 +81,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun getNameForRatio(mutantRatio: Double): String {
-        val name =  when {
+        val name = when {
             mutantRatio < 0.15 -> "Human"
             mutantRatio < 0.25 -> "Dormant"
             mutantRatio < 0.50 -> "Hidden"
@@ -114,42 +116,85 @@ class MainViewModel @Inject constructor(
 
     private fun initViewState(): MainViewState = MainViewState.Loading
 
+    private fun createActions() = listOf(
+        Action(
+            id = 0L,
+            title = "Work",
+            subtitle = "The sun is high",
+            actionType = ActionType.Human,
+        ),
+        Action(
+            id = 1L,
+            title = "Buy a pet",
+            subtitle = "It's so cute",
+            actionType = ActionType.Human,
+        ),
+        Action(
+            id = 2L,
+            title = "Eat food",
+            subtitle = "It's not much",
+            actionType = ActionType.Human,
+        ),
+        Action(
+            id = 3L,
+            title = "Buy Groceries",
+            subtitle = "It's a short walk",
+            actionType = ActionType.Human,
+        ),
+        Action(
+            id = 4L,
+            title = "Order Groceries",
+            subtitle = "I can hide at home",
+            actionType = ActionType.Human,
+        ),
+        Action(
+            id = 5L, title = "Grow", subtitle = "Cultivating mass",
+            actionType = ActionType.Mutant,
+        ),
+        Action(
+            id = 6L, title = "Eat a pet", subtitle = "Its time is up",
+            actionType = ActionType.Mutant,
+        ),
+        Action(
+            id = 7L,
+            title = "Hunt for rats",
+            subtitle = "Surely there are some",
+            actionType = ActionType.Mutant,
+        ),
+        Action(
+            id = 8L,
+            title = "Capture a person",
+            subtitle = "I think I can do it if I grow enough",
+            actionType = ActionType.Mutant,
+        ),
+        Action(
+            id = 9L,
+            title = "Eat captured person",
+            subtitle = "Finally some good fucking food",
+            actionType = ActionType.Mutant,
+        ),
+    )
+
     private fun createActionState() = ActionsState(
         actionPanes = listOf(
             ActionPane(
-                actions = listOf(
-                    ActionModel(id = 0L, title = "Work", subtitle = "The sun is high"),
-                    ActionModel(id = 1L, title = "Buy a pet", subtitle = "It's so cute"),
-                    ActionModel(id = 2L, title = "Eat food", subtitle = "It's not much"),
-                    ActionModel(id = 3L, title = "Buy Groceries", subtitle = "It's a short walk"),
+                actions = createActions().filter { it.actionType == ActionType.Human }.map {
                     ActionModel(
-                        id = 4L,
-                        title = "Order Groceries",
-                        subtitle = "I can hide at home"
-                    ),
-                )
+                        id = it.id,
+                        title = it.title,
+                        subtitle = it.subtitle,
+                    )
+                }
             ),
             ActionPane(
-                actions = listOf(
-                    ActionModel(id = 100L, title = "Grow", subtitle = "Cultivating mass"),
-                    ActionModel(id = 101L, title = "Eat a pet", subtitle = "Its time is up"),
+                actions = createActions().filter { it.actionType == ActionType.Mutant }.map {
                     ActionModel(
-                        id = 104L,
-                        title = "Hunt for rats",
-                        subtitle = "Surely there are some"
-                    ),
-                    ActionModel(
-                        id = 102L,
-                        title = "Capture a person",
-                        subtitle = "I think I can do it if I grow enough"
-                    ),
-                    ActionModel(
-                        id = 103L,
-                        title = "Eat captured person",
-                        subtitle = "Finally some good fucking food"
-                    ),
-                )
-            ),
+                        id = it.id,
+                        title = it.title,
+                        subtitle = it.subtitle,
+                    )
+                }
+            )
         )
     )
 
