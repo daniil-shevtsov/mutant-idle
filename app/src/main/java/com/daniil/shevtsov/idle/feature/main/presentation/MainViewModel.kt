@@ -44,7 +44,7 @@ class MainViewModel @Inject constructor(
 
     init {
         combine(
-            ResourceBehavior.observeResource(resourceStorage),
+            ResourceBehavior.observeResource(resourcesStorage = resourcesStorage, storage = resourceStorage),
             mutantRatioStorage.observeChange(),
             UpgradeBehavior.observeAll(upgradeStorage),
             ActionBehavior.observeAll(actionsStorage),

@@ -15,6 +15,8 @@ import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
+import com.daniil.shevtsov.idle.feature.resource.domain.Resource
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
 import com.daniil.shevtsov.idle.feature.upgrade.data.UpgradeStorage
@@ -41,7 +43,11 @@ internal class MainViewModelTest {
         initialActions = emptyList()
     )
     private val resourceStorage = ResourceStorage()
-    private val resourcesStorage = ResourcesStorage(initialResources = emptyList())
+    private val resourcesStorage = ResourcesStorage(
+        initialResources = listOf(
+            Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0)
+        )
+    )
     private val mutantRatioStorage = MutantRatioStorage()
 
     private val resourceSpentForFullMutant = 100.0
