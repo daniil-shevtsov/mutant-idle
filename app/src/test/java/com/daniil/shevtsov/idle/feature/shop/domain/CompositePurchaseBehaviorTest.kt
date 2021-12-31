@@ -40,7 +40,7 @@ internal class CompositePurchaseBehaviorTest {
             )
         )
 
-        resourceStorage.setNewValue(75.0)
+        setInitialResource(75.0)
 
         behavior.buyUpgrade(
             balanceConfig = balanceConfig,
@@ -65,7 +65,7 @@ internal class CompositePurchaseBehaviorTest {
             )
         )
 
-        resourceStorage.setNewValue(75.0)
+        setInitialResource(75.0)
 
         behavior.buyUpgrade(
             balanceConfig = balanceConfig,
@@ -88,7 +88,7 @@ internal class CompositePurchaseBehaviorTest {
             )
         )
 
-        resourceStorage.setNewValue(75.0)
+        setInitialResource(75.0)
 
         behavior.buyUpgrade(
             balanceConfig = balanceConfig,
@@ -111,7 +111,7 @@ internal class CompositePurchaseBehaviorTest {
             )
         )
 
-        resourceStorage.setNewValue(75.0)
+        setInitialResource(75.0)
         mutantRatioStorage.setNewValue(0.25)
 
         behavior.buyUpgrade(
@@ -134,7 +134,7 @@ internal class CompositePurchaseBehaviorTest {
                 upgrade(id = 1L, price = 250.0)
             )
         )
-        resourceStorage.setNewValue(75.0)
+        setInitialResource(75.0)
 
         behavior.buyUpgrade(
             balanceConfig = balanceConfig,
@@ -155,6 +155,12 @@ internal class CompositePurchaseBehaviorTest {
 
         assertThat(mutantRatioStorage.getCurrentValue())
             .isEqualTo(0.0)
+    }
+
+    private suspend fun setInitialResource(
+        value: Double
+    ) {
+        resourceStorage.setNewValue(value)
     }
 
 }
