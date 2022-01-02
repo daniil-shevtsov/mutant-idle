@@ -35,7 +35,7 @@ class ResourceBehaviorTest {
 
     @Test
     fun `should update resource by value after tick passed`() = runBlockingTest {
-        behavior.updateResource(
+        behavior.updateResourceByTime(
             resourcesStorage = resourcesStorage,
             passedTime = Time(balanceConfig.tickRateMillis),
             rate = balanceConfig.resourcePerMillisecond,
@@ -48,7 +48,7 @@ class ResourceBehaviorTest {
             .prop(Resource::value)
             .isEqualTo(balanceConfig.resourcePerMillisecond)
 
-        behavior.updateResource(
+        behavior.updateResourceByTime(
             resourcesStorage = resourcesStorage,
             passedTime = Time(balanceConfig.tickRateMillis),
             rate = balanceConfig.resourcePerMillisecond,
@@ -72,7 +72,7 @@ class ResourceBehaviorTest {
                 .prop(Resource::value)
                 .isEqualTo(0.0)
 
-            behavior.updateResource(
+            behavior.updateResourceByTime(
                 resourcesStorage = resourcesStorage,
                 passedTime = Time(balanceConfig.tickRateMillis),
                 rate = balanceConfig.resourcePerMillisecond,
@@ -80,7 +80,7 @@ class ResourceBehaviorTest {
             assertThat(awaitItem()).prop(Resource::value)
                 .isEqualTo(balanceConfig.resourcePerMillisecond)
 
-            behavior.updateResource(
+            behavior.updateResourceByTime(
                 resourcesStorage = resourcesStorage,
                 passedTime = Time(balanceConfig.tickRateMillis),
                 rate = balanceConfig.resourcePerMillisecond,
@@ -92,7 +92,7 @@ class ResourceBehaviorTest {
 
     @Test
     fun `should decrease resource by value`() = runBlockingTest {
-        behavior.updateResource(
+        behavior.updateResourceByTime(
             resourcesStorage = resourcesStorage,
             passedTime = Time(200),
             rate = 1.0,

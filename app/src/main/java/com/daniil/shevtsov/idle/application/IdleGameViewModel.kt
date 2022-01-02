@@ -45,7 +45,7 @@ class IdleGameViewModel @Inject constructor(
             TimeBehavior.observeTime(timeStorage)
                 .map { Time(it.inWholeMilliseconds) }
                 .onEach { time ->
-                    ResourceBehavior.updateResource(
+                    ResourceBehavior.updateResourceByTime(
                         resourcesStorage = resourcesStorage,
                         passedTime = time,
                         rate = balanceConfig.resourcePerMillisecond,

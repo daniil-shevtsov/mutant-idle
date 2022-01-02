@@ -14,7 +14,16 @@ object ResourceBehavior {
         return resourcesStorage.getByKey(key = resourceKey)!!
     }
 
-    fun updateResource(
+    fun observeAllResources(resourcesStorage: ResourcesStorage) = resourcesStorage.observeAll()
+
+    fun observeResource(
+        resourcesStorage: ResourcesStorage,
+        key: ResourceKey,
+    ): Flow<Resource> {
+        return resourcesStorage.observeAll().map { it.find { it.key == key }!! }
+    }
+
+    fun updateResourceByTime(
         resourcesStorage: ResourcesStorage,
         resourceKey: ResourceKey = ResourceKey.Blood,
         passedTime: Time,
@@ -25,15 +34,6 @@ object ResourceBehavior {
             resourceKey = resourceKey,
             amount = passedTime.value * rate,
         )
-    }
-
-    fun observeAllResources(resourcesStorage: ResourcesStorage) = resourcesStorage.observeAll()
-
-    fun observeResource(
-        resourcesStorage: ResourcesStorage,
-        key: ResourceKey,
-    ): Flow<Resource> {
-        return resourcesStorage.observeAll().map { it.find { it.key == key }!! }
     }
 
     fun decreaseResource(
