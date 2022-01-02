@@ -28,7 +28,12 @@ class ResourceBehaviorTest {
 
     @Test
     fun `should return 0 for resource initially`() = runBlockingTest {
-        assertThat(behavior.getCurrentResource(resourcesStorage = resourcesStorage))
+        assertThat(
+            behavior.getCurrentResource(
+                resourcesStorage = resourcesStorage,
+                resourceKey = ResourceKey.Blood,
+            )
+        )
             .prop(Resource::value)
             .isEqualTo(0.0)
     }
@@ -42,7 +47,8 @@ class ResourceBehaviorTest {
         )
         assertThat(
             behavior.getCurrentResource(
-                resourcesStorage = resourcesStorage
+                resourcesStorage = resourcesStorage,
+                resourceKey = ResourceKey.Blood,
             )
         )
             .prop(Resource::value)
@@ -55,8 +61,8 @@ class ResourceBehaviorTest {
         )
         assertThat(
             behavior.getCurrentResource(
-
-                resourcesStorage = resourcesStorage
+                resourcesStorage = resourcesStorage,
+                resourceKey = ResourceKey.Blood,
             )
         ).prop(Resource::value)
             .isEqualTo(balanceConfig.resourcePerMillisecond * 2)
@@ -105,8 +111,8 @@ class ResourceBehaviorTest {
 
         assertThat(
             behavior.getCurrentResource(
-
-                resourcesStorage = resourcesStorage
+                resourcesStorage = resourcesStorage,
+                resourceKey = ResourceKey.Blood,
             )
         ).prop(Resource::value)
             .isEqualTo(150.0)

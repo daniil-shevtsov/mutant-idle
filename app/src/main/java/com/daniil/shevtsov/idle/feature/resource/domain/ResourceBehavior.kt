@@ -9,7 +9,7 @@ object ResourceBehavior {
 
     fun getCurrentResource(
         resourcesStorage: ResourcesStorage,
-        resourceKey: ResourceKey = ResourceKey.Blood,
+        resourceKey: ResourceKey,
     ): Resource {
         return resourcesStorage.getByKey(key = resourceKey)!!
     }
