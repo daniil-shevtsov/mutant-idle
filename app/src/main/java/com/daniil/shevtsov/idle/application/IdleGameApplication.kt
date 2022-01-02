@@ -89,6 +89,9 @@ class IdleGameApplication : Application() {
             title = "Work",
             subtitle = "The sun is high",
             actionType = ActionType.Human,
+            resourceChanges = mapOf(
+                ResourceKey.Money to 25.0
+            )
         ),
         Action(
             id = 1L,
@@ -108,6 +111,10 @@ class IdleGameApplication : Application() {
             title = "Buy Groceries",
             subtitle = "It's a short walk",
             actionType = ActionType.Human,
+            resourceChanges = mapOf(
+                ResourceKey.Money to -15.0,
+                ResourceKey.Food to 1.0,
+            )
         ),
         Action(
             id = 4L,
@@ -144,6 +151,16 @@ class IdleGameApplication : Application() {
             subtitle = "Finally some good fucking food",
             actionType = ActionType.Mutant,
             resourceChange = 25.0,
+        ),
+        Action(
+            id = 10L,
+            title = "Eat food",
+            subtitle = "It's not enough",
+            actionType = ActionType.Human,
+            resourceChanges = mapOf(
+                ResourceKey.Blood to 2.0,
+                ResourceKey.Food to -1.0,
+            )
         ),
     )
 
