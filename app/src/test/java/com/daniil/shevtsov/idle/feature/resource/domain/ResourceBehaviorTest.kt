@@ -111,6 +111,7 @@ class ResourceBehaviorTest {
 
         behavior.decreaseResource(
             resourcesStorage = resourcesStorage,
+            resourceKey = ResourceKey.Blood,
             amount = 50.0,
         )
 

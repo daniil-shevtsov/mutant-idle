@@ -35,6 +35,7 @@ object CompositePurchaseBehavior {
             )
             ResourceBehavior.decreaseResource(
                 resourcesStorage = resourcesStorage,
+                resourceKey = ResourceKey.Blood,
                 amount = upgrade.price.value,
             )
             mutantRatioStorage.setNewValue(mutantRatioStorage.getCurrentValue() + upgrade.price.value / balanceConfig.resourceSpentForFullMutant)
