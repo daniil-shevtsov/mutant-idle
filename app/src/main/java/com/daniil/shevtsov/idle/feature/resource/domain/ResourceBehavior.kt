@@ -50,7 +50,7 @@ object ResourceBehavior {
 
     fun applyResourceChange(
         amount: Double,
-        resourceKey: ResourceKey = ResourceKey.Blood,
+        resourceKey: ResourceKey,
         resourcesStorage: ResourcesStorage,
     ) {
         applyChange(
