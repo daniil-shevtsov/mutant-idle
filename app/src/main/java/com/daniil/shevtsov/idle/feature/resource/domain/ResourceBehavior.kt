@@ -9,16 +9,18 @@ object ResourceBehavior {
 
     fun getCurrentResource(
         resourcesStorage: ResourcesStorage,
+        resourceKey: ResourceKey = ResourceKey.Blood,
     ): Resource {
-        return resourcesStorage.getByKey(key = ResourceKey.Blood)!!
+        return resourcesStorage.getByKey(key = resourceKey)!!
     }
 
     fun updateResource(
         resourcesStorage: ResourcesStorage,
+        resourceKey: ResourceKey = ResourceKey.Blood,
         passedTime: Time,
         rate: Double,
     ) {
-        val oldResource = resourcesStorage.getByKey(key = ResourceKey.Blood)!!
+        val oldResource = resourcesStorage.getByKey(key = resourceKey)!!
         val oldValue = oldResource.value
         val newValue = oldValue + passedTime.value * rate
 
@@ -39,14 +41,15 @@ object ResourceBehavior {
 
     fun decreaseResource(
         amount: Double,
+        resourceKey: ResourceKey = ResourceKey.Blood,
         resourcesStorage: ResourcesStorage,
     ) {
-        val oldResource = resourcesStorage.getByKey(key = ResourceKey.Blood)!!
+        val oldResource = resourcesStorage.getByKey(key = resourceKey)!!
         val oldValue = oldResource.value
         val newValue = oldValue - amount
 
         resourcesStorage.updateByKey(
-            key = ResourceKey.Blood,
+            key = resourceKey,
             newValue = oldResource.copy(value = newValue)
         )
     }
