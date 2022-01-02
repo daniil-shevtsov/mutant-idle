@@ -127,6 +127,7 @@ class MainViewModel @Inject constructor(
             if (selectedAction != null) {
                 ResourceBehavior.applyResourceChange(
                     resourcesStorage = resourcesStorage,
+                    resourceKey = ResourceKey.Blood,
                     amount = selectedAction.resourceChange,
                 )
             }

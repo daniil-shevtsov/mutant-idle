@@ -53,14 +53,15 @@ object ResourceBehavior {
 
     fun applyResourceChange(
         amount: Double,
+        resourceKey: ResourceKey = ResourceKey.Blood,
         resourcesStorage: ResourcesStorage,
     ) {
-        val oldResource = resourcesStorage.getByKey(key = ResourceKey.Blood)!!
+        val oldResource = resourcesStorage.getByKey(key = resourceKey)!!
         val oldValue = oldResource.value
         val newValue = oldValue + amount
 
         resourcesStorage.updateByKey(
-            key = ResourceKey.Blood,
+            key = resourceKey,
             newValue = oldResource.copy(value = newValue)
         )
     }
