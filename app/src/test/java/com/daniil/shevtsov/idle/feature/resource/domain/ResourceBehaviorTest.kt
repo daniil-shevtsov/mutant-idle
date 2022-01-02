@@ -43,6 +43,7 @@ class ResourceBehaviorTest {
         behavior.updateResourceByTime(
             resourcesStorage = resourcesStorage,
             passedTime = Time(balanceConfig.tickRateMillis),
+            resourceKey = ResourceKey.Blood,
             rate = balanceConfig.resourcePerMillisecond,
         )
         assertThat(
@@ -57,6 +58,7 @@ class ResourceBehaviorTest {
         behavior.updateResourceByTime(
             resourcesStorage = resourcesStorage,
             passedTime = Time(balanceConfig.tickRateMillis),
+            resourceKey = ResourceKey.Blood,
             rate = balanceConfig.resourcePerMillisecond,
         )
         assertThat(
@@ -81,6 +83,7 @@ class ResourceBehaviorTest {
             behavior.updateResourceByTime(
                 resourcesStorage = resourcesStorage,
                 passedTime = Time(balanceConfig.tickRateMillis),
+                resourceKey = ResourceKey.Blood,
                 rate = balanceConfig.resourcePerMillisecond,
             )
             assertThat(awaitItem()).prop(Resource::value)
