@@ -25,7 +25,7 @@ object ResourceBehavior {
 
     fun updateResourceByTime(
         resourcesStorage: ResourcesStorage,
-        resourceKey: ResourceKey = ResourceKey.Blood,
+        resourceKey: ResourceKey,
         passedTime: Time,
         rate: Double,
     ) {

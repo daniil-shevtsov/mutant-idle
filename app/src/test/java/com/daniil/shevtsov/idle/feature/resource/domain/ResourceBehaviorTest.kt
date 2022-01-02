@@ -92,6 +92,7 @@ class ResourceBehaviorTest {
             behavior.updateResourceByTime(
                 resourcesStorage = resourcesStorage,
                 passedTime = Time(balanceConfig.tickRateMillis),
+                resourceKey = ResourceKey.Blood,
                 rate = balanceConfig.resourcePerMillisecond,
             )
             assertThat(awaitItem()).prop(Resource::value)
@@ -103,6 +104,7 @@ class ResourceBehaviorTest {
     fun `should decrease resource by value`() = runBlockingTest {
         behavior.updateResourceByTime(
             resourcesStorage = resourcesStorage,
+            resourceKey = ResourceKey.Blood,
             passedTime = Time(200),
             rate = 1.0,
         )
