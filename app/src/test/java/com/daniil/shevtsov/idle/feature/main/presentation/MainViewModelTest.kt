@@ -86,8 +86,7 @@ internal class MainViewModelTest {
             assertThat(state)
                 .isInstanceOf(MainViewState.Success::class)
                 .all {
-                    prop(MainViewState.Success::resources)
-                        .extracting(ResourceModel::name, ResourceModel::value)
+                    extractingResources()
                         .containsExactly("Blood" to "0", "Money" to "0")
                     prop(MainViewState.Success::ratio)
                         .all {
