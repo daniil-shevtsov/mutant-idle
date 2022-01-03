@@ -3,14 +3,20 @@ package com.daniil.shevtsov.idle.feature.main.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.daniil.shevtsov.idle.core.BalanceConfig
+import com.daniil.shevtsov.idle.feature.action.data.ActionsStorage
+import com.daniil.shevtsov.idle.feature.action.domain.Action
+import com.daniil.shevtsov.idle.feature.action.domain.ActionBehavior
+import com.daniil.shevtsov.idle.feature.action.domain.ActionType
+import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
-import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
+import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMapper
 import com.daniil.shevtsov.idle.feature.shop.domain.CompositePurchaseBehavior
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
@@ -27,7 +33,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val balanceConfig: BalanceConfig,
     private val upgradeStorage: UpgradeStorage,
-    private val resourceStorage: ResourceStorage,
+    private val actionsStorage: ActionsStorage,
+    private val resourcesStorage: ResourcesStorage,
     private val mutantRatioStorage: MutantRatioStorage,
 ) : ViewModel() {
 
@@ -36,27 +43,34 @@ class MainViewModel @Inject constructor(
 
     init {
         combine(
-            ResourceBehavior.observeResource(resourceStorage),
+            ResourceBehavior.observeResource(
+                resourcesStorage = resourcesStorage,
+                key = ResourceKey.Blood,
+            ),
+            ResourceBehavior.observeAllResources(
+                resourcesStorage = resourcesStorage,
+            ),
             mutantRatioStorage.observeChange(),
             UpgradeBehavior.observeAll(upgradeStorage),
-        ) { resource: Resource, mutantRatio: Double, upgrades: List<Upgrade> ->
+            ActionBehavior.observeAll(actionsStorage),
+        ) { blood: Resource, resources: List<Resource>, mutantRatio: Double, upgrades: List<Upgrade>, actions: List<Action> ->
             val newViewState = MainViewState.Success(
-                resources = listOf(
+                resources = resources.map { resource ->
                     ResourceModelMapper.map(
                         resource = resource,
-                        name = "Blood",
+                        name = resource.name,
                     )
-                ),
+                },
                 ratio = HumanityRatioModel(
                     name = getNameForRatio(mutantRatio),
                     percent = mutantRatio
                 ),
-                actionState = createActionState(),
+                actionState = actions.toActionState(),
                 shop = upgrades
                     .map { upgrade ->
                         UpgradeModelMapper.map(
                             upgrade = upgrade,
-                            status = upgrade.mapStatus(resource.value)
+                            status = upgrade.mapStatus(blood.value)
                         )
                     }
                     .sortedBy {
@@ -77,7 +91,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun getNameForRatio(mutantRatio: Double): String {
-        val name =  when {
+        val name = when {
             mutantRatio < 0.15 -> "Human"
             mutantRatio < 0.25 -> "Dormant"
             mutantRatio < 0.50 -> "Hidden"
@@ -99,7 +113,7 @@ class MainViewModel @Inject constructor(
             CompositePurchaseBehavior.buyUpgrade(
                 balanceConfig = balanceConfig,
                 upgradeStorage = upgradeStorage,
-                resourceStorage = resourceStorage,
+                resourcesStorage = resourcesStorage,
                 mutantRatioStorage = mutantRatioStorage,
                 upgradeId = action.id,
             )
@@ -107,47 +121,26 @@ class MainViewModel @Inject constructor(
     }
 
     private fun handleActionClicked(action: MainViewAction.ActionClicked) {
-        TODO("Not yet implemented")
+        viewModelScope.launch {
+            val selectedAction = ActionBehavior.getById(actionsStorage, action.id)
+            selectedAction?.resourceChanges?.forEach { (resourceKey, resourceValue) ->
+                ResourceBehavior.applyResourceChange(
+                    resourcesStorage = resourcesStorage,
+                    resourceKey = resourceKey,
+                    amount = resourceValue,
+                )
+            }
+        }
     }
 
     private fun initViewState(): MainViewState = MainViewState.Loading
 
-    private fun createActionState() = ActionsState(
-        actionPanes = listOf(
-            ActionPane(
-                actions = listOf(
-                    ActionModel(id = 0L, title = "Work", subtitle = "The sun is high"),
-                    ActionModel(id = 1L, title = "Buy a pet", subtitle = "It's so cute"),
-                    ActionModel(id = 2L, title = "Eat food", subtitle = "It's not much"),
-                    ActionModel(id = 3L, title = "Buy Groceries", subtitle = "It's a short walk"),
-                    ActionModel(
-                        id = 4L,
-                        title = "Order Groceries",
-                        subtitle = "I can hide at home"
-                    ),
-                )
-            ),
-            ActionPane(
-                actions = listOf(
-                    ActionModel(id = 100L, title = "Grow", subtitle = "Cultivating mass"),
-                    ActionModel(id = 101L, title = "Eat a pet", subtitle = "Its time is up"),
-                    ActionModel(
-                        id = 104L,
-                        title = "Hunt for rats",
-                        subtitle = "Surely there are some"
-                    ),
-                    ActionModel(
-                        id = 102L,
-                        title = "Capture a person",
-                        subtitle = "I think I can do it if I grow enough"
-                    ),
-                    ActionModel(
-                        id = 103L,
-                        title = "Eat captured person",
-                        subtitle = "Finally some good fucking food"
-                    ),
-                )
-            ),
+    private fun List<Action>.toActionState() = ActionsState(
+        humanActionPane = ActionPane(
+            actions = filter { it.actionType == ActionType.Human }.map { it.toModel() }
+        ),
+        mutantActionPane = ActionPane(
+            actions = filter { it.actionType == ActionType.Mutant }.map { it.toModel() }
         )
     )
 
@@ -159,5 +152,15 @@ class MainViewModel @Inject constructor(
         }
         return statusModel
     }
+
+    private fun Action.toModel() = ActionModel(
+        id = id,
+        title = title,
+        subtitle = subtitle,
+        icon = when (actionType) {
+            ActionType.Human -> ActionIcon.Human
+            ActionType.Mutant -> ActionIcon.Mutant
+        }
+    )
 
 }

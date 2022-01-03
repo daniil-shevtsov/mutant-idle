@@ -3,15 +3,23 @@ package com.daniil.shevtsov.idle.feature.resource.domain
 import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
+import assertk.assertions.prop
+import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.time.domain.Time
 import com.daniil.shevtsov.idle.util.balanceConfig
+import com.daniil.shevtsov.idle.util.resource
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test
 
 class ResourceBehaviorTest {
 
     private val behavior = ResourceBehavior
+
+    private val resourcesStorage = ResourcesStorage(
+        initialResources = listOf(
+            resource(key = ResourceKey.Blood, name = "Blood", value = 0.0)
+        )
+    )
 
     private val balanceConfig = balanceConfig(
         tickRateMillis = 1L,
@@ -20,69 +28,100 @@ class ResourceBehaviorTest {
 
     @Test
     fun `should return 0 for resource initially`() = runBlockingTest {
-        val storage = ResourceStorage()
-        assertThat(behavior.getCurrentResource(storage)).isEqualTo(Resource(0.0))
+        assertThat(
+            behavior.getCurrentResource(
+                resourcesStorage = resourcesStorage,
+                resourceKey = ResourceKey.Blood,
+            )
+        )
+            .prop(Resource::value)
+            .isEqualTo(0.0)
     }
 
     @Test
     fun `should update resource by value after tick passed`() = runBlockingTest {
-        val storage = ResourceStorage()
-
-        behavior.updateResource(
-            storage = storage,
+        behavior.updateResourceByTime(
+            resourcesStorage = resourcesStorage,
             passedTime = Time(balanceConfig.tickRateMillis),
+            resourceKey = ResourceKey.Blood,
             rate = balanceConfig.resourcePerMillisecond,
         )
-        assertThat(behavior.getCurrentResource(storage)).isEqualTo(Resource(balanceConfig.resourcePerMillisecond))
+        assertThat(
+            behavior.getCurrentResource(
+                resourcesStorage = resourcesStorage,
+                resourceKey = ResourceKey.Blood,
+            )
+        )
+            .prop(Resource::value)
+            .isEqualTo(balanceConfig.resourcePerMillisecond)
 
-        behavior.updateResource(
-            storage = storage,
+        behavior.updateResourceByTime(
+            resourcesStorage = resourcesStorage,
             passedTime = Time(balanceConfig.tickRateMillis),
+            resourceKey = ResourceKey.Blood,
             rate = balanceConfig.resourcePerMillisecond,
         )
-        assertThat(behavior.getCurrentResource(storage)).isEqualTo(Resource(balanceConfig.resourcePerMillisecond * 2))
+        assertThat(
+            behavior.getCurrentResource(
+                resourcesStorage = resourcesStorage,
+                resourceKey = ResourceKey.Blood,
+            )
+        ).prop(Resource::value)
+            .isEqualTo(balanceConfig.resourcePerMillisecond * 2)
     }
 
     @Test
     fun `should got new values of resource to observer`() = runBlockingTest {
-        val storage = ResourceStorage()
+        behavior.observeResource(
+            resourcesStorage = resourcesStorage,
+            key = ResourceKey.Blood,
+        ).test {
+            assertThat(awaitItem())
+                .prop(Resource::value)
+                .isEqualTo(0.0)
 
-        behavior.observeResource(storage).test {
-            assertThat(awaitItem()).isEqualTo(Resource(0.0))
-
-            behavior.updateResource(
-                storage = storage,
+            behavior.updateResourceByTime(
+                resourcesStorage = resourcesStorage,
                 passedTime = Time(balanceConfig.tickRateMillis),
+                resourceKey = ResourceKey.Blood,
                 rate = balanceConfig.resourcePerMillisecond,
             )
-            assertThat(awaitItem()).isEqualTo(Resource(balanceConfig.resourcePerMillisecond))
+            assertThat(awaitItem()).prop(Resource::value)
+                .isEqualTo(balanceConfig.resourcePerMillisecond)
 
-            behavior.updateResource(
-                storage = storage,
+            behavior.updateResourceByTime(
+                resourcesStorage = resourcesStorage,
                 passedTime = Time(balanceConfig.tickRateMillis),
+                resourceKey = ResourceKey.Blood,
                 rate = balanceConfig.resourcePerMillisecond,
             )
-            assertThat(awaitItem()).isEqualTo(Resource(balanceConfig.resourcePerMillisecond * 2))
+            assertThat(awaitItem()).prop(Resource::value)
+                .isEqualTo(balanceConfig.resourcePerMillisecond * 2)
         }
     }
 
     @Test
     fun `should decrease resource by value`() = runBlockingTest {
-        val storage = ResourceStorage()
-
-        behavior.updateResource(
-            storage = storage,
+        behavior.updateResourceByTime(
+            resourcesStorage = resourcesStorage,
+            resourceKey = ResourceKey.Blood,
             passedTime = Time(200),
             rate = 1.0,
         )
 
         behavior.decreaseResource(
-            storage = storage,
+            resourcesStorage = resourcesStorage,
+            resourceKey = ResourceKey.Blood,
             amount = 50.0,
         )
 
-        assertThat(behavior.getCurrentResource(storage))
-            .isEqualTo(Resource(150.0))
+        assertThat(
+            behavior.getCurrentResource(
+                resourcesStorage = resourcesStorage,
+                resourceKey = ResourceKey.Blood,
+            )
+        ).prop(Resource::value)
+            .isEqualTo(150.0)
     }
 
 }

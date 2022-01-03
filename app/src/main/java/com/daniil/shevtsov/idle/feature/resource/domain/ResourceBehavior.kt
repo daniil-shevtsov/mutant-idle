@@ -1,34 +1,78 @@
 package com.daniil.shevtsov.idle.feature.resource.domain
 
-import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
+import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.time.domain.Time
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 object ResourceBehavior {
 
-    suspend fun getCurrentResource(storage: ResourceStorage): Resource {
-        return storage.getCurrentValue().let(::Resource)
+    fun getCurrentResource(
+        resourcesStorage: ResourcesStorage,
+        resourceKey: ResourceKey,
+    ): Resource {
+        return resourcesStorage.getByKey(key = resourceKey)!!
     }
 
-    suspend fun updateResource(
-        storage: ResourceStorage,
+    fun observeAllResources(resourcesStorage: ResourcesStorage) = resourcesStorage.observeAll()
+
+    fun observeResource(
+        resourcesStorage: ResourcesStorage,
+        key: ResourceKey,
+    ): Flow<Resource> {
+        return resourcesStorage.observeAll().map { it.find { it.key == key }!! }
+    }
+
+    fun updateResourceByTime(
+        resourcesStorage: ResourcesStorage,
+        resourceKey: ResourceKey,
         passedTime: Time,
         rate: Double,
     ) {
-        val oldValue = storage.getCurrentValue()
-        val newValue = oldValue + passedTime.value * rate
-        return storage.setNewValue(newValue)
+        applyChange(
+            resourcesStorage = resourcesStorage,
+            resourceKey = resourceKey,
+            amount = passedTime.value * rate,
+        )
     }
 
-    fun observeResource(storage: ResourceStorage): Flow<Resource> {
-        return storage.observeChange().map(::Resource)
+    fun decreaseResource(
+        amount: Double,
+        resourceKey: ResourceKey,
+        resourcesStorage: ResourcesStorage,
+    ) {
+        applyChange(
+            resourcesStorage = resourcesStorage,
+            resourceKey = resourceKey,
+            amount = -amount,
+        )
     }
 
-    suspend fun decreaseResource(storage: ResourceStorage, amount: Double) {
-        val oldValue = storage.getCurrentValue()
-        val newValue = oldValue - amount
-        return storage.setNewValue(newValue)
+    fun applyResourceChange(
+        amount: Double,
+        resourceKey: ResourceKey,
+        resourcesStorage: ResourcesStorage,
+    ) {
+        applyChange(
+            resourcesStorage = resourcesStorage,
+            resourceKey = resourceKey,
+            amount = amount,
+        )
+    }
+
+    private fun applyChange(
+        resourcesStorage: ResourcesStorage,
+        resourceKey: ResourceKey,
+        amount: Double
+    ) {
+        val oldResource = resourcesStorage.getByKey(key = resourceKey)!!
+        val oldValue = oldResource.value
+        val newValue = oldValue + amount
+
+        resourcesStorage.updateByKey(
+            key = resourceKey,
+            newValue = oldResource.copy(value = newValue)
+        )
     }
 
 }

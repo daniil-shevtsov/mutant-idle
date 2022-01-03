@@ -29,7 +29,7 @@ import com.google.accompanist.insets.statusBarsHeight
 @Composable
 fun MainPreview() {
     val state = viewStatePreviewStub()
-    MainContent(state = state)
+    MainContent(state = state, onActionClicked = {}, onUpgradeSelected = {})
 }
 
 @Composable
@@ -39,12 +39,11 @@ fun MainScreen(
     val viewState by viewModel.state.collectAsState()
     MainContent(
         state = viewState,
+        onActionClicked = { actionId ->
+            viewModel.handleAction(MainViewAction.ActionClicked(id = actionId))
+        },
         onUpgradeSelected = { upgradeId ->
-            viewModel.handleAction(
-                MainViewAction.UpgradeSelected(
-                    upgradeId
-                )
-            )
+            viewModel.handleAction(MainViewAction.UpgradeSelected(id = upgradeId))
         }
     )
 }
@@ -52,8 +51,8 @@ fun MainScreen(
 @Composable
 fun MainContent(
     state: MainViewState,
-    onActionClicked: (actionId: Long) -> Unit = {},
-    onUpgradeSelected: (upgradeId: Long) -> Unit = {},
+    onActionClicked: (actionId: Long) -> Unit,
+    onUpgradeSelected: (upgradeId: Long) -> Unit,
 ) {
     when (state) {
         is MainViewState.Loading -> LoadingContent()

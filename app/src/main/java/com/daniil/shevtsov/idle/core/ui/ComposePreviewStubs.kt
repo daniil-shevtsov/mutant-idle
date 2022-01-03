@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.core.ui
 
+import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
@@ -7,6 +8,7 @@ import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
+import com.daniil.shevtsov.idle.feature.suspicion.presentation.SuspicionModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.PriceModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
@@ -28,20 +30,25 @@ internal fun humanityRatioStub() = HumanityRatioModel(
     percent = 0.5,
 )
 
+internal fun suspicionStub() = SuspicionModel(
+    title = "Investigation",
+    percent = 0.5
+)
+
 internal fun actionStatePreviewStub() = ActionsState(
-    actionPanes = (0..3).map { paneIndex ->
-        actionPanePreviewStub(paneIndex = paneIndex)
-    }
+    humanActionPane = actionPanePreviewStub(icon = ActionIcon.Human),
+    mutantActionPane = actionPanePreviewStub(icon = ActionIcon.Mutant),
 )
 
 internal fun actionPanePreviewStub(
-    paneIndex: Int? = null
+    icon: ActionIcon,
 ) = ActionPane(
     actions = (0..10).map { index ->
         actionPreviewStub(
             id = index.toLong(),
-            title = "Action ${paneIndex ?: 0}$index",
+            title = "${icon.name} action",
             subtitle = "Some very very very very long text",
+            actionIcon = icon,
         )
     }
 )
@@ -50,10 +57,12 @@ internal fun actionPreviewStub(
     id: Long = 0L,
     title: String = "Lol Kek",
     subtitle: String = "Some very very very very long text",
+    actionIcon: ActionIcon = ActionIcon.Human,
 ) = ActionModel(
     id = id,
     title = title,
     subtitle = subtitle,
+    icon = actionIcon,
 )
 
 internal fun shopStatePreviewStub(

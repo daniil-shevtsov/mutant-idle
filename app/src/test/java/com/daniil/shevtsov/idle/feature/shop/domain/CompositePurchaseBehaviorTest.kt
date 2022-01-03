@@ -5,7 +5,9 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
-import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
+import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
+import com.daniil.shevtsov.idle.feature.resource.domain.Resource
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.upgrade.data.UpgradeStorage
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
@@ -19,7 +21,11 @@ internal class CompositePurchaseBehaviorTest {
 
     private val behavior = CompositePurchaseBehavior
 
-    private val resourceStorage = ResourceStorage()
+    private val resourcesStorage = ResourcesStorage(
+        initialResources = listOf(
+            Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0)
+        )
+    )
     private var upgradeStorage = UpgradeStorage(initialUpgrades = emptyList())
     private val mutantRatioStorage = MutantRatioStorage()
     private val balanceConfig = balanceConfig(resourceSpentForFullMutant = 100.0)
@@ -32,12 +38,12 @@ internal class CompositePurchaseBehaviorTest {
             )
         )
 
-        resourceStorage.setNewValue(75.0)
+        setInitialResource(75.0)
 
         behavior.buyUpgrade(
             balanceConfig = balanceConfig,
             upgradeStorage = upgradeStorage,
-            resourceStorage = resourceStorage,
+            resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
             upgradeId = 1L,
         )
@@ -56,18 +62,17 @@ internal class CompositePurchaseBehaviorTest {
             )
         )
 
-        resourceStorage.setNewValue(75.0)
+        setInitialResource(75.0)
 
         behavior.buyUpgrade(
             balanceConfig = balanceConfig,
             upgradeStorage = upgradeStorage,
-            resourceStorage = resourceStorage,
+            resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
             upgradeId = 1L,
         )
 
-        assertThat(resourceStorage.getCurrentValue())
-            .isEqualTo(50.0)
+        assertFinalResource(50.0)
     }
 
     @Test
@@ -78,12 +83,12 @@ internal class CompositePurchaseBehaviorTest {
             )
         )
 
-        resourceStorage.setNewValue(75.0)
+        setInitialResource(75.0)
 
         behavior.buyUpgrade(
             balanceConfig = balanceConfig,
             upgradeStorage = upgradeStorage,
-            resourceStorage = resourceStorage,
+            resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
             upgradeId = 1L,
         )
@@ -100,13 +105,13 @@ internal class CompositePurchaseBehaviorTest {
             )
         )
 
-        resourceStorage.setNewValue(75.0)
+        setInitialResource(75.0)
         mutantRatioStorage.setNewValue(0.25)
 
         behavior.buyUpgrade(
             balanceConfig = balanceConfig,
             upgradeStorage = upgradeStorage,
-            resourceStorage = resourceStorage,
+            resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
             upgradeId = 1L,
         )
@@ -122,12 +127,12 @@ internal class CompositePurchaseBehaviorTest {
                 upgrade(id = 1L, price = 250.0)
             )
         )
-        resourceStorage.setNewValue(75.0)
+        setInitialResource(75.0)
 
         behavior.buyUpgrade(
             balanceConfig = balanceConfig,
             upgradeStorage = upgradeStorage,
-            resourceStorage = resourceStorage,
+            resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
             upgradeId = 1L,
         )
@@ -137,11 +142,27 @@ internal class CompositePurchaseBehaviorTest {
             .prop(Upgrade::status)
             .isEqualTo(UpgradeStatus.NotBought)
 
-        assertThat(resourceStorage.getCurrentValue())
-            .isEqualTo(75.0)
+        assertFinalResource(75.0)
 
         assertThat(mutantRatioStorage.getCurrentValue())
             .isEqualTo(0.0)
+    }
+
+    private suspend fun setInitialResource(
+        value: Double
+    ) {
+        val resource = resourcesStorage.getByKey(key = ResourceKey.Blood)!!
+        resourcesStorage.updateByKey(
+            key = ResourceKey.Blood,
+            newValue = resource.copy(value = value)
+        )
+    }
+
+    private suspend fun assertFinalResource(value: Double) {
+        assertThat(resourcesStorage.getByKey(key = ResourceKey.Blood))
+            .isNotNull()
+            .prop(Resource::value)
+            .isEqualTo(value)
     }
 
 }

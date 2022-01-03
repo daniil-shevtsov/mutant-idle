@@ -2,9 +2,13 @@ package com.daniil.shevtsov.idle.application
 
 import app.cash.turbine.test
 import assertk.assertThat
+import assertk.assertions.index
 import assertk.assertions.isEqualTo
+import assertk.assertions.prop
 import com.daniil.shevtsov.idle.MainCoroutineExtension
-import com.daniil.shevtsov.idle.feature.resource.data.ResourceStorage
+import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
+import com.daniil.shevtsov.idle.feature.resource.domain.Resource
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.time.data.TimeStorage
 import com.daniil.shevtsov.idle.util.balanceConfig
 import kotlinx.coroutines.runBlocking
@@ -24,7 +28,11 @@ internal class IdleGameViewModelTest {
     )
 
     private val timeStorage = TimeStorage()
-    private val resourceStorage = ResourceStorage()
+    private val resourcesStorage = ResourcesStorage(
+        initialResources = listOf(
+            Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0)
+        )
+    )
 
     @Test
     fun `temporary e2e test`() = runBlockingTest {
@@ -66,11 +74,17 @@ internal class IdleGameViewModelTest {
 
     @Test
     fun `should update resource after game started`() = runBlockingTest {
-        resourceStorage.observeChange().test {
+        resourcesStorage.observeAll().test {
             viewModel.onSuspendStart(until = Duration.milliseconds(4L))
 
-            assertThat(awaitItem()).isEqualTo(0.0)
-            assertThat(awaitItem()).isEqualTo(8.0)
+            assertThat(awaitItem())
+                .index(0)
+                .prop(Resource::value)
+                .isEqualTo(0.0)
+            assertThat(awaitItem())
+                .index(0)
+                .prop(Resource::value)
+                .isEqualTo(8.0)
 
             viewModel.onCleared()
         }
@@ -79,6 +93,6 @@ internal class IdleGameViewModelTest {
     private fun createViewModel() = IdleGameViewModel(
         balanceConfig = balanceConfig,
         timeStorage = timeStorage,
-        resourceStorage = resourceStorage,
+        resourcesStorage = resourcesStorage,
     )
 }
