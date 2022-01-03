@@ -130,14 +130,6 @@ class MainViewModel @Inject constructor(
                     amount = resourceValue,
                 )
             }
-            //TODO: Get rid of this
-            if (selectedAction != null && selectedAction.resourceChanges.isEmpty()) {
-                ResourceBehavior.applyResourceChange(
-                    resourcesStorage = resourcesStorage,
-                    resourceKey = ResourceKey.Blood,
-                    amount = selectedAction.resourceChange,
-                )
-            }
         }
     }
 

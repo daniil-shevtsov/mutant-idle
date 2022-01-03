@@ -232,7 +232,11 @@ internal class MainViewModelTest {
         setInitialResourceValue(value = 1000.0)
         actionsStorage = ActionsStorage(
             initialActions = listOf(
-                action(id = 1L, resourceChange = 50.0)
+                action(
+                    id = 1L,
+                    resourceChange = 50.0,
+                    resourceChanges = mapOf(ResourceKey.Blood to 50.0)
+                )
             )
         )
 
