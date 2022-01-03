@@ -103,15 +103,6 @@ class IdleGameApplication : Application() {
             )
         ),
         Action(
-            id = 2L,
-            title = "Eat food",
-            subtitle = "It's not much",
-            actionType = ActionType.Human,
-            resourceChanges = mapOf(
-                ResourceKey.Blood to 5.0,
-            )
-        ),
-        Action(
             id = 3L,
             title = "Buy Groceries",
             subtitle = "It's a short walk",
@@ -186,6 +177,7 @@ class IdleGameApplication : Application() {
     private fun createInitialResources() = listOf(
         Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0),
         Resource(key = ResourceKey.Money, name = "Money", value = 0.0),
+        Resource(key = ResourceKey.Food, name = "Food", value = 0.0),
     )
 
 }

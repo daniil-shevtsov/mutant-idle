@@ -20,7 +20,8 @@ class ActionsStorage @Inject constructor(
 
     fun getActionById(id: Long): Action? {
         val actionMap = actions.value
-        return actionMap[id]
+        val action = actionMap[id]
+        return action
     }
 
     fun updateAction(id: Long, newValue: Action) {
