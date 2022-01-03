@@ -42,12 +42,14 @@ fun action(
     subtitle: String = "",
     actionType: ActionType = ActionType.Human,
     resourceChange: Double = 0.0,
+    resourceChanges: Map<ResourceKey, Double> = mapOf(),
 ) = Action(
     id = id,
     title = title,
     subtitle = subtitle,
     actionType = actionType,
     resourceChange = resourceChange,
+    resourceChanges = resourceChanges,
 )
 
 fun price(value: Double = 0.0) = Price(

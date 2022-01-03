@@ -188,10 +188,13 @@ internal class MainViewModelTest {
         }
     }
 
-    private fun setInitialResourceValue(value: Double) {
-        val resource = resourcesStorage.getByKey(key = ResourceKey.Blood)
+    private fun setInitialResourceValue(
+        value: Double,
+        key: ResourceKey = ResourceKey.Blood
+    ) {
+        val resource = resourcesStorage.getByKey(key = key)
         resourcesStorage.updateByKey(
-            key = ResourceKey.Blood,
+            key = key,
             newValue = resource!!.copy(value = value)
         )
     }
@@ -247,6 +250,37 @@ internal class MainViewModelTest {
         }
     }
 
+    @Test
+    fun `should update both resources when action with several changes clicked`() =
+        runBlockingTest {
+            setInitialResourceValue(key = ResourceKey.Blood, value = 1000.0)
+            setInitialResourceValue(key = ResourceKey.Money, value = 500.0)
+            actionsStorage = ActionsStorage(
+                initialActions = listOf(
+                    action(
+                        id = 1L,
+                        resourceChange = 50.0,
+                        resourceChanges = mapOf(
+                            ResourceKey.Blood to 50.0,
+                            ResourceKey.Money to -30.0,
+                        ),
+                    )
+                )
+            )
+
+            viewModel.state.test {
+                assertThat(expectMostRecentItem())
+                    .extractingResources()
+                    .containsExactly("Blood" to "1000", "Money" to "500")
+
+                viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
+
+                assertThat(expectMostRecentItem())
+                    .extractingResources()
+                    .containsExactly("Blood" to "1050", "Money" to "470")
+            }
+        }
+
     private fun createViewModel() = MainViewModel(
         balanceConfig = balanceConfig,
         upgradeStorage = upgradeStorage,
@@ -270,6 +304,7 @@ internal class MainViewModelTest {
     private fun Assert<MainViewState>.extractingResources() =
         isInstanceOf(MainViewState.Success::class)
             .prop(MainViewState.Success::resources)
+            .extracting(ResourceModel::name, ResourceModel::value)
 
     private fun Assert<MainViewState>.extractingBlood() =
         isInstanceOf(MainViewState.Success::class)

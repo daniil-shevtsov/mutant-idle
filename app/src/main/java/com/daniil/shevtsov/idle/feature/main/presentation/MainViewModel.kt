@@ -123,8 +123,15 @@ class MainViewModel @Inject constructor(
     private fun handleActionClicked(action: MainViewAction.ActionClicked) {
         viewModelScope.launch {
             val selectedAction = ActionBehavior.getById(actionsStorage, action.id)
-
-            if (selectedAction != null) {
+            selectedAction?.resourceChanges?.forEach { (resourceKey, resourceValue) ->
+                ResourceBehavior.applyResourceChange(
+                    resourcesStorage = resourcesStorage,
+                    resourceKey = resourceKey,
+                    amount = resourceValue,
+                )
+            }
+            //TODO: Get rid of this
+            if (selectedAction != null && selectedAction.resourceChanges.isEmpty()) {
                 ResourceBehavior.applyResourceChange(
                     resourcesStorage = resourcesStorage,
                     resourceKey = ResourceKey.Blood,
