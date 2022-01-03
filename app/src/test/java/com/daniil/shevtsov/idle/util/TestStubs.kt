@@ -41,7 +41,6 @@ fun action(
     title: String = "",
     subtitle: String = "",
     actionType: ActionType = ActionType.Human,
-    resourceChange: Double = 0.0,
     resourceChanges: Map<ResourceKey, Double> = mapOf(),
 ) = Action(
     id = id,

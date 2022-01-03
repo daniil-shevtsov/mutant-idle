@@ -234,7 +234,6 @@ internal class MainViewModelTest {
             initialActions = listOf(
                 action(
                     id = 1L,
-                    resourceChange = 50.0,
                     resourceChanges = mapOf(ResourceKey.Blood to 50.0)
                 )
             )
@@ -262,7 +261,6 @@ internal class MainViewModelTest {
                 initialActions = listOf(
                     action(
                         id = 1L,
-                        resourceChange = 50.0,
                         resourceChanges = mapOf(
                             ResourceKey.Blood to 50.0,
                             ResourceKey.Money to -30.0,
