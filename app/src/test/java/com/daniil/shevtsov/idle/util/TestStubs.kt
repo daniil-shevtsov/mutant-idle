@@ -48,7 +48,6 @@ fun action(
     title = title,
     subtitle = subtitle,
     actionType = actionType,
-    resourceChange = resourceChange,
     resourceChanges = resourceChanges,
 )
 
