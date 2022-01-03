@@ -7,5 +7,5 @@ data class Action(
     val title: String,
     val subtitle: String,
     val actionType: ActionType,
-    val resourceChanges: Map<ResourceKey, Double> = mapOf(),
+    val resourceChanges: Map<ResourceKey, Double>,
 )
