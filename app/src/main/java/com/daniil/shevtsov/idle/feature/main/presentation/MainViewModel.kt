@@ -69,9 +69,15 @@ class MainViewModel @Inject constructor(
                     )
                 },
                 ratio = HumanityRatioModel(
-                    name = getNameForRatio(ratios.first().value),
+                    name = getMutanityNameForRatio(ratios.first().value),
                     percent = ratios.first().value
                 ),
+                ratios = ratios.map {
+                    HumanityRatioModel(
+                        name = it.title,
+                        percent = ratios.first().value
+                    )
+                },
                 actionState = actions.toActionState(),
                 shop = upgrades
                     .map { upgrade ->
@@ -97,7 +103,7 @@ class MainViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    private fun getNameForRatio(mutantRatio: Double): String {
+    private fun getMutanityNameForRatio(mutantRatio: Double): String {
         val name = when {
             mutantRatio < 0.15 -> "Human"
             mutantRatio < 0.25 -> "Dormant"
