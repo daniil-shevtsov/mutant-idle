@@ -70,7 +70,7 @@ class MainViewModel @Inject constructor(
                     )
                 },
                 ratio = HumanityRatioModel(
-                    name = getMutanityNameForRatio(ratios.first().value),
+                    name = getNameForRatio(ratios.first()),
                     percent = ratios.first().value
                 ),
                 ratios = ratios.map {
