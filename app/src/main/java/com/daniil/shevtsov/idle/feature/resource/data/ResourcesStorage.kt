@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.feature.resource.data
 
+import com.daniil.shevtsov.idle.core.data.MultipleStorage
 import com.daniil.shevtsov.idle.core.di.AppScope
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
@@ -12,25 +13,22 @@ import javax.inject.Inject
 class ResourcesStorage @Inject constructor(
     initialResources: List<Resource>
 ) {
-    private val storedData: MutableStateFlow<Map<ResourceKey, Resource>> =
-        MutableStateFlow(initialResources.associateBy { it.key })
 
-    fun observeAll(): Flow<List<Resource>> {
-        return storedData.map { it.values.toList() }
-    }
+    private val multipleStorage = MultipleStorage(
+        initialResources = initialResources,
+        keyExtractor = Resource::key,
+    )
 
-    fun getByKey(key: ResourceKey): Resource? {
-        val map = storedData.value
-        return map[key]
-    }
+    fun observeAll(): Flow<List<Resource>> = multipleStorage.observeAll()
 
-    fun updateByKey(key: ResourceKey, newValue: Resource) {
-        val map = storedData.value
-        val modifiedMap = map
-            .toMutableMap()
-            .apply { put(key, newValue) }
-            .toMap()
-        storedData.value = modifiedMap
-    }
+    fun getByKey(key: ResourceKey): Resource? = multipleStorage.getByKey(key = key)
+
+    fun updateByKey(
+        key: ResourceKey,
+        newValue: Resource
+    ) = multipleStorage.updateByKey(
+        key = key,
+        newValue = newValue,
+    )
 
 }
