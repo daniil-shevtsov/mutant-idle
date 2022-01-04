@@ -53,13 +53,12 @@ class MainViewModel @Inject constructor(
             ResourceBehavior.observeAllResources(
                 resourcesStorage = resourcesStorage,
             ),
-            mutantRatioStorage.observeChange()
-                .combine(ratiosStorage.observeAll()) { a, b -> a to b },
+            ratiosStorage.observeAll(),
             UpgradeBehavior.observeAll(upgradeStorage),
             ActionBehavior.observeAll(actionsStorage),
         ) { blood: Resource,
             resources: List<Resource>,
-            mutantRatio: Pair<Double, List<Ratio>>,
+            ratios: List<Ratio>,
             upgrades: List<Upgrade>,
             actions: List<Action> ->
             val newViewState = MainViewState.Success(
@@ -70,8 +69,8 @@ class MainViewModel @Inject constructor(
                     )
                 },
                 ratio = HumanityRatioModel(
-                    name = getNameForRatio(mutantRatio.second.first().value),
-                    percent = mutantRatio.second.first().value
+                    name = getNameForRatio(ratios.first().value),
+                    percent = ratios.first().value
                 ),
                 actionState = actions.toActionState(),
                 shop = upgrades
