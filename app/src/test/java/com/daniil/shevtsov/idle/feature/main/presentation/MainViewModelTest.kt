@@ -303,6 +303,11 @@ internal class MainViewModelTest {
             .prop(ShopState::upgradeLists)
             .index(0)
 
+    private fun Assert<MainViewState>.extractingRatios() =
+        isInstanceOf(MainViewState.Success::class)
+            .prop(MainViewState.Success::ratios)
+            .extracting(HumanityRatioModel::name, HumanityRatioModel::percent)
+
     private fun Assert<MainViewState>.hasRatioName(expectedName: String) =
         isInstanceOf(MainViewState.Success::class)
             .prop(MainViewState.Success::ratio)
