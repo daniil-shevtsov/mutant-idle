@@ -6,6 +6,8 @@ import assertk.assertions.isNotNull
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
+import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
+import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
@@ -27,9 +29,11 @@ internal class CompositePurchaseBehaviorTest {
             Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0)
         )
     )
+    private val ratiosStorage = RatiosStorage(
+        initialRatios = listOf(Ratio(key = RatioKey.Mutanity, title = "", value = 0.0))
+    )
     private var upgradeStorage = UpgradeStorage(initialUpgrades = emptyList())
     private val mutantRatioStorage = MutantRatioStorage()
-    private val ratiosStorage = RatiosStorage(initialRatios = emptyList())
     private val balanceConfig = balanceConfig(resourceSpentForFullMutant = 100.0)
 
     @Test
