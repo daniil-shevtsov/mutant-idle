@@ -15,7 +15,7 @@ object CompositePurchaseBehavior {
         upgradeStorage: UpgradeStorage,
         resourcesStorage: ResourcesStorage,
         mutantRatioStorage: MutantRatioStorage,
-        ratiosStorage: RatiosStorage = RatiosStorage(emptyList()),
+        ratiosStorage: RatiosStorage,
         upgradeId: Long,
     ) {
         val upgrade = upgradeStorage.getUpgradeById(id = upgradeId)!!
