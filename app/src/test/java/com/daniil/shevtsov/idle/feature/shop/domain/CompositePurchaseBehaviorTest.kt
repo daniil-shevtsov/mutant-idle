@@ -47,6 +47,7 @@ internal class CompositePurchaseBehaviorTest {
             upgradeStorage = upgradeStorage,
             resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
+            ratiosStorage = ratiosStorage,
             upgradeId = 1L,
         )
 
@@ -71,6 +72,7 @@ internal class CompositePurchaseBehaviorTest {
             upgradeStorage = upgradeStorage,
             resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
+            ratiosStorage = ratiosStorage,
             upgradeId = 1L,
         )
 
@@ -92,6 +94,7 @@ internal class CompositePurchaseBehaviorTest {
             upgradeStorage = upgradeStorage,
             resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
+            ratiosStorage = ratiosStorage,
             upgradeId = 1L,
         )
 
@@ -115,6 +118,7 @@ internal class CompositePurchaseBehaviorTest {
             upgradeStorage = upgradeStorage,
             resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
+            ratiosStorage = ratiosStorage,
             upgradeId = 1L,
         )
 
@@ -136,6 +140,7 @@ internal class CompositePurchaseBehaviorTest {
             upgradeStorage = upgradeStorage,
             resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
+            ratiosStorage = ratiosStorage,
             upgradeId = 1L,
         )
 
