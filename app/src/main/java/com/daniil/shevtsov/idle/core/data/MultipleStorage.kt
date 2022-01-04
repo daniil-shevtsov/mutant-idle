@@ -22,12 +22,7 @@ class MultipleStorage<Key, Value> @Inject constructor(
     }
 
     fun updateByKey(key: Key, newValue: Value) {
-        val map = storedData.value
-        val modifiedMap = map
-            .toMutableMap()
-            .apply { put(key, newValue) }
-            .toMap()
-        storedData.value = modifiedMap
+        updateByKey(key = key, transformation = { newValue })
     }
 
     fun updateByKey(key: Key, transformation: (oldValue: Value?) -> Value) {
