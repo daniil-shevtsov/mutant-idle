@@ -185,6 +185,7 @@ class IdleGameApplication : Application() {
 
     private fun createInitialRatios() = listOf(
         Ratio(key = RatioKey.Mutanity, title = "", value = 0.0),
+        Ratio(key = RatioKey.Suspicion, title = "", value = 0.0),
     )
 
 }
