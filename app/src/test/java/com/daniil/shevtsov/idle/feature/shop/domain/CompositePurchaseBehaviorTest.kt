@@ -130,6 +130,7 @@ internal class CompositePurchaseBehaviorTest {
 
         assertThat(mutantRatioStorage.getCurrentValue())
             .isEqualTo(0.35)
+        assertMutanity(expected = 0.35)
     }
 
     @Test
@@ -159,6 +160,7 @@ internal class CompositePurchaseBehaviorTest {
 
         assertThat(mutantRatioStorage.getCurrentValue())
             .isEqualTo(0.0)
+        assertMutanity(expected = 0.0)
     }
 
     private suspend fun setInitialResource(
