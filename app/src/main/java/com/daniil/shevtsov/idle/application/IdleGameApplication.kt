@@ -7,6 +7,8 @@ import com.daniil.shevtsov.idle.core.di.DaggerAppComponent
 import com.daniil.shevtsov.idle.core.di.koin.appModule
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.ActionType
+import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
+import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Price
@@ -27,6 +29,7 @@ class IdleGameApplication : Application() {
                 initialUpgrades = createInitialUpgrades(),
                 initialActions = createInitialActions(),
                 initialResources = createInitialResources(),
+                initialRatios = createInitialRatios(),
             )
     }
 
@@ -178,6 +181,10 @@ class IdleGameApplication : Application() {
         Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0),
         Resource(key = ResourceKey.Money, name = "Money", value = 0.0),
         Resource(key = ResourceKey.Food, name = "Food", value = 0.0),
+    )
+
+    private fun createInitialRatios() = listOf(
+        Ratio(key = RatioKey.Mutanity, title = "", value = 0.0),
     )
 
 }
