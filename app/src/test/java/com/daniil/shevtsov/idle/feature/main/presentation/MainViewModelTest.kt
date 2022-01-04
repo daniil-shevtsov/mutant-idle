@@ -98,7 +98,7 @@ internal class MainViewModelTest {
                     extractingResources()
                         .containsExactly("Blood" to "0", "Money" to "0")
                     extractingRatios()
-                        .containsExactly("Human" to 0.0, "Suspicion" to 0.0)
+                        .containsExactly("Human" to 0.0, "Unknown" to 0.0)
                     prop(MainViewState.Success::shop)
                         .prop(ShopState::upgradeLists)
                         .index(0)
@@ -233,27 +233,30 @@ internal class MainViewModelTest {
 
     @Test
     fun `should update suspicion ratio names correctly`() = runBlockingTest {
-//        actionsStorage = ActionsStorage(
-//            initialActions = listOf(
-//                action(id = 0L, )
-//            )
-//        )
-//
-//        viewModel.state.test {
-//            assertThat(awaitItem()).hasRatioName("Human")
-//
-//            viewModel.handleAction(MainViewAction.UpgradeSelected(id = 0L))
-//            assertThat(expectMostRecentItem()).hasRatioName("Dormant")
-//
-//            viewModel.handleAction(MainViewAction.UpgradeSelected(id = 1L))
-//            assertThat(expectMostRecentItem()).hasRatioName("Hidden")
-//
-//            viewModel.handleAction(MainViewAction.UpgradeSelected(id = 2L))
-//            assertThat(expectMostRecentItem()).hasRatioName("Covert")
-//
-//            viewModel.handleAction(MainViewAction.UpgradeSelected(id = 3L))
-//            assertThat(expectMostRecentItem()).hasRatioName("Honest")
-//        }
+        actionsStorage = ActionsStorage(
+            initialActions = listOf(
+                action(id = 0L, ratioChanges = mapOf(RatioKey.Suspicion to 0.15f)),
+                action(id = 1L, ratioChanges = mapOf(RatioKey.Suspicion to 0.10f)),
+                action(id = 2L, ratioChanges = mapOf(RatioKey.Suspicion to 0.25f)),
+                action(id = 3L, ratioChanges = mapOf(RatioKey.Suspicion to 0.30f)),
+            )
+        )
+
+        viewModel.state.test {
+            assertThat(awaitItem()).hasSuspicionRatioName("Unknown")
+
+            viewModel.handleAction(MainViewAction.ActionClicked(id = 0L))
+            assertThat(expectMostRecentItem()).hasSuspicionRatioName("Rumors")
+
+            viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
+            assertThat(expectMostRecentItem()).hasSuspicionRatioName("News")
+
+            viewModel.handleAction(MainViewAction.ActionClicked(id = 2L))
+            assertThat(expectMostRecentItem()).hasSuspicionRatioName("Investigation")
+
+            viewModel.handleAction(MainViewAction.ActionClicked(id = 3L))
+            assertThat(expectMostRecentItem()).hasSuspicionRatioName("Manhunt")
+        }
     }
 
     @Test
@@ -345,6 +348,13 @@ internal class MainViewModelTest {
 
     private fun Assert<MainViewState>.hasRatioName(expectedName: String) = extractingMutanityName()
         .isEqualTo(expectedName)
+
+    private fun Assert<MainViewState>.hasSuspicionRatioName(expectedName: String) =
+        isInstanceOf(MainViewState.Success::class)
+            .prop(MainViewState.Success::ratios)
+            .index(1)
+            .prop(HumanityRatioModel::name)
+            .isEqualTo(expectedName)
 
     private fun Assert<MainViewState>.extractingResources() =
         isInstanceOf(MainViewState.Success::class)

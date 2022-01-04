@@ -106,7 +106,17 @@ class MainViewModel @Inject constructor(
 
     private fun getNameForRatio(ratio: Ratio) = when (ratio.key) {
         RatioKey.Mutanity -> getMutanityNameForRatio(ratio.value)
-        RatioKey.Suspicion -> "Suspicion"
+        RatioKey.Suspicion -> getSuspicionNameForRatio(ratio.value)
+    }
+
+    private fun getSuspicionNameForRatio(
+        value: Double
+    ): String = when {
+        value < 0.15f -> "Unknown"
+        value < 0.25f -> "Rumors"
+        value < 0.50f -> "News"
+        value < 0.80f -> "Investigation"
+        else -> "Manhunt"
     }
 
     private fun getMutanityNameForRatio(mutantRatio: Double): String {
@@ -149,6 +159,10 @@ class MainViewModel @Inject constructor(
                     resourceKey = resourceKey,
                     amount = resourceValue,
                 )
+            }
+            selectedAction?.ratioChanges?.forEach { (key, value) ->
+                val oldRatio = ratiosStorage.getByKey(key = key)!!.value
+                ratiosStorage.updateByKey(key = key, newRatio = oldRatio + value)
             }
         }
     }
