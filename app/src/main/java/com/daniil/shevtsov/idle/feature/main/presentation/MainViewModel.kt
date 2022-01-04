@@ -13,6 +13,7 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
+import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
@@ -52,10 +53,15 @@ class MainViewModel @Inject constructor(
             ResourceBehavior.observeAllResources(
                 resourcesStorage = resourcesStorage,
             ),
-            mutantRatioStorage.observeChange(),
+            mutantRatioStorage.observeChange()
+                .combine(ratiosStorage.observeAll()) { a, b -> a to b },
             UpgradeBehavior.observeAll(upgradeStorage),
             ActionBehavior.observeAll(actionsStorage),
-        ) { blood: Resource, resources: List<Resource>, mutantRatio: Double, upgrades: List<Upgrade>, actions: List<Action> ->
+        ) { blood: Resource,
+            resources: List<Resource>,
+            mutantRatio: Pair<Double, List<Ratio>>,
+            upgrades: List<Upgrade>,
+            actions: List<Action> ->
             val newViewState = MainViewState.Success(
                 resources = resources.map { resource ->
                     ResourceModelMapper.map(
@@ -64,8 +70,8 @@ class MainViewModel @Inject constructor(
                     )
                 },
                 ratio = HumanityRatioModel(
-                    name = getNameForRatio(mutantRatio),
-                    percent = mutantRatio
+                    name = getNameForRatio(mutantRatio.first),
+                    percent = mutantRatio.first
                 ),
                 actionState = actions.toActionState(),
                 shop = upgrades
