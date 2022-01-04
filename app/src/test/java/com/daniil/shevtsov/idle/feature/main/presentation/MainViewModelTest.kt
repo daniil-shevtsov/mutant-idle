@@ -308,6 +308,18 @@ internal class MainViewModelTest {
             .prop(MainViewState.Success::ratios)
             .extracting(HumanityRatioModel::name, HumanityRatioModel::percent)
 
+    private fun Assert<MainViewState>.extractingMutanityValue() =
+        isInstanceOf(MainViewState.Success::class)
+            .prop(MainViewState.Success::ratios)
+            .index(0)
+            .prop(HumanityRatioModel::percent)
+
+    private fun Assert<MainViewState>.extractingMutanityName() =
+        isInstanceOf(MainViewState.Success::class)
+            .prop(MainViewState.Success::ratios)
+            .index(0)
+            .prop(HumanityRatioModel::name)
+
     private fun Assert<MainViewState>.hasRatioName(expectedName: String) =
         isInstanceOf(MainViewState.Success::class)
             .prop(MainViewState.Success::ratio)
