@@ -320,11 +320,8 @@ internal class MainViewModelTest {
             .index(0)
             .prop(HumanityRatioModel::name)
 
-    private fun Assert<MainViewState>.hasRatioName(expectedName: String) =
-        isInstanceOf(MainViewState.Success::class)
-            .prop(MainViewState.Success::ratio)
-            .prop(HumanityRatioModel::name)
-            .isEqualTo(expectedName)
+    private fun Assert<MainViewState>.hasRatioName(expectedName: String) = extractingMutanityName()
+        .isEqualTo(expectedName)
 
     private fun Assert<MainViewState>.extractingResources() =
         isInstanceOf(MainViewState.Success::class)
