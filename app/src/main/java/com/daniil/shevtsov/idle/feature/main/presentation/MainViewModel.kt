@@ -117,6 +117,7 @@ class MainViewModel @Inject constructor(
                 upgradeStorage = upgradeStorage,
                 resourcesStorage = resourcesStorage,
                 mutantRatioStorage = mutantRatioStorage,
+                ratiosStorage = ratiosStorage,
                 upgradeId = action.id,
             )
         }
