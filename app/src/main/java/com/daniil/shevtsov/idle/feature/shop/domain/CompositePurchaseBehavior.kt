@@ -40,7 +40,12 @@ object CompositePurchaseBehavior {
                 resourceKey = ResourceKey.Blood,
                 amount = upgrade.price.value,
             )
-            mutantRatioStorage.setNewValue(mutantRatioStorage.getCurrentValue() + upgrade.price.value / balanceConfig.resourceSpentForFullMutant)
+
+            val oldBlood = mutantRatioStorage.getCurrentValue()
+            val bloodGain = upgrade.price.value / balanceConfig.resourceSpentForFullMutant
+            val newBlood = oldBlood + bloodGain
+
+            mutantRatioStorage.setNewValue(newBlood)
         }
     }
 }
