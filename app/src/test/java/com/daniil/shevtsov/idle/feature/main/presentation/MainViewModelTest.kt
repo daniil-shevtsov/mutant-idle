@@ -53,7 +53,10 @@ internal class MainViewModelTest {
     )
     private val mutantRatioStorage = MutantRatioStorage()
     private val ratiosStorage = RatiosStorage(
-        initialRatios = listOf(Ratio(key = RatioKey.Mutanity, title = "", value = 0.0))
+        initialRatios = listOf(
+            Ratio(key = RatioKey.Mutanity, title = "", value = 0.0),
+            Ratio(key = RatioKey.Suspicion, title = "", value = 0.0),
+        )
     )
 
     private val resourceSpentForFullMutant = 100.0
@@ -95,7 +98,7 @@ internal class MainViewModelTest {
                     extractingResources()
                         .containsExactly("Blood" to "0", "Money" to "0")
                     extractingRatios()
-                        .containsExactly("Human" to 0.0)
+                        .containsExactly("Human" to 0.0, "Suspicion" to 0.0)
                     prop(MainViewState.Success::shop)
                         .prop(ShopState::upgradeLists)
                         .index(0)

@@ -106,7 +106,7 @@ class MainViewModel @Inject constructor(
 
     private fun getNameForRatio(ratio: Ratio) = when (ratio.key) {
         RatioKey.Mutanity -> getMutanityNameForRatio(ratio.value)
-        RatioKey.Suspicion -> ""
+        RatioKey.Suspicion -> "Suspicion"
     }
 
     private fun getMutanityNameForRatio(mutantRatio: Double): String {
