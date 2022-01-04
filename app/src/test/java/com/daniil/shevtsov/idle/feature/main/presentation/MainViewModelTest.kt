@@ -186,9 +186,7 @@ internal class MainViewModelTest {
         viewModel.state.test {
             val state = expectMostRecentItem()
             assertThat(state)
-                .isInstanceOf(MainViewState.Success::class)
-                .prop(MainViewState.Success::ratio)
-                .prop(HumanityRatioModel::percent)
+                .extractingMutanityValue()
                 .isEqualTo(0.10)
         }
     }
