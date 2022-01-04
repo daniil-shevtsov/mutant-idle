@@ -104,6 +104,10 @@ internal class CompositePurchaseBehaviorTest {
 
         assertThat(mutantRatioStorage.getCurrentValue())
             .isEqualTo(0.10)
+        assertThat(ratiosStorage.getByKey(key = RatioKey.Mutanity))
+            .isNotNull()
+            .prop(Ratio::value)
+            .isEqualTo(0.10)
     }
 
     @Test
@@ -175,6 +179,10 @@ internal class CompositePurchaseBehaviorTest {
             .isNotNull()
             .prop(Resource::value)
             .isEqualTo(value)
+    }
+
+    private fun assertMutanity(expected: Double) {
+
     }
 
 }
