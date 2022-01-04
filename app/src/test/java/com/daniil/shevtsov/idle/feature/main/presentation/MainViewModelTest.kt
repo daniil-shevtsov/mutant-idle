@@ -290,6 +290,7 @@ internal class MainViewModelTest {
         actionsStorage = actionsStorage,
         resourcesStorage = resourcesStorage,
         mutantRatioStorage = mutantRatioStorage,
+        ratiosStorage = ratiosStorage,
     )
 
     private fun Assert<MainViewState>.extractingUpgrades() =

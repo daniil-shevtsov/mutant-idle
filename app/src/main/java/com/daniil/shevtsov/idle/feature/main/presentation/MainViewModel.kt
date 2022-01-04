@@ -12,6 +12,7 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
+import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
@@ -36,6 +37,7 @@ class MainViewModel @Inject constructor(
     private val actionsStorage: ActionsStorage,
     private val resourcesStorage: ResourcesStorage,
     private val mutantRatioStorage: MutantRatioStorage,
+    private val ratiosStorage: RatiosStorage,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(initViewState())
