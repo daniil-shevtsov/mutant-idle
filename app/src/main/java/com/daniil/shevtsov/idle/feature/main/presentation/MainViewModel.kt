@@ -14,6 +14,7 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
+import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
@@ -101,6 +102,11 @@ class MainViewModel @Inject constructor(
                 _state.value = viewState
             }
             .launchIn(viewModelScope)
+    }
+
+    private fun getNameForRatio(ratio: Ratio) = when (ratio.key) {
+        RatioKey.Mutanity -> getMutanityNameForRatio(ratio.value)
+        RatioKey.Suspicion -> ""
     }
 
     private fun getMutanityNameForRatio(mutantRatio: Double): String {
