@@ -116,6 +116,7 @@ internal class CompositePurchaseBehaviorTest {
 
         setInitialResource(75.0)
         mutantRatioStorage.setNewValue(0.25)
+        ratiosStorage.updateByKey(key = RatioKey.Mutanity, newRatio = 0.25)
 
         behavior.buyUpgrade(
             balanceConfig = balanceConfig,

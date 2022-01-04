@@ -29,4 +29,12 @@ class RatiosStorage @Inject constructor(
         newValue = newValue,
     )
 
+    fun updateByKey(
+        key: RatioKey,
+        newRatio: Double,
+    ) = multipleStorage.updateByKey(
+        key = key,
+        transformation = { oldRatio -> oldRatio!!.copy(value = newRatio) }
+    )
+
 }
