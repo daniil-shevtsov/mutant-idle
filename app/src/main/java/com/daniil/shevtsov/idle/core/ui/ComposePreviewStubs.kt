@@ -25,6 +25,17 @@ internal fun resourcePreviewStub() = ResourceModel(
     value = "10 000",
 )
 
+internal fun ratiosStubs() = listOf(
+    HumanityRatioModel(
+        name = "Dormant",
+        percent = 0.5,
+    ),
+    HumanityRatioModel(
+        name = "Suspicion",
+        percent = 0.25,
+    ),
+)
+
 internal fun humanityRatioStub() = HumanityRatioModel(
     name = "Dormant",
     percent = 0.5,

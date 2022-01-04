@@ -4,21 +4,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.daniil.shevtsov.idle.core.ui.humanityRatioStub
+import com.daniil.shevtsov.idle.core.ui.ratiosStubs
 import com.daniil.shevtsov.idle.core.ui.widgets.TitleWithProgress
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 
 @Preview
 @Composable
 fun MainPreview() {
-    MutantRatioPane(model = humanityRatioStub())
+    MutantRatioPane(ratios = ratiosStubs())
 }
 
 
 @Composable
 fun MutantRatioPane(
-    model: HumanityRatioModel,
+    ratios: List<HumanityRatioModel>,
     modifier: Modifier = Modifier,
 ) {
+    val model = ratios.first()
     TitleWithProgress(
         title = model.name,
         progress = model.percent.toFloat(),

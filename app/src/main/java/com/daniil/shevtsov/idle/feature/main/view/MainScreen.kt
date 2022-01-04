@@ -87,7 +87,7 @@ fun SuccessContent(
                 .fillMaxWidth()
         )
         ResourcePane(state.resources)
-        MutantRatioPane(state.ratio)
+        MutantRatioPane(state.ratios)
         ActionSection(
             state = state.actionState,
             onActionClicked = onActionClicked,
