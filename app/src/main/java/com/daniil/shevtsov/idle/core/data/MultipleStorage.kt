@@ -6,11 +6,11 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class MultipleStorage<Key, Value> @Inject constructor(
-    initialResources: List<Value>,
+    initialValues: List<Value>,
     keyExtractor: (value: Value) -> Key,
 ) {
     private val storedData: MutableStateFlow<Map<Key, Value>> =
-        MutableStateFlow(initialResources.associateBy { keyExtractor(it) })
+        MutableStateFlow(initialValues.associateBy { keyExtractor(it) })
 
     fun observeAll(): Flow<List<Value>> {
         return storedData.map { it.values.toList() }

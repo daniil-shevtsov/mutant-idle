@@ -50,7 +50,7 @@ internal class MainViewModelTest {
         )
     )
     private val mutantRatioStorage = MutantRatioStorage()
-    private val ratiosStorage = RatiosStorage(initialResources = emptyList())
+    private val ratiosStorage = RatiosStorage(initialRatios = emptyList())
 
     private val resourceSpentForFullMutant = 100.0
     private val balanceConfig = balanceConfig(

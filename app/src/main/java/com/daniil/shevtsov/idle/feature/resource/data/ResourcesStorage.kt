@@ -5,8 +5,6 @@ import com.daniil.shevtsov.idle.core.di.AppScope
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @AppScope
@@ -15,7 +13,7 @@ class ResourcesStorage @Inject constructor(
 ) {
 
     private val multipleStorage = MultipleStorage(
-        initialResources = initialResources,
+        initialValues = initialResources,
         keyExtractor = Resource::key,
     )
 

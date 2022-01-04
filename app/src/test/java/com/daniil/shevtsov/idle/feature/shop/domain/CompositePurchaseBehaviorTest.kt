@@ -29,7 +29,7 @@ internal class CompositePurchaseBehaviorTest {
     )
     private var upgradeStorage = UpgradeStorage(initialUpgrades = emptyList())
     private val mutantRatioStorage = MutantRatioStorage()
-    private val ratiosStorage = RatiosStorage(initialResources = emptyList())
+    private val ratiosStorage = RatiosStorage(initialRatios = emptyList())
     private val balanceConfig = balanceConfig(resourceSpentForFullMutant = 100.0)
 
     @Test
