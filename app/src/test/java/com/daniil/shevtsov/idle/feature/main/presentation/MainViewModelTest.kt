@@ -203,7 +203,7 @@ internal class MainViewModelTest {
     }
 
     @Test
-    fun `should update ratio names correctly`() = runBlockingTest {
+    fun `should update mutant ratio names correctly`() = runBlockingTest {
         upgradeStorage = UpgradeStorage(
             initialUpgrades = listOf(
                 upgrade(id = 0L, price = 15.0),
@@ -229,6 +229,31 @@ internal class MainViewModelTest {
             viewModel.handleAction(MainViewAction.UpgradeSelected(id = 3L))
             assertThat(expectMostRecentItem()).hasRatioName("Honest")
         }
+    }
+
+    @Test
+    fun `should update suspicion ratio names correctly`() = runBlockingTest {
+//        actionsStorage = ActionsStorage(
+//            initialActions = listOf(
+//                action(id = 0L, )
+//            )
+//        )
+//
+//        viewModel.state.test {
+//            assertThat(awaitItem()).hasRatioName("Human")
+//
+//            viewModel.handleAction(MainViewAction.UpgradeSelected(id = 0L))
+//            assertThat(expectMostRecentItem()).hasRatioName("Dormant")
+//
+//            viewModel.handleAction(MainViewAction.UpgradeSelected(id = 1L))
+//            assertThat(expectMostRecentItem()).hasRatioName("Hidden")
+//
+//            viewModel.handleAction(MainViewAction.UpgradeSelected(id = 2L))
+//            assertThat(expectMostRecentItem()).hasRatioName("Covert")
+//
+//            viewModel.handleAction(MainViewAction.UpgradeSelected(id = 3L))
+//            assertThat(expectMostRecentItem()).hasRatioName("Honest")
+//        }
     }
 
     @Test

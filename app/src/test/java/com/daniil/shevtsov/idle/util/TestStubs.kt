@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.util
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.ActionType
+import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.time.domain.Time
@@ -42,12 +43,14 @@ fun action(
     subtitle: String = "",
     actionType: ActionType = ActionType.Human,
     resourceChanges: Map<ResourceKey, Double> = mapOf(),
+    ratioChanges: Map<RatioKey, Float> = mapOf(),
 ) = Action(
     id = id,
     title = title,
     subtitle = subtitle,
     actionType = actionType,
     resourceChanges = resourceChanges,
+    ratioChanges = ratioChanges,
 )
 
 fun price(value: Double = 0.0) = Price(
