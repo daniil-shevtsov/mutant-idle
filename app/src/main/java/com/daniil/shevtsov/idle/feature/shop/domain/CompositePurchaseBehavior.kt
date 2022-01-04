@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.feature.shop.domain
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
+import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
@@ -45,6 +46,7 @@ object CompositePurchaseBehavior {
             val bloodGain = upgrade.price.value / balanceConfig.resourceSpentForFullMutant
             val newBlood = oldBlood + bloodGain
 
+            val oldKekRatio = ratiosStorage.getByKey(key = RatioKey.Mutanity)!!
             mutantRatioStorage.setNewValue(newBlood)
         }
     }
