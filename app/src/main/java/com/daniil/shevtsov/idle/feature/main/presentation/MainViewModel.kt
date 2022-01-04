@@ -70,8 +70,8 @@ class MainViewModel @Inject constructor(
                     )
                 },
                 ratio = HumanityRatioModel(
-                    name = getNameForRatio(mutantRatio.first),
-                    percent = mutantRatio.first
+                    name = getNameForRatio(mutantRatio.second.first().value),
+                    percent = mutantRatio.second.first().value
                 ),
                 actionState = actions.toActionState(),
                 shop = upgrades
