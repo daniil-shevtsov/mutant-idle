@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -86,8 +88,14 @@ fun SuccessContent(
                 .statusBarsHeight()
                 .fillMaxWidth()
         )
-        ResourcePane(state.resources)
-        MutantRatioPane(state.ratios)
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+        ) {
+            ResourcePane(state.resources)
+            MutantRatioPane(state.ratios)
+        }
+
         ActionSection(
             state = state.actionState,
             onActionClicked = onActionClicked,

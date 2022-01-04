@@ -154,6 +154,9 @@ class IdleGameApplication : Application() {
             actionType = ActionType.Mutant,
             resourceChanges = mapOf(
                 ResourceKey.Blood to -10.0,
+            ),
+            ratioChanges = mapOf(
+                RatioKey.Suspicion to 0.1f,
             )
         ),
         Action(
@@ -163,6 +166,9 @@ class IdleGameApplication : Application() {
             actionType = ActionType.Mutant,
             resourceChanges = mapOf(
                 ResourceKey.Blood to 25.0,
+            ),
+            ratioChanges = mapOf(
+                RatioKey.Suspicion to 0.05f,
             )
         ),
         Action(
