@@ -5,6 +5,7 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
+import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
@@ -28,6 +29,7 @@ internal class CompositePurchaseBehaviorTest {
     )
     private var upgradeStorage = UpgradeStorage(initialUpgrades = emptyList())
     private val mutantRatioStorage = MutantRatioStorage()
+    private val ratiosStorage = RatiosStorage(initialResources = emptyList())
     private val balanceConfig = balanceConfig(resourceSpentForFullMutant = 100.0)
 
     @Test
