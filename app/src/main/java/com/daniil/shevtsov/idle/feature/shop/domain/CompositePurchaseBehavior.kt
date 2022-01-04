@@ -26,7 +26,7 @@ object CompositePurchaseBehavior {
             resourceKey = ResourceKey.Blood,
         )
 
-        if(upgrade.price.value <= currentResource.value) {
+        if (upgrade.price.value <= currentResource.value) {
             val boughtUpgrade = PurchaseBehavior.buyUpgrade(
                 upgrade = upgrade,
                 currentResource = currentResource,
@@ -34,7 +34,7 @@ object CompositePurchaseBehavior {
             UpgradeBehavior.updateById(
                 storage = upgradeStorage,
                 id = upgradeId,
-                newUpgrade =  boughtUpgrade,
+                newUpgrade = boughtUpgrade,
             )
             ResourceBehavior.decreaseResource(
                 resourcesStorage = resourcesStorage,
@@ -48,6 +48,10 @@ object CompositePurchaseBehavior {
 
             val oldKekRatio = ratiosStorage.getByKey(key = RatioKey.Mutanity)!!
             mutantRatioStorage.setNewValue(newBlood)
+            ratiosStorage.updateByKey(
+                key = RatioKey.Mutanity,
+                newValue = oldKekRatio.copy(value = newBlood)
+            )
         }
     }
 }
