@@ -94,11 +94,8 @@ internal class MainViewModelTest {
                 .all {
                     extractingResources()
                         .containsExactly("Blood" to "0", "Money" to "0")
-                    prop(MainViewState.Success::ratio)
-                        .all {
-                            prop(HumanityRatioModel::name).isEqualTo("Human")
-                            prop(HumanityRatioModel::percent).isEqualTo(0.0)
-                        }
+                    extractingRatios()
+                        .containsExactly("Human" to 0.0)
                     prop(MainViewState.Success::shop)
                         .prop(ShopState::upgradeLists)
                         .index(0)
