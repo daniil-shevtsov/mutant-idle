@@ -18,16 +18,18 @@ import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 @Preview
 @Composable
 fun ResourcePreview() {
-    ResourcePanel(
-        resource = resourcePreviewStub()
-    )
-    ResourcePane(
-        resources = listOf(
-            resourcePreviewStub(),
-            resourcePreviewStub(),
-            resourcePreviewStub(),
+    Column {
+        ResourcePanel(
+            resource = resourcePreviewStub()
         )
-    )
+        ResourcePane(
+            resources = listOf(
+                resourcePreviewStub(),
+                resourcePreviewStub(),
+                resourcePreviewStub(),
+            )
+        )
+    }
 }
 
 @Composable
@@ -62,7 +64,8 @@ fun ResourcePanel(
         Text(
             text = resource.value,
             fontSize = 16.sp,
-            modifier = Modifier.weight(0.65f)
+            modifier = Modifier
+                .weight(0.65f)
                 .fillMaxWidth()
                 .cavitary(
                     lightColor = Pallete.LightRed,
