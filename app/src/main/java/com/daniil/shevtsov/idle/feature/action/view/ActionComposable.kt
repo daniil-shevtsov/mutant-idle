@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.actionPreviewStub
 import com.daniil.shevtsov.idle.core.ui.actionStatePreviewStub
-import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
@@ -54,14 +53,7 @@ fun ActionSection(
     val actionPanes = listOf(state.humanActionPane, state.mutantActionPane)
     HorizontalPager(
         count = actionPanes.size,
-        modifier = modifier
-            .background(Pallete.Red)
-            .padding(4.dp)
-            .cavitary(
-                lightColor = Pallete.LightRed,
-                darkColor = Pallete.DarkRed
-            )
-            .background(Pallete.DarkGray),
+        modifier = modifier,
     ) { paneIndex ->
         val actionPane = actionPanes[paneIndex]
         ActionPane(

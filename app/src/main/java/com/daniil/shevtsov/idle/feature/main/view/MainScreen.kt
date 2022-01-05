@@ -1,10 +1,7 @@
 package com.daniil.shevtsov.idle.feature.main.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
@@ -13,8 +10,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.viewStatePreviewStub
+import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewModel
@@ -96,15 +95,34 @@ fun SuccessContent(
             MutantRatioPane(state.ratios)
         }
 
-        ActionSection(
-            state = state.actionState,
-            onActionClicked = onActionClicked,
-            modifier = Modifier.weight(0.5f),
-        )
-        Shop(
-            shop = state.shop,
-            onUpgradeSelected = onUpgradeSelected,
-            modifier = Modifier.weight(0.5f),
-        )
+        Column(
+            modifier = Modifier
+                .background(Pallete.Red)
+                .padding(4.dp)
+        ) {
+            Cavity(
+                mainColor = Pallete.Red,
+                modifier = Modifier.weight(0.5f),
+            ) {
+                ActionSection(
+                    state = state.actionState,
+                    onActionClicked = onActionClicked,
+                )
+            }
+            Spacer(
+                Modifier
+                    .height(8.dp)
+                    .fillMaxWidth()
+            )
+            Cavity(
+                mainColor = Pallete.Red,
+                modifier = Modifier.weight(0.5f),
+            ) {
+                Shop(
+                    shop = state.shop,
+                    onUpgradeSelected = onUpgradeSelected,
+                )
+            }
+        }
     }
 }
