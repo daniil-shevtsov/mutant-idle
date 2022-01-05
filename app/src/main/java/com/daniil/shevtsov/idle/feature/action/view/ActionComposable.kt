@@ -2,11 +2,8 @@ package com.daniil.shevtsov.idle.feature.action.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement.spacedBy
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
@@ -71,7 +68,8 @@ fun ActionPane(
 ) {
     LazyVerticalGrid(
         cells = GridCells.Fixed(count = 2),
-        modifier = modifier
+        modifier = modifier,
+        contentPadding = PaddingValues(4.dp)
     ) {
         items(pane.actions) { action ->
             Action(
@@ -91,7 +89,6 @@ fun Action(
 ) {
     Column(
         modifier = modifier
-            .padding(4.dp)
             .background(Pallete.Red)
             .padding(4.dp)
             .background(Pallete.DarkRed)

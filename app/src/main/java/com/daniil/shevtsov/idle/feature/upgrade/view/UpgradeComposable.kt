@@ -47,7 +47,8 @@ fun UpgradeList(
             }
         },
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = modifier
+        modifier = modifier,
+        contentPadding = PaddingValues(4.dp)
     )
 }
 
@@ -67,7 +68,6 @@ fun Upgrade(
     }
     Column(
         modifier = Modifier
-            .padding(4.dp)
             .background(Pallete.Red)
             .clickable { onClicked() }
             .padding(4.dp),
