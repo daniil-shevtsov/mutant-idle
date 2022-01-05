@@ -17,8 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Pallete
-import com.daniil.shevtsov.idle.core.ui.cavitary
-import com.daniil.shevtsov.idle.core.ui.protrusive
 
 @Preview(heightDp = 400)
 @Composable
@@ -37,7 +35,7 @@ fun CollapsablePreview() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(10.dp)
+                    .height(120.dp)
                     .background(Color.White)
             )
         }
@@ -51,45 +49,97 @@ fun Collapsable(
     collapsedContent: @Composable () -> Unit,
     expandedContent: @Composable () -> Unit,
 ) {
-    var isCollapsed by remember { mutableStateOf(true) }
+    var isCollapsed by remember { mutableStateOf(false) }
 
-    Row {
-        if (isCollapsed) {
-            Row(
-                horizontalArrangement = spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically,
+    Column(
+        modifier = Modifier.fillMaxWidth()
+            .background(Pallete.Red)
+            .padding(4.dp)
+    ) {
+        Row(
+            horizontalArrangement = spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+
+        ) {
+            CollapseButton(
+                isCollapsed = isCollapsed,
+                onClick = { isCollapsed = !isCollapsed }
+            )
+            Text(
+                text = title,
+                color = Color.White,
+                fontSize = 24.sp,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Pallete.Red)
-                    .protrusive(
-                        lightColor = Pallete.LightRed,
-                        darkColor = Pallete.DarkRed
-                    )
-                    .background(Pallete.Red)
-                    .padding(4.dp)
-                    .cavitary(
-                        lightColor = Pallete.LightRed,
-                        darkColor = Pallete.DarkRed
-                    )
-                    .background(Pallete.DarkRed)
-                    .padding(4.dp)
-            ) {
-                CollapseButton(
-                    isCollapsed = isCollapsed,
-                    onClick = { isCollapsed = !isCollapsed }
-                )
-                Text(
-                    text = title,
-                    color = Color.White,
-                    fontSize = 24.sp,
-                    modifier = Modifier
-                )
-                collapsedContent()
-            }
+            )
+        }
+        if(isCollapsed) {
+            collapsedContent()
         } else {
             expandedContent()
         }
     }
+
+//    Row {
+//        if (isCollapsed) {
+//            Row(
+//                horizontalArrangement = spacedBy(4.dp),
+//                verticalAlignment = Alignment.CenterVertically,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .background(Pallete.Red)
+//                    .protrusive(
+//                        lightColor = Pallete.LightRed,
+//                        darkColor = Pallete.DarkRed
+//                    )
+//                    .background(Pallete.Red)
+//                    .padding(4.dp)
+//                    .cavitary(
+//                        lightColor = Pallete.LightRed,
+//                        darkColor = Pallete.DarkRed
+//                    )
+//                    .background(Pallete.DarkRed)
+//                    .padding(4.dp)
+//            ) {
+//                CollapseButton(
+//                    isCollapsed = isCollapsed,
+//                    onClick = { isCollapsed = !isCollapsed }
+//                )
+//                Text(
+//                    text = title,
+//                    color = Color.White,
+//                    fontSize = 24.sp,
+//                    modifier = Modifier
+//                )
+//                collapsedContent()
+//            }
+//        } else {
+//            Column(
+//                modifier = Modifier.fillMaxWidth()
+//                    .background(Pallete.Red)
+//                    .padding(4.dp)
+//            ) {
+//                Row(
+//                    horizontalArrangement = spacedBy(4.dp),
+//                    verticalAlignment = Alignment.CenterVertically,
+//                    modifier = Modifier
+//
+//                ) {
+//                    CollapseButton(
+//                        isCollapsed = isCollapsed,
+//                        onClick = { isCollapsed = !isCollapsed }
+//                    )
+//                    Text(
+//                        text = title,
+//                        color = Color.White,
+//                        fontSize = 24.sp,
+//                        modifier = Modifier
+//                    )
+//                }
+//                expandedContent()
+//            }
+//        }
+//    }
 }
 
 @Composable

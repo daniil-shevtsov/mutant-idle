@@ -44,7 +44,7 @@ fun ResourcePane(
     Collapsable(
         title = "Resources",
         collapsedContent = {
-            Text("Resources")
+            ResourcePanel(resources.first())
         },
         expandedContent = {
             Column {
