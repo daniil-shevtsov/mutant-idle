@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.core.ui.widgets
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement.spacedBy
@@ -42,6 +43,7 @@ fun CollapsablePreview() {
     )
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun Collapsable(
     title: String,
@@ -52,9 +54,11 @@ fun Collapsable(
     var isCollapsed by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .background(Pallete.Red)
             .padding(4.dp)
+        //.animateContentSize(),
     ) {
         Row(
             horizontalArrangement = spacedBy(4.dp),
@@ -73,73 +77,27 @@ fun Collapsable(
                 modifier = Modifier
             )
         }
-        if(isCollapsed) {
-            collapsedContent()
-        } else {
-            expandedContent()
+
+        AnimatedContent(
+            targetState = isCollapsed,
+            transitionSpec = {
+                if(targetState) {
+                    fadeIn(initialAlpha = 1f) with fadeOut(targetAlpha = 1f)
+                } else {
+                    fadeIn(initialAlpha = 1f) with fadeOut(targetAlpha = 1f)
+                }
+
+            }
+        ) { targetCollapsed ->
+
+
+            if (targetCollapsed) {
+                collapsedContent()
+            } else {
+                expandedContent()
+            }
         }
     }
-
-//    Row {
-//        if (isCollapsed) {
-//            Row(
-//                horizontalArrangement = spacedBy(4.dp),
-//                verticalAlignment = Alignment.CenterVertically,
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .background(Pallete.Red)
-//                    .protrusive(
-//                        lightColor = Pallete.LightRed,
-//                        darkColor = Pallete.DarkRed
-//                    )
-//                    .background(Pallete.Red)
-//                    .padding(4.dp)
-//                    .cavitary(
-//                        lightColor = Pallete.LightRed,
-//                        darkColor = Pallete.DarkRed
-//                    )
-//                    .background(Pallete.DarkRed)
-//                    .padding(4.dp)
-//            ) {
-//                CollapseButton(
-//                    isCollapsed = isCollapsed,
-//                    onClick = { isCollapsed = !isCollapsed }
-//                )
-//                Text(
-//                    text = title,
-//                    color = Color.White,
-//                    fontSize = 24.sp,
-//                    modifier = Modifier
-//                )
-//                collapsedContent()
-//            }
-//        } else {
-//            Column(
-//                modifier = Modifier.fillMaxWidth()
-//                    .background(Pallete.Red)
-//                    .padding(4.dp)
-//            ) {
-//                Row(
-//                    horizontalArrangement = spacedBy(4.dp),
-//                    verticalAlignment = Alignment.CenterVertically,
-//                    modifier = Modifier
-//
-//                ) {
-//                    CollapseButton(
-//                        isCollapsed = isCollapsed,
-//                        onClick = { isCollapsed = !isCollapsed }
-//                    )
-//                    Text(
-//                        text = title,
-//                        color = Color.White,
-//                        fontSize = 24.sp,
-//                        modifier = Modifier
-//                    )
-//                }
-//                expandedContent()
-//            }
-//        }
-//    }
 }
 
 @Composable
