@@ -42,6 +42,7 @@ fun ResourcePane(
 ) {
 
     Collapsable(
+        title = "Resources",
         collapsedContent = {
             Text("Resources")
         },
