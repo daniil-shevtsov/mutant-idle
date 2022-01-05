@@ -2,8 +2,14 @@ package com.daniil.shevtsov.idle.feature.resource.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,11 +45,27 @@ fun ResourcePanePreview() {
 fun ResourcePane(
     resources: List<ResourceModel>
 ) {
-    Column {
-        resources.forEach { resource ->
-            ResourcePanel(resource)
+    var isCollapsed by remember { mutableStateOf(false) }
+
+    Row {
+        IconButton(onClick = { isCollapsed = !isCollapsed }) {
+            Icon(
+                if (isCollapsed) Icons.Filled.ArrowDropDown else Icons.Filled.ArrowDropUp,
+                contentDescription = "Collapse",
+                modifier = Modifier.size(ButtonDefaults.IconSize)
+            )
+        }
+        if (!isCollapsed) {
+            Column {
+                resources.forEach { resource ->
+                    ResourcePanel(resource)
+                }
+            }
+        } else {
+            Text("Resources")
         }
     }
+
 }
 
 @Composable

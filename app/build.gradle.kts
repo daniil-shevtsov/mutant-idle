@@ -95,6 +95,7 @@ dependencies {
         implementation(uiGraphics)
         implementation(uiTooling)
         implementation(foundationLayout)
+        implementation(materialExtended)
         implementation(material)
         implementation(navigation)
     }
