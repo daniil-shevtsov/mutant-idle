@@ -14,8 +14,9 @@ import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
 
 internal fun viewStatePreviewStub() = MainViewState.Success(
-    resources = listOf(resourcePreviewStub()),
+    resources = resourceStubs(),
     ratio = humanityRatioStub(),
+    ratios = ratiosStubs(),
     actionState = actionStatePreviewStub(),
     shop = shopStatePreviewStub(),
 )
@@ -23,6 +24,11 @@ internal fun viewStatePreviewStub() = MainViewState.Success(
 internal fun resourcePreviewStub() = ResourceModel(
     name = "Blood",
     value = "10 000",
+)
+
+internal fun resourceStubs() = listOf(
+    ResourceModel(name = "Blood", value = "10 000"),
+    ResourceModel(name = "Money", value = "500"),
 )
 
 internal fun ratiosStubs() = listOf(
