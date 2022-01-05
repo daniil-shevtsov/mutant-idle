@@ -89,7 +89,8 @@ fun SuccessContent(
         )
         Column(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             ResourcePane(state.resources)
             MutantRatioPane(state.ratios)

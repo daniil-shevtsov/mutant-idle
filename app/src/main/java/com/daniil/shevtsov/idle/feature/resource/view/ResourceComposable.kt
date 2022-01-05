@@ -18,25 +18,28 @@ import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 @Preview
 @Composable
 fun ResourcePreview() {
-    Column {
-        ResourcePanel(
-            resource = resourcePreviewStub()
+    ResourcePanel(
+        resource = resourcePreviewStub()
+    )
+}
+
+@Preview
+@Composable
+fun ResourcePanePreview() {
+    ResourcePane(
+        resources = listOf(
+            resourcePreviewStub(),
+            resourcePreviewStub(),
+            resourcePreviewStub(),
         )
-        ResourcePane(
-            resources = listOf(
-                resourcePreviewStub(),
-                resourcePreviewStub(),
-                resourcePreviewStub(),
-            )
-        )
-    }
+    )
 }
 
 @Composable
 fun ResourcePane(
     resources: List<ResourceModel>
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column {
         resources.forEach { resource ->
             ResourcePanel(resource)
         }
