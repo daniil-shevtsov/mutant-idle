@@ -21,11 +21,13 @@ fun ResourcePreview() {
     ResourcePanel(
         resource = resourcePreviewStub()
     )
-    ResourcePane(resources = listOf(
-        resourcePreviewStub(),
-        resourcePreviewStub(),
-        resourcePreviewStub(),
-    ))
+    ResourcePane(
+        resources = listOf(
+            resourcePreviewStub(),
+            resourcePreviewStub(),
+            resourcePreviewStub(),
+        )
+    )
 }
 
 @Composable
@@ -51,10 +53,16 @@ fun ResourcePanel(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Text(text = resource.name, fontSize = 24.sp, color = Color.White)
         Text(
-            text = resource.value, fontSize = 16.sp, modifier =
-            Modifier
+            modifier = Modifier.weight(0.35f),
+            text = resource.name,
+            fontSize = 24.sp,
+            color = Color.White
+        )
+        Text(
+            text = resource.value,
+            fontSize = 16.sp,
+            modifier = Modifier.weight(0.65f)
                 .fillMaxWidth()
                 .cavitary(
                     lightColor = Pallete.LightRed,
