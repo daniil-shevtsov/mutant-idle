@@ -2,7 +2,7 @@ package com.daniil.shevtsov.idle.core.ui.widgets
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.ButtonDefaults
+import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,6 +29,7 @@ fun CollapsablePreview() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(10.dp)
                     .background(Color.Red)
             )
         },
@@ -35,6 +37,7 @@ fun CollapsablePreview() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(10.dp)
                     .background(Color.White)
             )
         }
@@ -51,12 +54,10 @@ fun Collapsable(
     var isCollapsed by remember { mutableStateOf(true) }
 
     Row {
-        CollapseButton(
-            isCollapsed = isCollapsed,
-            onClick = { isCollapsed = !isCollapsed }
-        )
         if (isCollapsed) {
             Row(
+                horizontalArrangement = spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Pallete.Red)
@@ -73,6 +74,10 @@ fun Collapsable(
                     .background(Pallete.DarkRed)
                     .padding(4.dp)
             ) {
+                CollapseButton(
+                    isCollapsed = isCollapsed,
+                    onClick = { isCollapsed = !isCollapsed }
+                )
                 Text(
                     text = title,
                     color = Color.White,
@@ -93,11 +98,15 @@ fun CollapseButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    IconButton(onClick = onClick, modifier = modifier) {
+    IconButton(
+        onClick = onClick, modifier = modifier
+            .size(32.dp)
+    ) {
         Icon(
             if (isCollapsed) Icons.Filled.ArrowDropDown else Icons.Filled.ArrowDropUp,
             contentDescription = "Collapse / Expand",
-            modifier = modifier.size(ButtonDefaults.IconSize),
+            modifier = modifier.fillMaxSize(),
+            tint = Color.White,
         )
     }
 }
