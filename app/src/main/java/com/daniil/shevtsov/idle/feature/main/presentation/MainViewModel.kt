@@ -134,6 +134,9 @@ class MainViewModel @Inject constructor(
         when (action) {
             is MainViewAction.UpgradeSelected -> handleUpgradeSelected(action)
             is MainViewAction.ActionClicked -> handleActionClicked(action)
+            MainViewAction.ToggleActionsCollapse -> toggleActionsCollapse()
+            MainViewAction.ToggleResourcesCollapse -> toggleResourcesCollapse()
+            MainViewAction.ToggleUpgradesCollapse -> toggleUpgradesCollapse()
         }
     }
 
@@ -165,6 +168,18 @@ class MainViewModel @Inject constructor(
                 ratiosStorage.updateByKey(key = key, newRatio = oldRatio + value)
             }
         }
+    }
+
+    private fun toggleResourcesCollapse() {
+
+    }
+
+    private fun toggleActionsCollapse() {
+
+    }
+
+    private fun toggleUpgradesCollapse() {
+
     }
 
     private fun initViewState(): MainViewState = MainViewState.Loading
