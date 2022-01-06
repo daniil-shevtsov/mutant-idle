@@ -59,6 +59,7 @@ fun ActionSection(
     Collapsable(
         title = "Actions",
         isCollapsed = isCollapsed,
+        modifier = modifier,
         collapsedContent = { },
         expandedContent = {
             HorizontalPager(
@@ -68,6 +69,7 @@ fun ActionSection(
                 val actionPane = actionPanes[paneIndex]
                 ActionPane(
                     pane = actionPane,
+                    modifier = modifier,
                     onActionClicked = onActionClicked,
                 )
             }

@@ -42,6 +42,7 @@ fun UpgradeList(
             items(items = upgradeList) { upgrade ->
                 Upgrade(
                     upgrade = upgrade,
+                    modifier = modifier,
                     onClicked = { onUpgradeSelected(upgrade.id) }
                 )
             }
@@ -55,6 +56,7 @@ fun UpgradeList(
 @Composable
 fun Upgrade(
     upgrade: UpgradeModel,
+    modifier: Modifier = Modifier,
     onClicked: () -> Unit = {},
 ) {
     val priceColor = when (upgrade.status) {
@@ -67,7 +69,7 @@ fun Upgrade(
         else -> upgrade.price.value
     }
     Column(
-        modifier = Modifier
+        modifier = modifier
             .background(Pallete.Red)
             .clickable { onClicked() }
             .padding(4.dp),
@@ -77,7 +79,7 @@ fun Upgrade(
                 text = upgrade.title,
                 color = Color.White,
                 fontSize = 24.sp,
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .background(Pallete.DarkRed)
                     .padding(4.dp)
@@ -86,7 +88,7 @@ fun Upgrade(
                 text = priceText,
                 color = priceColor,
                 fontSize = 24.sp,
-                modifier = Modifier
+                modifier = modifier
                     .background(Pallete.DarkRed)
                     .padding(4.dp)
                     .align(Alignment.CenterEnd)
@@ -96,7 +98,7 @@ fun Upgrade(
         Text(
             text = upgrade.subtitle,
             fontSize = 16.sp,
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .background(Color.White)
                 .padding(4.dp)

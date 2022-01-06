@@ -174,7 +174,7 @@ fun SuccessContent(
                 modifier = modifier,
                 onToggleCollapse = { onToggleCollapse(SectionKey.Resources) },
             )
-            MutantRatioPane(state.ratios)
+            MutantRatioPane(state.ratios, modifier = modifier)
         }
 
         Column(
@@ -189,6 +189,7 @@ fun SuccessContent(
                 ActionSection(
                     state = state.actionState,
                     isCollapsed = state.sectionCollapse[SectionKey.Actions] ?: false,
+                    modifier = modifier,
                     onToggleCollapse = { onToggleCollapse(SectionKey.Actions) },
                     onActionClicked = onActionClicked,
                 )
@@ -205,6 +206,7 @@ fun SuccessContent(
                 Shop(
                     shop = state.shop,
                     isCollapsed = state.sectionCollapse[SectionKey.Upgrades] ?: false,
+                    modifier = modifier,
                     onToggleCollapse = { onToggleCollapse(SectionKey.Upgrades) },
                     onUpgradeSelected = onUpgradeSelected,
                 )
