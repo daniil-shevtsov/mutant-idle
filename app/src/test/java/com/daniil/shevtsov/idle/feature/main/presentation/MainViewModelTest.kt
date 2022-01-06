@@ -320,6 +320,25 @@ internal class MainViewModelTest {
             }
         }
 
+    @Test
+    fun `should toggle corresponding collapse state when toggle clicked`() = runBlockingTest {
+        viewModel.state.test {
+            viewModel.handleAction(MainViewAction.ToggleSectionCollapse(key = SectionKey.Resources))
+
+            assertThat(expectMostRecentItem())
+                .isInstanceOf(MainViewState.Success::class)
+                .prop(MainViewState.Success::sectionCollapse)
+                .contains(SectionKey.Resources to true)
+
+            viewModel.handleAction(MainViewAction.ToggleSectionCollapse(key = SectionKey.Resources))
+
+            assertThat(expectMostRecentItem())
+                .isInstanceOf(MainViewState.Success::class)
+                .prop(MainViewState.Success::sectionCollapse)
+                .contains(SectionKey.Resources to false)
+        }
+    }
+
     private fun createViewModel() = MainViewModel(
         balanceConfig = balanceConfig,
         upgradeStorage = upgradeStorage,

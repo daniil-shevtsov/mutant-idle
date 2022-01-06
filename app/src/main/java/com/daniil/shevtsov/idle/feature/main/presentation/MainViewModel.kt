@@ -45,6 +45,14 @@ class MainViewModel @Inject constructor(
     private val _state = MutableStateFlow(initViewState())
     val state = _state.asStateFlow()
 
+    private val sectionCollapseState = MutableStateFlow<Map<SectionKey, Boolean>>(
+        mapOf(
+            SectionKey.Resources to false,
+            SectionKey.Actions to false,
+            SectionKey.Upgrades to false,
+        )
+    )
+
     init {
         combine(
             ResourceBehavior.observeResource(
@@ -56,12 +64,16 @@ class MainViewModel @Inject constructor(
             ),
             ratiosStorage.observeAll(),
             UpgradeBehavior.observeAll(upgradeStorage),
-            ActionBehavior.observeAll(actionsStorage),
+            combine(ActionBehavior.observeAll(actionsStorage), sectionCollapseState, ::Pair),
         ) { blood: Resource,
             resources: List<Resource>,
             ratios: List<Ratio>,
             upgrades: List<Upgrade>,
-            actions: List<Action> ->
+            //actions: List<Action> ->
+            actionsAndSectionState: Pair<List<Action>, Map<SectionKey, Boolean>> ->
+            val actions = actionsAndSectionState.first
+            val sectionState = actionsAndSectionState.second
+
             val newViewState = MainViewState.Success(
                 resources = resources.map { resource ->
                     ResourceModelMapper.map(
@@ -95,11 +107,7 @@ class MainViewModel @Inject constructor(
                         }
                     }
                     .let { ShopState(upgradeLists = listOf(it)) },
-                sectionCollapse = mapOf(
-                    SectionKey.Resources to false,
-                    SectionKey.Actions to false,
-                    SectionKey.Upgrades to false,
-                )
+                sectionCollapse = sectionState,
             )
             newViewState
         }
@@ -174,7 +182,11 @@ class MainViewModel @Inject constructor(
     }
 
     private fun toggleSectionCollapse(action: MainViewAction.ToggleSectionCollapse) {
-
+        val oldState = sectionCollapseState.value
+        val newState = oldState.toMutableMap()
+            .apply { put(action.key, !(oldState[action.key] ?: false)) }
+            .toMap()
+        sectionCollapseState.value = newState
     }
 
     private fun initViewState(): MainViewState = MainViewState.Loading
