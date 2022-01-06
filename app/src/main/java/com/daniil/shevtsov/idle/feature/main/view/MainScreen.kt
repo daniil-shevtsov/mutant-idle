@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.Pallete
@@ -24,57 +25,53 @@ import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
 import com.daniil.shevtsov.idle.feature.shop.view.Shop
 import com.google.accompanist.insets.statusBarsHeight
 
-//@Preview(
-//    widthDp = 320,
-//    heightDp = 534,
-//)
-//@Composable
-//fun MainPreview() {
-//    TestComposable(
-//        firstBig = true,
-//        firstVisible = true,
-//        secondBig = true
-//    )
-//}
-//
-//@Preview(
-//    widthDp = 320,
-//    heightDp = 534,
-//)
-//@Composable
-//fun MainPreview2() {
-//    TestComposable(
-//        firstBig = true,
-//        firstVisible = true,
-//        secondBig = false
-//    )
-//}
-//
-//@Preview(
-//    widthDp = 320,
-//    heightDp = 534,
-//)
-//@Composable
-//fun MainPreview3() {
-//    TestComposable(
-//        firstBig = false,
-//        firstVisible = false,
-//        secondBig = true
-//    )
-//}
-//
-//@Preview(
-//    widthDp = 320,
-//    heightDp = 534,
-//)
-//@Composable
-//fun MainPreview4() {
-//    TestComposable(
-//        firstBig = false,
-//        firstVisible = true,
-//        secondBig = true
-//    )
-//}
+@Preview(
+    widthDp = 320,
+    heightDp = 534,
+)
+@Composable
+fun MainPreview1() {
+    TestComposable(
+        firstBig = true,
+        secondBig = true
+    )
+}
+
+@Preview(
+    widthDp = 320,
+    heightDp = 534,
+)
+@Composable
+fun MainPreview2() {
+    TestComposable(
+        firstBig = true,
+        secondBig = false
+    )
+}
+
+@Preview(
+    widthDp = 320,
+    heightDp = 534,
+)
+@Composable
+fun MainPreview3() {
+    TestComposable(
+        firstBig = false,
+        secondBig = true
+    )
+}
+
+@Preview(
+    widthDp = 320,
+    heightDp = 534,
+)
+@Composable
+fun MainPreview4() {
+    TestComposable(
+        firstBig = false,
+        secondBig = false
+    )
+}
 
 
 @Preview(
@@ -198,48 +195,55 @@ fun LoadingContent() {
     Text("Loading")
 }
 
-//@Composable
-//fun TestComposable(
-//    firstBig: Boolean,
-//    firstVisible: Boolean,
-//    secondBig: Boolean,
-//) {
-//    Column(modifier = Modifier.background(Color.Green)) {
-//        Box(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(100.dp)
-//                .background(Color.Yellow)
-//        )
-//
-//        if (firstBig && firstVisible) {
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(400.dp)
+@Composable
+fun TestComposable(
+    firstBig: Boolean,
+    secondBig: Boolean,
+) {
+    Column(modifier = Modifier.background(Color.Green)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(100.dp)
+                .background(Color.Yellow)
+        )
+
+        if (firstBig) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(400.dp)
+                    .weight(1f, fill = false)
+                    .background(Color.Red)
+            )
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    //.weight(1f, fill = false)
+                    .background(Color.Red)
+            )
+        }
+        if (secondBig) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(4000.dp)
+                    .weight(1f, fill = false)
+                    .background(Color.Blue)
+            )
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
 //                    .weight(1f, fill = false)
-//                    .background(Color.Red)
-//            )
-//        } else if (firstVisible) {
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(1.dp)
-//                    //.weight(1f, fill = false)
-//                    .background(Color.Red)
-//            )
-//        }
-//        if (secondBig) {
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(4000.dp)
-//                    .weight(1f, fill = false)
-//                    .background(Color.Blue)
-//            )
-//        }
-//    }
-//}
+                    .background(Color.Blue)
+            )
+        }
+    }
+}
 
 @Composable
 fun SuccessContent(
@@ -280,7 +284,14 @@ fun SuccessContent(
         ) {
             Cavity(
                 mainColor = Pallete.Red,
-                modifier = Modifier.weight(0.5f, fill = false),
+                modifier = Modifier
+                    .let {
+                        if (state.sectionCollapse[SectionKey.Actions] == true) {
+                            it.weight(0.5f, fill = false)
+                        } else {
+                            it
+                        }
+                    },
             ) {
                 ActionSection(
                     state = state.actionState,
@@ -297,7 +308,14 @@ fun SuccessContent(
             )
             Cavity(
                 mainColor = Pallete.Red,
-                modifier = modifier.weight(0.5f, fill = false),
+                modifier = modifier
+                    .let {
+                        if (state.sectionCollapse[SectionKey.Upgrades] == true) {
+                            it.weight(0.5f, fill = false)
+                        } else {
+                            it
+                        }
+                    },
             ) {
                 Shop(
                     shop = state.shop,

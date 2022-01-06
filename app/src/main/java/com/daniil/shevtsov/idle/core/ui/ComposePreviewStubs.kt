@@ -5,6 +5,7 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
+import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
@@ -19,6 +20,11 @@ internal fun viewStatePreviewStub() = MainViewState.Success(
     ratios = ratiosStubs(),
     actionState = actionStatePreviewStub(),
     shop = shopStatePreviewStub(),
+    sectionCollapse = mapOf(
+        SectionKey.Resources to false,
+        SectionKey.Actions to false,
+        SectionKey.Upgrades to false,
+    )
 )
 
 internal fun resourcePreviewStub() = ResourceModel(
