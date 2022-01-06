@@ -80,7 +80,7 @@ fun SuccessContent(
     Column(
         modifier = Modifier
             .background(Pallete.Red),
-        verticalArrangement = Arrangement.SpaceEvenly,
+        verticalArrangement = Arrangement.Top,
     ) {
         Spacer(
             Modifier
@@ -103,7 +103,7 @@ fun SuccessContent(
         ) {
             Cavity(
                 mainColor = Pallete.Red,
-                modifier = Modifier.weight(0.5f),
+                modifier = Modifier.weight(0.5f, fill=false),
             ) {
                 ActionSection(
                     state = state.actionState,
@@ -117,7 +117,7 @@ fun SuccessContent(
             )
             Cavity(
                 mainColor = Pallete.Red,
-                modifier = Modifier.weight(0.5f),
+                modifier = Modifier.weight(0.5f, fill=false),
             ) {
                 Shop(
                     shop = state.shop,
