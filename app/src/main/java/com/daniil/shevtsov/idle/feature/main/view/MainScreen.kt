@@ -31,7 +31,75 @@ import com.google.accompanist.insets.statusBarsHeight
 @Composable
 fun MainPreview() {
     val state = viewStatePreviewStub()
-    MainContent(state = state, onActionClicked = {}, onUpgradeSelected = {}, onToggleCollapse = {})
+    MainContent(
+        state = state,
+        onActionClicked = {},
+        onUpgradeSelected = {},
+        onToggleCollapse = {}
+    )
+}
+
+@Preview(
+    widthDp = 320,
+    heightDp = 534,
+)
+@Composable
+fun MainPreviewAllCollapsed() {
+    val state = viewStatePreviewStub().copy(
+        sectionCollapse = mapOf(
+            SectionKey.Resources to true,
+            SectionKey.Actions to true,
+            SectionKey.Upgrades to true,
+        )
+    )
+    MainContent(
+        state = state,
+        onActionClicked = {},
+        onUpgradeSelected = {},
+        onToggleCollapse = {}
+    )
+}
+
+@Preview(
+    widthDp = 320,
+    heightDp = 534,
+)
+@Composable
+fun MainPreviewActionsExpanded() {
+    val state = viewStatePreviewStub().copy(
+        sectionCollapse = mapOf(
+            SectionKey.Resources to true,
+            SectionKey.Actions to false,
+            SectionKey.Upgrades to true,
+        )
+    )
+    MainContent(
+        state = state,
+        onActionClicked = {},
+        onUpgradeSelected = {},
+        onToggleCollapse = {}
+    )
+}
+
+@Preview(
+    widthDp = 320,
+    heightDp = 534,
+)
+@Composable
+fun MainPreviewUpgradesExpanded() {
+    val state = viewStatePreviewStub().copy(
+        sectionCollapse = mapOf(
+            SectionKey.Resources to true,
+            SectionKey.Actions to true,
+            SectionKey.Upgrades to false,
+        )
+    )
+    MainContent(
+        state = state,
+        onActionClicked = {},
+        onUpgradeSelected = {},
+        onToggleCollapse = {}
+    )
 }
 
 @Composable
@@ -80,22 +148,23 @@ fun LoadingContent() {
 @Composable
 fun SuccessContent(
     state: MainViewState.Success,
+    modifier: Modifier = Modifier,
     onActionClicked: (actionId: Long) -> Unit = {},
     onUpgradeSelected: (upgradeId: Long) -> Unit = {},
     onToggleCollapse: (key: SectionKey) -> Unit,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .background(Pallete.Red),
         verticalArrangement = Arrangement.Top,
     ) {
         Spacer(
-            Modifier
+            modifier
                 .statusBarsHeight()
                 .fillMaxWidth()
         )
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
@@ -108,7 +177,7 @@ fun SuccessContent(
         }
 
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .background(Pallete.Red)
                 .padding(4.dp)
         ) {
@@ -124,13 +193,13 @@ fun SuccessContent(
                 )
             }
             Spacer(
-                Modifier
+                modifier
                     .height(8.dp)
                     .fillMaxWidth()
             )
             Cavity(
                 mainColor = Pallete.Red,
-                modifier = Modifier.weight(0.5f, fill = false),
+                modifier = modifier.weight(0.5f, fill = false),
             ) {
                 Shop(
                     shop = state.shop,
