@@ -171,6 +171,7 @@ fun SuccessContent(
             ResourcePane(
                 resources = state.resources,
                 isCollapsed = state.sectionCollapse[SectionKey.Resources] ?: false,
+                modifier = modifier,
                 onToggleCollapse = { onToggleCollapse(SectionKey.Resources) },
             )
             MutantRatioPane(state.ratios)

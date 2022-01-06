@@ -45,14 +45,15 @@ fun ResourcePanePreview() {
 fun ResourcePane(
     resources: List<ResourceModel>,
     isCollapsed: Boolean,
+    modifier: Modifier = Modifier,
     onToggleCollapse: () -> Unit,
 ) {
-
     CollapsableColumn(
         title = "Resources",
         isCollapsed = isCollapsed,
         items = resources,
-        composable = { ResourcePanel(it) },
+        modifier = modifier,
+        composable = { ResourcePanel(resource = it, modifier = modifier) },
         onToggleCollapse = onToggleCollapse,
     )
 }
@@ -60,9 +61,10 @@ fun ResourcePane(
 @Composable
 fun ResourcePanel(
     resource: ResourceModel,
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(Pallete.Red)
             .padding(4.dp),
@@ -70,7 +72,7 @@ fun ResourcePanel(
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Text(
-            modifier = Modifier.weight(0.35f),
+            modifier = modifier.weight(0.35f),
             text = resource.name,
             fontSize = 24.sp,
             color = Color.White
@@ -78,7 +80,7 @@ fun ResourcePanel(
         Text(
             text = resource.value,
             fontSize = 16.sp,
-            modifier = Modifier
+            modifier = modifier
                 .weight(0.65f)
                 .fillMaxWidth()
                 .cavitary(

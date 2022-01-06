@@ -51,9 +51,9 @@ fun <ElementType, ComposableType> CollapsableColumn(
     title: String,
     isCollapsed: Boolean,
     items: List<ElementType>,
+    modifier: Modifier = Modifier,
     composable: @Composable (item: ElementType) -> ComposableType,
     onToggleCollapse: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     Collapsable(
         title = title,
@@ -83,18 +83,14 @@ fun Collapsable(
     expandedContent: @Composable () -> Unit,
     onToggleCollapse: () -> Unit,
 ) {
-//    var isCollapsed by remember { mutableStateOf(false) }
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
-
-        //.animateContentSize(),
     ) {
         Row(
             horizontalArrangement = spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .background(Pallete.Red)
                 .padding(4.dp)
@@ -102,13 +98,14 @@ fun Collapsable(
         ) {
             CollapseButton(
                 isCollapsed = isCollapsed,
+                modifier = modifier,
                 onClick = { onToggleCollapse() }
             )
             Text(
                 text = title,
                 color = Color.White,
                 fontSize = 24.sp,
-                modifier = Modifier
+                modifier = modifier
             )
         }
 
