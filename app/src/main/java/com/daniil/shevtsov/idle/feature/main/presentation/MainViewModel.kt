@@ -134,9 +134,7 @@ class MainViewModel @Inject constructor(
         when (action) {
             is MainViewAction.UpgradeSelected -> handleUpgradeSelected(action)
             is MainViewAction.ActionClicked -> handleActionClicked(action)
-            MainViewAction.ToggleActionsCollapse -> toggleActionsCollapse()
-            MainViewAction.ToggleResourcesCollapse -> toggleResourcesCollapse()
-            MainViewAction.ToggleUpgradesCollapse -> toggleUpgradesCollapse()
+            is MainViewAction.ToggleSectionCollapse -> toggleSectionCollapse(action)
         }
     }
 
@@ -170,15 +168,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun toggleResourcesCollapse() {
-
-    }
-
-    private fun toggleActionsCollapse() {
-
-    }
-
-    private fun toggleUpgradesCollapse() {
+    private fun toggleSectionCollapse(action: MainViewAction.ToggleSectionCollapse) {
 
     }
 

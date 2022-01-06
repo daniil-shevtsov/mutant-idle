@@ -14,8 +14,6 @@ sealed class MainViewState {
         val ratios: List<HumanityRatioModel> = emptyList(),
         val actionState: ActionsState,
         val shop: ShopState,
-        val isResourceCollapsed: Boolean = false,
-        val isActionCollapsed: Boolean = false,
-        val isUpgradeCollapsed: Boolean = false,
+        val sectionCollapse: Map<SectionKey, Boolean> = mapOf(),
     ) : MainViewState()
 }
