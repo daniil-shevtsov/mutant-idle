@@ -276,7 +276,15 @@ fun SuccessContent(
             )
             MutantRatioPane(state.ratios, modifier = modifier)
         }
-
+        fun Modifier.hackyWeight(
+            isCollapsed: Boolean
+        ): Modifier {
+            return if (isCollapsed) {
+                modifier
+            } else {
+                modifier.weight(0.5f, fill = false)
+            }
+        }
         Column(
             modifier = modifier
                 .weight(1f)
@@ -286,7 +294,7 @@ fun SuccessContent(
             val isActionsCollapsed = state.sectionCollapse[SectionKey.Actions] ?: false
             Cavity(
                 mainColor = Pallete.Red,
-                modifier = Modifier.weight(0.5f, fill = false),
+                modifier = modifier.hackyWeight(isCollapsed = false),
                 /*.let {
                     if (state.sectionCollapse[SectionKey.Actions] == true) {
                         it.weight(0.5f, fill = false)
@@ -311,14 +319,7 @@ fun SuccessContent(
             val isShopCollapsed = state.sectionCollapse[SectionKey.Upgrades] ?: false
             Cavity(
                 mainColor = Pallete.Red,
-                modifier = modifier.weight(0.5f, fill = false),
-                /*.let {
-                    if (state.sectionCollapse[SectionKey.Upgrades] == true) {
-                        it.weight(0.5f, fill = false)
-                    } else {
-                        it
-                    }
-                }*/
+                modifier = modifier.hackyWeight(isCollapsed = false)
             ) {
                 Shop(
                     shop = state.shop,
@@ -328,6 +329,9 @@ fun SuccessContent(
                     onUpgradeSelected = onUpgradeSelected,
                 )
             }
+
+
         }
     }
 }
+
