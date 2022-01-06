@@ -15,7 +15,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.daniil.shevtsov.idle.core.ui.*
+import com.daniil.shevtsov.idle.core.ui.Pallete
+import com.daniil.shevtsov.idle.core.ui.actionPreviewStub
+import com.daniil.shevtsov.idle.core.ui.actionStatePreviewStub
 import com.daniil.shevtsov.idle.core.ui.widgets.Collapsable
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
@@ -55,30 +57,9 @@ fun ActionSection(
     val actionPanes = listOf(state.humanActionPane, state.mutantActionPane)
 
     Collapsable(
-        title ="Actions",
+        title = "Actions",
         isCollapsed = isCollapsed,
-        collapsedContent = {
-            Text(
-                text = "Actions",
-                color = Color.White,
-                fontSize = 24.sp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Pallete.Red)
-                    .protrusive(
-                        lightColor = Pallete.LightRed,
-                        darkColor = Pallete.DarkRed
-                    )
-                    .background(Pallete.Red)
-                    .padding(4.dp)
-                    .cavitary(
-                        lightColor = Pallete.LightRed,
-                        darkColor = Pallete.DarkRed
-                    )
-                    .background(Pallete.DarkRed)
-                    .padding(4.dp)
-            )
-        },
+        collapsedContent = { },
         expandedContent = {
             HorizontalPager(
                 count = actionPanes.size,
