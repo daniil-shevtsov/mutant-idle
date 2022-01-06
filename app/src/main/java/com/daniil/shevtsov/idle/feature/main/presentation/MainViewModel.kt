@@ -94,7 +94,12 @@ class MainViewModel @Inject constructor(
                             UpgradeStatusModel.Bought -> 2
                         }
                     }
-                    .let { ShopState(upgradeLists = listOf(it)) }
+                    .let { ShopState(upgradeLists = listOf(it)) },
+                sectionCollapse = mapOf(
+                    SectionKey.Resources to false,
+                    SectionKey.Actions to false,
+                    SectionKey.Upgrades to false,
+                )
             )
             newViewState
         }

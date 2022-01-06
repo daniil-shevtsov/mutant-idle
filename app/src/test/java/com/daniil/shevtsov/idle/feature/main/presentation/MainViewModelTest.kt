@@ -114,6 +114,12 @@ internal class MainViewModelTest {
                         .prop(ActionPane::actions)
                         .extracting(ActionModel::title)
                         .containsExactly("mutant action")
+                    prop(MainViewState.Success::sectionCollapse)
+                        .containsOnly(
+                            SectionKey.Resources to false,
+                            SectionKey.Actions to false,
+                            SectionKey.Upgrades to false,
+                        )
                 }
         }
     }
