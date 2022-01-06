@@ -36,14 +36,20 @@ fun ActionPreview() {
 )
 @Composable
 fun ActionPanesPreview() {
-    ActionSection(state = actionStatePreviewStub())
+    ActionSection(
+        state = actionStatePreviewStub(),
+        isCollapsed = false,
+        onToggleCollapse = {},
+    )
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ActionSection(
     state: ActionsState,
+    isCollapsed: Boolean,
     modifier: Modifier = Modifier,
+    onToggleCollapse: () -> Unit,
     onActionClicked: (actionId: Long) -> Unit = {},
 ) {
     val actionPanes = listOf(state.humanActionPane, state.mutantActionPane)

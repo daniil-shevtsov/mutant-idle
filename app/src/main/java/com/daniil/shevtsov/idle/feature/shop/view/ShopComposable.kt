@@ -28,7 +28,7 @@ import com.google.accompanist.pager.HorizontalPager
 @Composable
 fun ShopPreview() {
     Column {
-        Shop(shop = shopStatePreviewStub())
+        Shop(shop = shopStatePreviewStub(), isCollapsed = false, onToggleCollapse = {})
     }
 }
 
@@ -36,10 +36,12 @@ fun ShopPreview() {
 @Composable
 fun Shop(
     shop: ShopState,
+    isCollapsed: Boolean,
     modifier: Modifier = Modifier,
+    onToggleCollapse: () -> Unit,
     onUpgradeSelected: (upgradeId: Long) -> Unit = {},
 ) {
-    Collapsable(title ="Upgrades",
+    Collapsable(title = "Upgrades",
         collapsedContent = {
             Text(
                 text = "Upgrades",

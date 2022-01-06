@@ -35,13 +35,17 @@ fun ResourcePanePreview() {
             resourcePreviewStub(),
             resourcePreviewStub(),
             resourcePreviewStub(),
-        )
+        ),
+        isCollapsed = false,
+        onToggleCollapse = {},
     )
 }
 
 @Composable
 fun ResourcePane(
-    resources: List<ResourceModel>
+    resources: List<ResourceModel>,
+    isCollapsed: Boolean,
+    onToggleCollapse: () -> Unit,
 ) {
 
     CollapsableColumn(

@@ -18,6 +18,7 @@ import com.daniil.shevtsov.idle.feature.action.view.ActionSection
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewModel
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
+import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.ratio.view.MutantRatioPane
 import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
 import com.daniil.shevtsov.idle.feature.shop.view.Shop
@@ -30,7 +31,7 @@ import com.google.accompanist.insets.statusBarsHeight
 @Composable
 fun MainPreview() {
     val state = viewStatePreviewStub()
-    MainContent(state = state, onActionClicked = {}, onUpgradeSelected = {})
+    MainContent(state = state, onActionClicked = {}, onUpgradeSelected = {}, onToggleCollapse = {})
 }
 
 @Composable
@@ -45,6 +46,9 @@ fun MainScreen(
         },
         onUpgradeSelected = { upgradeId ->
             viewModel.handleAction(MainViewAction.UpgradeSelected(id = upgradeId))
+        },
+        onToggleCollapse = { sectionKey ->
+            viewModel.handleAction(MainViewAction.ToggleSectionCollapse(key = sectionKey))
         }
     )
 }
@@ -54,6 +58,7 @@ fun MainContent(
     state: MainViewState,
     onActionClicked: (actionId: Long) -> Unit,
     onUpgradeSelected: (upgradeId: Long) -> Unit,
+    onToggleCollapse: (key: SectionKey) -> Unit,
 ) {
     when (state) {
         is MainViewState.Loading -> LoadingContent()
@@ -61,6 +66,7 @@ fun MainContent(
             state = state,
             onActionClicked = onActionClicked,
             onUpgradeSelected = onUpgradeSelected,
+            onToggleCollapse = onToggleCollapse
         )
     }
 
@@ -76,6 +82,7 @@ fun SuccessContent(
     state: MainViewState.Success,
     onActionClicked: (actionId: Long) -> Unit = {},
     onUpgradeSelected: (upgradeId: Long) -> Unit = {},
+    onToggleCollapse: (key: SectionKey) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -92,7 +99,11 @@ fun SuccessContent(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            ResourcePane(state.resources)
+            ResourcePane(
+                resources = state.resources,
+                isCollapsed = state.sectionCollapse[SectionKey.Resources] ?: false,
+                onToggleCollapse = { onToggleCollapse(SectionKey.Resources) },
+            )
             MutantRatioPane(state.ratios)
         }
 
@@ -103,10 +114,12 @@ fun SuccessContent(
         ) {
             Cavity(
                 mainColor = Pallete.Red,
-                modifier = Modifier.weight(0.5f, fill=false),
+                modifier = Modifier.weight(0.5f, fill = false),
             ) {
                 ActionSection(
                     state = state.actionState,
+                    isCollapsed = state.sectionCollapse[SectionKey.Actions] ?: false,
+                    onToggleCollapse = { onToggleCollapse(SectionKey.Actions) },
                     onActionClicked = onActionClicked,
                 )
             }
@@ -117,10 +130,12 @@ fun SuccessContent(
             )
             Cavity(
                 mainColor = Pallete.Red,
-                modifier = Modifier.weight(0.5f, fill=false),
+                modifier = Modifier.weight(0.5f, fill = false),
             ) {
                 Shop(
                     shop = state.shop,
+                    isCollapsed = state.sectionCollapse[SectionKey.Upgrades] ?: false,
+                    onToggleCollapse = { onToggleCollapse(SectionKey.Upgrades) },
                     onUpgradeSelected = onUpgradeSelected,
                 )
             }
