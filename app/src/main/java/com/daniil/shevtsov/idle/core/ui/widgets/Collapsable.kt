@@ -43,6 +43,29 @@ fun CollapsablePreview() {
     )
 }
 
+@Composable
+fun <ElementType, ComposableType> CollapsableColumn(
+    title: String,
+    items: List<ElementType>,
+    composable: @Composable (item: ElementType) -> ComposableType,
+    modifier: Modifier = Modifier,
+) {
+    Collapsable(
+        title = title,
+        modifier = modifier,
+        collapsedContent = {
+            composable(items.first())
+        },
+        expandedContent = {
+            Column {
+                items.forEach { item ->
+                    composable(item)
+                }
+            }
+        }
+    )
+}
+
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun Collapsable(
@@ -81,7 +104,7 @@ fun Collapsable(
         AnimatedContent(
             targetState = isCollapsed,
             transitionSpec = {
-                if(targetState) {
+                if (targetState) {
                     fadeIn(initialAlpha = 1f) with fadeOut(targetAlpha = 1f)
                 } else {
                     fadeIn(initialAlpha = 1f) with fadeOut(targetAlpha = 1f)
@@ -89,8 +112,6 @@ fun Collapsable(
 
             }
         ) { targetCollapsed ->
-
-
             if (targetCollapsed) {
                 collapsedContent()
             } else {

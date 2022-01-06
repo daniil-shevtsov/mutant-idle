@@ -1,7 +1,10 @@
 package com.daniil.shevtsov.idle.feature.resource.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,7 +16,7 @@ import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.resourcePreviewStub
-import com.daniil.shevtsov.idle.core.ui.widgets.Collapsable
+import com.daniil.shevtsov.idle.core.ui.widgets.CollapsableColumn
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 
 @Preview
@@ -41,18 +44,10 @@ fun ResourcePane(
     resources: List<ResourceModel>
 ) {
 
-    Collapsable(
+    CollapsableColumn(
         title = "Resources",
-        collapsedContent = {
-            ResourcePanel(resources.first())
-        },
-        expandedContent = {
-            Column {
-                resources.forEach { resource ->
-                    ResourcePanel(resource)
-                }
-            }
-        }
+        items = resources,
+        composable = { ResourcePanel(it) }
     )
 }
 
