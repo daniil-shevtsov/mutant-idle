@@ -294,7 +294,7 @@ fun SuccessContent(
             val isActionsCollapsed = state.sectionCollapse[SectionKey.Actions] ?: false
             Cavity(
                 mainColor = Pallete.Red,
-                modifier = modifier.hackyWeight(isCollapsed = false),
+                modifier = modifier.hackyWeight(isCollapsed = isActionsCollapsed),
                 /*.let {
                     if (state.sectionCollapse[SectionKey.Actions] == true) {
                         it.weight(0.5f, fill = false)
@@ -319,7 +319,7 @@ fun SuccessContent(
             val isShopCollapsed = state.sectionCollapse[SectionKey.Upgrades] ?: false
             Cavity(
                 mainColor = Pallete.Red,
-                modifier = modifier.hackyWeight(isCollapsed = false)
+                modifier = modifier.hackyWeight(isCollapsed = isShopCollapsed)
             ) {
                 Shop(
                     shop = state.shop,
@@ -329,8 +329,6 @@ fun SuccessContent(
                     onUpgradeSelected = onUpgradeSelected,
                 )
             }
-
-
         }
     }
 }
