@@ -283,20 +283,21 @@ fun SuccessContent(
                 .background(Pallete.Red)
                 .padding(4.dp)
         ) {
+            val isActionsCollapsed = state.sectionCollapse[SectionKey.Actions] ?: false
             Cavity(
                 mainColor = Pallete.Red,
-                modifier = Modifier.weight(0.5f, fill = false)
-                    /*.let {
-                        if (state.sectionCollapse[SectionKey.Actions] == true) {
-                            it.weight(0.5f, fill = false)
-                        } else {
-                            it
-                        }
-                    }*/,
+                modifier = Modifier.weight(0.5f, fill = false),
+                /*.let {
+                    if (state.sectionCollapse[SectionKey.Actions] == true) {
+                        it.weight(0.5f, fill = false)
+                    } else {
+                        it
+                    }
+                }*/
             ) {
                 ActionSection(
                     state = state.actionState,
-                    isCollapsed = state.sectionCollapse[SectionKey.Actions] ?: false,
+                    isCollapsed = isActionsCollapsed,
                     modifier = modifier,
                     onToggleCollapse = { onToggleCollapse(SectionKey.Actions) },
                     onActionClicked = onActionClicked,
@@ -307,20 +308,21 @@ fun SuccessContent(
                     .height(8.dp)
                     .fillMaxWidth()
             )
+            val isShopCollapsed = state.sectionCollapse[SectionKey.Upgrades] ?: false
             Cavity(
                 mainColor = Pallete.Red,
-                modifier = modifier.weight(0.5f, fill = false)
-                    /*.let {
-                        if (state.sectionCollapse[SectionKey.Upgrades] == true) {
-                            it.weight(0.5f, fill = false)
-                        } else {
-                            it
-                        }
-                    }*/,
+                modifier = modifier.weight(0.5f, fill = false),
+                /*.let {
+                    if (state.sectionCollapse[SectionKey.Upgrades] == true) {
+                        it.weight(0.5f, fill = false)
+                    } else {
+                        it
+                    }
+                }*/
             ) {
                 Shop(
                     shop = state.shop,
-                    isCollapsed = state.sectionCollapse[SectionKey.Upgrades] ?: false,
+                    isCollapsed = isShopCollapsed,
                     modifier = modifier,
                     onToggleCollapse = { onToggleCollapse(SectionKey.Upgrades) },
                     onUpgradeSelected = onUpgradeSelected,
