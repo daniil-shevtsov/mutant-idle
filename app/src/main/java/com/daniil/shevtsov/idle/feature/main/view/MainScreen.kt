@@ -279,19 +279,20 @@ fun SuccessContent(
 
         Column(
             modifier = modifier
+                .weight(1f)
                 .background(Pallete.Red)
                 .padding(4.dp)
         ) {
             Cavity(
                 mainColor = Pallete.Red,
-                modifier = Modifier
-                    .let {
+                modifier = Modifier.weight(0.5f, fill = false)
+                    /*.let {
                         if (state.sectionCollapse[SectionKey.Actions] == true) {
                             it.weight(0.5f, fill = false)
                         } else {
                             it
                         }
-                    },
+                    }*/,
             ) {
                 ActionSection(
                     state = state.actionState,
@@ -308,14 +309,14 @@ fun SuccessContent(
             )
             Cavity(
                 mainColor = Pallete.Red,
-                modifier = modifier
-                    .let {
+                modifier = modifier.weight(0.5f, fill = false)
+                    /*.let {
                         if (state.sectionCollapse[SectionKey.Upgrades] == true) {
                             it.weight(0.5f, fill = false)
                         } else {
                             it
                         }
-                    },
+                    }*/,
             ) {
                 Shop(
                     shop = state.shop,
