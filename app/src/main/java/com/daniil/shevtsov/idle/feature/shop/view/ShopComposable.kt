@@ -16,6 +16,7 @@ import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.protrusive
 import com.daniil.shevtsov.idle.core.ui.shopStatePreviewStub
+import com.daniil.shevtsov.idle.core.ui.widgets.Collapsable
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
 import com.daniil.shevtsov.idle.feature.upgrade.view.UpgradeList
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -27,7 +28,6 @@ import com.google.accompanist.pager.HorizontalPager
 @Composable
 fun ShopPreview() {
     Column {
-        Shop(shop = shopStatePreviewStub(), isCollapsed = true)
         Shop(shop = shopStatePreviewStub())
     }
 }
@@ -38,40 +38,42 @@ fun Shop(
     shop: ShopState,
     modifier: Modifier = Modifier,
     onUpgradeSelected: (upgradeId: Long) -> Unit = {},
-    isCollapsed: Boolean = false,
 ) {
-    if(isCollapsed) {
-        Text(
-            text = "Upgrades",
-            color = Color.White,
-            fontSize = 24.sp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Pallete.Red)
-                .protrusive(
-                    lightColor = Pallete.LightRed,
-                    darkColor = Pallete.DarkRed
-                )
-                .background(Pallete.Red)
-                .padding(4.dp)
-                .cavitary(
-                    lightColor = Pallete.LightRed,
-                    darkColor = Pallete.DarkRed
-                )
-                .background(Pallete.DarkRed)
-                .padding(4.dp)
-        )
-    } else {
-        HorizontalPager(
-            count = shop.upgradeLists.size,
-            modifier = modifier,
-        ) { pageIndex ->
-            val upgradeList = shop.upgradeLists[pageIndex]
-            UpgradeList(
-                upgradeList = upgradeList,
-                onUpgradeSelected = onUpgradeSelected,
-                modifier = Modifier.fillMaxHeight()
+    Collapsable(title ="Upgrades",
+        collapsedContent = {
+            Text(
+                text = "Upgrades",
+                color = Color.White,
+                fontSize = 24.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Pallete.Red)
+                    .protrusive(
+                        lightColor = Pallete.LightRed,
+                        darkColor = Pallete.DarkRed
+                    )
+                    .background(Pallete.Red)
+                    .padding(4.dp)
+                    .cavitary(
+                        lightColor = Pallete.LightRed,
+                        darkColor = Pallete.DarkRed
+                    )
+                    .background(Pallete.DarkRed)
+                    .padding(4.dp)
             )
+        },
+        expandedContent = {
+            HorizontalPager(
+                count = shop.upgradeLists.size,
+                modifier = modifier,
+            ) { pageIndex ->
+                val upgradeList = shop.upgradeLists[pageIndex]
+                UpgradeList(
+                    upgradeList = upgradeList,
+                    onUpgradeSelected = onUpgradeSelected,
+                    modifier = Modifier.fillMaxHeight()
+                )
+            }
         }
-    }
+    )
 }
