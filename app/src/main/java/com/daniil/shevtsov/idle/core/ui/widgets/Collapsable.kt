@@ -10,7 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,6 +24,7 @@ import com.daniil.shevtsov.idle.core.ui.Pallete
 fun CollapsablePreview() {
     Collapsable(
         title = "Preview",
+        isCollapsed = false,
         collapsedContent = {
             Box(
                 modifier = Modifier
@@ -40,19 +41,23 @@ fun CollapsablePreview() {
                     .padding(8.dp)
                     .background(Color.White)
             )
-        }
+        },
+        onToggleCollapse = {},
     )
 }
 
 @Composable
 fun <ElementType, ComposableType> CollapsableColumn(
     title: String,
+    isCollapsed: Boolean,
     items: List<ElementType>,
     composable: @Composable (item: ElementType) -> ComposableType,
+    onToggleCollapse: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Collapsable(
         title = title,
+        isCollapsed = isCollapsed,
         modifier = modifier,
         collapsedContent = {
             composable(items.first())
@@ -63,7 +68,8 @@ fun <ElementType, ComposableType> CollapsableColumn(
                     composable(item)
                 }
             }
-        }
+        },
+        onToggleCollapse = onToggleCollapse,
     )
 }
 
@@ -71,11 +77,13 @@ fun <ElementType, ComposableType> CollapsableColumn(
 @Composable
 fun Collapsable(
     title: String,
+    isCollapsed: Boolean,
     modifier: Modifier = Modifier,
     collapsedContent: @Composable () -> Unit,
     expandedContent: @Composable () -> Unit,
+    onToggleCollapse: () -> Unit,
 ) {
-    var isCollapsed by remember { mutableStateOf(false) }
+//    var isCollapsed by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -94,7 +102,7 @@ fun Collapsable(
         ) {
             CollapseButton(
                 isCollapsed = isCollapsed,
-                onClick = { isCollapsed = !isCollapsed }
+                onClick = { onToggleCollapse() }
             )
             Text(
                 text = title,

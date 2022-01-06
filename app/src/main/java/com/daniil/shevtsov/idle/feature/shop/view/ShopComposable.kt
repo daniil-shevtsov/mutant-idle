@@ -41,7 +41,9 @@ fun Shop(
     onToggleCollapse: () -> Unit,
     onUpgradeSelected: (upgradeId: Long) -> Unit = {},
 ) {
-    Collapsable(title = "Upgrades",
+    Collapsable(
+        title = "Upgrades",
+        isCollapsed = isCollapsed,
         collapsedContent = {
             Text(
                 text = "Upgrades",
@@ -76,6 +78,7 @@ fun Shop(
                     modifier = Modifier.fillMaxHeight()
                 )
             }
-        }
+        },
+        onToggleCollapse = onToggleCollapse,
     )
 }

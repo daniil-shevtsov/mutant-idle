@@ -50,8 +50,10 @@ fun ResourcePane(
 
     CollapsableColumn(
         title = "Resources",
+        isCollapsed = isCollapsed,
         items = resources,
-        composable = { ResourcePanel(it) }
+        composable = { ResourcePanel(it) },
+        onToggleCollapse = onToggleCollapse,
     )
 }
 

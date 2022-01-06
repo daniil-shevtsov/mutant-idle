@@ -54,7 +54,9 @@ fun ActionSection(
 ) {
     val actionPanes = listOf(state.humanActionPane, state.mutantActionPane)
 
-    Collapsable(title ="Actions",
+    Collapsable(
+        title ="Actions",
+        isCollapsed = isCollapsed,
         collapsedContent = {
             Text(
                 text = "Actions",
@@ -88,7 +90,8 @@ fun ActionSection(
                     onActionClicked = onActionClicked,
                 )
             }
-        }
+        },
+        onToggleCollapse = onToggleCollapse,
     )
 }
 
