@@ -37,6 +37,7 @@ fun CollapsablePreview() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp)
+                    .padding(8.dp)
                     .background(Color.White)
             )
         }
@@ -79,14 +80,16 @@ fun Collapsable(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Pallete.Red)
-            .padding(4.dp)
+
         //.animateContentSize(),
     ) {
         Row(
             horizontalArrangement = spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
+                .fillMaxWidth()
+                .background(Pallete.Red)
+                .padding(4.dp)
 
         ) {
             CollapseButton(
