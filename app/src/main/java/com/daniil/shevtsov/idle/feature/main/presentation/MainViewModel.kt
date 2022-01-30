@@ -163,16 +163,27 @@ class MainViewModel @Inject constructor(
     private fun handleActionClicked(action: MainViewAction.ActionClicked) {
         viewModelScope.launch {
             val selectedAction = ActionBehavior.getById(actionsStorage, action.id)
-            selectedAction?.resourceChanges?.forEach { (resourceKey, resourceValue) ->
-                ResourceBehavior.applyResourceChange(
+
+            val hasInvalidChanges =  selectedAction?.resourceChanges?.any { (resourceKey, resourceChange) ->
+                val resource = ResourceBehavior.getCurrentResource(
                     resourcesStorage = resourcesStorage,
                     resourceKey = resourceKey,
-                    amount = resourceValue,
                 )
-            }
-            selectedAction?.ratioChanges?.forEach { (key, value) ->
-                val oldRatio = ratiosStorage.getByKey(key = key)!!.value
-                ratiosStorage.updateByKey(key = key, newRatio = oldRatio + value)
+                resource.value + resourceChange < 0
+            } ?: false
+
+            if(!hasInvalidChanges) {
+                selectedAction?.resourceChanges?.forEach { (resourceKey, resourceValue) ->
+                    ResourceBehavior.applyResourceChange(
+                        resourcesStorage = resourcesStorage,
+                        resourceKey = resourceKey,
+                        amount = resourceValue,
+                    )
+                }
+                selectedAction?.ratioChanges?.forEach { (key, value) ->
+                    val oldRatio = ratiosStorage.getByKey(key = key)!!.value
+                    ratiosStorage.updateByKey(key = key, newRatio = oldRatio + value)
+                }
             }
         }
     }

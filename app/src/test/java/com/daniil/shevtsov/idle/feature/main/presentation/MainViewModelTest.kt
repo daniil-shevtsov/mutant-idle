@@ -363,6 +363,27 @@ internal class MainViewModelTest {
         }
     }
 
+    @Test
+    fun `should not apply action if it requires unavailable resources`() = runBlockingTest {
+        actionsStorage = ActionsStorage(
+            initialActions = listOf(
+                action(
+                    id = 1L,
+                    resourceChanges = mapOf(ResourceKey.Money to -30.0),
+                )
+            )
+        )
+        setInitialResourceValue(key = ResourceKey.Money, value = 10.0)
+
+        viewModel.state.test {
+            viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
+
+            assertThat(expectMostRecentItem())
+                .extractingMoney()
+                .isEqualTo("10")
+        }
+    }
+
     private fun createViewModel() = MainViewModel(
         balanceConfig = balanceConfig,
         upgradeStorage = upgradeStorage,
@@ -383,17 +404,19 @@ internal class MainViewModelTest {
             .prop(MainViewState.Success::ratios)
             .extracting(HumanityRatioModel::name, HumanityRatioModel::percent)
 
-    private fun Assert<HumanityRatioModel>.assertPercentage(expected: Double) = prop(HumanityRatioModel::percent)
-        .isCloseTo(expected, 0.00001)
+    private fun Assert<HumanityRatioModel>.assertPercentage(expected: Double) =
+        prop(HumanityRatioModel::percent)
+            .isCloseTo(expected, 0.00001)
 
     private fun Assert<MainViewState>.extractingMutanity() =
         isInstanceOf(MainViewState.Success::class)
             .prop(MainViewState.Success::ratios)
             .index(0)
 
-    private fun Assert<MainViewState>.extractingSuspicion() = isInstanceOf(MainViewState.Success::class)
-        .prop(MainViewState.Success::ratios)
-        .index(1)
+    private fun Assert<MainViewState>.extractingSuspicion() =
+        isInstanceOf(MainViewState.Success::class)
+            .prop(MainViewState.Success::ratios)
+            .index(1)
 
     private fun Assert<MainViewState>.extractingMutanityValue() =
         isInstanceOf(MainViewState.Success::class)
@@ -428,4 +451,8 @@ internal class MainViewModelTest {
             .index(0)
             .prop(ResourceModel::value)
 
+    private fun Assert<MainViewState>.extractingMoney() = isInstanceOf(MainViewState.Success::class)
+        .prop(MainViewState.Success::resources)
+        .index(1)
+        .prop(ResourceModel::value)
 }
