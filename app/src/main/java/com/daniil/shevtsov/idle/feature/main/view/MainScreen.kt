@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.Pallete
@@ -24,55 +23,6 @@ import com.daniil.shevtsov.idle.feature.ratio.view.MutantRatioPane
 import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
 import com.daniil.shevtsov.idle.feature.shop.view.Shop
 import com.google.accompanist.insets.statusBarsHeight
-
-@Preview(
-    widthDp = 320,
-    heightDp = 534,
-)
-@Composable
-fun MainPreview1() {
-    TestComposable(
-        firstBig = true,
-        secondBig = true
-    )
-}
-
-@Preview(
-    widthDp = 320,
-    heightDp = 534,
-)
-@Composable
-fun MainPreview2() {
-    TestComposable(
-        firstBig = true,
-        secondBig = false
-    )
-}
-
-@Preview(
-    widthDp = 320,
-    heightDp = 534,
-)
-@Composable
-fun MainPreview3() {
-    TestComposable(
-        firstBig = false,
-        secondBig = true
-    )
-}
-
-@Preview(
-    widthDp = 320,
-    heightDp = 534,
-)
-@Composable
-fun MainPreview4() {
-    TestComposable(
-        firstBig = false,
-        secondBig = false
-    )
-}
-
 
 @Preview(
     widthDp = 320,
@@ -193,54 +143,6 @@ fun MainContent(
 @Composable
 fun LoadingContent() {
     Text("Loading")
-}
-
-@Composable
-fun TestComposable(
-    firstBig: Boolean,
-    secondBig: Boolean,
-) {
-    Column(modifier = Modifier.background(Color.Green)) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(100.dp)
-                .background(Color.Yellow)
-        )
-
-        if (firstBig) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(400.dp)
-                    .weight(1f, fill = false)
-                    .background(Color.Red)
-            )
-        } else {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(Color.Red)
-            )
-        }
-        if (secondBig) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(4000.dp)
-                    .weight(1f, fill = false)
-                    .background(Color.Blue)
-            )
-        } else {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(Color.Blue)
-            )
-        }
-    }
 }
 
 @Composable
