@@ -16,7 +16,6 @@ import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
 
 internal fun viewStatePreviewStub() = MainViewState.Success(
     resources = resourceStubs(),
-    ratio = humanityRatioStub(),
     ratios = ratiosStubs(),
     actionState = actionStatePreviewStub(),
     shop = shopStatePreviewStub(),

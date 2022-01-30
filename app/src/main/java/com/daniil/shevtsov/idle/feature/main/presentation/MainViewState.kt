@@ -10,7 +10,6 @@ sealed class MainViewState {
 
     data class Success(
         val resources: List<ResourceModel>,
-        val ratio: HumanityRatioModel,
         val ratios: List<HumanityRatioModel> = emptyList(),
         val actionState: ActionsState,
         val shop: ShopState,
