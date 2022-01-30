@@ -221,7 +221,6 @@ fun TestComposable(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(1.dp)
-                    //.weight(1f, fill = false)
                     .background(Color.Red)
             )
         }
@@ -238,7 +237,6 @@ fun TestComposable(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(1.dp)
-//                    .weight(1f, fill = false)
                     .background(Color.Blue)
             )
         }
@@ -295,13 +293,6 @@ fun SuccessContent(
             Cavity(
                 mainColor = Pallete.Red,
                 modifier = modifier.hackyWeight(isCollapsed = isActionsCollapsed),
-                /*.let {
-                    if (state.sectionCollapse[SectionKey.Actions] == true) {
-                        it.weight(0.5f, fill = false)
-                    } else {
-                        it
-                    }
-                }*/
             ) {
                 ActionSection(
                     state = state.actionState,
