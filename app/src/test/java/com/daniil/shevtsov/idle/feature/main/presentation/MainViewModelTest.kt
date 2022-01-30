@@ -266,6 +266,30 @@ internal class MainViewModelTest {
     }
 
     @Test
+    fun `should update both ratios correctly when actions change them both`() = runBlockingTest {
+        actionsStorage = ActionsStorage(
+            initialActions = listOf(
+                action(id = 0L, ratioChanges = mapOf(RatioKey.Suspicion to 0.15f)),
+                action(id = 1L, ratioChanges = mapOf(RatioKey.Mutanity to 0.25f)),
+            )
+        )
+
+        viewModel.state.test {
+            viewModel.handleAction(MainViewAction.ActionClicked(id = 0L))
+            assertThat(expectMostRecentItem()).all {
+                extractingSuspicion().assertPercentage(0.15)
+                extractingMutanity().assertPercentage(0.0)
+            }
+
+            viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
+            assertThat(expectMostRecentItem()).all {
+                extractingSuspicion().assertPercentage(0.15)
+                extractingMutanity().assertPercentage(0.25)
+            }
+        }
+    }
+
+    @Test
     fun `should update blood when action clicked`() = runBlockingTest {
         setInitialResourceValue(value = 1000.0)
         actionsStorage = ActionsStorage(
@@ -358,6 +382,18 @@ internal class MainViewModelTest {
         isInstanceOf(MainViewState.Success::class)
             .prop(MainViewState.Success::ratios)
             .extracting(HumanityRatioModel::name, HumanityRatioModel::percent)
+
+    private fun Assert<HumanityRatioModel>.assertPercentage(expected: Double) = prop(HumanityRatioModel::percent)
+        .isCloseTo(expected, 0.00001)
+
+    private fun Assert<MainViewState>.extractingMutanity() =
+        isInstanceOf(MainViewState.Success::class)
+            .prop(MainViewState.Success::ratios)
+            .index(0)
+
+    private fun Assert<MainViewState>.extractingSuspicion() = isInstanceOf(MainViewState.Success::class)
+        .prop(MainViewState.Success::ratios)
+        .index(1)
 
     private fun Assert<MainViewState>.extractingMutanityValue() =
         isInstanceOf(MainViewState.Success::class)

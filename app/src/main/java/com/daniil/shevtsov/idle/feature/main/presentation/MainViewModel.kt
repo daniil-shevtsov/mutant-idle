@@ -88,7 +88,7 @@ class MainViewModel @Inject constructor(
                 ratios = ratios.map {
                     HumanityRatioModel(
                         name = getNameForRatio(it),
-                        percent = ratios.first().value
+                        percent = it.value
                     )
                 },
                 actionState = actions.toActionState(),
