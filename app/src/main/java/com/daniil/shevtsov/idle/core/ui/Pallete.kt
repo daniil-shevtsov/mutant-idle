@@ -6,10 +6,10 @@ import androidx.compose.ui.graphics.Color
 object Pallete {
 
     @Stable
-    val LightRed = Color(0xCDD64747)
+    val LightRed = Color(0xFFD64747)
 
     @Stable
-    val Red = Color(0xE4AF0A0A)
+    val Red = Color(0xFFAF0A0A)
 
     @Stable
     val DarkRed = Color(0xFF750404)

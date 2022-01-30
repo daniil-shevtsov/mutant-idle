@@ -2,6 +2,8 @@ package com.daniil.shevtsov.idle.feature.shop.domain
 
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
+import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
+import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
@@ -14,7 +16,8 @@ object CompositePurchaseBehavior {
         upgradeStorage: UpgradeStorage,
         resourcesStorage: ResourcesStorage,
         mutantRatioStorage: MutantRatioStorage,
-        upgradeId: Long
+        ratiosStorage: RatiosStorage,
+        upgradeId: Long,
     ) {
         val upgrade = upgradeStorage.getUpgradeById(id = upgradeId)!!
 
@@ -23,7 +26,7 @@ object CompositePurchaseBehavior {
             resourceKey = ResourceKey.Blood,
         )
 
-        if(upgrade.price.value <= currentResource.value) {
+        if (upgrade.price.value <= currentResource.value) {
             val boughtUpgrade = PurchaseBehavior.buyUpgrade(
                 upgrade = upgrade,
                 currentResource = currentResource,
@@ -31,14 +34,24 @@ object CompositePurchaseBehavior {
             UpgradeBehavior.updateById(
                 storage = upgradeStorage,
                 id = upgradeId,
-                newUpgrade =  boughtUpgrade,
+                newUpgrade = boughtUpgrade,
             )
             ResourceBehavior.decreaseResource(
                 resourcesStorage = resourcesStorage,
                 resourceKey = ResourceKey.Blood,
                 amount = upgrade.price.value,
             )
-            mutantRatioStorage.setNewValue(mutantRatioStorage.getCurrentValue() + upgrade.price.value / balanceConfig.resourceSpentForFullMutant)
+
+            val oldRatio = mutantRatioStorage.getCurrentValue()
+            val upgradePercent = upgrade.price.value / balanceConfig.resourceSpentForFullMutant
+            val newRatio = oldRatio + upgradePercent
+
+            val oldKekRatio = ratiosStorage.getByKey(key = RatioKey.Mutanity)!!
+            mutantRatioStorage.setNewValue(newRatio)
+            ratiosStorage.updateByKey(
+                key = RatioKey.Mutanity,
+                newValue = oldKekRatio.copy(value = newRatio)
+            )
         }
     }
 }

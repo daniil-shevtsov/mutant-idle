@@ -5,6 +5,7 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
+import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
@@ -14,15 +15,36 @@ import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
 
 internal fun viewStatePreviewStub() = MainViewState.Success(
-    resources = listOf(resourcePreviewStub()),
-    ratio = humanityRatioStub(),
+    resources = resourceStubs(),
+    ratios = ratiosStubs(),
     actionState = actionStatePreviewStub(),
     shop = shopStatePreviewStub(),
+    sectionCollapse = mapOf(
+        SectionKey.Resources to false,
+        SectionKey.Actions to false,
+        SectionKey.Upgrades to false,
+    )
 )
 
 internal fun resourcePreviewStub() = ResourceModel(
     name = "Blood",
     value = "10 000",
+)
+
+internal fun resourceStubs() = listOf(
+    ResourceModel(name = "Blood", value = "10 000"),
+    ResourceModel(name = "Money", value = "500"),
+)
+
+internal fun ratiosStubs() = listOf(
+    HumanityRatioModel(
+        name = "Dormant",
+        percent = 0.5,
+    ),
+    HumanityRatioModel(
+        name = "Suspicion",
+        percent = 0.25,
+    ),
 )
 
 internal fun humanityRatioStub() = HumanityRatioModel(

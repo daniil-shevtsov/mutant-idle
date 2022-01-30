@@ -2,11 +2,8 @@ package com.daniil.shevtsov.idle.feature.action.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement.spacedBy
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
@@ -21,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.actionPreviewStub
 import com.daniil.shevtsov.idle.core.ui.actionStatePreviewStub
-import com.daniil.shevtsov.idle.core.ui.cavitary
+import com.daniil.shevtsov.idle.core.ui.widgets.Collapsable
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
@@ -41,34 +38,44 @@ fun ActionPreview() {
 )
 @Composable
 fun ActionPanesPreview() {
-    ActionSection(state = actionStatePreviewStub())
+    ActionSection(
+        state = actionStatePreviewStub(),
+        isCollapsed = false,
+        onToggleCollapse = {},
+    )
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ActionSection(
     state: ActionsState,
+    isCollapsed: Boolean,
     modifier: Modifier = Modifier,
+    onToggleCollapse: () -> Unit,
     onActionClicked: (actionId: Long) -> Unit = {},
 ) {
     val actionPanes = listOf(state.humanActionPane, state.mutantActionPane)
-    HorizontalPager(
-        count = actionPanes.size,
-        modifier = modifier
-            .background(Pallete.Red)
-            .padding(4.dp)
-            .cavitary(
-                lightColor = Pallete.LightRed,
-                darkColor = Pallete.DarkRed
-            )
-            .background(Pallete.DarkGray),
-    ) { paneIndex ->
-        val actionPane = actionPanes[paneIndex]
-        ActionPane(
-            pane = actionPane,
-            onActionClicked = onActionClicked,
-        )
-    }
+
+    Collapsable(
+        title = "Actions",
+        isCollapsed = isCollapsed,
+        modifier = modifier,
+        collapsedContent = { },
+        expandedContent = {
+            HorizontalPager(
+                count = actionPanes.size,
+                modifier = modifier,
+            ) { paneIndex ->
+                val actionPane = actionPanes[paneIndex]
+                ActionPane(
+                    pane = actionPane,
+                    modifier = modifier,
+                    onActionClicked = onActionClicked,
+                )
+            }
+        },
+        onToggleCollapse = onToggleCollapse,
+    )
 }
 
 @Composable
@@ -79,7 +86,8 @@ fun ActionPane(
 ) {
     LazyVerticalGrid(
         cells = GridCells.Fixed(count = 2),
-        modifier = modifier
+        modifier = modifier,
+        contentPadding = PaddingValues(4.dp)
     ) {
         items(pane.actions) { action ->
             Action(
@@ -99,7 +107,6 @@ fun Action(
 ) {
     Column(
         modifier = modifier
-            .padding(4.dp)
             .background(Pallete.Red)
             .padding(4.dp)
             .background(Pallete.DarkRed)

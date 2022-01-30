@@ -65,6 +65,7 @@ object Deps {
         const val foundationLayout =
             "androidx.compose.foundation:foundation-layout:${Versions.compose}"
         const val material = "androidx.compose.material:material:${Versions.compose}"
+        const val materialExtended = "androidx.compose.material:material-icons-extended:${Versions.compose}"
         const val navigation = "androidx.navigation:navigation-compose:${Versions.navCompose}"
     }
 

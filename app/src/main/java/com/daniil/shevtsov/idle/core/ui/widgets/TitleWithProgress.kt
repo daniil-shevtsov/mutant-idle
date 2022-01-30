@@ -1,10 +1,7 @@
 package com.daniil.shevtsov.idle.core.ui.widgets
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,10 +16,16 @@ import com.daniil.shevtsov.idle.core.ui.Pallete
 @Preview
 @Composable
 fun MainPreview() {
-    TitleWithProgress(
-        title = "Title",
-        progress = 0.5f,
-    )
+    Column{
+        TitleWithProgress(
+            title = "Title",
+            progress = 0.5f,
+        )
+        TitleWithProgress(
+            title = "Suspicion",
+            progress = 0.5f,
+        )
+    }
 }
 
 @Composable
@@ -40,15 +43,15 @@ fun TitleWithProgress(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            modifier = modifier,
+            modifier = modifier.weight(0.35f),
             text = title,
             fontSize = 24.sp,
             color = Color.White,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Start
         )
         MyProgressBar(
             progressPercentage = progress,
-            modifier = modifier,
+            modifier = modifier.weight(0.65f),
         )
     }
 }

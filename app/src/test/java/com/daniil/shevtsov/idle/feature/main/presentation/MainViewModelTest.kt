@@ -12,6 +12,9 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
+import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
+import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
+import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
@@ -49,6 +52,12 @@ internal class MainViewModelTest {
         )
     )
     private val mutantRatioStorage = MutantRatioStorage()
+    private val ratiosStorage = RatiosStorage(
+        initialRatios = listOf(
+            Ratio(key = RatioKey.Mutanity, title = "", value = 0.0),
+            Ratio(key = RatioKey.Suspicion, title = "", value = 0.0),
+        )
+    )
 
     private val resourceSpentForFullMutant = 100.0
     private val balanceConfig = balanceConfig(
@@ -88,11 +97,8 @@ internal class MainViewModelTest {
                 .all {
                     extractingResources()
                         .containsExactly("Blood" to "0", "Money" to "0")
-                    prop(MainViewState.Success::ratio)
-                        .all {
-                            prop(HumanityRatioModel::name).isEqualTo("Human")
-                            prop(HumanityRatioModel::percent).isEqualTo(0.0)
-                        }
+                    extractingRatios()
+                        .containsExactly("Human" to 0.0, "Unknown" to 0.0)
                     prop(MainViewState.Success::shop)
                         .prop(ShopState::upgradeLists)
                         .index(0)
@@ -108,6 +114,12 @@ internal class MainViewModelTest {
                         .prop(ActionPane::actions)
                         .extracting(ActionModel::title)
                         .containsExactly("mutant action")
+                    prop(MainViewState.Success::sectionCollapse)
+                        .containsOnly(
+                            SectionKey.Resources to false,
+                            SectionKey.Actions to false,
+                            SectionKey.Upgrades to false,
+                        )
                 }
         }
     }
@@ -180,9 +192,7 @@ internal class MainViewModelTest {
         viewModel.state.test {
             val state = expectMostRecentItem()
             assertThat(state)
-                .isInstanceOf(MainViewState.Success::class)
-                .prop(MainViewState.Success::ratio)
-                .prop(HumanityRatioModel::percent)
+                .extractingMutanityValue()
                 .isEqualTo(0.10)
         }
     }
@@ -199,7 +209,7 @@ internal class MainViewModelTest {
     }
 
     @Test
-    fun `should update ratio names correctly`() = runBlockingTest {
+    fun `should update mutant ratio names correctly`() = runBlockingTest {
         upgradeStorage = UpgradeStorage(
             initialUpgrades = listOf(
                 upgrade(id = 0L, price = 15.0),
@@ -224,6 +234,58 @@ internal class MainViewModelTest {
 
             viewModel.handleAction(MainViewAction.UpgradeSelected(id = 3L))
             assertThat(expectMostRecentItem()).hasRatioName("Honest")
+        }
+    }
+
+    @Test
+    fun `should update suspicion ratio names correctly`() = runBlockingTest {
+        actionsStorage = ActionsStorage(
+            initialActions = listOf(
+                action(id = 0L, ratioChanges = mapOf(RatioKey.Suspicion to 0.15f)),
+                action(id = 1L, ratioChanges = mapOf(RatioKey.Suspicion to 0.10f)),
+                action(id = 2L, ratioChanges = mapOf(RatioKey.Suspicion to 0.25f)),
+                action(id = 3L, ratioChanges = mapOf(RatioKey.Suspicion to 0.30f)),
+            )
+        )
+
+        viewModel.state.test {
+            assertThat(awaitItem()).hasSuspicionRatioName("Unknown")
+
+            viewModel.handleAction(MainViewAction.ActionClicked(id = 0L))
+            assertThat(expectMostRecentItem()).hasSuspicionRatioName("Rumors")
+
+            viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
+            assertThat(expectMostRecentItem()).hasSuspicionRatioName("News")
+
+            viewModel.handleAction(MainViewAction.ActionClicked(id = 2L))
+            assertThat(expectMostRecentItem()).hasSuspicionRatioName("Investigation")
+
+            viewModel.handleAction(MainViewAction.ActionClicked(id = 3L))
+            assertThat(expectMostRecentItem()).hasSuspicionRatioName("Manhunt")
+        }
+    }
+
+    @Test
+    fun `should update both ratios correctly when actions change them both`() = runBlockingTest {
+        actionsStorage = ActionsStorage(
+            initialActions = listOf(
+                action(id = 0L, ratioChanges = mapOf(RatioKey.Suspicion to 0.15f)),
+                action(id = 1L, ratioChanges = mapOf(RatioKey.Mutanity to 0.25f)),
+            )
+        )
+
+        viewModel.state.test {
+            viewModel.handleAction(MainViewAction.ActionClicked(id = 0L))
+            assertThat(expectMostRecentItem()).all {
+                extractingSuspicion().assertPercentage(0.15)
+                extractingMutanity().assertPercentage(0.0)
+            }
+
+            viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
+            assertThat(expectMostRecentItem()).all {
+                extractingSuspicion().assertPercentage(0.15)
+                extractingMutanity().assertPercentage(0.25)
+            }
         }
     }
 
@@ -282,12 +344,32 @@ internal class MainViewModelTest {
             }
         }
 
+    @Test
+    fun `should toggle corresponding collapse state when toggle clicked`() = runBlockingTest {
+        viewModel.state.test {
+            viewModel.handleAction(MainViewAction.ToggleSectionCollapse(key = SectionKey.Resources))
+
+            assertThat(expectMostRecentItem())
+                .isInstanceOf(MainViewState.Success::class)
+                .prop(MainViewState.Success::sectionCollapse)
+                .contains(SectionKey.Resources to true)
+
+            viewModel.handleAction(MainViewAction.ToggleSectionCollapse(key = SectionKey.Resources))
+
+            assertThat(expectMostRecentItem())
+                .isInstanceOf(MainViewState.Success::class)
+                .prop(MainViewState.Success::sectionCollapse)
+                .contains(SectionKey.Resources to false)
+        }
+    }
+
     private fun createViewModel() = MainViewModel(
         balanceConfig = balanceConfig,
         upgradeStorage = upgradeStorage,
         actionsStorage = actionsStorage,
         resourcesStorage = resourcesStorage,
         mutantRatioStorage = mutantRatioStorage,
+        ratiosStorage = ratiosStorage,
     )
 
     private fun Assert<MainViewState>.extractingUpgrades() =
@@ -296,9 +378,42 @@ internal class MainViewModelTest {
             .prop(ShopState::upgradeLists)
             .index(0)
 
-    private fun Assert<MainViewState>.hasRatioName(expectedName: String) =
+    private fun Assert<MainViewState>.extractingRatios() =
         isInstanceOf(MainViewState.Success::class)
-            .prop(MainViewState.Success::ratio)
+            .prop(MainViewState.Success::ratios)
+            .extracting(HumanityRatioModel::name, HumanityRatioModel::percent)
+
+    private fun Assert<HumanityRatioModel>.assertPercentage(expected: Double) = prop(HumanityRatioModel::percent)
+        .isCloseTo(expected, 0.00001)
+
+    private fun Assert<MainViewState>.extractingMutanity() =
+        isInstanceOf(MainViewState.Success::class)
+            .prop(MainViewState.Success::ratios)
+            .index(0)
+
+    private fun Assert<MainViewState>.extractingSuspicion() = isInstanceOf(MainViewState.Success::class)
+        .prop(MainViewState.Success::ratios)
+        .index(1)
+
+    private fun Assert<MainViewState>.extractingMutanityValue() =
+        isInstanceOf(MainViewState.Success::class)
+            .prop(MainViewState.Success::ratios)
+            .index(0)
+            .prop(HumanityRatioModel::percent)
+
+    private fun Assert<MainViewState>.extractingMutanityName() =
+        isInstanceOf(MainViewState.Success::class)
+            .prop(MainViewState.Success::ratios)
+            .index(0)
+            .prop(HumanityRatioModel::name)
+
+    private fun Assert<MainViewState>.hasRatioName(expectedName: String) = extractingMutanityName()
+        .isEqualTo(expectedName)
+
+    private fun Assert<MainViewState>.hasSuspicionRatioName(expectedName: String) =
+        isInstanceOf(MainViewState.Success::class)
+            .prop(MainViewState.Success::ratios)
+            .index(1)
             .prop(HumanityRatioModel::name)
             .isEqualTo(expectedName)
 

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -18,11 +19,12 @@ fun MyProgressBar(
     progressPercentage: Float,
     modifier: Modifier = Modifier,
 ) {
+    val height = remember { 30.dp }
     Box(modifier = modifier) {
         Box(
             modifier = modifier
                 .fillMaxWidth()
-                .height(40.dp)
+                .height(height)
                 .cavitary(
                     lightColor = Pallete.LightRed,
                     darkColor = Pallete.DarkRed
@@ -32,7 +34,7 @@ fun MyProgressBar(
         Box(
             modifier = modifier
                 .fillMaxWidth(fraction = progressPercentage)
-                .height(40.dp)
+                .height(height)
                 .padding(4.dp)
                 .protrusive(
                     lightColor = Pallete.LightRed,

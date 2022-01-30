@@ -5,6 +5,9 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
+import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
+import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
+import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
@@ -26,6 +29,9 @@ internal class CompositePurchaseBehaviorTest {
             Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0)
         )
     )
+    private val ratiosStorage = RatiosStorage(
+        initialRatios = listOf(Ratio(key = RatioKey.Mutanity, title = "", value = 0.0))
+    )
     private var upgradeStorage = UpgradeStorage(initialUpgrades = emptyList())
     private val mutantRatioStorage = MutantRatioStorage()
     private val balanceConfig = balanceConfig(resourceSpentForFullMutant = 100.0)
@@ -45,6 +51,7 @@ internal class CompositePurchaseBehaviorTest {
             upgradeStorage = upgradeStorage,
             resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
+            ratiosStorage = ratiosStorage,
             upgradeId = 1L,
         )
 
@@ -69,6 +76,7 @@ internal class CompositePurchaseBehaviorTest {
             upgradeStorage = upgradeStorage,
             resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
+            ratiosStorage = ratiosStorage,
             upgradeId = 1L,
         )
 
@@ -90,11 +98,13 @@ internal class CompositePurchaseBehaviorTest {
             upgradeStorage = upgradeStorage,
             resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
+            ratiosStorage = ratiosStorage,
             upgradeId = 1L,
         )
 
         assertThat(mutantRatioStorage.getCurrentValue())
             .isEqualTo(0.10)
+        assertMutanity(expected = 0.10)
     }
 
     @Test
@@ -107,17 +117,20 @@ internal class CompositePurchaseBehaviorTest {
 
         setInitialResource(75.0)
         mutantRatioStorage.setNewValue(0.25)
+        ratiosStorage.updateByKey(key = RatioKey.Mutanity, newRatio = 0.25)
 
         behavior.buyUpgrade(
             balanceConfig = balanceConfig,
             upgradeStorage = upgradeStorage,
             resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
+            ratiosStorage = ratiosStorage,
             upgradeId = 1L,
         )
 
         assertThat(mutantRatioStorage.getCurrentValue())
             .isEqualTo(0.35)
+        assertMutanity(expected = 0.35)
     }
 
     @Test
@@ -134,6 +147,7 @@ internal class CompositePurchaseBehaviorTest {
             upgradeStorage = upgradeStorage,
             resourcesStorage = resourcesStorage,
             mutantRatioStorage = mutantRatioStorage,
+            ratiosStorage = ratiosStorage,
             upgradeId = 1L,
         )
 
@@ -146,6 +160,7 @@ internal class CompositePurchaseBehaviorTest {
 
         assertThat(mutantRatioStorage.getCurrentValue())
             .isEqualTo(0.0)
+        assertMutanity(expected = 0.0)
     }
 
     private suspend fun setInitialResource(
@@ -163,6 +178,13 @@ internal class CompositePurchaseBehaviorTest {
             .isNotNull()
             .prop(Resource::value)
             .isEqualTo(value)
+    }
+
+    private fun assertMutanity(expected: Double) {
+        assertThat(ratiosStorage.getByKey(key = RatioKey.Mutanity))
+            .isNotNull()
+            .prop(Ratio::value)
+            .isEqualTo(expected)
     }
 
 }

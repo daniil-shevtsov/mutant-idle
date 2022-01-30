@@ -12,6 +12,9 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
+import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
+import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
+import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
@@ -36,10 +39,19 @@ class MainViewModel @Inject constructor(
     private val actionsStorage: ActionsStorage,
     private val resourcesStorage: ResourcesStorage,
     private val mutantRatioStorage: MutantRatioStorage,
+    private val ratiosStorage: RatiosStorage,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(initViewState())
     val state = _state.asStateFlow()
+
+    private val sectionCollapseState = MutableStateFlow<Map<SectionKey, Boolean>>(
+        mapOf(
+            SectionKey.Resources to false,
+            SectionKey.Actions to false,
+            SectionKey.Upgrades to false,
+        )
+    )
 
     init {
         combine(
@@ -50,10 +62,18 @@ class MainViewModel @Inject constructor(
             ResourceBehavior.observeAllResources(
                 resourcesStorage = resourcesStorage,
             ),
-            mutantRatioStorage.observeChange(),
+            ratiosStorage.observeAll(),
             UpgradeBehavior.observeAll(upgradeStorage),
-            ActionBehavior.observeAll(actionsStorage),
-        ) { blood: Resource, resources: List<Resource>, mutantRatio: Double, upgrades: List<Upgrade>, actions: List<Action> ->
+            combine(ActionBehavior.observeAll(actionsStorage), sectionCollapseState, ::Pair),
+        ) { blood: Resource,
+            resources: List<Resource>,
+            ratios: List<Ratio>,
+            upgrades: List<Upgrade>,
+            //actions: List<Action> ->
+            actionsAndSectionState: Pair<List<Action>, Map<SectionKey, Boolean>> ->
+            val actions = actionsAndSectionState.first
+            val sectionState = actionsAndSectionState.second
+
             val newViewState = MainViewState.Success(
                 resources = resources.map { resource ->
                     ResourceModelMapper.map(
@@ -61,10 +81,12 @@ class MainViewModel @Inject constructor(
                         name = resource.name,
                     )
                 },
-                ratio = HumanityRatioModel(
-                    name = getNameForRatio(mutantRatio),
-                    percent = mutantRatio
-                ),
+                ratios = ratios.map {
+                    HumanityRatioModel(
+                        name = getNameForRatio(it),
+                        percent = it.value
+                    )
+                },
                 actionState = actions.toActionState(),
                 shop = upgrades
                     .map { upgrade ->
@@ -80,7 +102,8 @@ class MainViewModel @Inject constructor(
                             UpgradeStatusModel.Bought -> 2
                         }
                     }
-                    .let { ShopState(upgradeLists = listOf(it)) }
+                    .let { ShopState(upgradeLists = listOf(it)) },
+                sectionCollapse = sectionState,
             )
             newViewState
         }
@@ -90,7 +113,22 @@ class MainViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    private fun getNameForRatio(mutantRatio: Double): String {
+    private fun getNameForRatio(ratio: Ratio) = when (ratio.key) {
+        RatioKey.Mutanity -> getMutanityNameForRatio(ratio.value)
+        RatioKey.Suspicion -> getSuspicionNameForRatio(ratio.value)
+    }
+
+    private fun getSuspicionNameForRatio(
+        value: Double
+    ): String = when {
+        value < 0.15f -> "Unknown"
+        value < 0.25f -> "Rumors"
+        value < 0.50f -> "News"
+        value < 0.80f -> "Investigation"
+        else -> "Manhunt"
+    }
+
+    private fun getMutanityNameForRatio(mutantRatio: Double): String {
         val name = when {
             mutantRatio < 0.15 -> "Human"
             mutantRatio < 0.25 -> "Dormant"
@@ -105,6 +143,7 @@ class MainViewModel @Inject constructor(
         when (action) {
             is MainViewAction.UpgradeSelected -> handleUpgradeSelected(action)
             is MainViewAction.ActionClicked -> handleActionClicked(action)
+            is MainViewAction.ToggleSectionCollapse -> toggleSectionCollapse(action)
         }
     }
 
@@ -115,6 +154,7 @@ class MainViewModel @Inject constructor(
                 upgradeStorage = upgradeStorage,
                 resourcesStorage = resourcesStorage,
                 mutantRatioStorage = mutantRatioStorage,
+                ratiosStorage = ratiosStorage,
                 upgradeId = action.id,
             )
         }
@@ -130,7 +170,19 @@ class MainViewModel @Inject constructor(
                     amount = resourceValue,
                 )
             }
+            selectedAction?.ratioChanges?.forEach { (key, value) ->
+                val oldRatio = ratiosStorage.getByKey(key = key)!!.value
+                ratiosStorage.updateByKey(key = key, newRatio = oldRatio + value)
+            }
         }
+    }
+
+    private fun toggleSectionCollapse(action: MainViewAction.ToggleSectionCollapse) {
+        val oldState = sectionCollapseState.value
+        val newState = oldState.toMutableMap()
+            .apply { put(action.key, !(oldState[action.key] ?: false)) }
+            .toMap()
+        sectionCollapseState.value = newState
     }
 
     private fun initViewState(): MainViewState = MainViewState.Loading
