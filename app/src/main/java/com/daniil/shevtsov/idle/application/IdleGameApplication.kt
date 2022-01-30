@@ -122,6 +122,7 @@ class IdleGameApplication : Application() {
             actionType = ActionType.Human,
             resourceChanges = mapOf(
                 ResourceKey.Money to -20.0,
+                ResourceKey.Food to 1.0,
             )
         ),
         Action(
