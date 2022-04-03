@@ -1,3 +1,4 @@
+
 package com.daniil.shevtsov.idle.feature.main.presentation
 
 import app.cash.turbine.test
@@ -381,6 +382,33 @@ internal class MainViewModelTest {
             assertThat(expectMostRecentItem())
                 .extractingMoney()
                 .isEqualTo("10")
+        }
+    }
+
+    @Test
+    fun `should not apply action if it requires both available and not available resources`() = runBlockingTest {
+        actionsStorage = ActionsStorage(
+            initialActions = listOf(
+                action(
+                    id = 1L,
+                    resourceChanges = mapOf(
+                        ResourceKey.Money to -30.0,
+                        ResourceKey.Blood to -50.0,
+                    ),
+                )
+            )
+        )
+        setInitialResourceValue(key = ResourceKey.Money, value = 40.0)
+        setInitialResourceValue(key = ResourceKey.Blood, value = 30.0)
+
+        viewModel.state.test {
+            viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
+
+            assertThat(expectMostRecentItem())
+                .all {
+                    extractingMoney().isEqualTo("40")
+                    extractingBlood().isEqualTo("30")
+                }
         }
     }
 
