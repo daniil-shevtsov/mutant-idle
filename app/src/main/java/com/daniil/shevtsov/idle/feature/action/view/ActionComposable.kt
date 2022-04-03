@@ -29,7 +29,10 @@ import com.google.accompanist.pager.HorizontalPager
 @Preview
 @Composable
 fun ActionPreview() {
-    Action(action = actionPreviewStub())
+    Column {
+        Action(action = actionPreviewStub(isActive = true))
+        Action(action = actionPreviewStub(isActive = false))
+    }
 }
 
 @Preview(
@@ -105,11 +108,18 @@ fun Action(
     modifier: Modifier = Modifier,
     onClicked: () -> Unit = {},
 ) {
+    val colorAlpha = when (action.isActive) {
+        true -> 1f
+        false -> 0.5f
+    }
+    val lightColor = Pallete.Red.copy(alpha = colorAlpha)
+    val darkColor = Pallete.DarkRed.copy(alpha = colorAlpha)
+
     Column(
         modifier = modifier
-            .background(Pallete.Red)
+            .background(lightColor)
             .padding(4.dp)
-            .background(Pallete.DarkRed)
+            .background(darkColor)
             .padding(4.dp)
             .clickable { onClicked() },
         verticalArrangement = spacedBy(4.dp)
