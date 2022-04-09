@@ -102,6 +102,7 @@ fun ActionPane(
     }
 }
 
+//TODO: Make items the same height
 @Composable
 fun Action(
     action: ActionModel,
