@@ -5,4 +5,5 @@ data class ActionModel(
     val title: String,
     val subtitle: String,
     val icon: ActionIcon,
+    val isEnabled: Boolean = true,
 )

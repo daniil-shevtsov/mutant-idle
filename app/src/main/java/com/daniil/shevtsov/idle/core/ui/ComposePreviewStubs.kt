@@ -80,11 +80,13 @@ internal fun actionPreviewStub(
     title: String = "Lol Kek",
     subtitle: String = "Some very very very very long text",
     actionIcon: ActionIcon = ActionIcon.Human,
+    isEnabled: Boolean = true,
 ) = ActionModel(
     id = id,
     title = title,
     subtitle = subtitle,
     icon = actionIcon,
+    isEnabled = isEnabled,
 )
 
 internal fun shopStatePreviewStub(

@@ -87,7 +87,7 @@ class MainViewModel @Inject constructor(
                         percent = it.value
                     )
                 },
-                actionState = actions.toActionState(),
+                actionState = createActionState(actions),
                 shop = upgrades
                     .map { upgrade ->
                         UpgradeModelMapper.map(
@@ -112,6 +112,19 @@ class MainViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
     }
+
+    private fun createActionState(actions: List<Action>): ActionsState {
+        return ActionsState(
+             humanActionPane = ActionPane(
+                 actions = actions.filter { it.actionType == ActionType.Human }.prepareActionForDisplay()
+             ),
+             mutantActionPane = ActionPane(
+                 actions = actions.filter { it.actionType == ActionType.Mutant }.prepareActionForDisplay()
+             )
+         )
+    }
+
+    private fun List<Action>.prepareActionForDisplay() = map { it.toModel() }.sortedByDescending { it.isEnabled }
 
     private fun getNameForRatio(ratio: Ratio) = when (ratio.key) {
         RatioKey.Mutanity -> getMutanityNameForRatio(ratio.value)
@@ -163,16 +176,28 @@ class MainViewModel @Inject constructor(
     private fun handleActionClicked(action: MainViewAction.ActionClicked) {
         viewModelScope.launch {
             val selectedAction = ActionBehavior.getById(actionsStorage, action.id)
-            selectedAction?.resourceChanges?.forEach { (resourceKey, resourceValue) ->
-                ResourceBehavior.applyResourceChange(
-                    resourcesStorage = resourcesStorage,
-                    resourceKey = resourceKey,
-                    amount = resourceValue,
-                )
-            }
-            selectedAction?.ratioChanges?.forEach { (key, value) ->
-                val oldRatio = ratiosStorage.getByKey(key = key)!!.value
-                ratiosStorage.updateByKey(key = key, newRatio = oldRatio + value)
+
+            val hasInvalidChanges =
+                selectedAction?.resourceChanges?.any { (resourceKey, resourceChange) ->
+                    val resource = ResourceBehavior.getCurrentResource(
+                        resourcesStorage = resourcesStorage,
+                        resourceKey = resourceKey,
+                    )
+                    resource.value + resourceChange < 0
+                } ?: false
+
+            if (!hasInvalidChanges) {
+                selectedAction?.resourceChanges?.forEach { (resourceKey, resourceValue) ->
+                    ResourceBehavior.applyResourceChange(
+                        resourcesStorage = resourcesStorage,
+                        resourceKey = resourceKey,
+                        amount = resourceValue,
+                    )
+                }
+                selectedAction?.ratioChanges?.forEach { (key, value) ->
+                    val oldRatio = ratiosStorage.getByKey(key = key)!!.value
+                    ratiosStorage.updateByKey(key = key, newRatio = oldRatio + value)
+                }
             }
         }
     }
@@ -205,14 +230,22 @@ class MainViewModel @Inject constructor(
         return statusModel
     }
 
-    private fun Action.toModel() = ActionModel(
-        id = id,
-        title = title,
-        subtitle = subtitle,
-        icon = when (actionType) {
-            ActionType.Human -> ActionIcon.Human
-            ActionType.Mutant -> ActionIcon.Mutant
+    private fun Action.toModel(): ActionModel {
+        val isActive = resourceChanges.all { (resourceKey, resourceChange) ->
+            val currentResource = resourcesStorage.getByKey(resourceKey)!!.value
+            currentResource + resourceChange >= 0
         }
-    )
+
+        return ActionModel(
+            id = id,
+            title = title,
+            subtitle = subtitle,
+            icon = when (actionType) {
+                ActionType.Human -> ActionIcon.Human
+                ActionType.Mutant -> ActionIcon.Mutant
+            },
+            isEnabled = isActive,
+        )
+    }
 
 }

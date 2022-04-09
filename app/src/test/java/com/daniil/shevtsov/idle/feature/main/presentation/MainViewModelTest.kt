@@ -363,6 +363,125 @@ internal class MainViewModelTest {
         }
     }
 
+    @Test
+    fun `should not apply action if it requires unavailable resources`() = runBlockingTest {
+        actionsStorage = ActionsStorage(
+            initialActions = listOf(
+                action(
+                    id = 1L,
+                    resourceChanges = mapOf(ResourceKey.Money to -30.0),
+                )
+            )
+        )
+        setInitialResourceValue(key = ResourceKey.Money, value = 10.0)
+
+        viewModel.state.test {
+            viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
+
+            assertThat(expectMostRecentItem())
+                .extractingMoney()
+                .isEqualTo("10")
+        }
+    }
+
+    @Test
+    fun `should not apply action if it requires both available and not available resources`() =
+        runBlockingTest {
+            actionsStorage = ActionsStorage(
+                initialActions = listOf(
+                    action(
+                        id = 1L,
+                        resourceChanges = mapOf(
+                            ResourceKey.Money to -30.0,
+                            ResourceKey.Blood to -50.0,
+                        ),
+                    )
+                )
+            )
+            setInitialResourceValue(key = ResourceKey.Money, value = 40.0)
+            setInitialResourceValue(key = ResourceKey.Blood, value = 30.0)
+
+            viewModel.state.test {
+                viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
+
+                assertThat(expectMostRecentItem())
+                    .all {
+                        extractingMoney().isEqualTo("40")
+                        extractingBlood().isEqualTo("30")
+                    }
+            }
+        }
+
+    @Test
+    fun `should disable actions if it requires not available resources`() = runBlockingTest {
+        actionsStorage = ActionsStorage(
+            initialActions = listOf(
+                action(
+                    id = 1L,
+                    resourceChanges = mapOf(
+                        ResourceKey.Money to -30.0,
+                    ),
+                    actionType = ActionType.Human,
+                ),
+                action(
+                    id = 2L,
+                    resourceChanges = mapOf(
+                        ResourceKey.Money to -50.0,
+                    ),
+                    actionType = ActionType.Human,
+                )
+            )
+        )
+        setInitialResourceValue(key = ResourceKey.Money, value = 35.0)
+
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .extractingHumanActions()
+                .extracting(ActionModel::id, ActionModel::isEnabled)
+                .containsExactly(
+                    1L to true,
+                    2L to false,
+                )
+        }
+    }
+
+    @Test
+    fun `show enabled actions before disabled if got both`() = runBlockingTest {
+        actionsStorage = ActionsStorage(
+            initialActions = listOf(
+                action(
+                    id = 1L,
+                    resourceChanges = mapOf(
+                        ResourceKey.Money to -60.0,
+                    ),
+                    actionType = ActionType.Human,
+                ),
+                action(
+                    id = 2L,
+                    resourceChanges = mapOf(
+                        ResourceKey.Money to -10.0,
+                    ),
+                    actionType = ActionType.Human,
+                ),
+                action(
+                    id = 3L,
+                    resourceChanges = mapOf(
+                        ResourceKey.Money to -50.0,
+                    ),
+                    actionType = ActionType.Human,
+                ),
+            )
+        )
+        setInitialResourceValue(key = ResourceKey.Money, value = 35.0)
+
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .extractingHumanActions()
+                .extracting(ActionModel::id)
+                .containsExactly(2L, 1L, 3L)
+        }
+    }
+
     private fun createViewModel() = MainViewModel(
         balanceConfig = balanceConfig,
         upgradeStorage = upgradeStorage,
@@ -378,22 +497,31 @@ internal class MainViewModelTest {
             .prop(ShopState::upgradeLists)
             .index(0)
 
+    private fun Assert<MainViewState>.extractingHumanActions() =
+        isInstanceOf(MainViewState.Success::class)
+            .prop(MainViewState.Success::actionState)
+            .prop(ActionsState::humanActionPane)
+            .prop(ActionPane::actions)
+
+
     private fun Assert<MainViewState>.extractingRatios() =
         isInstanceOf(MainViewState.Success::class)
             .prop(MainViewState.Success::ratios)
             .extracting(HumanityRatioModel::name, HumanityRatioModel::percent)
 
-    private fun Assert<HumanityRatioModel>.assertPercentage(expected: Double) = prop(HumanityRatioModel::percent)
-        .isCloseTo(expected, 0.00001)
+    private fun Assert<HumanityRatioModel>.assertPercentage(expected: Double) =
+        prop(HumanityRatioModel::percent)
+            .isCloseTo(expected, 0.00001)
 
     private fun Assert<MainViewState>.extractingMutanity() =
         isInstanceOf(MainViewState.Success::class)
             .prop(MainViewState.Success::ratios)
             .index(0)
 
-    private fun Assert<MainViewState>.extractingSuspicion() = isInstanceOf(MainViewState.Success::class)
-        .prop(MainViewState.Success::ratios)
-        .index(1)
+    private fun Assert<MainViewState>.extractingSuspicion() =
+        isInstanceOf(MainViewState.Success::class)
+            .prop(MainViewState.Success::ratios)
+            .index(1)
 
     private fun Assert<MainViewState>.extractingMutanityValue() =
         isInstanceOf(MainViewState.Success::class)
@@ -428,4 +556,8 @@ internal class MainViewModelTest {
             .index(0)
             .prop(ResourceModel::value)
 
+    private fun Assert<MainViewState>.extractingMoney() = isInstanceOf(MainViewState.Success::class)
+        .prop(MainViewState.Success::resources)
+        .index(1)
+        .prop(ResourceModel::value)
 }

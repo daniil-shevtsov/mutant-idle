@@ -29,7 +29,10 @@ import com.google.accompanist.pager.HorizontalPager
 @Preview
 @Composable
 fun ActionPreview() {
-    Action(action = actionPreviewStub())
+    Column {
+        Action(action = actionPreviewStub(isEnabled = true))
+        Action(action = actionPreviewStub(isEnabled = false))
+    }
 }
 
 @Preview(
@@ -87,29 +90,38 @@ fun ActionPane(
     LazyVerticalGrid(
         cells = GridCells.Fixed(count = 2),
         modifier = modifier,
-        contentPadding = PaddingValues(4.dp)
+        contentPadding = PaddingValues(2.dp)
     ) {
         items(pane.actions) { action ->
             Action(
                 action = action,
                 onClicked = { onActionClicked(action.id) },
-                modifier = modifier,
+                modifier = modifier.padding(2.dp), //TODO: Add item spacing after comopse update
             )
         }
     }
 }
 
+//TODO: Make items the same height
 @Composable
 fun Action(
     action: ActionModel,
     modifier: Modifier = Modifier,
     onClicked: () -> Unit = {},
 ) {
+    val colorAlpha = when (action.isEnabled) {
+        true -> 1f
+        false -> 0.5f
+    }
+    val lightColor = Pallete.Red.copy(alpha = colorAlpha)
+    val darkColor = Pallete.DarkRed.copy(alpha = colorAlpha)
+
     Column(
         modifier = modifier
-            .background(Pallete.Red)
+            .background(Color.LightGray)
+            .background(lightColor)
             .padding(4.dp)
-            .background(Pallete.DarkRed)
+            .background(darkColor)
             .padding(4.dp)
             .clickable { onClicked() },
         verticalArrangement = spacedBy(4.dp)
@@ -130,7 +142,6 @@ fun Action(
                 fontSize = 24.sp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Pallete.DarkRed)
             )
         }
 
@@ -146,4 +157,5 @@ fun Action(
                 .padding(bottom = 4.dp)
         )
     }
+
 }
