@@ -412,6 +412,39 @@ internal class MainViewModelTest {
         }
     }
 
+    @Test
+    fun `should show actiions inactive if it requires not available resources`() = runBlockingTest {
+        actionsStorage = ActionsStorage(
+            initialActions = listOf(
+                action(
+                    id = 1L,
+                    resourceChanges = mapOf(
+                        ResourceKey.Money to 30.0,
+                    ),
+                    actionType = ActionType.Human,
+                ),
+                action(
+                    id = 2L,
+                    resourceChanges = mapOf(
+                        ResourceKey.Money to 50.0,
+                    ),
+                    actionType = ActionType.Human,
+                )
+            )
+        )
+        setInitialResourceValue(key = ResourceKey.Money, value = 35.0)
+
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .extractingHumanActions()
+                .extracting(ActionModel::id, ActionModel::isActive)
+                .containsExactly(
+                    1L to true,
+                    2L to false,
+                )
+        }
+    }
+
     private fun createViewModel() = MainViewModel(
         balanceConfig = balanceConfig,
         upgradeStorage = upgradeStorage,
@@ -426,6 +459,12 @@ internal class MainViewModelTest {
             .prop(MainViewState.Success::shop)
             .prop(ShopState::upgradeLists)
             .index(0)
+
+    private fun Assert<MainViewState>.extractingHumanActions() = isInstanceOf(MainViewState.Success::class)
+        .prop(MainViewState.Success::actionState)
+        .prop(ActionsState::humanActionPane)
+        .prop(ActionPane::actions)
+
 
     private fun Assert<MainViewState>.extractingRatios() =
         isInstanceOf(MainViewState.Success::class)

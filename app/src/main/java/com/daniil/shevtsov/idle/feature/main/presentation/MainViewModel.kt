@@ -164,15 +164,16 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             val selectedAction = ActionBehavior.getById(actionsStorage, action.id)
 
-            val hasInvalidChanges =  selectedAction?.resourceChanges?.any { (resourceKey, resourceChange) ->
-                val resource = ResourceBehavior.getCurrentResource(
-                    resourcesStorage = resourcesStorage,
-                    resourceKey = resourceKey,
-                )
-                resource.value + resourceChange < 0
-            } ?: false
+            val hasInvalidChanges =
+                selectedAction?.resourceChanges?.any { (resourceKey, resourceChange) ->
+                    val resource = ResourceBehavior.getCurrentResource(
+                        resourcesStorage = resourcesStorage,
+                        resourceKey = resourceKey,
+                    )
+                    resource.value + resourceChange < 0
+                } ?: false
 
-            if(!hasInvalidChanges) {
+            if (!hasInvalidChanges) {
                 selectedAction?.resourceChanges?.forEach { (resourceKey, resourceValue) ->
                     ResourceBehavior.applyResourceChange(
                         resourcesStorage = resourcesStorage,
@@ -216,14 +217,22 @@ class MainViewModel @Inject constructor(
         return statusModel
     }
 
-    private fun Action.toModel() = ActionModel(
-        id = id,
-        title = title,
-        subtitle = subtitle,
-        icon = when (actionType) {
-            ActionType.Human -> ActionIcon.Human
-            ActionType.Mutant -> ActionIcon.Mutant
+    private fun Action.toModel(): ActionModel {
+        val isActive = resourceChanges.all { (resourceKey, resourceCost) ->
+            val currentResource = resourcesStorage.getByKey(resourceKey)!!.value
+            resourceCost <= currentResource
         }
-    )
+
+        return ActionModel(
+            id = id,
+            title = title,
+            subtitle = subtitle,
+            icon = when (actionType) {
+                ActionType.Human -> ActionIcon.Human
+                ActionType.Mutant -> ActionIcon.Mutant
+            },
+            isActive = isActive,
+        )
+    }
 
 }
