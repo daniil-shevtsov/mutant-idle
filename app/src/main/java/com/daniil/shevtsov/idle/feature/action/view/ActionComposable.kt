@@ -30,8 +30,8 @@ import com.google.accompanist.pager.HorizontalPager
 @Composable
 fun ActionPreview() {
     Column {
-        Action(action = actionPreviewStub(isActive = true))
-        Action(action = actionPreviewStub(isActive = false))
+        Action(action = actionPreviewStub(isEnabled = true))
+        Action(action = actionPreviewStub(isEnabled = false))
     }
 }
 
@@ -109,7 +109,7 @@ fun Action(
     modifier: Modifier = Modifier,
     onClicked: () -> Unit = {},
 ) {
-    val colorAlpha = when (action.isActive) {
+    val colorAlpha = when (action.isEnabled) {
         true -> 1f
         false -> 0.5f
     }

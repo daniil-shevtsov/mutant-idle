@@ -413,7 +413,7 @@ internal class MainViewModelTest {
         }
 
     @Test
-    fun `should show actions inactive if it requires not available resources`() = runBlockingTest {
+    fun `should disable actions if it requires not available resources`() = runBlockingTest {
         actionsStorage = ActionsStorage(
             initialActions = listOf(
                 action(
@@ -437,7 +437,7 @@ internal class MainViewModelTest {
         viewModel.state.test {
             assertThat(expectMostRecentItem())
                 .extractingHumanActions()
-                .extracting(ActionModel::id, ActionModel::isActive)
+                .extracting(ActionModel::id, ActionModel::isEnabled)
                 .containsExactly(
                     1L to true,
                     2L to false,
@@ -446,7 +446,7 @@ internal class MainViewModelTest {
     }
 
     @Test
-    fun `show active actions before inactive if got both`() = runBlockingTest {
+    fun `show enabled actions before disabled if got both`() = runBlockingTest {
         actionsStorage = ActionsStorage(
             initialActions = listOf(
                 action(

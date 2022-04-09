@@ -124,7 +124,7 @@ class MainViewModel @Inject constructor(
          )
     }
 
-    private fun List<Action>.prepareActionForDisplay() = map { it.toModel() }.sortedByDescending { it.isActive }
+    private fun List<Action>.prepareActionForDisplay() = map { it.toModel() }.sortedByDescending { it.isEnabled }
 
     private fun getNameForRatio(ratio: Ratio) = when (ratio.key) {
         RatioKey.Mutanity -> getMutanityNameForRatio(ratio.value)
@@ -244,7 +244,7 @@ class MainViewModel @Inject constructor(
                 ActionType.Human -> ActionIcon.Human
                 ActionType.Mutant -> ActionIcon.Mutant
             },
-            isActive = isActive,
+            isEnabled = isActive,
         )
     }
 
