@@ -218,9 +218,9 @@ class MainViewModel @Inject constructor(
     }
 
     private fun Action.toModel(): ActionModel {
-        val isActive = resourceChanges.all { (resourceKey, resourceCost) ->
+        val isActive = resourceChanges.all { (resourceKey, resourceChange) ->
             val currentResource = resourcesStorage.getByKey(resourceKey)!!.value
-            resourceCost <= currentResource
+            currentResource + resourceChange >= 0
         }
 
         return ActionModel(

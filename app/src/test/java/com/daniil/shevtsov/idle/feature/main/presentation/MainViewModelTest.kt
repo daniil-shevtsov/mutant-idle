@@ -419,14 +419,14 @@ internal class MainViewModelTest {
                 action(
                     id = 1L,
                     resourceChanges = mapOf(
-                        ResourceKey.Money to 30.0,
+                        ResourceKey.Money to -30.0,
                     ),
                     actionType = ActionType.Human,
                 ),
                 action(
                     id = 2L,
                     resourceChanges = mapOf(
-                        ResourceKey.Money to 50.0,
+                        ResourceKey.Money to -50.0,
                     ),
                     actionType = ActionType.Human,
                 )

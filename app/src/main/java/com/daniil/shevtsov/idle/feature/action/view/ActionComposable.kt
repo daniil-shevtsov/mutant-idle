@@ -90,13 +90,13 @@ fun ActionPane(
     LazyVerticalGrid(
         cells = GridCells.Fixed(count = 2),
         modifier = modifier,
-        contentPadding = PaddingValues(4.dp)
+        contentPadding = PaddingValues(2.dp)
     ) {
         items(pane.actions) { action ->
             Action(
                 action = action,
                 onClicked = { onActionClicked(action.id) },
-                modifier = modifier,
+                modifier = modifier.padding(2.dp), //TODO: Add item spacing after comopse update
             )
         }
     }
@@ -117,6 +117,7 @@ fun Action(
 
     Column(
         modifier = modifier
+            .background(Color.LightGray)
             .background(lightColor)
             .padding(4.dp)
             .background(darkColor)
@@ -140,7 +141,6 @@ fun Action(
                 fontSize = 24.sp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Pallete.DarkRed)
             )
         }
 
@@ -156,4 +156,5 @@ fun Action(
                 .padding(bottom = 4.dp)
         )
     }
+
 }
