@@ -87,7 +87,7 @@ class MainViewModel @Inject constructor(
                         percent = it.value
                     )
                 },
-                actionState = actions.toActionState(),
+                actionState = createActionState(actions),
                 shop = upgrades
                     .map { upgrade ->
                         UpgradeModelMapper.map(
@@ -112,6 +112,19 @@ class MainViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
     }
+
+    private fun createActionState(actions: List<Action>): ActionsState {
+        return ActionsState(
+             humanActionPane = ActionPane(
+                 actions = actions.filter { it.actionType == ActionType.Human }.prepareActionForDisplay()
+             ),
+             mutantActionPane = ActionPane(
+                 actions = actions.filter { it.actionType == ActionType.Mutant }.prepareActionForDisplay()
+             )
+         )
+    }
+
+    private fun List<Action>.prepareActionForDisplay() = map { it.toModel() }.sortedByDescending { it.isActive }
 
     private fun getNameForRatio(ratio: Ratio) = when (ratio.key) {
         RatioKey.Mutanity -> getMutanityNameForRatio(ratio.value)

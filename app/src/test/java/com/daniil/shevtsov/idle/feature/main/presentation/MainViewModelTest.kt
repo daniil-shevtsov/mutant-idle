@@ -1,4 +1,3 @@
-
 package com.daniil.shevtsov.idle.feature.main.presentation
 
 import app.cash.turbine.test
@@ -386,34 +385,35 @@ internal class MainViewModelTest {
     }
 
     @Test
-    fun `should not apply action if it requires both available and not available resources`() = runBlockingTest {
-        actionsStorage = ActionsStorage(
-            initialActions = listOf(
-                action(
-                    id = 1L,
-                    resourceChanges = mapOf(
-                        ResourceKey.Money to -30.0,
-                        ResourceKey.Blood to -50.0,
-                    ),
+    fun `should not apply action if it requires both available and not available resources`() =
+        runBlockingTest {
+            actionsStorage = ActionsStorage(
+                initialActions = listOf(
+                    action(
+                        id = 1L,
+                        resourceChanges = mapOf(
+                            ResourceKey.Money to -30.0,
+                            ResourceKey.Blood to -50.0,
+                        ),
+                    )
                 )
             )
-        )
-        setInitialResourceValue(key = ResourceKey.Money, value = 40.0)
-        setInitialResourceValue(key = ResourceKey.Blood, value = 30.0)
+            setInitialResourceValue(key = ResourceKey.Money, value = 40.0)
+            setInitialResourceValue(key = ResourceKey.Blood, value = 30.0)
 
-        viewModel.state.test {
-            viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
+            viewModel.state.test {
+                viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
 
-            assertThat(expectMostRecentItem())
-                .all {
-                    extractingMoney().isEqualTo("40")
-                    extractingBlood().isEqualTo("30")
-                }
+                assertThat(expectMostRecentItem())
+                    .all {
+                        extractingMoney().isEqualTo("40")
+                        extractingBlood().isEqualTo("30")
+                    }
+            }
         }
-    }
 
     @Test
-    fun `should show actiions inactive if it requires not available resources`() = runBlockingTest {
+    fun `should show actions inactive if it requires not available resources`() = runBlockingTest {
         actionsStorage = ActionsStorage(
             initialActions = listOf(
                 action(
@@ -445,6 +445,43 @@ internal class MainViewModelTest {
         }
     }
 
+    @Test
+    fun `show active actions before inactive if got both`() = runBlockingTest {
+        actionsStorage = ActionsStorage(
+            initialActions = listOf(
+                action(
+                    id = 1L,
+                    resourceChanges = mapOf(
+                        ResourceKey.Money to -60.0,
+                    ),
+                    actionType = ActionType.Human,
+                ),
+                action(
+                    id = 2L,
+                    resourceChanges = mapOf(
+                        ResourceKey.Money to -10.0,
+                    ),
+                    actionType = ActionType.Human,
+                ),
+                action(
+                    id = 3L,
+                    resourceChanges = mapOf(
+                        ResourceKey.Money to -50.0,
+                    ),
+                    actionType = ActionType.Human,
+                ),
+            )
+        )
+        setInitialResourceValue(key = ResourceKey.Money, value = 35.0)
+
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .extractingHumanActions()
+                .extracting(ActionModel::id)
+                .containsExactly(2L, 1L, 3L)
+        }
+    }
+
     private fun createViewModel() = MainViewModel(
         balanceConfig = balanceConfig,
         upgradeStorage = upgradeStorage,
@@ -460,10 +497,11 @@ internal class MainViewModelTest {
             .prop(ShopState::upgradeLists)
             .index(0)
 
-    private fun Assert<MainViewState>.extractingHumanActions() = isInstanceOf(MainViewState.Success::class)
-        .prop(MainViewState.Success::actionState)
-        .prop(ActionsState::humanActionPane)
-        .prop(ActionPane::actions)
+    private fun Assert<MainViewState>.extractingHumanActions() =
+        isInstanceOf(MainViewState.Success::class)
+            .prop(MainViewState.Success::actionState)
+            .prop(ActionsState::humanActionPane)
+            .prop(ActionPane::actions)
 
 
     private fun Assert<MainViewState>.extractingRatios() =
