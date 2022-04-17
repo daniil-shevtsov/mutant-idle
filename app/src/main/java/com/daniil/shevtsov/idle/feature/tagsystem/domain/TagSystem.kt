@@ -7,6 +7,6 @@ class TagSystem {
     }
 
     fun isActionAvailable(playerTags: List<Tag>, action: Action): Boolean {
-        return true
+        return playerTags.containsAll(action.tags.filter { it.value == TagRelation.Required }.keys.toList())
     }
 }
