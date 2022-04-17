@@ -7,6 +7,7 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.time.domain.Time
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Price
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
@@ -45,7 +46,7 @@ fun action(
     actionType: ActionType = ActionType.Human,
     resourceChanges: Map<ResourceKey, Double> = mapOf(),
     ratioChanges: Map<RatioKey, Float> = mapOf(),
-    tags: List<Tag> = emptyList(),
+    tags: Map<Tag, TagRelation> = mapOf(),
 ) = Action(
     id = id,
     title = title,

@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import assertk.assertions.isTrue
 import com.daniil.shevtsov.idle.util.action
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -10,35 +11,28 @@ internal class TagSystemTest {
     private val tagSystem = TagSystem()
 
     @Test
-    fun `job should have tags`() {
-        val tags = listOf(
-            tag(name = "lol"),
-            tag(name = "kek"),
-            tag(name = "cheburek"),
-        )
-        val job = playerJob(
-            tags = tags,
-        )
+    fun `should make action available if player has required tags`() {
+        val devourerTag = tag(name = "Devourer")
+        val corpsesTag = tag(name = "Fresh corpses access")
 
-        val jobTags = job.tags
-
-        assertThat(jobTags).isEqualTo(tags)
-    }
-
-    @Test
-    fun `action should have tags`() {
-        val tags = listOf(
-            tag(name = "lol"),
-            tag(name = "kek"),
-            tag(name = "cheburek"),
-        )
-        val action = action(
-            tags = tags,
+        val playerTags = listOf(
+            devourerTag,
+            corpsesTag,
         )
 
-        val actionTags = action.tags
+        val action = action(id = 0L,
+            title = "Eat organ",
+            tags = mapOf(
+                devourerTag to TagRelation.Required,
+                corpsesTag to TagRelation.Required,
+            ))
 
-        assertThat(actionTags).isEqualTo(tags)
+        val isActionAvailable = tagSystem.isActionAvailable(
+            playerTags = playerTags,
+            action = action
+        )
+
+        assertThat(isActionAvailable).isTrue()
     }
 
 }
