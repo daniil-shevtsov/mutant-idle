@@ -7,10 +7,12 @@ import com.daniil.shevtsov.idle.core.di.DaggerAppComponent
 import com.daniil.shevtsov.idle.core.di.koin.appModule
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.ActionType
+import com.daniil.shevtsov.idle.feature.player.domain.Player
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Price
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
@@ -30,6 +32,7 @@ class IdleGameApplication : Application() {
                 initialActions = createInitialActions(),
                 initialResources = createInitialResources(),
                 initialRatios = createInitialRatios(),
+                initialPlayer = createInitialPlayer()
             )
     }
 
@@ -193,6 +196,13 @@ class IdleGameApplication : Application() {
     private fun createInitialRatios() = listOf(
         Ratio(key = RatioKey.Mutanity, title = "", value = 0.0),
         Ratio(key = RatioKey.Suspicion, title = "", value = 0.0),
+    )
+
+    private fun createInitialPlayer() = Player(
+        tags = listOf(
+            Tag("Devourer"),
+            Tag("Work From Home"),
+        )
     )
 
 }
