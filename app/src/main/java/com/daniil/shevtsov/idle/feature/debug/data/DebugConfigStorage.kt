@@ -8,9 +8,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @AppScope
-class DebugConfigStorage @Inject constructor() {
+class DebugConfigStorage @Inject constructor(
+    private val initial: List<PlayerJob>
+) {
 
-    private val jobs =  MutableStateFlow(emptyList<PlayerJob>())
+    private val jobs =  MutableStateFlow(initial)
 
     fun addAvailableJobs(availableJobs: List<PlayerJob>) {
         jobs.value = availableJobs
