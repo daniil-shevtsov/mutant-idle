@@ -1,5 +1,5 @@
 package com.daniil.shevtsov.idle.feature.debug.domain
 
-class DebugFlag {
-
-}
+data class DebugFlag(
+    val key: String,
+)
