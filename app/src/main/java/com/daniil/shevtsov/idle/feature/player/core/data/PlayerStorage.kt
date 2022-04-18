@@ -1,12 +1,10 @@
-package com.daniil.shevtsov.idle.feature.player.data
+package com.daniil.shevtsov.idle.feature.player.core.data
 
 import com.daniil.shevtsov.idle.core.di.AppScope
-import com.daniil.shevtsov.idle.feature.action.domain.Action
-import com.daniil.shevtsov.idle.feature.player.domain.Player
+import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @AppScope

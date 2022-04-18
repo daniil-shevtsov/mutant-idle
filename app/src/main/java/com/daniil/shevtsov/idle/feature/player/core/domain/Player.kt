@@ -1,4 +1,4 @@
-package com.daniil.shevtsov.idle.feature.player.domain
+package com.daniil.shevtsov.idle.feature.player.core.domain
 
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 

@@ -5,6 +5,7 @@ val Hypnosis = Tag(name = "Hypnosis")
 val Heliophobia = Tag(name = "Heliophobia")
 val Immortal = Tag(name = "Immortal")
 val Mutating = Tag(name = "Mutating")
+val Growth = Tag(name = "Growth")
 
 val Surgeon = Tag(name = "Surgeon")
 val FreshCorpseAccess = Tag(name = "Fresh Corpse Access")

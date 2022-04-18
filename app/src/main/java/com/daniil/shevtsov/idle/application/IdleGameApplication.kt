@@ -7,7 +7,7 @@ import com.daniil.shevtsov.idle.core.di.DaggerAppComponent
 import com.daniil.shevtsov.idle.core.di.koin.appModule
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.ActionType
-import com.daniil.shevtsov.idle.feature.player.domain.Player
+import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource

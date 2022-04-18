@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.feature.playerjob.domain
 
+import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.*
 
 val Mortician = PlayerJob(
