@@ -30,10 +30,7 @@ import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.CorpseAccess
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.MeatAccess
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.SocialJob
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.playerJob
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.*
 import com.daniil.shevtsov.idle.feature.upgrade.data.UpgradeStorage
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
@@ -552,6 +549,39 @@ internal class MainViewModelTest {
             .containsExactly(
                 CorpseAccess,
                 SocialJob
+            )
+    }
+
+    @Test
+    fun `should keep other player tags when changing jobs`() = runBlockingTest {
+        val playerTags = listOf(
+            Devourer,
+            Immortal,
+        )
+        val previousJob = playerJob(
+            tags = listOf(
+                MeatAccess,
+                SocialJob,
+            )
+        )
+        val newJob = playerJob(
+            tags = listOf(
+                CorpseAccess,
+                SocialJob,
+            )
+        )
+        playerStorage.update(newPlayer = player(tags = playerTags))
+
+        viewModel.handleAction(MainViewAction.DebugJobSelected(job = previousJob))
+        viewModel.handleAction(MainViewAction.DebugJobSelected(job = newJob))
+
+        assertThat(playerStorage.get())
+            .prop(Player::tags)
+            .containsExactly(
+                Devourer,
+                Immortal,
+                CorpseAccess,
+                SocialJob,
             )
     }
 

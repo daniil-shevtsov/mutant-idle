@@ -224,8 +224,11 @@ class MainViewModel @Inject constructor(
     private fun handleJobSelected(action: MainViewAction.DebugJobSelected) {
         viewModelScope.launch {
             val currentPlayer = playerStorage.get()
-            val newTags = /*currentPlayer.tags +*/ action.job.tags
-            playerStorage.update(newPlayer = currentPlayer.copy(tags = newTags))
+            val newTags = currentPlayer.tags - currentPlayer.job.tags + action.job.tags
+            playerStorage.update(newPlayer = currentPlayer.copy(
+                job = action.job,
+                tags = newTags
+            ))
         }
     }
 
