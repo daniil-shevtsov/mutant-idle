@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.feature.main.presentation
 
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
+import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
@@ -14,5 +15,6 @@ sealed class MainViewState {
         val actionState: ActionsState,
         val shop: ShopState,
         val sectionCollapse: Map<SectionKey, Boolean> = mapOf(),
+        val debugState: DebugViewState,
     ) : MainViewState()
 }

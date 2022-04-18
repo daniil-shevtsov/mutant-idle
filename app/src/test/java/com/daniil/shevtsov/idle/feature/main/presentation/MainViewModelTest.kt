@@ -11,6 +11,12 @@ import com.daniil.shevtsov.idle.feature.action.domain.ActionType
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
+import com.daniil.shevtsov.idle.feature.debug.data.DebugConfigStorage
+import com.daniil.shevtsov.idle.feature.debug.domain.DebugFlag
+import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
+import com.daniil.shevtsov.idle.feature.player.job.domain.Butcher
+import com.daniil.shevtsov.idle.feature.player.job.domain.Mortician
+import com.daniil.shevtsov.idle.feature.player.job.domain.Undertaker
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
@@ -65,6 +71,8 @@ internal class MainViewModelTest {
         resourcePerMillisecond = 2.0,
         resourceSpentForFullMutant = resourceSpentForFullMutant,
     )
+
+    private val debugConfigStorage = DebugConfigStorage()
 
     private val viewModel: MainViewModel by lazy { createViewModel() }
 
@@ -482,6 +490,23 @@ internal class MainViewModelTest {
         }
     }
 
+    @Test
+    fun `should show debug job selection if has any`() = runBlockingTest {
+        val availableJobs = listOf(
+            Mortician,
+            Undertaker,
+            Butcher,
+        )
+        debugConfigStorage.addAvailableJobs(availableJobs)
+
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .extractingDebugState()
+                .extractingJobSelection()
+                .isEqualTo(availableJobs)
+        }
+    }
+
     private fun createViewModel() = MainViewModel(
         balanceConfig = balanceConfig,
         upgradeStorage = upgradeStorage,
@@ -489,6 +514,7 @@ internal class MainViewModelTest {
         resourcesStorage = resourcesStorage,
         mutantRatioStorage = mutantRatioStorage,
         ratiosStorage = ratiosStorage,
+        debugConfigStorage = debugConfigStorage,
     )
 
     private fun Assert<MainViewState>.extractingUpgrades() =
@@ -560,4 +586,10 @@ internal class MainViewModelTest {
         .prop(MainViewState.Success::resources)
         .index(1)
         .prop(ResourceModel::value)
+
+    private fun Assert<MainViewState>.extractingDebugState() =
+        isInstanceOf(MainViewState.Success::class)
+            .prop(MainViewState.Success::debugState)
+
+    private fun Assert<DebugViewState>.extractingJobSelection() = prop(DebugViewState::jobSelection)
 }

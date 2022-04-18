@@ -4,8 +4,10 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
+import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
+import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
@@ -23,7 +25,8 @@ internal fun viewStatePreviewStub() = MainViewState.Success(
         SectionKey.Resources to false,
         SectionKey.Actions to false,
         SectionKey.Upgrades to false,
-    )
+    ),
+    debugState = debugViewStateStub(),
 )
 
 internal fun resourcePreviewStub() = ResourceModel(
@@ -126,4 +129,10 @@ internal fun upgradeListPreviewStub() = listOf(
         title = "Iron jaws",
         subtitle = "Your jaws become stronger than any shark"
     ),
+)
+
+internal fun debugViewStateStub(
+    jobSelection: List<PlayerJob> = emptyList(),
+) = DebugViewState(
+    jobSelection = jobSelection,
 )

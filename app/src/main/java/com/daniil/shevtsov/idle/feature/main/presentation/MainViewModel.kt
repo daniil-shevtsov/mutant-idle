@@ -11,6 +11,8 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
+import com.daniil.shevtsov.idle.feature.debug.data.DebugConfigStorage
+import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
@@ -40,6 +42,7 @@ class MainViewModel @Inject constructor(
     private val resourcesStorage: ResourcesStorage,
     private val mutantRatioStorage: MutantRatioStorage,
     private val ratiosStorage: RatiosStorage,
+    private val debugConfigStorage: DebugConfigStorage,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(initViewState())
@@ -104,6 +107,9 @@ class MainViewModel @Inject constructor(
                     }
                     .let { ShopState(upgradeLists = listOf(it)) },
                 sectionCollapse = sectionState,
+                debugState = DebugViewState(
+                    jobSelection = emptyList(),
+                )
             )
             newViewState
         }
