@@ -13,6 +13,7 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.data.DebugConfigStorage
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
+import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
@@ -33,6 +34,7 @@ import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModelMapper
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlin.Triple
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
@@ -67,15 +69,15 @@ class MainViewModel @Inject constructor(
             ),
             ratiosStorage.observeAll(),
             UpgradeBehavior.observeAll(upgradeStorage),
-            combine(ActionBehavior.observeAll(actionsStorage), sectionCollapseState, ::Pair),
+            combine(ActionBehavior.observeAll(actionsStorage), sectionCollapseState, debugConfigStorage.observeAll(), ::Triple),
         ) { blood: Resource,
             resources: List<Resource>,
             ratios: List<Ratio>,
             upgrades: List<Upgrade>,
-            //actions: List<Action> ->
-            actionsAndSectionState: Pair<List<Action>, Map<SectionKey, Boolean>> ->
+            actionsAndSectionState: Triple<List<Action>, Map<SectionKey, Boolean>, List<PlayerJob>> ->
             val actions = actionsAndSectionState.first
             val sectionState = actionsAndSectionState.second
+            val debugState = actionsAndSectionState.third
 
             val newViewState = MainViewState.Success(
                 resources = resources.map { resource ->
@@ -108,7 +110,7 @@ class MainViewModel @Inject constructor(
                     .let { ShopState(upgradeLists = listOf(it)) },
                 sectionCollapse = sectionState,
                 debugState = DebugViewState(
-                    jobSelection = emptyList(),
+                    jobSelection = debugState,
                 )
             )
             newViewState
