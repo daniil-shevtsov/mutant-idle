@@ -19,8 +19,9 @@ val Undertaker = PlayerJob(
     )
 )
 
-val SoftwareEngineer = PlayerJob(
+val Butcher = PlayerJob(
     tags = listOf(
-        
+        MeatAccess,
+        SocialJob,
     )
 )
