@@ -4,10 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,6 +24,7 @@ import com.daniil.shevtsov.idle.feature.ratio.view.MutantRatioPane
 import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
 import com.daniil.shevtsov.idle.feature.shop.view.Shop
 import com.google.accompanist.insets.statusBarsHeight
+import kotlinx.coroutines.launch
 
 @Preview(
     widthDp = 320,
@@ -147,6 +149,42 @@ fun LoadingContent() {
 
 @Composable
 fun SuccessContent(
+    state: MainViewState.Success,
+    modifier: Modifier = Modifier,
+    onActionClicked: (actionId: Long) -> Unit = {},
+    onUpgradeSelected: (upgradeId: Long) -> Unit = {},
+    onToggleCollapse: (key: SectionKey) -> Unit,
+) {
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
+    ModalDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            Column {
+                Text("Text in Drawer")
+                Button(onClick = {
+                    scope.launch {
+                        drawerState.close()
+                    }
+                }) {
+                    Text("Close Drawer")
+                }
+            }
+        },
+        content = {
+            ContentBody(
+                state = state,
+                onActionClicked = onActionClicked,
+                onUpgradeSelected = onUpgradeSelected,
+                onToggleCollapse = onToggleCollapse
+            )
+        }
+    )
+}
+
+@Composable
+fun ContentBody(
     state: MainViewState.Success,
     modifier: Modifier = Modifier,
     onActionClicked: (actionId: Long) -> Unit = {},
