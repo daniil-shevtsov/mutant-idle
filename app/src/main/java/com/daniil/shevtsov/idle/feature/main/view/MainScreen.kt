@@ -18,6 +18,9 @@ import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugComposable
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewAction
+import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
+import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
+import com.daniil.shevtsov.idle.feature.drawer.view.DrawerTabSelector
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewModel
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
@@ -171,6 +174,13 @@ fun SuccessContent(
     ModalDrawer(
         drawerState = drawerState,
         drawerContent = {
+            DrawerTabSelector(
+                tabs = listOf(
+                    DrawerTab(id = DrawerTabId.PlayerInfo, title ="Info"),
+                    DrawerTab(id = DrawerTabId.Debug, title = "debug"),
+                ),
+                onTabSelected = {},
+            )
             DebugComposable(state = state.debugState, onAction = { action ->
                 val mainViewAction = when (action) {
                     is DebugViewAction.JobSelected -> MainViewAction.DebugJobSelected(action.job)
