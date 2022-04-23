@@ -4,6 +4,9 @@ import assertk.Assert
 import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
+import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
+import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
+import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
@@ -168,5 +171,28 @@ class MainFunctionalCoreTest {
                         RatioKey.Suspicion to 4.0,
                     )
             }
+    }
+
+    @Test
+    fun `should select new tab when tab switched`() {
+        val initialState = mainFunctionalCoreState(
+            drawerTabs = listOf(
+                drawerTab(id = DrawerTabId.PlayerInfo, isSelected = true),
+                drawerTab(id = DrawerTabId.Debug, isSelected = false),
+            )
+        )
+
+        val newState = mainFunctionalCore(
+            state = initialState,
+            viewAction = MainViewAction.DrawerTabSwitched(id = DrawerTabId.Debug)
+        )
+
+        assertThat(newState)
+            .prop(MainFunctionalCoreState::drawerTabs)
+            .extracting(DrawerTab::id, DrawerTab::isSelected)
+            .containsExactly(
+                DrawerTabId.PlayerInfo to false,
+                DrawerTabId.Debug to true,
+            )
     }
 }

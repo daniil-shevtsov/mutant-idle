@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.feature.main.domain
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.core.domain.balanceConfig
 import com.daniil.shevtsov.idle.feature.action.domain.Action
+import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
@@ -19,6 +20,7 @@ fun mainFunctionalCoreState(
     ratios: List<Ratio> = emptyList(),
     upgrades: List<Upgrade> = emptyList(),
     actions: List<Action> = emptyList(),
+    drawerTabs: List<DrawerTab> = emptyList(),
     sectionState: Map<SectionKey, Boolean> = mapOf(),
     availableJobs: List<PlayerJob> = emptyList(),
     player: Player = player(),
@@ -28,6 +30,7 @@ fun mainFunctionalCoreState(
     ratios = ratios,
     upgrades = upgrades,
     actions = actions,
+    drawerTabs = drawerTabs,
     sectionState = sectionState,
     availableJobs = availableJobs,
     player = player,

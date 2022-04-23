@@ -22,9 +22,24 @@ fun mainFunctionalCore(
             state = state,
             viewAction = viewAction,
         )
+        is MainViewAction.DrawerTabSwitched -> handleDrawerTabSwitched(
+            state = state,
+            viewAction = viewAction,
+        )
         else -> TODO("Not Implemented")
     }
     return newState
+}
+
+fun handleDrawerTabSwitched(
+    state: MainFunctionalCoreState,
+    viewAction: MainViewAction.DrawerTabSwitched
+): MainFunctionalCoreState {
+    return state.copy(
+        drawerTabs = state.drawerTabs.map { tab ->
+            tab.copy(isSelected = tab.id == viewAction.id)
+        }
+    )
 }
 
 fun handleActionClicked(
