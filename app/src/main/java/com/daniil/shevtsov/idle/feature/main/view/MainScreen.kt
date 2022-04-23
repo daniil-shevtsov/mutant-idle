@@ -16,6 +16,8 @@ import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.viewStatePreviewStub
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
+import com.daniil.shevtsov.idle.feature.debug.presentation.DebugComposable
+import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewModel
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
@@ -35,6 +37,7 @@ fun MainPreview() {
     val state = viewStatePreviewStub()
     MainContent(
         state = state,
+        onViewAction = {},
         onActionClicked = {},
         onUpgradeSelected = {},
         onToggleCollapse = {}
@@ -56,6 +59,7 @@ fun MainPreviewAllCollapsed() {
     )
     MainContent(
         state = state,
+        onViewAction = {},
         onActionClicked = {},
         onUpgradeSelected = {},
         onToggleCollapse = {}
@@ -77,6 +81,7 @@ fun MainPreviewActionsExpanded() {
     )
     MainContent(
         state = state,
+        onViewAction = {},
         onActionClicked = {},
         onUpgradeSelected = {},
         onToggleCollapse = {}
@@ -98,6 +103,7 @@ fun MainPreviewUpgradesExpanded() {
     )
     MainContent(
         state = state,
+        onViewAction = {},
         onActionClicked = {},
         onUpgradeSelected = {},
         onToggleCollapse = {}
@@ -111,6 +117,7 @@ fun MainScreen(
     val viewState by viewModel.state.collectAsState()
     MainContent(
         state = viewState,
+        onViewAction = { action -> viewModel.handleAction(action) },
         onActionClicked = { actionId ->
             viewModel.handleAction(MainViewAction.ActionClicked(id = actionId))
         },
@@ -126,6 +133,7 @@ fun MainScreen(
 @Composable
 fun MainContent(
     state: MainViewState,
+    onViewAction: (MainViewAction) -> Unit,
     onActionClicked: (actionId: Long) -> Unit,
     onUpgradeSelected: (upgradeId: Long) -> Unit,
     onToggleCollapse: (key: SectionKey) -> Unit,
@@ -134,6 +142,7 @@ fun MainContent(
         is MainViewState.Loading -> LoadingContent()
         is MainViewState.Success -> SuccessContent(
             state = state,
+            onViewAction = onViewAction,
             onActionClicked = onActionClicked,
             onUpgradeSelected = onUpgradeSelected,
             onToggleCollapse = onToggleCollapse
@@ -151,6 +160,7 @@ fun LoadingContent() {
 fun SuccessContent(
     state: MainViewState.Success,
     modifier: Modifier = Modifier,
+    onViewAction: (MainViewAction) -> Unit,
     onActionClicked: (actionId: Long) -> Unit = {},
     onUpgradeSelected: (upgradeId: Long) -> Unit = {},
     onToggleCollapse: (key: SectionKey) -> Unit,
@@ -161,16 +171,12 @@ fun SuccessContent(
     ModalDrawer(
         drawerState = drawerState,
         drawerContent = {
-            Column {
-                Text("Text in Drawer")
-                Button(onClick = {
-                    scope.launch {
-                        drawerState.close()
-                    }
-                }) {
-                    Text("Close Drawer")
+            DebugComposable(state = state.debugState, onAction = { action ->
+                val mainViewAction = when (action) {
+                    is DebugViewAction.JobSelected -> MainViewAction.DebugJobSelected(action.job)
                 }
-            }
+                onViewAction(mainViewAction)
+            })
         },
         content = {
             ContentBody(

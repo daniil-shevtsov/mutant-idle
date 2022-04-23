@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.feature.main.presentation
 
+import android.database.sqlite.SQLiteBindOrColumnIndexOutOfRangeException
 import app.cash.turbine.test
 import assertk.Assert
 import assertk.all
@@ -14,6 +15,8 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.data.DebugConfigStorage
 import com.daniil.shevtsov.idle.feature.debug.domain.DebugFlag
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
+import com.daniil.shevtsov.idle.feature.player.core.data.PlayerStorage
+import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.job.domain.Butcher
 import com.daniil.shevtsov.idle.feature.player.job.domain.Mortician
 import com.daniil.shevtsov.idle.feature.player.job.domain.Undertaker
@@ -27,6 +30,7 @@ import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.*
 import com.daniil.shevtsov.idle.feature.upgrade.data.UpgradeStorage
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
@@ -34,6 +38,7 @@ import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
 import com.daniil.shevtsov.idle.util.action
 import com.daniil.shevtsov.idle.util.balanceConfig
+import com.daniil.shevtsov.idle.util.player
 import com.daniil.shevtsov.idle.util.upgrade
 import io.mockk.clearAllMocks
 import kotlinx.coroutines.test.runBlockingTest
@@ -70,6 +75,9 @@ internal class MainViewModelTest {
         tickRateMillis = 1L,
         resourcePerMillisecond = 2.0,
         resourceSpentForFullMutant = resourceSpentForFullMutant,
+    )
+    private val playerStorage = PlayerStorage(
+        initialPlayer = player()
     )
 
     private val debugConfigStorage = DebugConfigStorage()
@@ -507,6 +515,76 @@ internal class MainViewModelTest {
         }
     }
 
+    @Test
+    fun `should add job tags to player when job selected`() = runBlockingTest {
+        val jobTags = Mortician.tags
+
+        viewModel.handleAction(MainViewAction.DebugJobSelected(job = Mortician))
+
+        assertThat(playerStorage.get())
+            .prop(Player::tags)
+            .containsSubList(jobTags)
+    }
+
+    @Test
+    fun `should remove previous job tags if job changed`() = runBlockingTest {
+        val previousJob = playerJob(
+            tags = listOf(
+                MeatAccess,
+                SocialJob,
+            )
+        )
+        val newJob = playerJob(
+            tags = listOf(
+                CorpseAccess,
+                SocialJob,
+            )
+        )
+
+        viewModel.handleAction(MainViewAction.DebugJobSelected(job = previousJob))
+        viewModel.handleAction(MainViewAction.DebugJobSelected(job = newJob))
+
+        assertThat(playerStorage.get())
+            .prop(Player::tags)
+            .containsExactly(
+                CorpseAccess,
+                SocialJob
+            )
+    }
+
+    @Test
+    fun `should keep other player tags when changing jobs`() = runBlockingTest {
+        val playerTags = listOf(
+            Devourer,
+            Immortal,
+        )
+        val previousJob = playerJob(
+            tags = listOf(
+                MeatAccess,
+                SocialJob,
+            )
+        )
+        val newJob = playerJob(
+            tags = listOf(
+                CorpseAccess,
+                SocialJob,
+            )
+        )
+        playerStorage.update(newPlayer = player(tags = playerTags))
+
+        viewModel.handleAction(MainViewAction.DebugJobSelected(job = previousJob))
+        viewModel.handleAction(MainViewAction.DebugJobSelected(job = newJob))
+
+        assertThat(playerStorage.get())
+            .prop(Player::tags)
+            .containsExactly(
+                Devourer,
+                Immortal,
+                CorpseAccess,
+                SocialJob,
+            )
+    }
+
     private fun createViewModel() = MainViewModel(
         balanceConfig = balanceConfig,
         upgradeStorage = upgradeStorage,
@@ -515,6 +593,7 @@ internal class MainViewModelTest {
         mutantRatioStorage = mutantRatioStorage,
         ratiosStorage = ratiosStorage,
         debugConfigStorage = debugConfigStorage,
+        playerStorage = playerStorage,
     )
 
     private fun Assert<MainViewState>.extractingUpgrades() =

@@ -8,6 +8,9 @@ import com.daniil.shevtsov.idle.core.di.koin.appModule
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.ActionType
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
+import com.daniil.shevtsov.idle.feature.player.job.domain.Butcher
+import com.daniil.shevtsov.idle.feature.player.job.domain.Mortician
+import com.daniil.shevtsov.idle.feature.player.job.domain.Undertaker
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
@@ -32,7 +35,8 @@ class IdleGameApplication : Application() {
                 initialActions = createInitialActions(),
                 initialResources = createInitialResources(),
                 initialRatios = createInitialRatios(),
-                initialPlayer = createInitialPlayer()
+                initialPlayer = createInitialPlayer(),
+                initialJobs = createInitialJobs(),
             )
     }
 
@@ -199,10 +203,17 @@ class IdleGameApplication : Application() {
     )
 
     private fun createInitialPlayer() = Player(
+        job = Mortician,
         tags = listOf(
             Tag("Devourer"),
             Tag("Work From Home"),
         )
+    )
+
+    private fun createInitialJobs() = listOf(
+        Mortician,
+        Undertaker,
+        Butcher,
     )
 
 }

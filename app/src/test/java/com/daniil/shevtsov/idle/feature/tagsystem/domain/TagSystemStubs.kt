@@ -6,6 +6,10 @@ fun tag(name: String = "") = Tag(
     name = name
 )
 
-fun playerJob(tags: List<Tag>) = PlayerJob(
+fun playerJob(
+    title: String = "",
+    tags: List<Tag> = emptyList(),
+) = PlayerJob(
+    title = title,
     tags = tags,
 )

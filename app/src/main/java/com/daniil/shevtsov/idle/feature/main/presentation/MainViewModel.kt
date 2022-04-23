@@ -13,6 +13,7 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.data.DebugConfigStorage
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
+import com.daniil.shevtsov.idle.feature.player.core.data.PlayerStorage
 import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
@@ -44,6 +45,7 @@ class MainViewModel @Inject constructor(
     private val mutantRatioStorage: MutantRatioStorage,
     private val ratiosStorage: RatiosStorage,
     private val debugConfigStorage: DebugConfigStorage,
+    private val playerStorage: PlayerStorage,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(initViewState())
@@ -167,6 +169,7 @@ class MainViewModel @Inject constructor(
             is MainViewAction.UpgradeSelected -> handleUpgradeSelected(action)
             is MainViewAction.ActionClicked -> handleActionClicked(action)
             is MainViewAction.ToggleSectionCollapse -> toggleSectionCollapse(action)
+            is MainViewAction.DebugJobSelected -> handleJobSelected(action)
         }
     }
 
@@ -218,6 +221,17 @@ class MainViewModel @Inject constructor(
             .apply { put(action.key, !(oldState[action.key] ?: false)) }
             .toMap()
         sectionCollapseState.value = newState
+    }
+
+    private fun handleJobSelected(action: MainViewAction.DebugJobSelected) {
+        viewModelScope.launch {
+            val currentPlayer = playerStorage.get()
+            val newTags = currentPlayer.tags - currentPlayer.job.tags + action.job.tags
+            playerStorage.update(newPlayer = currentPlayer.copy(
+                job = action.job,
+                tags = newTags
+            ))
+        }
     }
 
     private fun initViewState(): MainViewState = MainViewState.Loading

@@ -6,6 +6,7 @@ import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.main.view.MainFragment
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
+import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
@@ -30,6 +31,7 @@ interface AppComponent {
             @BindsInstance initialResources: List<Resource>,
             @BindsInstance initialRatios: List<Ratio>,
             @BindsInstance initialPlayer: Player,
+            @BindsInstance initialJobs: List<PlayerJob>,
         ): AppComponent
     }
 
