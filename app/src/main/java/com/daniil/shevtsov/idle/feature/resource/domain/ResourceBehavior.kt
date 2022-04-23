@@ -48,18 +48,6 @@ object ResourceBehavior {
         )
     }
 
-    fun applyResourceChange(
-        amount: Double,
-        resourceKey: ResourceKey,
-        resourcesStorage: ResourcesStorage,
-    ) {
-        applyChange(
-            resourcesStorage = resourcesStorage,
-            resourceKey = resourceKey,
-            amount = amount,
-        )
-    }
-
     private fun applyChange(
         resourcesStorage: ResourcesStorage,
         resourceKey: ResourceKey,

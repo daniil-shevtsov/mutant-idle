@@ -18,7 +18,6 @@ import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
 import com.daniil.shevtsov.idle.feature.player.core.data.PlayerStorage
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
-import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
@@ -31,7 +30,6 @@ import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMappe
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
 import com.daniil.shevtsov.idle.feature.upgrade.data.UpgradeStorage
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
-import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeBehavior
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModelMapper
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
@@ -74,7 +72,7 @@ class MainViewModel @Inject constructor(
                     resourcesStorage = resourcesStorage,
                 ).first()
                 val ratios = ratiosStorage.observeAll().first()
-                val upgrades = UpgradeBehavior.observeAll(upgradeStorage).first()
+                val upgrades = upgradeStorage.observeAll().first()
                 val actions = ActionBehavior.observeAll(actionsStorage).first()
                 val sectionState = sectionCollapseState.first()
                 val availableJobs = debugConfigStorage.observeAvailableJobs().first()
@@ -107,7 +105,7 @@ class MainViewModel @Inject constructor(
                 resourcesStorage = resourcesStorage,
             ),
             ratiosStorage.observeAll(),
-            UpgradeBehavior.observeAll(upgradeStorage),
+            upgradeStorage.observeAll(),
             ActionBehavior.observeAll(actionsStorage),
             sectionCollapseState,
             debugConfigStorage.observeAvailableJobs(),
