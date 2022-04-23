@@ -1,5 +1,7 @@
 package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
-data class Tag(
-    val name: String,
+fun tag(
+    name: String = "",
+) = Tag(
+    name = name,
 )
