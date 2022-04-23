@@ -13,6 +13,7 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.data.DebugConfigStorage
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
+import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.player.core.data.PlayerStorage
 import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
@@ -227,10 +228,12 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             val currentPlayer = playerStorage.get()
             val newTags = currentPlayer.tags - currentPlayer.job.tags + action.job.tags
-            playerStorage.update(newPlayer = currentPlayer.copy(
-                job = action.job,
-                tags = newTags
-            ))
+            playerStorage.update(
+                newPlayer = currentPlayer.copy(
+                    job = action.job,
+                    tags = newTags
+                )
+            )
         }
     }
 
