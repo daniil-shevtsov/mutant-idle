@@ -44,7 +44,6 @@ class MainViewModel @Inject constructor(
     private val upgradeStorage: UpgradeStorage,
     private val actionsStorage: ActionsStorage,
     private val resourcesStorage: ResourcesStorage,
-    private val mutantRatioStorage: MutantRatioStorage,
     private val ratiosStorage: RatiosStorage,
     private val debugConfigStorage: DebugConfigStorage,
     private val playerStorage: PlayerStorage,

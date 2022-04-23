@@ -60,7 +60,6 @@ internal class MainViewModelTest {
             Resource(key = ResourceKey.Money, name = "Money", value = 0.0),
         )
     )
-    private val mutantRatioStorage = MutantRatioStorage()
     private val ratiosStorage = RatiosStorage(
         initialRatios = listOf(
             Ratio(key = RatioKey.Mutanity, title = "", value = 0.0),
@@ -589,7 +588,6 @@ internal class MainViewModelTest {
         upgradeStorage = upgradeStorage,
         actionsStorage = actionsStorage,
         resourcesStorage = resourcesStorage,
-        mutantRatioStorage = mutantRatioStorage,
         ratiosStorage = ratiosStorage,
         debugConfigStorage = debugConfigStorage,
         playerStorage = playerStorage,
