@@ -103,10 +103,6 @@ class MainViewModel @Inject constructor(
 
 
         combine(
-            ResourceBehavior.observeResource(
-                resourcesStorage = resourcesStorage,
-                key = ResourceKey.Blood,
-            ),
             ResourceBehavior.observeAllResources(
                 resourcesStorage = resourcesStorage,
             ),
@@ -116,8 +112,7 @@ class MainViewModel @Inject constructor(
             sectionCollapseState,
             debugConfigStorage.observeAvailableJobs(),
             playerStorage.observe(),
-        ) { blood: Resource,
-            resources: List<Resource>,
+        ) { resources: List<Resource>,
             ratios: List<Ratio>,
             upgrades: List<Upgrade>,
             actions: List<Action>,
@@ -143,7 +138,9 @@ class MainViewModel @Inject constructor(
                     .map { upgrade ->
                         UpgradeModelMapper.map(
                             upgrade = upgrade,
-                            status = upgrade.mapStatus(blood.value)
+                            status = upgrade.mapStatus(
+                                resources.find { it.key == ResourceKey.Blood }?.value ?: 0.0
+                            )
                         )
                     }
                     .sortedBy {
@@ -292,7 +289,7 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    private fun <T0, T1, T2, T3, T4, T5, T6, T7, R> combine(
+    private fun <T0, T1, T2, T3, T4, T5, T6, /*T7,*/ R> combine(
         flow0: Flow<T0>,
         flow1: Flow<T1>,
         flow2: Flow<T2>,
@@ -300,7 +297,7 @@ class MainViewModel @Inject constructor(
         flow4: Flow<T4>,
         flow5: Flow<T5>,
         flow6: Flow<T6>,
-        flow7: Flow<T7>,
+//        flow7: Flow<T7>,
         transform: suspend (
             T0,
             T1,
@@ -309,7 +306,7 @@ class MainViewModel @Inject constructor(
             T4,
             T5,
             T6,
-            T7,
+//            T7,
         ) -> R
     ): Flow<R> = combine(
         flow0,
@@ -319,7 +316,7 @@ class MainViewModel @Inject constructor(
         flow4,
         flow5,
         flow6,
-        flow7,
+//        flow7,
     ) { args: Array<*> ->
         transform(
             args[0] as T0,
@@ -329,7 +326,7 @@ class MainViewModel @Inject constructor(
             args[4] as T4,
             args[5] as T5,
             args[6] as T6,
-            args[7] as T7,
+//            args[7] as T7,
         )
     }
 
