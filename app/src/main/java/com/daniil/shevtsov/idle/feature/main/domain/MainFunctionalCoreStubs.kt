@@ -14,7 +14,6 @@ import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 
 fun mainFunctionalCoreState(
-    blood: Resource = resource(),
     balanceConfig: BalanceConfig = balanceConfig(),
     resources: List<Resource> = emptyList(),
     ratios: List<Ratio> = emptyList(),
@@ -24,7 +23,6 @@ fun mainFunctionalCoreState(
     availableJobs: List<PlayerJob> = emptyList(),
     player: Player = player(),
 ) = MainFunctionalCoreState(
-    blood = blood,
     balanceConfig = balanceConfig,
     resources = resources,
     ratios = ratios,

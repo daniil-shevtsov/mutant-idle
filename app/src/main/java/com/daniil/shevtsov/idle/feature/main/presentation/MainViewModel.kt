@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.action.data.ActionsStorage
 import com.daniil.shevtsov.idle.feature.action.domain.Action
-import com.daniil.shevtsov.idle.feature.action.domain.ActionBehavior
 import com.daniil.shevtsov.idle.feature.action.domain.ActionType
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
@@ -24,7 +23,6 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
-import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMapper
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
@@ -64,23 +62,16 @@ class MainViewModel @Inject constructor(
     init {
         temporaryHackyActionFlow
             .onEach { viewAction ->
-                val blood = ResourceBehavior.observeResource(
-                    resourcesStorage = resourcesStorage,
-                    key = ResourceKey.Blood,
-                ).first()
-                val resources = ResourceBehavior.observeAllResources(
-                    resourcesStorage = resourcesStorage,
-                ).first()
+                val resources = resourcesStorage.observeAll().first()
                 val ratios = ratiosStorage.observeAll().first()
                 val upgrades = upgradeStorage.observeAll().first()
-                val actions = ActionBehavior.observeAll(actionsStorage).first()
+                val actions = actionsStorage.observeAll().first()
                 val sectionState = sectionCollapseState.first()
                 val availableJobs = debugConfigStorage.observeAvailableJobs().first()
                 val player = playerStorage.observe().first()
 
                 val functionalCoreState = MainFunctionalCoreState(
                     player = player,
-                    blood = blood,
                     balanceConfig = balanceConfig,
                     resources = resources,
                     ratios = ratios,
@@ -101,12 +92,10 @@ class MainViewModel @Inject constructor(
 
 
         combine(
-            ResourceBehavior.observeAllResources(
-                resourcesStorage = resourcesStorage,
-            ),
+            resourcesStorage.observeAll(),
             ratiosStorage.observeAll(),
             upgradeStorage.observeAll(),
-            ActionBehavior.observeAll(actionsStorage),
+            actionsStorage.observeAll(),
             sectionCollapseState,
             debugConfigStorage.observeAvailableJobs(),
             playerStorage.observe(),

@@ -10,7 +10,6 @@ import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 
 data class MainFunctionalCoreState(
-    val blood: Resource,
     val balanceConfig: BalanceConfig,
     val resources: List<Resource>,
     val ratios: List<Ratio>,
