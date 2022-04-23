@@ -32,4 +32,8 @@ class UpgradeStorage @Inject constructor(
         upgrades.value = modifiedMap
     }
 
+    fun updateALl(newUpgrades: List<Upgrade>) {
+        upgrades.value = newUpgrades.associateBy { it.id }
+    }
+
 }

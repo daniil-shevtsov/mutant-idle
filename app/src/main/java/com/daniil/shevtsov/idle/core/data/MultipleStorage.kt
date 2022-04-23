@@ -7,13 +7,17 @@ import javax.inject.Inject
 
 class MultipleStorage<Key, Value> @Inject constructor(
     initialValues: List<Value>,
-    keyExtractor: (value: Value) -> Key,
+    private val keyExtractor: (value: Value) -> Key,
 ) {
     private val storedData: MutableStateFlow<Map<Key, Value>> =
         MutableStateFlow(initialValues.associateBy { keyExtractor(it) })
 
     fun observeAll(): Flow<List<Value>> {
         return storedData.map { it.values.toList() }
+    }
+
+    fun updateAll(newValues: List<Value>) {
+        storedData.value = newValues.associateBy { keyExtractor(it) }
     }
 
     fun getByKey(key: Key): Value? {

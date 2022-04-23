@@ -14,6 +14,7 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.data.DebugConfigStorage
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
+import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
 import com.daniil.shevtsov.idle.feature.player.core.data.PlayerStorage
 import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
@@ -26,7 +27,6 @@ import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMapper
-import com.daniil.shevtsov.idle.feature.shop.domain.CompositePurchaseBehavior
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
 import com.daniil.shevtsov.idle.feature.upgrade.data.UpgradeStorage
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
@@ -52,6 +52,9 @@ class MainViewModel @Inject constructor(
     private val _state = MutableStateFlow(initViewState())
     val state = _state.asStateFlow()
 
+    private val temporaryHackyActionFlow =
+        MutableSharedFlow<MainViewAction>()
+
     private val sectionCollapseState = MutableStateFlow(
         mapOf(
             SectionKey.Resources to false,
@@ -61,6 +64,42 @@ class MainViewModel @Inject constructor(
     )
 
     init {
+        temporaryHackyActionFlow
+            .onEach { viewAction ->
+                val blood = ResourceBehavior.observeResource(
+                    resourcesStorage = resourcesStorage,
+                    key = ResourceKey.Blood,
+                ).first()
+                val resources = ResourceBehavior.observeAllResources(
+                    resourcesStorage = resourcesStorage,
+                ).first()
+                val ratios = ratiosStorage.observeAll().first()
+                val upgrades = UpgradeBehavior.observeAll(upgradeStorage).first()
+                val actions = ActionBehavior.observeAll(actionsStorage).first()
+                val sectionState = sectionCollapseState.first()
+                val availableJobs = debugConfigStorage.observeAvailableJobs().first()
+
+                val functionalCoreState = MainFunctionalCoreState(
+                    blood = blood,
+                    balanceConfig = balanceConfig,
+                    resources = resources,
+                    ratios = ratios,
+                    upgrades = upgrades,
+                    actions = actions,
+                    sectionState = sectionState,
+                    availableJobs = availableJobs,
+                )
+
+                val newFunctionalCoreState = mainFunctionalCore(
+                    state = functionalCoreState,
+                    action = viewAction
+                )
+
+                updateImperativeShell(newState = newFunctionalCoreState)
+            }
+            .launchIn(viewModelScope)
+
+
         combine(
             ResourceBehavior.observeResource(
                 resourcesStorage = resourcesStorage,
@@ -81,6 +120,7 @@ class MainViewModel @Inject constructor(
             actions: List<Action>,
             sectionState: Map<SectionKey, Boolean>,
             availableJobs: List<PlayerJob> ->
+
             val newViewState = MainViewState.Success(
                 resources = resources.map { resource ->
                     ResourceModelMapper.map(
@@ -121,6 +161,14 @@ class MainViewModel @Inject constructor(
                 _state.value = viewState
             }
             .launchIn(viewModelScope)
+    }
+
+    private fun updateImperativeShell(newState: MainFunctionalCoreState) {
+        with(newState) {
+            upgradeStorage.updateALl(newUpgrades = newState.upgrades)
+            resourcesStorage.upgradeAll(newResources = newState.resources)
+            ratiosStorage.upgradeAll(newRatios = newState.ratios)
+        }
     }
 
     private fun createActionState(actions: List<Action>): ActionsState {
@@ -176,14 +224,7 @@ class MainViewModel @Inject constructor(
 
     private fun handleUpgradeSelected(action: MainViewAction.UpgradeSelected) {
         viewModelScope.launch {
-            CompositePurchaseBehavior.buyUpgrade(
-                balanceConfig = balanceConfig,
-                upgradeStorage = upgradeStorage,
-                resourcesStorage = resourcesStorage,
-                mutantRatioStorage = mutantRatioStorage,
-                ratiosStorage = ratiosStorage,
-                upgradeId = action.id,
-            )
+            temporaryHackyActionFlow.emit(action)
         }
     }
 

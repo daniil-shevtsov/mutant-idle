@@ -140,6 +140,7 @@ internal class MainViewModelTest {
         }
     }
 
+    // x
     @Test
     fun `should buy upgrade when clicked and affordable`() = runBlockingTest {
         setInitialResourceValue(10.0)

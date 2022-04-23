@@ -12,11 +12,7 @@ import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 
 fun mainFunctionalCoreState(
-    blood: Resource = resource(
-        key = ResourceKey.Blood,
-        name = "Blood",
-        value = 0.0,
-    ),
+    blood: Resource = resource(),
     balanceConfig: BalanceConfig = balanceConfig(),
     resources: List<Resource> = emptyList(),
     ratios: List<Ratio> = emptyList(),
