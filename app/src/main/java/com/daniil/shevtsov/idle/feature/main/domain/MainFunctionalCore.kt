@@ -2,10 +2,7 @@ package com.daniil.shevtsov.idle.feature.main.domain
 
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
-import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
-import com.daniil.shevtsov.idle.feature.shop.domain.PurchaseBehavior
-import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeBehavior
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 
 fun mainFunctionalCore(
@@ -14,6 +11,10 @@ fun mainFunctionalCore(
 ): MainFunctionalCoreState {
     val newState = when (action) {
         is MainViewAction.UpgradeSelected -> handleUpgradeSelected(
+            state = state,
+            action = action,
+        )
+        is MainViewAction.DebugJobSelected -> handleDebugJobSelected(
             state = state,
             action = action,
         )
@@ -84,4 +85,23 @@ fun handleUpgradeSelected(
         }
         else -> state
     }
+}
+
+fun handleDebugJobSelected(
+    state: MainFunctionalCoreState,
+    action: MainViewAction.DebugJobSelected
+): MainFunctionalCoreState {
+    val previousPlayerTags = state.player.tags
+    val previousJobTags = state.player.job.tags
+    val newJobTags = action.job.tags
+    
+    val newPlayerTags = previousPlayerTags - previousJobTags + newJobTags
+
+    return state.copy(
+        player = state.player.copy(
+            job = action.job,
+            tags = newPlayerTags,
+        )
+    )
+
 }

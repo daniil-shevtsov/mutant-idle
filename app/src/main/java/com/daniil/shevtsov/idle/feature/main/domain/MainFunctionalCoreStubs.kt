@@ -4,6 +4,8 @@ import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.core.domain.balanceConfig
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
+import com.daniil.shevtsov.idle.feature.player.core.domain.Player
+import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
@@ -20,6 +22,7 @@ fun mainFunctionalCoreState(
     actions: List<Action> = emptyList(),
     sectionState: Map<SectionKey, Boolean> = mapOf(),
     availableJobs: List<PlayerJob> = emptyList(),
+    player: Player = player(),
 ) = MainFunctionalCoreState(
     blood = blood,
     balanceConfig = balanceConfig,
@@ -28,5 +31,6 @@ fun mainFunctionalCoreState(
     upgrades = upgrades,
     actions = actions,
     sectionState = sectionState,
-    availableJobs = availableJobs
+    availableJobs = availableJobs,
+    player = player,
 )

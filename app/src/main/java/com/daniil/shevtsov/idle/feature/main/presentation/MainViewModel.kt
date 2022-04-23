@@ -16,6 +16,7 @@ import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
 import com.daniil.shevtsov.idle.feature.player.core.data.PlayerStorage
+import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
@@ -78,8 +79,10 @@ class MainViewModel @Inject constructor(
                 val actions = ActionBehavior.observeAll(actionsStorage).first()
                 val sectionState = sectionCollapseState.first()
                 val availableJobs = debugConfigStorage.observeAvailableJobs().first()
+                val player = playerStorage.observe().first()
 
                 val functionalCoreState = MainFunctionalCoreState(
+                    player = player,
                     blood = blood,
                     balanceConfig = balanceConfig,
                     resources = resources,
@@ -113,13 +116,15 @@ class MainViewModel @Inject constructor(
             ActionBehavior.observeAll(actionsStorage),
             sectionCollapseState,
             debugConfigStorage.observeAvailableJobs(),
+            playerStorage.observe(),
         ) { blood: Resource,
             resources: List<Resource>,
             ratios: List<Ratio>,
             upgrades: List<Upgrade>,
             actions: List<Action>,
             sectionState: Map<SectionKey, Boolean>,
-            availableJobs: List<PlayerJob> ->
+            availableJobs: List<PlayerJob>,
+            player: Player ->
 
             val newViewState = MainViewState.Success(
                 resources = resources.map { resource ->
@@ -316,7 +321,7 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    private fun <T0, T1, T2, T3, T4, T5, T6, R> combine(
+    private fun <T0, T1, T2, T3, T4, T5, T6, T7, R> combine(
         flow0: Flow<T0>,
         flow1: Flow<T1>,
         flow2: Flow<T2>,
@@ -324,8 +329,27 @@ class MainViewModel @Inject constructor(
         flow4: Flow<T4>,
         flow5: Flow<T5>,
         flow6: Flow<T6>,
-        transform: suspend (T0, T1, T2, T3, T4, T5, T6) -> R
-    ): Flow<R> = combine(flow0, flow1, flow2, flow3, flow4, flow5, flow6) { args: Array<*> ->
+        flow7: Flow<T7>,
+        transform: suspend (
+            T0,
+            T1,
+            T2,
+            T3,
+            T4,
+            T5,
+            T6,
+            T7,
+        ) -> R
+    ): Flow<R> = combine(
+        flow0,
+        flow1,
+        flow2,
+        flow3,
+        flow4,
+        flow5,
+        flow6,
+        flow7,
+    ) { args: Array<*> ->
         transform(
             args[0] as T0,
             args[1] as T1,
@@ -334,6 +358,7 @@ class MainViewModel @Inject constructor(
             args[4] as T4,
             args[5] as T5,
             args[6] as T6,
+            args[7] as T7,
         )
     }
 
