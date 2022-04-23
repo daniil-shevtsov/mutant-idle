@@ -107,43 +107,18 @@ class MainViewModel @Inject constructor(
             availableJobs: List<PlayerJob>,
             player: Player ->
 
-            val newViewState = MainViewState.Success(
-                resources = resources.map { resource ->
-                    ResourceModelMapper.map(
-                        resource = resource,
-                        name = resource.name,
-                    )
-                },
-                ratios = ratios.map {
-                    HumanityRatioModel(
-                        name = getNameForRatio(it),
-                        percent = it.value
-                    )
-                },
-                actionState = createActionState(actions),
-                shop = upgrades
-                    .map { upgrade ->
-                        UpgradeModelMapper.map(
-                            upgrade = upgrade,
-                            status = upgrade.mapStatus(
-                                resources.find { it.key == ResourceKey.Blood }?.value ?: 0.0
-                            )
-                        )
-                    }
-                    .sortedBy {
-                        when (it.status) {
-                            UpgradeStatusModel.Affordable -> 0
-                            UpgradeStatusModel.NotAffordable -> 1
-                            UpgradeStatusModel.Bought -> 2
-                        }
-                    }
-                    .let { ShopState(upgradeLists = listOf(it)) },
-                sectionCollapse = sectionState,
-                debugState = DebugViewState(
-                    jobSelection = availableJobs,
-                )
+            val newState = MainFunctionalCoreState(
+                player = player,
+                balanceConfig = balanceConfig,
+                resources = resources,
+                ratios = ratios,
+                upgrades = upgrades,
+                actions = actions,
+                sectionState = sectionState,
+                availableJobs = availableJobs,
             )
-            newViewState
+
+            createMainViewState(newState)
         }
             .onEach { viewState ->
                 _state.value = viewState
@@ -168,6 +143,45 @@ class MainViewModel @Inject constructor(
         actionsStorage.upgradeAll(newActions = newState.actions)
         sectionCollapseState.value = newState.sectionState
         debugConfigStorage.updateAvailableJobs(newAvailableJobs = newState.availableJobs)
+    }
+
+    private fun createMainViewState(state: MainFunctionalCoreState): MainViewState {
+        return MainViewState.Success(
+            resources = state.resources.map { resource ->
+                ResourceModelMapper.map(
+                    resource = resource,
+                    name = resource.name,
+                )
+            },
+            ratios = state.ratios.map {
+                HumanityRatioModel(
+                    name = getNameForRatio(it),
+                    percent = it.value
+                )
+            },
+            actionState = createActionState(state.actions),
+            shop = state.upgrades
+                .map { upgrade ->
+                    UpgradeModelMapper.map(
+                        upgrade = upgrade,
+                        status = upgrade.mapStatus(
+                            state.resources.find { it.key == ResourceKey.Blood }?.value ?: 0.0
+                        )
+                    )
+                }
+                .sortedBy {
+                    when (it.status) {
+                        UpgradeStatusModel.Affordable -> 0
+                        UpgradeStatusModel.NotAffordable -> 1
+                        UpgradeStatusModel.Bought -> 2
+                    }
+                }
+                .let { ShopState(upgradeLists = listOf(it)) },
+            sectionCollapse = state.sectionState,
+            debugState = DebugViewState(
+                jobSelection = state.availableJobs,
+            )
+        )
     }
 
     private fun createActionState(actions: List<Action>): ActionsState {
