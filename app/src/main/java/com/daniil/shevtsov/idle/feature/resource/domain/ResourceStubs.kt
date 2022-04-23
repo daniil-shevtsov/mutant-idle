@@ -9,3 +9,8 @@ fun resource(
     name = name,
     value = value,
 )
+
+fun resourceChange(
+    key: ResourceKey = ResourceKey.Blood,
+    change: Double = 0.0
+) = key to change

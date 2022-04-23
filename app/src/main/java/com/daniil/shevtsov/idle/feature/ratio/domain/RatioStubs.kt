@@ -9,3 +9,8 @@ fun ratio(
     title = title,
     value = value,
 )
+
+fun ratioChange(
+    key: RatioKey = RatioKey.Mutanity,
+    change: Float = 0.0f,
+) = key to change

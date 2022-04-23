@@ -7,27 +7,67 @@ import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 
 fun mainFunctionalCore(
     state: MainFunctionalCoreState,
-    action: MainViewAction,
+    viewAction: MainViewAction,
 ): MainFunctionalCoreState {
-    val newState = when (action) {
+    val newState = when (viewAction) {
+        is MainViewAction.ActionClicked -> handleActionClicked(
+            state = state,
+            viewAction = viewAction
+        )
         is MainViewAction.UpgradeSelected -> handleUpgradeSelected(
             state = state,
-            action = action,
+            viewAction = viewAction,
         )
         is MainViewAction.DebugJobSelected -> handleDebugJobSelected(
             state = state,
-            action = action,
+            viewAction = viewAction,
         )
         else -> TODO("Not Implemented")
     }
     return newState
 }
 
+fun handleActionClicked(
+    state: MainFunctionalCoreState,
+    viewAction: MainViewAction.ActionClicked
+): MainFunctionalCoreState {
+    val selectedAction = state.actions.find { action -> action.id == viewAction.id }!!
+
+    val hasInvalidChanges = selectedAction.resourceChanges.any { (resourceKey, resourceChange) ->
+        val currentResourceValue = state.resources
+            .find { resource -> resource.key == resourceKey }!!.value
+
+        currentResourceValue + resourceChange < 0
+    }
+
+    val updatedResources = state.resources.map { resource ->
+        when (val resourceChange = selectedAction.resourceChanges[resource.key]) {
+            null -> resource
+            else -> resource.copy(value = resource.value + resourceChange)
+        }
+    }
+    val updatedRatios = state.ratios.map { ratio ->
+        when (val ratioChange = selectedAction.ratioChanges[ratio.key]) {
+            null -> ratio
+            else -> ratio.copy(value = ratio.value + ratioChange)
+        }
+    }
+
+    return if (!hasInvalidChanges) {
+        state.copy(
+            ratios = updatedRatios,
+            resources = updatedResources,
+        )
+    } else {
+        state
+    }
+}
+
 fun handleUpgradeSelected(
     state: MainFunctionalCoreState,
-    action: MainViewAction.UpgradeSelected
+    viewAction: MainViewAction.UpgradeSelected
 ): MainFunctionalCoreState {
-    val upgradeToBuy = state.upgrades.find { upgrade -> upgrade.id == action.id }!!
+    val upgradeToBuy = state.upgrades.find { upgrade -> upgrade.id == viewAction.id }!!
 
     val currentResource = state.resources.find { resource -> resource.key == ResourceKey.Blood }!!
 
@@ -89,17 +129,17 @@ fun handleUpgradeSelected(
 
 fun handleDebugJobSelected(
     state: MainFunctionalCoreState,
-    action: MainViewAction.DebugJobSelected
+    viewAction: MainViewAction.DebugJobSelected
 ): MainFunctionalCoreState {
     val previousPlayerTags = state.player.tags
     val previousJobTags = state.player.job.tags
-    val newJobTags = action.job.tags
+    val newJobTags = viewAction.job.tags
 
     val newPlayerTags = previousPlayerTags - previousJobTags + newJobTags
 
     return state.copy(
         player = state.player.copy(
-            job = action.job,
+            job = viewAction.job,
             tags = newPlayerTags,
         )
     )

@@ -95,7 +95,7 @@ class MainViewModel @Inject constructor(
 
                 val newFunctionalCoreState = mainFunctionalCore(
                     state = functionalCoreState,
-                    action = viewAction
+                    viewAction = viewAction
                 )
 
                 updateImperativeShell(newState = newFunctionalCoreState)
@@ -168,6 +168,15 @@ class MainViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
+    fun handleAction(action: MainViewAction) {
+        when (action) {
+            is MainViewAction.UpgradeSelected -> handleUpgradeSelected(action)
+            is MainViewAction.ActionClicked -> handleActionClicked(action)
+            is MainViewAction.ToggleSectionCollapse -> toggleSectionCollapse(action)
+            is MainViewAction.DebugJobSelected -> handleJobSelected(action)
+        }
+    }
+
     private fun updateImperativeShell(newState: MainFunctionalCoreState) {
         playerStorage.update(newPlayer = newState.player)
         upgradeStorage.updateALl(newUpgrades = newState.upgrades)
@@ -218,15 +227,6 @@ class MainViewModel @Inject constructor(
             else -> "Honest"
         }
         return name
-    }
-
-    fun handleAction(action: MainViewAction) {
-        when (action) {
-            is MainViewAction.UpgradeSelected -> handleUpgradeSelected(action)
-            is MainViewAction.ActionClicked -> handleActionClicked(action)
-            is MainViewAction.ToggleSectionCollapse -> toggleSectionCollapse(action)
-            is MainViewAction.DebugJobSelected -> handleJobSelected(action)
-        }
     }
 
     private fun handleUpgradeSelected(action: MainViewAction.UpgradeSelected) {
