@@ -94,7 +94,7 @@ fun handleDebugJobSelected(
     val previousPlayerTags = state.player.tags
     val previousJobTags = state.player.job.tags
     val newJobTags = action.job.tags
-    
+
     val newPlayerTags = previousPlayerTags - previousJobTags + newJobTags
 
     return state.copy(

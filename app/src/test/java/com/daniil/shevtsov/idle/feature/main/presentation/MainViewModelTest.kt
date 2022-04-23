@@ -1,6 +1,5 @@
 package com.daniil.shevtsov.idle.feature.main.presentation
 
-import android.database.sqlite.SQLiteBindOrColumnIndexOutOfRangeException
 import app.cash.turbine.test
 import assertk.Assert
 import assertk.all
@@ -13,7 +12,6 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.data.DebugConfigStorage
-import com.daniil.shevtsov.idle.feature.debug.domain.DebugFlag
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.player.core.data.PlayerStorage
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
@@ -506,7 +504,7 @@ internal class MainViewModelTest {
             Undertaker,
             Butcher,
         )
-        debugConfigStorage.addAvailableJobs(availableJobs)
+        debugConfigStorage.updateAvailableJobs(availableJobs)
 
         viewModel.state.test {
             assertThat(expectMostRecentItem())

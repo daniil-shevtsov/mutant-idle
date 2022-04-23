@@ -14,8 +14,8 @@ class DebugConfigStorage @Inject constructor(
 
     private val jobs =  MutableStateFlow(initial)
 
-    fun addAvailableJobs(availableJobs: List<PlayerJob>) {
-        jobs.value = availableJobs
+    fun updateAvailableJobs(newAvailableJobs: List<PlayerJob>) {
+        jobs.value = newAvailableJobs
     }
 
     fun observeAvailableJobs(): Flow<List<PlayerJob>> {

@@ -20,8 +20,8 @@ class PlayerStorage @Inject constructor(
 
     fun get() = player.value
 
-    suspend fun update(newPlayer: Player) {
-        player.emit(newPlayer)
+    fun update(newPlayer: Player) {
+        player.value = newPlayer
     }
 
 }

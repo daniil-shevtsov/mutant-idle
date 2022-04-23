@@ -169,11 +169,13 @@ class MainViewModel @Inject constructor(
     }
 
     private fun updateImperativeShell(newState: MainFunctionalCoreState) {
-        with(newState) {
-            upgradeStorage.updateALl(newUpgrades = newState.upgrades)
-            resourcesStorage.upgradeAll(newResources = newState.resources)
-            ratiosStorage.upgradeAll(newRatios = newState.ratios)
-        }
+        playerStorage.update(newPlayer = newState.player)
+        upgradeStorage.updateALl(newUpgrades = newState.upgrades)
+        resourcesStorage.upgradeAll(newResources = newState.resources)
+        ratiosStorage.upgradeAll(newRatios = newState.ratios)
+        actionsStorage.upgradeAll(newActions = newState.actions)
+        sectionCollapseState.value = newState.sectionState
+        debugConfigStorage.updateAvailableJobs(newAvailableJobs = newState.availableJobs)
     }
 
     private fun createActionState(actions: List<Action>): ActionsState {
@@ -272,14 +274,7 @@ class MainViewModel @Inject constructor(
 
     private fun handleJobSelected(action: MainViewAction.DebugJobSelected) {
         viewModelScope.launch {
-            val currentPlayer = playerStorage.get()
-            val newTags = currentPlayer.tags - currentPlayer.job.tags + action.job.tags
-            playerStorage.update(
-                newPlayer = currentPlayer.copy(
-                    job = action.job,
-                    tags = newTags
-                )
-            )
+            temporaryHackyActionFlow.emit(action)
         }
     }
 
