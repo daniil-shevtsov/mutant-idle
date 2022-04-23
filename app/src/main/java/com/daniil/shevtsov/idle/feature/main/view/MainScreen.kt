@@ -21,10 +21,7 @@ import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewAction
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.view.DrawerTabSelector
-import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
-import com.daniil.shevtsov.idle.feature.main.presentation.MainViewModel
-import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
-import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
+import com.daniil.shevtsov.idle.feature.main.presentation.*
 import com.daniil.shevtsov.idle.feature.ratio.view.MutantRatioPane
 import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
 import com.daniil.shevtsov.idle.feature.shop.view.Shop
@@ -181,12 +178,16 @@ fun SuccessContent(
                 ),
                 onTabSelected = {},
             )
-            DebugComposable(state = state.debugState, onAction = { action ->
-                val mainViewAction = when (action) {
-                    is DebugViewAction.JobSelected -> MainViewAction.DebugJobSelected(action.job)
+            when(val drawerContentState = state.drawerState.drawerContent) {
+                is DrawerContentViewState.Debug -> {
+                    DebugComposable(state = drawerContentState.state, onAction = { action ->
+                        val mainViewAction = when (action) {
+                            is DebugViewAction.JobSelected -> MainViewAction.DebugJobSelected(action.job)
+                        }
+                        onViewAction(mainViewAction)
+                    })
                 }
-                onViewAction(mainViewAction)
-            })
+            }
         },
         content = {
             ContentBody(

@@ -186,9 +186,6 @@ class MainViewModel @Inject constructor(
                     )
                 )
             ),
-            debugState = DebugViewState(
-                jobSelection = state.availableJobs,
-            )
         )
     }
 

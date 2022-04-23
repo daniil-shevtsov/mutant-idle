@@ -16,6 +16,5 @@ sealed class MainViewState {
         val shop: ShopState,
         val sectionCollapse: Map<SectionKey, Boolean> = mapOf(),
         val drawerState: DrawerViewState,
-        val debugState: DebugViewState,
     ) : MainViewState()
 }

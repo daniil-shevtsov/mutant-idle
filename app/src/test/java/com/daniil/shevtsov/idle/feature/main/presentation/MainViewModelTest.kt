@@ -665,7 +665,10 @@ internal class MainViewModelTest {
 
     private fun Assert<MainViewState>.extractingDebugState() =
         isInstanceOf(MainViewState.Success::class)
-            .prop(MainViewState.Success::debugState)
+            .prop(MainViewState.Success::drawerState)
+            .prop(DrawerViewState::drawerContent)
+            .isInstanceOf(DrawerContentViewState.Debug::class)
+            .prop(DrawerContentViewState.Debug::state)
 
     private fun Assert<DebugViewState>.extractingJobSelection() = prop(DebugViewState::jobSelection)
 }

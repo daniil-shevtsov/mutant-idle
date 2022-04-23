@@ -34,7 +34,6 @@ internal fun viewStatePreviewStub() = MainViewState.Success(
             state = debugViewStateStub()
         )
     ),
-    debugState = debugViewStateStub(),
 )
 
 internal fun resourcePreviewStub() = ResourceModel(
