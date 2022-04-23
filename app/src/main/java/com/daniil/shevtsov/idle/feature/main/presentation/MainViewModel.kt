@@ -254,15 +254,6 @@ class MainViewModel @Inject constructor(
 
     private fun initViewState(): MainViewState = MainViewState.Loading
 
-    private fun List<Action>.toActionState() = ActionsState(
-        humanActionPane = ActionPane(
-            actions = filter { it.actionType == ActionType.Human }.map { it.toModel() }
-        ),
-        mutantActionPane = ActionPane(
-            actions = filter { it.actionType == ActionType.Mutant }.map { it.toModel() }
-        )
-    )
-
     private fun Upgrade.mapStatus(resource: Double): UpgradeStatusModel {
         val statusModel = when {
             status == UpgradeStatus.Bought -> UpgradeStatusModel.Bought
