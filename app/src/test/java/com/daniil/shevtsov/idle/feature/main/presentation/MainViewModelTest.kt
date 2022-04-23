@@ -80,7 +80,7 @@ internal class MainViewModelTest {
         initialPlayer = player()
     )
 
-    private val debugConfigStorage = DebugConfigStorage()
+    private val debugConfigStorage = DebugConfigStorage(initial = emptyList())
 
     private val viewModel: MainViewModel by lazy { createViewModel() }
 
