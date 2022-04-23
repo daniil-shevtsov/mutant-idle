@@ -178,6 +178,14 @@ class MainViewModel @Inject constructor(
                 }
                 .let { ShopState(upgradeLists = listOf(it)) },
             sectionCollapse = state.sectionState,
+            drawerState = DrawerViewState(
+                tabSelectorState = emptyList(),
+                drawerContent = DrawerContentViewState.Debug(
+                    state = DebugViewState(
+                        jobSelection = state.availableJobs,
+                    )
+                )
+            ),
             debugState = DebugViewState(
                 jobSelection = state.availableJobs,
             )
