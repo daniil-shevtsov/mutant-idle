@@ -13,6 +13,7 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.data.DebugConfigStorage
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
+import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
 import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
@@ -69,12 +70,14 @@ class MainViewModel @Inject constructor(
             UpgradeBehavior.observeAll(upgradeStorage),
             ActionBehavior.observeAll(actionsStorage),
             sectionCollapseState,
+            debugConfigStorage.observeAvailableJobs(),
         ) { blood: Resource,
             resources: List<Resource>,
             ratios: List<Ratio>,
             upgrades: List<Upgrade>,
             actions: List<Action>,
-            sectionState: Map<SectionKey, Boolean> ->
+            sectionState: Map<SectionKey, Boolean>,
+            availableJobs: List<PlayerJob> ->
             val newViewState = MainViewState.Success(
                 resources = resources.map { resource ->
                     ResourceModelMapper.map(
@@ -106,7 +109,7 @@ class MainViewModel @Inject constructor(
                     .let { ShopState(upgradeLists = listOf(it)) },
                 sectionCollapse = sectionState,
                 debugState = DebugViewState(
-                    jobSelection = emptyList(),
+                    jobSelection = availableJobs,
                 )
             )
             newViewState
@@ -255,22 +258,24 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    private fun <T1, T2, T3, T4, T5, T6, R> combine(
-        flow: Flow<T1>,
+    private fun <T0, T1, T2, T3, T4, T5, T6, R> combine(
+        flow0: Flow<T0>,
+        flow1: Flow<T1>,
         flow2: Flow<T2>,
         flow3: Flow<T3>,
         flow4: Flow<T4>,
         flow5: Flow<T5>,
         flow6: Flow<T6>,
-        transform: suspend (T1, T2, T3, T4, T5, T6) -> R
-    ): Flow<R> = combine(flow, flow2, flow3, flow4, flow5, flow6) { args: Array<*> ->
+        transform: suspend (T0, T1, T2, T3, T4, T5, T6) -> R
+    ): Flow<R> = combine(flow0, flow1, flow2, flow3, flow4, flow5, flow6) { args: Array<*> ->
         transform(
-            args[0] as T1,
-            args[1] as T2,
-            args[2] as T3,
-            args[3] as T4,
-            args[4] as T5,
-            args[5] as T6,
+            args[0] as T0,
+            args[1] as T1,
+            args[2] as T2,
+            args[3] as T3,
+            args[4] as T4,
+            args[5] as T5,
+            args[6] as T6,
         )
     }
 
