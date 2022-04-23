@@ -79,7 +79,7 @@ fun handleUpgradeSelected(
             return state.copy(
                 upgrades = updatedUpgrades,
                 resources = updatedResources,
-                ratios = updatedRatios
+                ratios = updatedRatios,
             )
         }
         else -> state
