@@ -4,8 +4,8 @@ import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.ActionType
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
-import com.daniil.shevtsov.idle.feature.player.job.domain.Mortician
 import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
+import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
@@ -27,7 +27,7 @@ fun balanceConfig(
 )
 
 fun player(
-    job: PlayerJob = Mortician,
+    job: PlayerJob = playerJob(),
     tags: List<Tag> = emptyList(),
 ) = Player(
     job = job,

@@ -16,9 +16,6 @@ import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.player.info.presentation.PlayerInfoState
-import com.daniil.shevtsov.idle.feature.player.job.domain.Butcher
-import com.daniil.shevtsov.idle.feature.player.job.domain.Mortician
-import com.daniil.shevtsov.idle.feature.player.job.domain.Undertaker
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
@@ -527,9 +524,9 @@ internal class MainViewModelTest {
     @Test
     fun `should show debug job selection if has any`() = runBlockingTest {
         val availableJobs = listOf(
-            Mortician,
-            Undertaker,
-            Butcher,
+            playerJob(id = 0L),
+            playerJob(id = 1L),
+            playerJob(id = 2L),
         )
 
         imperativeShell.updateState(
@@ -543,12 +540,8 @@ internal class MainViewModelTest {
             assertThat(expectMostRecentItem())
                 .extractingDebugState()
                 .extractingJobSelection()
-                .extracting(PlayerJobModel::title)
-                .containsExactly(
-                    Mortician.title,
-                    Undertaker.title,
-                    Butcher.title,
-                )
+                .extracting(PlayerJobModel::id)
+                .containsExactly(0L, 1L, 2L)
         }
     }
 

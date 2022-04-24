@@ -13,9 +13,7 @@ import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
-import com.daniil.shevtsov.idle.feature.player.job.domain.Butcher
-import com.daniil.shevtsov.idle.feature.player.job.domain.Mortician
-import com.daniil.shevtsov.idle.feature.player.job.domain.Undertaker
+import com.daniil.shevtsov.idle.feature.player.job.domain.Jobs
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
@@ -230,7 +228,7 @@ class IdleGameApplication : Application() {
     )
 
     private fun createInitialPlayer() = Player(
-        job = Mortician,
+        job = Jobs.Mortician,
         tags = listOf(
             Tag("Devourer"),
             Tag("Work From Home"),
@@ -238,9 +236,9 @@ class IdleGameApplication : Application() {
     )
 
     private fun createInitialJobs() = listOf(
-        Mortician,
-        Undertaker,
-        Butcher,
+        Jobs.Mortician,
+        Jobs.Undertaker,
+        Jobs.Butcher,
     )
 
 }
