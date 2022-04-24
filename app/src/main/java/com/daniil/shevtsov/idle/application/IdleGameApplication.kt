@@ -19,6 +19,8 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Price
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
@@ -174,8 +176,12 @@ class IdleGameApplication : Application() {
             title = "Capture a person",
             subtitle = "I think I can do it if I grow enough",
             actionType = ActionType.Mutant,
+            tags = mapOf(
+                Tags.PersonCapturer to TagRelation.Required,
+            ),
             resourceChanges = mapOf(
                 ResourceKey.Blood to -10.0,
+                ResourceKey.Prisoner to 1.0,
             ),
             ratioChanges = mapOf(
                 RatioKey.Suspicion to 0.1f,
@@ -188,10 +194,14 @@ class IdleGameApplication : Application() {
             actionType = ActionType.Mutant,
             resourceChanges = mapOf(
                 ResourceKey.Blood to 25.0,
+                ResourceKey.Prisoner to -1.0,
             ),
             ratioChanges = mapOf(
                 RatioKey.Suspicion to 0.05f,
-            )
+            ),
+            tags = mapOf(
+                Tags.PersonCapturer to TagRelation.Required,
+            ),
         ),
         Action(
             id = 10L,

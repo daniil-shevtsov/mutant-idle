@@ -1,16 +1,16 @@
 package com.daniil.shevtsov.idle.feature.player.job.domain
 
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.*
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 
 object Jobs {
     val Mortician = PlayerJob(
         id = 0L,
         title = "Mortician",
         tags = listOf(
-            Surgeon,
-            SolitaryJob,
-            FreshCorpseAccess,
-            IncineratorAccess,
+            Tags.Surgeon,
+            Tags.SolitaryJob,
+            Tags.FreshCorpseAccess,
+            Tags.IncineratorAccess,
         )
     )
 
@@ -18,9 +18,9 @@ object Jobs {
         id = 1L,
         title = "Undertaker",
         tags = listOf(
-            CorpseAccess,
-            GraveyardAccess,
-            LaborIntensive,
+            Tags.CorpseAccess,
+            Tags.GraveyardAccess,
+            Tags.LaborIntensive,
         )
     )
 
@@ -28,8 +28,8 @@ object Jobs {
         id = 2L,
         title = "Butcher",
         tags = listOf(
-            MeatAccess,
-            SocialJob,
+            Tags.MeatAccess,
+            Tags.SocialJob,
         )
     )
 }

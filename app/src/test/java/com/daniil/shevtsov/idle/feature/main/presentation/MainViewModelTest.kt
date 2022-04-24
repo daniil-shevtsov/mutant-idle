@@ -27,7 +27,8 @@ import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.*
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
 import com.daniil.shevtsov.idle.util.action
@@ -582,15 +583,15 @@ internal class MainViewModelTest {
         val previousJob = playerJob(
             id = 0L,
             tags = listOf(
-                MeatAccess,
-                SocialJob,
+                Tags.MeatAccess,
+                Tags.SocialJob,
             )
         )
         val newJob = playerJob(
             id = 1L,
             tags = listOf(
-                CorpseAccess,
-                SocialJob,
+                Tags.CorpseAccess,
+                Tags.SocialJob,
             )
         )
 
@@ -615,8 +616,8 @@ internal class MainViewModelTest {
                 .prop(DrawerContentViewState.PlayerInfo::playerInfo)
                 .prop(PlayerInfoState::playerTags)
                 .containsExactly(
-                    CorpseAccess,
-                    SocialJob,
+                    Tags.CorpseAccess,
+                    Tags.SocialJob,
                 )
         }
     }
@@ -624,21 +625,21 @@ internal class MainViewModelTest {
     @Test
     fun `should keep other player tags when changing jobs`() = runBlockingTest {
         val playerTags = listOf(
-            Devourer,
-            Immortal,
+            Tags.Devourer,
+            Tags.Immortal,
         )
         val previousJob = playerJob(
             id = 0L,
             tags = listOf(
-                MeatAccess,
-                SocialJob,
+                Tags.MeatAccess,
+                Tags.SocialJob,
             )
         )
         val newJob = playerJob(
             id = 1L,
             tags = listOf(
-                CorpseAccess,
-                SocialJob,
+                Tags.CorpseAccess,
+                Tags.SocialJob,
             )
         )
         imperativeShell.updateState(
@@ -665,10 +666,10 @@ internal class MainViewModelTest {
                 .prop(DrawerContentViewState.PlayerInfo::playerInfo)
                 .prop(PlayerInfoState::playerTags)
                 .containsExactly(
-                    Devourer,
-                    Immortal,
-                    CorpseAccess,
-                    SocialJob,
+                    Tags.Devourer,
+                    Tags.Immortal,
+                    Tags.CorpseAccess,
+                    Tags.SocialJob,
                 )
         }
     }
