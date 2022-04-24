@@ -13,6 +13,8 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.data.DebugConfigStorage
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
+import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
+import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.player.core.data.PlayerStorage
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.job.domain.Butcher
@@ -73,6 +75,8 @@ internal class MainViewModelTest {
         resourcePerMillisecond = 2.0,
         resourceSpentForFullMutant = resourceSpentForFullMutant,
     )
+    private lateinit var imperativeShell: MainImperativeShell
+
     private val playerStorage = PlayerStorage(
         initialPlayer = player()
     )
@@ -84,6 +88,7 @@ internal class MainViewModelTest {
     @BeforeEach
     fun onSetup() {
         clearAllMocks()
+        imperativeShell = MainImperativeShell(initialState = mainFunctionalCoreState())
     }
 
     @Test
@@ -570,6 +575,7 @@ internal class MainViewModelTest {
     }
 
     private fun createViewModel() = MainViewModel(
+        imperativeShell = imperativeShell,
         balanceConfig = balanceConfig,
         upgradeStorage = upgradeStorage,
         actionsStorage = actionsStorage,
