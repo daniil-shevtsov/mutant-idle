@@ -18,7 +18,6 @@ import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.player.core.data.PlayerStorage
-import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.info.presentation.PlayerInfoState
 import com.daniil.shevtsov.idle.feature.player.job.domain.Butcher
 import com.daniil.shevtsov.idle.feature.player.job.domain.Mortician
@@ -738,14 +737,22 @@ internal class MainViewModelTest {
         val jobTags = Mortician.tags
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
-                availableJobs = listOf(Mortician)
+                availableJobs = listOf(Mortician),
+                drawerTabs = listOf(drawerTab(id = DrawerTabId.PlayerInfo, isSelected = true)),
             )
         )
         viewModel.handleAction(MainViewAction.DebugJobSelected(job = Mortician))
 
-        assertThat(playerStorage.get())
-            .prop(Player::tags)
-            .containsSubList(jobTags)
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .isInstanceOf(MainViewState.Success::class)
+                .prop(MainViewState.Success::drawerState)
+                .prop(DrawerViewState::drawerContent)
+                .isInstanceOf(DrawerContentViewState.PlayerInfo::class)
+                .prop(DrawerContentViewState.PlayerInfo::playerInfo)
+                .prop(PlayerInfoState::playerTags)
+                .containsSubList(jobTags)
+        }
     }
 
     @Test
@@ -766,12 +773,19 @@ internal class MainViewModelTest {
         viewModel.handleAction(MainViewAction.DebugJobSelected(job = previousJob))
         viewModel.handleAction(MainViewAction.DebugJobSelected(job = newJob))
 
-        assertThat(playerStorage.get())
-            .prop(Player::tags)
-            .containsExactly(
-                CorpseAccess,
-                SocialJob
-            )
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .isInstanceOf(MainViewState.Success::class)
+                .prop(MainViewState.Success::drawerState)
+                .prop(DrawerViewState::drawerContent)
+                .isInstanceOf(DrawerContentViewState.PlayerInfo::class)
+                .prop(DrawerContentViewState.PlayerInfo::playerInfo)
+                .prop(PlayerInfoState::playerTags)
+                .containsExactly(
+                    CorpseAccess,
+                    SocialJob,
+                )
+        }
     }
 
     @Test
