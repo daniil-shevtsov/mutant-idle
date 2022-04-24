@@ -55,13 +55,6 @@ class MainViewModel @Inject constructor(
     private val temporaryHackyActionFlow =
         MutableSharedFlow<MainViewAction>()
 
-    private val sectionCollapseState = MutableStateFlow(
-        mapOf(
-            SectionKey.Resources to false,
-            SectionKey.Actions to false,
-            SectionKey.Upgrades to false,
-        )
-    )
     private val drawerTabsState = MutableStateFlow(
         listOf(
             DrawerTab(id = DrawerTabId.PlayerInfo, title = "Player Info", isSelected = false),
@@ -76,7 +69,6 @@ class MainViewModel @Inject constructor(
                 val ratios = ratiosStorage.observeAll().first()
                 val upgrades = upgradeStorage.observeAll().first()
                 val actions = actionsStorage.observeAll().first()
-                val sectionState = sectionCollapseState.first()
                 val availableJobs = debugConfigStorage.observeAvailableJobs().first()
                 val player = playerStorage.observe().first()
                 val drawerTabs = drawerTabsState.value
@@ -90,7 +82,7 @@ class MainViewModel @Inject constructor(
                     ratios = ratios,
                     upgrades = upgrades,
                     actions = actions,
-                    sections = sectionState.map { (key, value) -> SectionState(key, value) },
+                    sections = mainFunctionalCoreState.sections,
                     availableJobs = availableJobs,
                     drawerTabs = drawerTabs,
                 )
@@ -110,19 +102,19 @@ class MainViewModel @Inject constructor(
             ratiosStorage.observeAll(),
             upgradeStorage.observeAll(),
             actionsStorage.observeAll(),
-            sectionCollapseState,
+            flowOf(false),
             drawerTabsState,
             debugConfigStorage.observeAvailableJobs(),
             playerStorage.observe(),
             imperativeShell.observeState(),
-        ) { resources: List<Resource>,
+        ) { _: List<Resource>,
             ratios: List<Ratio>,
-            upgrades: List<Upgrade>,
-            actions: List<Action>,
-            sectionState: Map<SectionKey, Boolean>,
+            _: List<Upgrade>,
+            _: List<Action>,
+            _: Boolean,
             drawerTabs: List<DrawerTab>,
-            availableJobs: List<PlayerJob>,
-            player: Player,
+            _: List<PlayerJob>,
+            _: Player,
             mainFunctionalCoreState: MainFunctionalCoreState ->
 
             val newState = MainFunctionalCoreState(
@@ -132,7 +124,7 @@ class MainViewModel @Inject constructor(
                 ratios = ratios,
                 upgrades = mainFunctionalCoreState.upgrades,
                 actions = mainFunctionalCoreState.actions,
-                sections = sectionState.map { (key, value) -> SectionState(key, value) },
+                sections = mainFunctionalCoreState.sections,
                 availableJobs = mainFunctionalCoreState.availableJobs,
                 drawerTabs = drawerTabs,
             )
@@ -162,7 +154,6 @@ class MainViewModel @Inject constructor(
         resourcesStorage.upgradeAll(newResources = newState.resources)
         ratiosStorage.upgradeAll(newRatios = newState.ratios)
         actionsStorage.upgradeAll(newActions = newState.actions)
-        sectionCollapseState.value = newState.sections.map { it.key to it.isCollapsed }.toMap()
         drawerTabsState.value = newState.drawerTabs
         debugConfigStorage.updateAvailableJobs(newAvailableJobs = newState.availableJobs)
     }
@@ -266,11 +257,9 @@ class MainViewModel @Inject constructor(
     }
 
     private fun toggleSectionCollapse(action: MainViewAction.ToggleSectionCollapse) {
-        val oldState = sectionCollapseState.value
-        val newState = oldState.toMutableMap()
-            .apply { put(action.key, !(oldState[action.key] ?: false)) }
-            .toMap()
-        sectionCollapseState.value = newState
+        viewModelScope.launch {
+            temporaryHackyActionFlow.emit(action)
+        }
     }
 
     private fun handleJobSelected(action: MainViewAction.DebugJobSelected) {
