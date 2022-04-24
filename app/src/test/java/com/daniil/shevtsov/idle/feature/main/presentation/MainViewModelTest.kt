@@ -28,6 +28,7 @@ import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
+import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.*
@@ -75,7 +76,7 @@ internal class MainViewModelTest {
         resourcePerMillisecond = 2.0,
         resourceSpentForFullMutant = resourceSpentForFullMutant,
     )
-    private lateinit var imperativeShell: MainImperativeShell
+    private val imperativeShell = MainImperativeShell(initialState = mainFunctionalCoreState())
 
     private val playerStorage = PlayerStorage(
         initialPlayer = player()
@@ -88,11 +89,25 @@ internal class MainViewModelTest {
     @BeforeEach
     fun onSetup() {
         clearAllMocks()
-        imperativeShell = MainImperativeShell(initialState = mainFunctionalCoreState())
     }
 
     @Test
     fun `should form correct initial state`() = runBlockingTest {
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                upgrades = listOf(
+                    upgrade(id = 0L),
+                    upgrade(id = 1L, price = 25.0),
+                    upgrade(id = 2L, price = 150.0),
+                    upgrade(id = 3L, price = 10.0),
+                ),
+                actions = listOf(
+                    action(id = 0L, title = "human action", actionType = ActionType.Human),
+                    action(id = 1L, title = "mutant action", actionType = ActionType.Mutant),
+                )
+            )
+        )
+
         upgradeStorage = UpgradeStorage(
             initialUpgrades = listOf(
                 upgrade(id = 0L),
@@ -107,6 +122,7 @@ internal class MainViewModelTest {
                 action(id = 1L, title = "mutant action", actionType = ActionType.Mutant),
             )
         )
+
 
         viewModel.state.test {
             val state = expectMostRecentItem()
@@ -144,6 +160,13 @@ internal class MainViewModelTest {
 
     @Test
     fun `should mark upgrade as affordable if its price less than resource`() = runBlockingTest {
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                upgrades = listOf(upgrade(id = 0L, price = 5.0)),
+                resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
+            )
+        )
+
         setInitialResourceValue(10.0)
         upgradeStorage = UpgradeStorage(initialUpgrades = listOf(upgrade(id = 0L, price = 5.0)))
 
@@ -159,6 +182,13 @@ internal class MainViewModelTest {
     @Test
     fun `should mark upgrade as not affordable if its price higher than resource`() =
         runBlockingTest {
+            imperativeShell.updateState(
+                newState = mainFunctionalCoreState(
+                    upgrades = listOf(upgrade(id = 0L, price = 20.0)),
+                    resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
+                )
+            )
+
             setInitialResourceValue(10.0)
             upgradeStorage =
                 UpgradeStorage(initialUpgrades = listOf(upgrade(id = 0L, price = 20.0)))
@@ -174,6 +204,13 @@ internal class MainViewModelTest {
 
     @Test
     fun `should mark upgrade as bought if it is bought`() = runBlockingTest {
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                upgrades = listOf(upgrade(id = 0L, price = 10.0)),
+                resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
+            )
+        )
+
         setInitialResourceValue(10.0)
         upgradeStorage = UpgradeStorage(initialUpgrades = listOf(upgrade(id = 0L, price = 10.0)))
 
@@ -189,6 +226,13 @@ internal class MainViewModelTest {
 
     @Test
     fun `should update human ratio after upgrade bought`() = runBlockingTest {
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                upgrades = listOf(upgrade(id = 0L, price = 10.0)),
+                resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
+            )
+        )
+
         setInitialResourceValue(10.0)
         upgradeStorage = UpgradeStorage(initialUpgrades = listOf(upgrade(id = 0L, price = 10.0)))
 
@@ -202,17 +246,6 @@ internal class MainViewModelTest {
         }
     }
 
-    private fun setInitialResourceValue(
-        value: Double,
-        key: ResourceKey = ResourceKey.Blood
-    ) {
-        val resource = resourcesStorage.getByKey(key = key)
-        resourcesStorage.updateByKey(
-            key = key,
-            newValue = resource!!.copy(value = value)
-        )
-    }
-
     @Test
     fun `should update mutant ratio names correctly`() = runBlockingTest {
         upgradeStorage = UpgradeStorage(
@@ -224,6 +257,18 @@ internal class MainViewModelTest {
             )
         )
         setInitialResourceValue(value = 1000.0)
+
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                upgrades = listOf(
+                    upgrade(id = 0L, price = 15.0),
+                    upgrade(id = 1L, price = 10.0),
+                    upgrade(id = 2L, price = 25.0),
+                    upgrade(id = 3L, price = 30.0),
+                ),
+                resources = listOf(resource(key = ResourceKey.Blood, value = 1000.0)),
+            )
+        )
 
         viewModel.state.test {
             assertThat(awaitItem()).hasRatioName("Human")
@@ -253,6 +298,17 @@ internal class MainViewModelTest {
             )
         )
 
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                actions = listOf(
+                    action(id = 0L, ratioChanges = mapOf(RatioKey.Suspicion to 0.15f)),
+                    action(id = 1L, ratioChanges = mapOf(RatioKey.Suspicion to 0.10f)),
+                    action(id = 2L, ratioChanges = mapOf(RatioKey.Suspicion to 0.25f)),
+                    action(id = 3L, ratioChanges = mapOf(RatioKey.Suspicion to 0.30f)),
+                ),
+            )
+        )
+
         viewModel.state.test {
             assertThat(awaitItem()).hasSuspicionRatioName("Unknown")
 
@@ -276,6 +332,15 @@ internal class MainViewModelTest {
             initialActions = listOf(
                 action(id = 0L, ratioChanges = mapOf(RatioKey.Suspicion to 0.15f)),
                 action(id = 1L, ratioChanges = mapOf(RatioKey.Mutanity to 0.25f)),
+            )
+        )
+
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                actions = listOf(
+                    action(id = 0L, ratioChanges = mapOf(RatioKey.Suspicion to 0.15f)),
+                    action(id = 1L, ratioChanges = mapOf(RatioKey.Mutanity to 0.25f)),
+                ),
             )
         )
 
@@ -306,6 +371,15 @@ internal class MainViewModelTest {
             )
         )
 
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                actions = listOf(
+                    action(id = 1L, resourceChanges = mapOf(ResourceKey.Blood to 50.0))
+                ),
+                resources = listOf(resource(key = ResourceKey.Blood, value = 50.0)),
+            )
+        )
+
         viewModel.state.test {
             assertThat(expectMostRecentItem())
                 .extractingBlood()
@@ -333,6 +407,24 @@ internal class MainViewModelTest {
                             ResourceKey.Money to -30.0,
                         ),
                     )
+                )
+            )
+
+            imperativeShell.updateState(
+                newState = mainFunctionalCoreState(
+                    actions = listOf(
+                        action(
+                            id = 1L,
+                            resourceChanges = mapOf(
+                                ResourceKey.Blood to 50.0,
+                                ResourceKey.Money to -30.0,
+                            ),
+                        )
+                    ),
+                    resources = listOf(
+                        resource(key = ResourceKey.Blood, value = 1000.0),
+                        resource(key = ResourceKey.Money, value = 500.0),
+                    ),
                 )
             )
 
@@ -380,6 +472,18 @@ internal class MainViewModelTest {
         )
         setInitialResourceValue(key = ResourceKey.Money, value = 10.0)
 
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                actions = listOf(
+                    action(
+                        id = 1L,
+                        resourceChanges = mapOf(ResourceKey.Money to -30.0),
+                    )
+                ),
+                resources = listOf(resource(key = ResourceKey.Money, value = 10.0)),
+            )
+        )
+
         viewModel.state.test {
             viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
 
@@ -405,6 +509,24 @@ internal class MainViewModelTest {
             )
             setInitialResourceValue(key = ResourceKey.Money, value = 40.0)
             setInitialResourceValue(key = ResourceKey.Blood, value = 30.0)
+
+            imperativeShell.updateState(
+                newState = mainFunctionalCoreState(
+                    actions = listOf(
+                        action(
+                            id = 1L,
+                            resourceChanges = mapOf(
+                                ResourceKey.Money to -30.0,
+                                ResourceKey.Blood to -50.0,
+                            ),
+                        )
+                    ),
+                    resources = listOf(
+                        resource(key = ResourceKey.Blood, value = 30.0),
+                        resource(key = ResourceKey.Money, value = 40.0),
+                    ),
+                )
+            )
 
             viewModel.state.test {
                 viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
@@ -438,6 +560,30 @@ internal class MainViewModelTest {
             )
         )
         setInitialResourceValue(key = ResourceKey.Money, value = 35.0)
+
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                actions = listOf(
+                    action(
+                        id = 1L,
+                        resourceChanges = mapOf(
+                            ResourceKey.Money to -30.0,
+                        ),
+                        actionType = ActionType.Human,
+                    ),
+                    action(
+                        id = 2L,
+                        resourceChanges = mapOf(
+                            ResourceKey.Money to -50.0,
+                        ),
+                        actionType = ActionType.Human,
+                    )
+                ),
+                resources = listOf(
+                    resource(key = ResourceKey.Money, value = 35.0),
+                ),
+            )
+        )
 
         viewModel.state.test {
             assertThat(expectMostRecentItem())
@@ -479,6 +625,37 @@ internal class MainViewModelTest {
         )
         setInitialResourceValue(key = ResourceKey.Money, value = 35.0)
 
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                actions = listOf(
+                    action(
+                        id = 1L,
+                        resourceChanges = mapOf(
+                            ResourceKey.Money to -60.0,
+                        ),
+                        actionType = ActionType.Human,
+                    ),
+                    action(
+                        id = 2L,
+                        resourceChanges = mapOf(
+                            ResourceKey.Money to -10.0,
+                        ),
+                        actionType = ActionType.Human,
+                    ),
+                    action(
+                        id = 3L,
+                        resourceChanges = mapOf(
+                            ResourceKey.Money to -50.0,
+                        ),
+                        actionType = ActionType.Human,
+                    ),
+                ),
+                resources = listOf(
+                    resource(key = ResourceKey.Money, value = 35.0),
+                ),
+            )
+        )
+
         viewModel.state.test {
             assertThat(expectMostRecentItem())
                 .extractingHumanActions()
@@ -495,6 +672,11 @@ internal class MainViewModelTest {
             Butcher,
         )
         debugConfigStorage.updateAvailableJobs(availableJobs)
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                availableJobs = availableJobs
+            )
+        )
 
         viewModel.state.test {
             assertThat(expectMostRecentItem())
@@ -507,7 +689,11 @@ internal class MainViewModelTest {
     @Test
     fun `should add job tags to player when job selected`() = runBlockingTest {
         val jobTags = Mortician.tags
-
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                availableJobs = listOf(Mortician)
+            )
+        )
         viewModel.handleAction(MainViewAction.DebugJobSelected(job = Mortician))
 
         assertThat(playerStorage.get())
@@ -663,4 +849,16 @@ internal class MainViewModelTest {
             .prop(DrawerContentViewState.Debug::state)
 
     private fun Assert<DebugViewState>.extractingJobSelection() = prop(DebugViewState::jobSelection)
+
+    private fun setInitialResourceValue(
+        value: Double,
+        key: ResourceKey = ResourceKey.Blood
+    ) {
+        val resource = resourcesStorage.getByKey(key = key)
+        resourcesStorage.updateByKey(
+            key = key,
+            newValue = resource!!.copy(value = value)
+        )
+    }
+
 }

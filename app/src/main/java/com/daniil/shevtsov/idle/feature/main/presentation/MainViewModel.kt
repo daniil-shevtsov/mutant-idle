@@ -123,7 +123,7 @@ class MainViewModel @Inject constructor(
             drawerTabs: List<DrawerTab>,
             availableJobs: List<PlayerJob>,
             player: Player,
-            newStater: MainFunctionalCoreState ->
+            mainFunctionalCoreState: MainFunctionalCoreState ->
 
             val newState = MainFunctionalCoreState(
                 player = player,
