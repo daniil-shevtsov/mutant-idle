@@ -7,6 +7,10 @@ import com.daniil.shevtsov.idle.core.di.DaggerAppComponent
 import com.daniil.shevtsov.idle.core.di.koin.appModule
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.ActionType
+import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
+import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
+import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
+import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.job.domain.Butcher
 import com.daniil.shevtsov.idle.feature.player.job.domain.Mortician
@@ -37,6 +41,17 @@ class IdleGameApplication : Application() {
                 initialRatios = createInitialRatios(),
                 initialPlayer = createInitialPlayer(),
                 initialJobs = createInitialJobs(),
+                initialMainState = MainFunctionalCoreState(
+                    balanceConfig = createBalanceConfig(),
+                    resources = createInitialResources(),
+                    ratios = createInitialRatios(),
+                    sectionState = createInitialSectionState(),
+                    drawerTabs = createInitialDrawerTabs(),
+                    upgrades = createInitialUpgrades(),
+                    actions = createInitialActions(),
+                    availableJobs = createInitialJobs(),
+                    player = createInitialPlayer(),
+                )
             )
     }
 
@@ -200,6 +215,17 @@ class IdleGameApplication : Application() {
     private fun createInitialRatios() = listOf(
         Ratio(key = RatioKey.Mutanity, title = "", value = 0.0),
         Ratio(key = RatioKey.Suspicion, title = "", value = 0.0),
+    )
+
+    private fun createInitialSectionState() = mapOf(
+        SectionKey.Resources to false,
+        SectionKey.Actions to false,
+        SectionKey.Upgrades to false,
+    )
+
+    private fun createInitialDrawerTabs() = listOf(
+        DrawerTab(id = DrawerTabId.PlayerInfo, title = "Player Info", isSelected = false),
+        DrawerTab(id = DrawerTabId.Debug, title = "Debug", isSelected = false),
     )
 
     private fun createInitialPlayer() = Player(

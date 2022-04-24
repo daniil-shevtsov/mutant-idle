@@ -4,6 +4,7 @@ import android.content.Context
 import com.daniil.shevtsov.idle.application.IdleGameApplication
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.action.domain.Action
+import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.main.view.MainFragment
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
@@ -32,6 +33,7 @@ interface AppComponent {
             @BindsInstance initialRatios: List<Ratio>,
             @BindsInstance initialPlayer: Player,
             @BindsInstance initialJobs: List<PlayerJob>,
+            @BindsInstance initialMainState: MainFunctionalCoreState,
         ): AppComponent
     }
 
