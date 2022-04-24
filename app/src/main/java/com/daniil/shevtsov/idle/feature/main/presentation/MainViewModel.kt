@@ -143,6 +143,16 @@ class MainViewModel @Inject constructor(
         resources: List<Resource>,
     ): ActionsState {
         return ActionsState(
+            actionPanes = listOf(
+                ActionPane(
+                    actions = actions.filter { it.actionType == ActionType.Human }
+                        .prepareActionForDisplay(resources = resources)
+                ),
+                ActionPane(
+                    actions = actions.filter { it.actionType == ActionType.Mutant }
+                        .prepareActionForDisplay(resources = resources)
+                )
+            ),
             humanActionPane = ActionPane(
                 actions = actions.filter { it.actionType == ActionType.Human }
                     .prepareActionForDisplay(resources = resources)

@@ -28,7 +28,7 @@ internal fun viewStatePreviewStub() = MainViewState.Success(
         SectionKey.Actions to false,
         SectionKey.Upgrades to false,
     ),
-    drawerState =  DrawerViewState(
+    drawerState = DrawerViewState(
         tabSelectorState = emptyList(),
         drawerContent = DrawerContentViewState.Debug(
             state = debugViewStateStub()
@@ -68,6 +68,10 @@ internal fun suspicionStub() = SuspicionModel(
 )
 
 internal fun actionStatePreviewStub() = ActionsState(
+    actionPanes = listOf(
+        actionPanePreviewStub(icon = ActionIcon.Human),
+        actionPanePreviewStub(icon = ActionIcon.Mutant),
+    ),
     humanActionPane = actionPanePreviewStub(icon = ActionIcon.Human),
     mutantActionPane = actionPanePreviewStub(icon = ActionIcon.Mutant),
 )
