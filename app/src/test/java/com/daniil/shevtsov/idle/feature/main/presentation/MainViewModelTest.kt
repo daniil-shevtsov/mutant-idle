@@ -22,8 +22,6 @@ import com.daniil.shevtsov.idle.feature.player.info.presentation.PlayerInfoState
 import com.daniil.shevtsov.idle.feature.player.job.domain.Butcher
 import com.daniil.shevtsov.idle.feature.player.job.domain.Mortician
 import com.daniil.shevtsov.idle.feature.player.job.domain.Undertaker
-import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
-import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
@@ -63,19 +61,8 @@ internal class MainViewModelTest {
             Resource(key = ResourceKey.Money, name = "Money", value = 0.0),
         )
     )
-    private val ratiosStorage = RatiosStorage(
-        initialRatios = listOf(
-            Ratio(key = RatioKey.Mutanity, title = "", value = 0.0),
-            Ratio(key = RatioKey.Suspicion, title = "", value = 0.0),
-        )
-    )
 
     private val resourceSpentForFullMutant = 100.0
-    private val balanceConfig = balanceConfig(
-        tickRateMillis = 1L,
-        resourcePerMillisecond = 2.0,
-        resourceSpentForFullMutant = resourceSpentForFullMutant,
-    )
     private val imperativeShell = MainImperativeShell(initialState = mainFunctionalCoreState())
 
     private val playerStorage = PlayerStorage(
@@ -837,7 +824,6 @@ internal class MainViewModelTest {
 
     private fun createViewModel() = MainViewModel(
         imperativeShell = imperativeShell,
-        playerStorage = playerStorage,
     )
 
     private fun Assert<MainViewState>.extractingUpgrades() =

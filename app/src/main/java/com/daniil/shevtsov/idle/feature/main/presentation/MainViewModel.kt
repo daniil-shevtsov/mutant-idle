@@ -13,7 +13,6 @@ import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
-import com.daniil.shevtsov.idle.feature.player.core.data.PlayerStorage
 import com.daniil.shevtsov.idle.feature.player.info.presentation.PlayerInfoState
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
@@ -32,7 +31,6 @@ import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
     private val imperativeShell: MainImperativeShell,
-    private val playerStorage: PlayerStorage,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(initViewState())
@@ -70,8 +68,6 @@ class MainViewModel @Inject constructor(
 
     private fun updateImperativeShell(newState: MainFunctionalCoreState) {
         imperativeShell.updateState(newState)
-
-        playerStorage.update(newPlayer = newState.player)
     }
 
     private fun createMainViewState(state: MainFunctionalCoreState): MainViewState {
@@ -109,7 +105,8 @@ class MainViewModel @Inject constructor(
             sectionCollapse = state.sections.map { it.key to it.isCollapsed }.toMap(),
             drawerState = DrawerViewState(
                 tabSelectorState = state.drawerTabs,
-                drawerContent = when (state.drawerTabs.find { it.isSelected }?.id ?: DrawerTabId.PlayerInfo) {
+                drawerContent = when (state.drawerTabs.find { it.isSelected }?.id
+                    ?: DrawerTabId.PlayerInfo) {
                     DrawerTabId.Debug -> {
                         DrawerContentViewState.Debug(
                             state = DebugViewState(
