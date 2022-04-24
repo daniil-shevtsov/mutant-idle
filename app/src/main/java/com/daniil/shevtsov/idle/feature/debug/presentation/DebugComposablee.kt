@@ -46,13 +46,11 @@ fun DebugComposable(
             .background(Pallete.Red)
             .fillMaxSize()
             .wrapContentSize(Alignment.TopStart)
-
     ) {
         Row(
             modifier = modifier
                 .fillMaxWidth()
                 .background(Pallete.Red)
-                .clickable(onClick = { expanded = true })
                 .padding(4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -63,35 +61,39 @@ fun DebugComposable(
                 fontSize = 24.sp,
                 color = Color.White
             )
-            Text(
-                text = when (val selectedJob =
-                    state.jobSelection.firstOrNull { it.isSelected }
-                        ?: state.jobSelection.firstOrNull()) {
-                    null -> "EMPTY"
-                    else -> selectedJob.title
-                },
-                fontSize = 16.sp,
-                modifier = modifier
-                    .fillMaxWidth()
-                    .cavitary(
-                        lightColor = Pallete.LightRed,
-                        darkColor = Pallete.DarkRed
-                    )
-                    .background(Color.White)
-                    .padding(4.dp)
-            )
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }) {
-            state.jobSelection.forEach { job ->
-                DropdownMenuItem(
-                    onClick = {
-                        onAction(DebugViewAction.JobSelected(job.id))
-                        expanded = false
+            Box {
+                Text(
+                    text = when (val selectedJob =
+                        state.jobSelection.firstOrNull { it.isSelected }
+                            ?: state.jobSelection.firstOrNull()) {
+                        null -> "EMPTY"
+                        else -> selectedJob.title
+                    },
+                    fontSize = 16.sp,
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .cavitary(
+                            lightColor = Pallete.LightRed,
+                            darkColor = Pallete.DarkRed
+                        )
+                        .background(Color.White)
+                        .clickable(onClick = { expanded = true })
+                        .padding(4.dp)
+                )
+                DropdownMenu(
+                    expanded = expanded,
+                    modifier = modifier,
+                    onDismissRequest = { expanded = false }) {
+                    state.jobSelection.forEach { job ->
+                        DropdownMenuItem(
+                            onClick = {
+                                onAction(DebugViewAction.JobSelected(job.id))
+                                expanded = false
+                            }
+                        ) {
+                            Text(text = job.title)
+                        }
                     }
-                ) {
-                    Text(text = job.title)
                 }
             }
         }
