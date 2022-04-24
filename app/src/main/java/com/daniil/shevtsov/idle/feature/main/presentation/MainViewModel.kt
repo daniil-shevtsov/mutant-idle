@@ -22,6 +22,7 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
+import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMapper
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
@@ -110,7 +111,7 @@ class MainViewModel @Inject constructor(
                     percent = it.value
                 )
             },
-            actionState = createActionState(state.actions),
+            actionState = createActionState(state.actions, state.resources),
             shop = state.upgrades
                 .map { upgrade ->
                     UpgradeModelMapper.map(
@@ -140,21 +141,24 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    private fun createActionState(actions: List<Action>): ActionsState {
+    private fun createActionState(
+        actions: List<Action>,
+        resources: List<Resource>,
+    ): ActionsState {
         return ActionsState(
             humanActionPane = ActionPane(
                 actions = actions.filter { it.actionType == ActionType.Human }
-                    .prepareActionForDisplay()
+                    .prepareActionForDisplay(resources = resources)
             ),
             mutantActionPane = ActionPane(
                 actions = actions.filter { it.actionType == ActionType.Mutant }
-                    .prepareActionForDisplay()
+                    .prepareActionForDisplay(resources = resources)
             )
         )
     }
 
-    private fun List<Action>.prepareActionForDisplay() =
-        map { it.toModel() }.sortedByDescending { it.isEnabled }
+    private fun List<Action>.prepareActionForDisplay(resources: List<Resource>) =
+        map { it.toModel(resources) }.sortedByDescending { it.isEnabled }
 
     private fun getNameForRatio(ratio: Ratio) = when (ratio.key) {
         RatioKey.Mutanity -> getMutanityNameForRatio(ratio.value)
@@ -217,9 +221,9 @@ class MainViewModel @Inject constructor(
         return statusModel
     }
 
-    private fun Action.toModel(): ActionModel {
+    private fun Action.toModel(resources: List<Resource>): ActionModel {
         val isActive = resourceChanges.all { (resourceKey, resourceChange) ->
-            val currentResource = resourcesStorage.getByKey(resourceKey)!!.value
+            val currentResource = resources.find { it.key == resourceKey }!!.value
             currentResource + resourceChange >= 0
         }
 
