@@ -2,14 +2,12 @@ package com.daniil.shevtsov.idle.feature.main.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.daniil.shevtsov.idle.feature.action.data.ActionsStorage
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.ActionType
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
-import com.daniil.shevtsov.idle.feature.debug.data.DebugConfigStorage
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
@@ -17,16 +15,13 @@ import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
 import com.daniil.shevtsov.idle.feature.player.core.data.PlayerStorage
-import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
-import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMapper
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
-import com.daniil.shevtsov.idle.feature.upgrade.data.UpgradeStorage
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModelMapper
@@ -37,11 +32,6 @@ import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
     private val imperativeShell: MainImperativeShell,
-    private val upgradeStorage: UpgradeStorage,
-    private val actionsStorage: ActionsStorage,
-    private val resourcesStorage: ResourcesStorage,
-    private val ratiosStorage: RatiosStorage,
-    private val debugConfigStorage: DebugConfigStorage,
     private val playerStorage: PlayerStorage,
 ) : ViewModel() {
 
@@ -89,12 +79,6 @@ class MainViewModel @Inject constructor(
         imperativeShell.updateState(newState)
 
         playerStorage.update(newPlayer = newState.player)
-        upgradeStorage.updateALl(newUpgrades = newState.upgrades)
-        resourcesStorage.upgradeAll(newResources = newState.resources)
-        ratiosStorage.upgradeAll(newRatios = newState.ratios)
-        actionsStorage.upgradeAll(newActions = newState.actions)
-        drawerTabsState.value = newState.drawerTabs
-        debugConfigStorage.updateAvailableJobs(newAvailableJobs = newState.availableJobs)
     }
 
     private fun createMainViewState(state: MainFunctionalCoreState): MainViewState {
@@ -186,30 +170,6 @@ class MainViewModel @Inject constructor(
         return name
     }
 
-    private fun handleUpgradeSelected(action: MainViewAction.UpgradeSelected) {
-        viewModelScope.launch {
-//            temporaryHackyActionFlow.emit(action)
-        }
-    }
-
-    private fun handleActionClicked(action: MainViewAction.ActionClicked) {
-        viewModelScope.launch {
-//            temporaryHackyActionFlow.emit(action)
-        }
-    }
-
-    private fun toggleSectionCollapse(action: MainViewAction.ToggleSectionCollapse) {
-        viewModelScope.launch {
-//            temporaryHackyActionFlow.emit(action)
-        }
-    }
-
-    private fun handleJobSelected(action: MainViewAction.DebugJobSelected) {
-        viewModelScope.launch {
-//            temporaryHackyActionFlow.emit(action)
-        }
-    }
-
     private fun initViewState(): MainViewState = MainViewState.Loading
 
     private fun Upgrade.mapStatus(resource: Double): UpgradeStatusModel {
@@ -236,51 +196,6 @@ class MainViewModel @Inject constructor(
                 ActionType.Mutant -> ActionIcon.Mutant
             },
             isEnabled = isActive,
-        )
-    }
-
-    private fun <T0, T1, T2, T3, T4, T5, T6, T7, T8, R> combine(
-        flow0: Flow<T0>,
-        flow1: Flow<T1>,
-        flow2: Flow<T2>,
-        flow3: Flow<T3>,
-        flow4: Flow<T4>,
-        flow5: Flow<T5>,
-        flow6: Flow<T6>,
-        flow7: Flow<T7>,
-        flow8: Flow<T8>,
-        transform: suspend (
-            T0,
-            T1,
-            T2,
-            T3,
-            T4,
-            T5,
-            T6,
-            T7,
-            T8,
-        ) -> R
-    ): Flow<R> = combine(
-        flow0,
-        flow1,
-        flow2,
-        flow3,
-        flow4,
-        flow5,
-        flow6,
-        flow7,
-        flow8,
-    ) { args: Array<*> ->
-        transform(
-            args[0] as T0,
-            args[1] as T1,
-            args[2] as T2,
-            args[3] as T3,
-            args[4] as T4,
-            args[5] as T5,
-            args[6] as T6,
-            args[7] as T7,
-            args[8] as T8,
         )
     }
 

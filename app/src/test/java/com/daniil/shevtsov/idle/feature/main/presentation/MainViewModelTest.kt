@@ -812,11 +812,6 @@ internal class MainViewModelTest {
 
     private fun createViewModel() = MainViewModel(
         imperativeShell = imperativeShell,
-        upgradeStorage = upgradeStorage,
-        actionsStorage = actionsStorage,
-        resourcesStorage = resourcesStorage,
-        ratiosStorage = ratiosStorage,
-        debugConfigStorage = debugConfigStorage,
         playerStorage = playerStorage,
     )
 
