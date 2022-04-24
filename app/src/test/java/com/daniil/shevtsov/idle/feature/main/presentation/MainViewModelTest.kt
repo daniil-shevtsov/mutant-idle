@@ -99,6 +99,10 @@ internal class MainViewModelTest {
                     upgrade(id = 2L, price = 150.0),
                     upgrade(id = 3L, price = 10.0),
                 ),
+                ratios = listOf(
+                    ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.0),
+                    ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
+                ),
                 actions = listOf(
                     action(id = 0L, title = "human action", actionType = ActionType.Human),
                     action(id = 1L, title = "mutant action", actionType = ActionType.Mutant),
@@ -214,6 +218,10 @@ internal class MainViewModelTest {
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
                 upgrades = listOf(upgrade(id = 0L, price = 10.0)),
+                ratios = listOf(
+                    ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.0),
+                    ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
+                ),
                 resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
             )
         )
@@ -319,6 +327,10 @@ internal class MainViewModelTest {
 
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
+                ratios = listOf(
+                    ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.0),
+                    ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
+                ),
                 actions = listOf(
                     action(id = 0L, ratioChanges = mapOf(RatioKey.Suspicion to 0.15f)),
                     action(id = 1L, ratioChanges = mapOf(RatioKey.Suspicion to 0.10f)),
@@ -356,6 +368,10 @@ internal class MainViewModelTest {
 
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
+                ratios = listOf(
+                    ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.0),
+                    ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
+                ),
                 actions = listOf(
                     action(id = 0L, ratioChanges = mapOf(RatioKey.Suspicion to 0.15f)),
                     action(id = 1L, ratioChanges = mapOf(RatioKey.Mutanity to 0.25f)),

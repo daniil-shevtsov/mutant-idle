@@ -79,12 +79,12 @@ class MainViewModel @Inject constructor(
                     player = mainFunctionalCoreState.player,
                     balanceConfig = mainFunctionalCoreState.balanceConfig,
                     resources = mainFunctionalCoreState.resources,
-                    ratios = ratios,
+                    ratios = mainFunctionalCoreState.ratios,
                     upgrades = mainFunctionalCoreState.upgrades,
                     actions = mainFunctionalCoreState.actions,
                     sections = mainFunctionalCoreState.sections,
                     availableJobs = mainFunctionalCoreState.availableJobs,
-                    drawerTabs = drawerTabs,
+                    drawerTabs = mainFunctionalCoreState.drawerTabs,
                 )
 
                 val newFunctionalCoreState = mainFunctionalCore(
@@ -121,12 +121,12 @@ class MainViewModel @Inject constructor(
                 player = mainFunctionalCoreState.player,
                 balanceConfig = mainFunctionalCoreState.balanceConfig,
                 resources = mainFunctionalCoreState.resources,
-                ratios = ratios,
+                ratios = mainFunctionalCoreState.ratios,
                 upgrades = mainFunctionalCoreState.upgrades,
                 actions = mainFunctionalCoreState.actions,
                 sections = mainFunctionalCoreState.sections,
                 availableJobs = mainFunctionalCoreState.availableJobs,
-                drawerTabs = drawerTabs,
+                drawerTabs = mainFunctionalCoreState.drawerTabs,
             )
 
             createMainViewState(newState)
