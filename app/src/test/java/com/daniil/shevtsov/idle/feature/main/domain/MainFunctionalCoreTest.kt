@@ -1,6 +1,5 @@
 package com.daniil.shevtsov.idle.feature.main.domain
 
-import assertk.Assert
 import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
@@ -8,6 +7,9 @@ import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
+import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
+import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
+import com.daniil.shevtsov.idle.feature.main.presentation.sectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
@@ -15,7 +17,6 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratioChange
-import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.domain.resourceChange
@@ -193,6 +194,42 @@ class MainFunctionalCoreTest {
             .containsExactly(
                 DrawerTabId.PlayerInfo to false,
                 DrawerTabId.Debug to true,
+            )
+    }
+
+    @Test
+    fun `should switch section collapsed state when clicked`() {
+        val initialState = mainFunctionalCoreState(
+            sections = listOf(
+                sectionState(key = SectionKey.Resources, isCollapsed = false),
+                sectionState(key = SectionKey.Actions, isCollapsed = false),
+            )
+        )
+
+        val firstState = mainFunctionalCore(
+            state = initialState,
+            viewAction = MainViewAction.ToggleSectionCollapse(key = SectionKey.Resources)
+        )
+
+        assertThat(firstState)
+            .prop(MainFunctionalCoreState::sections)
+            .extracting(SectionState::key, SectionState::isCollapsed)
+            .containsExactly(
+                SectionKey.Resources to true,
+                SectionKey.Actions to false,
+            )
+
+        val secondState = mainFunctionalCore(
+            state = firstState,
+            viewAction = MainViewAction.ToggleSectionCollapse(key = SectionKey.Resources)
+        )
+
+        assertThat(secondState)
+            .prop(MainFunctionalCoreState::sections)
+            .extracting(SectionState::key, SectionState::isCollapsed)
+            .containsExactly(
+                SectionKey.Resources to false,
+                SectionKey.Actions to false,
             )
     }
 }

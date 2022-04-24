@@ -90,7 +90,7 @@ class MainViewModel @Inject constructor(
                     ratios = ratios,
                     upgrades = upgrades,
                     actions = actions,
-                    sectionState = sectionState,
+                    sections = sectionState.map { (key, value) -> SectionState(key, value) },
                     availableJobs = availableJobs,
                     drawerTabs = drawerTabs,
                 )
@@ -132,7 +132,7 @@ class MainViewModel @Inject constructor(
                 ratios = ratios,
                 upgrades = mainFunctionalCoreState.upgrades,
                 actions = mainFunctionalCoreState.actions,
-                sectionState = sectionState,
+                sections = sectionState.map { (key, value) -> SectionState(key, value) },
                 availableJobs = mainFunctionalCoreState.availableJobs,
                 drawerTabs = drawerTabs,
             )
@@ -162,7 +162,7 @@ class MainViewModel @Inject constructor(
         resourcesStorage.upgradeAll(newResources = newState.resources)
         ratiosStorage.upgradeAll(newRatios = newState.ratios)
         actionsStorage.upgradeAll(newActions = newState.actions)
-        sectionCollapseState.value = newState.sectionState
+        sectionCollapseState.value = newState.sections.map { it.key to it.isCollapsed }.toMap()
         drawerTabsState.value = newState.drawerTabs
         debugConfigStorage.updateAvailableJobs(newAvailableJobs = newState.availableJobs)
     }
@@ -199,7 +199,7 @@ class MainViewModel @Inject constructor(
                     }
                 }
                 .let { ShopState(upgradeLists = listOf(it)) },
-            sectionCollapse = state.sectionState,
+            sectionCollapse = state.sections.map { it.key to it.isCollapsed }.toMap(),
             drawerState = DrawerViewState(
                 tabSelectorState = state.drawerTabs,
                 drawerContent = DrawerContentViewState.Debug(

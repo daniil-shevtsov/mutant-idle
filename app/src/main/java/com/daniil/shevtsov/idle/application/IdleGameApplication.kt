@@ -11,6 +11,7 @@ import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
+import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.job.domain.Butcher
 import com.daniil.shevtsov.idle.feature.player.job.domain.Mortician
@@ -45,7 +46,7 @@ class IdleGameApplication : Application() {
                     balanceConfig = createBalanceConfig(),
                     resources = createInitialResources(),
                     ratios = createInitialRatios(),
-                    sectionState = createInitialSectionState(),
+                    sections = createInitialSectionState(),
                     drawerTabs = createInitialDrawerTabs(),
                     upgrades = createInitialUpgrades(),
                     actions = createInitialActions(),
@@ -217,10 +218,10 @@ class IdleGameApplication : Application() {
         Ratio(key = RatioKey.Suspicion, title = "", value = 0.0),
     )
 
-    private fun createInitialSectionState() = mapOf(
-        SectionKey.Resources to false,
-        SectionKey.Actions to false,
-        SectionKey.Upgrades to false,
+    private fun createInitialSectionState() = listOf(
+        SectionState(key = SectionKey.Resources, isCollapsed = false),
+        SectionState(key = SectionKey.Actions, isCollapsed = false),
+        SectionState(key = SectionKey.Upgrades, isCollapsed = false),
     )
 
     private fun createInitialDrawerTabs() = listOf(

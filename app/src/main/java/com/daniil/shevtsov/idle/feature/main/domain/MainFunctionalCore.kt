@@ -26,7 +26,10 @@ fun mainFunctionalCore(
             state = state,
             viewAction = viewAction,
         )
-        else -> TODO("Not Implemented")
+        is MainViewAction.ToggleSectionCollapse -> handleSectionCollapsed(
+            state = state,
+            viewAction = viewAction,
+        )
     }
     return newState
 }
@@ -38,6 +41,22 @@ fun handleDrawerTabSwitched(
     return state.copy(
         drawerTabs = state.drawerTabs.map { tab ->
             tab.copy(isSelected = tab.id == viewAction.id)
+        }
+    )
+}
+
+fun handleSectionCollapsed(
+    state: MainFunctionalCoreState,
+    viewAction: MainViewAction.ToggleSectionCollapse,
+): MainFunctionalCoreState {
+    return state.copy(
+        sections = state.sections.map { section ->
+            section.copy(
+                isCollapsed = when (section.key) {
+                    viewAction.key -> !section.isCollapsed
+                    else -> section.isCollapsed
+                }
+            )
         }
     )
 }

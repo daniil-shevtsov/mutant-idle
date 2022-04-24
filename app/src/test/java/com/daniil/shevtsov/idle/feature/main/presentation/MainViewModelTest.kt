@@ -20,7 +20,6 @@ import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.job.domain.Butcher
 import com.daniil.shevtsov.idle.feature.player.job.domain.Mortician
 import com.daniil.shevtsov.idle.feature.player.job.domain.Undertaker
-import com.daniil.shevtsov.idle.feature.ratio.data.MutantRatioStorage
 import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
@@ -33,8 +32,6 @@ import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.*
 import com.daniil.shevtsov.idle.feature.upgrade.data.UpgradeStorage
-import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
-import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
 import com.daniil.shevtsov.idle.util.action
@@ -108,6 +105,11 @@ internal class MainViewModelTest {
                 resources = listOf(
                     resource(key = ResourceKey.Blood, name = "Blood", value = 0.0),
                     resource(key = ResourceKey.Money, name = "Money", value = 0.0),
+                ),
+                sections = listOf(
+                    sectionState(key = SectionKey.Resources, isCollapsed = false),
+                    sectionState(key = SectionKey.Actions, isCollapsed = false),
+                    sectionState(key = SectionKey.Upgrades, isCollapsed = false),
                 )
             )
         )
@@ -448,6 +450,12 @@ internal class MainViewModelTest {
     @Test
     fun `should toggle corresponding collapse state when toggle clicked`() = runBlockingTest {
         viewModel.state.test {
+            imperativeShell.updateState(
+                newState = mainFunctionalCoreState(
+                    sections = listOf(sectionState( key = SectionKey.Resources, isCollapsed = false))
+                )
+            )
+
             viewModel.handleAction(MainViewAction.ToggleSectionCollapse(key = SectionKey.Resources))
 
             assertThat(expectMostRecentItem())

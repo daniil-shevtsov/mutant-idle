@@ -4,14 +4,12 @@ import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.core.domain.balanceConfig
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
-import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
+import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
-import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
-import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 
 fun mainFunctionalCoreState(
@@ -21,7 +19,7 @@ fun mainFunctionalCoreState(
     upgrades: List<Upgrade> = emptyList(),
     actions: List<Action> = emptyList(),
     drawerTabs: List<DrawerTab> = emptyList(),
-    sectionState: Map<SectionKey, Boolean> = mapOf(),
+    sections: List<SectionState> = emptyList(),
     availableJobs: List<PlayerJob> = emptyList(),
     player: Player = player(),
 ) = MainFunctionalCoreState(
@@ -31,7 +29,7 @@ fun mainFunctionalCoreState(
     upgrades = upgrades,
     actions = actions,
     drawerTabs = drawerTabs,
-    sectionState = sectionState,
+    sections = sections,
     availableJobs = availableJobs,
     player = player,
 )
