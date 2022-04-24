@@ -1,27 +1,43 @@
 package com.daniil.shevtsov.idle.feature.drawer.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.Arrangement.spacedBy
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
 
-@Preview
+@Preview(
+    widthDp = 320,
+)
 @Composable
 fun DrawerSelectorPreview() {
-    DrawerTabSelector(
-        tabs = listOf(
-            drawerTab(title = "lol"),
-            drawerTab(title = "kek"),
-            drawerTab(title = "cheburek"),
-        ),
-        onTabSelected = {},
+    val tabs = listOf(
+        drawerTab(title = "Lol"),
+        drawerTab(title = "Kek"),
+        drawerTab(title = "Cheburek"),
     )
+    Column {
+        tabs.forEachIndexed { previewIndex, tab ->
+            DrawerTabSelector(
+                tabs = tabs.mapIndexed { index, tab ->
+                    tab.copy(isSelected = index == previewIndex)
+                },
+                onTabSelected = {},
+            )
+        }
+    }
 }
 
 @Composable
@@ -30,12 +46,40 @@ fun DrawerTabSelector(
     onTabSelected: (id: DrawerTabId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyRow {
-        items(items = tabs) { tab ->
+    Row(
+        horizontalArrangement = spacedBy(4.dp),
+        modifier = modifier
+            .background(Pallete.Red)
+            .padding(bottom = 4.dp)
+            .background(Pallete.DarkGray)
+            .padding(top = 4.dp)
+    ) {
+        tabs.forEachIndexed { index, tab ->
             Text(
                 text = tab.title,
-                modifier = modifier
-                    .clickable { onTabSelected(tab.id) }
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                modifier = if (tab.isSelected) {
+                    modifier
+                        .background(Pallete.LightRed)
+                        .let { kek ->
+                            when (index) {
+                                0 -> kek.padding(top = 1.dp, end = 1.dp)
+                                tabs.size - 1 -> kek.padding(start = 1.dp, top = 1.dp)
+                                else -> kek.padding(start = 1.dp, top = 1.dp, end = 1.dp)
+                            }
+                        }
+                        .background(Pallete.Red)
+                        .padding(4.dp)
+                        .clickable { onTabSelected(tab.id) }
+                        .weight(1f)
+                } else {
+                    modifier
+                        .background(Pallete.Red)
+                        .padding(4.dp)
+                        .clickable { onTabSelected(tab.id) }
+                        .weight(1f)
+                }
             )
         }
     }
