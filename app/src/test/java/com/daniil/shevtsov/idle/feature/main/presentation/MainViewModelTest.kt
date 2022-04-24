@@ -104,6 +104,10 @@ internal class MainViewModelTest {
                 actions = listOf(
                     action(id = 0L, title = "human action", actionType = ActionType.Human),
                     action(id = 1L, title = "mutant action", actionType = ActionType.Mutant),
+                ),
+                resources = listOf(
+                    resource(key = ResourceKey.Blood, name = "Blood", value = 0.0),
+                    resource(key = ResourceKey.Money, name = "Money", value = 0.0),
                 )
             )
         )
@@ -376,7 +380,7 @@ internal class MainViewModelTest {
                 actions = listOf(
                     action(id = 1L, resourceChanges = mapOf(ResourceKey.Blood to 50.0))
                 ),
-                resources = listOf(resource(key = ResourceKey.Blood, value = 50.0)),
+                resources = listOf(resource(key = ResourceKey.Blood, value = 1000.0)),
             )
         )
 
@@ -422,8 +426,8 @@ internal class MainViewModelTest {
                         )
                     ),
                     resources = listOf(
-                        resource(key = ResourceKey.Blood, value = 1000.0),
-                        resource(key = ResourceKey.Money, value = 500.0),
+                        resource(key = ResourceKey.Blood, name = "Blood", value = 1000.0),
+                        resource(key = ResourceKey.Money, name = "Money", value = 500.0),
                     ),
                 )
             )
