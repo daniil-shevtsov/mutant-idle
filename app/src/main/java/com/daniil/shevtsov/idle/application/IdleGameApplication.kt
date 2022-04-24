@@ -18,7 +18,6 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Price
@@ -261,11 +260,13 @@ class IdleGameApplication : Application() {
         ),
     )
 
-    private fun createInitialResources() = listOf(
-        Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0),
-        Resource(key = ResourceKey.Money, name = "Money", value = 0.0),
-        Resource(key = ResourceKey.HumanFood, name = "Food", value = 0.0),
-    )
+    private fun createInitialResources() = ResourceKey.values().map { key ->
+        Resource(
+            key = key,
+            name = key.name,
+            value = 0.0,
+        )
+    }
 
     private fun createInitialRatios() = listOf(
         Ratio(key = RatioKey.Mutanity, title = "", value = 0.0),
@@ -285,9 +286,9 @@ class IdleGameApplication : Application() {
 
     private fun createInitialPlayer() = Player(
         job = Jobs.Mortician,
-        tags = listOf(
-            Tag("Devourer"),
-            Tag("Work From Home"),
+        tags = Jobs.Mortician.tags + listOf(
+            Tags.Devourer,
+            Tags.PersonCapturer,
         )
     )
 

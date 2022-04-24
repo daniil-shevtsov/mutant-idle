@@ -81,7 +81,7 @@ fun PlayerInfoComposable(
                     .fillMaxWidth()
             )
             Text(
-                text = state.playerJob.tags.joinToString(separator = "\n") { tag -> tag.name },
+                text = state.playerTags.joinToString(separator = "\n") { tag -> tag.name },
                 fontSize = 16.sp,
                 modifier = modifier
                     .cavitary(
