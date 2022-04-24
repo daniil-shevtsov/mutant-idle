@@ -9,7 +9,7 @@ import com.daniil.shevtsov.idle.feature.main.presentation.DrawerContentViewState
 import com.daniil.shevtsov.idle.feature.main.presentation.DrawerViewState
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
-import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
+import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
@@ -139,7 +139,7 @@ internal fun upgradeListPreviewStub() = listOf(
 )
 
 internal fun debugViewStateStub(
-    jobSelection: List<PlayerJob> = emptyList(),
+    jobSelection: List<PlayerJobModel> = emptyList(),
 ) = DebugViewState(
     jobSelection = jobSelection,
 )

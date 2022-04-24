@@ -167,13 +167,14 @@ fun handleDebugJobSelected(
 ): MainFunctionalCoreState {
     val previousPlayerTags = state.player.tags
     val previousJobTags = state.player.job.tags
-    val newJobTags = viewAction.job.tags
+    val newJob = state.availableJobs.find { it.id == viewAction.id }!!
+    val newJobTags = newJob.tags
 
     val newPlayerTags = previousPlayerTags - previousJobTags + newJobTags
 
     return state.copy(
         player = state.player.copy(
-            job = viewAction.job,
+            job = newJob,
             tags = newPlayerTags,
         )
     )

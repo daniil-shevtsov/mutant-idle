@@ -4,7 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.DrawerValue
+import androidx.compose.material.ModalDrawer
+import androidx.compose.material.Text
+import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -18,8 +21,6 @@ import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugComposable
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewAction
-import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
-import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.view.DrawerTabSelector
 import com.daniil.shevtsov.idle.feature.main.presentation.*
 import com.daniil.shevtsov.idle.feature.player.info.view.PlayerInfoComposable
@@ -27,7 +28,6 @@ import com.daniil.shevtsov.idle.feature.ratio.view.MutantRatioPane
 import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
 import com.daniil.shevtsov.idle.feature.shop.view.Shop
 import com.google.accompanist.insets.statusBarsHeight
-import kotlinx.coroutines.launch
 
 @Preview(
     widthDp = 320,
@@ -180,7 +180,7 @@ fun SuccessContent(
                 is DrawerContentViewState.Debug -> {
                     DebugComposable(state = drawerContentState.state, onAction = { action ->
                         val mainViewAction = when (action) {
-                            is DebugViewAction.JobSelected -> MainViewAction.DebugJobSelected(action.job)
+                            is DebugViewAction.JobSelected -> MainViewAction.DebugJobSelected(action.id)
                         }
                         onViewAction(mainViewAction)
                     })

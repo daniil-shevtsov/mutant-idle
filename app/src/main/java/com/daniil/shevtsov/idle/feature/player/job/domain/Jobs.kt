@@ -1,9 +1,9 @@
 package com.daniil.shevtsov.idle.feature.player.job.domain
 
-import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.*
 
 val Mortician = PlayerJob(
+    id = 0L,
     title = "Mortician",
     tags = listOf(
         Surgeon,
@@ -14,6 +14,7 @@ val Mortician = PlayerJob(
 )
 
 val Undertaker = PlayerJob(
+    id = 1L,
     title = "Undertaker",
     tags = listOf(
         CorpseAccess,
@@ -23,6 +24,7 @@ val Undertaker = PlayerJob(
 )
 
 val Butcher = PlayerJob(
+    id = 2L,
     title = "Butcher",
     tags = listOf(
         MeatAccess,

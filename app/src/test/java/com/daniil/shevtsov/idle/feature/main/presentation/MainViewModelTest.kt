@@ -19,6 +19,8 @@ import com.daniil.shevtsov.idle.feature.player.info.presentation.PlayerInfoState
 import com.daniil.shevtsov.idle.feature.player.job.domain.Butcher
 import com.daniil.shevtsov.idle.feature.player.job.domain.Mortician
 import com.daniil.shevtsov.idle.feature.player.job.domain.Undertaker
+import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
+import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
@@ -541,20 +543,32 @@ internal class MainViewModelTest {
             assertThat(expectMostRecentItem())
                 .extractingDebugState()
                 .extractingJobSelection()
-                .isEqualTo(availableJobs)
+                .extracting(PlayerJobModel::title)
+                .containsExactly(
+                    Mortician.title,
+                    Undertaker.title,
+                    Butcher.title,
+                )
         }
     }
 
     @Test
     fun `should add job tags to player when job selected`() = runBlockingTest {
-        val jobTags = Mortician.tags
+        val job = playerJob(
+            tags = listOf(
+                tag(name = "lol"),
+                tag(name = "kek"),
+            )
+        )
+
+        val jobTags = job.tags
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
-                availableJobs = listOf(Mortician),
+                availableJobs = listOf(job),
                 drawerTabs = listOf(drawerTab(id = DrawerTabId.PlayerInfo, isSelected = true)),
             )
         )
-        viewModel.handleAction(MainViewAction.DebugJobSelected(job = Mortician))
+        viewModel.handleAction(MainViewAction.DebugJobSelected(id = job.id))
 
         viewModel.state.test {
             assertThat(expectMostRecentItem())
@@ -571,20 +585,31 @@ internal class MainViewModelTest {
     @Test
     fun `should remove previous job tags if job changed`() = runBlockingTest {
         val previousJob = playerJob(
+            id = 0L,
             tags = listOf(
                 MeatAccess,
                 SocialJob,
             )
         )
         val newJob = playerJob(
+            id = 1L,
             tags = listOf(
                 CorpseAccess,
                 SocialJob,
             )
         )
 
-        viewModel.handleAction(MainViewAction.DebugJobSelected(job = previousJob))
-        viewModel.handleAction(MainViewAction.DebugJobSelected(job = newJob))
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                availableJobs = listOf(
+                    previousJob,
+                    newJob,
+                ),
+            )
+        )
+
+        viewModel.handleAction(MainViewAction.DebugJobSelected(id = previousJob.id))
+        viewModel.handleAction(MainViewAction.DebugJobSelected(id = newJob.id))
 
         viewModel.state.test {
             assertThat(expectMostRecentItem())
@@ -608,12 +633,14 @@ internal class MainViewModelTest {
             Immortal,
         )
         val previousJob = playerJob(
+            id = 0L,
             tags = listOf(
                 MeatAccess,
                 SocialJob,
             )
         )
         val newJob = playerJob(
+            id = 1L,
             tags = listOf(
                 CorpseAccess,
                 SocialJob,
@@ -621,14 +648,18 @@ internal class MainViewModelTest {
         )
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
+                availableJobs = listOf(
+                    previousJob,
+                    newJob,
+                ),
                 player = player(
                     tags = playerTags,
                 )
             )
         )
 
-        viewModel.handleAction(MainViewAction.DebugJobSelected(job = previousJob))
-        viewModel.handleAction(MainViewAction.DebugJobSelected(job = newJob))
+        viewModel.handleAction(MainViewAction.DebugJobSelected(id = previousJob.id))
+        viewModel.handleAction(MainViewAction.DebugJobSelected(id = newJob.id))
 
         viewModel.state.test {
             assertThat(expectMostRecentItem())

@@ -9,18 +9,12 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.daniil.shevtsov.idle.feature.player.job.domain.Butcher
-import com.daniil.shevtsov.idle.feature.player.job.domain.Mortician
-import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
+import com.daniil.shevtsov.idle.feature.player.job.domain.playerJobModel
 
 @Preview
 @Composable
@@ -28,8 +22,8 @@ fun DebugComposablePreview() {
     DebugComposable(
         state = DebugViewState(
             jobSelection = listOf(
-                PlayerJob(title = "LOL", tags = emptyList()),
-                PlayerJob(title = "KEK", tags = emptyList()),
+                playerJobModel(title = "LOL", tags = emptyList()),
+                playerJobModel(title = "KEK", tags = emptyList()),
             )
         ),
         onAction = {},
@@ -55,7 +49,7 @@ fun DebugComposable(
             state.jobSelection.forEach { job ->
                 DropdownMenuItem(
                     onClick = {
-                        onAction(DebugViewAction.JobSelected(job))
+                        onAction(DebugViewAction.JobSelected(job.id))
                         expanded = false
                     }
                 ) {

@@ -76,27 +76,32 @@ class MainFunctionalCoreTest {
             tag(name = "non-job tag 2"),
         )
 
-        val previousPlayerState = player(
-            job = playerJob(
-                title = "old job",
-                tags = listOf(
-                    tag(name = "old job tag 1"),
-                    tag(name = "old job tag 2"),
-                )
-            ),
+        val previousJob = playerJob(
+            id = 0L,
+            title = "old job",
             tags = listOf(
-                tag(name = "old job tag 1"), //TODO: This design choice to have duplicated data is kinda dumb
+                tag(name = "old job tag 1"),
                 tag(name = "old job tag 2"),
-            ) + nonJobTags
+            )
         )
-
         val newJob = playerJob(
+            id = 1L,
             title = "new job",
             tags = listOf(
                 tag(name = "new job tag 1"),
                 tag(name = "new job tag 2"),
             ),
         )
+
+        val previousPlayerState = player(
+            job = previousJob,
+            tags = listOf(
+                tag(name = "old job tag 1"), //TODO: This design choice to have duplicated data is kinda dumb
+                tag(name = "old job tag 2"),
+            ) + nonJobTags
+        )
+
+
 
         val initialState = mainFunctionalCoreState(
             player = previousPlayerState,
@@ -108,7 +113,7 @@ class MainFunctionalCoreTest {
 
         val newState = mainFunctionalCore(
             state = initialState,
-            viewAction = MainViewAction.DebugJobSelected(job = newJob)
+            viewAction = MainViewAction.DebugJobSelected(id = newJob.id)
         )
 
         assertThat(newState)

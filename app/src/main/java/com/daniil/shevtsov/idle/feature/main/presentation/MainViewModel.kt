@@ -14,6 +14,7 @@ import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
 import com.daniil.shevtsov.idle.feature.player.info.presentation.PlayerInfoState
+import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
@@ -110,7 +111,16 @@ class MainViewModel @Inject constructor(
                     DrawerTabId.Debug -> {
                         DrawerContentViewState.Debug(
                             state = DebugViewState(
-                                jobSelection = state.availableJobs,
+                                jobSelection = state.availableJobs.map { job ->
+                                    with(job) {
+                                        PlayerJobModel(
+                                            id = id,
+                                            title = title,
+                                            tags = tags,
+                                            isSelected = state.player.job.id == job.id,
+                                        )
+                                    }
+                                },
                             )
                         )
                     }
