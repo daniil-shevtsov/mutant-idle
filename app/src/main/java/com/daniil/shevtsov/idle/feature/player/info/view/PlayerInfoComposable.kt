@@ -45,7 +45,7 @@ fun PlayerInfoComposable(
     Column(
         modifier = modifier
             .background(Pallete.Red)
-            .padding(4.dp)
+            .padding(8.dp)
             .fillMaxSize(),
         verticalArrangement = spacedBy(16.dp)
     ) {
