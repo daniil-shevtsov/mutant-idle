@@ -36,13 +36,23 @@ fun DebugComposable(
     onAction: (DebugViewAction) -> Unit,
 ) {
     var expanded: Boolean by remember { mutableStateOf(false) }
-    Box(modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.TopStart)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .wrapContentSize(Alignment.TopStart)
+    ) {
         Text(
-            text = if(state.jobSelection.isNotEmpty()) {state.jobSelection.first().title} else {"EMPTY"},
+            text = when (val selectedJob =
+                state.jobSelection.firstOrNull { it.isSelected }
+                    ?: state.jobSelection.firstOrNull()) {
+                null -> "EMPTY"
+                else -> selectedJob.title
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable(onClick = { expanded = true })
-                .background(Color.Gray))
+                .background(Color.Gray)
+        )
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }) {
