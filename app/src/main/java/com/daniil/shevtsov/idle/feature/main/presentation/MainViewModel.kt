@@ -76,14 +76,14 @@ class MainViewModel @Inject constructor(
                 val mainFunctionalCoreState = imperativeShell.getState()
 
                 val functionalCoreState = MainFunctionalCoreState(
-                    player = player,
-                    balanceConfig = balanceConfig,
-                    resources = resources,
+                    player = mainFunctionalCoreState.player,
+                    balanceConfig = mainFunctionalCoreState.balanceConfig,
+                    resources = mainFunctionalCoreState.resources,
                     ratios = ratios,
-                    upgrades = upgrades,
-                    actions = actions,
+                    upgrades = mainFunctionalCoreState.upgrades,
+                    actions = mainFunctionalCoreState.actions,
                     sections = mainFunctionalCoreState.sections,
-                    availableJobs = availableJobs,
+                    availableJobs = mainFunctionalCoreState.availableJobs,
                     drawerTabs = drawerTabs,
                 )
 

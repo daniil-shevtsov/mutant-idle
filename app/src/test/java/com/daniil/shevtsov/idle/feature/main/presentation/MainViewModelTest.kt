@@ -23,6 +23,7 @@ import com.daniil.shevtsov.idle.feature.player.job.domain.Undertaker
 import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
+import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
@@ -234,8 +235,14 @@ internal class MainViewModelTest {
     fun `should update human ratio after upgrade bought`() = runBlockingTest {
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
+                balanceConfig = balanceConfig(
+                    resourceSpentForFullMutant = 100.0,
+                ),
                 upgrades = listOf(upgrade(id = 0L, price = 10.0)),
                 resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
+                ratios = listOf(
+                    ratio(key = RatioKey.Mutanity)
+                )
             )
         )
 
@@ -266,6 +273,9 @@ internal class MainViewModelTest {
 
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
+                balanceConfig = balanceConfig(
+                    resourceSpentForFullMutant = 100.0,
+                ),
                 upgrades = listOf(
                     upgrade(id = 0L, price = 15.0),
                     upgrade(id = 1L, price = 10.0),
@@ -273,6 +283,9 @@ internal class MainViewModelTest {
                     upgrade(id = 3L, price = 30.0),
                 ),
                 resources = listOf(resource(key = ResourceKey.Blood, value = 1000.0)),
+                ratios = listOf(
+                    ratio(key = RatioKey.Mutanity, value = 0.0)
+                )
             )
         )
 
@@ -500,8 +513,10 @@ internal class MainViewModelTest {
             viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
 
             assertThat(expectMostRecentItem())
-                .extractingMoney()
-                .isEqualTo("10")
+                .isInstanceOf(MainViewState.Success::class)
+                .prop(MainViewState.Success::resources)
+                .extracting(ResourceModel::value)
+                .containsExactly("10")
         }
     }
 
@@ -758,6 +773,13 @@ internal class MainViewModelTest {
             )
         )
         playerStorage.update(newPlayer = player(tags = playerTags))
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                player = player(
+                    tags = playerTags,
+                )
+            )
+        )
 
         viewModel.handleAction(MainViewAction.DebugJobSelected(job = previousJob))
         viewModel.handleAction(MainViewAction.DebugJobSelected(job = newJob))
