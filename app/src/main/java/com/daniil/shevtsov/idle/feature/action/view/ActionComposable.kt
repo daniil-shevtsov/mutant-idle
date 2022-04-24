@@ -57,7 +57,7 @@ fun ActionSection(
     onToggleCollapse: () -> Unit,
     onActionClicked: (actionId: Long) -> Unit = {},
 ) {
-    val actionPanes = listOf(state.humanActionPane, state.mutantActionPane)
+    val actionPanes = state.actionPanes
 
     Collapsable(
         title = "Actions",
