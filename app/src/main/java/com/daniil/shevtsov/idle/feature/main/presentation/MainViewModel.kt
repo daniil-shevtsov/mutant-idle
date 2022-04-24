@@ -155,6 +155,7 @@ class MainViewModel @Inject constructor(
         ratiosStorage.upgradeAll(newRatios = newState.ratios)
         actionsStorage.upgradeAll(newActions = newState.actions)
         sectionCollapseState.value = newState.sectionState
+        drawerTabsState.value = newState.drawerTabs
         debugConfigStorage.updateAvailableJobs(newAvailableJobs = newState.availableJobs)
     }
 
@@ -192,7 +193,7 @@ class MainViewModel @Inject constructor(
                 .let { ShopState(upgradeLists = listOf(it)) },
             sectionCollapse = state.sectionState,
             drawerState = DrawerViewState(
-                tabSelectorState = emptyList(),
+                tabSelectorState = state.drawerTabs,
                 drawerContent = DrawerContentViewState.Debug(
                     state = DebugViewState(
                         jobSelection = state.availableJobs,

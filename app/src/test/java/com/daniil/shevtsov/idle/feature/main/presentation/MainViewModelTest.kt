@@ -137,20 +137,6 @@ internal class MainViewModelTest {
         }
     }
 
-    // x
-    @Test
-    fun `should buy upgrade when clicked and affordable`() = runBlockingTest {
-        setInitialResourceValue(10.0)
-        upgradeStorage = UpgradeStorage(initialUpgrades = listOf(upgrade(id = 0L, price = 5.0)))
-
-        viewModel.handleAction(MainViewAction.UpgradeSelected(id = 0L))
-
-        assertThat(upgradeStorage.getUpgradeById(id = 0L))
-            .isNotNull()
-            .prop(Upgrade::status)
-            .isEqualTo(UpgradeStatus.Bought)
-    }
-
     @Test
     fun `should mark upgrade as affordable if its price less than resource`() = runBlockingTest {
         setInitialResourceValue(10.0)
