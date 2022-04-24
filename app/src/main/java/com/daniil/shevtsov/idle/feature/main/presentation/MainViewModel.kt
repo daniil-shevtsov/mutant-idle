@@ -2,7 +2,6 @@ package com.daniil.shevtsov.idle.feature.main.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.action.data.ActionsStorage
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.ActionType
@@ -18,14 +17,11 @@ import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
 import com.daniil.shevtsov.idle.feature.player.core.data.PlayerStorage
-import com.daniil.shevtsov.idle.feature.player.core.domain.Player
-import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
 import com.daniil.shevtsov.idle.feature.ratio.data.RatiosStorage
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
-import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMapper
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
@@ -40,7 +36,6 @@ import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
     private val imperativeShell: MainImperativeShell,
-    private val balanceConfig: BalanceConfig,
     private val upgradeStorage: UpgradeStorage,
     private val actionsStorage: ActionsStorage,
     private val resourcesStorage: ResourcesStorage,
@@ -65,30 +60,8 @@ class MainViewModel @Inject constructor(
     init {
         temporaryHackyActionFlow
             .onEach { viewAction ->
-                val resources = resourcesStorage.observeAll().first()
-                val ratios = ratiosStorage.observeAll().first()
-                val upgrades = upgradeStorage.observeAll().first()
-                val actions = actionsStorage.observeAll().first()
-                val availableJobs = debugConfigStorage.observeAvailableJobs().first()
-                val player = playerStorage.observe().first()
-                val drawerTabs = drawerTabsState.value
-
-                val mainFunctionalCoreState = imperativeShell.getState()
-
-                val functionalCoreState = MainFunctionalCoreState(
-                    player = mainFunctionalCoreState.player,
-                    balanceConfig = mainFunctionalCoreState.balanceConfig,
-                    resources = mainFunctionalCoreState.resources,
-                    ratios = mainFunctionalCoreState.ratios,
-                    upgrades = mainFunctionalCoreState.upgrades,
-                    actions = mainFunctionalCoreState.actions,
-                    sections = mainFunctionalCoreState.sections,
-                    availableJobs = mainFunctionalCoreState.availableJobs,
-                    drawerTabs = mainFunctionalCoreState.drawerTabs,
-                )
-
                 val newFunctionalCoreState = mainFunctionalCore(
-                    state = functionalCoreState,
+                    state = imperativeShell.getState(),
                     viewAction = viewAction
                 )
 
@@ -97,40 +70,8 @@ class MainViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
 
-        combine(
-            resourcesStorage.observeAll(),
-            ratiosStorage.observeAll(),
-            upgradeStorage.observeAll(),
-            actionsStorage.observeAll(),
-            flowOf(false),
-            drawerTabsState,
-            debugConfigStorage.observeAvailableJobs(),
-            playerStorage.observe(),
-            imperativeShell.observeState(),
-        ) { _: List<Resource>,
-            ratios: List<Ratio>,
-            _: List<Upgrade>,
-            _: List<Action>,
-            _: Boolean,
-            drawerTabs: List<DrawerTab>,
-            _: List<PlayerJob>,
-            _: Player,
-            mainFunctionalCoreState: MainFunctionalCoreState ->
-
-            val newState = MainFunctionalCoreState(
-                player = mainFunctionalCoreState.player,
-                balanceConfig = mainFunctionalCoreState.balanceConfig,
-                resources = mainFunctionalCoreState.resources,
-                ratios = mainFunctionalCoreState.ratios,
-                upgrades = mainFunctionalCoreState.upgrades,
-                actions = mainFunctionalCoreState.actions,
-                sections = mainFunctionalCoreState.sections,
-                availableJobs = mainFunctionalCoreState.availableJobs,
-                drawerTabs = mainFunctionalCoreState.drawerTabs,
-            )
-
-            createMainViewState(newState)
-        }
+        imperativeShell.observeState()
+            .map { state -> createMainViewState(state) }
             .onEach { viewState ->
                 _state.value = viewState
             }

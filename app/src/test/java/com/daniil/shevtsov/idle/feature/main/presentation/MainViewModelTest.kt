@@ -812,7 +812,6 @@ internal class MainViewModelTest {
 
     private fun createViewModel() = MainViewModel(
         imperativeShell = imperativeShell,
-        balanceConfig = balanceConfig,
         upgradeStorage = upgradeStorage,
         actionsStorage = actionsStorage,
         resourcesStorage = resourcesStorage,
