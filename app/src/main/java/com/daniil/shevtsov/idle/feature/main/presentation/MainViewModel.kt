@@ -79,11 +79,8 @@ class MainViewModel @Inject constructor(
     }
 
     fun handleAction(action: MainViewAction) {
-        when (action) {
-            is MainViewAction.UpgradeSelected -> handleUpgradeSelected(action)
-            is MainViewAction.ActionClicked -> handleActionClicked(action)
-            is MainViewAction.ToggleSectionCollapse -> toggleSectionCollapse(action)
-            is MainViewAction.DebugJobSelected -> handleJobSelected(action)
+        viewModelScope.launch {
+            temporaryHackyActionFlow.emit(action)
         }
     }
 
@@ -187,25 +184,25 @@ class MainViewModel @Inject constructor(
 
     private fun handleUpgradeSelected(action: MainViewAction.UpgradeSelected) {
         viewModelScope.launch {
-            temporaryHackyActionFlow.emit(action)
+//            temporaryHackyActionFlow.emit(action)
         }
     }
 
     private fun handleActionClicked(action: MainViewAction.ActionClicked) {
         viewModelScope.launch {
-            temporaryHackyActionFlow.emit(action)
+//            temporaryHackyActionFlow.emit(action)
         }
     }
 
     private fun toggleSectionCollapse(action: MainViewAction.ToggleSectionCollapse) {
         viewModelScope.launch {
-            temporaryHackyActionFlow.emit(action)
+//            temporaryHackyActionFlow.emit(action)
         }
     }
 
     private fun handleJobSelected(action: MainViewAction.DebugJobSelected) {
         viewModelScope.launch {
-            temporaryHackyActionFlow.emit(action)
+//            temporaryHackyActionFlow.emit(action)
         }
     }
 
