@@ -12,6 +12,8 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.data.DebugConfigStorage
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
+import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
+import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
 import com.daniil.shevtsov.idle.feature.player.core.data.PlayerStorage
@@ -58,6 +60,12 @@ class MainViewModel @Inject constructor(
             SectionKey.Upgrades to false,
         )
     )
+    private val drawerTabsState = MutableStateFlow(
+        listOf(
+            DrawerTab(id = DrawerTabId.PlayerInfo, title = "Player Info", isSelected = false),
+            DrawerTab(id = DrawerTabId.Debug, title = "Debug", isSelected = false),
+        )
+    )
 
     init {
         temporaryHackyActionFlow
@@ -69,6 +77,7 @@ class MainViewModel @Inject constructor(
                 val sectionState = sectionCollapseState.first()
                 val availableJobs = debugConfigStorage.observeAvailableJobs().first()
                 val player = playerStorage.observe().first()
+                val drawerTabs = drawerTabsState.value
 
                 val functionalCoreState = MainFunctionalCoreState(
                     player = player,
@@ -79,6 +88,7 @@ class MainViewModel @Inject constructor(
                     actions = actions,
                     sectionState = sectionState,
                     availableJobs = availableJobs,
+                    drawerTabs = drawerTabs,
                 )
 
                 val newFunctionalCoreState = mainFunctionalCore(
@@ -97,6 +107,7 @@ class MainViewModel @Inject constructor(
             upgradeStorage.observeAll(),
             actionsStorage.observeAll(),
             sectionCollapseState,
+            drawerTabsState,
             debugConfigStorage.observeAvailableJobs(),
             playerStorage.observe(),
         ) { resources: List<Resource>,
@@ -104,6 +115,7 @@ class MainViewModel @Inject constructor(
             upgrades: List<Upgrade>,
             actions: List<Action>,
             sectionState: Map<SectionKey, Boolean>,
+            drawerTabs: List<DrawerTab>,
             availableJobs: List<PlayerJob>,
             player: Player ->
 
@@ -116,6 +128,7 @@ class MainViewModel @Inject constructor(
                 actions = actions,
                 sectionState = sectionState,
                 availableJobs = availableJobs,
+                drawerTabs = drawerTabs,
             )
 
             createMainViewState(newState)
@@ -286,7 +299,7 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    private fun <T0, T1, T2, T3, T4, T5, T6, /*T7,*/ R> combine(
+    private fun <T0, T1, T2, T3, T4, T5, T6, T7, R> combine(
         flow0: Flow<T0>,
         flow1: Flow<T1>,
         flow2: Flow<T2>,
@@ -294,7 +307,7 @@ class MainViewModel @Inject constructor(
         flow4: Flow<T4>,
         flow5: Flow<T5>,
         flow6: Flow<T6>,
-//        flow7: Flow<T7>,
+        flow7: Flow<T7>,
         transform: suspend (
             T0,
             T1,
@@ -303,7 +316,7 @@ class MainViewModel @Inject constructor(
             T4,
             T5,
             T6,
-//            T7,
+            T7,
         ) -> R
     ): Flow<R> = combine(
         flow0,
@@ -313,7 +326,7 @@ class MainViewModel @Inject constructor(
         flow4,
         flow5,
         flow6,
-//        flow7,
+        flow7,
     ) { args: Array<*> ->
         transform(
             args[0] as T0,
@@ -323,7 +336,7 @@ class MainViewModel @Inject constructor(
             args[4] as T4,
             args[5] as T5,
             args[6] as T6,
-//            args[7] as T7,
+            args[7] as T7,
         )
     }
 

@@ -22,6 +22,7 @@ import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.view.DrawerTabSelector
 import com.daniil.shevtsov.idle.feature.main.presentation.*
+import com.daniil.shevtsov.idle.feature.player.info.view.PlayerInfoComposable
 import com.daniil.shevtsov.idle.feature.ratio.view.MutantRatioPane
 import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
 import com.daniil.shevtsov.idle.feature.shop.view.Shop
@@ -172,13 +173,10 @@ fun SuccessContent(
         drawerState = drawerState,
         drawerContent = {
             DrawerTabSelector(
-                tabs = listOf(
-                    DrawerTab(id = DrawerTabId.PlayerInfo, title ="Info"),
-                    DrawerTab(id = DrawerTabId.Debug, title = "debug"),
-                ),
-                onTabSelected = {},
+                tabs = state.drawerState.tabSelectorState,
+                onTabSelected = { id -> onViewAction(MainViewAction.DrawerTabSwitched(id = id)) },
             )
-            when(val drawerContentState = state.drawerState.drawerContent) {
+            when (val drawerContentState = state.drawerState.drawerContent) {
                 is DrawerContentViewState.Debug -> {
                     DebugComposable(state = drawerContentState.state, onAction = { action ->
                         val mainViewAction = when (action) {
@@ -186,6 +184,9 @@ fun SuccessContent(
                         }
                         onViewAction(mainViewAction)
                     })
+                }
+                is DrawerContentViewState.PlayerInfo -> {
+                    PlayerInfoComposable(state = drawerContentState.playerInfo)
                 }
             }
         },
