@@ -13,6 +13,7 @@ import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
+import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.info.presentation.PlayerInfoState
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
@@ -22,6 +23,7 @@ import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMapper
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModelMapper
@@ -85,7 +87,7 @@ class MainViewModel @Inject constructor(
                     percent = it.value
                 )
             },
-            actionState = createActionState(state.actions, state.resources),
+            actionState = createActionState(state.actions, state.resources, state.player),
             shop = state.upgrades
                 .map { upgrade ->
                     UpgradeModelMapper.map(
@@ -141,15 +143,23 @@ class MainViewModel @Inject constructor(
     private fun createActionState(
         actions: List<Action>,
         resources: List<Resource>,
+        player: Player,
     ): ActionsState {
+        val availableActions = actions
+            .filter { action ->
+                val requiredTags = action.tags
+                    .filter { (_, tagRelation) -> tagRelation == TagRelation.Required }.keys
+                player.tags.containsAll(requiredTags)
+            }
+
         return ActionsState(
             actionPanes = listOf(
                 ActionPane(
-                    actions = actions.filter { it.actionType == ActionType.Human }
+                    actions = availableActions.filter { it.actionType == ActionType.Human }
                         .prepareActionForDisplay(resources = resources)
                 ),
                 ActionPane(
-                    actions = actions.filter { it.actionType == ActionType.Mutant }
+                    actions = availableActions.filter { it.actionType == ActionType.Mutant }
                         .prepareActionForDisplay(resources = resources)
                 )
             ),

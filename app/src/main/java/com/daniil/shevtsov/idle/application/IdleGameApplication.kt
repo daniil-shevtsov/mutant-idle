@@ -135,7 +135,7 @@ class IdleGameApplication : Application() {
             actionType = ActionType.Human,
             resourceChanges = mapOf(
                 ResourceKey.Money to -15.0,
-                ResourceKey.Food to 1.0,
+                ResourceKey.HumanFood to 1.0,
             )
         ),
         Action(
@@ -145,7 +145,7 @@ class IdleGameApplication : Application() {
             actionType = ActionType.Human,
             resourceChanges = mapOf(
                 ResourceKey.Money to -20.0,
-                ResourceKey.Food to 1.0,
+                ResourceKey.HumanFood to 1.0,
             )
         ),
         Action(
@@ -195,12 +195,13 @@ class IdleGameApplication : Application() {
             resourceChanges = mapOf(
                 ResourceKey.Blood to 25.0,
                 ResourceKey.Prisoner to -1.0,
+                ResourceKey.Remains to 1.0,
             ),
             ratioChanges = mapOf(
                 RatioKey.Suspicion to 0.05f,
             ),
             tags = mapOf(
-                Tags.PersonCapturer to TagRelation.Required,
+                Tags.Devourer to TagRelation.Required,
             ),
         ),
         Action(
@@ -210,7 +211,52 @@ class IdleGameApplication : Application() {
             actionType = ActionType.Human,
             resourceChanges = mapOf(
                 ResourceKey.Blood to 2.0,
-                ResourceKey.Food to -1.0,
+                ResourceKey.HumanFood to -1.0,
+            )
+        ),
+        Action(
+            id = 11L,
+            title = "Bury remains",
+            subtitle = "You better hope there is space",
+            actionType = ActionType.Human,
+            resourceChanges = mapOf(
+                ResourceKey.Remains to -1.0,
+            ),
+            tags = mapOf(
+                Tags.GraveyardAccess to TagRelation.Required,
+            ),
+            ratioChanges = mapOf(
+                RatioKey.Suspicion to -0.05f,
+            )
+        ),
+        Action(
+            id = 12L,
+            title = "Steal organs from corpse",
+            subtitle = "They won't need it",
+            actionType = ActionType.Human,
+            resourceChanges = mapOf(
+                ResourceKey.Organs to 1.0,
+            ),
+            tags = mapOf(
+                Tags.FreshCorpseAccess to TagRelation.Required,
+            ),
+            ratioChanges = mapOf(
+                RatioKey.Suspicion to 0.1f,
+            )
+        ),
+        Action(
+            id = 13L,
+            title = "Burn remains",
+            subtitle = "It won't leave a trace",
+            actionType = ActionType.Human,
+            resourceChanges = mapOf(
+                ResourceKey.Remains to -1.0,
+            ),
+            tags = mapOf(
+                Tags.IncineratorAccess to TagRelation.Required,
+            ),
+            ratioChanges = mapOf(
+                RatioKey.Suspicion to -0.1f,
             )
         ),
     )
@@ -218,7 +264,7 @@ class IdleGameApplication : Application() {
     private fun createInitialResources() = listOf(
         Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0),
         Resource(key = ResourceKey.Money, name = "Money", value = 0.0),
-        Resource(key = ResourceKey.Food, name = "Food", value = 0.0),
+        Resource(key = ResourceKey.HumanFood, name = "Food", value = 0.0),
     )
 
     private fun createInitialRatios() = listOf(

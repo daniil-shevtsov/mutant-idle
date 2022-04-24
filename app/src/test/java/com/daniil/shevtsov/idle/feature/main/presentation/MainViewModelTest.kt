@@ -27,6 +27,7 @@ import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
@@ -674,6 +675,51 @@ internal class MainViewModelTest {
         }
     }
 
+    @Test
+    fun `should show only actions that require avialable tags`() = runBlockingTest {
+        val availableTag = tag(name = "lol")
+        val notAvailableTag = tag(name = "kek")
+
+        val availableAction = action(
+            id = 1L,
+            tags = mapOf(
+                availableTag to TagRelation.Required,
+            )
+        )
+        val notAvailableAction = action(
+            id = 2L,
+            tags = mapOf(
+                availableTag to TagRelation.Required,
+                notAvailableTag to TagRelation.Required,
+            )
+        )
+
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                actions = listOf(
+                    availableAction,
+                    notAvailableAction,
+                ),
+                player = player(
+                    tags = listOf(
+                        availableTag
+                    )
+                )
+            )
+        )
+
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .isInstanceOf(MainViewState.Success::class)
+                .prop(MainViewState.Success::actionState)
+                .prop(ActionsState::actionPanes)
+                .index(0)
+                .prop(ActionPane::actions)
+                .extracting(ActionModel::id)
+                .containsExactly(availableAction.id)
+        }
+    }
+
     private fun createViewModel() = MainViewModel(
         imperativeShell = imperativeShell,
     )
@@ -757,16 +803,5 @@ internal class MainViewModelTest {
             .prop(DrawerContentViewState.Debug::state)
 
     private fun Assert<DebugViewState>.extractingJobSelection() = prop(DebugViewState::jobSelection)
-
-    private fun setInitialResourceValue(
-        value: Double,
-        key: ResourceKey = ResourceKey.Blood
-    ) {
-        val resource = resourcesStorage.getByKey(key = key)
-        resourcesStorage.updateByKey(
-            key = key,
-            newValue = resource!!.copy(value = value)
-        )
-    }
 
 }
