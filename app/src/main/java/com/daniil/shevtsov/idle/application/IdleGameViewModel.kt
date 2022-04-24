@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.application
 
 import com.daniil.shevtsov.idle.core.BalanceConfig
+import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
@@ -18,6 +19,7 @@ class IdleGameViewModel @Inject constructor(
     private val balanceConfig: BalanceConfig,
     private val timeStorage: TimeStorage,
     private val resourcesStorage: ResourcesStorage,
+    private val imperativeShell: MainImperativeShell,
 ) {
     private val scope = CoroutineScope(Job() + Dispatchers.Main.immediate)
 
@@ -51,6 +53,20 @@ class IdleGameViewModel @Inject constructor(
                         resourceKey = ResourceKey.Blood,
                         passedTime = time,
                         rate = balanceConfig.resourcePerMillisecond,
+                    )
+
+                    val currentState = imperativeShell.getState()
+                    imperativeShell.updateState(
+                        newState = currentState.copy(
+                            resources = currentState.resources.map { resource ->
+                                when (resource.key) {
+                                    ResourceKey.Blood -> resource.copy(
+                                        value = time.value * balanceConfig.resourcePerMillisecond
+                                    )
+                                    else -> resource
+                                }
+                            }
+                        )
                     )
                 }
                 .collect()
