@@ -153,14 +153,6 @@ class MainViewModel @Inject constructor(
                         .prepareActionForDisplay(resources = resources)
                 )
             ),
-            humanActionPane = ActionPane(
-                actions = actions.filter { it.actionType == ActionType.Human }
-                    .prepareActionForDisplay(resources = resources)
-            ),
-            mutantActionPane = ActionPane(
-                actions = actions.filter { it.actionType == ActionType.Mutant }
-                    .prepareActionForDisplay(resources = resources)
-            )
         )
     }
 

@@ -686,7 +686,8 @@ internal class MainViewModelTest {
     private fun Assert<MainViewState>.extractingHumanActions() =
         isInstanceOf(MainViewState.Success::class)
             .prop(MainViewState.Success::actionState)
-            .prop(ActionsState::humanActionPane)
+            .prop(ActionsState::actionPanes)
+            .index(0)
             .prop(ActionPane::actions)
 
 

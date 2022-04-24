@@ -72,8 +72,6 @@ internal fun actionStatePreviewStub() = ActionsState(
         actionPanePreviewStub(icon = ActionIcon.Human),
         actionPanePreviewStub(icon = ActionIcon.Mutant),
     ),
-    humanActionPane = actionPanePreviewStub(icon = ActionIcon.Human),
-    mutantActionPane = actionPanePreviewStub(icon = ActionIcon.Mutant),
 )
 
 internal fun actionPanePreviewStub(

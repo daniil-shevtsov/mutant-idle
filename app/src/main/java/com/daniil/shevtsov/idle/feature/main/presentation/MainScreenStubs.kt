@@ -29,12 +29,8 @@ fun mainViewState(
 
 fun actionsState(
     actionPanes: List<ActionPane> = emptyList(),
-    humanActionPane: ActionPane = actionPane(),
-    mutantActionPane: ActionPane = actionPane(),
 ) = ActionsState(
     actionPanes = actionPanes,
-    humanActionPane = humanActionPane,
-    mutantActionPane = mutantActionPane,
 )
 
 fun shopState(
