@@ -449,13 +449,13 @@ internal class MainViewModelTest {
 
     @Test
     fun `should toggle corresponding collapse state when toggle clicked`() = runBlockingTest {
-        viewModel.state.test {
-            imperativeShell.updateState(
-                newState = mainFunctionalCoreState(
-                    sections = listOf(sectionState( key = SectionKey.Resources, isCollapsed = false))
-                )
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                sections = listOf(sectionState(key = SectionKey.Resources, isCollapsed = false))
             )
+        )
 
+        viewModel.state.test {
             viewModel.handleAction(MainViewAction.ToggleSectionCollapse(key = SectionKey.Resources))
 
             assertThat(expectMostRecentItem())

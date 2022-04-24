@@ -81,7 +81,7 @@ class MainViewModel @Inject constructor(
                 val player = playerStorage.observe().first()
                 val drawerTabs = drawerTabsState.value
 
-                val kek = imperativeShell.getState()
+                val mainFunctionalCoreState = imperativeShell.getState()
 
                 val functionalCoreState = MainFunctionalCoreState(
                     player = player,
