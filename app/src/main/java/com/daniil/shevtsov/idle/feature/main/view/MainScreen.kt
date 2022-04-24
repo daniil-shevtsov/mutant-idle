@@ -170,7 +170,8 @@ fun SuccessContent(
 @Composable
 private fun MainDrawer(
     state: MainViewState.Success,
-    onViewAction: (MainViewAction) -> Unit
+    onViewAction: (MainViewAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     DrawerTabSelector(
         tabs = state.drawerState.tabSelectorState,
@@ -178,15 +179,21 @@ private fun MainDrawer(
     )
     when (val drawerContentState = state.drawerState.drawerContent) {
         is DrawerContentViewState.Debug -> {
-            DebugComposable(state = drawerContentState.state, onAction = { action ->
-                val mainViewAction = when (action) {
-                    is DebugViewAction.JobSelected -> MainViewAction.DebugJobSelected(action.id)
-                }
-                onViewAction(mainViewAction)
-            })
+            DebugComposable(
+                state = drawerContentState.state,
+                modifier = modifier.background(Pallete.Red).padding(8.dp),
+                onAction = { action ->
+                    val mainViewAction = when (action) {
+                        is DebugViewAction.JobSelected -> MainViewAction.DebugJobSelected(action.id)
+                    }
+                    onViewAction(mainViewAction)
+                })
         }
         is DrawerContentViewState.PlayerInfo -> {
-            PlayerInfoComposable(state = drawerContentState.playerInfo)
+            PlayerInfoComposable(
+                state = drawerContentState.playerInfo,
+                modifier = modifier.background(Pallete.Red).padding(8.dp)
+            )
         }
     }
 }

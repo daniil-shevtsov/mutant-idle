@@ -50,8 +50,7 @@ fun DebugComposable(
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .background(Pallete.Red)
-                .padding(4.dp),
+                .background(Pallete.Red),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {

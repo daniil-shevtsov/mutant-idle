@@ -70,8 +70,8 @@ fun DrawerTabSelector(
                             }
                         }
                         .background(Pallete.Red)
-                        .padding(4.dp)
                         .clickable { onTabSelected(tab.id) }
+                        .padding(4.dp)
                         .weight(1f)
                 } else {
                     modifier
