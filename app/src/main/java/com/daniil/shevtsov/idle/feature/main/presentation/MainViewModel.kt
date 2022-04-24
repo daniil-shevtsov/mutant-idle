@@ -9,12 +9,12 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
-import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
 import com.daniil.shevtsov.idle.feature.player.core.data.PlayerStorage
+import com.daniil.shevtsov.idle.feature.player.info.presentation.PlayerInfoState
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
@@ -40,13 +40,6 @@ class MainViewModel @Inject constructor(
 
     private val temporaryHackyActionFlow =
         MutableSharedFlow<MainViewAction>()
-
-    private val drawerTabsState = MutableStateFlow(
-        listOf(
-            DrawerTab(id = DrawerTabId.PlayerInfo, title = "Player Info", isSelected = false),
-            DrawerTab(id = DrawerTabId.Debug, title = "Debug", isSelected = false),
-        )
-    )
 
     init {
         temporaryHackyActionFlow
@@ -116,11 +109,24 @@ class MainViewModel @Inject constructor(
             sectionCollapse = state.sections.map { it.key to it.isCollapsed }.toMap(),
             drawerState = DrawerViewState(
                 tabSelectorState = state.drawerTabs,
-                drawerContent = DrawerContentViewState.Debug(
-                    state = DebugViewState(
-                        jobSelection = state.availableJobs,
-                    )
-                )
+                drawerContent = when (state.drawerTabs.find { it.isSelected }?.id ?: DrawerTabId.PlayerInfo) {
+                    DrawerTabId.Debug -> {
+                        DrawerContentViewState.Debug(
+                            state = DebugViewState(
+                                jobSelection = state.availableJobs,
+                            )
+                        )
+                    }
+                    DrawerTabId.PlayerInfo -> {
+                        DrawerContentViewState.PlayerInfo(
+                            playerInfo = PlayerInfoState(
+                                playerJob = state.player.job,
+                                playerTags = state.player.tags,
+                            )
+                        )
+                    }
+                }
+
             ),
         )
     }

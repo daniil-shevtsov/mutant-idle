@@ -13,10 +13,13 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.data.DebugConfigStorage
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
+import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
+import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.player.core.data.PlayerStorage
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
+import com.daniil.shevtsov.idle.feature.player.info.presentation.PlayerInfoState
 import com.daniil.shevtsov.idle.feature.player.job.domain.Butcher
 import com.daniil.shevtsov.idle.feature.player.job.domain.Mortician
 import com.daniil.shevtsov.idle.feature.player.job.domain.Undertaker
@@ -717,7 +720,8 @@ internal class MainViewModelTest {
         debugConfigStorage.updateAvailableJobs(availableJobs)
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
-                availableJobs = availableJobs
+                availableJobs = availableJobs,
+                drawerTabs = listOf(drawerTab(id = DrawerTabId.Debug, isSelected = true)),
             )
         )
 
@@ -800,14 +804,21 @@ internal class MainViewModelTest {
         viewModel.handleAction(MainViewAction.DebugJobSelected(job = previousJob))
         viewModel.handleAction(MainViewAction.DebugJobSelected(job = newJob))
 
-        assertThat(playerStorage.get())
-            .prop(Player::tags)
-            .containsExactly(
-                Devourer,
-                Immortal,
-                CorpseAccess,
-                SocialJob,
-            )
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .isInstanceOf(MainViewState.Success::class)
+                .prop(MainViewState.Success::drawerState)
+                .prop(DrawerViewState::drawerContent)
+                .isInstanceOf(DrawerContentViewState.PlayerInfo::class)
+                .prop(DrawerContentViewState.PlayerInfo::playerInfo)
+                .prop(PlayerInfoState::playerTags)
+                .containsExactly(
+                    Devourer,
+                    Immortal,
+                    CorpseAccess,
+                    SocialJob,
+                )
+        }
     }
 
     private fun createViewModel() = MainViewModel(
