@@ -116,17 +116,24 @@ class IdleGameApplication : Application() {
             actionType = ActionType.Human,
             resourceChanges = mapOf(
                 ResourceKey.Money to 25.0
-            )
+            ),
+            tags = mapOf(
+                Tags.HumanAppearance to TagRelation.Required,
+                Tags.Employed to TagRelation.Required,
+            ),
         ),
-        Action(
-            id = 1L,
-            title = "Buy a pet",
-            subtitle = "It's so cute",
-            actionType = ActionType.Human,
-            resourceChanges = mapOf(
-                ResourceKey.Money to -50.0,
-            )
-        ),
+//        Action(
+//            id = 1L,
+//            title = "Buy a pet",
+//            subtitle = "It's so cute",
+//            actionType = ActionType.Human,
+//            resourceChanges = mapOf(
+//                ResourceKey.Money to -50.0,
+//            ),
+//            tags = mapOf(
+//                Tags.HumanAppearance to TagRelation.Required,
+//            ),
+//        ),
         Action(
             id = 3L,
             title = "Buy Groceries",
@@ -135,41 +142,44 @@ class IdleGameApplication : Application() {
             resourceChanges = mapOf(
                 ResourceKey.Money to -15.0,
                 ResourceKey.HumanFood to 1.0,
-            )
+            ),
+            tags = mapOf(
+                Tags.HumanAppearance to TagRelation.Required,
+            ),
         ),
-        Action(
-            id = 4L,
-            title = "Order Groceries",
-            subtitle = "I can hide at home",
-            actionType = ActionType.Human,
-            resourceChanges = mapOf(
-                ResourceKey.Money to -20.0,
-                ResourceKey.HumanFood to 1.0,
-            )
-        ),
-        Action(
-            id = 5L, title = "Grow", subtitle = "Cultivating mass",
-            actionType = ActionType.Mutant,
-            resourceChanges = mapOf(
-                ResourceKey.Blood to 15.0,
-            )
-        ),
-        Action(
-            id = 6L, title = "Eat a pet", subtitle = "Its time is up",
-            actionType = ActionType.Mutant,
-            resourceChanges = mapOf(
-                ResourceKey.Blood to 10.0,
-            )
-        ),
-        Action(
-            id = 7L,
-            title = "Hunt for rats",
-            subtitle = "Surely there are some",
-            actionType = ActionType.Mutant,
-            resourceChanges = mapOf(
-                ResourceKey.Blood to 5.0,
-            )
-        ),
+//        Action(
+//            id = 4L,
+//            title = "Order Groceries",
+//            subtitle = "I can hide at home",
+//            actionType = ActionType.Human,
+//            resourceChanges = mapOf(
+//                ResourceKey.Money to -20.0,
+//                ResourceKey.HumanFood to 1.0,
+//            )
+//        ),
+//        Action(
+//            id = 5L, title = "Grow", subtitle = "Cultivating mass",
+//            actionType = ActionType.Mutant,
+//            resourceChanges = mapOf(
+//                ResourceKey.Blood to 15.0,
+//            )
+//        ),
+//        Action(
+//            id = 6L, title = "Eat a pet", subtitle = "Its time is up",
+//            actionType = ActionType.Mutant,
+//            resourceChanges = mapOf(
+//                ResourceKey.Blood to 10.0,
+//            )
+//        ),
+//        Action(
+//            id = 7L,
+//            title = "Hunt for rats",
+//            subtitle = "Surely there are some",
+//            actionType = ActionType.Mutant,
+//            resourceChanges = mapOf(
+//                ResourceKey.Blood to 5.0,
+//            )
+//        ),
         Action(
             id = 8L,
             title = "Capture a person",
@@ -189,7 +199,7 @@ class IdleGameApplication : Application() {
         Action(
             id = 9L,
             title = "Eat captured person",
-            subtitle = "Finally some good fucking food",
+            subtitle = "What to do about the mess",
             actionType = ActionType.Mutant,
             resourceChanges = mapOf(
                 ResourceKey.Blood to 25.0,
@@ -205,7 +215,7 @@ class IdleGameApplication : Application() {
         ),
         Action(
             id = 10L,
-            title = "Eat food",
+            title = "Eat human food",
             subtitle = "It's not enough",
             actionType = ActionType.Human,
             resourceChanges = mapOf(

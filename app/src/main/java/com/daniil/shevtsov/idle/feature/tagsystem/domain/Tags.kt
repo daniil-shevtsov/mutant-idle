@@ -10,6 +10,9 @@ object Tags {
 
     val PersonCapturer = Tag(name = "Person Capturer")
 
+    val HumanAppearance = Tag(name = "Human Appearance")
+    val Employed = Tag(name = "Employed")
+
     val Surgeon = Tag(name = "Surgeon")
     val FreshCorpseAccess = Tag(name = "Fresh Corpse Access")
     val SolitaryJob = Tag(name = "Solitary Job")

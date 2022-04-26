@@ -19,10 +19,12 @@ import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.actionPreviewStub
 import com.daniil.shevtsov.idle.core.ui.actionStatePreviewStub
 import com.daniil.shevtsov.idle.core.ui.widgets.Collapsable
+import com.daniil.shevtsov.idle.feature.action.domain.actionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
-import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
+import com.daniil.shevtsov.idle.feature.main.presentation.actionPane
+import com.daniil.shevtsov.idle.feature.main.presentation.actionsState
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 
@@ -48,6 +50,28 @@ fun ActionPanesPreview() {
     )
 }
 
+@Preview(
+    widthDp = 400,
+    heightDp = 400,
+)
+@Composable
+fun MutantActionPanePreview() {
+    ActionSection(
+        state = actionsState(
+            actionPanes = listOf(
+                actionPane(
+                    actions = listOf(
+                        actionModel(id = 0L),
+                        actionModel(id = 1L),
+                    )
+                )
+            )
+        ),
+        isCollapsed = false,
+        onToggleCollapse = {},
+    )
+}
+
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ActionSection(
@@ -67,39 +91,33 @@ fun ActionSection(
         expandedContent = {
             HorizontalPager(
                 count = actionPanes.size,
-                modifier = modifier,
+                verticalAlignment = Alignment.Top,
+                modifier = modifier
+                    .fillMaxSize(),
             ) { paneIndex ->
                 val actionPane = actionPanes[paneIndex]
-                ActionPane(
-                    pane = actionPane,
-                    modifier = modifier,
-                    onActionClicked = onActionClicked,
-                )
+                Column(
+                    verticalArrangement = Arrangement.Top,
+                    modifier = modifier.fillMaxSize(),
+                ) {
+                    LazyVerticalGrid(
+                        cells = GridCells.Fixed(count = 2),
+                        modifier = modifier,
+                        contentPadding = PaddingValues(2.dp)
+                    ) {
+                        items(actionPane.actions) { action ->
+                            Action(
+                                action = action,
+                                onClicked = { onActionClicked(action.id) },
+                                modifier = modifier.padding(2.dp), //TODO: Add item spacing after comopse update
+                            )
+                        }
+                    }
+                }
             }
         },
         onToggleCollapse = onToggleCollapse,
     )
-}
-
-@Composable
-fun ActionPane(
-    pane: ActionPane,
-    onActionClicked: (actionId: Long) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    LazyVerticalGrid(
-        cells = GridCells.Fixed(count = 2),
-        modifier = modifier,
-        contentPadding = PaddingValues(2.dp)
-    ) {
-        items(pane.actions) { action ->
-            Action(
-                action = action,
-                onClicked = { onActionClicked(action.id) },
-                modifier = modifier.padding(2.dp), //TODO: Add item spacing after comopse update
-            )
-        }
-    }
 }
 
 //TODO: Make items the same height
