@@ -24,9 +24,9 @@ import com.daniil.shevtsov.idle.feature.resource.domain.resourceChange
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
+import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
 import com.daniil.shevtsov.idle.util.balanceConfig
 import com.daniil.shevtsov.idle.util.resource
-import com.daniil.shevtsov.idle.util.upgrade
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test
 

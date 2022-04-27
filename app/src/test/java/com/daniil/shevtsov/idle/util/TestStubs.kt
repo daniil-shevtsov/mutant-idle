@@ -7,10 +7,6 @@ import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
-import com.daniil.shevtsov.idle.feature.time.domain.Time
-import com.daniil.shevtsov.idle.feature.upgrade.domain.Price
-import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
-import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 
 fun balanceConfig(
     tickRateMillis: Long = 1L,
@@ -28,26 +24,6 @@ fun player(
 ) = Player(
     job = job,
     tags = tags
-)
-
-fun time(value: Long = 0L) = Time(value = value)
-
-fun upgrade(
-    id: Long = 0L,
-    title: String = "",
-    subtitle: String = "",
-    price: Double = 0.0,
-    status: UpgradeStatus = UpgradeStatus.NotBought,
-) = Upgrade(
-    id = id,
-    title = title,
-    subtitle = subtitle,
-    price = price(value = price),
-    status = status,
-)
-
-fun price(value: Double = 0.0) = Price(
-    value = value,
 )
 
 fun resource(
