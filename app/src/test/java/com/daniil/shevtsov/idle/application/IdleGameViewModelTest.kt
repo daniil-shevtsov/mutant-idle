@@ -6,6 +6,8 @@ import assertk.assertions.index
 import assertk.assertions.isEqualTo
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.MainCoroutineExtension
+import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
+import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
@@ -31,6 +33,15 @@ internal class IdleGameViewModelTest {
     private val resourcesStorage = ResourcesStorage(
         initialResources = listOf(
             Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0)
+        )
+    )
+
+    private val imperativeShell = MainImperativeShell(
+        initialState = mainFunctionalCoreState(
+            balanceConfig = balanceConfig,
+            resources = listOf(
+                Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0)
+            ),
         )
     )
 
@@ -94,5 +105,6 @@ internal class IdleGameViewModelTest {
         balanceConfig = balanceConfig,
         timeStorage = timeStorage,
         resourcesStorage = resourcesStorage,
+        imperativeShell = imperativeShell,
     )
 }
