@@ -33,12 +33,7 @@ class IdleGameApplication : Application() {
             .create(
                 appContext = applicationContext,
                 balanceConfig = createBalanceConfig(),
-                initialUpgrades = createInitialUpgrades(),
-                initialActions = createAllActions(),
                 initialResources = createInitialResources(),
-                initialRatios = createInitialRatios(),
-                initialPlayer = createInitialPlayer(),
-                initialJobs = createInitialJobs(),
                 initialMainState = MainFunctionalCoreState(
                     balanceConfig = createBalanceConfig(),
                     resources = createInitialResources(),
