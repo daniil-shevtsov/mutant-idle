@@ -17,9 +17,8 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.createResources
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
-import com.daniil.shevtsov.idle.feature.upgrade.domain.Price
-import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
+import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
 import org.koin.core.Koin
 import timber.log.Timber
 import javax.inject.Inject
@@ -77,25 +76,25 @@ class IdleGameApplication : Application() {
     )
 
     private fun createInitialUpgrades() = listOf(
-        Upgrade(
+        upgrade(
             id = 0L,
             title = "Hand-sword",
             subtitle = "Transform your hand into a sharp blade",
-            price = Price(value = 50.0),
+            price = 50.0,
             status = UpgradeStatus.NotBought,
         ),
-        Upgrade(
+        upgrade(
             id = 1L,
             title = "Fangs",
             subtitle = "Grow very sharp fangs. They are almost useless without stronger jaws though",
-            price = Price(value = 25.0),
+            price = 25.0,
             status = UpgradeStatus.NotBought,
         ),
-        Upgrade(
+        upgrade(
             id = 2L,
             title = "Iron jaws",
             subtitle = "Your jaws become stronger than any shark",
-            price = Price(value = 10.0),
+            price = 10.0,
             status = UpgradeStatus.NotBought,
         ),
     )
