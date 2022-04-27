@@ -3,7 +3,6 @@ package com.daniil.shevtsov.idle.feature.main.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.daniil.shevtsov.idle.feature.action.domain.Action
-import com.daniil.shevtsov.idle.feature.action.domain.ActionType
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
@@ -24,6 +23,8 @@ import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMapper
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.hasRequiredTag
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModelMapper
@@ -155,19 +156,14 @@ class MainViewModel @Inject constructor(
         return ActionsState(
             actionPanes = listOf(
                 ActionPane(
-                    actions = availableActions.filter { it.actionType == ActionType.Human }
-                        .prepareActionForDisplay(resources = resources)
+                    actions = availableActions.prepareActionForDisplay(resources = resources)
                 ),
-                ActionPane(
-                    actions = availableActions.filter { it.actionType == ActionType.Mutant }
-                        .prepareActionForDisplay(resources = resources)
-                )
             ),
         )
     }
 
     private fun List<Action>.prepareActionForDisplay(resources: List<Resource>) =
-        map { it.toModel(resources) }.sortedByDescending { it.isEnabled }
+        map { it.toModel(resources) }.sortedByDescending(ActionModel::isEnabled)
 
     private fun getNameForRatio(ratio: Ratio) = when (ratio.key) {
         RatioKey.Mutanity -> getMutanityNameForRatio(ratio.value)
@@ -216,9 +212,9 @@ class MainViewModel @Inject constructor(
             id = id,
             title = title,
             subtitle = subtitle,
-            icon = when (actionType) {
-                ActionType.Human -> ActionIcon.Human
-                ActionType.Mutant -> ActionIcon.Mutant
+            icon = when {
+                tags.hasRequiredTag(Tags.HumanAppearance) -> ActionIcon.Human
+                else -> ActionIcon.Mutant
             },
             isEnabled = isActive,
         )

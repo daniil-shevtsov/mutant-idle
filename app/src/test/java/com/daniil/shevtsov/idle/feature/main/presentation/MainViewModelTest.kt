@@ -104,13 +104,7 @@ internal class MainViewModelTest {
                         .index(0)
                         .prop(ActionPane::actions)
                         .extracting(ActionModel::title)
-                        .containsExactly("human action")
-                    prop(MainViewState.Success::actionState)
-                        .prop(ActionsState::actionPanes)
-                        .index(1)
-                        .prop(ActionPane::actions)
-                        .extracting(ActionModel::title)
-                        .containsExactly("mutant action")
+                        .containsExactly("human action","mutant action")
                     prop(MainViewState.Success::sectionCollapse)
                         .containsOnly(
                             SectionKey.Resources to false,
