@@ -21,8 +21,6 @@ import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
-import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
-import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
@@ -42,13 +40,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(MainCoroutineExtension::class)
 internal class MainViewModelTest {
 
-    private val resourcesStorage = ResourcesStorage(
-        initialResources = listOf(
-            Resource(key = ResourceKey.Blood, name = "Blood", value = 0.0),
-            Resource(key = ResourceKey.Money, name = "Money", value = 0.0),
-        )
-    )
-
     private val imperativeShell = MainImperativeShell(initialState = mainFunctionalCoreState())
 
     private val viewModel: MainViewModel by lazy { createViewModel() }
@@ -58,10 +49,10 @@ internal class MainViewModelTest {
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
                 upgrades = listOf(
-                    upgrade(id = 0L),
-                    upgrade(id = 1L, price = 25.0),
+                    upgrade(id = 0L, price = 32.0),
+                    upgrade(id = 1L, price = 35.0),
                     upgrade(id = 2L, price = 150.0),
-                    upgrade(id = 3L, price = 10.0),
+                    upgrade(id = 3L, price = 30.0),
                 ),
                 ratios = listOf(
                     ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.0),
@@ -72,8 +63,8 @@ internal class MainViewModelTest {
                     action(id = 1L, title = "mutant action"),
                 ),
                 resources = listOf(
-                    resource(key = ResourceKey.Blood, name = "Blood", value = 0.0),
-                    resource(key = ResourceKey.Money, name = "Money", value = 0.0),
+                    resource(key = ResourceKey.Blood, name = "Blood", value = 10.0),
+                    resource(key = ResourceKey.Money, name = "Money", value = 20.0),
                 ),
                 sections = listOf(
                     sectionState(key = SectionKey.Resources, isCollapsed = false),
@@ -89,8 +80,8 @@ internal class MainViewModelTest {
             assertThat(state)
                 .isInstanceOf(MainViewState.Success::class)
                 .all {
-                    extractingResources()
-                        .containsExactly("Blood" to "0", "Money" to "0")
+                    extractingResourceNameAndValues()
+                        .containsExactly("Blood" to "10", "Money" to "20")
                     extractingRatios()
                         .containsExactly("Human" to 0.0, "Unknown" to 0.0)
                     prop(MainViewState.Success::shop)
@@ -111,6 +102,26 @@ internal class MainViewModelTest {
                             SectionKey.Upgrades to false,
                         )
                 }
+        }
+    }
+
+    @Test
+    fun `should only show resources that you have`() = runBlockingTest {
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                resources = listOf(
+                    resource(key = ResourceKey.Blood, name = "Blood", value = 10.0),
+                    resource(key = ResourceKey.Money, name = "Money", value = 20.0),
+                    resource(key = ResourceKey.Prisoner, name = "Prisoners", value = 0.0),
+                )
+            )
+        )
+
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .extractingResources()
+                .extracting(ResourceModel::name)
+                .containsExactly("Blood", "Money")
         }
     }
 
@@ -347,13 +358,13 @@ internal class MainViewModelTest {
 
             viewModel.state.test {
                 assertThat(expectMostRecentItem())
-                    .extractingResources()
+                    .extractingResourceNameAndValues()
                     .containsExactly("Blood" to "1000", "Money" to "500")
 
                 viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
 
                 assertThat(expectMostRecentItem())
-                    .extractingResources()
+                    .extractingResourceNameAndValues()
                     .containsExactly("Blood" to "1050", "Money" to "470")
             }
         }
@@ -770,6 +781,9 @@ internal class MainViewModelTest {
     private fun Assert<MainViewState>.extractingResources() =
         isInstanceOf(MainViewState.Success::class)
             .prop(MainViewState.Success::resources)
+
+    private fun Assert<MainViewState>.extractingResourceNameAndValues() =
+        extractingResources()
             .extracting(ResourceModel::name, ResourceModel::value)
 
     private fun Assert<MainViewState>.extractingBlood() =

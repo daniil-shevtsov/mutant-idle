@@ -15,8 +15,7 @@ import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.job.domain.Jobs
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
-import com.daniil.shevtsov.idle.feature.resource.domain.Resource
-import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
+import com.daniil.shevtsov.idle.feature.resource.domain.createResources
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Price
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
@@ -33,10 +32,10 @@ class IdleGameApplication : Application() {
             .create(
                 appContext = applicationContext,
                 balanceConfig = createBalanceConfig(),
-                initialResources = createInitialResources(),
+                initialResources = createResources(),
                 initialMainState = MainFunctionalCoreState(
                     balanceConfig = createBalanceConfig(),
-                    resources = createInitialResources(),
+                    resources = createResources(),
                     ratios = createInitialRatios(),
                     sections = createInitialSectionState(),
                     drawerTabs = createInitialDrawerTabs(),
@@ -100,14 +99,6 @@ class IdleGameApplication : Application() {
             status = UpgradeStatus.NotBought,
         ),
     )
-
-    private fun createInitialResources() = ResourceKey.values().map { key ->
-        Resource(
-            key = key,
-            name = key.name,
-            value = 0.0,
-        )
-    }
 
     private fun createInitialRatios() = listOf(
         Ratio(key = RatioKey.Mutanity, title = "", value = 0.0),
