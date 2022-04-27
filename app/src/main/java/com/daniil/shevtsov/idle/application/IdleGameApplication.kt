@@ -17,8 +17,7 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.createResources
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
-import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
-import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
+import com.daniil.shevtsov.idle.feature.upgrade.domain.createUpgrades
 import org.koin.core.Koin
 import timber.log.Timber
 import javax.inject.Inject
@@ -38,7 +37,7 @@ class IdleGameApplication : Application() {
                     ratios = createInitialRatios(),
                     sections = createInitialSectionState(),
                     drawerTabs = createInitialDrawerTabs(),
-                    upgrades = createInitialUpgrades(),
+                    upgrades = createUpgrades(),
                     actions = createAllActions(),
                     availableJobs = createInitialJobs(),
                     player = createInitialPlayer(),
@@ -73,30 +72,6 @@ class IdleGameApplication : Application() {
         tickRateMillis = 1L,
         resourcePerMillisecond = 0.002,
         resourceSpentForFullMutant = 100.0,
-    )
-
-    private fun createInitialUpgrades() = listOf(
-        upgrade(
-            id = 0L,
-            title = "Hand-sword",
-            subtitle = "Transform your hand into a sharp blade",
-            price = 50.0,
-            status = UpgradeStatus.NotBought,
-        ),
-        upgrade(
-            id = 1L,
-            title = "Fangs",
-            subtitle = "Grow very sharp fangs. They are almost useless without stronger jaws though",
-            price = 25.0,
-            status = UpgradeStatus.NotBought,
-        ),
-        upgrade(
-            id = 2L,
-            title = "Iron jaws",
-            subtitle = "Your jaws become stronger than any shark",
-            price = 10.0,
-            status = UpgradeStatus.NotBought,
-        ),
     )
 
     private fun createInitialRatios() = listOf(

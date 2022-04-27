@@ -13,6 +13,22 @@ object Tags {
     val HumanAppearance = Tag(name = "Human Appearance")
     val Employed = Tag(name = "Employed")
 
+    object Body {
+        val HandSword = Tag(name = "Hand Sword")
+        val Fangs = Tag(name = "Fangs")
+        val IronJaws = Tag(name = "Iron Jaws")
+        val Darts = Tag("Darts")
+        val LiquidForm = Tag("Liquid Form")
+    }
+
+    object Abilities {
+        val Invisibility = Tag(name = "Invisibility")
+        val Flight = Tag(name = "Flight")
+        val AnimalForm = Tag(name = "Animal Form")
+        val TransferHost = Tag(name = "Transfer Host")
+    }
+
+
     val Surgeon = Tag(name = "Surgeon")
     val FreshCorpseAccess = Tag(name = "Fresh Corpse Access")
     val SolitaryJob = Tag(name = "Solitary Job")
