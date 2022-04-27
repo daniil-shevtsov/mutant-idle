@@ -10,7 +10,6 @@ fun createAllActions() = listOf(
         id = 0L,
         title = "Work",
         subtitle = "The sun is high",
-        actionType = ActionType.Human,
         resourceChanges = mapOf(
             ResourceKey.Money to 25.0
         ),
@@ -23,7 +22,6 @@ fun createAllActions() = listOf(
         id = 3L,
         title = "Buy Groceries",
         subtitle = "It's a short walk",
-        actionType = ActionType.Human,
         resourceChanges = mapOf(
             ResourceKey.Money to -15.0,
             ResourceKey.HumanFood to 1.0,
@@ -36,7 +34,6 @@ fun createAllActions() = listOf(
         id = 8L,
         title = "Capture a person",
         subtitle = "I think I can do it if I grow enough",
-        actionType = ActionType.Mutant,
         tags = mapOf(
             Tags.PersonCapturer to TagRelation.Required,
         ),
@@ -52,7 +49,6 @@ fun createAllActions() = listOf(
         id = 9L,
         title = "Eat captured person",
         subtitle = "What to do about the mess",
-        actionType = ActionType.Mutant,
         resourceChanges = mapOf(
             ResourceKey.Blood to 25.0,
             ResourceKey.Prisoner to -1.0,
@@ -69,7 +65,6 @@ fun createAllActions() = listOf(
         id = 10L,
         title = "Eat human food",
         subtitle = "It's not enough",
-        actionType = ActionType.Human,
         resourceChanges = mapOf(
             ResourceKey.Blood to 2.0,
             ResourceKey.HumanFood to -1.0,
@@ -79,7 +74,6 @@ fun createAllActions() = listOf(
         id = 11L,
         title = "Bury remains",
         subtitle = "You better hope there is space",
-        actionType = ActionType.Human,
         resourceChanges = mapOf(
             ResourceKey.Remains to -1.0,
         ),
@@ -94,7 +88,6 @@ fun createAllActions() = listOf(
         id = 12L,
         title = "Steal organs from corpse",
         subtitle = "They won't need it",
-        actionType = ActionType.Human,
         resourceChanges = mapOf(
             ResourceKey.Organs to 1.0,
         ),
@@ -109,7 +102,6 @@ fun createAllActions() = listOf(
         id = 13L,
         title = "Burn remains",
         subtitle = "It won't leave a trace",
-        actionType = ActionType.Human,
         resourceChanges = mapOf(
             ResourceKey.Remains to -1.0,
         ),

@@ -6,7 +6,6 @@ import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.MainCoroutineExtension
-import com.daniil.shevtsov.idle.feature.action.domain.ActionType
 import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
@@ -69,8 +68,8 @@ internal class MainViewModelTest {
                     ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
                 ),
                 actions = listOf(
-                    action(id = 0L, title = "human action", actionType = ActionType.Human),
-                    action(id = 1L, title = "mutant action", actionType = ActionType.Mutant),
+                    action(id = 0L, title = "human action"),
+                    action(id = 1L, title = "mutant action"),
                 ),
                 resources = listOf(
                     resource(key = ResourceKey.Blood, name = "Blood", value = 0.0),
@@ -104,7 +103,7 @@ internal class MainViewModelTest {
                         .index(0)
                         .prop(ActionPane::actions)
                         .extracting(ActionModel::title)
-                        .containsExactly("human action","mutant action")
+                        .containsExactly("human action", "mutant action")
                     prop(MainViewState.Success::sectionCollapse)
                         .containsOnly(
                             SectionKey.Resources to false,
@@ -451,14 +450,12 @@ internal class MainViewModelTest {
                         resourceChanges = mapOf(
                             ResourceKey.Money to -30.0,
                         ),
-                        actionType = ActionType.Human,
                     ),
                     action(
                         id = 2L,
                         resourceChanges = mapOf(
                             ResourceKey.Money to -50.0,
                         ),
-                        actionType = ActionType.Human,
                     )
                 ),
                 resources = listOf(
@@ -488,21 +485,18 @@ internal class MainViewModelTest {
                         resourceChanges = mapOf(
                             ResourceKey.Money to -60.0,
                         ),
-                        actionType = ActionType.Human,
                     ),
                     action(
                         id = 2L,
                         resourceChanges = mapOf(
                             ResourceKey.Money to -10.0,
                         ),
-                        actionType = ActionType.Human,
                     ),
                     action(
                         id = 3L,
                         resourceChanges = mapOf(
                             ResourceKey.Money to -50.0,
                         ),
-                        actionType = ActionType.Human,
                     ),
                 ),
                 resources = listOf(
