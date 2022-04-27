@@ -2,6 +2,28 @@ package com.daniil.shevtsov.idle.feature.action.domain
 
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
+import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
+
+fun action(
+    id: Long,
+    title: String,
+    subtitle: String,
+    actionType: ActionType,
+    resourceChanges: Map<ResourceKey, Double>,
+    ratioChanges: Map<RatioKey, Float> = mapOf(),
+    tags: Map<Tag, TagRelation> = mapOf(),
+) = Action(
+    id = id,
+    title = title,
+    subtitle = subtitle,
+    actionType = actionType,
+    resourceChanges = resourceChanges,
+    ratioChanges = ratioChanges,
+    tags = tags,
+)
 
 fun actionModel(
     id: Long = 0L,

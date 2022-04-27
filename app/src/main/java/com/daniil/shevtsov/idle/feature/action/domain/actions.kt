@@ -6,7 +6,7 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 
 fun createAllActions() = listOf(
-    Action(
+    action(
         id = 0L,
         title = "Work",
         subtitle = "The sun is high",
@@ -19,7 +19,7 @@ fun createAllActions() = listOf(
             Tags.Employed to TagRelation.Required,
         ),
     ),
-    Action(
+    action(
         id = 3L,
         title = "Buy Groceries",
         subtitle = "It's a short walk",
@@ -32,7 +32,7 @@ fun createAllActions() = listOf(
             Tags.HumanAppearance to TagRelation.Required,
         ),
     ),
-    Action(
+    action(
         id = 8L,
         title = "Capture a person",
         subtitle = "I think I can do it if I grow enough",
@@ -48,7 +48,7 @@ fun createAllActions() = listOf(
             RatioKey.Suspicion to 0.1f,
         )
     ),
-    Action(
+    action(
         id = 9L,
         title = "Eat captured person",
         subtitle = "What to do about the mess",
@@ -65,7 +65,7 @@ fun createAllActions() = listOf(
             Tags.Devourer to TagRelation.Required,
         ),
     ),
-    Action(
+    action(
         id = 10L,
         title = "Eat human food",
         subtitle = "It's not enough",
@@ -75,7 +75,7 @@ fun createAllActions() = listOf(
             ResourceKey.HumanFood to -1.0,
         )
     ),
-    Action(
+    action(
         id = 11L,
         title = "Bury remains",
         subtitle = "You better hope there is space",
@@ -90,7 +90,7 @@ fun createAllActions() = listOf(
             RatioKey.Suspicion to -0.05f,
         )
     ),
-    Action(
+    action(
         id = 12L,
         title = "Steal organs from corpse",
         subtitle = "They won't need it",
@@ -105,7 +105,7 @@ fun createAllActions() = listOf(
             RatioKey.Suspicion to 0.1f,
         )
     ),
-    Action(
+    action(
         id = 13L,
         title = "Burn remains",
         subtitle = "It won't leave a trace",
