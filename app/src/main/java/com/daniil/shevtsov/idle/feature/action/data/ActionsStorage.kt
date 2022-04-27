@@ -33,4 +33,8 @@ class ActionsStorage @Inject constructor(
         actions.value = modifiedMap
     }
 
+    fun upgradeAll(newActions: List<Action>) {
+        actions.value = newActions.associateBy { it.id }
+    }
+
 }

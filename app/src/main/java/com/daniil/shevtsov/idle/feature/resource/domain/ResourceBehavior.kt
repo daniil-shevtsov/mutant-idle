@@ -14,8 +14,6 @@ object ResourceBehavior {
         return resourcesStorage.getByKey(key = resourceKey)!!
     }
 
-    fun observeAllResources(resourcesStorage: ResourcesStorage) = resourcesStorage.observeAll()
-
     fun observeResource(
         resourcesStorage: ResourcesStorage,
         key: ResourceKey,
@@ -45,18 +43,6 @@ object ResourceBehavior {
             resourcesStorage = resourcesStorage,
             resourceKey = resourceKey,
             amount = -amount,
-        )
-    }
-
-    fun applyResourceChange(
-        amount: Double,
-        resourceKey: ResourceKey,
-        resourcesStorage: ResourcesStorage,
-    ) {
-        applyChange(
-            resourcesStorage = resourcesStorage,
-            resourceKey = resourceKey,
-            amount = amount,
         )
     }
 

@@ -4,6 +4,7 @@ import com.daniil.shevtsov.idle.core.data.MultipleStorage
 import com.daniil.shevtsov.idle.core.di.AppScope
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
+import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -18,6 +19,10 @@ class RatiosStorage @Inject constructor(
     )
 
     fun observeAll(): Flow<List<Ratio>> = multipleStorage.observeAll()
+
+    fun upgradeAll(newRatios: List<Ratio>) {
+        multipleStorage.updateAll(newValues = newRatios)
+    }
 
     fun getByKey(key: RatioKey): Ratio? = multipleStorage.getByKey(key = key)
 

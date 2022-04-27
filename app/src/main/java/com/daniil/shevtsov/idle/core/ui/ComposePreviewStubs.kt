@@ -4,8 +4,12 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
+import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
+import com.daniil.shevtsov.idle.feature.main.presentation.DrawerContentViewState
+import com.daniil.shevtsov.idle.feature.main.presentation.DrawerViewState
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
+import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
@@ -23,7 +27,13 @@ internal fun viewStatePreviewStub() = MainViewState.Success(
         SectionKey.Resources to false,
         SectionKey.Actions to false,
         SectionKey.Upgrades to false,
-    )
+    ),
+    drawerState = DrawerViewState(
+        tabSelectorState = emptyList(),
+        drawerContent = DrawerContentViewState.Debug(
+            state = debugViewStateStub()
+        )
+    ),
 )
 
 internal fun resourcePreviewStub() = ResourceModel(
@@ -58,8 +68,10 @@ internal fun suspicionStub() = SuspicionModel(
 )
 
 internal fun actionStatePreviewStub() = ActionsState(
-    humanActionPane = actionPanePreviewStub(icon = ActionIcon.Human),
-    mutantActionPane = actionPanePreviewStub(icon = ActionIcon.Mutant),
+    actionPanes = listOf(
+        actionPanePreviewStub(icon = ActionIcon.Human),
+        actionPanePreviewStub(icon = ActionIcon.Mutant),
+    ),
 )
 
 internal fun actionPanePreviewStub(
@@ -126,4 +138,10 @@ internal fun upgradeListPreviewStub() = listOf(
         title = "Iron jaws",
         subtitle = "Your jaws become stronger than any shark"
     ),
+)
+
+internal fun debugViewStateStub(
+    jobSelection: List<PlayerJobModel> = emptyList(),
+) = DebugViewState(
+    jobSelection = jobSelection,
 )
