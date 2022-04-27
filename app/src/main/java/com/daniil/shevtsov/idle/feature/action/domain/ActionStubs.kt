@@ -8,11 +8,11 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 
 fun action(
-    id: Long,
-    title: String,
-    subtitle: String,
-    actionType: ActionType,
-    resourceChanges: Map<ResourceKey, Double>,
+    id: Long = 0L,
+    title: String = "",
+    subtitle: String = "",
+    actionType: ActionType = ActionType.Human,
+    resourceChanges: Map<ResourceKey, Double> = mapOf(),
     ratioChanges: Map<RatioKey, Float> = mapOf(),
     tags: Map<Tag, TagRelation> = mapOf(),
 ) = Action(

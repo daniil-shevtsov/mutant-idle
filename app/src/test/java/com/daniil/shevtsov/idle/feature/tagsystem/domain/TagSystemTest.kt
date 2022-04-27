@@ -1,11 +1,9 @@
 package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
 import assertk.assertThat
-import assertk.assertions.isEqualTo
 import assertk.assertions.isFalse
 import assertk.assertions.isTrue
-import com.daniil.shevtsov.idle.util.action
-import org.junit.jupiter.api.Assertions.*
+import com.daniil.shevtsov.idle.feature.action.domain.action
 import org.junit.jupiter.api.Test
 
 internal class TagSystemTest {

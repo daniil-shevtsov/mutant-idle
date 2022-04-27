@@ -7,6 +7,7 @@ import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.MainCoroutineExtension
 import com.daniil.shevtsov.idle.feature.action.domain.ActionType
+import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
@@ -32,7 +33,6 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
-import com.daniil.shevtsov.idle.util.action
 import com.daniil.shevtsov.idle.util.balanceConfig
 import com.daniil.shevtsov.idle.util.player
 import com.daniil.shevtsov.idle.util.upgrade

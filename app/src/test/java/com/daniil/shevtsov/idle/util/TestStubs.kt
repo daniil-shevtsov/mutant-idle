@@ -1,16 +1,12 @@
 package com.daniil.shevtsov.idle.util
 
 import com.daniil.shevtsov.idle.core.BalanceConfig
-import com.daniil.shevtsov.idle.feature.action.domain.Action
-import com.daniil.shevtsov.idle.feature.action.domain.ActionType
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
-import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.time.domain.Time
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Price
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
@@ -48,24 +44,6 @@ fun upgrade(
     subtitle = subtitle,
     price = price(value = price),
     status = status,
-)
-
-fun action(
-    id: Long = 0L,
-    title: String = "",
-    subtitle: String = "",
-    actionType: ActionType = ActionType.Human,
-    resourceChanges: Map<ResourceKey, Double> = mapOf(),
-    ratioChanges: Map<RatioKey, Float> = mapOf(),
-    tags: Map<Tag, TagRelation> = mapOf(),
-) = Action(
-    id = id,
-    title = title,
-    subtitle = subtitle,
-    actionType = actionType,
-    resourceChanges = resourceChanges,
-    ratioChanges = ratioChanges,
-    tags = tags,
 )
 
 fun price(value: Double = 0.0) = Price(

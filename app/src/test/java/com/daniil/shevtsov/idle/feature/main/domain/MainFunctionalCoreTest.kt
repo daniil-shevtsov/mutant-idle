@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.feature.main.domain
 import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
+import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
@@ -23,7 +24,6 @@ import com.daniil.shevtsov.idle.feature.resource.domain.resourceChange
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
-import com.daniil.shevtsov.idle.util.action
 import com.daniil.shevtsov.idle.util.balanceConfig
 import com.daniil.shevtsov.idle.util.resource
 import com.daniil.shevtsov.idle.util.upgrade
