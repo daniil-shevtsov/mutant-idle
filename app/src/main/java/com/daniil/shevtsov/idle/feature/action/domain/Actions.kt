@@ -106,6 +106,7 @@ fun createAllActions() = listOf(
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
+                Tags.Species.Devourer,
                 Tags.FreshCorpseAccess,
             )
         ),
@@ -136,6 +137,9 @@ fun createAllActions() = listOf(
             ),
             TagRelation.Provides to listOf(
                 Tags.State.Invisible
+            ),
+            TagRelation.RequiresNone to listOf( //TODO: Maybe this should be default behavior for providing tags?
+                Tags.State.Invisible,
             )
         ),
     ),
@@ -148,7 +152,7 @@ fun createAllActions() = listOf(
                 Tags.Abilities.Invisibility,
                 Tags.State.Invisible,
             ),
-            TagRelation.Removes to listOf(
+            TagRelation.Removes to listOf( //TODO: I sense inconsistency in this one
                 Tags.State.Invisible
             )
         ),
