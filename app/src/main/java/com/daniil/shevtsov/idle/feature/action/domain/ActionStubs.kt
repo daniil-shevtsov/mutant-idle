@@ -20,7 +20,7 @@ fun action(
     subtitle = subtitle,
     resourceChanges = resourceChanges,
     ratioChanges = ratioChanges,
-    tags = tags,
+    tags = tags.toList().groupBy { it.second }.mapValues { entry -> entry.value.map { it.first } },
 )
 
 fun actionModel(

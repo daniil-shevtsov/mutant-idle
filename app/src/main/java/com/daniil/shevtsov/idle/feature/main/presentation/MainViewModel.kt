@@ -25,7 +25,6 @@ import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMappe
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.hasRequiredTag
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModelMapper
@@ -166,8 +165,7 @@ class MainViewModel @Inject constructor(
     ): ActionsState {
         val availableActions = actions
             .filter { action ->
-                val requiredTags = action.tags
-                    .filter { (_, tagRelation) -> tagRelation == TagRelation.RequiredAll }.keys
+                val requiredTags = action.tags[TagRelation.RequiredAll].orEmpty()
                 player.generalTags.containsAll(requiredTags)
             }
 
@@ -231,7 +229,7 @@ class MainViewModel @Inject constructor(
             title = title,
             subtitle = subtitle,
             icon = when {
-                tags.hasRequiredTag(Tags.HumanAppearance) -> ActionIcon.Human
+              tags[TagRelation.RequiredAll].orEmpty().contains(Tags.HumanAppearance) -> ActionIcon.Human
                 else -> ActionIcon.Mutant
             },
             isEnabled = isActive,

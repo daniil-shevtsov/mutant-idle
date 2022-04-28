@@ -214,6 +214,7 @@ class MainFunctionalCoreTest {
 
     @Test
     fun `should update everything correctly when action clicked`() = runBlockingTest {
+        val providedTag = tag(name = "lol")
         val action = action(
             id = 1L,
             resourceChanges = mapOf(
@@ -223,7 +224,7 @@ class MainFunctionalCoreTest {
             ratioChanges = mapOf(
                 ratioChange(key = RatioKey.Mutanity, change = 2.0f),
                 ratioChange(key = RatioKey.Suspicion, change = -3.0f),
-            )
+            ),
         )
 
         val initialState = mainFunctionalCoreState(
