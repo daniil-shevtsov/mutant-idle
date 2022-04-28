@@ -23,6 +23,7 @@ import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMapper
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
@@ -91,11 +92,10 @@ class MainViewModel @Inject constructor(
             actionState = createActionState(state.actions, state.resources, state.player),
             shop = state.upgrades
                 .filter { upgrade ->
-                    val hasAllRequired = upgrade.tags[TagRelation.RequiredAll].orEmpty().all { requiredTag -> requiredTag in state.player.tags }
-                    val requiredAny = upgrade.tags[TagRelation.RequiredAny]
-                    val hasAnyRequired = requiredAny == null || requiredAny.any { requiredTag -> requiredTag in state.player.tags }
-
-                    hasAllRequired && hasAnyRequired
+                    satisfiesAllTagsRelations(
+                        tagRelations = upgrade.tags,
+                        tags = state.player.tags
+                    )
                 }
                 .map { upgrade ->
                     UpgradeModelMapper.map(
@@ -158,6 +158,20 @@ class MainViewModel @Inject constructor(
         )
     }
 
+    private fun satisfiesAllTagsRelations(
+        tagRelations: Map<TagRelation, List<Tag>>,
+        tags: List<Tag>,
+    ): Boolean {
+        val hasAllRequired = tagRelations[TagRelation.RequiredAll].orEmpty()
+            .all { requiredTag -> requiredTag in tags }
+        val requiredAny = tagRelations[TagRelation.RequiredAny]
+        val hasAnyRequired = requiredAny == null || requiredAny.any { requiredTag -> requiredTag in tags }
+        val requiredNone = tagRelations[TagRelation.RequiresNone]
+        val hasNone = requiredNone == null || requiredNone.none { forbiddenTag -> forbiddenTag in tags }
+
+        return hasAllRequired && hasAnyRequired && hasNone
+    }
+
     private fun createActionState(
         actions: List<Action>,
         resources: List<Resource>,
@@ -165,8 +179,10 @@ class MainViewModel @Inject constructor(
     ): ActionsState {
         val availableActions = actions
             .filter { action ->
-                val requiredTags = action.tags[TagRelation.RequiredAll].orEmpty()
-                player.generalTags.containsAll(requiredTags)
+                satisfiesAllTagsRelations(
+                    tagRelations = action.tags,
+                    tags = player.tags,
+                )
             }
 
         return ActionsState(

@@ -105,12 +105,15 @@ fun handleActionClicked(
         }
     }
 
+    val newTags =
+        state.player.generalTags + selectedAction.tags[TagRelation.Provides].orEmpty() - selectedAction.tags[TagRelation.Removes].orEmpty()
+
     return if (!hasInvalidChanges) {
         state.copy(
             ratios = updatedRatios,
             resources = updatedResources,
             player = state.player.copy(
-                generalTags = state.player.generalTags + selectedAction.tags[TagRelation.Provides].orEmpty()
+                generalTags = newTags
             )
         )
     } else {

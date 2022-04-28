@@ -79,9 +79,11 @@ class MainFunctionalCoreTest {
             resources = listOf(resource(key = ResourceKey.Blood, value = 1.0)),
             ratios = listOf(ratio(key = RatioKey.Mutanity)),
             upgrades = listOf(
-                upgrade(id = 0L, tags = mapOf(
-                    TagRelation.Provides to listOf(providedTag)
-                ))
+                upgrade(
+                    id = 0L, tags = mapOf(
+                        TagRelation.Provides to listOf(providedTag)
+                    )
+                )
             ),
         )
 
@@ -91,11 +93,9 @@ class MainFunctionalCoreTest {
         )
 
         assertThat(newState)
-            .all {
-                prop(MainFunctionalCoreState::player)
-                    .prop(Player::tags)
-                    .containsExactly(providedTag)
-            }
+            .prop(MainFunctionalCoreState::player)
+            .prop(Player::tags)
+            .containsExactly(providedTag)
     }
 
     @Test
@@ -265,6 +265,45 @@ class MainFunctionalCoreTest {
                     .prop(Player::tags)
                     .containsExactly(providedTag)
             }
+    }
+
+    @Test
+    fun `should add tags provided by clicked action`() {
+        val providedTag = tag(name = "lol")
+        val action = action(
+            id = 1L,
+            tags = mapOf(TagRelation.Provides to listOf(providedTag)),
+        )
+        val newState = mainFunctionalCore(
+            state = mainFunctionalCoreState(actions = listOf(action)),
+            viewAction = MainViewAction.ActionClicked(id = action.id),
+        )
+
+        assertThat(newState)
+            .prop(MainFunctionalCoreState::player)
+            .prop(Player::tags)
+            .containsExactly(providedTag)
+    }
+
+    @Test
+    fun `should remove tags removed by clicked action`() {
+        val tagToRemove = tag(name = "lol")
+        val action = action(
+            id = 1L,
+            tags = mapOf(TagRelation.Removes to listOf(tagToRemove)),
+        )
+        val newState = mainFunctionalCore(
+            state = mainFunctionalCoreState(
+                player = player(generalTags = listOf(tagToRemove)),
+                actions = listOf(action),
+            ),
+            viewAction = MainViewAction.ActionClicked(id = action.id),
+        )
+
+        assertThat(newState)
+            .prop(MainFunctionalCoreState::player)
+            .prop(Player::tags)
+            .containsNone(tagToRemove)
     }
 
     @Test

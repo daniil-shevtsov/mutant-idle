@@ -813,6 +813,124 @@ internal class MainViewModelTest {
         }
     }
 
+    @Test
+    fun `should handle requiredAny tag relation for actions`() = runBlockingTest {
+        val availableTag = tag(name = "available")
+        val oneTagOption = tag(name = "required tag option 1")
+        val anotherTagOption = tag(name = "required tag option 2")
+        val notAvailableTag = tag(name = "not available tag")
+
+        val availableAction = action(
+            id = 1L,
+            tags = mapOf(
+                TagRelation.RequiredAll to listOf(availableTag),
+                TagRelation.RequiredAny to listOf(oneTagOption, anotherTagOption)
+            )
+        )
+        val notAvailableAction = action(
+            id = 2L,
+            tags = mapOf(
+                TagRelation.RequiredAll to listOf(notAvailableTag),
+            )
+        )
+
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                actions = listOf(
+                    availableAction,
+                    notAvailableAction,
+                ),
+                player = player(
+                    generalTags = listOf(
+                        availableTag,
+                        oneTagOption,
+                    )
+                ),
+            )
+        )
+
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .isInstanceOf(MainViewState.Success::class)
+                .prop(MainViewState.Success::actionState)
+                .prop(ActionsState::actionPanes)
+                .index(0)
+                .prop(ActionPane::actions)
+                .extracting(ActionModel::id)
+                .containsExactly(availableAction.id)
+        }
+
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                actions = listOf(
+                    availableAction,
+                    notAvailableAction,
+                ),
+                player = player(
+                    generalTags = listOf(
+                        availableTag,
+                        anotherTagOption,
+                    )
+                ),
+            )
+        )
+
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .isInstanceOf(MainViewState.Success::class)
+                .prop(MainViewState.Success::actionState)
+                .prop(ActionsState::actionPanes)
+                .index(0)
+                .prop(ActionPane::actions)
+                .extracting(ActionModel::id)
+                .containsExactly(availableAction.id)
+        }
+    }
+
+    @Test
+    fun `should handle requiredNone tag relation for actions`() = runBlockingTest {
+        val availableTag = tag(name = "available")
+        val forbiddenTag = tag(name = "forbidden")
+
+        val availableAction = action(
+            id = 1L,
+            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
+        )
+        val notAvailableAction = action(
+            id = 2L,
+            tags = mapOf(
+                TagRelation.RequiredAll to listOf(availableTag),
+                TagRelation.RequiresNone to listOf(forbiddenTag),
+            )
+        )
+
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                actions = listOf(
+                    availableAction,
+                    notAvailableAction,
+                ),
+                player = player(
+                    generalTags = listOf(
+                        availableTag,
+                        forbiddenTag,
+                    )
+                ),
+            )
+        )
+
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .isInstanceOf(MainViewState.Success::class)
+                .prop(MainViewState.Success::actionState)
+                .prop(ActionsState::actionPanes)
+                .index(0)
+                .prop(ActionPane::actions)
+                .extracting(ActionModel::id)
+                .containsExactly(availableAction.id)
+        }
+    }
+
     private fun createViewModel() = MainViewModel(
         imperativeShell = imperativeShell,
     )
