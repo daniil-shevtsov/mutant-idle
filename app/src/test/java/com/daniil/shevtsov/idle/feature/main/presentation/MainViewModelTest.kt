@@ -648,6 +648,37 @@ internal class MainViewModelTest {
     }
 
     @Test
+    fun `should add species tags to player when species selected`() = runBlockingTest {
+        val species = playerSpecies(
+            id = 1L,
+            tags = listOf(
+                tag(name = "lol"),
+                tag(name = "kek"),
+            )
+        )
+
+        val speciesTags = species.tags
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                drawerTabs = listOf(drawerTab(id = DrawerTabId.PlayerInfo, isSelected = true)),
+                availableSpecies = listOf(species),
+            )
+        )
+        viewModel.handleAction(MainViewAction.DebugSpeciesSelected(id = species.id))
+
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .isInstanceOf(MainViewState.Success::class)
+                .prop(MainViewState.Success::drawerState)
+                .prop(DrawerViewState::drawerContent)
+                .isInstanceOf(DrawerContentViewState.PlayerInfo::class)
+                .prop(DrawerContentViewState.PlayerInfo::playerInfo)
+                .prop(PlayerInfoState::playerTags)
+                .containsSubList(speciesTags)
+        }
+    }
+
+    @Test
     fun `should remove previous job tags if job changed`() = runBlockingTest {
         val previousJob = playerJob(
             id = 0L,
