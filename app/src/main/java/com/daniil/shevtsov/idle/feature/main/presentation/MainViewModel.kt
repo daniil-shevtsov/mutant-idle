@@ -190,6 +190,14 @@ class MainViewModel @Inject constructor(
                     tags = player.tags,
                 )
             }
+            .map { action ->
+                action.copy(
+                    subtitle = flavorMachine(
+                        original = action.subtitle,
+                        tags = player.tags,
+                    )
+                )
+            }
 
         return ActionsState(
             actionPanes = listOf(

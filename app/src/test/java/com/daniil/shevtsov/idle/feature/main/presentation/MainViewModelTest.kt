@@ -933,6 +933,29 @@ internal class MainViewModelTest {
     }
 
     @Test
+    fun `should replace placeholders in action description if has any`() = runBlockingTest {
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                actions = listOf(
+                    action(subtitle = Flavors.invisibilityAction.placeholder)
+                ),
+                player = player(
+                    generalTags = listOf(
+                        Tags.Nature.Tech,
+                    )
+                ),
+            )
+        )
+
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .extractingHumanActions()
+                .extracting(ActionModel::subtitle)
+                .containsExactly(Flavors.invisibilityAction.values[Tags.Nature.Tech])
+        }
+    }
+
+    @Test
     fun `should replace placeholders in upgrade description if has any`() = runBlockingTest {
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
