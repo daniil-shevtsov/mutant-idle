@@ -131,22 +131,21 @@ internal class MainViewModelTest {
         val unavailableTag = tag(name = "kek")
 
         val expectedAvailableUpgrade =
-            upgrade(id = 1L, tags = mapOf(availableTag to TagRelation.RequiredAll))
+            upgrade(id = 1L, newTags = mapOf(TagRelation.RequiredAll to listOf(availableTag)))
+        val expectedUnavailableUpgrades = listOf(
+            upgrade(
+                id = 2L,
+                newTags = mapOf(TagRelation.RequiredAll to listOf( availableTag,unavailableTag)),
+            ),
+            upgrade(
+                id = 3L, newTags = mapOf(TagRelation.RequiredAll to listOf(unavailableTag)),
+            )
+        )
 
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
                 player = player(tags = listOf(availableTag)),
-                upgrades = listOf(
-                    expectedAvailableUpgrade,
-                    upgrade(
-                        id = 2L,
-                        tags = mapOf(
-                            availableTag to TagRelation.RequiredAll,
-                            unavailableTag to TagRelation.RequiredAll
-                        )
-                    ),
-                    upgrade(id = 3L, tags = mapOf(unavailableTag to TagRelation.RequiredAll)),
-                )
+                upgrades = listOf(expectedAvailableUpgrade) + expectedUnavailableUpgrades
             )
         )
 
