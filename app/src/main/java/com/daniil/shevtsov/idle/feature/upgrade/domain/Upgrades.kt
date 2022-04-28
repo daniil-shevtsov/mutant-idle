@@ -5,16 +5,6 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 
 fun createUpgrades() = listOf(
     upgrade(
-        id = 0L,
-        title = "Hand-sword",
-        subtitle = "Transform your hand into a sharp blade",
-        price = 50.0,
-        status = UpgradeStatus.NotBought,
-        tags = mapOf(
-            Tags.Body.HandSword to TagRelation.Provides,
-        )
-    ),
-    upgrade(
         id = 1L,
         title = "Fangs",
         subtitle = "Grow very sharp fangs. They are almost useless without stronger jaws though",
@@ -22,6 +12,7 @@ fun createUpgrades() = listOf(
         status = UpgradeStatus.NotBought,
         tags = mapOf(
             Tags.Body.Fangs to TagRelation.Provides,
+            Tags.Species.Devourer to TagRelation.Required,
         )
     ),
     upgrade(
@@ -32,6 +23,21 @@ fun createUpgrades() = listOf(
         status = UpgradeStatus.NotBought,
         tags = mapOf(
             Tags.Body.IronJaws to TagRelation.Provides,
+            Tags.Species.Devourer to TagRelation.Required,
         )
     ),
+    upgrade(
+        id = 3L,
+        title = "Super Strength",
+        subtitle = "Lifting a car or crushing a lock is not a problem anymore",
+        price = 25.0,
+        tags = mapOf(
+            Tags.Body.SuperStrength to TagRelation.Provides,
+            Tags.Species.Devourer to TagRelation.Required,
+        )
+    ),
+    upgrade(
+
+    )
+
 )
