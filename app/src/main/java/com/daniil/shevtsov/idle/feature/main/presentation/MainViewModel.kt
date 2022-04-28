@@ -9,6 +9,7 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
+import com.daniil.shevtsov.idle.feature.flavor.flavorMachine
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
@@ -99,7 +100,12 @@ class MainViewModel @Inject constructor(
                 }
                 .map { upgrade ->
                     UpgradeModelMapper.map(
-                        upgrade = upgrade,
+                        upgrade = upgrade.copy(
+                            subtitle = flavorMachine(
+                                original = upgrade.subtitle,
+                                tags = state.player.tags,
+                            )
+                        ),
                         status = upgrade.mapStatus(
                             state.resources.find { it.key == ResourceKey.Blood }?.value ?: 0.0
                         )

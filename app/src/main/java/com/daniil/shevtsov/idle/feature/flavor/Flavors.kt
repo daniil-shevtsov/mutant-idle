@@ -14,6 +14,14 @@ object Flavors {
         default = "become invisible",
     )
 
+    val invisibilityGain = flavor(
+        placeholder = "${PREFIX}INVISIBILITY_GAIN",
+        values = mapOf(
+            Tags.Nature.Magic to "learn dark arts of invisibility",
+            Tags.Nature.Tech to "build a cloaking device from scrap",
+        )
+    )
+
     val peopleName = flavor(
         placeholder = "${PREFIX}PEOPLE_NAME",
         values = mapOf(
@@ -32,9 +40,11 @@ object Flavors {
         default = "puny people"
     )
 
+    //TODO: Do the same as with actions and upgrades
     val flavors = listOf(
         invisibilityAction,
+        invisibilityGain,
         peopleName,
         derogativePeopleName,
-    )
+    )//.map { flavor -> flavor.copy(placeholder = PREFIX + flavor.placeholder) }
 }

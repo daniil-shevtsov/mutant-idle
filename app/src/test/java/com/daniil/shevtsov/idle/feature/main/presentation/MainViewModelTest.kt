@@ -13,6 +13,7 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
+import com.daniil.shevtsov.idle.feature.flavor.Flavors
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
@@ -928,6 +929,29 @@ internal class MainViewModelTest {
                 .prop(ActionPane::actions)
                 .extracting(ActionModel::id)
                 .containsExactly(availableAction.id)
+        }
+    }
+
+    @Test
+    fun `should replace placeholders in upgrade description if has any`() = runBlockingTest {
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                upgrades = listOf(
+                    upgrade(subtitle = Flavors.invisibilityGain.placeholder)
+                ),
+                player = player(
+                    generalTags = listOf(
+                        Tags.Nature.Tech,
+                    )
+                ),
+            )
+        )
+
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .extractingUpgrades()
+                .extracting(UpgradeModel::subtitle)
+                .containsExactly(Flavors.invisibilityGain.values[Tags.Nature.Tech])
         }
     }
 
