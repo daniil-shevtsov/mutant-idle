@@ -13,19 +13,14 @@ fun action(
     subtitle: String = "",
     resourceChanges: Map<ResourceKey, Double> = mapOf(),
     ratioChanges: Map<RatioKey, Float> = mapOf(),
-    tags: Map<Tag, TagRelation> = mapOf(),
-    newTags: Map<TagRelation, List<Tag>> = mapOf(),
+    tags: Map<TagRelation, List<Tag>> = mapOf(),
 ) = Action(
     id = id,
     title = title,
     subtitle = subtitle,
     resourceChanges = resourceChanges,
     ratioChanges = ratioChanges,
-    tags = if(newTags.isNotEmpty()) {
-        newTags
-    } else {
-        tags.toList().groupBy { it.second }.mapValues { entry -> entry.value.map { it.first } }
-    }
+    tags = tags
 )
 
 fun actionModel(

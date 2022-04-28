@@ -781,11 +781,11 @@ internal class MainViewModelTest {
 
         val availableAction = action(
             id = 1L,
-            newTags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
+            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
         )
         val notAvailableAction = action(
             id = 2L,
-            newTags = mapOf(TagRelation.RequiredAll to listOf(availableTag, notAvailableTag))
+            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag, notAvailableTag))
         )
 
         imperativeShell.updateState(

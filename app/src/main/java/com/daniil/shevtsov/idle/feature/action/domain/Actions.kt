@@ -14,8 +14,10 @@ fun createAllActions() = listOf(
             ResourceKey.Money to 25.0
         ),
         tags = mapOf(
-            Tags.HumanAppearance to TagRelation.RequiredAll,
-            Tags.Employed to TagRelation.RequiredAll,
+            TagRelation.RequiredAll to listOf(
+                Tags.HumanAppearance,
+                Tags.Employed,
+            )
         ),
     ),
     action(
@@ -27,23 +29,27 @@ fun createAllActions() = listOf(
             ResourceKey.HumanFood to 1.0,
         ),
         tags = mapOf(
-            Tags.HumanAppearance to TagRelation.RequiredAll,
+            TagRelation.RequiredAll to listOf(
+                Tags.HumanAppearance,
+            )
         ),
     ),
     action(
         id = 8L,
         title = "Capture a person",
         subtitle = "I think I can do it if I grow enough",
-        tags = mapOf(
-            Tags.PersonCapturer to TagRelation.RequiredAll,
-        ),
         resourceChanges = mapOf(
             ResourceKey.Blood to -10.0,
             ResourceKey.Prisoner to 1.0,
         ),
         ratioChanges = mapOf(
             RatioKey.Suspicion to 0.1f,
-        )
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.PersonCapturer,
+            )
+        ),
     ),
     action(
         id = 9L,
@@ -58,7 +64,9 @@ fun createAllActions() = listOf(
             RatioKey.Suspicion to 0.05f,
         ),
         tags = mapOf(
-            Tags.Devourer to TagRelation.RequiredAll,
+            TagRelation.RequiredAll to listOf(
+                Tags.Devourer,
+            )
         ),
     ),
     action(
@@ -77,12 +85,14 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.Remains to -1.0,
         ),
-        tags = mapOf(
-            Tags.GraveyardAccess to TagRelation.RequiredAll,
-        ),
         ratioChanges = mapOf(
             RatioKey.Suspicion to -0.05f,
-        )
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.GraveyardAccess,
+            )
+        ),
     ),
     action(
         id = 12L,
@@ -91,12 +101,14 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.Organs to 1.0,
         ),
-        tags = mapOf(
-            Tags.FreshCorpseAccess to TagRelation.RequiredAll,
-        ),
         ratioChanges = mapOf(
             RatioKey.Suspicion to 0.1f,
-        )
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.FreshCorpseAccess,
+            )
+        ),
     ),
     action(
         id = 13L,
@@ -105,20 +117,26 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.Remains to -1.0,
         ),
-        tags = mapOf(
-            Tags.IncineratorAccess to TagRelation.RequiredAll,
-        ),
         ratioChanges = mapOf(
             RatioKey.Suspicion to -0.1f,
-        )
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.IncineratorAccess,
+            )
+        ),
     ),
     action(
         id = 14L,
         title = "Become invisible",
         subtitle = "You become invisible to people",
         tags = mapOf(
-            Tags.Abilities.Invisibility to TagRelation.RequiredAll,
-            Tags.State.Invisible to TagRelation.Provides,
-        )
+            TagRelation.RequiredAll to listOf(
+                Tags.Abilities.Invisibility,
+            ),
+            TagRelation.Provides to listOf(
+                Tags.State.Invisible
+            )
+        ),
     )
 )
