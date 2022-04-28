@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.cavitary
+import com.daniil.shevtsov.idle.core.ui.debugViewState
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJobModel
 
 @Preview(
@@ -24,7 +25,7 @@ import com.daniil.shevtsov.idle.feature.player.job.domain.playerJobModel
 @Composable
 fun DebugComposablePreview() {
     DebugComposable(
-        state = DebugViewState(
+        state = debugViewState(
             jobSelection = listOf(
                 playerJobModel(title = "LOL", tags = emptyList()),
                 playerJobModel(title = "KEK", tags = emptyList()),

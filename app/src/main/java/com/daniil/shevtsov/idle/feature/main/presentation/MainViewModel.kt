@@ -15,6 +15,7 @@ import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.info.presentation.PlayerInfoState
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
+import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
@@ -131,6 +132,16 @@ class MainViewModel @Inject constructor(
                                         )
                                     }
                                 },
+                                speciesSelection = state.availableSpecies.map { species ->
+                                    with(species) {
+                                        PlayerSpeciesModel(
+                                            id = id,
+                                            title = title,
+                                            tags = tags,
+                                            isSelected = state.player.species.id == species.id,
+                                        )
+                                    }
+                                }
                             )
                         )
                     }

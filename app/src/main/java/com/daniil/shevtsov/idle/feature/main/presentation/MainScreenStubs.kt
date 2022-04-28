@@ -1,9 +1,9 @@
 package com.daniil.shevtsov.idle.feature.main.presentation
 
+import com.daniil.shevtsov.idle.core.ui.debugViewState
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
-import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
@@ -50,7 +50,7 @@ fun drawerViewState(
 fun drawerDebugContent(
     jobSelection: List<PlayerJobModel> = emptyList(),
 ) = DrawerContentViewState.Debug(
-    state = DebugViewState(
+    state = debugViewState(
         jobSelection = jobSelection,
     ),
 )

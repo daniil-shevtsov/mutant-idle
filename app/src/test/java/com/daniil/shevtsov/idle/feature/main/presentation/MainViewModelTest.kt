@@ -19,6 +19,8 @@ import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.info.presentation.PlayerInfoState
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
+import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
+import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
@@ -592,6 +594,30 @@ internal class MainViewModelTest {
     }
 
     @Test
+    fun `should show debug species selection if has any`() = runBlockingTest {
+        val availableSpecies = listOf(
+            playerSpecies(id = 0L),
+            playerSpecies(id = 1L),
+            playerSpecies(id = 2L),
+        )
+
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                drawerTabs = listOf(drawerTab(id = DrawerTabId.Debug, isSelected = true)),
+                availableSpecies = availableSpecies,
+            )
+        )
+
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .extractingDebugState()
+                .extractingSpeciesSelection()
+                .extracting(PlayerSpeciesModel::id)
+                .containsExactly(0L, 1L, 2L)
+        }
+    }
+
+    @Test
     fun `should add job tags to player when job selected`() = runBlockingTest {
         val job = playerJob(
             tags = listOf(
@@ -848,5 +874,6 @@ internal class MainViewModelTest {
             .prop(DrawerContentViewState.Debug::state)
 
     private fun Assert<DebugViewState>.extractingJobSelection() = prop(DebugViewState::jobSelection)
+    private fun Assert<DebugViewState>.extractingSpeciesSelection() = prop(DebugViewState::speciesSelection)
 
 }
