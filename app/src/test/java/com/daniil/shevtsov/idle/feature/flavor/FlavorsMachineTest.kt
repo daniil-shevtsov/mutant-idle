@@ -6,7 +6,7 @@ import assertk.assertions.isEqualTo
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import org.junit.jupiter.api.Test
 
-class FlavorMachineTest {
+class FlavorsMachineTest {
 
     @Test
     fun `should return empty for empty`() {
@@ -26,7 +26,7 @@ class FlavorMachineTest {
 
     @Test
     fun `should replace placeholder with default value`() {
-        val placeholder = Flavor.InvisibilityAction
+        val placeholder = Flavors.newInvisibilityAction.placeholder
 
         val withFlavor = flavorMachine(original = placeholder)
 
@@ -35,7 +35,7 @@ class FlavorMachineTest {
 
     @Test
     fun `should replace placeholder with magic flavor`() {
-        val placeholder = "You ${Flavor.InvisibilityAction}."
+        val placeholder = "You ${Flavors.newInvisibilityAction.placeholder}."
 
         val withFlavor = flavorMachine(
             original = placeholder,
@@ -47,7 +47,7 @@ class FlavorMachineTest {
 
     @Test
     fun `should replace placeholder with tech flavor`() {
-        val placeholder = "You ${Flavor.InvisibilityAction}."
+        val placeholder = "You ${Flavors.newInvisibilityAction.placeholder}."
 
         val withFlavor = flavorMachine(
             original = placeholder,
@@ -59,11 +59,49 @@ class FlavorMachineTest {
 
     @Test
     fun `should replace placeholder with value in text`() {
-        val placeholder = "You ${Flavor.InvisibilityAction}."
+        val placeholder = "You ${Flavors.newInvisibilityAction.placeholder}."
 
         val withFlavor = flavorMachine(original = placeholder)
 
         assertThat(withFlavor).isEqualTo("You become invisible.")
     }
+
+    @Test
+    fun `should replace placeholder with alien flavor`() {
+        val placeholder = "You are beyond comprehension of ${Flavors.DerogativePeopleName}."
+
+        val withFlavor = flavorMachine(
+            original = placeholder,
+            tags = listOf(Tags.Species.Alien),
+        )
+
+        assertThat(withFlavor).isEqualTo("You are beyond comprehension of primitive life forms.")
+    }
+
+    @Test
+    fun `should replace placeholder with immortal flavor`() {
+        val placeholder = "You are beyond comprehension of ${Flavors.DerogativePeopleName}."
+
+        val withFlavor = flavorMachine(
+            original = placeholder,
+            tags = listOf(Tags.Immortal),
+        )
+
+        assertThat(withFlavor).isEqualTo("You are beyond comprehension of mere mortals.")
+    }
+
+    @Test
+    fun `minivan `() {
+        val original = "You ${Flavors.newInvisibilityAction.placeholder}."
+
+        assertThat(
+            flavorMinivan(
+                original = original,
+                flavor = Flavors.newInvisibilityAction,
+                tags = listOf(Tags.Nature.Tech),
+            )
+        ).isEqualTo("You activate the cloaking device.")
+    }
+
 
 }

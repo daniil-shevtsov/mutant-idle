@@ -7,11 +7,27 @@ fun flavorMachine(
     original: String,
     tags: List<Tag> = emptyList(),
 ): String {
-    val flavor = when {
-        tags.contains(Tags.Nature.Magic) -> "become ethereal"
-        tags.contains(Tags.Nature.Tech) -> "activate the cloaking device"
-        else -> "become invisible"
+    val peopleNameFlavor = when {
+        tags.contains(Tags.Immortal) -> "mere mortals"
+        tags.contains(Tags.Species.Alien) -> "primitive life forms"
+        else -> "people"
     }
 
-    return original.replace(Flavor.InvisibilityAction, flavor)
+    return flavorMinivan(original = original, flavor = Flavors.newInvisibilityAction, tags = tags)
+        .replace(Flavors.DerogativePeopleName, peopleNameFlavor)
+}
+
+fun flavorMinivan(
+    original: String,
+    flavor: Flavor,
+    tags: List<Tag>,
+): String {
+//    original = original,
+//    flavor = Flavors.newInvisibilityAction,
+//    tags = listOf(Tags.Nature.Tech),
+    val placeholder = flavor.placeholder
+    val replacement =
+        tags.firstOrNull { tag -> flavor.values.containsKey(tag) }?.let { flavor.values[it] }
+            ?: flavor.default
+    return original.replace(placeholder, replacement)
 }
