@@ -126,36 +126,47 @@ internal class MainViewModelTest {
     }
 
     @Test
-    fun `should only show upgrades if you have all required tags`() = runBlockingTest {
-        val availableTag = tag(name = "lol")
-        val unavailableTag = tag(name = "kek")
+    fun `should only show upgrades if you have all requiredAll or at least one requiredAny tag`() =
+        runBlockingTest {
+            val availableTag = tag(name = "lol")
+            val unavailableTag = tag(name = "kek")
 
-        val expectedAvailableUpgrade =
-            upgrade(id = 1L, tags = mapOf(TagRelation.RequiredAll to listOf(availableTag)))
-        val expectedUnavailableUpgrades = listOf(
-            upgrade(
+            val requiredAllAvailableUpgrade = upgrade(
+                id = 1L,
+                tags = mapOf(TagRelation.RequiredAll to listOf(availableTag)),
+            )
+            val requiredAnyAvailableUpgrade = upgrade(
                 id = 2L,
-                tags = mapOf(TagRelation.RequiredAll to listOf( availableTag,unavailableTag)),
-            ),
-            upgrade(
-                id = 3L, tags = mapOf(TagRelation.RequiredAll to listOf(unavailableTag)),
+                tags = mapOf(TagRelation.RequiredAny to listOf(availableTag, unavailableTag)),
             )
-        )
-
-        imperativeShell.updateState(
-            newState = mainFunctionalCoreState(
-                player = player(tags = listOf(availableTag)),
-                upgrades = listOf(expectedAvailableUpgrade) + expectedUnavailableUpgrades
+            val expectedAvailableUpgrades = listOf(
+                requiredAllAvailableUpgrade,
+                requiredAnyAvailableUpgrade,
             )
-        )
+            val expectedUnavailableUpgrades = listOf(
+                upgrade(
+                    id = 3L,
+                    tags = mapOf(TagRelation.RequiredAll to listOf(availableTag, unavailableTag)),
+                ),
+                upgrade(
+                    id = 4L, tags = mapOf(TagRelation.RequiredAll to listOf(unavailableTag)),
+                )
+            )
 
-        viewModel.state.test {
-            assertThat(expectMostRecentItem())
-                .extractingUpgrades()
-                .extracting(UpgradeModel::id)
-                .containsExactly(expectedAvailableUpgrade.id)
+            imperativeShell.updateState(
+                newState = mainFunctionalCoreState(
+                    player = player(tags = listOf(availableTag)),
+                    upgrades = expectedAvailableUpgrades + expectedUnavailableUpgrades
+                )
+            )
+
+            viewModel.state.test {
+                assertThat(expectMostRecentItem())
+                    .extractingUpgrades()
+                    .extracting(UpgradeModel::id)
+                    .containsExactly(requiredAllAvailableUpgrade.id, requiredAnyAvailableUpgrade.id)
+            }
         }
-    }
 
     @Test
     fun `should mark upgrade as affordable if its price less than resource`() = runBlockingTest {

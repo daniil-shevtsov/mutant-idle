@@ -90,7 +90,13 @@ class MainViewModel @Inject constructor(
             },
             actionState = createActionState(state.actions, state.resources, state.player),
             shop = state.upgrades
-                .filter { upgrade -> upgrade.tags[TagRelation.RequiredAll].orEmpty().all { requiredTag -> requiredTag in state.player.tags } }
+                .filter { upgrade ->
+                    val hasAllRequired = upgrade.tags[TagRelation.RequiredAll].orEmpty().all { requiredTag -> requiredTag in state.player.tags }
+                    val requiredAny = upgrade.tags[TagRelation.RequiredAny]
+                    val hasAnyRequired = requiredAny == null || requiredAny.any { requiredTag -> requiredTag in state.player.tags }
+
+                    hasAllRequired && hasAnyRequired
+                }
                 .map { upgrade ->
                     UpgradeModelMapper.map(
                         upgrade = upgrade,
