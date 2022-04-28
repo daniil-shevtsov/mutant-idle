@@ -76,6 +76,11 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.Blood to 2.0,
             ResourceKey.HumanFood to -1.0,
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Species.Devourer,
+            )
         )
     ),
     action(
