@@ -46,7 +46,7 @@ fun createUpgrades() = listOf(
         id = 4L,
         title = "Invisibility",
         subtitle = "The ability to become invisible",
-        price = 45.0,
+        price = 1.0,
         tags = mapOf(
             TagRelation.Provides to listOf(Tags.Abilities.Invisibility),
             TagRelation.RequiredAny to listOf(
@@ -55,6 +55,6 @@ fun createUpgrades() = listOf(
                 Tags.Species.Alien,
             ),
         )
-    )
+    ),
 
 )

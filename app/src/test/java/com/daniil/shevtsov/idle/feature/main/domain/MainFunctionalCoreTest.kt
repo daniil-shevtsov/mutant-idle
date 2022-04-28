@@ -22,6 +22,7 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.ratioChange
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.domain.resourceChange
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
@@ -67,6 +68,33 @@ class MainFunctionalCoreTest {
                 prop(MainFunctionalCoreState::ratios)
                     .extracting(Ratio::key, Ratio::value)
                     .containsExactly(RatioKey.Mutanity to 0.4)
+            }
+    }
+
+    @Test
+    fun `should add tags provided by upgrade when upgrade bought`() = runBlockingTest {
+        val providedTag = tag(name = "lol")
+
+        val initialState = mainFunctionalCoreState(
+            resources = listOf(resource(key = ResourceKey.Blood, value = 1.0)),
+            ratios = listOf(ratio(key = RatioKey.Mutanity)),
+            upgrades = listOf(
+                upgrade(id = 0L, tags = mapOf(
+                    TagRelation.Provides to listOf(providedTag)
+                ))
+            ),
+        )
+
+        val newState = mainFunctionalCore(
+            state = initialState,
+            viewAction = MainViewAction.UpgradeSelected(id = 0L),
+        )
+
+        assertThat(newState)
+            .all {
+                prop(MainFunctionalCoreState::player)
+                    .prop(Player::tags)
+                    .containsExactly(providedTag)
             }
     }
 

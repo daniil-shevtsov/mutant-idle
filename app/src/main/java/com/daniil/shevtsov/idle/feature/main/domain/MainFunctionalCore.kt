@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.feature.main.domain
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 
 fun mainFunctionalCore(
@@ -172,6 +173,9 @@ fun handleUpgradeSelected(
                 upgrades = updatedUpgrades,
                 resources = updatedResources,
                 ratios = updatedRatios,
+                player = state.player.copy(
+                    generalTags = state.player.generalTags + boughtUpgrade.tags[TagRelation.Provides].orEmpty()
+                )
             )
         }
         else -> state
