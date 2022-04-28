@@ -25,6 +25,7 @@ object Species {
         title = "Vampire",
         tags = listOf(
             Tags.Species.Vampire,
+            Tags.Nature.Magic,
             Tags.Heliophobia,
             Tags.Immortal,
             Tags.Hypnosis,
@@ -44,6 +45,7 @@ object Species {
         title = "Demon",
         tags = listOf(
             Tags.Species.Demon,
+            Tags.Nature.Magic,
         )
     )
 
@@ -52,6 +54,7 @@ object Species {
         title = "Alien",
         tags = listOf(
             Tags.Species.Alien,
+            Tags.Nature.Tech,
         )
     )
 
@@ -60,6 +63,7 @@ object Species {
         title = "Android",
         tags = listOf(
             Tags.Species.Android,
+            Tags.Nature.Tech,
         )
     )
 }

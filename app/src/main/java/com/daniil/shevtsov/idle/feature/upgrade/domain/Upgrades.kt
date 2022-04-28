@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.feature.upgrade.domain
 
+import com.daniil.shevtsov.idle.feature.flavor.Flavors
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 
@@ -45,7 +46,7 @@ fun createUpgrades() = listOf(
     upgrade(
         id = 4L,
         title = "Invisibility",
-        subtitle = "The ability to become invisible",
+        subtitle = Flavors.invisibilityGain.placeholder,
         price = 1.0,
         tags = mapOf(
             TagRelation.Provides to listOf(Tags.Abilities.Invisibility),

@@ -17,8 +17,8 @@ object Flavors {
     val invisibilityGain = flavor(
         placeholder = "${PREFIX}INVISIBILITY_GAIN",
         values = mapOf(
-            Tags.Nature.Magic to "learn dark arts of invisibility",
-            Tags.Nature.Tech to "build a cloaking device from scrap",
+            Tags.Nature.Magic to "Learn dark arts of invisibility",
+            Tags.Nature.Tech to "Build a cloaking device from scrap",
         )
     )
 

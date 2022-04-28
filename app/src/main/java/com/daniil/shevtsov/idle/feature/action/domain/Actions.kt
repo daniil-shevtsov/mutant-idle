@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.feature.action.domain
 
+import com.daniil.shevtsov.idle.feature.flavor.Flavors
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
@@ -135,7 +136,7 @@ fun createAllActions() = listOf(
     action(
         id = 14L,
         title = "Become invisible",
-        subtitle = "You become invisible to people",
+        subtitle = "You ${Flavors.invisibilityAction.placeholder}, ${Flavors.derogativePeopleName.placeholder} can't see you now",
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
                 Tags.Abilities.Invisibility,
