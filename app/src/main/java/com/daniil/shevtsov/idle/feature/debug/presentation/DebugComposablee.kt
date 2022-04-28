@@ -48,50 +48,102 @@ fun DebugComposable(
             .fillMaxSize()
             .wrapContentSize(Alignment.TopStart)
     ) {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .background(Pallete.Red),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Text(
-                modifier = modifier,
-                text = "Selected Job:",
-                fontSize = 24.sp,
-                color = Color.White
-            )
-            Box {
+        Column {
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .background(Pallete.Red),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
                 Text(
-                    text = when (val selectedJob =
-                        state.jobSelection.firstOrNull { it.isSelected }
-                            ?: state.jobSelection.firstOrNull()) {
-                        null -> "EMPTY"
-                        else -> selectedJob.title
-                    },
-                    fontSize = 16.sp,
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .cavitary(
-                            lightColor = Pallete.LightRed,
-                            darkColor = Pallete.DarkRed
-                        )
-                        .background(Color.White)
-                        .clickable(onClick = { expanded = true })
-                        .padding(4.dp)
-                )
-                DropdownMenu(
-                    expanded = expanded,
                     modifier = modifier,
-                    onDismissRequest = { expanded = false }) {
-                    state.jobSelection.forEach { job ->
-                        DropdownMenuItem(
-                            onClick = {
-                                onAction(DebugViewAction.JobSelected(job.id))
-                                expanded = false
+                    text = "Selected Job:",
+                    fontSize = 24.sp,
+                    color = Color.White
+                )
+                Box {
+                    Text(
+                        text = when (val selectedJob =
+                            state.jobSelection.firstOrNull { it.isSelected }
+                                ?: state.jobSelection.firstOrNull()) {
+                            null -> "EMPTY"
+                            else -> selectedJob.title
+                        },
+                        fontSize = 16.sp,
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .cavitary(
+                                lightColor = Pallete.LightRed,
+                                darkColor = Pallete.DarkRed
+                            )
+                            .background(Color.White)
+                            .clickable(onClick = { expanded = true })
+                            .padding(4.dp)
+                    )
+                    DropdownMenu(
+                        expanded = expanded,
+                        modifier = modifier,
+                        onDismissRequest = { expanded = false }) {
+                        state.jobSelection.forEach { job ->
+                            DropdownMenuItem(
+                                onClick = {
+                                    onAction(DebugViewAction.JobSelected(job.id))
+                                    expanded = false
+                                }
+                            ) {
+                                Text(text = job.title)
                             }
-                        ) {
-                            Text(text = job.title)
+                        }
+                    }
+                }
+            }
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .background(Pallete.Red),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text(
+                    modifier = modifier,
+                    text = "Selected Species:",
+                    fontSize = 24.sp,
+                    color = Color.White
+                )
+                Box {
+                    Text(
+                        text = when (val selectedSpecies =
+                            state.speciesSelection.firstOrNull { it.isSelected }
+                                ?: state.speciesSelection.firstOrNull()) {
+                            null -> "EMPTY"
+                            else -> selectedSpecies.title
+                        },
+                        fontSize = 16.sp,
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .cavitary(
+                                lightColor = Pallete.LightRed,
+                                darkColor = Pallete.DarkRed
+                            )
+                            .background(Color.White)
+                            .clickable(onClick = { expanded = true })
+                            .padding(4.dp)
+                    )
+                    DropdownMenu(
+                        expanded = expanded,
+                        modifier = modifier,
+                        onDismissRequest = { expanded = false }) {
+                        state.speciesSelection.forEach { species ->
+                            DropdownMenuItem(
+                                modifier = modifier.background(Color.White),
+                                onClick = {
+                                    onAction(DebugViewAction.SpeciesSelected(species.id))
+                                    expanded = false
+                                }
+                            ) {
+                                Text(text = species.title)
+                            }
                         }
                     }
                 }
