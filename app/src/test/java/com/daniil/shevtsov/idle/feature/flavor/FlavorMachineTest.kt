@@ -46,6 +46,18 @@ class FlavorMachineTest {
     }
 
     @Test
+    fun `should replace placeholder with tech flavor`() {
+        val placeholder = "You ${Flavor.InvisibilityAction}."
+
+        val withFlavor = flavorMachine(
+            original = placeholder,
+            tags = listOf(Tags.Nature.Tech),
+        )
+
+        assertThat(withFlavor).isEqualTo("You activate the cloaking device.")
+    }
+
+    @Test
     fun `should replace placeholder with value in text`() {
         val placeholder = "You ${Flavor.InvisibilityAction}."
 

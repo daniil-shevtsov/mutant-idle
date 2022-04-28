@@ -9,6 +9,7 @@ fun flavorMachine(
 ): String {
     val flavor = when {
         tags.contains(Tags.Nature.Magic) -> "become ethereal"
+        tags.contains(Tags.Nature.Tech) -> "activate the cloaking device"
         else -> "become invisible"
     }
 
