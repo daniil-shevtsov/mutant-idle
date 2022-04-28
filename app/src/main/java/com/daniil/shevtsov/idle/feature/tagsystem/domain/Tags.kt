@@ -42,6 +42,11 @@ object Tags {
         val Invisible = Tag(name = "Invisible")
     }
 
+    object Nature {
+        val Magic = Tag(name = "Magic")
+        val Tech = Tag(name = "Tech")
+    }
+
     val Surgeon = Tag(name = "Surgeon")
     val FreshCorpseAccess = Tag(name = "Fresh Corpse Access")
     val SolitaryJob = Tag(name = "Solitary Job")

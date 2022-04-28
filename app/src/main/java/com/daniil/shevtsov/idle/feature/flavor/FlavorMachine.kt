@@ -1,5 +1,16 @@
 package com.daniil.shevtsov.idle.feature.flavor
 
-fun flavorMachine(original: String): String {
-    return original.replace(Flavor.InvisibilityAction, "become invisible")
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
+
+fun flavorMachine(
+    original: String,
+    tags: List<Tag> = emptyList(),
+): String {
+    val flavor = when {
+        tags.contains(Tags.Nature.Magic) -> "become ethereal"
+        else -> "become invisible"
+    }
+
+    return original.replace(Flavor.InvisibilityAction, flavor)
 }

@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.feature.flavor
 import assertk.assertThat
 import assertk.assertions.isEmpty
 import assertk.assertions.isEqualTo
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import org.junit.jupiter.api.Test
 
 class FlavorMachineTest {
@@ -24,12 +25,24 @@ class FlavorMachineTest {
     }
 
     @Test
-    fun `should replace placeholder with value`() {
+    fun `should replace placeholder with default value`() {
         val placeholder = Flavor.InvisibilityAction
 
         val withFlavor = flavorMachine(original = placeholder)
 
         assertThat(withFlavor).isEqualTo("become invisible")
+    }
+
+    @Test
+    fun `should replace placeholder with magic flavor`() {
+        val placeholder = "You ${Flavor.InvisibilityAction}."
+
+        val withFlavor = flavorMachine(
+            original = placeholder,
+            tags = listOf(Tags.Nature.Magic),
+        )
+
+        assertThat(withFlavor).isEqualTo("You become ethereal.")
     }
 
     @Test
