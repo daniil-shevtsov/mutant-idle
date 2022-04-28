@@ -41,7 +41,8 @@ fun DebugComposable(
     onAction: (DebugViewAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var expanded: Boolean by remember { mutableStateOf(false) }
+    var expanded1: Boolean by remember { mutableStateOf(false) }
+    var expanded2: Boolean by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier
             .background(Pallete.Red)
@@ -78,18 +79,19 @@ fun DebugComposable(
                                 darkColor = Pallete.DarkRed
                             )
                             .background(Color.White)
-                            .clickable(onClick = { expanded = true })
+                            .clickable(onClick = { expanded1 = true })
                             .padding(4.dp)
                     )
                     DropdownMenu(
-                        expanded = expanded,
+                        expanded = expanded1,
                         modifier = modifier,
-                        onDismissRequest = { expanded = false }) {
+                        onDismissRequest = { expanded1 = false }) {
                         state.jobSelection.forEach { job ->
                             DropdownMenuItem(
+                                modifier = modifier.background(Color.White),
                                 onClick = {
                                     onAction(DebugViewAction.JobSelected(job.id))
-                                    expanded = false
+                                    expanded1 = false
                                 }
                             ) {
                                 Text(text = job.title)
@@ -127,19 +129,19 @@ fun DebugComposable(
                                 darkColor = Pallete.DarkRed
                             )
                             .background(Color.White)
-                            .clickable(onClick = { expanded = true })
+                            .clickable(onClick = { expanded2 = true })
                             .padding(4.dp)
                     )
                     DropdownMenu(
-                        expanded = expanded,
+                        expanded = expanded2,
                         modifier = modifier,
-                        onDismissRequest = { expanded = false }) {
+                        onDismissRequest = { expanded2 = false }) {
                         state.speciesSelection.forEach { species ->
                             DropdownMenuItem(
                                 modifier = modifier.background(Color.White),
                                 onClick = {
                                     onAction(DebugViewAction.SpeciesSelected(species.id))
-                                    expanded = false
+                                    expanded2 = false
                                 }
                             ) {
                                 Text(text = species.title)
@@ -150,4 +152,62 @@ fun DebugComposable(
             }
         }
     }
+
+//    Box(
+//        modifier = Modifier
+//            .background(Pallete.Red)
+//            .fillMaxSize()
+//            .wrapContentSize(Alignment.TopStart)
+//    ) {
+//        Column {
+//            Row(
+//                modifier = modifier
+//                    .fillMaxWidth()
+//                    .background(Pallete.Red),
+//                verticalAlignment = Alignment.CenterVertically,
+//                horizontalArrangement = Arrangement.spacedBy(10.dp)
+//            ) {
+//                Text(
+//                    modifier = modifier,
+//                    text = "Selected Job:",
+//                    fontSize = 24.sp,
+//                    color = Color.White
+//                )
+//                Box {
+//                    Text(
+//                        text = when (val selectedJob =
+//                            state.jobSelection.firstOrNull { it.isSelected }
+//                                ?: state.jobSelection.firstOrNull()) {
+//                            null -> "EMPTY"
+//                            else -> selectedJob.title
+//                        },
+//                        fontSize = 16.sp,
+//                        modifier = modifier
+//                            .fillMaxWidth()
+//                            .cavitary(
+//                                lightColor = Pallete.LightRed,
+//                                darkColor = Pallete.DarkRed
+//                            )
+//                            .background(Color.White)
+//                            .clickable(onClick = { expanded = true })
+//                            .padding(4.dp)
+//                    )
+//                    DropdownMenu(
+//                        expanded = expanded,
+//                        modifier = modifier,
+//                        onDismissRequest = { expanded = false }) {
+//                        state.jobSelection.forEach { job ->
+//                            DropdownMenuItem(
+//                                onClick = {
+//                                    onAction(DebugViewAction.JobSelected(job.id))
+//                                    expanded = false
+//                                }
+//                            ) {
+//                                Text(text = job.title)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+
 }
