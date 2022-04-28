@@ -225,6 +225,9 @@ class MainFunctionalCoreTest {
                 ratioChange(key = RatioKey.Mutanity, change = 2.0f),
                 ratioChange(key = RatioKey.Suspicion, change = -3.0f),
             ),
+            tags = mapOf(
+                TagRelation.Provides to listOf(providedTag)
+            )
         )
 
         val initialState = mainFunctionalCoreState(
@@ -258,6 +261,9 @@ class MainFunctionalCoreTest {
                         RatioKey.Mutanity to 5.0,
                         RatioKey.Suspicion to 4.0,
                     )
+                prop(MainFunctionalCoreState::player)
+                    .prop(Player::tags)
+                    .containsExactly(providedTag)
             }
     }
 

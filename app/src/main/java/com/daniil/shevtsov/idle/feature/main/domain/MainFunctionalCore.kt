@@ -109,6 +109,9 @@ fun handleActionClicked(
         state.copy(
             ratios = updatedRatios,
             resources = updatedResources,
+            player = state.player.copy(
+                generalTags = state.player.generalTags + selectedAction.tags[TagRelation.Provides].orEmpty()
+            )
         )
     } else {
         state
