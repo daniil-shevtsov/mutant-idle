@@ -12,7 +12,7 @@ fun createUpgrades() = listOf(
         status = UpgradeStatus.NotBought,
         tags = mapOf(
             TagRelation.Provides to listOf(Tags.Body.Fangs),
-            TagRelation.RequiredAll to listOf(Tags.Species.Devourer),
+            TagRelation.RequiredAny to listOf(Tags.Species.Devourer),
         )
     ),
     upgrade(
@@ -23,7 +23,7 @@ fun createUpgrades() = listOf(
         status = UpgradeStatus.NotBought,
         tags = mapOf(
             TagRelation.Provides to listOf(Tags.Body.IronJaws),
-            TagRelation.RequiredAll to listOf(Tags.Species.Devourer),
+            TagRelation.RequiredAny to listOf(Tags.Species.Devourer),
         )
     ),
     upgrade(
@@ -33,8 +33,28 @@ fun createUpgrades() = listOf(
         price = 25.0,
         tags = mapOf(
             TagRelation.Provides to listOf(Tags.Body.SuperStrength),
-            TagRelation.RequiredAll to listOf(Tags.Species.Devourer),
+            TagRelation.RequiredAny to listOf(
+                Tags.Species.Devourer,
+                Tags.Species.ShapeShifter,
+                Tags.Species.Demon,
+                Tags.Species.Vampire,
+                Tags.Species.Android,
+            ),
         )
     ),
+    upgrade(
+        id = 4L,
+        title = "Invisibility",
+        subtitle = "The ability to become invisible",
+        price = 45.0,
+        tags = mapOf(
+            TagRelation.Provides to listOf(Tags.Abilities.Invisibility),
+            TagRelation.RequiredAny to listOf(
+                Tags.Species.Vampire,
+                Tags.Species.Android,
+                Tags.Species.Alien,
+            ),
+        )
+    )
 
 )

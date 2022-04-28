@@ -20,6 +20,7 @@ object Tags {
         val Parasite = Tag(name = "Parasite")
         val Demon = Tag(name = "Demon")
         val Alien = Tag(name = "Alien")
+        val Android = Tag(name = "Android")
     }
 
     object Body {
