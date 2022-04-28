@@ -96,13 +96,8 @@ class MainFunctionalCoreTest {
 
         val previousPlayerState = player(
             job = previousJob,
-            tags = listOf(
-                tag(name = "old job tag 1"), //TODO: This design choice to have duplicated data is kinda dumb
-                tag(name = "old job tag 2"),
-            ) + nonJobTags
+            generalTags = nonJobTags
         )
-
-
 
         val initialState = mainFunctionalCoreState(
             availableJobs = listOf(
@@ -158,13 +153,8 @@ class MainFunctionalCoreTest {
 
         val previousPlayerState = player(
             species = previousSpecies,
-            tags = listOf(
-                tag(name = "old species tag 1"), //TODO: This design choice to have duplicated data is kinda dumb
-                tag(name = "old species tag 2"),
-            ) + nonSpeciesTags
+            generalTags = nonSpeciesTags,
         )
-
-
 
         val initialState = mainFunctionalCoreState(
             player = previousPlayerState,

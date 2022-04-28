@@ -17,7 +17,6 @@ import com.daniil.shevtsov.idle.feature.player.species.domain.Species
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.createResources
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.upgrade.domain.createUpgrades
 import org.koin.core.Koin
 import timber.log.Timber
@@ -94,10 +93,8 @@ class IdleGameApplication : Application() {
 
     private fun createInitialPlayer() = player(
         job = Jobs.Mortician,
-        tags = Jobs.Mortician.tags + listOf(
-            Tags.Devourer,
-            Tags.PersonCapturer,
-        )
+        species = Species.Devourer,
+        generalTags = emptyList(),
     )
 
     private fun createInitialJobs() = listOf(

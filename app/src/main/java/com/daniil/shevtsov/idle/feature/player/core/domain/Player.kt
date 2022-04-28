@@ -7,5 +7,8 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 data class Player(
     val job: PlayerJob,
     val species: PlayerSpecies,
-    val tags: List<Tag>,
-)
+    val generalTags: List<Tag>,
+) {
+    val tags: List<Tag>
+        get() = generalTags + job.tags + species.tags
+}

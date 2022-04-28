@@ -9,9 +9,9 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 fun player(
     job: PlayerJob = playerJob(),
     species: PlayerSpecies = playerSpecies(),
-    tags: List<Tag> = emptyList(),
+    generalTags: List<Tag> = emptyList(),
 ) = Player(
     job = job,
     species = species,
-    tags = tags,
+    generalTags = generalTags,
 )

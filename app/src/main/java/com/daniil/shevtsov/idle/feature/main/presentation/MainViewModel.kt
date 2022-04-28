@@ -168,7 +168,7 @@ class MainViewModel @Inject constructor(
             .filter { action ->
                 val requiredTags = action.tags
                     .filter { (_, tagRelation) -> tagRelation == TagRelation.RequiredAll }.keys
-                player.tags.containsAll(requiredTags)
+                player.generalTags.containsAll(requiredTags)
             }
 
         return ActionsState(

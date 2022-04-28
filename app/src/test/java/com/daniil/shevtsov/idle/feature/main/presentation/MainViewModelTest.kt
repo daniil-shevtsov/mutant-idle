@@ -158,7 +158,7 @@ internal class MainViewModelTest {
             imperativeShell.updateState(
                 newState = mainFunctionalCoreState(
                     upgrades = expectedAvailableUpgrades + expectedUnavailableUpgrades,
-                    player = player(tags = listOf(availableTag)),
+                    player = player(generalTags = listOf(availableTag)),
                 )
             )
 
@@ -749,7 +749,7 @@ internal class MainViewModelTest {
                     newJob,
                 ),
                 player = player(
-                    tags = playerTags,
+                    generalTags = playerTags,
                 ),
             )
         )
@@ -800,7 +800,7 @@ internal class MainViewModelTest {
                     notAvailableAction,
                 ),
                 player = player(
-                    tags = listOf(
+                    generalTags = listOf(
                         availableTag
                     )
                 ),

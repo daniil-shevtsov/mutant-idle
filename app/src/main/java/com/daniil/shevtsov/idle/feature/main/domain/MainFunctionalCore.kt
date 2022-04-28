@@ -42,16 +42,13 @@ fun handleSpeciesSelected(
     state: MainFunctionalCoreState,
     viewAction: MainViewAction.DebugSpeciesSelected
 ): MainFunctionalCoreState {
-    val previousPlayerTags = state.player.tags
+    val previousPlayerTags = state.player.generalTags
     val previousSpecies = state.player.species
     val newSpecies = state.availableSpecies.find { it.id == viewAction.id }!!
-
-    val newPlayerTags = previousPlayerTags - previousSpecies.tags + newSpecies.tags
 
     return state.copy(
         player = state.player.copy(
             species = newSpecies,
-            tags = newPlayerTags,
         )
     )
 }
@@ -187,7 +184,7 @@ fun handleDebugJobSelected(
     state: MainFunctionalCoreState,
     viewAction: MainViewAction.DebugJobSelected
 ): MainFunctionalCoreState {
-    val previousPlayerTags = state.player.tags
+    val previousPlayerTags = state.player.generalTags
     val previousJobTags = state.player.job.tags
     val newJob = state.availableJobs.find { it.id == viewAction.id }!!
     val newJobTags = newJob.tags
@@ -197,7 +194,6 @@ fun handleDebugJobSelected(
     return state.copy(
         player = state.player.copy(
             job = newJob,
-            tags = newPlayerTags,
         )
     )
 
