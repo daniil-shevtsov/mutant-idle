@@ -12,8 +12,13 @@ fun flavorMachine(
         tags.contains(Tags.Species.Alien) -> "primitive life forms"
         else -> "people"
     }
+    var newOriginal = original
 
-    return flavorMinivan(original = original, flavor = Flavors.newInvisibilityAction, tags = tags)
+    Flavors.flavors.forEach { flavor ->
+        newOriginal = flavorMinivan(original = newOriginal, flavor = flavor, tags = tags)
+    }
+
+    return newOriginal
         .replace(Flavors.DerogativePeopleName, peopleNameFlavor)
 }
 
@@ -22,9 +27,6 @@ fun flavorMinivan(
     flavor: Flavor,
     tags: List<Tag>,
 ): String {
-//    original = original,
-//    flavor = Flavors.newInvisibilityAction,
-//    tags = listOf(Tags.Nature.Tech),
     val placeholder = flavor.placeholder
     val replacement =
         tags.firstOrNull { tag -> flavor.values.containsKey(tag) }?.let { flavor.values[it] }

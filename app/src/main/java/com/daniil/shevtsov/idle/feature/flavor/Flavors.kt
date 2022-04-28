@@ -3,7 +3,7 @@ package com.daniil.shevtsov.idle.feature.flavor
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 
 object Flavors {
-    const val PREFIX = "PLACEHOLDER_PREFIX_"
+    const val PREFIX = "8"
 
     const val InvisibilityAction = "INVISIBILITY_ACTION"
 
@@ -14,6 +14,10 @@ object Flavors {
             Tags.Nature.Tech to "activate the cloaking device",
         ),
         default = "become invisible",
+    )
+
+    val flavors = listOf(
+        newInvisibilityAction
     )
 
     const val DerogativePeopleName = "DEROGATIVE_PEOPLE_NAME"
