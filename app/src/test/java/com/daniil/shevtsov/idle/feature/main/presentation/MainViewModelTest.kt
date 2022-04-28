@@ -126,6 +126,39 @@ internal class MainViewModelTest {
     }
 
     @Test
+    fun `should only show upgrades if you have all required tags`() = runBlockingTest {
+        val availableTag = tag(name = "lol")
+        val unavailableTag = tag(name = "kek")
+
+        val expectedAvailableUpgrade =
+            upgrade(id = 1L, tags = mapOf(availableTag to TagRelation.RequiredAll))
+
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                player = player(tags = listOf(availableTag)),
+                upgrades = listOf(
+                    expectedAvailableUpgrade,
+                    upgrade(
+                        id = 2L,
+                        tags = mapOf(
+                            availableTag to TagRelation.RequiredAll,
+                            unavailableTag to TagRelation.RequiredAll
+                        )
+                    ),
+                    upgrade(id = 3L, tags = mapOf(unavailableTag to TagRelation.RequiredAll)),
+                )
+            )
+        )
+
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .extractingUpgrades()
+                .extracting(UpgradeModel::id)
+                .containsExactly(expectedAvailableUpgrade.id)
+        }
+    }
+
+    @Test
     fun `should mark upgrade as affordable if its price less than resource`() = runBlockingTest {
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
