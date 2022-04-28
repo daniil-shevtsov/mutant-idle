@@ -33,5 +33,6 @@ fun mainFunctionalCoreState(
     drawerTabs = drawerTabs,
     sections = sections,
     availableJobs = availableJobs,
+    availableSpecies = availableSpecies,
     player = player,
 )

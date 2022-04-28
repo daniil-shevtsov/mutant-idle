@@ -30,9 +30,30 @@ fun mainFunctionalCore(
             state = state,
             viewAction = viewAction,
         )
-        is MainViewAction.DebugSpeciesSelected -> state
+        is MainViewAction.DebugSpeciesSelected -> handleSpeciesSelected(
+            state = state,
+            viewAction = viewAction,
+        )
     }
     return newState
+}
+
+fun handleSpeciesSelected(
+    state: MainFunctionalCoreState,
+    viewAction: MainViewAction.DebugSpeciesSelected
+): MainFunctionalCoreState {
+    val previousPlayerTags = state.player.tags
+    val previousSpecies = state.player.species
+    val newSpecies = state.availableSpecies.find { it.id == viewAction.id }!!
+
+    val newPlayerTags = previousPlayerTags - previousSpecies.tags + newSpecies.tags
+
+    return state.copy(
+        player = state.player.copy(
+            species = newSpecies,
+            tags = newPlayerTags,
+        )
+    )
 }
 
 fun handleDrawerTabSwitched(

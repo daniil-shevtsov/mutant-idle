@@ -135,8 +135,8 @@ class MainFunctionalCoreTest {
     @Test
     fun `should change player species when species selected`() = runBlockingTest {
         val nonSpeciesTags = listOf(
-            tag(name = "non-job tag 1"),
-            tag(name = "non-job tag 2"),
+            tag(name = "non-species tag 1"),
+            tag(name = "non-species tag 2"),
         )
 
         val previousSpecies = playerSpecies(

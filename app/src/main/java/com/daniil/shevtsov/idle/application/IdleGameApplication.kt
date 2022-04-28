@@ -13,6 +13,7 @@ import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.Jobs
+import com.daniil.shevtsov.idle.feature.player.species.domain.Species
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.createResources
@@ -40,6 +41,7 @@ class IdleGameApplication : Application() {
                     upgrades = createUpgrades(),
                     actions = createAllActions(),
                     availableJobs = createInitialJobs(),
+                    availableSpecies = createInitialSpecies(),
                     player = createInitialPlayer(),
                 )
             )
@@ -102,6 +104,16 @@ class IdleGameApplication : Application() {
         Jobs.Mortician,
         Jobs.Undertaker,
         Jobs.Butcher,
+    )
+
+    private fun createInitialSpecies() = listOf(
+        Species.Alien,
+        Species.Android,
+        Species.Demon,
+        Species.Devourer,
+        Species.Parasite,
+        Species.Shapeshifter,
+        Species.Vampire,
     )
 
 }
