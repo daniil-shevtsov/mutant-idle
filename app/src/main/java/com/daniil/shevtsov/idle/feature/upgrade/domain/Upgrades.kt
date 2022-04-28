@@ -11,8 +11,8 @@ fun createUpgrades() = listOf(
         price = 25.0,
         status = UpgradeStatus.NotBought,
         tags = mapOf(
-            Tags.Body.Fangs to TagRelation.Provides,
-            Tags.Species.Devourer to TagRelation.RequiredAll,
+            TagRelation.Provides to listOf(Tags.Body.Fangs),
+            TagRelation.RequiredAll to listOf(Tags.Species.Devourer),
         )
     ),
     upgrade(
@@ -22,8 +22,8 @@ fun createUpgrades() = listOf(
         price = 10.0,
         status = UpgradeStatus.NotBought,
         tags = mapOf(
-            Tags.Body.IronJaws to TagRelation.Provides,
-            Tags.Species.Devourer to TagRelation.RequiredAll,
+            TagRelation.Provides to listOf(Tags.Body.IronJaws),
+            TagRelation.RequiredAll to listOf(Tags.Species.Devourer),
         )
     ),
     upgrade(
@@ -32,12 +32,9 @@ fun createUpgrades() = listOf(
         subtitle = "Lifting a car or crushing a lock is not a problem anymore",
         price = 25.0,
         tags = mapOf(
-            Tags.Body.SuperStrength to TagRelation.Provides,
-            Tags.Species.Devourer to TagRelation.RequiredAll,
+            TagRelation.Provides to listOf(Tags.Body.SuperStrength),
+            TagRelation.RequiredAll to listOf(Tags.Species.Devourer),
         )
     ),
-    upgrade(
-
-    )
 
 )
