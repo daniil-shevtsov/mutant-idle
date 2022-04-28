@@ -1,17 +1,11 @@
 package com.daniil.shevtsov.idle.feature.flavor
 
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 
 fun flavorMachine(
     original: String,
     tags: List<Tag> = emptyList(),
 ): String {
-    val peopleNameFlavor = when {
-        tags.contains(Tags.Immortal) -> "mere mortals"
-        tags.contains(Tags.Species.Alien) -> "primitive life forms"
-        else -> "people"
-    }
     var newOriginal = original
 
     Flavors.flavors.forEach { flavor ->
@@ -19,7 +13,6 @@ fun flavorMachine(
     }
 
     return newOriginal
-        .replace(Flavors.DerogativePeopleName, peopleNameFlavor)
 }
 
 fun flavorMinivan(

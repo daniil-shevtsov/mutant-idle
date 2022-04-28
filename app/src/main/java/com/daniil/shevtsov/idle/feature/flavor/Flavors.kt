@@ -5,9 +5,7 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 object Flavors {
     const val PREFIX = "8"
 
-    const val InvisibilityAction = "INVISIBILITY_ACTION"
-
-    val newInvisibilityAction = flavor(
+    val invisibilityAction = flavor(
         placeholder = "${PREFIX}INVISIBILITY_ACTION",
         values = mapOf(
             Tags.Nature.Magic to "become ethereal",
@@ -16,9 +14,27 @@ object Flavors {
         default = "become invisible",
     )
 
-    val flavors = listOf(
-        newInvisibilityAction
+    val peopleName = flavor(
+        placeholder = "${PREFIX}PEOPLE_NAME",
+        values = mapOf(
+            Tags.Immortal to "mortals",
+            Tags.Species.Alien to "lifeforms",
+        ),
+        default = "people"
     )
 
-    const val DerogativePeopleName = "DEROGATIVE_PEOPLE_NAME"
+    val derogativePeopleName = flavor(
+        placeholder = "${PREFIX}DEROGATIVE_PEOPLE_NAME",
+        values = mapOf(
+            Tags.Immortal to "mere mortals",
+            Tags.Species.Alien to "primitive lifeforms",
+        ),
+        default = "puny people"
+    )
+
+    val flavors = listOf(
+        invisibilityAction,
+        peopleName,
+        derogativePeopleName,
+    )
 }
