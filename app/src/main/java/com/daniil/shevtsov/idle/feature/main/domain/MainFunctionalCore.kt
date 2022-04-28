@@ -30,6 +30,7 @@ fun mainFunctionalCore(
             state = state,
             viewAction = viewAction,
         )
+        is MainViewAction.DebugSpeciesSelected -> state
     }
     return newState
 }

@@ -15,6 +15,7 @@ import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCoreState
+import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.info.presentation.PlayerInfoState
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
@@ -32,7 +33,6 @@ import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
 import com.daniil.shevtsov.idle.util.balanceConfig
-import com.daniil.shevtsov.idle.util.player
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -48,29 +48,29 @@ internal class MainViewModelTest {
     fun `should form correct initial state`() = runBlockingTest {
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
+                resources = listOf(
+                    resource(key = ResourceKey.Blood, name = "Blood", value = 10.0),
+                    resource(key = ResourceKey.Money, name = "Money", value = 20.0),
+                ),
+                ratios = listOf(
+                    ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.0),
+                    ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
+                ),
                 upgrades = listOf(
                     upgrade(id = 0L, price = 32.0),
                     upgrade(id = 1L, price = 35.0),
                     upgrade(id = 2L, price = 150.0),
                     upgrade(id = 3L, price = 30.0),
                 ),
-                ratios = listOf(
-                    ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.0),
-                    ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
-                ),
                 actions = listOf(
                     action(id = 0L, title = "human action"),
                     action(id = 1L, title = "mutant action"),
-                ),
-                resources = listOf(
-                    resource(key = ResourceKey.Blood, name = "Blood", value = 10.0),
-                    resource(key = ResourceKey.Money, name = "Money", value = 20.0),
                 ),
                 sections = listOf(
                     sectionState(key = SectionKey.Resources, isCollapsed = false),
                     sectionState(key = SectionKey.Actions, isCollapsed = false),
                     sectionState(key = SectionKey.Upgrades, isCollapsed = false),
-                )
+                ),
             )
         )
 
@@ -113,7 +113,7 @@ internal class MainViewModelTest {
                     resource(key = ResourceKey.Blood, name = "Blood", value = 10.0),
                     resource(key = ResourceKey.Money, name = "Money", value = 20.0),
                     resource(key = ResourceKey.Prisoner, name = "Prisoners", value = 0.0),
-                )
+                ),
             )
         )
 
@@ -155,8 +155,8 @@ internal class MainViewModelTest {
 
             imperativeShell.updateState(
                 newState = mainFunctionalCoreState(
+                    upgrades = expectedAvailableUpgrades + expectedUnavailableUpgrades,
                     player = player(tags = listOf(availableTag)),
-                    upgrades = expectedAvailableUpgrades + expectedUnavailableUpgrades
                 )
             )
 
@@ -172,8 +172,8 @@ internal class MainViewModelTest {
     fun `should mark upgrade as affordable if its price less than resource`() = runBlockingTest {
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
-                upgrades = listOf(upgrade(id = 0L, price = 5.0)),
                 resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
+                upgrades = listOf(upgrade(id = 0L, price = 5.0)),
             )
         )
 
@@ -191,8 +191,8 @@ internal class MainViewModelTest {
         runBlockingTest {
             imperativeShell.updateState(
                 newState = mainFunctionalCoreState(
-                    upgrades = listOf(upgrade(id = 0L, price = 20.0)),
                     resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
+                    upgrades = listOf(upgrade(id = 0L, price = 20.0)),
                 )
             )
 
@@ -209,12 +209,12 @@ internal class MainViewModelTest {
     fun `should mark upgrade as bought if it is bought`() = runBlockingTest {
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
-                upgrades = listOf(upgrade(id = 0L, price = 10.0)),
+                resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
                 ratios = listOf(
                     ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.0),
                     ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
                 ),
-                resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
+                upgrades = listOf(upgrade(id = 0L, price = 10.0)),
             )
         )
 
@@ -235,11 +235,11 @@ internal class MainViewModelTest {
                 balanceConfig = balanceConfig(
                     resourceSpentForFullMutant = 100.0,
                 ),
-                upgrades = listOf(upgrade(id = 0L, price = 10.0)),
                 resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
                 ratios = listOf(
                     ratio(key = RatioKey.Mutanity)
-                )
+                ),
+                upgrades = listOf(upgrade(id = 0L, price = 10.0)),
             )
         )
 
@@ -260,16 +260,16 @@ internal class MainViewModelTest {
                 balanceConfig = balanceConfig(
                     resourceSpentForFullMutant = 100.0,
                 ),
+                resources = listOf(resource(key = ResourceKey.Blood, value = 1000.0)),
+                ratios = listOf(
+                    ratio(key = RatioKey.Mutanity, value = 0.0)
+                ),
                 upgrades = listOf(
                     upgrade(id = 0L, price = 15.0),
                     upgrade(id = 1L, price = 10.0),
                     upgrade(id = 2L, price = 25.0),
                     upgrade(id = 3L, price = 30.0),
                 ),
-                resources = listOf(resource(key = ResourceKey.Blood, value = 1000.0)),
-                ratios = listOf(
-                    ratio(key = RatioKey.Mutanity, value = 0.0)
-                )
             )
         )
 
@@ -358,10 +358,10 @@ internal class MainViewModelTest {
     fun `should update blood when action clicked`() = runBlockingTest {
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
+                resources = listOf(resource(key = ResourceKey.Blood, value = 1000.0)),
                 actions = listOf(
                     action(id = 1L, resourceChanges = mapOf(ResourceKey.Blood to 50.0))
                 ),
-                resources = listOf(resource(key = ResourceKey.Blood, value = 1000.0)),
             )
         )
 
@@ -383,6 +383,10 @@ internal class MainViewModelTest {
         runBlockingTest {
             imperativeShell.updateState(
                 newState = mainFunctionalCoreState(
+                    resources = listOf(
+                        resource(key = ResourceKey.Blood, name = "Blood", value = 1000.0),
+                        resource(key = ResourceKey.Money, name = "Money", value = 500.0),
+                    ),
                     actions = listOf(
                         action(
                             id = 1L,
@@ -391,10 +395,6 @@ internal class MainViewModelTest {
                                 ResourceKey.Money to -30.0,
                             ),
                         )
-                    ),
-                    resources = listOf(
-                        resource(key = ResourceKey.Blood, name = "Blood", value = 1000.0),
-                        resource(key = ResourceKey.Money, name = "Money", value = 500.0),
                     ),
                 )
             )
@@ -416,7 +416,7 @@ internal class MainViewModelTest {
     fun `should toggle corresponding collapse state when toggle clicked`() = runBlockingTest {
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
-                sections = listOf(sectionState(key = SectionKey.Resources, isCollapsed = false))
+                sections = listOf(sectionState(key = SectionKey.Resources, isCollapsed = false)),
             )
         )
 
@@ -441,13 +441,13 @@ internal class MainViewModelTest {
     fun `should not apply action if it requires unavailable resources`() = runBlockingTest {
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
+                resources = listOf(resource(key = ResourceKey.Money, value = 10.0)),
                 actions = listOf(
                     action(
                         id = 1L,
                         resourceChanges = mapOf(ResourceKey.Money to -30.0),
                     )
                 ),
-                resources = listOf(resource(key = ResourceKey.Money, value = 10.0)),
             )
         )
 
@@ -467,6 +467,10 @@ internal class MainViewModelTest {
         runBlockingTest {
             imperativeShell.updateState(
                 newState = mainFunctionalCoreState(
+                    resources = listOf(
+                        resource(key = ResourceKey.Blood, value = 30.0),
+                        resource(key = ResourceKey.Money, value = 40.0),
+                    ),
                     actions = listOf(
                         action(
                             id = 1L,
@@ -475,10 +479,6 @@ internal class MainViewModelTest {
                                 ResourceKey.Blood to -50.0,
                             ),
                         )
-                    ),
-                    resources = listOf(
-                        resource(key = ResourceKey.Blood, value = 30.0),
-                        resource(key = ResourceKey.Money, value = 40.0),
                     ),
                 )
             )
@@ -498,6 +498,9 @@ internal class MainViewModelTest {
     fun `should disable actions if it requires not available resources`() = runBlockingTest {
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
+                resources = listOf(
+                    resource(key = ResourceKey.Money, value = 35.0),
+                ),
                 actions = listOf(
                     action(
                         id = 1L,
@@ -511,9 +514,6 @@ internal class MainViewModelTest {
                             ResourceKey.Money to -50.0,
                         ),
                     )
-                ),
-                resources = listOf(
-                    resource(key = ResourceKey.Money, value = 35.0),
                 ),
             )
         )
@@ -533,6 +533,9 @@ internal class MainViewModelTest {
     fun `show enabled actions before disabled if got both`() = runBlockingTest {
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
+                resources = listOf(
+                    resource(key = ResourceKey.Money, value = 35.0),
+                ),
                 actions = listOf(
                     action(
                         id = 1L,
@@ -552,9 +555,6 @@ internal class MainViewModelTest {
                             ResourceKey.Money to -50.0,
                         ),
                     ),
-                ),
-                resources = listOf(
-                    resource(key = ResourceKey.Money, value = 35.0),
                 ),
             )
         )
@@ -577,8 +577,8 @@ internal class MainViewModelTest {
 
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
-                availableJobs = availableJobs,
                 drawerTabs = listOf(drawerTab(id = DrawerTabId.Debug, isSelected = true)),
+                availableJobs = availableJobs,
             )
         )
 
@@ -603,8 +603,8 @@ internal class MainViewModelTest {
         val jobTags = job.tags
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
-                availableJobs = listOf(job),
                 drawerTabs = listOf(drawerTab(id = DrawerTabId.PlayerInfo, isSelected = true)),
+                availableJobs = listOf(job),
             )
         )
         viewModel.handleAction(MainViewAction.DebugJobSelected(id = job.id))
@@ -693,7 +693,7 @@ internal class MainViewModelTest {
                 ),
                 player = player(
                     tags = playerTags,
-                )
+                ),
             )
         )
 
@@ -746,7 +746,7 @@ internal class MainViewModelTest {
                     tags = listOf(
                         availableTag
                     )
-                )
+                ),
             )
         )
 

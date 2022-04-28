@@ -8,6 +8,7 @@ import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
+import com.daniil.shevtsov.idle.feature.player.species.domain.PlayerSpecies
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
@@ -21,6 +22,7 @@ fun mainFunctionalCoreState(
     drawerTabs: List<DrawerTab> = emptyList(),
     sections: List<SectionState> = emptyList(),
     availableJobs: List<PlayerJob> = emptyList(),
+    availableSpecies: List<PlayerSpecies> = emptyList(),
     player: Player = player(),
 ) = MainFunctionalCoreState(
     balanceConfig = balanceConfig,

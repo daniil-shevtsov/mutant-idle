@@ -2,18 +2,63 @@ package com.daniil.shevtsov.idle.feature.player.species.domain
 
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 
-val Blob = PlayerSpecies(
-    tags = listOf(
-        Tags.Devourer,
-        Tags.Mutating,
-        Tags.Growth,
+object Species {
+    val Devourer = playerSpecies(
+        id = 0L,
+        title = "Devourer",
+        tags = listOf(
+            Tags.Species.Devourer,
+        )
     )
-)
 
-val Vampire = PlayerSpecies(
-    tags = listOf(
-        Tags.Heliophobia,
-        Tags.Immortal,
-        Tags.Hypnosis,
+    val Shapeshifter = playerSpecies(
+        id = 1L,
+        title = "Shapeshifter",
+        tags = listOf(
+            Tags.Species.ShapeShifter,
+        )
     )
-)
+
+    val Vampire = playerSpecies(
+        id = 2L,
+        title = "Vampire",
+        tags = listOf(
+            Tags.Species.Vampire,
+            Tags.Heliophobia,
+            Tags.Immortal,
+            Tags.Hypnosis,
+        )
+    )
+
+    val Parasite = playerSpecies(
+        id = 3L,
+        title = "Parasite",
+        tags = listOf(
+            Tags.Species.Parasite,
+        )
+    )
+
+    val Demon = playerSpecies(
+        id = 4L,
+        title = "Demon",
+        tags = listOf(
+            Tags.Species.Demon,
+        )
+    )
+
+    val Alien = playerSpecies(
+        id = 5L,
+        title = "Alien",
+        tags = listOf(
+            Tags.Species.Alien,
+        )
+    )
+
+    val Android = playerSpecies(
+        id = 6L,
+        title = "Android",
+        tags = listOf(
+            Tags.Species.Android,
+        )
+    )
+}

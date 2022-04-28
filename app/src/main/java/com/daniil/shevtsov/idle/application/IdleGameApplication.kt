@@ -11,7 +11,7 @@ import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
-import com.daniil.shevtsov.idle.feature.player.core.domain.Player
+import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.Jobs
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
@@ -90,7 +90,7 @@ class IdleGameApplication : Application() {
         DrawerTab(id = DrawerTabId.Debug, title = "Debug", isSelected = false),
     )
 
-    private fun createInitialPlayer() = Player(
+    private fun createInitialPlayer() = player(
         job = Jobs.Mortician,
         tags = Jobs.Mortician.tags + listOf(
             Tags.Devourer,

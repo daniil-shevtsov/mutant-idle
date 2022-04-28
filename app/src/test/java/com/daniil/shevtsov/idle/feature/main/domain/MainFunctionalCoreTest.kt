@@ -14,6 +14,7 @@ import com.daniil.shevtsov.idle.feature.main.presentation.sectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
+import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
@@ -40,12 +41,12 @@ class MainFunctionalCoreTest {
             resources = listOf(
                 resource(key = ResourceKey.Blood, value = 10.0),
             ),
+            ratios = listOf(
+                ratio(key = RatioKey.Mutanity, value = 0.0)
+            ),
             upgrades = listOf(
                 upgrade(id = 0L, price = 4.0)
             ),
-            ratios = listOf(
-                ratio(key = RatioKey.Mutanity, value = 0.0)
-            )
         )
 
         val newState = mainFunctionalCore(
@@ -104,11 +105,11 @@ class MainFunctionalCoreTest {
 
 
         val initialState = mainFunctionalCoreState(
-            player = previousPlayerState,
             availableJobs = listOf(
                 previousPlayerState.job,
                 newJob
             ),
+            player = previousPlayerState,
         )
 
         val newState = mainFunctionalCore(
@@ -127,6 +128,68 @@ class MainFunctionalCoreTest {
                         containsSubList(nonJobTags)
                         containsNone(previousPlayerState.job.tags)
                         containsSubList(newJob.tags)
+                    }
+            }
+    }
+
+    @Test
+    fun `should change player species when species selected`() = runBlockingTest {
+        val nonSpeciesTags = listOf(
+            tag(name = "non-job tag 1"),
+            tag(name = "non-job tag 2"),
+        )
+
+        val previousSpecies = playerSpecies(
+            id = 0L,
+            title = "old species",
+            tags = listOf(
+                tag(name = "old species tag 1"),
+                tag(name = "old species tag 2"),
+            )
+        )
+        val newSpecies = playerSpecies(
+            id = 1L,
+            title = "new species",
+            tags = listOf(
+                tag(name = "new species tag 1"),
+                tag(name = "new species tag 2"),
+            ),
+        )
+
+        val previousPlayerState = player(
+            species = previousSpecies,
+            tags = listOf(
+                tag(name = "old species tag 1"), //TODO: This design choice to have duplicated data is kinda dumb
+                tag(name = "old species tag 2"),
+            ) + nonSpeciesTags
+        )
+
+
+
+        val initialState = mainFunctionalCoreState(
+            player = previousPlayerState,
+            availableSpecies = listOf(
+                previousPlayerState.species,
+                newSpecies
+            ),
+        )
+
+        val newState = mainFunctionalCore(
+            state = initialState,
+            viewAction = MainViewAction.DebugSpeciesSelected(id = newSpecies.id)
+        )
+
+        assertThat(newState)
+            .prop(MainFunctionalCoreState::player)
+            .all {
+                prop(Player::species)
+                    .isEqualTo(newSpecies)
+
+                prop(Player::tags)
+                    .all {
+                        containsSubList(nonSpeciesTags)
+                        containsNone(previousPlayerState.species.tags)
+                        containsSubList(newSpecies.tags)
                     }
             }
     }
@@ -154,7 +217,7 @@ class MainFunctionalCoreTest {
                 ratio(key = RatioKey.Mutanity, value = 3.0),
                 ratio(key = RatioKey.Suspicion, value = 7.0),
             ),
-            actions = listOf(action)
+            actions = listOf(action),
         )
 
         val newState = mainFunctionalCore(
@@ -185,7 +248,7 @@ class MainFunctionalCoreTest {
             drawerTabs = listOf(
                 drawerTab(id = DrawerTabId.PlayerInfo, isSelected = true),
                 drawerTab(id = DrawerTabId.Debug, isSelected = false),
-            )
+            ),
         )
 
         val newState = mainFunctionalCore(
@@ -208,7 +271,7 @@ class MainFunctionalCoreTest {
             sections = listOf(
                 sectionState(key = SectionKey.Resources, isCollapsed = false),
                 sectionState(key = SectionKey.Actions, isCollapsed = false),
-            )
+            ),
         )
 
         val firstState = mainFunctionalCore(

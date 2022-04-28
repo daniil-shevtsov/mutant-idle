@@ -185,6 +185,7 @@ private fun MainDrawer(
                 onAction = { action ->
                     val mainViewAction = when (action) {
                         is DebugViewAction.JobSelected -> MainViewAction.DebugJobSelected(action.id)
+                        is DebugViewAction.SpeciesSelected -> MainViewAction.DebugSpeciesSelected(action.id)
                     }
                     onViewAction(mainViewAction)
                 })
