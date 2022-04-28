@@ -8,6 +8,7 @@ object Species {
         title = "Devourer",
         tags = listOf(
             Tags.Species.Devourer,
+            Tags.PersonCapturer,
         )
     )
 
