@@ -112,4 +112,13 @@ fun createAllActions() = listOf(
             RatioKey.Suspicion to -0.1f,
         )
     ),
+    action(
+        id = 14L,
+        title = "Become invisible",
+        subtitle = "You become invisible to people",
+        tags = mapOf(
+            Tags.Abilities.Invisibility to TagRelation.RequiredAll,
+            Tags.State.Invisible to TagRelation.Provides,
+        )
+    )
 )

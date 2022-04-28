@@ -33,12 +33,15 @@ object Tags {
     }
 
     object Abilities {
-        val Invisibility = Tag(name = "Invisibility")
-        val Flight = Tag(name = "Flight")
-        val AnimalForm = Tag(name = "Animal Form")
-        val TransferHost = Tag(name = "Transfer Host")
+        val Invisibility = Tag(name = "Invisibility Ability")
+        val Flight = Tag(name = "Flight Ability")
+        val AnimalForm = Tag(name = "Animal Form Ability")
+        val TransferHost = Tag(name = "Transfer Host Ability")
     }
 
+    object State {
+        val Invisible = Tag(name = "Invisible")
+    }
 
     val Surgeon = Tag(name = "Surgeon")
     val FreshCorpseAccess = Tag(name = "Fresh Corpse Access")
