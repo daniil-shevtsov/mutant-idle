@@ -17,9 +17,10 @@ import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.debugViewState
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJobModel
+import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpeciesModel
 
 @Preview(
-    widthDp = 320,
+    widthDp = 230,
     heightDp = 534,
 )
 @Composable
@@ -27,8 +28,11 @@ fun DebugComposablePreview() {
     DebugComposable(
         state = debugViewState(
             jobSelection = listOf(
-                playerJobModel(title = "LOL", tags = emptyList()),
+                playerJobModel(title = "Mortician"),
                 playerJobModel(title = "KEK", tags = emptyList()),
+            ),
+            speciesSelection = listOf(
+                playerSpeciesModel(title = "Devourer")
             )
         ),
         onAction = {},
@@ -58,12 +62,12 @@ fun DebugComposable(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text(
-                    modifier = modifier,
+                    modifier = modifier.weight(1f),
                     text = "Selected Job:",
                     fontSize = 24.sp,
                     color = Color.White
                 )
-                Box {
+                Box(modifier = modifier.weight(1f)) {
                     Text(
                         text = when (val selectedJob =
                             state.jobSelection.firstOrNull { it.isSelected }
@@ -108,12 +112,12 @@ fun DebugComposable(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text(
-                    modifier = modifier,
+                    modifier = modifier.weight(1f),
                     text = "Selected Species:",
                     fontSize = 24.sp,
                     color = Color.White
                 )
-                Box {
+                Box(modifier = modifier.weight(1f)) {
                     Text(
                         text = when (val selectedSpecies =
                             state.speciesSelection.firstOrNull { it.isSelected }
@@ -134,7 +138,7 @@ fun DebugComposable(
                     )
                     DropdownMenu(
                         expanded = expanded2,
-                        modifier = modifier,
+                        modifier = modifier.wrapContentHeight(),
                         onDismissRequest = { expanded2 = false }) {
                         state.speciesSelection.forEach { species ->
                             DropdownMenuItem(
