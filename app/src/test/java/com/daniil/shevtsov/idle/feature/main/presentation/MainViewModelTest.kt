@@ -725,21 +725,21 @@ internal class MainViewModelTest {
     @Test
     fun `should keep other player tags when changing jobs`() = runBlockingTest {
         val playerTags = listOf(
-            Tags.Devourer,
-            Tags.Immortal,
+            tag(name = "player tag 1"),
+            tag(name = "player tag 2"),
         )
         val previousJob = playerJob(
             id = 0L,
             tags = listOf(
-                Tags.MeatAccess,
-                Tags.SocialJob,
+                tag(name = "old job tag 1"),
+                tag(name = "old job tag 2"),
             )
         )
         val newJob = playerJob(
             id = 1L,
             tags = listOf(
-                Tags.CorpseAccess,
-                Tags.SocialJob,
+                tag(name = "new job tag 1"),
+                tag(name = "new job tag 2"),
             )
         )
         imperativeShell.updateState(
@@ -765,12 +765,11 @@ internal class MainViewModelTest {
                 .isInstanceOf(DrawerContentViewState.PlayerInfo::class)
                 .prop(DrawerContentViewState.PlayerInfo::playerInfo)
                 .prop(PlayerInfoState::playerTags)
-                .containsExactly(
-                    Tags.Devourer,
-                    Tags.Immortal,
-                    Tags.CorpseAccess,
-                    Tags.SocialJob,
-                )
+                .all {
+                    containsSubList(playerTags)
+                    containsSubList(newJob.tags)
+                    containsNone(previousJob.tags)
+                }
         }
     }
 
@@ -900,6 +899,7 @@ internal class MainViewModelTest {
             .prop(DrawerContentViewState.Debug::state)
 
     private fun Assert<DebugViewState>.extractingJobSelection() = prop(DebugViewState::jobSelection)
-    private fun Assert<DebugViewState>.extractingSpeciesSelection() = prop(DebugViewState::speciesSelection)
+    private fun Assert<DebugViewState>.extractingSpeciesSelection() =
+        prop(DebugViewState::speciesSelection)
 
 }

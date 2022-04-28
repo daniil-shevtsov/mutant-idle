@@ -1,7 +1,6 @@
 package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
 object Tags {
-    val Devourer = Tag(name = "Devourer")
     val Hypnosis = Tag(name = "Hypnosis")
     val Heliophobia = Tag(name = "Heliophobia")
     val Immortal = Tag(name = "Immortal")

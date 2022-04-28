@@ -65,7 +65,7 @@ fun createAllActions() = listOf(
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
-                Tags.Devourer,
+                Tags.Species.Devourer,
             )
         ),
     ),
