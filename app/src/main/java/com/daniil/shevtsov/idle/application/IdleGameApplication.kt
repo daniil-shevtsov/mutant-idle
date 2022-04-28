@@ -92,7 +92,7 @@ class IdleGameApplication : Application() {
     )
 
     private fun createInitialPlayer() = player(
-        job = Jobs.Mortician,
+        job = Jobs.Unemployed,
         species = Species.Devourer,
         generalTags = emptyList(),
     )

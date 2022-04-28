@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.feature.player.job.domain
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 
 object Jobs {
+
     val Mortician = PlayerJob(
         id = 0L,
         title = "Mortician",
@@ -32,6 +33,13 @@ object Jobs {
             Tags.SocialJob,
         )
     )
+
+    val Unemployed = PlayerJob(
+        id = 3L,
+        title = "Unemployed",
+        tags = listOf(),
+    )
+
 }
 
 
