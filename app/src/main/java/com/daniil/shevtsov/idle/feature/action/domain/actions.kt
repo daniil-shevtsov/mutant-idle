@@ -14,8 +14,8 @@ fun createAllActions() = listOf(
             ResourceKey.Money to 25.0
         ),
         tags = mapOf(
-            Tags.HumanAppearance to TagRelation.Required,
-            Tags.Employed to TagRelation.Required,
+            Tags.HumanAppearance to TagRelation.RequiredAll,
+            Tags.Employed to TagRelation.RequiredAll,
         ),
     ),
     action(
@@ -27,7 +27,7 @@ fun createAllActions() = listOf(
             ResourceKey.HumanFood to 1.0,
         ),
         tags = mapOf(
-            Tags.HumanAppearance to TagRelation.Required,
+            Tags.HumanAppearance to TagRelation.RequiredAll,
         ),
     ),
     action(
@@ -35,7 +35,7 @@ fun createAllActions() = listOf(
         title = "Capture a person",
         subtitle = "I think I can do it if I grow enough",
         tags = mapOf(
-            Tags.PersonCapturer to TagRelation.Required,
+            Tags.PersonCapturer to TagRelation.RequiredAll,
         ),
         resourceChanges = mapOf(
             ResourceKey.Blood to -10.0,
@@ -58,7 +58,7 @@ fun createAllActions() = listOf(
             RatioKey.Suspicion to 0.05f,
         ),
         tags = mapOf(
-            Tags.Devourer to TagRelation.Required,
+            Tags.Devourer to TagRelation.RequiredAll,
         ),
     ),
     action(
@@ -78,7 +78,7 @@ fun createAllActions() = listOf(
             ResourceKey.Remains to -1.0,
         ),
         tags = mapOf(
-            Tags.GraveyardAccess to TagRelation.Required,
+            Tags.GraveyardAccess to TagRelation.RequiredAll,
         ),
         ratioChanges = mapOf(
             RatioKey.Suspicion to -0.05f,
@@ -92,7 +92,7 @@ fun createAllActions() = listOf(
             ResourceKey.Organs to 1.0,
         ),
         tags = mapOf(
-            Tags.FreshCorpseAccess to TagRelation.Required,
+            Tags.FreshCorpseAccess to TagRelation.RequiredAll,
         ),
         ratioChanges = mapOf(
             RatioKey.Suspicion to 0.1f,
@@ -106,7 +106,7 @@ fun createAllActions() = listOf(
             ResourceKey.Remains to -1.0,
         ),
         tags = mapOf(
-            Tags.IncineratorAccess to TagRelation.Required,
+            Tags.IncineratorAccess to TagRelation.RequiredAll,
         ),
         ratioChanges = mapOf(
             RatioKey.Suspicion to -0.1f,

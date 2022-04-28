@@ -682,14 +682,14 @@ internal class MainViewModelTest {
         val availableAction = action(
             id = 1L,
             tags = mapOf(
-                availableTag to TagRelation.Required,
+                availableTag to TagRelation.RequiredAll,
             )
         )
         val notAvailableAction = action(
             id = 2L,
             tags = mapOf(
-                availableTag to TagRelation.Required,
-                notAvailableTag to TagRelation.Required,
+                availableTag to TagRelation.RequiredAll,
+                notAvailableTag to TagRelation.RequiredAll,
             )
         )
 

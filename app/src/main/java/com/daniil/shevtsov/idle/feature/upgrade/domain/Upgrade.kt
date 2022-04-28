@@ -9,5 +9,5 @@ data class Upgrade(
     val subtitle: String,
     val price: Price,
     val status: UpgradeStatus,
-    val tags: Map<Tag, TagRelation>,
+    val tags: Map<TagRelation, List<Tag>>,
 )

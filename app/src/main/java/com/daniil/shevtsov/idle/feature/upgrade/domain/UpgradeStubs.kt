@@ -16,7 +16,7 @@ fun upgrade(
     subtitle = subtitle,
     price = price(value = price),
     status = status,
-    tags = tags,
+    tags = tags.map { it.value to listOf(it.key) }.toMap(),
 )
 
 fun price(
