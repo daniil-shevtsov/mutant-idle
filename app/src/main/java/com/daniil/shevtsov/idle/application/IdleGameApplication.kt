@@ -8,7 +8,7 @@ import com.daniil.shevtsov.idle.core.di.koin.appModule
 import com.daniil.shevtsov.idle.feature.action.domain.createAllActions
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
-import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
+import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
@@ -31,7 +31,7 @@ class IdleGameApplication : Application() {
                 appContext = applicationContext,
                 balanceConfig = createBalanceConfig(),
                 initialResources = createResources(),
-                initialMainState = MainFunctionalCoreState(
+                initialMainState = mainFunctionalCoreState(
                     balanceConfig = createBalanceConfig(),
                     resources = createResources(),
                     ratios = createInitialRatios(),

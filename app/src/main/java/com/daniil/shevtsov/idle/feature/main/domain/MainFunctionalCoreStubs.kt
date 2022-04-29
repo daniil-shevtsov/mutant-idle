@@ -4,6 +4,7 @@ import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.core.domain.balanceConfig
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
+import com.daniil.shevtsov.idle.feature.flavor.Flavor
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
@@ -23,6 +24,7 @@ fun mainFunctionalCoreState(
     sections: List<SectionState> = emptyList(),
     availableJobs: List<PlayerJob> = emptyList(),
     availableSpecies: List<PlayerSpecies> = emptyList(),
+    flavors: List<Flavor> = emptyList(),
     player: Player = player(),
 ) = MainFunctionalCoreState(
     balanceConfig = balanceConfig,
@@ -34,5 +36,6 @@ fun mainFunctionalCoreState(
     sections = sections,
     availableJobs = availableJobs,
     availableSpecies = availableSpecies,
+    flavors = flavors,
     player = player,
 )

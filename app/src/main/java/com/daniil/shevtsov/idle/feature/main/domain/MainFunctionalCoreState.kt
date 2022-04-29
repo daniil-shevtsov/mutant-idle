@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.feature.main.domain
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
+import com.daniil.shevtsov.idle.feature.flavor.Flavor
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
@@ -21,5 +22,6 @@ data class MainFunctionalCoreState(
     val drawerTabs: List<DrawerTab>,
     val availableJobs: List<PlayerJob>,
     val availableSpecies: List<PlayerSpecies>,
+    val flavors: List<Flavor>,
     val player: Player,
 )

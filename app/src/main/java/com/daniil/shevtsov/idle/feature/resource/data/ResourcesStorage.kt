@@ -26,11 +26,7 @@ class ResourcesStorage @Inject constructor(
         newValue: Resource
     ) = multipleStorage.updateByKey(
         key = key,
-        newValue = if (key == ResourceKey.Blood) {
-            newValue.copy(value = 1000 + newValue.value)
-        } else {
-            newValue
-        }// TODO: for debug,
+        newValue = newValue,
     )
 
     fun upgradeAll(newResources: List<Resource>) {
