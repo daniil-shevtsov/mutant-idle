@@ -6,6 +6,7 @@ object Flavors {
     const val PREFIX = "8"
 
     val invisibilityAction = flavor(
+        id = FlavorId.InvisibilityAction,
         placeholder = "${PREFIX}INVISIBILITY_ACTION",
         values = mapOf(
             Tags.Nature.Magic to "become ethereal",
@@ -15,6 +16,7 @@ object Flavors {
     )
 
     val invisibilityGain = flavor(
+        id = FlavorId.InvisibilityGain,
         placeholder = "${PREFIX}INVISIBILITY_GAIN",
         values = mapOf(
             Tags.Nature.Magic to "Learn dark arts of invisibility",
@@ -23,6 +25,7 @@ object Flavors {
     )
 
     val peopleName = flavor(
+        id = FlavorId.PeopleName,
         placeholder = "${PREFIX}PEOPLE_NAME",
         values = mapOf(
             Tags.Immortal to "mortals",
@@ -32,6 +35,7 @@ object Flavors {
     )
 
     val derogativePeopleName = flavor(
+        id = FlavorId.DerogativePeopleName,
         placeholder = "${PREFIX}DEROGATIVE_PEOPLE_NAME",
         values = mapOf(
             Tags.Immortal to "mere mortals",
