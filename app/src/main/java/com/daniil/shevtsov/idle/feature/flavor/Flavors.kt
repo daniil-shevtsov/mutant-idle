@@ -39,12 +39,12 @@ object Flavors {
         ),
         default = "puny people"
     )
-
-    //TODO: Do the same as with actions and upgrades
-    val flavors = listOf(
-        invisibilityAction,
-        invisibilityGain,
-        peopleName,
-        derogativePeopleName,
-    )//.map { flavor -> flavor.copy(placeholder = PREFIX + flavor.placeholder) }
 }
+
+//TODO: Do the same as with actions and upgrades
+fun createFlavors() = listOf(
+    Flavors.invisibilityAction,
+    Flavors.invisibilityGain,
+    Flavors.peopleName,
+    Flavors.derogativePeopleName,
+)

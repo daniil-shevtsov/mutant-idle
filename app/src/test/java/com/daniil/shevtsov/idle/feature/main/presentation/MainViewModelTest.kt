@@ -967,6 +967,7 @@ internal class MainViewModelTest {
                 upgrades = listOf(
                     upgrade(subtitle = flavor.placeholder)
                 ),
+                flavors = listOf(flavor),
                 player = player(
                     generalTags = listOf(tag)
                 ),
