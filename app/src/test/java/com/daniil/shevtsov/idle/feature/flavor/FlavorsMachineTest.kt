@@ -10,7 +10,10 @@ class FlavorsMachineTest {
 
     @Test
     fun `should return empty for empty`() {
-        val withFlavor = flavorMachine(original = "")
+        val withFlavor = flavorMachine(
+            original = "",
+            flavors = emptyList(),
+        )
 
         assertThat(withFlavor).isEmpty()
     }
@@ -19,26 +22,35 @@ class FlavorsMachineTest {
     fun `should return plain text for plain text`() {
         val plainText = "lol"
 
-        val withFlavor = flavorMachine(original = plainText)
+        val withFlavor = flavorMachine(
+            original = plainText,
+            flavors = emptyList(),
+        )
 
         assertThat(withFlavor).isEqualTo(plainText)
     }
 
     @Test
     fun `should replace placeholder with default value`() {
-        val placeholder = Flavors.invisibilityAction.placeholder
+        val flavor = Flavors.invisibilityAction
 
-        val withFlavor = flavorMachine(original = placeholder)
+        val withFlavor = flavorMachine(
+            original = flavor.placeholder,
+            flavors = listOf(flavor),
+            tags = emptyList(),
+        )
 
         assertThat(withFlavor).isEqualTo("become invisible")
     }
 
     @Test
     fun `should replace placeholder with magic flavor`() {
-        val placeholder = "You ${Flavors.invisibilityAction.placeholder}."
+        val flavor = Flavors.invisibilityAction
+        val original = "You ${flavor.placeholder}."
 
         val withFlavor = flavorMachine(
-            original = placeholder,
+            original = original,
+            flavors = listOf(flavor),
             tags = listOf(Tags.Nature.Magic),
         )
 
@@ -47,10 +59,12 @@ class FlavorsMachineTest {
 
     @Test
     fun `should replace placeholder with tech flavor`() {
-        val placeholder = "You ${Flavors.invisibilityAction.placeholder}."
+        val flavor = Flavors.invisibilityAction
+        val original = "You ${flavor.placeholder}."
 
         val withFlavor = flavorMachine(
-            original = placeholder,
+            original = original,
+            flavors = listOf(flavor),
             tags = listOf(Tags.Nature.Tech),
         )
 
@@ -59,19 +73,25 @@ class FlavorsMachineTest {
 
     @Test
     fun `should replace placeholder with value in text`() {
-        val placeholder = "You ${Flavors.invisibilityAction.placeholder}."
+        val flavor = Flavors.invisibilityAction
+        val original = "You ${flavor.placeholder}."
 
-        val withFlavor = flavorMachine(original = placeholder)
+        val withFlavor = flavorMachine(
+            original = original,
+            flavors = listOf(flavor),
+        )
 
         assertThat(withFlavor).isEqualTo("You become invisible.")
     }
 
     @Test
     fun `should replace placeholder with alien flavor`() {
-        val placeholder = "You are beyond comprehension of ${Flavors.derogativePeopleName.placeholder}."
+        val flavor = Flavors.derogativePeopleName
+        val original = "You are beyond comprehension of ${flavor.placeholder}."
 
         val withFlavor = flavorMachine(
-            original = placeholder,
+            original = original,
+            flavors = listOf(flavor),
             tags = listOf(Tags.Species.Alien),
         )
 
@@ -80,10 +100,12 @@ class FlavorsMachineTest {
 
     @Test
     fun `should replace placeholder with immortal flavor`() {
-        val placeholder = "You are beyond comprehension of ${Flavors.derogativePeopleName.placeholder}."
+        val flavor = Flavors.derogativePeopleName
+        val original = "You are beyond comprehension of ${flavor.placeholder}."
 
         val withFlavor = flavorMachine(
-            original = placeholder,
+            original = original,
+            flavors  = listOf(flavor),
             tags = listOf(Tags.Immortal),
         )
 
@@ -92,7 +114,8 @@ class FlavorsMachineTest {
 
     @Test
     fun `minivan `() {
-        val original = "You ${Flavors.invisibilityAction.placeholder}."
+        val flavor = Flavors.invisibilityAction
+        val original = "You ${flavor.placeholder}."
 
         assertThat(
             flavorMinivan(

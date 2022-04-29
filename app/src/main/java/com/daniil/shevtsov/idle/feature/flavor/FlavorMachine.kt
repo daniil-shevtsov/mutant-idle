@@ -4,7 +4,7 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 
 fun flavorMachine(
     original: String,
-    flavors: List<Flavor> = Flavors.flavors,
+    flavors: List<Flavor>,
     tags: List<Tag> = emptyList(),
 ): String {
     var newOriginal = original
