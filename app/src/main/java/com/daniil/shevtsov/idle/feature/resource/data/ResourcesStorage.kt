@@ -4,7 +4,6 @@ import com.daniil.shevtsov.idle.core.data.MultipleStorage
 import com.daniil.shevtsov.idle.core.di.AppScope
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
-import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -27,7 +26,11 @@ class ResourcesStorage @Inject constructor(
         newValue: Resource
     ) = multipleStorage.updateByKey(
         key = key,
-        newValue = newValue,
+        newValue = if (key == ResourceKey.Blood) {
+            newValue.copy(value = 1000 + newValue.value)
+        } else {
+            newValue
+        }// TODO: for debug,
     )
 
     fun upgradeAll(newResources: List<Resource>) {

@@ -98,6 +98,7 @@ class IdleGameApplication : Application() {
     )
 
     private fun createInitialJobs() = listOf(
+        Jobs.Unemployed,
         Jobs.Mortician,
         Jobs.Undertaker,
         Jobs.Butcher,
