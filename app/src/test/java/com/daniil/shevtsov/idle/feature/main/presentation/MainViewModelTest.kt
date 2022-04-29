@@ -934,15 +934,17 @@ internal class MainViewModelTest {
 
     @Test
     fun `should replace placeholders in action description if has any`() = runBlockingTest {
+        val tag = Tags.Nature.Tech
+        val flavor = Flavors.invisibilityAction
+
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
                 actions = listOf(
-                    action(subtitle = Flavors.invisibilityAction.placeholder)
+                    action(subtitle = flavor.placeholder)
                 ),
+                flavors = listOf(flavor),
                 player = player(
-                    generalTags = listOf(
-                        Tags.Nature.Tech,
-                    )
+                    generalTags = listOf(tag)
                 ),
             )
         )
@@ -951,21 +953,22 @@ internal class MainViewModelTest {
             assertThat(expectMostRecentItem())
                 .extractingHumanActions()
                 .extracting(ActionModel::subtitle)
-                .containsExactly(Flavors.invisibilityAction.values[Tags.Nature.Tech])
+                .containsExactly(flavor.values[tag])
         }
     }
 
     @Test
     fun `should replace placeholders in upgrade description if has any`() = runBlockingTest {
+        val tag = Tags.Nature.Tech
+        val flavor = Flavors.invisibilityAction
+
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
                 upgrades = listOf(
-                    upgrade(subtitle = Flavors.invisibilityGain.placeholder)
+                    upgrade(subtitle = flavor.placeholder)
                 ),
                 player = player(
-                    generalTags = listOf(
-                        Tags.Nature.Tech,
-                    )
+                    generalTags = listOf(tag)
                 ),
             )
         )
@@ -974,7 +977,7 @@ internal class MainViewModelTest {
             assertThat(expectMostRecentItem())
                 .extractingUpgrades()
                 .extracting(UpgradeModel::subtitle)
-                .containsExactly(Flavors.invisibilityGain.values[Tags.Nature.Tech])
+                .containsExactly(flavor.values[tag])
         }
     }
 
