@@ -90,7 +90,7 @@ class MainViewModel @Inject constructor(
                     percent = it.value
                 )
             },
-            actionState = createActionState(state.actions, state.resources, state.player),
+            actionState = createActionState(state.actions, state.resources, state.player, state),
             shop = state.upgrades
                 .filter { upgrade ->
                     satisfiesAllTagsRelations(
@@ -103,6 +103,7 @@ class MainViewModel @Inject constructor(
                         upgrade = upgrade.copy(
                             subtitle = flavorMachine(
                                 original = upgrade.subtitle,
+                                flavors = state.flavors,
                                 tags = state.player.tags,
                             )
                         ),
@@ -182,6 +183,7 @@ class MainViewModel @Inject constructor(
         actions: List<Action>,
         resources: List<Resource>,
         player: Player,
+        state: MainFunctionalCoreState,
     ): ActionsState {
         val availableActions = actions
             .filter { action ->
@@ -194,6 +196,7 @@ class MainViewModel @Inject constructor(
                 action.copy(
                     subtitle = flavorMachine(
                         original = action.subtitle,
+                        flavors = state.flavors,
                         tags = player.tags,
                     )
                 )

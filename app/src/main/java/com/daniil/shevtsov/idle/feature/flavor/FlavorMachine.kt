@@ -4,11 +4,12 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 
 fun flavorMachine(
     original: String,
+    flavors: List<Flavor> = Flavors.flavors,
     tags: List<Tag> = emptyList(),
 ): String {
     var newOriginal = original
 
-    Flavors.flavors.forEach { flavor ->
+    flavors.forEach { flavor ->
         newOriginal = flavorMinivan(original = newOriginal, flavor = flavor, tags = tags)
     }
 
