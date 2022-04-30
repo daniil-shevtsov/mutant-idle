@@ -14,6 +14,7 @@ sealed class MainViewState {
         val ratios: List<HumanityRatioModel> = emptyList(),
         val actionState: ActionsState,
         val locations: List<LocationModel>,
+        val isLocationSelectionExpanded: Boolean,
         val shop: ShopState,
         val sectionCollapse: Map<SectionKey, Boolean> = mapOf(),
         val drawerState: DrawerViewState,

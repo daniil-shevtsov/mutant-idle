@@ -35,12 +35,25 @@ fun mainFunctionalCore(
             state = state,
             viewAction = viewAction,
         )
+        is MainViewAction.LocationSelectionExpandChange -> handleLocationSelectionExpandChange(
+            state = state,
+            viewAction = viewAction,
+        )
         is MainViewAction.LocationSelected -> handleLocationSelected(
             state = state,
             viewAction = viewAction,
         )
     }
     return newState
+}
+
+fun handleLocationSelectionExpandChange(
+    state: MainFunctionalCoreState,
+    viewAction: MainViewAction.LocationSelectionExpandChange
+): MainFunctionalCoreState {
+    return state.copy(
+        isLocationSelectionExpanded = !state.isLocationSelectionExpanded,
+    )
 }
 
 fun handleLocationSelected(

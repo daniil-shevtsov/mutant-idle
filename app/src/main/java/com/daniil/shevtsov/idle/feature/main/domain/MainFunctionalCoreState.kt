@@ -24,6 +24,7 @@ data class MainFunctionalCoreState(
     val availableJobs: List<PlayerJob>,
     val availableSpecies: List<PlayerSpecies>,
     val availableLocations: List<Location>,
+    val isLocationSelectionExpanded: Boolean,
     val flavors: List<Flavor>,
     val player: Player,
     val location: Location,

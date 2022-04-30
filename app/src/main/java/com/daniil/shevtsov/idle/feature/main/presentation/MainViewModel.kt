@@ -102,6 +102,7 @@ class MainViewModel @Inject constructor(
                     )
                 }
             },
+            isLocationSelectionExpanded = state.isLocationSelectionExpanded,
             shop = state.upgrades
                 .filter { upgrade ->
                     satisfiesAllTagsRelations(

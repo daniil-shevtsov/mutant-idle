@@ -18,6 +18,7 @@ fun mainViewState(
     actionState: ActionsState = actionsState(),
     shop: ShopState = shopState(),
     locations: List<LocationModel> = emptyList(),
+    isLocationSelectionExpanded: Boolean = false,
     sectionCollapse: Map<SectionKey, Boolean> = mapOf(),
     drawerState: DrawerViewState = drawerViewState(),
 ) = MainViewState.Success(
@@ -25,6 +26,7 @@ fun mainViewState(
     ratios = ratios,
     actionState = actionState,
     locations = locations,
+    isLocationSelectionExpanded = isLocationSelectionExpanded,
     shop = shop,
     sectionCollapse = sectionCollapse,
     drawerState = drawerState,
