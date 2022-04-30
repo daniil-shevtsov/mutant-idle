@@ -95,7 +95,7 @@ class MainViewModel @Inject constructor(
                 )
             },
             actionState = createActionState(state.actions, state.resources, state.player, state),
-            locationSelectionViewState = state.locationSelectionState.toViewState(),
+            locationSelectionViewState = state.locationSelectionState.toViewState(playerTags = state.player.tags),
             isLocationSelectionExpanded = state.isLocationSelectionExpanded,
             shop = state.upgrades
                 .filter { upgrade ->
@@ -278,11 +278,14 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    private fun LocationSelectionState.toViewState() = LocationSelectionViewState(
-        locations = allLocations.map { location -> location.toModel(selectedLocationId = selectedLocation.id) },
-        selectedLocation = selectedLocation.toModel(selectedLocationId = selectedLocation.id),
-        isExpanded = isSelectionExpanded,
-    )
+    private fun LocationSelectionState.toViewState(playerTags: List<Tag>) =
+        LocationSelectionViewState(
+            locations = allLocations
+                .filter { location -> playerTags.containsAll(location.tags[TagRelation.RequiredAll].orEmpty()) }
+                .map { location -> location.toModel(selectedLocationId = selectedLocation.id) },
+            selectedLocation = selectedLocation.toModel(selectedLocationId = selectedLocation.id),
+            isExpanded = isSelectionExpanded,
+        )
 
     private fun Location.toModel(selectedLocationId: Long) = LocationModel(
         id = id,

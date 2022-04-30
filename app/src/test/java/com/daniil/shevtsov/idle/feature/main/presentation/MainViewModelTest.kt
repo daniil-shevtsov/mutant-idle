@@ -1007,6 +1007,38 @@ internal class MainViewModelTest {
         }
     }
 
+    @Test
+    fun `should not show locations that require not available tags`() = runBlockingTest {
+        val availableTag = tag(name = "available tag")
+        val unavailableTag = tag(name = "unavailable tag")
+        val availableLocation = location(
+            id = 1L,
+            title = "available location",
+            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
+        )
+        val unavailableLocation = location(
+            id = 2,
+            title = "unavailable location",
+            tags = mapOf(TagRelation.RequiredAll to listOf(unavailableTag))
+        )
+
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                player = player(generalTags = listOf(availableTag)),
+                locationSelectionState = locationSelectionState(
+                    allLocations = listOf(availableLocation, unavailableLocation),
+                ),
+            )
+        )
+
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .extractingAvailableLocations()
+                .extracting(LocationModel::title)
+                .containsExactly(availableLocation.title)
+        }
+    }
+
     private fun createViewModel() = MainViewModel(
         imperativeShell = imperativeShell,
     )
@@ -1021,14 +1053,17 @@ internal class MainViewModelTest {
         isInstanceOf(MainViewState.Success::class)
             .prop(MainViewState.Success::locationSelectionViewState)
 
-    private fun Assert<MainViewState>.extractingAvailableLocations() = extractingLocationSelectionViewState()
-        .prop(LocationSelectionViewState::locations)
+    private fun Assert<MainViewState>.extractingAvailableLocations() =
+        extractingLocationSelectionViewState()
+            .prop(LocationSelectionViewState::locations)
 
-    private fun Assert<MainViewState>.extractingSelectedLocation() = extractingLocationSelectionViewState()
-        .prop(LocationSelectionViewState::selectedLocation)
+    private fun Assert<MainViewState>.extractingSelectedLocation() =
+        extractingLocationSelectionViewState()
+            .prop(LocationSelectionViewState::selectedLocation)
 
-    private fun Assert<MainViewState>.extractingLocationSelectionExpanded() = extractingLocationSelectionViewState()
-        .prop(LocationSelectionViewState::isExpanded)
+    private fun Assert<MainViewState>.extractingLocationSelectionExpanded() =
+        extractingLocationSelectionViewState()
+            .prop(LocationSelectionViewState::isExpanded)
 
     private fun Assert<MainViewState>.extractingLocationSelection() =
         isInstanceOf(MainViewState.Success::class)
