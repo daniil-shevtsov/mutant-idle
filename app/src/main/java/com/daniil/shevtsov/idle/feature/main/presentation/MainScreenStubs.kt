@@ -5,6 +5,7 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
+import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
@@ -16,12 +17,14 @@ fun mainViewState(
     ratios: List<HumanityRatioModel> = emptyList(),
     actionState: ActionsState = actionsState(),
     shop: ShopState = shopState(),
+    locations: List<LocationModel> = emptyList(),
     sectionCollapse: Map<SectionKey, Boolean> = mapOf(),
     drawerState: DrawerViewState = drawerViewState(),
 ) = MainViewState.Success(
     resources = resources,
     ratios = ratios,
     actionState = actionState,
+    locations = locations,
     shop = shop,
     sectionCollapse = sectionCollapse,
     drawerState = drawerState,

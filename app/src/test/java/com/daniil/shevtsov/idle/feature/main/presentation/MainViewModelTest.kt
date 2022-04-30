@@ -14,6 +14,8 @@ import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
 import com.daniil.shevtsov.idle.feature.flavor.Flavors
+import com.daniil.shevtsov.idle.feature.location.domain.location
+import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
@@ -982,6 +984,28 @@ internal class MainViewModelTest {
         }
     }
 
+    @Test
+    fun `should show locations if has any`() = runBlockingTest {
+        val availableLocations = listOf(
+           location(id = 0L),
+           location(id = 1L),
+           location(id = 2L),
+        )
+
+        imperativeShell.updateState(
+            newState = mainFunctionalCoreState(
+                availableLocations = availableLocations,
+            )
+        )
+
+        viewModel.state.test {
+            assertThat(expectMostRecentItem())
+                .extractingLocationSelection()
+                .extracting(LocationModel::id)
+                .containsExactly(0L, 1L, 2L)
+        }
+    }
+
     private fun createViewModel() = MainViewModel(
         imperativeShell = imperativeShell,
     )
@@ -991,6 +1015,10 @@ internal class MainViewModelTest {
             .prop(MainViewState.Success::shop)
             .prop(ShopState::upgradeLists)
             .index(0)
+
+    private fun Assert<MainViewState>.extractingLocationSelection() =
+        isInstanceOf(MainViewState.Success::class)
+            .prop(MainViewState.Success::locations)
 
     private fun Assert<MainViewState>.extractingHumanActions() =
         isInstanceOf(MainViewState.Success::class)

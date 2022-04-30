@@ -15,8 +15,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.daniil.shevtsov.idle.core.ui.Pallete
-import com.daniil.shevtsov.idle.core.ui.viewStatePreviewStub
+import com.daniil.shevtsov.idle.core.ui.*
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugComposable
@@ -87,7 +86,23 @@ fun MainDrawerDebugPreview() {
 @Composable
 fun MainPreview() {
     MainContent(
-        state = viewStatePreviewStub(),
+        state = mainViewState(
+            resources = resourceStubs(),
+            ratios = ratiosStubs(),
+            actionState = actionStatePreviewStub(),
+            shop = shopStatePreviewStub(),
+            sectionCollapse = mapOf(
+                SectionKey.Resources to false,
+                SectionKey.Actions to false,
+                SectionKey.Upgrades to false,
+            ),
+            drawerState = DrawerViewState(
+                tabSelectorState = emptyList(),
+                drawerContent = DrawerContentViewState.Debug(
+                    state = debugViewState()
+                )
+            ),
+        ),
         onViewAction = {},
         onActionClicked = {},
         onUpgradeSelected = {},
