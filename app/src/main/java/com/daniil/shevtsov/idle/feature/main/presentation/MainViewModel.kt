@@ -10,7 +10,10 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.flavor.flavorMachine
+import com.daniil.shevtsov.idle.feature.location.domain.Location
+import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
+import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
@@ -92,16 +95,7 @@ class MainViewModel @Inject constructor(
                 )
             },
             actionState = createActionState(state.actions, state.resources, state.player, state),
-            locations = state.availableLocations.map { location ->
-                with(location) {
-                    LocationModel(
-                        id = id,
-                        title = title,
-                        description = description,
-                        isSelected = state.location.id == location.id,
-                    )
-                }
-            },
+            locationSelectionViewState = state.locationSelectionState.toViewState(),
             isLocationSelectionExpanded = state.isLocationSelectionExpanded,
             shop = state.upgrades
                 .filter { upgrade ->
@@ -283,5 +277,18 @@ class MainViewModel @Inject constructor(
             isEnabled = isActive,
         )
     }
+
+    private fun LocationSelectionState.toViewState() = LocationSelectionViewState(
+        locations = allLocations.map { location -> location.toModel(selectedLocationId = selectedLocation.id) },
+        selectedLocation = selectedLocation.toModel(selectedLocationId = selectedLocation.id),
+        isExpanded = isSelectionExpanded,
+    )
+
+    private fun Location.toModel(selectedLocationId: Long) = LocationModel(
+        id = id,
+        title = title,
+        description = description,
+        isSelected = id == selectedLocationId,
+    )
 
 }

@@ -6,6 +6,8 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
+import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
+import com.daniil.shevtsov.idle.feature.location.presentation.locationSelectionViewState
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
@@ -18,6 +20,7 @@ fun mainViewState(
     actionState: ActionsState = actionsState(),
     shop: ShopState = shopState(),
     locations: List<LocationModel> = emptyList(),
+    locationSelectionViewState: LocationSelectionViewState = locationSelectionViewState(),
     isLocationSelectionExpanded: Boolean = false,
     sectionCollapse: Map<SectionKey, Boolean> = mapOf(),
     drawerState: DrawerViewState = drawerViewState(),
@@ -26,6 +29,7 @@ fun mainViewState(
     ratios = ratios,
     actionState = actionState,
     locations = locations,
+    locationSelectionViewState = locationSelectionViewState,
     isLocationSelectionExpanded = isLocationSelectionExpanded,
     shop = shop,
     sectionCollapse = sectionCollapse,

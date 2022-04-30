@@ -15,7 +15,9 @@ import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
 import com.daniil.shevtsov.idle.feature.flavor.Flavors
 import com.daniil.shevtsov.idle.feature.location.domain.location
+import com.daniil.shevtsov.idle.feature.location.domain.locationSelectionState
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
+import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
@@ -986,23 +988,22 @@ internal class MainViewModelTest {
 
     @Test
     fun `should show locations if has any`() = runBlockingTest {
-        val availableLocations = listOf(
-           location(id = 0L),
-           location(id = 1L),
-           location(id = 2L),
-        )
+        val availableLocation = location(id = 1L)
 
         imperativeShell.updateState(
             newState = mainFunctionalCoreState(
-                availableLocations = availableLocations,
+                locationSelectionState = locationSelectionState(
+                    allLocations = listOf(availableLocation),
+                ),
+                availableLocations = listOf(availableLocation),
             )
         )
 
         viewModel.state.test {
             assertThat(expectMostRecentItem())
-                .extractingLocationSelection()
+                .extractingAvailableLocations()
                 .extracting(LocationModel::id)
-                .containsExactly(0L, 1L, 2L)
+                .containsExactly(availableLocation.id)
         }
     }
 
@@ -1015,6 +1016,19 @@ internal class MainViewModelTest {
             .prop(MainViewState.Success::shop)
             .prop(ShopState::upgradeLists)
             .index(0)
+
+    private fun Assert<MainViewState>.extractingLocationSelectionViewState() =
+        isInstanceOf(MainViewState.Success::class)
+            .prop(MainViewState.Success::locationSelectionViewState)
+
+    private fun Assert<MainViewState>.extractingAvailableLocations() = extractingLocationSelectionViewState()
+        .prop(LocationSelectionViewState::locations)
+
+    private fun Assert<MainViewState>.extractingSelectedLocation() = extractingLocationSelectionViewState()
+        .prop(LocationSelectionViewState::selectedLocation)
+
+    private fun Assert<MainViewState>.extractingLocationSelectionExpanded() = extractingLocationSelectionViewState()
+        .prop(LocationSelectionViewState::isExpanded)
 
     private fun Assert<MainViewState>.extractingLocationSelection() =
         isInstanceOf(MainViewState.Success::class)

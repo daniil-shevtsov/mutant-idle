@@ -437,4 +437,5 @@ class MainFunctionalCoreTest {
             .prop(Player::generalTags)
             .containsExactly(newTag)
     }
+
 }
