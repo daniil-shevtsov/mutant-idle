@@ -109,7 +109,7 @@ class MainViewModel @Inject constructor(
                         },
                         selectedLocation = viewState.selectedLocation.copy(
                             description = flavorMachine(
-                                original =  viewState.selectedLocation.description,
+                                original = viewState.selectedLocation.description,
                                 flavors = state.flavors,
                                 tags = state.player.tags,
                             )
@@ -300,7 +300,12 @@ class MainViewModel @Inject constructor(
     private fun LocationSelectionState.toViewState(playerTags: List<Tag>) =
         LocationSelectionViewState(
             locations = allLocations
-                .filter { location -> playerTags.containsAll(location.tags[TagRelation.RequiredAll].orEmpty()) }
+                .filter { location ->
+                    satisfiesAllTagsRelations(
+                        tagRelations = location.tags,
+                        tags = playerTags,
+                    )
+                }
                 .map { location -> location.toModel(selectedLocationId = selectedLocation.id) },
             selectedLocation = selectedLocation.toModel(selectedLocationId = selectedLocation.id),
             isExpanded = isSelectionExpanded,
