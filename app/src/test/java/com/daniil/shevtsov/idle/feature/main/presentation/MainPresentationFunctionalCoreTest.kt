@@ -197,101 +197,121 @@ class MainPresentationFunctionalCoreTest {
             .containsExactly(0L to UpgradeStatusModel.Bought)
     }
 
-//    @Test
-//    fun `should update human ratio after upgrade bought`() = runBlockingTest {
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                balanceConfig = balanceConfig(
-//                    resourceSpentForFullMutant = 100.0,
-//                ),
-//                resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
-//                ratios = listOf(
-//                    ratio(key = RatioKey.Mutanity)
-//                ),
-//                upgrades = listOf(upgrade(id = 0L, price = 10.0)),
-//            )
-//        )
-//
-//        viewModel.handleAction(MainViewAction.UpgradeSelected(id = 0L))
-//
-//        viewModel.state.test {
-//            val state = expectMostRecentItem()
-//            assertThat(state)
-//                .extractingMutanityValue()
-//                .isEqualTo(0.10)
-//        }
-//    }
-//
-//    @Test
-//    fun `should update mutant ratio names correctly`() = runBlockingTest {
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                balanceConfig = balanceConfig(
-//                    resourceSpentForFullMutant = 100.0,
-//                ),
-//                resources = listOf(resource(key = ResourceKey.Blood, value = 1000.0)),
-//                ratios = listOf(
-//                    ratio(key = RatioKey.Mutanity, value = 0.0)
-//                ),
-//                upgrades = listOf(
-//                    upgrade(id = 0L, price = 15.0),
-//                    upgrade(id = 1L, price = 10.0),
-//                    upgrade(id = 2L, price = 25.0),
-//                    upgrade(id = 3L, price = 30.0),
-//                ),
-//            )
-//        )
-//
-//        viewModel.state.test {
-//            assertThat(awaitItem()).hasRatioName("Human")
-//
-//            viewModel.handleAction(MainViewAction.UpgradeSelected(id = 0L))
-//            assertThat(expectMostRecentItem()).hasRatioName("Dormant")
-//
-//            viewModel.handleAction(MainViewAction.UpgradeSelected(id = 1L))
-//            assertThat(expectMostRecentItem()).hasRatioName("Hidden")
-//
-//            viewModel.handleAction(MainViewAction.UpgradeSelected(id = 2L))
-//            assertThat(expectMostRecentItem()).hasRatioName("Covert")
-//
-//            viewModel.handleAction(MainViewAction.UpgradeSelected(id = 3L))
-//            assertThat(expectMostRecentItem()).hasRatioName("Honest")
-//        }
-//    }
-//
-//    @Test
-//    fun `should update suspicion ratio names correctly`() = runBlockingTest {
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                ratios = listOf(
-//                    ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.0),
-//                    ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
-//                ),
-//                actions = listOf(
-//                    action(id = 0L, ratioChanges = mapOf(RatioKey.Suspicion to 0.15f)),
-//                    action(id = 1L, ratioChanges = mapOf(RatioKey.Suspicion to 0.10f)),
-//                    action(id = 2L, ratioChanges = mapOf(RatioKey.Suspicion to 0.25f)),
-//                    action(id = 3L, ratioChanges = mapOf(RatioKey.Suspicion to 0.30f)),
-//                ),
-//            )
-//        )
-//
-//        viewModel.state.test {
-//            assertThat(awaitItem()).hasSuspicionRatioName("Unknown")
-//
-//            viewModel.handleAction(MainViewAction.ActionClicked(id = 0L))
-//            assertThat(expectMostRecentItem()).hasSuspicionRatioName("Rumors")
-//
-//            viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
-//            assertThat(expectMostRecentItem()).hasSuspicionRatioName("News")
-//
-//            viewModel.handleAction(MainViewAction.ActionClicked(id = 2L))
-//            assertThat(expectMostRecentItem()).hasSuspicionRatioName("Investigation")
-//
-//            viewModel.handleAction(MainViewAction.ActionClicked(id = 3L))
-//            assertThat(expectMostRecentItem()).hasSuspicionRatioName("Manhunt")
-//        }
-//    }
+    @Test
+    fun `should update mutant ratio names correctly`() = runBlockingTest {
+        assertThat(
+            mainPresentationFunctionalCore(
+                state = mainFunctionalCoreState(
+                    ratios = listOf(
+                        ratio(key = RatioKey.Mutanity, value = 0.14)
+                    )
+                )
+            )
+        )
+            .hasRatioName("Human")
+
+        assertThat(
+            mainPresentationFunctionalCore(
+                state = mainFunctionalCoreState(
+                    ratios = listOf(
+                        ratio(key = RatioKey.Mutanity, value = 0.16)
+                    )
+                )
+            )
+        )
+            .hasRatioName("Dormant")
+
+        assertThat(
+            mainPresentationFunctionalCore(
+                state = mainFunctionalCoreState(
+                    ratios = listOf(
+                        ratio(key = RatioKey.Mutanity, value = 0.26)
+                    )
+                )
+            )
+        )
+            .hasRatioName("Hidden")
+
+        assertThat(
+            mainPresentationFunctionalCore(
+                state = mainFunctionalCoreState(
+                    ratios = listOf(
+                        ratio(key = RatioKey.Mutanity, value = 0.51)
+                    )
+                )
+            )
+        )
+            .hasRatioName("Covert")
+
+        assertThat(
+            mainPresentationFunctionalCore(
+                state = mainFunctionalCoreState(
+                    ratios = listOf(
+                        ratio(key = RatioKey.Mutanity, value = 0.81)
+                    )
+                )
+            )
+        )
+            .hasRatioName("Honest")
+    }
+
+    @Test
+    fun `should update suspicion ratio names correctly`() = runBlockingTest {
+        assertThat(
+            mainPresentationFunctionalCore(
+                state = mainFunctionalCoreState(
+                    ratios = listOf(
+                        ratio(key = RatioKey.Suspicion, value = 0.14)
+                    )
+                )
+            )
+        )
+            .hasRatioName("Unknown")
+
+        assertThat(
+            mainPresentationFunctionalCore(
+                state = mainFunctionalCoreState(
+                    ratios = listOf(
+                        ratio(key = RatioKey.Suspicion, value = 0.16)
+                    )
+                )
+            )
+        )
+            .hasRatioName("Rumors")
+
+        assertThat(
+            mainPresentationFunctionalCore(
+                state = mainFunctionalCoreState(
+                    ratios = listOf(
+                        ratio(key = RatioKey.Suspicion, value = 0.26)
+                    )
+                )
+            )
+        )
+            .hasRatioName("News")
+
+        assertThat(
+            mainPresentationFunctionalCore(
+                state = mainFunctionalCoreState(
+                    ratios = listOf(
+                        ratio(key = RatioKey.Suspicion, value = 0.51)
+                    )
+                )
+            )
+        )
+            .hasRatioName("Investigation")
+
+        assertThat(
+            mainPresentationFunctionalCore(
+                state = mainFunctionalCoreState(
+                    ratios = listOf(
+                        ratio(key = RatioKey.Suspicion, value = 0.81)
+                    )
+                )
+            )
+        )
+            .hasRatioName("Manhunt")
+    }
 //
 //    @Test
 //    fun `should update both ratios correctly when actions change them both`() = runBlockingTest {
