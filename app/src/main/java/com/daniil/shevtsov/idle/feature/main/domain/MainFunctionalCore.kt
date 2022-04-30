@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.feature.main.domain
 
 import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.core.navigation.ScreenViewAction
+import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
@@ -9,14 +10,14 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 
 fun screenFunctionalCore(
-    state: MainFunctionalCoreState,
+    state: GameState,
     viewAction: ScreenViewAction,
-): MainFunctionalCoreState {
+): GameState {
     return when (viewAction) {
         is ScreenViewAction.Main -> mainFunctionalCore(
-            state = state,
+            state = state.toMainState(),
             viewAction = viewAction.action,
-        )
+        ).updateGameState(currentState = state)
     }
 }
 
