@@ -7,7 +7,9 @@ import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
+import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
 import com.daniil.shevtsov.idle.feature.location.domain.location
+import com.daniil.shevtsov.idle.feature.location.domain.locationSelectionState
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
@@ -372,13 +374,16 @@ class MainFunctionalCoreTest {
 
         val state = mainFunctionalCore(
             state = mainFunctionalCoreState(
-                availableLocations = listOf(location),
+                locationSelectionState = locationSelectionState(
+                    allLocations = listOf(location)
+                )
             ),
             viewAction = MainViewAction.LocationSelected(id = location.id)
         )
 
         assertThat(state)
-            .prop(MainFunctionalCoreState::location)
+            .prop(MainFunctionalCoreState::locationSelectionState)
+            .prop(LocationSelectionState::selectedLocation)
             .isEqualTo(location)
     }
 }

@@ -5,6 +5,7 @@ import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.flavor.Flavor
 import com.daniil.shevtsov.idle.feature.location.domain.Location
+import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
@@ -23,6 +24,7 @@ data class MainFunctionalCoreState(
     val drawerTabs: List<DrawerTab>,
     val availableJobs: List<PlayerJob>,
     val availableSpecies: List<PlayerSpecies>,
+    val locationSelectionState: LocationSelectionState,
     val availableLocations: List<Location>,
     val isLocationSelectionExpanded: Boolean,
     val flavors: List<Flavor>,
