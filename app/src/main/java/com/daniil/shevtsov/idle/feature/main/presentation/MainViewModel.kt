@@ -10,6 +10,10 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.flavor.flavorMachine
+import com.daniil.shevtsov.idle.feature.location.domain.Location
+import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
+import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
+import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
@@ -91,6 +95,27 @@ class MainViewModel @Inject constructor(
                 )
             },
             actionState = createActionState(state.actions, state.resources, state.player, state),
+            locationSelectionViewState = state.locationSelectionState.toViewState(playerTags = state.player.tags)
+                .let { viewState ->
+                    viewState.copy(
+                        locations = viewState.locations.map { location ->
+                            location.copy(
+                                description = flavorMachine(
+                                    original = location.description,
+                                    flavors = state.flavors,
+                                    tags = state.player.tags,
+                                )
+                            )
+                        },
+                        selectedLocation = viewState.selectedLocation.copy(
+                            description = flavorMachine(
+                                original = viewState.selectedLocation.description,
+                                flavors = state.flavors,
+                                tags = state.player.tags,
+                            )
+                        )
+                    )
+                },
             shop = state.upgrades
                 .filter { upgrade ->
                     satisfiesAllTagsRelations(
@@ -172,9 +197,11 @@ class MainViewModel @Inject constructor(
         val hasAllRequired = tagRelations[TagRelation.RequiredAll].orEmpty()
             .all { requiredTag -> requiredTag in tags }
         val requiredAny = tagRelations[TagRelation.RequiredAny]
-        val hasAnyRequired = requiredAny == null || requiredAny.any { requiredTag -> requiredTag in tags }
+        val hasAnyRequired =
+            requiredAny == null || requiredAny.any { requiredTag -> requiredTag in tags }
         val requiredNone = tagRelations[TagRelation.RequiresNone]
-        val hasNone = requiredNone == null || requiredNone.none { forbiddenTag -> forbiddenTag in tags }
+        val hasNone =
+            requiredNone == null || requiredNone.none { forbiddenTag -> forbiddenTag in tags }
 
         return hasAllRequired && hasAnyRequired && hasNone
     }
@@ -262,11 +289,33 @@ class MainViewModel @Inject constructor(
             title = title,
             subtitle = subtitle,
             icon = when {
-              tags[TagRelation.RequiredAll].orEmpty().contains(Tags.HumanAppearance) -> ActionIcon.Human
+                tags[TagRelation.RequiredAll].orEmpty()
+                    .contains(Tags.HumanAppearance) -> ActionIcon.Human
                 else -> ActionIcon.Mutant
             },
             isEnabled = isActive,
         )
     }
+
+    private fun LocationSelectionState.toViewState(playerTags: List<Tag>) =
+        LocationSelectionViewState(
+            locations = allLocations
+                .filter { location ->
+                    satisfiesAllTagsRelations(
+                        tagRelations = location.tags,
+                        tags = playerTags,
+                    )
+                }
+                .map { location -> location.toModel(selectedLocationId = selectedLocation.id) },
+            selectedLocation = selectedLocation.toModel(selectedLocationId = selectedLocation.id),
+            isExpanded = isSelectionExpanded,
+        )
+
+    private fun Location.toModel(selectedLocationId: Long) = LocationModel(
+        id = id,
+        title = title,
+        description = description,
+        isSelected = id == selectedLocationId,
+    )
 
 }

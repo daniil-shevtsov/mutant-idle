@@ -35,8 +35,50 @@ fun mainFunctionalCore(
             state = state,
             viewAction = viewAction,
         )
+        is MainViewAction.LocationSelectionExpandChange -> handleLocationSelectionExpandChange(
+            state = state,
+            viewAction = viewAction,
+        )
+        is MainViewAction.LocationSelected -> handleLocationSelected(
+            state = state,
+            viewAction = viewAction,
+        )
     }
     return newState
+}
+
+fun handleLocationSelectionExpandChange(
+    state: MainFunctionalCoreState,
+    viewAction: MainViewAction.LocationSelectionExpandChange
+): MainFunctionalCoreState {
+    return state.copy(
+        locationSelectionState = state.locationSelectionState.copy(
+            isSelectionExpanded = !state.locationSelectionState.isSelectionExpanded,
+        ),
+    )
+}
+
+fun handleLocationSelected(
+    state: MainFunctionalCoreState,
+    viewAction: MainViewAction.LocationSelected
+): MainFunctionalCoreState {
+    val selectedLocation = state.locationSelectionState.allLocations.find { it.id == viewAction.id }
+
+    val oldTags = state.locationSelectionState.selectedLocation.tags[TagRelation.Provides].orEmpty()
+    val newTags = selectedLocation?.tags?.get(TagRelation.Provides).orEmpty()
+
+    return when {
+        selectedLocation != null -> state.copy(
+            locationSelectionState = state.locationSelectionState.copy(
+                selectedLocation = selectedLocation,
+            ),
+            player = state.player.copy(
+                generalTags = state.player.generalTags - oldTags + newTags
+            )
+        )
+        else -> state
+    }
+
 }
 
 fun handleSpeciesSelected(

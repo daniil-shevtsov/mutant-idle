@@ -7,6 +7,9 @@ import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
+import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
+import com.daniil.shevtsov.idle.feature.location.domain.location
+import com.daniil.shevtsov.idle.feature.location.domain.locationSelectionState
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
@@ -364,4 +367,75 @@ class MainFunctionalCoreTest {
                 SectionKey.Actions to false,
             )
     }
+
+    @Test
+    fun `should change location selection expanded state when switched`() {
+        val stateAfterFirstSwitch = mainFunctionalCore(
+            state = mainFunctionalCoreState(
+                locationSelectionState = locationSelectionState(
+                    isSelectionExpanded = false,
+                )
+            ),
+            viewAction = MainViewAction.LocationSelectionExpandChange,
+        )
+        assertThat(stateAfterFirstSwitch)
+            .prop(MainFunctionalCoreState::locationSelectionState)
+            .prop(LocationSelectionState::isSelectionExpanded)
+            .isEqualTo(true)
+
+        val stateAfterSecondSwitch = mainFunctionalCore(
+            state = stateAfterFirstSwitch,
+            viewAction = MainViewAction.LocationSelectionExpandChange,
+        )
+        assertThat(stateAfterSecondSwitch)
+            .prop(MainFunctionalCoreState::locationSelectionState)
+            .prop(LocationSelectionState::isSelectionExpanded)
+            .isEqualTo(false)
+    }
+
+    @Test
+    fun `should select location when clicked`() {
+        val location = location(id =  1L, title = "lol")
+
+        val state = mainFunctionalCore(
+            state = mainFunctionalCoreState(
+                locationSelectionState = locationSelectionState(
+                    allLocations = listOf(location)
+                )
+            ),
+            viewAction = MainViewAction.LocationSelected(id = location.id)
+        )
+
+        assertThat(state)
+            .prop(MainFunctionalCoreState::locationSelectionState)
+            .prop(LocationSelectionState::selectedLocation)
+            .isEqualTo(location)
+    }
+
+    @Test
+    fun `should update current tags with provided by selected location`() {
+        val oldLocation = location(id =  1L, title = "old location", tags = mapOf(
+            TagRelation.Provides to listOf(tag(name = "old tag"))
+        ))
+
+        val newTag = tag(name = "new tag")
+        val newLocation = location(id = 2L, title = "new location", tags = mapOf(
+            TagRelation.Provides to listOf(newTag)
+        ))
+
+        val state = mainFunctionalCore(
+            state = mainFunctionalCoreState(
+                locationSelectionState = locationSelectionState(
+                    allLocations = listOf(oldLocation, newLocation)
+                )
+            ),
+            viewAction = MainViewAction.LocationSelected(id = newLocation.id)
+        )
+
+        assertThat(state)
+            .prop(MainFunctionalCoreState::player)
+            .prop(Player::generalTags)
+            .containsExactly(newTag)
+    }
+
 }

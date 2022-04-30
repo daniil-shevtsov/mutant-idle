@@ -96,7 +96,7 @@ fun createAllActions() = listOf(
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
-                Tags.GraveyardAccess,
+                Tags.Locations.Graveyard,
             )
         ),
     ),
@@ -113,7 +113,7 @@ fun createAllActions() = listOf(
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
                 Tags.Species.Devourer,
-                Tags.FreshCorpseAccess,
+                Tags.Access.FreshCorpses,
             )
         ),
     ),
@@ -129,7 +129,7 @@ fun createAllActions() = listOf(
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
-                Tags.IncineratorAccess,
+                Tags.Access.Incinerator,
             )
         ),
     ),

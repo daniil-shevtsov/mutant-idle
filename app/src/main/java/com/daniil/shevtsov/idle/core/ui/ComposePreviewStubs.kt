@@ -5,10 +5,6 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
-import com.daniil.shevtsov.idle.feature.main.presentation.DrawerContentViewState
-import com.daniil.shevtsov.idle.feature.main.presentation.DrawerViewState
-import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
-import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
@@ -18,24 +14,6 @@ import com.daniil.shevtsov.idle.feature.suspicion.presentation.SuspicionModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.PriceModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
-
-internal fun viewStatePreviewStub() = MainViewState.Success(
-    resources = resourceStubs(),
-    ratios = ratiosStubs(),
-    actionState = actionStatePreviewStub(),
-    shop = shopStatePreviewStub(),
-    sectionCollapse = mapOf(
-        SectionKey.Resources to false,
-        SectionKey.Actions to false,
-        SectionKey.Upgrades to false,
-    ),
-    drawerState = DrawerViewState(
-        tabSelectorState = emptyList(),
-        drawerContent = DrawerContentViewState.Debug(
-            state = debugViewState()
-        )
-    ),
-)
 
 internal fun resourcePreviewStub() = ResourceModel(
     name = "Blood",

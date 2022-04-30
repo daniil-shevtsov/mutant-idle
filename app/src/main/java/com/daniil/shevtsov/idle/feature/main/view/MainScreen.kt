@@ -11,12 +11,10 @@ import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.daniil.shevtsov.idle.core.ui.Pallete
-import com.daniil.shevtsov.idle.core.ui.viewStatePreviewStub
+import com.daniil.shevtsov.idle.core.ui.*
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugComposable
@@ -24,6 +22,7 @@ import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewAction
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
 import com.daniil.shevtsov.idle.feature.drawer.view.DrawerTabSelector
+import com.daniil.shevtsov.idle.feature.location.view.LocationSelection
 import com.daniil.shevtsov.idle.feature.main.presentation.*
 import com.daniil.shevtsov.idle.feature.player.info.view.PlayerInfoComposable
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJobModel
@@ -87,7 +86,23 @@ fun MainDrawerDebugPreview() {
 @Composable
 fun MainPreview() {
     MainContent(
-        state = viewStatePreviewStub(),
+        state = mainViewState(
+            resources = resourceStubs(),
+            ratios = ratiosStubs(),
+            actionState = actionStatePreviewStub(),
+            shop = shopStatePreviewStub(),
+            sectionCollapse = mapOf(
+                SectionKey.Resources to false,
+                SectionKey.Actions to false,
+                SectionKey.Upgrades to false,
+            ),
+            drawerState = DrawerViewState(
+                tabSelectorState = emptyList(),
+                drawerContent = DrawerContentViewState.Debug(
+                    state = debugViewState()
+                )
+            ),
+        ),
         onViewAction = {},
         onActionClicked = {},
         onUpgradeSelected = {},
@@ -144,14 +159,13 @@ fun LoadingContent() {
 @Composable
 fun SuccessContent(
     state: MainViewState.Success,
-    modifier: Modifier = Modifier,
     onViewAction: (MainViewAction) -> Unit,
+    modifier: Modifier = Modifier,
     onActionClicked: (actionId: Long) -> Unit = {},
     onUpgradeSelected: (upgradeId: Long) -> Unit = {},
     onToggleCollapse: (key: SectionKey) -> Unit,
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
 
     ModalDrawer(
         drawerState = drawerState,
@@ -159,6 +173,7 @@ fun SuccessContent(
         content = {
             ContentBody(
                 state = state,
+                onViewAction = onViewAction,
                 onActionClicked = onActionClicked,
                 onUpgradeSelected = onUpgradeSelected,
                 onToggleCollapse = onToggleCollapse
@@ -181,11 +196,15 @@ private fun MainDrawer(
         is DrawerContentViewState.Debug -> {
             DebugComposable(
                 state = drawerContentState.state,
-                modifier = modifier.background(Pallete.Red).padding(8.dp),
+                modifier = modifier
+                    .background(Pallete.Red)
+                    .padding(8.dp),
                 onAction = { action ->
                     val mainViewAction = when (action) {
                         is DebugViewAction.JobSelected -> MainViewAction.DebugJobSelected(action.id)
-                        is DebugViewAction.SpeciesSelected -> MainViewAction.DebugSpeciesSelected(action.id)
+                        is DebugViewAction.SpeciesSelected -> MainViewAction.DebugSpeciesSelected(
+                            action.id
+                        )
                     }
                     onViewAction(mainViewAction)
                 })
@@ -193,7 +212,9 @@ private fun MainDrawer(
         is DrawerContentViewState.PlayerInfo -> {
             PlayerInfoComposable(
                 state = drawerContentState.playerInfo,
-                modifier = modifier.background(Pallete.Red).padding(8.dp)
+                modifier = modifier
+                    .background(Pallete.Red)
+                    .padding(8.dp)
             )
         }
     }
@@ -203,6 +224,7 @@ private fun MainDrawer(
 fun ContentBody(
     state: MainViewState.Success,
     modifier: Modifier = Modifier,
+    onViewAction: (MainViewAction) -> Unit = {},
     onActionClicked: (actionId: Long) -> Unit = {},
     onUpgradeSelected: (upgradeId: Long) -> Unit = {},
     onToggleCollapse: (key: SectionKey) -> Unit,
@@ -216,6 +238,11 @@ fun ContentBody(
             modifier
                 .statusBarsHeight()
                 .fillMaxWidth()
+        )
+        LocationSelection(
+            state = state.locationSelectionViewState,
+            onExpandChange = { onViewAction(MainViewAction.LocationSelectionExpandChange) },
+            onLocationSelected = { id -> onViewAction(MainViewAction.LocationSelected(id)) },
         )
         Column(
             modifier = modifier

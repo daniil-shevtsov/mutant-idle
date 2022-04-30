@@ -9,7 +9,9 @@ import com.daniil.shevtsov.idle.feature.action.domain.createAllActions
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.flavor.createFlavors
-import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCoreState
+import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
+import com.daniil.shevtsov.idle.feature.location.domain.createLocations
+import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
@@ -32,7 +34,7 @@ class IdleGameApplication : Application() {
                 appContext = applicationContext,
                 balanceConfig = createBalanceConfig(),
                 initialResources = createResources(),
-                initialMainState = mainFunctionalCoreState(
+                initialMainState = MainFunctionalCoreState(
                     balanceConfig = createBalanceConfig(),
                     resources = createResources(),
                     ratios = createInitialRatios(),
@@ -42,6 +44,7 @@ class IdleGameApplication : Application() {
                     actions = createAllActions(),
                     availableJobs = createInitialJobs(),
                     availableSpecies = createInitialSpecies(),
+                    locationSelectionState = createLocationSelectionState(),
                     flavors = createFlavors(),
                     player = createInitialPlayer(),
                 )
@@ -88,6 +91,12 @@ class IdleGameApplication : Application() {
         SectionState(key = SectionKey.Upgrades, isCollapsed = false),
     )
 
+    private fun createLocationSelectionState() = LocationSelectionState(
+        allLocations = createLocations(),
+        selectedLocation = createLocations().first(),
+        isSelectionExpanded = false,
+    )
+
     private fun createInitialDrawerTabs() = listOf(
         DrawerTab(id = DrawerTabId.PlayerInfo, title = "Player Info", isSelected = false),
         DrawerTab(id = DrawerTabId.Debug, title = "Debug", isSelected = false),
@@ -104,6 +113,7 @@ class IdleGameApplication : Application() {
         Jobs.Mortician,
         Jobs.Undertaker,
         Jobs.Butcher,
+        Jobs.ScrapyardMechanic,
     )
 
     private fun createInitialSpecies() = listOf(
