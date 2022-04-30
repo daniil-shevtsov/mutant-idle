@@ -1,9 +1,8 @@
 package com.daniil.shevtsov.idle.feature.gamefinish.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
@@ -17,13 +16,46 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
-import com.daniil.shevtsov.idle.feature.gamefinish.presentation.FinishedGameViewState
-import com.daniil.shevtsov.idle.feature.gamefinish.presentation.finishedGameViewState
+import com.daniil.shevtsov.idle.feature.gamefinish.presentation.*
 
 @Preview
 @Composable
 fun FinishedGameScreenPreview() {
-    FinishedGameScreen(state = finishedGameViewState())
+    FinishedGameScreen(
+        state = finishedGameViewState(
+            endingState = endingViewState(description = "You have been captured by the government"),
+            unlocks = listOf(
+                UnlockModel(
+                    title = "New class: Vampire",
+                    subtitle = "You are a bloodsucking immortal creature",
+                    unlockFeatures = listOf(
+                        UnlockFeatureModel(
+                            title = "Can't be in the sun",
+                            subtitle = "Reduced number of available human actions",
+                        ),
+                        UnlockFeatureModel(
+                            title = "Hypnosis",
+                            subtitle = "Can influence humans and gather familiars"
+                        ),
+                    )
+                ),
+                UnlockModel(
+                    title = "New job: Mortician",
+                    subtitle = "You work in a morgue",
+                    unlockFeatures = listOf(
+                        UnlockFeatureModel(
+                            title = "Corpses access",
+                            subtitle = "People bring them TO YOU",
+                        ),
+                        UnlockFeatureModel(
+                            title = "Solitary job",
+                            subtitle = "People don't pay attention as long as the job gets done"
+                        ),
+                    )
+                ),
+            )
+        )
+    )
 }
 
 @Composable
@@ -42,45 +74,19 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(2.dp)
+                    .padding(2.dp),
+                contentPadding = PaddingValues(8.dp),
+                verticalArrangement = spacedBy(12.dp),
             ) {
-                items(state.unlocks
-//                    listOf(
-//                        UnlockModel(
-//                            title = "New class: Vampire",
-//                            subtitle = "You are a bloodsucking immortal creature",
-//                            unlockFeatures = listOf(
-//                                UnlockFeatureModel(
-//                                    title = "Can't be in the sun",
-//                                    subtitle = "Reduced number of available human actions",
-//                                ),
-//                                UnlockFeatureModel(
-//                                    title = "Hypnosis",
-//                                    subtitle = "Can influence humans and gather familiars"
-//                                ),
-//                            )
-//                        ),
-//                        UnlockModel(
-//                            title = "New job: Mortician",
-//                            subtitle = "You work in a morgue",
-//                            unlockFeatures = listOf(
-//                                UnlockFeatureModel(
-//                                    title = "Corpses access",
-//                                    subtitle = "People bring them TO YOU",
-//                                ),
-//                                UnlockFeatureModel(
-//                                    title = "Solitary job",
-//                                    subtitle = "People don't pay attention as long as the job gets done"
-//                                ),
-//                            )
-//                        ),
-//                    )
-                ) { unlock ->
+                items(state.unlocks) { unlock ->
                     Column(
                         modifier = Modifier
                             .background(Pallete.Red)
-                            .padding(4.dp)
+                            .padding(6.dp)
                     ) {
+                        Box() {
+
+                        }
                         Text(
                             text = unlock.title,
                             color = Color.White,
@@ -88,7 +94,7 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Pallete.DarkRed)
-                                .padding(4.dp)
+                                .padding(8.dp)
                         )
                         Text(
                             text = unlock.subtitle,
@@ -97,12 +103,13 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Pallete.DarkRed)
-                                .padding(4.dp)
+                                .padding(8.dp)
                         )
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color.White)
+                                .padding(4.dp)
                         ) {
                             unlock.unlockFeatures.forEach { feature ->
                                 Column {
@@ -115,37 +122,22 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                                             .background(Color.White)
                                             .padding(4.dp)
                                     )
-                                    Text(
-                                        text = feature.subtitle,
-                                        fontSize = 16.sp,
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .background(Color.White)
-                                            .padding(4.dp)
-                                    )
+                                    if(feature.subtitle.isNotEmpty()) {
+                                        Text(
+                                            text = feature.subtitle,
+                                            fontSize = 16.sp,
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .background(Color.White)
+                                                .padding(4.dp)
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-
         }
-//        LazyColumn {
-//            items(
-//                listOf(
-//                    "Max blood" to "1000",
-//                    "Max money" to "20000",
-//                    "Pets eaten" to "5",
-//                    "People eaten" to "3",
-//                )
-//            ) { (description, value) ->
-//                Row {
-//                    Text(description)
-//                    Text(value)
-//                }
-//            }
-//        }
-
     }
 }

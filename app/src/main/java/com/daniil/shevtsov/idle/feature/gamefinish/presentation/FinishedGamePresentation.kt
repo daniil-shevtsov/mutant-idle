@@ -19,7 +19,7 @@ fun mapFinishedGameViewState(
                     unlockFeatures = unlock.newTags.map { tag ->
                         UnlockFeatureModel(
                             title = tag.name,
-                            subtitle = "",
+                            subtitle = tag.description.orEmpty(),
                         )
                     }
                 )

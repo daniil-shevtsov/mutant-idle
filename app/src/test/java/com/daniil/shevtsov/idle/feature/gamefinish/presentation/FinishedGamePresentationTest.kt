@@ -54,8 +54,10 @@ internal class FinishedGamePresentationTest {
                 prop(UnlockModel::subtitle).isEqualTo(unlock.description)
                 prop(UnlockModel::unlockFeatures)
                     .index(0)
-                    .prop(UnlockFeatureModel::title)
-                    .isEqualTo(unlockTag.name)
+                    .all {
+                        prop(UnlockFeatureModel::title).isEqualTo(unlockTag.name)
+                        prop(UnlockFeatureModel::subtitle).isEqualTo(unlockTag.description)
+                    }
             }
     }
 

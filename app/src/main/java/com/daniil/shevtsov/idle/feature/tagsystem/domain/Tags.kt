@@ -1,9 +1,9 @@
 package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
 object Tags {
-    val Hypnosis = Tag(name = "Hypnosis")
-    val Heliophobia = Tag(name = "Heliophobia")
-    val Immortal = Tag(name = "Immortal")
+    val Hypnosis = Tag(name = "Hypnosis", description = "Can control people")
+    val Heliophobia = Tag(name = "Heliophobia", description = "Can't be in the sun")
+    val Immortal = Tag(name = "Immortal", description = "Can't be killed in any way")
     val Mutating = Tag(name = "Mutating")
     val Growth = Tag(name = "Growth")
 
@@ -70,8 +70,8 @@ object Tags {
         val Tech = Tag(name = "Tech")
     }
 
-    val Surgeon = Tag(name = "Surgeon")
-    val SolitaryJob = Tag(name = "Solitary Job")
+    val Surgeon = Tag(name = "Surgeon", description = "You are very precise with the scalpel")
+    val SolitaryJob = Tag(name = "Solitary Job", description = "People don't pay attention as long as the job gets done")
     val CorpseAccess = Tag(name = "Corpse Access")
     val MeatAccess = Tag(name = "Meat Access")
     val LaborIntensive = Tag(name = "Labor intensive job")
