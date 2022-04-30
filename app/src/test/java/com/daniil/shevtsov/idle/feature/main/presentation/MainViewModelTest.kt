@@ -1065,10 +1065,6 @@ internal class MainViewModelTest {
         extractingLocationSelectionViewState()
             .prop(LocationSelectionViewState::isExpanded)
 
-    private fun Assert<MainViewState>.extractingLocationSelection() =
-        isInstanceOf(MainViewState.Success::class)
-            .prop(MainViewState.Success::locations)
-
     private fun Assert<MainViewState>.extractingHumanActions() =
         isInstanceOf(MainViewState.Success::class)
             .prop(MainViewState.Success::actionState)

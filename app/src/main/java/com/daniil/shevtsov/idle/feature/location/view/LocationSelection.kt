@@ -15,16 +15,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.cavitary
-import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
+import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
 import com.daniil.shevtsov.idle.feature.location.presentation.locationModel
+import com.daniil.shevtsov.idle.feature.location.presentation.locationSelectionViewState
 
 @Preview
 @Composable
 fun LocationSelectionPreview() {
-    LocationSelection(
-        locations = listOf(locationModel(title = "Graveyard")),
+    val selectedLocation = locationModel(
+        title = "Graveyard",
         description = "A place where they hide people in the ground",
-        isExpanded = false,
+    )
+    LocationSelection(
+        state = locationSelectionViewState(
+            locations = listOf(selectedLocation),
+            selectedLocation = selectedLocation,
+            isExpanded = false,
+        ),
         onExpandChange = {},
         onLocationSelected = {},
     )
@@ -32,9 +39,7 @@ fun LocationSelectionPreview() {
 
 @Composable
 fun LocationSelection(
-    locations: List<LocationModel>,
-    description: String,
-    isExpanded: Boolean,
+    state: LocationSelectionViewState,
     onExpandChange: () -> Unit,
     onLocationSelected: (id: Long) -> Unit,
     modifier: Modifier = Modifier,
@@ -60,12 +65,7 @@ fun LocationSelection(
             )
             Box(modifier = modifier.weight(1f)) {
                 Text(
-                    text = when (val selectedLocation =
-                        locations.firstOrNull { it.isSelected }
-                            ?: locations.firstOrNull()) {
-                        null -> "EMPTY"
-                        else -> selectedLocation.title
-                    },
+                    text = state.selectedLocation.title,
                     fontSize = 16.sp,
                     modifier = modifier
                         .fillMaxWidth()
@@ -78,10 +78,10 @@ fun LocationSelection(
                         .padding(4.dp)
                 )
                 DropdownMenu(
-                    expanded = isExpanded,
+                    expanded = state.isExpanded,
                     modifier = modifier.wrapContentHeight(),
                     onDismissRequest = { onExpandChange() }) {
-                    locations.forEach { location ->
+                    state.locations.forEach { location ->
                         DropdownMenuItem(
                             modifier = modifier.background(Color.White),
                             onClick = {
@@ -96,7 +96,7 @@ fun LocationSelection(
             }
         }
         Text(
-            text = description,
+            text = state.selectedLocation.description,
             fontSize = 16.sp,
             modifier = modifier
                 .fillMaxWidth()

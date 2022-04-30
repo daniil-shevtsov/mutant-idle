@@ -240,9 +240,7 @@ fun ContentBody(
                 .fillMaxWidth()
         )
         LocationSelection(
-            locations = state.locations,
-            isExpanded = state.isLocationSelectionExpanded,
-            description = state.locations.firstOrNull { it.isSelected }?.description.orEmpty(),
+            state = state.locationSelectionViewState,
             onExpandChange = { onViewAction(MainViewAction.LocationSelectionExpandChange) },
             onLocationSelected = { id -> onViewAction(MainViewAction.LocationSelected(id)) },
         )

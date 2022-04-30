@@ -96,7 +96,6 @@ class MainViewModel @Inject constructor(
             },
             actionState = createActionState(state.actions, state.resources, state.player, state),
             locationSelectionViewState = state.locationSelectionState.toViewState(playerTags = state.player.tags),
-            isLocationSelectionExpanded = state.isLocationSelectionExpanded,
             shop = state.upgrades
                 .filter { upgrade ->
                     satisfiesAllTagsRelations(
