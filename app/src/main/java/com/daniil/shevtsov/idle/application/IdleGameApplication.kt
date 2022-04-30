@@ -5,6 +5,7 @@ import com.daniil.shevtsov.idle.common.di.initKoin
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.core.di.DaggerAppComponent
 import com.daniil.shevtsov.idle.core.di.koin.appModule
+import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.action.domain.createAllActions
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
@@ -47,6 +48,7 @@ class IdleGameApplication : Application() {
                     locationSelectionState = createLocationSelectionState(),
                     flavors = createFlavors(),
                     player = createInitialPlayer(),
+                    currentScreen = Screen.Main,
                 )
             )
     }

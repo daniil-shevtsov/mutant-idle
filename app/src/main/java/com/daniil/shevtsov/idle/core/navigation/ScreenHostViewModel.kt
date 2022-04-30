@@ -6,7 +6,6 @@ import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.domain.screenFunctionalCore
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
-import com.daniil.shevtsov.idle.feature.main.presentation.screenPresentationFunctionalCore
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject

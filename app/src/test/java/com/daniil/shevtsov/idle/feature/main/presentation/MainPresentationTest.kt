@@ -39,7 +39,7 @@ import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test
 
-class MainPresentationFunctionalCoreTest {
+class MainPresentationTest {
     @Test
     fun `should form correct initial state`() = runBlockingTest {
         val state = mainFunctionalCoreState(
@@ -68,7 +68,7 @@ class MainPresentationFunctionalCoreTest {
             ),
         )
 
-        val viewState = mainPresentationFunctionalCore(state = state)
+        val viewState = mapMainViewState(state = state)
 
         assertThat(viewState)
             .all {
@@ -109,7 +109,7 @@ class MainPresentationFunctionalCoreTest {
             ),
         )
 
-        val viewState = mainPresentationFunctionalCore(state = state)
+        val viewState = mapMainViewState(state = state)
 
         assertThat(viewState)
             .extractingResources()
@@ -150,7 +150,7 @@ class MainPresentationFunctionalCoreTest {
                 player = player(generalTags = listOf(availableTag)),
             )
 
-            val viewState = mainPresentationFunctionalCore(state = state)
+            val viewState = mapMainViewState(state = state)
 
             assertThat(viewState)
                 .extractingUpgrades()
@@ -165,7 +165,7 @@ class MainPresentationFunctionalCoreTest {
             upgrades = listOf(upgrade(id = 0L, price = 5.0)),
         )
 
-        val viewState = mainPresentationFunctionalCore(state = state)
+        val viewState = mapMainViewState(state = state)
 
         assertThat(viewState)
             .extractingUpgrades()
@@ -181,7 +181,7 @@ class MainPresentationFunctionalCoreTest {
                 upgrades = listOf(upgrade(id = 0L, price = 20.0)),
             )
 
-            val viewState = mainPresentationFunctionalCore(state = state)
+            val viewState = mapMainViewState(state = state)
 
             assertThat(viewState)
                 .extractingUpgrades()
@@ -200,7 +200,7 @@ class MainPresentationFunctionalCoreTest {
             upgrades = listOf(upgrade(id = 0L, price = 10.0, status = UpgradeStatus.Bought)),
         )
 
-        val viewState = mainPresentationFunctionalCore(state = state)
+        val viewState = mapMainViewState(state = state)
 
         assertThat(viewState)
             .extractingUpgrades()
@@ -211,7 +211,7 @@ class MainPresentationFunctionalCoreTest {
     @Test
     fun `should update mutant ratio names correctly`() = runBlockingTest {
         assertThat(
-            mainPresentationFunctionalCore(
+            mapMainViewState(
                 state = mainFunctionalCoreState(
                     ratios = listOf(
                         ratio(key = RatioKey.Mutanity, value = 0.14)
@@ -222,7 +222,7 @@ class MainPresentationFunctionalCoreTest {
             .hasRatioName("Human")
 
         assertThat(
-            mainPresentationFunctionalCore(
+            mapMainViewState(
                 state = mainFunctionalCoreState(
                     ratios = listOf(
                         ratio(key = RatioKey.Mutanity, value = 0.16)
@@ -233,7 +233,7 @@ class MainPresentationFunctionalCoreTest {
             .hasRatioName("Dormant")
 
         assertThat(
-            mainPresentationFunctionalCore(
+            mapMainViewState(
                 state = mainFunctionalCoreState(
                     ratios = listOf(
                         ratio(key = RatioKey.Mutanity, value = 0.26)
@@ -244,7 +244,7 @@ class MainPresentationFunctionalCoreTest {
             .hasRatioName("Hidden")
 
         assertThat(
-            mainPresentationFunctionalCore(
+            mapMainViewState(
                 state = mainFunctionalCoreState(
                     ratios = listOf(
                         ratio(key = RatioKey.Mutanity, value = 0.51)
@@ -255,7 +255,7 @@ class MainPresentationFunctionalCoreTest {
             .hasRatioName("Covert")
 
         assertThat(
-            mainPresentationFunctionalCore(
+            mapMainViewState(
                 state = mainFunctionalCoreState(
                     ratios = listOf(
                         ratio(key = RatioKey.Mutanity, value = 0.81)
@@ -269,7 +269,7 @@ class MainPresentationFunctionalCoreTest {
     @Test
     fun `should update suspicion ratio names correctly`() = runBlockingTest {
         assertThat(
-            mainPresentationFunctionalCore(
+            mapMainViewState(
                 state = mainFunctionalCoreState(
                     ratios = listOf(
                         ratio(key = RatioKey.Suspicion, value = 0.14)
@@ -280,7 +280,7 @@ class MainPresentationFunctionalCoreTest {
             .hasRatioName("Unknown")
 
         assertThat(
-            mainPresentationFunctionalCore(
+            mapMainViewState(
                 state = mainFunctionalCoreState(
                     ratios = listOf(
                         ratio(key = RatioKey.Suspicion, value = 0.16)
@@ -291,7 +291,7 @@ class MainPresentationFunctionalCoreTest {
             .hasRatioName("Rumors")
 
         assertThat(
-            mainPresentationFunctionalCore(
+            mapMainViewState(
                 state = mainFunctionalCoreState(
                     ratios = listOf(
                         ratio(key = RatioKey.Suspicion, value = 0.26)
@@ -302,7 +302,7 @@ class MainPresentationFunctionalCoreTest {
             .hasRatioName("News")
 
         assertThat(
-            mainPresentationFunctionalCore(
+            mapMainViewState(
                 state = mainFunctionalCoreState(
                     ratios = listOf(
                         ratio(key = RatioKey.Suspicion, value = 0.51)
@@ -313,7 +313,7 @@ class MainPresentationFunctionalCoreTest {
             .hasRatioName("Investigation")
 
         assertThat(
-            mainPresentationFunctionalCore(
+            mapMainViewState(
                 state = mainFunctionalCoreState(
                     ratios = listOf(
                         ratio(key = RatioKey.Suspicion, value = 0.81)
@@ -346,7 +346,7 @@ class MainPresentationFunctionalCoreTest {
                 )
             ),
         )
-        val viewState = mainPresentationFunctionalCore(state = state)
+        val viewState = mapMainViewState(state = state)
 
         assertThat(viewState)
             .extractingHumanActions()
@@ -385,7 +385,7 @@ class MainPresentationFunctionalCoreTest {
             ),
         )
 
-        val viewState = mainPresentationFunctionalCore(state = state)
+        val viewState = mapMainViewState(state = state)
 
         assertThat(viewState)
             .extractingHumanActions()
@@ -406,7 +406,7 @@ class MainPresentationFunctionalCoreTest {
             availableJobs = availableJobs,
         )
 
-        val viewState = mainPresentationFunctionalCore(state = state)
+        val viewState = mapMainViewState(state = state)
 
         assertThat(viewState)
             .extractingDebugState()
@@ -428,7 +428,7 @@ class MainPresentationFunctionalCoreTest {
             availableSpecies = availableSpecies,
         )
 
-        val viewState = mainPresentationFunctionalCore(state = state)
+        val viewState = mapMainViewState(state = state)
 
         assertThat(viewState)
             .extractingDebugState()
@@ -463,7 +463,7 @@ class MainPresentationFunctionalCoreTest {
             ),
         )
 
-        val viewState = mainPresentationFunctionalCore(state = state)
+        val viewState = mapMainViewState(state = state)
 
         assertThat(viewState)
             .extractingMainState()
@@ -509,7 +509,7 @@ class MainPresentationFunctionalCoreTest {
             ),
         )
 
-        val viewState = mainPresentationFunctionalCore(state = state)
+        val viewState = mapMainViewState(state = state)
 
         assertThat(viewState)
             .extractingMainState()
@@ -533,7 +533,7 @@ class MainPresentationFunctionalCoreTest {
             ),
         )
 
-        val anotherViewState = mainPresentationFunctionalCore(state = anotherState)
+        val anotherViewState = mapMainViewState(state = anotherState)
 
         assertThat(anotherViewState)
             .extractingMainState()
@@ -575,7 +575,7 @@ class MainPresentationFunctionalCoreTest {
             ),
         )
 
-        val viewState = mainPresentationFunctionalCore(state = state)
+        val viewState = mapMainViewState(state = state)
 
         assertThat(viewState)
             .extractingMainState()
@@ -606,7 +606,7 @@ class MainPresentationFunctionalCoreTest {
             ),
         )
 
-        val viewState = mainPresentationFunctionalCore(state = state)
+        val viewState = mapMainViewState(state = state)
 
         assertThat(viewState)
             .extractingHumanActions()
@@ -633,7 +633,7 @@ class MainPresentationFunctionalCoreTest {
             ),
         )
 
-        val viewState = mainPresentationFunctionalCore(state = state)
+        val viewState = mapMainViewState(state = state)
 
         assertThat(viewState)
             .extractingUpgrades()
@@ -651,7 +651,7 @@ class MainPresentationFunctionalCoreTest {
             ),
         )
 
-        val viewState = mainPresentationFunctionalCore(state = state)
+        val viewState = mapMainViewState(state = state)
 
         assertThat(viewState)
             .extractingAvailableLocations()
@@ -681,7 +681,7 @@ class MainPresentationFunctionalCoreTest {
             ),
         )
 
-        val viewState = mainPresentationFunctionalCore(state = state)
+        val viewState = mapMainViewState(state = state)
 
         assertThat(viewState)
             .extractingAvailableLocations()

@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.feature.main.domain
 
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.core.domain.balanceConfig
+import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.flavor.Flavor
@@ -29,6 +30,7 @@ fun mainFunctionalCoreState(
     locationSelectionState: LocationSelectionState = locationSelectionState(),
     flavors: List<Flavor> = emptyList(),
     player: Player = player(),
+    currentScreen: Screen = Screen.Main,
 ) = MainFunctionalCoreState(
     balanceConfig = balanceConfig,
     resources = resources,
@@ -42,4 +44,5 @@ fun mainFunctionalCoreState(
     locationSelectionState = locationSelectionState,
     flavors = flavors,
     player = player,
+    currentScreen = currentScreen,
 )

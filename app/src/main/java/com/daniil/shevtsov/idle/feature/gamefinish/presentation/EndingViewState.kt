@@ -1,4 +1,5 @@
 package com.daniil.shevtsov.idle.feature.gamefinish.presentation
 
-class EndingViewState {
-}
+data class EndingViewState(
+    val description: String,
+)

@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.feature.main.domain
 
 import com.daniil.shevtsov.idle.core.BalanceConfig
+import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.flavor.Flavor
@@ -26,4 +27,5 @@ data class MainFunctionalCoreState(
     val locationSelectionState: LocationSelectionState,
     val flavors: List<Flavor>,
     val player: Player,
+    val currentScreen: Screen,
 )

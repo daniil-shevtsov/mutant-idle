@@ -1,4 +1,6 @@
 package com.daniil.shevtsov.idle.feature.gamefinish.presentation
 
-class FinishedGameViewState {
-}
+data class FinishedGameViewState(
+    val endingState: EndingViewState,
+    val unlocks: List<UnlockModel>
+)
