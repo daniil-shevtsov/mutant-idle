@@ -105,11 +105,51 @@ class FlavorsMachineTest {
 
         val withFlavor = flavorMachine(
             original = original,
-            flavors  = listOf(flavor),
+            flavors = listOf(flavor),
             tags = listOf(Tags.Immortal),
         )
 
         assertThat(withFlavor).isEqualTo("You are beyond comprehension of mere mortals.")
+    }
+
+    @Test
+    fun `should replace simple two-level placeholder when root then child in list`() {
+        val childFlavor = flavor(
+            placeholder = "${Flavors.PREFIX}CHILD-FLAVOR",
+            default = "cheburek"
+        )
+        val rootFlavor = flavor(
+            placeholder = "${Flavors.PREFIX}ROOT-FLAVOR",
+            default = "kek ${childFlavor.placeholder}"
+        )
+        val original = "lol ${rootFlavor.placeholder}"
+
+        val flavored = flavorMachine(
+            original = original,
+            flavors = listOf(rootFlavor, childFlavor),
+        )
+
+        assertThat(flavored).isEqualTo("lol kek cheburek")
+    }
+
+    @Test
+    fun `should replace simple two-level placeholder when child then root in list`() {
+        val childFlavor = flavor(
+            placeholder = "${Flavors.PREFIX}CHILD-FLAVOR",
+            default = "cheburek"
+        )
+        val rootFlavor = flavor(
+            placeholder = "${Flavors.PREFIX}ROOT-FLAVOR",
+            default = "kek ${childFlavor.placeholder}"
+        )
+        val original = "lol ${rootFlavor.placeholder}"
+
+        val flavored = flavorMachine(
+            original = original,
+            flavors = listOf(childFlavor, rootFlavor),
+        )
+
+        assertThat(flavored).isEqualTo("lol kek cheburek")
     }
 
     @Test

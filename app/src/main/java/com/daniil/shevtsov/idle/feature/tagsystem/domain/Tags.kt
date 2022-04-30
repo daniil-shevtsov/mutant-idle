@@ -41,6 +41,10 @@ object Tags {
         val Scrapyard = Tag(name = "Scrapyard Location")
     }
 
+    object Knowledge {
+        val SocialNorms = Tag(name = "Social Norms")
+    }
+
     object Body {
         val HandSword = Tag(name = "Hand Sword")
         val Fangs = Tag(name = "Fangs")
