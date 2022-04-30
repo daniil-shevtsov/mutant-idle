@@ -25,6 +25,7 @@ import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewAction
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
 import com.daniil.shevtsov.idle.feature.drawer.view.DrawerTabSelector
+import com.daniil.shevtsov.idle.feature.gamefinish.view.EndingComposable
 import com.daniil.shevtsov.idle.feature.location.view.LocationSelection
 import com.daniil.shevtsov.idle.feature.main.presentation.*
 import com.daniil.shevtsov.idle.feature.player.info.view.PlayerInfoComposable
@@ -122,6 +123,9 @@ fun MainScreen(
                 state = viewState.state,
                 onViewAction = { action -> viewModel.handleAction(ScreenViewAction.Main(action)) },
             )
+        }
+        is ScreenViewState.FinishedGame -> {
+            EndingComposable()
         }
     }
 }
@@ -264,8 +268,14 @@ fun ContentBody(
                     state = state.actionState,
                     isCollapsed = isActionsCollapsed,
                     modifier = modifier,
-                    onToggleCollapse = { MainViewAction.ToggleSectionCollapse(SectionKey.Actions) },
-                    onActionClicked = { id -> MainViewAction.ActionClicked(id) },
+                    onToggleCollapse = {
+                        onViewAction(
+                            MainViewAction.ToggleSectionCollapse(
+                                SectionKey.Actions
+                            )
+                        )
+                    },
+                    onActionClicked = { id -> onViewAction(MainViewAction.ActionClicked(id)) },
                 )
             }
             Spacer(
@@ -282,8 +292,14 @@ fun ContentBody(
                     shop = state.shop,
                     isCollapsed = isShopCollapsed,
                     modifier = modifier,
-                    onToggleCollapse = { MainViewAction.ToggleSectionCollapse(SectionKey.Upgrades) },
-                    onUpgradeSelected = { id -> MainViewAction.UpgradeSelected(id) },
+                    onToggleCollapse = {
+                        onViewAction(
+                            MainViewAction.ToggleSectionCollapse(
+                                SectionKey.Upgrades
+                            )
+                        )
+                    },
+                    onUpgradeSelected = { id -> onViewAction(MainViewAction.UpgradeSelected(id)) },
                 )
             }
         }

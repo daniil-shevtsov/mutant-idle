@@ -47,7 +47,7 @@ class IdleGameViewModel @Inject constructor(
                             resources = currentState.resources.map { resource ->
                                 when (resource.key) {
                                     ResourceKey.Blood -> resource.copy(
-                                        value = time.value * balanceConfig.resourcePerMillisecond
+                                        value = (10 + time.value * balanceConfig.resourcePerMillisecond)*10
                                     )
                                     else -> resource
                                 }
