@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.feature.main.domain
 
+import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.core.navigation.ScreenViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
@@ -11,7 +12,7 @@ fun screenFunctionalCore(
     state: MainFunctionalCoreState,
     viewAction: ScreenViewAction,
 ): MainFunctionalCoreState {
-    return when(viewAction) {
+    return when (viewAction) {
         is ScreenViewAction.Main -> mainFunctionalCore(
             state = state,
             viewAction = viewAction.action,
@@ -170,7 +171,11 @@ fun handleActionClicked(
             resources = updatedResources,
             player = state.player.copy(
                 generalTags = newTags
-            )
+            ),
+            currentScreen = when {
+                updatedRatios.find { it.key == RatioKey.Suspicion }?.value ?: 0.0 >= 1.0 -> Screen.FinishedGame
+                else -> state.currentScreen
+            }
         )
     } else {
         state

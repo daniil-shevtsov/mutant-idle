@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.feature.main.domain
 import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
+import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
@@ -216,59 +217,60 @@ class MainFunctionalCoreTest {
     }
 
     @Test
-    fun `should update resources, ratios and tags correctly when action clicked`() = runBlockingTest {
-        val providedTag = tag(name = "lol")
-        val action = action(
-            id = 1L,
-            resourceChanges = mapOf(
-                resourceChange(key = ResourceKey.Blood, change = 2.0),
-                resourceChange(key = ResourceKey.Money, change = -7.0),
-            ),
-            ratioChanges = mapOf(
-                ratioChange(key = RatioKey.Mutanity, change = 2.0f),
-                ratioChange(key = RatioKey.Suspicion, change = -3.0f),
-            ),
-            tags = mapOf(
-                TagRelation.Provides to listOf(providedTag)
+    fun `should update resources, ratios and tags correctly when action clicked`() =
+        runBlockingTest {
+            val providedTag = tag(name = "lol")
+            val action = action(
+                id = 1L,
+                resourceChanges = mapOf(
+                    resourceChange(key = ResourceKey.Blood, change = 2.0),
+                    resourceChange(key = ResourceKey.Money, change = -7.0),
+                ),
+                ratioChanges = mapOf(
+                    ratioChange(key = RatioKey.Mutanity, change = 2.0f),
+                    ratioChange(key = RatioKey.Suspicion, change = -3.0f),
+                ),
+                tags = mapOf(
+                    TagRelation.Provides to listOf(providedTag)
+                )
             )
-        )
 
-        val initialState = mainFunctionalCoreState(
-            resources = listOf(
-                resource(key = ResourceKey.Blood, value = 4.0),
-                resource(key = ResourceKey.Money, value = 8.0),
-            ),
-            ratios = listOf(
-                ratio(key = RatioKey.Mutanity, value = 3.0),
-                ratio(key = RatioKey.Suspicion, value = 7.0),
-            ),
-            actions = listOf(action),
-        )
+            val initialState = mainFunctionalCoreState(
+                resources = listOf(
+                    resource(key = ResourceKey.Blood, value = 4.0),
+                    resource(key = ResourceKey.Money, value = 8.0),
+                ),
+                ratios = listOf(
+                    ratio(key = RatioKey.Mutanity, value = 3.0),
+                    ratio(key = RatioKey.Suspicion, value = 7.0),
+                ),
+                actions = listOf(action),
+            )
 
-        val newState = mainFunctionalCore(
-            state = initialState,
-            viewAction = MainViewAction.ActionClicked(id = action.id),
-        )
+            val newState = mainFunctionalCore(
+                state = initialState,
+                viewAction = MainViewAction.ActionClicked(id = action.id),
+            )
 
-        assertThat(newState)
-            .all {
-                prop(MainFunctionalCoreState::resources)
-                    .extracting(Resource::key, Resource::value)
-                    .containsExactly(
-                        ResourceKey.Blood to 6.0,
-                        ResourceKey.Money to 1.0,
-                    )
-                prop(MainFunctionalCoreState::ratios)
-                    .extracting(Ratio::key, Ratio::value)
-                    .containsExactly(
-                        RatioKey.Mutanity to 5.0,
-                        RatioKey.Suspicion to 4.0,
-                    )
-                prop(MainFunctionalCoreState::player)
-                    .prop(Player::tags)
-                    .containsExactly(providedTag)
-            }
-    }
+            assertThat(newState)
+                .all {
+                    prop(MainFunctionalCoreState::resources)
+                        .extracting(Resource::key, Resource::value)
+                        .containsExactly(
+                            ResourceKey.Blood to 6.0,
+                            ResourceKey.Money to 1.0,
+                        )
+                    prop(MainFunctionalCoreState::ratios)
+                        .extracting(Ratio::key, Ratio::value)
+                        .containsExactly(
+                            RatioKey.Mutanity to 5.0,
+                            RatioKey.Suspicion to 4.0,
+                        )
+                    prop(MainFunctionalCoreState::player)
+                        .prop(Player::tags)
+                        .containsExactly(providedTag)
+                }
+        }
 
     @Test
     fun `should add tags provided by clicked action`() {
@@ -395,7 +397,7 @@ class MainFunctionalCoreTest {
 
     @Test
     fun `should select location when clicked`() {
-        val location = location(id =  1L, title = "lol")
+        val location = location(id = 1L, title = "lol")
 
         val state = mainFunctionalCore(
             state = mainFunctionalCoreState(
@@ -414,14 +416,18 @@ class MainFunctionalCoreTest {
 
     @Test
     fun `should update current tags with provided by selected location`() {
-        val oldLocation = location(id =  1L, title = "old location", tags = mapOf(
-            TagRelation.Provides to listOf(tag(name = "old tag"))
-        ))
+        val oldLocation = location(
+            id = 1L, title = "old location", tags = mapOf(
+                TagRelation.Provides to listOf(tag(name = "old tag"))
+            )
+        )
 
         val newTag = tag(name = "new tag")
-        val newLocation = location(id = 2L, title = "new location", tags = mapOf(
-            TagRelation.Provides to listOf(newTag)
-        ))
+        val newLocation = location(
+            id = 2L, title = "new location", tags = mapOf(
+                TagRelation.Provides to listOf(newTag)
+            )
+        )
 
         val state = mainFunctionalCore(
             state = mainFunctionalCoreState(
@@ -436,6 +442,27 @@ class MainFunctionalCoreTest {
             .prop(MainFunctionalCoreState::player)
             .prop(Player::generalTags)
             .containsExactly(newTag)
+    }
+
+    @Test
+    fun `should open finished screen if suspicion gained maximum value`() {
+        val state = mainFunctionalCoreState(
+            ratios = listOf(
+                ratio(key = RatioKey.Suspicion, value = 0.95),
+            ),
+            actions = listOf(
+                action(id = 1L, ratioChanges = mapOf(RatioKey.Suspicion to 0.05f))
+            )
+        )
+
+        val newState = mainFunctionalCore(
+            state = state,
+            viewAction = MainViewAction.ActionClicked(id = 1L)
+        )
+
+        assertThat(newState)
+            .prop(MainFunctionalCoreState::currentScreen)
+            .isEqualTo(Screen.FinishedGame)
     }
 
 }
