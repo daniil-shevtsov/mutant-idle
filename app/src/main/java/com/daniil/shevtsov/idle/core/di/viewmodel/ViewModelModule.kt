@@ -3,7 +3,7 @@ package com.daniil.shevtsov.idle.core.di.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.daniil.shevtsov.idle.core.di.AppScope
-import com.daniil.shevtsov.idle.feature.main.presentation.ScreenHostViewModel
+import com.daniil.shevtsov.idle.core.navigation.ScreenHostViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
