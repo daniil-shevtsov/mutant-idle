@@ -19,7 +19,6 @@ object Jobs {
         title = "Undertaker",
         tags = listOf(
             Tags.Access.Graveyard,
-            Tags.Access.Graveyard,
             Tags.LaborIntensive,
         )
     )

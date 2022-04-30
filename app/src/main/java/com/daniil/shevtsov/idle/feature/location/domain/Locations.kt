@@ -24,7 +24,7 @@ fun createLocations() = listOf(
         )
     ),
     location(
-        id = 1L,
+        id = 2L,
         title = "Morgue",
         description = "A place where they store people for a while",
         tags = mapOf(
@@ -39,7 +39,7 @@ fun createLocations() = listOf(
         )
     ),
     location(
-        id = 2L,
+        id = 3L,
         title = "Butcher Shop",
         description = "A place where they share pieces of meat",
         tags = mapOf(
@@ -53,7 +53,7 @@ fun createLocations() = listOf(
         )
     ),
     location(
-        id = 3L,
+        id = 4L,
         title = "Scrap Yard",
         description = "A place where they pile up metal",
         tags = mapOf(
