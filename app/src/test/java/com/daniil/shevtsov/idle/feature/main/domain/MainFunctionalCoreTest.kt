@@ -411,4 +411,30 @@ class MainFunctionalCoreTest {
             .prop(LocationSelectionState::selectedLocation)
             .isEqualTo(location)
     }
+
+    @Test
+    fun `should update current tags with provided by selected location`() {
+        val oldLocation = location(id =  1L, title = "old location", tags = mapOf(
+            TagRelation.Provides to listOf(tag(name = "old tag"))
+        ))
+
+        val newTag = tag(name = "new tag")
+        val newLocation = location(id = 2L, title = "new location", tags = mapOf(
+            TagRelation.Provides to listOf(newTag)
+        ))
+
+        val state = mainFunctionalCore(
+            state = mainFunctionalCoreState(
+                locationSelectionState = locationSelectionState(
+                    allLocations = listOf(oldLocation, newLocation)
+                )
+            ),
+            viewAction = MainViewAction.LocationSelected(id = newLocation.id)
+        )
+
+        assertThat(state)
+            .prop(MainFunctionalCoreState::player)
+            .prop(Player::generalTags)
+            .containsExactly(newTag)
+    }
 }
