@@ -9,8 +9,10 @@ fun flavorMachine(
 ): String {
     var newOriginal = original
 
-    flavors.forEach { flavor ->
-        newOriginal = flavorMinivan(original = newOriginal, flavor = flavor, tags = tags)
+    while(newOriginal.contains(Flavors.PREFIX)) {
+        flavors.forEach { flavor ->
+            newOriginal = flavorMinivan(original = newOriginal, flavor = flavor, tags = tags)
+        }
     }
 
     return newOriginal
