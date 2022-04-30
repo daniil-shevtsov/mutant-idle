@@ -1,20 +1,19 @@
 package com.daniil.shevtsov.idle.feature.gamefinish.domain
 
-data class Ending(
-    val id: Long,
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
+
+data class Unlock(
     val title: String,
     val description: String,
-    val unlocks: List<Unlock>,
+    val newTags: List<Tag>,
 )
 
-fun ending(
-    id: Long = 0L,
+fun unlock(
     title: String = "",
     description: String = "",
-    unlocks: List<Unlock> = emptyList(),
-) = Ending(
-    id = id,
+    newTags: List<Tag> = emptyList(),
+) = Unlock(
     title = title,
     description = description,
-    unlocks = unlocks,
+    newTags = newTags,
 )
