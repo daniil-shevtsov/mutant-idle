@@ -11,6 +11,11 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
+import com.daniil.shevtsov.idle.feature.flavor.Flavors
+import com.daniil.shevtsov.idle.feature.flavor.flavor
+import com.daniil.shevtsov.idle.feature.location.domain.location
+import com.daniil.shevtsov.idle.feature.location.domain.locationSelectionState
+import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
@@ -558,17 +563,17 @@ class MainPresentationFunctionalCoreTest {
         )
 
         val state = mainFunctionalCoreState(
-                actions = listOf(
-                    availableAction,
-                    notAvailableAction,
-                ),
-                player = player(
-                    generalTags = listOf(
-                        availableTag,
-                        forbiddenTag,
-                    )
-                ),
-            )
+            actions = listOf(
+                availableAction,
+                notAvailableAction,
+            ),
+            player = player(
+                generalTags = listOf(
+                    availableTag,
+                    forbiddenTag,
+                )
+            ),
+        )
 
         val viewState = mainPresentationFunctionalCore(state = state)
 
@@ -581,108 +586,108 @@ class MainPresentationFunctionalCoreTest {
             .extracting(ActionModel::id)
             .containsExactly(availableAction.id)
     }
-//
-//    @Test
-//    fun `should replace placeholders in action description if has any`() = runBlockingTest {
-//        val tag = Tags.Nature.Tech
-//        val flavor = Flavors.invisibilityAction
-//
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                actions = listOf(
-//                    action(subtitle = flavor.placeholder)
-//                ),
-//                flavors = listOf(flavor),
-//                player = player(
-//                    generalTags = listOf(tag)
-//                ),
-//            )
-//        )
-//
-//        viewModel.state.test {
-//            assertThat(expectMostRecentItem())
-//                .extractingHumanActions()
-//                .extracting(ActionModel::subtitle)
-//                .containsExactly(flavor.values[tag])
-//        }
-//    }
-//
-//    @Test
-//    fun `should replace placeholders in upgrade description if has any`() = runBlockingTest {
-//        val tag = Tags.Nature.Tech
-//        val flavor = Flavors.invisibilityAction
-//
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                upgrades = listOf(
-//                    upgrade(subtitle = flavor.placeholder)
-//                ),
-//                flavors = listOf(flavor),
-//                player = player(
-//                    generalTags = listOf(tag)
-//                ),
-//            )
-//        )
-//
-//        viewModel.state.test {
-//            assertThat(expectMostRecentItem())
-//                .extractingUpgrades()
-//                .extracting(UpgradeModel::subtitle)
-//                .containsExactly(flavor.values[tag])
-//        }
-//    }
-//
-//    @Test
-//    fun `should show locations if has any`() = runBlockingTest {
-//        val availableLocation = location(id = 1L)
-//
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                locationSelectionState = locationSelectionState(
-//                    allLocations = listOf(availableLocation),
-//                ),
-//            )
-//        )
-//
-//        viewModel.state.test {
-//            assertThat(expectMostRecentItem())
-//                .extractingAvailableLocations()
-//                .extracting(LocationModel::id)
-//                .containsExactly(availableLocation.id)
-//        }
-//    }
-//
-//    @Test
-//    fun `should not show locations that require not available tags`() = runBlockingTest {
-//        val availableTag = tag(name = "available tag")
-//        val unavailableTag = tag(name = "unavailable tag")
-//        val availableLocation = location(
-//            id = 1L,
-//            title = "available location",
-//            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
-//        )
-//        val unavailableLocation = location(
-//            id = 2,
-//            title = "unavailable location",
-//            tags = mapOf(TagRelation.RequiredAll to listOf(unavailableTag))
-//        )
-//
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                player = player(generalTags = listOf(availableTag)),
-//                locationSelectionState = locationSelectionState(
-//                    allLocations = listOf(availableLocation, unavailableLocation),
-//                ),
-//            )
-//        )
-//
-//        viewModel.state.test {
-//            assertThat(expectMostRecentItem())
-//                .extractingAvailableLocations()
-//                .extracting(LocationModel::title)
-//                .containsExactly(availableLocation.title)
-//        }
-//    }
+
+    @Test
+    fun `should replace placeholders in action description if has any`() = runBlockingTest {
+        val tag = tag(name = "flavor tag")
+        val flavoredDescription = "flavored"
+        val flavor = flavor(
+            placeholder = "${Flavors.PREFIX}placeholder",
+            values = mapOf(tag to flavoredDescription),
+        )
+
+        val state = mainFunctionalCoreState(
+            actions = listOf(
+                action(subtitle = flavor.placeholder)
+            ),
+            flavors = listOf(flavor),
+            player = player(
+                generalTags = listOf(tag)
+            ),
+        )
+
+        val viewState = mainPresentationFunctionalCore(state = state)
+
+        assertThat(viewState)
+            .extractingHumanActions()
+            .extracting(ActionModel::subtitle)
+            .containsExactly(flavoredDescription)
+    }
+
+    @Test
+    fun `should replace placeholders in upgrade description if has any`() = runBlockingTest {
+        val tag = tag(name = "flavor tag")
+        val flavoredDescription = "flavored"
+        val flavor = flavor(
+            placeholder = "${Flavors.PREFIX}placeholder",
+            values = mapOf(tag to flavoredDescription),
+        )
+
+        val state = mainFunctionalCoreState(
+            upgrades = listOf(
+                upgrade(subtitle = flavor.placeholder)
+            ),
+            flavors = listOf(flavor),
+            player = player(
+                generalTags = listOf(tag)
+            ),
+        )
+
+        val viewState = mainPresentationFunctionalCore(state = state)
+
+        assertThat(viewState)
+            .extractingUpgrades()
+            .extracting(UpgradeModel::subtitle)
+            .containsExactly(flavoredDescription)
+    }
+
+    @Test
+    fun `should show locations if has any`() = runBlockingTest {
+        val availableLocation = location(id = 1L)
+
+        val state = mainFunctionalCoreState(
+            locationSelectionState = locationSelectionState(
+                allLocations = listOf(availableLocation),
+            ),
+        )
+
+        val viewState = mainPresentationFunctionalCore(state = state)
+
+        assertThat(viewState)
+            .extractingAvailableLocations()
+            .extracting(LocationModel::id)
+            .containsExactly(availableLocation.id)
+    }
+
+    @Test
+    fun `should not show locations that require not available tags`() = runBlockingTest {
+        val availableTag = tag(name = "available tag")
+        val unavailableTag = tag(name = "unavailable tag")
+        val availableLocation = location(
+            id = 1L,
+            title = "available location",
+            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
+        )
+        val unavailableLocation = location(
+            id = 2,
+            title = "unavailable location",
+            tags = mapOf(TagRelation.RequiredAll to listOf(unavailableTag))
+        )
+
+        val state = mainFunctionalCoreState(
+            player = player(generalTags = listOf(availableTag)),
+            locationSelectionState = locationSelectionState(
+                allLocations = listOf(availableLocation, unavailableLocation),
+            ),
+        )
+
+        val viewState = mainPresentationFunctionalCore(state = state)
+
+        assertThat(viewState)
+            .extractingAvailableLocations()
+            .extracting(LocationModel::title)
+            .containsExactly(availableLocation.title)
+    }
 
     private fun Assert<MainViewState>.extractingUpgrades() =
         extractingMainState()
