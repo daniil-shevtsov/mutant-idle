@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.feature.main.presentation
 
+import com.daniil.shevtsov.idle.core.navigation.ScreenViewState
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
@@ -31,6 +32,16 @@ import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModelMapper
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
+
+fun screenPresentationFunctionalCore(
+    state: MainFunctionalCoreState
+): ScreenViewState {
+    return ScreenViewState.Main(
+        mainPresentationFunctionalCore(
+            state
+        )
+    )
+}
 
 fun mainPresentationFunctionalCore(
     state: MainFunctionalCoreState

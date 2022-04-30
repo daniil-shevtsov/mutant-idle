@@ -6,6 +6,7 @@ import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.MainCoroutineExtension
+import com.daniil.shevtsov.idle.core.navigation.ScreenViewAction
 import com.daniil.shevtsov.idle.core.navigation.ScreenViewState
 import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
@@ -46,11 +47,11 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(MainCoroutineExtension::class)
-internal class MainViewModelTest {
+internal class ScreenHostViewModelTest {
 
     private val imperativeShell = MainImperativeShell(initialState = mainFunctionalCoreState())
 
-    private val viewModel: MainViewModel by lazy { createViewModel() }
+    private val viewModel: ScreenHostViewModel by lazy { createViewModel() }
 
     @Test
     fun `should form correct initial state`() = runBlockingTest {
@@ -1041,7 +1042,11 @@ internal class MainViewModelTest {
         }
     }
 
-    private fun createViewModel() = MainViewModel(
+    private fun ScreenHostViewModel.handleAction(action: MainViewAction) {
+        handleAction(ScreenViewAction.Main(action))
+    }
+
+    private fun createViewModel() = ScreenHostViewModel(
         imperativeShell = imperativeShell,
     )
 
