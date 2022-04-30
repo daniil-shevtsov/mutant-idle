@@ -1,8 +1,7 @@
-package com.daniil.shevtsov.idle.feature.ending.view
+package com.daniil.shevtsov.idle.feature.gamefinish.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,23 +17,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
+import com.daniil.shevtsov.idle.feature.gamefinish.presentation.UnlockFeatureModel
+import com.daniil.shevtsov.idle.feature.gamefinish.presentation.UnlockModel
 
 @Preview
 @Composable
 fun EndinigPreview() {
     EndingComposable()
 }
-
-data class UnlockFeatureModel(
-    val title: String,
-    val subtitle: String,
-)
-
-data class UnlockModel(
-    val title: String,
-    val subtitle: String,
-    val unlockFeatures: List<UnlockFeatureModel>,
-)
 
 @Composable
 fun EndingComposable() {
