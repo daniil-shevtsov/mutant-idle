@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.daniil.shevtsov.idle.core.navigation.ScreenViewState
 import com.daniil.shevtsov.idle.core.ui.*
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
@@ -114,20 +115,25 @@ fun MainPreview() {
 fun MainScreen(
     viewModel: MainViewModel
 ) {
-    val viewState by viewModel.state.collectAsState()
-    MainContent(
-        state = viewState,
-        onViewAction = { action -> viewModel.handleAction(action) },
-        onActionClicked = { actionId ->
-            viewModel.handleAction(MainViewAction.ActionClicked(id = actionId))
-        },
-        onUpgradeSelected = { upgradeId ->
-            viewModel.handleAction(MainViewAction.UpgradeSelected(id = upgradeId))
-        },
-        onToggleCollapse = { sectionKey ->
-            viewModel.handleAction(MainViewAction.ToggleSectionCollapse(key = sectionKey))
+    val delegatedViewState by viewModel.state.collectAsState()
+
+    when(val viewState = delegatedViewState) {
+        is ScreenViewState.Main -> {
+            MainContent(
+                state = viewState.state,
+                onViewAction = { action -> viewModel.handleAction(action) },
+                onActionClicked = { actionId ->
+                    viewModel.handleAction(MainViewAction.ActionClicked(id = actionId))
+                },
+                onUpgradeSelected = { upgradeId ->
+                    viewModel.handleAction(MainViewAction.UpgradeSelected(id = upgradeId))
+                },
+                onToggleCollapse = { sectionKey ->
+                    viewModel.handleAction(MainViewAction.ToggleSectionCollapse(key = sectionKey))
+                }
+            )
         }
-    )
+    }
 }
 
 @Composable

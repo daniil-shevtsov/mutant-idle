@@ -6,6 +6,7 @@ import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.MainCoroutineExtension
+import com.daniil.shevtsov.idle.core.navigation.ScreenViewState
 import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
@@ -85,29 +86,31 @@ internal class MainViewModelTest {
         viewModel.state.test {
             val state = expectMostRecentItem()
             assertThat(state)
-                .isInstanceOf(MainViewState.Success::class)
                 .all {
                     extractingResourceNameAndValues()
                         .containsExactly("Blood" to "10", "Money" to "20")
                     extractingRatios()
                         .containsExactly("Human" to 0.0, "Unknown" to 0.0)
-                    prop(MainViewState.Success::shop)
-                        .prop(ShopState::upgradeLists)
-                        .index(0)
-                        .extracting(UpgradeModel::id)
-                        .containsExactly(0L, 1L, 2L, 3L)
-                    prop(MainViewState.Success::actionState)
-                        .prop(ActionsState::actionPanes)
-                        .index(0)
-                        .prop(ActionPane::actions)
-                        .extracting(ActionModel::title)
-                        .containsExactly("human action", "mutant action")
-                    prop(MainViewState.Success::sectionCollapse)
-                        .containsOnly(
-                            SectionKey.Resources to false,
-                            SectionKey.Actions to false,
-                            SectionKey.Upgrades to false,
-                        )
+
+                    extractingMainState().all {
+                        prop(MainViewState.Success::shop)
+                            .prop(ShopState::upgradeLists)
+                            .index(0)
+                            .extracting(UpgradeModel::id)
+                            .containsExactly(0L, 1L, 2L, 3L)
+                        prop(MainViewState.Success::actionState)
+                            .prop(ActionsState::actionPanes)
+                            .index(0)
+                            .prop(ActionPane::actions)
+                            .extracting(ActionModel::title)
+                            .containsExactly("human action", "mutant action")
+                        prop(MainViewState.Success::sectionCollapse)
+                            .containsOnly(
+                                SectionKey.Resources to false,
+                                SectionKey.Actions to false,
+                                SectionKey.Upgrades to false,
+                            )
+                    }
                 }
         }
     }
@@ -431,14 +434,14 @@ internal class MainViewModelTest {
             viewModel.handleAction(MainViewAction.ToggleSectionCollapse(key = SectionKey.Resources))
 
             assertThat(expectMostRecentItem())
-                .isInstanceOf(MainViewState.Success::class)
+                .extractingMainState()
                 .prop(MainViewState.Success::sectionCollapse)
                 .contains(SectionKey.Resources to true)
 
             viewModel.handleAction(MainViewAction.ToggleSectionCollapse(key = SectionKey.Resources))
 
             assertThat(expectMostRecentItem())
-                .isInstanceOf(MainViewState.Success::class)
+                .extractingMainState()
                 .prop(MainViewState.Success::sectionCollapse)
                 .contains(SectionKey.Resources to false)
         }
@@ -462,7 +465,7 @@ internal class MainViewModelTest {
             viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
 
             assertThat(expectMostRecentItem())
-                .isInstanceOf(MainViewState.Success::class)
+                .extractingMainState()
                 .prop(MainViewState.Success::resources)
                 .extracting(ResourceModel::value)
                 .containsExactly("10")
@@ -642,7 +645,7 @@ internal class MainViewModelTest {
 
         viewModel.state.test {
             assertThat(expectMostRecentItem())
-                .isInstanceOf(MainViewState.Success::class)
+                .extractingMainState()
                 .prop(MainViewState.Success::drawerState)
                 .prop(DrawerViewState::drawerContent)
                 .isInstanceOf(DrawerContentViewState.PlayerInfo::class)
@@ -673,7 +676,7 @@ internal class MainViewModelTest {
 
         viewModel.state.test {
             assertThat(expectMostRecentItem())
-                .isInstanceOf(MainViewState.Success::class)
+                .extractingMainState()
                 .prop(MainViewState.Success::drawerState)
                 .prop(DrawerViewState::drawerContent)
                 .isInstanceOf(DrawerContentViewState.PlayerInfo::class)
@@ -714,7 +717,7 @@ internal class MainViewModelTest {
 
         viewModel.state.test {
             assertThat(expectMostRecentItem())
-                .isInstanceOf(MainViewState.Success::class)
+                .extractingMainState()
                 .prop(MainViewState.Success::drawerState)
                 .prop(DrawerViewState::drawerContent)
                 .isInstanceOf(DrawerContentViewState.PlayerInfo::class)
@@ -764,7 +767,7 @@ internal class MainViewModelTest {
 
         viewModel.state.test {
             assertThat(expectMostRecentItem())
-                .isInstanceOf(MainViewState.Success::class)
+                .extractingMainState()
                 .prop(MainViewState.Success::drawerState)
                 .prop(DrawerViewState::drawerContent)
                 .isInstanceOf(DrawerContentViewState.PlayerInfo::class)
@@ -808,7 +811,7 @@ internal class MainViewModelTest {
 
         viewModel.state.test {
             assertThat(expectMostRecentItem())
-                .isInstanceOf(MainViewState.Success::class)
+                .extractingMainState()
                 .prop(MainViewState.Success::actionState)
                 .prop(ActionsState::actionPanes)
                 .index(0)
@@ -856,7 +859,7 @@ internal class MainViewModelTest {
 
         viewModel.state.test {
             assertThat(expectMostRecentItem())
-                .isInstanceOf(MainViewState.Success::class)
+                .extractingMainState()
                 .prop(MainViewState.Success::actionState)
                 .prop(ActionsState::actionPanes)
                 .index(0)
@@ -882,7 +885,7 @@ internal class MainViewModelTest {
 
         viewModel.state.test {
             assertThat(expectMostRecentItem())
-                .isInstanceOf(MainViewState.Success::class)
+                .extractingMainState()
                 .prop(MainViewState.Success::actionState)
                 .prop(ActionsState::actionPanes)
                 .index(0)
@@ -926,7 +929,7 @@ internal class MainViewModelTest {
 
         viewModel.state.test {
             assertThat(expectMostRecentItem())
-                .isInstanceOf(MainViewState.Success::class)
+                .extractingMainState()
                 .prop(MainViewState.Success::actionState)
                 .prop(ActionsState::actionPanes)
                 .index(0)
@@ -1042,105 +1045,101 @@ internal class MainViewModelTest {
         imperativeShell = imperativeShell,
     )
 
-    private fun Assert<MainViewState>.extractingUpgrades() =
-        isInstanceOf(MainViewState.Success::class)
+    private fun Assert<ScreenViewState>.extractingUpgrades() =
+        extractingMainState()
             .prop(MainViewState.Success::shop)
             .prop(ShopState::upgradeLists)
             .index(0)
 
-    private fun Assert<MainViewState>.extractingLocationSelectionViewState() =
-        isInstanceOf(MainViewState.Success::class)
+    private fun Assert<ScreenViewState>.extractingLocationSelectionViewState() =
+        extractingMainState()
             .prop(MainViewState.Success::locationSelectionViewState)
 
-    private fun Assert<MainViewState>.extractingAvailableLocations() =
+    private fun Assert<ScreenViewState>.extractingAvailableLocations() =
         extractingLocationSelectionViewState()
             .prop(LocationSelectionViewState::locations)
 
-    private fun Assert<MainViewState>.extractingSelectedLocation() =
-        extractingLocationSelectionViewState()
-            .prop(LocationSelectionViewState::selectedLocation)
-
-    private fun Assert<MainViewState>.extractingLocationSelectionExpanded() =
-        extractingLocationSelectionViewState()
-            .prop(LocationSelectionViewState::isExpanded)
-
-    private fun Assert<MainViewState>.extractingHumanActions() =
-        isInstanceOf(MainViewState.Success::class)
+    private fun Assert<ScreenViewState>.extractingHumanActions() =
+        extractingMainState()
             .prop(MainViewState.Success::actionState)
             .prop(ActionsState::actionPanes)
             .index(0)
             .prop(ActionPane::actions)
 
-
-    private fun Assert<MainViewState>.extractingRatios() =
-        isInstanceOf(MainViewState.Success::class)
-            .prop(MainViewState.Success::ratios)
-            .extracting(HumanityRatioModel::name, HumanityRatioModel::percent)
-
     private fun Assert<HumanityRatioModel>.assertPercentage(expected: Double) =
         prop(HumanityRatioModel::percent)
             .isCloseTo(expected, 0.00001)
 
-    private fun Assert<MainViewState>.extractingMutanity() =
-        isInstanceOf(MainViewState.Success::class)
+    private fun Assert<ScreenViewState>.extractingMutanity() =
+        extractingMainState()
             .prop(MainViewState.Success::ratios)
             .index(0)
 
-    private fun Assert<MainViewState>.extractingSuspicion() =
-        isInstanceOf(MainViewState.Success::class)
+    private fun Assert<ScreenViewState>.extractingSuspicion() =
+        extractingMainState()
             .prop(MainViewState.Success::ratios)
             .index(1)
 
-    private fun Assert<MainViewState>.extractingMutanityValue() =
-        isInstanceOf(MainViewState.Success::class)
+    private fun Assert<ScreenViewState>.extractingMutanityValue() =
+        extractingMainState()
             .prop(MainViewState.Success::ratios)
             .index(0)
             .prop(HumanityRatioModel::percent)
 
-    private fun Assert<MainViewState>.extractingMutanityName() =
-        isInstanceOf(MainViewState.Success::class)
+    private fun Assert<ScreenViewState>.extractingMutanityName() =
+        extractingMainState()
             .prop(MainViewState.Success::ratios)
             .index(0)
             .prop(HumanityRatioModel::name)
 
-    private fun Assert<MainViewState>.hasRatioName(expectedName: String) = extractingMutanityName()
-        .isEqualTo(expectedName)
+    private fun Assert<ScreenViewState>.extractingRatios() = extractingMainState()
+        .prop(MainViewState.Success::ratios)
+        .extracting(HumanityRatioModel::name, HumanityRatioModel::percent)
 
-    private fun Assert<MainViewState>.hasSuspicionRatioName(expectedName: String) =
-        isInstanceOf(MainViewState.Success::class)
+
+    private fun Assert<ScreenViewState>.hasRatioName(expectedName: String) =
+        extractingMutanityName()
+            .isEqualTo(expectedName)
+
+    private fun Assert<ScreenViewState>.hasSuspicionRatioName(expectedName: String) =
+        extractingMainState()
             .prop(MainViewState.Success::ratios)
             .index(1)
             .prop(HumanityRatioModel::name)
             .isEqualTo(expectedName)
 
-    private fun Assert<MainViewState>.extractingResources() =
-        isInstanceOf(MainViewState.Success::class)
+    private fun Assert<ScreenViewState>.extractingResources() =
+        extractingMainState()
             .prop(MainViewState.Success::resources)
 
-    private fun Assert<MainViewState>.extractingResourceNameAndValues() =
+    private fun Assert<ScreenViewState>.extractingResourceNameAndValues() =
         extractingResources()
             .extracting(ResourceModel::name, ResourceModel::value)
 
-    private fun Assert<MainViewState>.extractingBlood() =
-        isInstanceOf(MainViewState.Success::class)
+    private fun Assert<ScreenViewState>.extractingBlood() =
+        extractingMainState()
             .prop(MainViewState.Success::resources)
             .index(0)
             .prop(ResourceModel::value)
 
-    private fun Assert<MainViewState>.extractingMoney() = isInstanceOf(MainViewState.Success::class)
+    private fun Assert<ScreenViewState>.extractingMoney() = extractingMainState()
         .prop(MainViewState.Success::resources)
         .index(1)
         .prop(ResourceModel::value)
 
-    private fun Assert<MainViewState>.extractingDebugState() =
-        isInstanceOf(MainViewState.Success::class)
-            .prop(MainViewState.Success::drawerState)
-            .prop(DrawerViewState::drawerContent)
-            .isInstanceOf(DrawerContentViewState.Debug::class)
-            .prop(DrawerContentViewState.Debug::state)
+    private fun Assert<ScreenViewState>.extractingDebugState() = extractingMainState()
+        .prop(MainViewState.Success::drawerState)
+        .prop(DrawerViewState::drawerContent)
+        .isInstanceOf(DrawerContentViewState.Debug::class)
+        .prop(DrawerContentViewState.Debug::state)
 
     private fun Assert<DebugViewState>.extractingJobSelection() = prop(DebugViewState::jobSelection)
     private fun Assert<DebugViewState>.extractingSpeciesSelection() =
         prop(DebugViewState::speciesSelection)
+
+    private fun Assert<ScreenViewState>.extractingMainState() =
+        isInstanceOf(ScreenViewState.Main::class)
+            .prop(ScreenViewState.Main::state)
+            .isInstanceOf(MainViewState.Success::class)
 
 }
