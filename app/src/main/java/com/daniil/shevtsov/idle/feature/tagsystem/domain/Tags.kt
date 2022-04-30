@@ -1,7 +1,6 @@
 package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
 object Tags {
-    val Devourer = Tag(name = "Devourer")
     val Hypnosis = Tag(name = "Hypnosis")
     val Heliophobia = Tag(name = "Heliophobia")
     val Immortal = Tag(name = "Immortal")
@@ -12,6 +11,41 @@ object Tags {
 
     val HumanAppearance = Tag(name = "Human Appearance")
     val Employed = Tag(name = "Employed")
+
+    object Species {
+        val Devourer = Tag(name = "Devourer")
+        val ShapeShifter = Tag(name = "Shape Shifter")
+        val Vampire = Tag(name = "Vampire")
+        val Parasite = Tag(name = "Parasite")
+        val Demon = Tag(name = "Demon")
+        val Alien = Tag(name = "Alien")
+        val Android = Tag(name = "Android")
+    }
+
+    object Body {
+        val HandSword = Tag(name = "Hand Sword")
+        val Fangs = Tag(name = "Fangs")
+        val IronJaws = Tag(name = "Iron Jaws")
+        val Darts = Tag("Darts")
+        val LiquidForm = Tag("Liquid Form")
+        val SuperStrength = Tag("Super Strength")
+    }
+
+    object Abilities {
+        val Invisibility = Tag(name = "Invisibility Ability")
+        val Flight = Tag(name = "Flight Ability")
+        val AnimalForm = Tag(name = "Animal Form Ability")
+        val TransferHost = Tag(name = "Transfer Host Ability")
+    }
+
+    object State {
+        val Invisible = Tag(name = "Invisible")
+    }
+
+    object Nature {
+        val Magic = Tag(name = "Magic")
+        val Tech = Tag(name = "Tech")
+    }
 
     val Surgeon = Tag(name = "Surgeon")
     val FreshCorpseAccess = Tag(name = "Fresh Corpse Access")

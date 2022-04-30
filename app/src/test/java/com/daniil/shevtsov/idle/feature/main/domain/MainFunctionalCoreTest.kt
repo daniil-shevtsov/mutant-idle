@@ -14,6 +14,7 @@ import com.daniil.shevtsov.idle.feature.main.presentation.sectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
+import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
@@ -21,12 +22,13 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.ratioChange
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.domain.resourceChange
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
+import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
 import com.daniil.shevtsov.idle.util.balanceConfig
 import com.daniil.shevtsov.idle.util.resource
-import com.daniil.shevtsov.idle.util.upgrade
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test
 
@@ -40,12 +42,12 @@ class MainFunctionalCoreTest {
             resources = listOf(
                 resource(key = ResourceKey.Blood, value = 10.0),
             ),
+            ratios = listOf(
+                ratio(key = RatioKey.Mutanity, value = 0.0)
+            ),
             upgrades = listOf(
                 upgrade(id = 0L, price = 4.0)
             ),
-            ratios = listOf(
-                ratio(key = RatioKey.Mutanity, value = 0.0)
-            )
         )
 
         val newState = mainFunctionalCore(
@@ -67,6 +69,33 @@ class MainFunctionalCoreTest {
                     .extracting(Ratio::key, Ratio::value)
                     .containsExactly(RatioKey.Mutanity to 0.4)
             }
+    }
+
+    @Test
+    fun `should add tags provided by upgrade when upgrade bought`() = runBlockingTest {
+        val providedTag = tag(name = "lol")
+
+        val initialState = mainFunctionalCoreState(
+            resources = listOf(resource(key = ResourceKey.Blood, value = 1.0)),
+            ratios = listOf(ratio(key = RatioKey.Mutanity)),
+            upgrades = listOf(
+                upgrade(
+                    id = 0L, tags = mapOf(
+                        TagRelation.Provides to listOf(providedTag)
+                    )
+                )
+            ),
+        )
+
+        val newState = mainFunctionalCore(
+            state = initialState,
+            viewAction = MainViewAction.UpgradeSelected(id = 0L),
+        )
+
+        assertThat(newState)
+            .prop(MainFunctionalCoreState::player)
+            .prop(Player::tags)
+            .containsExactly(providedTag)
     }
 
     @Test
@@ -95,20 +124,15 @@ class MainFunctionalCoreTest {
 
         val previousPlayerState = player(
             job = previousJob,
-            tags = listOf(
-                tag(name = "old job tag 1"), //TODO: This design choice to have duplicated data is kinda dumb
-                tag(name = "old job tag 2"),
-            ) + nonJobTags
+            generalTags = nonJobTags
         )
 
-
-
         val initialState = mainFunctionalCoreState(
-            player = previousPlayerState,
             availableJobs = listOf(
                 previousPlayerState.job,
                 newJob
             ),
+            player = previousPlayerState,
         )
 
         val newState = mainFunctionalCore(
@@ -132,7 +156,65 @@ class MainFunctionalCoreTest {
     }
 
     @Test
+    fun `should change player species when species selected`() = runBlockingTest {
+        val nonSpeciesTags = listOf(
+            tag(name = "non-species tag 1"),
+            tag(name = "non-species tag 2"),
+        )
+
+        val previousSpecies = playerSpecies(
+            id = 0L,
+            title = "old species",
+            tags = listOf(
+                tag(name = "old species tag 1"),
+                tag(name = "old species tag 2"),
+            )
+        )
+        val newSpecies = playerSpecies(
+            id = 1L,
+            title = "new species",
+            tags = listOf(
+                tag(name = "new species tag 1"),
+                tag(name = "new species tag 2"),
+            ),
+        )
+
+        val previousPlayerState = player(
+            species = previousSpecies,
+            generalTags = nonSpeciesTags,
+        )
+
+        val initialState = mainFunctionalCoreState(
+            player = previousPlayerState,
+            availableSpecies = listOf(
+                previousPlayerState.species,
+                newSpecies
+            ),
+        )
+
+        val newState = mainFunctionalCore(
+            state = initialState,
+            viewAction = MainViewAction.DebugSpeciesSelected(id = newSpecies.id)
+        )
+
+        assertThat(newState)
+            .prop(MainFunctionalCoreState::player)
+            .all {
+                prop(Player::species)
+                    .isEqualTo(newSpecies)
+
+                prop(Player::tags)
+                    .all {
+                        containsSubList(nonSpeciesTags)
+                        containsNone(previousPlayerState.species.tags)
+                        containsSubList(newSpecies.tags)
+                    }
+            }
+    }
+
+    @Test
     fun `should update everything correctly when action clicked`() = runBlockingTest {
+        val providedTag = tag(name = "lol")
         val action = action(
             id = 1L,
             resourceChanges = mapOf(
@@ -142,6 +224,9 @@ class MainFunctionalCoreTest {
             ratioChanges = mapOf(
                 ratioChange(key = RatioKey.Mutanity, change = 2.0f),
                 ratioChange(key = RatioKey.Suspicion, change = -3.0f),
+            ),
+            tags = mapOf(
+                TagRelation.Provides to listOf(providedTag)
             )
         )
 
@@ -154,7 +239,7 @@ class MainFunctionalCoreTest {
                 ratio(key = RatioKey.Mutanity, value = 3.0),
                 ratio(key = RatioKey.Suspicion, value = 7.0),
             ),
-            actions = listOf(action)
+            actions = listOf(action),
         )
 
         val newState = mainFunctionalCore(
@@ -176,7 +261,49 @@ class MainFunctionalCoreTest {
                         RatioKey.Mutanity to 5.0,
                         RatioKey.Suspicion to 4.0,
                     )
+                prop(MainFunctionalCoreState::player)
+                    .prop(Player::tags)
+                    .containsExactly(providedTag)
             }
+    }
+
+    @Test
+    fun `should add tags provided by clicked action`() {
+        val providedTag = tag(name = "lol")
+        val action = action(
+            id = 1L,
+            tags = mapOf(TagRelation.Provides to listOf(providedTag)),
+        )
+        val newState = mainFunctionalCore(
+            state = mainFunctionalCoreState(actions = listOf(action)),
+            viewAction = MainViewAction.ActionClicked(id = action.id),
+        )
+
+        assertThat(newState)
+            .prop(MainFunctionalCoreState::player)
+            .prop(Player::tags)
+            .containsExactly(providedTag)
+    }
+
+    @Test
+    fun `should remove tags removed by clicked action`() {
+        val tagToRemove = tag(name = "lol")
+        val action = action(
+            id = 1L,
+            tags = mapOf(TagRelation.Removes to listOf(tagToRemove)),
+        )
+        val newState = mainFunctionalCore(
+            state = mainFunctionalCoreState(
+                player = player(generalTags = listOf(tagToRemove)),
+                actions = listOf(action),
+            ),
+            viewAction = MainViewAction.ActionClicked(id = action.id),
+        )
+
+        assertThat(newState)
+            .prop(MainFunctionalCoreState::player)
+            .prop(Player::tags)
+            .containsNone(tagToRemove)
     }
 
     @Test
@@ -185,7 +312,7 @@ class MainFunctionalCoreTest {
             drawerTabs = listOf(
                 drawerTab(id = DrawerTabId.PlayerInfo, isSelected = true),
                 drawerTab(id = DrawerTabId.Debug, isSelected = false),
-            )
+            ),
         )
 
         val newState = mainFunctionalCore(
@@ -208,7 +335,7 @@ class MainFunctionalCoreTest {
             sections = listOf(
                 sectionState(key = SectionKey.Resources, isCollapsed = false),
                 sectionState(key = SectionKey.Actions, isCollapsed = false),
-            )
+            ),
         )
 
         val firstState = mainFunctionalCore(

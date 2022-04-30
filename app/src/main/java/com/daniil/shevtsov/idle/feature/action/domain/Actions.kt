@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.feature.action.domain
 
+import com.daniil.shevtsov.idle.feature.flavor.Flavors
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
@@ -14,8 +15,10 @@ fun createAllActions() = listOf(
             ResourceKey.Money to 25.0
         ),
         tags = mapOf(
-            Tags.HumanAppearance to TagRelation.Required,
-            Tags.Employed to TagRelation.Required,
+            TagRelation.RequiredAll to listOf(
+                Tags.HumanAppearance,
+                Tags.Employed,
+            )
         ),
     ),
     action(
@@ -27,23 +30,27 @@ fun createAllActions() = listOf(
             ResourceKey.HumanFood to 1.0,
         ),
         tags = mapOf(
-            Tags.HumanAppearance to TagRelation.Required,
+            TagRelation.RequiredAll to listOf(
+                Tags.HumanAppearance,
+            )
         ),
     ),
     action(
         id = 8L,
         title = "Capture a person",
         subtitle = "I think I can do it if I grow enough",
-        tags = mapOf(
-            Tags.PersonCapturer to TagRelation.Required,
-        ),
         resourceChanges = mapOf(
             ResourceKey.Blood to -10.0,
             ResourceKey.Prisoner to 1.0,
         ),
         ratioChanges = mapOf(
             RatioKey.Suspicion to 0.1f,
-        )
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.PersonCapturer,
+            )
+        ),
     ),
     action(
         id = 9L,
@@ -58,7 +65,9 @@ fun createAllActions() = listOf(
             RatioKey.Suspicion to 0.05f,
         ),
         tags = mapOf(
-            Tags.Devourer to TagRelation.Required,
+            TagRelation.RequiredAll to listOf(
+                Tags.Species.Devourer,
+            )
         ),
     ),
     action(
@@ -68,6 +77,11 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.Blood to 2.0,
             ResourceKey.HumanFood to -1.0,
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Species.Devourer,
+            )
         )
     ),
     action(
@@ -77,12 +91,14 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.Remains to -1.0,
         ),
-        tags = mapOf(
-            Tags.GraveyardAccess to TagRelation.Required,
-        ),
         ratioChanges = mapOf(
             RatioKey.Suspicion to -0.05f,
-        )
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.GraveyardAccess,
+            )
+        ),
     ),
     action(
         id = 12L,
@@ -91,12 +107,15 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.Organs to 1.0,
         ),
-        tags = mapOf(
-            Tags.FreshCorpseAccess to TagRelation.Required,
-        ),
         ratioChanges = mapOf(
             RatioKey.Suspicion to 0.1f,
-        )
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Species.Devourer,
+                Tags.FreshCorpseAccess,
+            )
+        ),
     ),
     action(
         id = 13L,
@@ -105,11 +124,43 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.Remains to -1.0,
         ),
-        tags = mapOf(
-            Tags.IncineratorAccess to TagRelation.Required,
-        ),
         ratioChanges = mapOf(
             RatioKey.Suspicion to -0.1f,
-        )
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.IncineratorAccess,
+            )
+        ),
+    ),
+    action(
+        id = 14L,
+        title = "Become invisible",
+        subtitle = "You ${Flavors.invisibilityAction.placeholder}, ${Flavors.derogativePeopleName.placeholder} can't see you now",
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Abilities.Invisibility,
+            ),
+            TagRelation.Provides to listOf(
+                Tags.State.Invisible
+            ),
+            TagRelation.RequiresNone to listOf( //TODO: Maybe this should be default behavior for providing tags?
+                Tags.State.Invisible,
+            )
+        ),
+    ),
+    action(
+        id = 15L,
+        title = "Become visible",
+        subtitle = "You become visible again",
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Abilities.Invisibility,
+                Tags.State.Invisible,
+            ),
+            TagRelation.Removes to listOf( //TODO: I sense inconsistency in this one
+                Tags.State.Invisible
+            )
+        ),
     ),
 )

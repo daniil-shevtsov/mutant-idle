@@ -8,19 +8,17 @@ import com.daniil.shevtsov.idle.core.di.koin.appModule
 import com.daniil.shevtsov.idle.feature.action.domain.createAllActions
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
-import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
+import com.daniil.shevtsov.idle.feature.flavor.createFlavors
+import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
-import com.daniil.shevtsov.idle.feature.player.core.domain.Player
+import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.Jobs
+import com.daniil.shevtsov.idle.feature.player.species.domain.Species
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
-import com.daniil.shevtsov.idle.feature.resource.domain.Resource
-import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
-import com.daniil.shevtsov.idle.feature.upgrade.domain.Price
-import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
-import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
+import com.daniil.shevtsov.idle.feature.resource.domain.createResources
+import com.daniil.shevtsov.idle.feature.upgrade.domain.createUpgrades
 import org.koin.core.Koin
 import timber.log.Timber
 import javax.inject.Inject
@@ -33,16 +31,18 @@ class IdleGameApplication : Application() {
             .create(
                 appContext = applicationContext,
                 balanceConfig = createBalanceConfig(),
-                initialResources = createInitialResources(),
-                initialMainState = MainFunctionalCoreState(
+                initialResources = createResources(),
+                initialMainState = mainFunctionalCoreState(
                     balanceConfig = createBalanceConfig(),
-                    resources = createInitialResources(),
+                    resources = createResources(),
                     ratios = createInitialRatios(),
                     sections = createInitialSectionState(),
                     drawerTabs = createInitialDrawerTabs(),
-                    upgrades = createInitialUpgrades(),
+                    upgrades = createUpgrades(),
                     actions = createAllActions(),
                     availableJobs = createInitialJobs(),
+                    availableSpecies = createInitialSpecies(),
+                    flavors = createFlavors(),
                     player = createInitialPlayer(),
                 )
             )
@@ -77,38 +77,6 @@ class IdleGameApplication : Application() {
         resourceSpentForFullMutant = 100.0,
     )
 
-    private fun createInitialUpgrades() = listOf(
-        Upgrade(
-            id = 0L,
-            title = "Hand-sword",
-            subtitle = "Transform your hand into a sharp blade",
-            price = Price(value = 50.0),
-            status = UpgradeStatus.NotBought,
-        ),
-        Upgrade(
-            id = 1L,
-            title = "Fangs",
-            subtitle = "Grow very sharp fangs. They are almost useless without stronger jaws though",
-            price = Price(value = 25.0),
-            status = UpgradeStatus.NotBought,
-        ),
-        Upgrade(
-            id = 2L,
-            title = "Iron jaws",
-            subtitle = "Your jaws become stronger than any shark",
-            price = Price(value = 10.0),
-            status = UpgradeStatus.NotBought,
-        ),
-    )
-
-    private fun createInitialResources() = ResourceKey.values().map { key ->
-        Resource(
-            key = key,
-            name = key.name,
-            value = 0.0,
-        )
-    }
-
     private fun createInitialRatios() = listOf(
         Ratio(key = RatioKey.Mutanity, title = "", value = 0.0),
         Ratio(key = RatioKey.Suspicion, title = "", value = 0.0),
@@ -125,18 +93,27 @@ class IdleGameApplication : Application() {
         DrawerTab(id = DrawerTabId.Debug, title = "Debug", isSelected = false),
     )
 
-    private fun createInitialPlayer() = Player(
-        job = Jobs.Mortician,
-        tags = Jobs.Mortician.tags + listOf(
-            Tags.Devourer,
-            Tags.PersonCapturer,
-        )
+    private fun createInitialPlayer() = player(
+        job = Jobs.Unemployed,
+        species = Species.Devourer,
+        generalTags = emptyList(),
     )
 
     private fun createInitialJobs() = listOf(
+        Jobs.Unemployed,
         Jobs.Mortician,
         Jobs.Undertaker,
         Jobs.Butcher,
+    )
+
+    private fun createInitialSpecies() = listOf(
+        Species.Alien,
+        Species.Android,
+        Species.Demon,
+        Species.Devourer,
+        Species.Parasite,
+        Species.Shapeshifter,
+        Species.Vampire,
     )
 
 }

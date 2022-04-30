@@ -4,7 +4,6 @@ import com.daniil.shevtsov.idle.core.data.MultipleStorage
 import com.daniil.shevtsov.idle.core.di.AppScope
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
-import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

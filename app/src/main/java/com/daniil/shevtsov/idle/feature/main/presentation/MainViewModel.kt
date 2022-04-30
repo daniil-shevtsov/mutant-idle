@@ -9,12 +9,14 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
+import com.daniil.shevtsov.idle.feature.flavor.flavorMachine
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.info.presentation.PlayerInfoState
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
+import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
@@ -22,9 +24,9 @@ import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMapper
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.hasRequiredTag
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModelMapper
@@ -76,7 +78,7 @@ class MainViewModel @Inject constructor(
 
     private fun createMainViewState(state: MainFunctionalCoreState): MainViewState {
         return MainViewState.Success(
-            resources = state.resources.map { resource ->
+            resources = state.resources.filter { it.value > 0.0 }.map { resource ->
                 ResourceModelMapper.map(
                     resource = resource,
                     name = resource.name,
@@ -88,11 +90,23 @@ class MainViewModel @Inject constructor(
                     percent = it.value
                 )
             },
-            actionState = createActionState(state.actions, state.resources, state.player),
+            actionState = createActionState(state.actions, state.resources, state.player, state),
             shop = state.upgrades
+                .filter { upgrade ->
+                    satisfiesAllTagsRelations(
+                        tagRelations = upgrade.tags,
+                        tags = state.player.tags
+                    )
+                }
                 .map { upgrade ->
                     UpgradeModelMapper.map(
-                        upgrade = upgrade,
+                        upgrade = upgrade.copy(
+                            subtitle = flavorMachine(
+                                original = upgrade.subtitle,
+                                flavors = state.flavors,
+                                tags = state.player.tags,
+                            )
+                        ),
                         status = upgrade.mapStatus(
                             state.resources.find { it.key == ResourceKey.Blood }?.value ?: 0.0
                         )
@@ -124,6 +138,16 @@ class MainViewModel @Inject constructor(
                                         )
                                     }
                                 },
+                                speciesSelection = state.availableSpecies.map { species ->
+                                    with(species) {
+                                        PlayerSpeciesModel(
+                                            id = id,
+                                            title = title,
+                                            tags = tags,
+                                            isSelected = state.player.species.id == species.id,
+                                        )
+                                    }
+                                }
                             )
                         )
                     }
@@ -141,16 +165,41 @@ class MainViewModel @Inject constructor(
         )
     }
 
+    private fun satisfiesAllTagsRelations(
+        tagRelations: Map<TagRelation, List<Tag>>,
+        tags: List<Tag>,
+    ): Boolean {
+        val hasAllRequired = tagRelations[TagRelation.RequiredAll].orEmpty()
+            .all { requiredTag -> requiredTag in tags }
+        val requiredAny = tagRelations[TagRelation.RequiredAny]
+        val hasAnyRequired = requiredAny == null || requiredAny.any { requiredTag -> requiredTag in tags }
+        val requiredNone = tagRelations[TagRelation.RequiresNone]
+        val hasNone = requiredNone == null || requiredNone.none { forbiddenTag -> forbiddenTag in tags }
+
+        return hasAllRequired && hasAnyRequired && hasNone
+    }
+
     private fun createActionState(
         actions: List<Action>,
         resources: List<Resource>,
         player: Player,
+        state: MainFunctionalCoreState,
     ): ActionsState {
         val availableActions = actions
             .filter { action ->
-                val requiredTags = action.tags
-                    .filter { (_, tagRelation) -> tagRelation == TagRelation.Required }.keys
-                player.tags.containsAll(requiredTags)
+                satisfiesAllTagsRelations(
+                    tagRelations = action.tags,
+                    tags = player.tags,
+                )
+            }
+            .map { action ->
+                action.copy(
+                    subtitle = flavorMachine(
+                        original = action.subtitle,
+                        flavors = state.flavors,
+                        tags = player.tags,
+                    )
+                )
             }
 
         return ActionsState(
@@ -213,7 +262,7 @@ class MainViewModel @Inject constructor(
             title = title,
             subtitle = subtitle,
             icon = when {
-                tags.hasRequiredTag(Tags.HumanAppearance) -> ActionIcon.Human
+              tags[TagRelation.RequiredAll].orEmpty().contains(Tags.HumanAppearance) -> ActionIcon.Human
                 else -> ActionIcon.Mutant
             },
             isEnabled = isActive,

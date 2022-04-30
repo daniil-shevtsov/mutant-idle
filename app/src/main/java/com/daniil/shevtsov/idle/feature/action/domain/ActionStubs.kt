@@ -13,14 +13,14 @@ fun action(
     subtitle: String = "",
     resourceChanges: Map<ResourceKey, Double> = mapOf(),
     ratioChanges: Map<RatioKey, Float> = mapOf(),
-    tags: Map<Tag, TagRelation> = mapOf(),
+    tags: Map<TagRelation, List<Tag>> = mapOf(),
 ) = Action(
     id = id,
     title = title,
     subtitle = subtitle,
     resourceChanges = resourceChanges,
     ratioChanges = ratioChanges,
-    tags = tags,
+    tags = tags
 )
 
 fun actionModel(

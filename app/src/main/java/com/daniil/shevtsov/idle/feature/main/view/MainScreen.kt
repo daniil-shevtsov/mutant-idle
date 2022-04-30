@@ -185,6 +185,7 @@ private fun MainDrawer(
                 onAction = { action ->
                     val mainViewAction = when (action) {
                         is DebugViewAction.JobSelected -> MainViewAction.DebugJobSelected(action.id)
+                        is DebugViewAction.SpeciesSelected -> MainViewAction.DebugSpeciesSelected(action.id)
                     }
                     onViewAction(mainViewAction)
                 })
@@ -229,25 +230,27 @@ fun ContentBody(
             )
             MutantRatioPane(state.ratios, modifier = modifier)
         }
-        fun Modifier.hackyWeight(
-            isCollapsed: Boolean
-        ): Modifier {
-            return if (isCollapsed) {
-                modifier
-            } else {
-                modifier.weight(0.5f, fill = false)
-            }
-        }
+
         Column(
             modifier = modifier
                 .weight(1f)
                 .background(Pallete.Red)
                 .padding(4.dp)
         ) {
+            fun hackyWeight(
+                isCollapsed: Boolean
+            ): Modifier {
+                return if (isCollapsed) {
+                    modifier
+                } else {
+                    modifier.weight(0.5f, fill = false)
+                }
+            }
+
             val isActionsCollapsed = state.sectionCollapse[SectionKey.Actions] ?: false
             Cavity(
                 mainColor = Pallete.Red,
-                modifier = modifier.hackyWeight(isCollapsed = isActionsCollapsed),
+                modifier = hackyWeight(isCollapsed = isActionsCollapsed),
             ) {
                 ActionSection(
                     state = state.actionState,
@@ -265,7 +268,7 @@ fun ContentBody(
             val isShopCollapsed = state.sectionCollapse[SectionKey.Upgrades] ?: false
             Cavity(
                 mainColor = Pallete.Red,
-                modifier = modifier.hackyWeight(isCollapsed = isShopCollapsed)
+                modifier = hackyWeight(isCollapsed = isShopCollapsed)
             ) {
                 Shop(
                     shop = state.shop,

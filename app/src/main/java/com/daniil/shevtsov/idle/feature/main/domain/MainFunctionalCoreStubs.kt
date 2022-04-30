@@ -4,10 +4,12 @@ import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.core.domain.balanceConfig
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
+import com.daniil.shevtsov.idle.feature.flavor.Flavor
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
+import com.daniil.shevtsov.idle.feature.player.species.domain.PlayerSpecies
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
@@ -21,6 +23,8 @@ fun mainFunctionalCoreState(
     drawerTabs: List<DrawerTab> = emptyList(),
     sections: List<SectionState> = emptyList(),
     availableJobs: List<PlayerJob> = emptyList(),
+    availableSpecies: List<PlayerSpecies> = emptyList(),
+    flavors: List<Flavor> = emptyList(),
     player: Player = player(),
 ) = MainFunctionalCoreState(
     balanceConfig = balanceConfig,
@@ -31,5 +35,7 @@ fun mainFunctionalCoreState(
     drawerTabs = drawerTabs,
     sections = sections,
     availableJobs = availableJobs,
+    availableSpecies = availableSpecies,
+    flavors = flavors,
     player = player,
 )

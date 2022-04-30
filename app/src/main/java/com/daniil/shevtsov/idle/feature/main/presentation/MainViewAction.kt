@@ -9,4 +9,5 @@ sealed class MainViewAction {
 
     data class DrawerTabSwitched(val id : DrawerTabId) : MainViewAction()
     data class DebugJobSelected(val id: Long) : MainViewAction()
+    data class DebugSpeciesSelected(val id: Long) : MainViewAction()
 }

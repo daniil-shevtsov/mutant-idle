@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.feature.main.domain
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 
 fun mainFunctionalCore(
@@ -30,8 +31,25 @@ fun mainFunctionalCore(
             state = state,
             viewAction = viewAction,
         )
+        is MainViewAction.DebugSpeciesSelected -> handleSpeciesSelected(
+            state = state,
+            viewAction = viewAction,
+        )
     }
     return newState
+}
+
+fun handleSpeciesSelected(
+    state: MainFunctionalCoreState,
+    viewAction: MainViewAction.DebugSpeciesSelected
+): MainFunctionalCoreState {
+    val newSpecies = state.availableSpecies.find { it.id == viewAction.id }!!
+
+    return state.copy(
+        player = state.player.copy(
+            species = newSpecies,
+        )
+    )
 }
 
 fun handleDrawerTabSwitched(
@@ -87,10 +105,16 @@ fun handleActionClicked(
         }
     }
 
+    val newTags =
+        state.player.generalTags + selectedAction.tags[TagRelation.Provides].orEmpty() - selectedAction.tags[TagRelation.Removes].orEmpty()
+
     return if (!hasInvalidChanges) {
         state.copy(
             ratios = updatedRatios,
             resources = updatedResources,
+            player = state.player.copy(
+                generalTags = newTags
+            )
         )
     } else {
         state
@@ -155,6 +179,9 @@ fun handleUpgradeSelected(
                 upgrades = updatedUpgrades,
                 resources = updatedResources,
                 ratios = updatedRatios,
+                player = state.player.copy(
+                    generalTags = state.player.generalTags + boughtUpgrade.tags[TagRelation.Provides].orEmpty()
+                )
             )
         }
         else -> state
@@ -165,17 +192,11 @@ fun handleDebugJobSelected(
     state: MainFunctionalCoreState,
     viewAction: MainViewAction.DebugJobSelected
 ): MainFunctionalCoreState {
-    val previousPlayerTags = state.player.tags
-    val previousJobTags = state.player.job.tags
     val newJob = state.availableJobs.find { it.id == viewAction.id }!!
-    val newJobTags = newJob.tags
-
-    val newPlayerTags = previousPlayerTags - previousJobTags + newJobTags
 
     return state.copy(
         player = state.player.copy(
             job = newJob,
-            tags = newPlayerTags,
         )
     )
 

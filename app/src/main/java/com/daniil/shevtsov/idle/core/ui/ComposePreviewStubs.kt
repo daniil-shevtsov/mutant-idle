@@ -10,6 +10,7 @@ import com.daniil.shevtsov.idle.feature.main.presentation.DrawerViewState
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
+import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
@@ -31,7 +32,7 @@ internal fun viewStatePreviewStub() = MainViewState.Success(
     drawerState = DrawerViewState(
         tabSelectorState = emptyList(),
         drawerContent = DrawerContentViewState.Debug(
-            state = debugViewStateStub()
+            state = debugViewState()
         )
     ),
 )
@@ -140,8 +141,10 @@ internal fun upgradeListPreviewStub() = listOf(
     ),
 )
 
-internal fun debugViewStateStub(
+internal fun debugViewState(
     jobSelection: List<PlayerJobModel> = emptyList(),
+    speciesSelection: List<PlayerSpeciesModel> = emptyList(),
 ) = DebugViewState(
     jobSelection = jobSelection,
+    speciesSelection = speciesSelection,
 )
