@@ -14,8 +14,7 @@ class ScreenHostViewModel @Inject constructor(
     private val imperativeShell: MainImperativeShell,
 ) : ViewModel() {
 
-    private val _state =
-        MutableStateFlow<ScreenViewState>(ScreenViewState.Main(MainViewState.Loading))
+    private val _state = MutableStateFlow<ScreenViewState>(ScreenViewState.Main(MainViewState.Loading))
     val state = _state.asStateFlow()
 
     private val viewActionFlow = MutableSharedFlow<ScreenViewAction>()

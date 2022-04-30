@@ -1,9 +1,13 @@
 package com.daniil.shevtsov.idle.feature.gamefinish.presentation
 
-import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
+import com.daniil.shevtsov.idle.feature.gamefinish.domain.FinishedGameState
 
 fun mapFinishedGameViewState(
-    state: MainFunctionalCoreState
+    state: FinishedGameState
 ): FinishedGameViewState {
-    return finishedGameViewState()
+    return finishedGameViewState(
+        endingState = EndingViewState(
+            description = state.endingText,
+        )
+    )
 }

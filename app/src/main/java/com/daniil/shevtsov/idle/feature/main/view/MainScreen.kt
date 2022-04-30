@@ -25,7 +25,7 @@ import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewAction
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
 import com.daniil.shevtsov.idle.feature.drawer.view.DrawerTabSelector
-import com.daniil.shevtsov.idle.feature.gamefinish.view.EndingComposable
+import com.daniil.shevtsov.idle.feature.gamefinish.view.FinishedGameScreen
 import com.daniil.shevtsov.idle.feature.location.view.LocationSelection
 import com.daniil.shevtsov.idle.feature.main.presentation.*
 import com.daniil.shevtsov.idle.feature.player.info.view.PlayerInfoComposable
@@ -125,7 +125,9 @@ fun MainScreen(
             )
         }
         is ScreenViewState.FinishedGame -> {
-            EndingComposable()
+            FinishedGameScreen(
+                state = viewState.state,
+            )
         }
     }
 }

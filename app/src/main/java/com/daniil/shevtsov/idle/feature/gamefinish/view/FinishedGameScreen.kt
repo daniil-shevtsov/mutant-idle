@@ -17,66 +17,70 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
-import com.daniil.shevtsov.idle.feature.gamefinish.presentation.UnlockFeatureModel
-import com.daniil.shevtsov.idle.feature.gamefinish.presentation.UnlockModel
+import com.daniil.shevtsov.idle.feature.gamefinish.presentation.FinishedGameViewState
+import com.daniil.shevtsov.idle.feature.gamefinish.presentation.finishedGameViewState
 
 @Preview
 @Composable
-fun EndinigPreview() {
-    EndingComposable()
+fun FinishedGameScreenPreview() {
+    FinishedGameScreen(state = finishedGameViewState())
 }
 
 @Composable
-fun EndingComposable() {
+fun FinishedGameScreen(state: FinishedGameViewState) {
     Column(modifier = Modifier.background(Pallete.Red)) {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(25.dp),
-            text = "You have been captured by the government.",
+            text = state.endingState.description,
             fontSize = 24.sp,
             color = Color.White,
             textAlign = TextAlign.Center,
         )
         Cavity(mainColor = Pallete.Red, modifier = Modifier.fillMaxWidth()) {
-            LazyColumn(modifier = Modifier
-                .fillMaxWidth()
-                .padding(2.dp)) {
-                items(
-                    listOf(
-                        UnlockModel(
-                            title = "New class: Vampire",
-                            subtitle = "You are a bloodsucking immortal creature",
-                            unlockFeatures = listOf(
-                                UnlockFeatureModel(
-                                    title = "Can't be in the sun",
-                                    subtitle = "Reduced number of available human actions",
-                                ),
-                                UnlockFeatureModel(
-                                    title = "Hypnosis",
-                                    subtitle = "Can influence humans and gather familiars"
-                                ),
-                            )
-                        ),
-                        UnlockModel(
-                            title = "New job: Mortician",
-                            subtitle = "You work in a morgue",
-                            unlockFeatures = listOf(
-                                UnlockFeatureModel(
-                                    title = "Corpses access",
-                                    subtitle = "People bring them TO YOU",
-                                ),
-                                UnlockFeatureModel(
-                                    title = "Solitary job",
-                                    subtitle = "People don't pay attention as long as the job gets done"
-                                ),
-                            )
-                        ),
-                    )
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(2.dp)
+            ) {
+                items(state.unlocks
+//                    listOf(
+//                        UnlockModel(
+//                            title = "New class: Vampire",
+//                            subtitle = "You are a bloodsucking immortal creature",
+//                            unlockFeatures = listOf(
+//                                UnlockFeatureModel(
+//                                    title = "Can't be in the sun",
+//                                    subtitle = "Reduced number of available human actions",
+//                                ),
+//                                UnlockFeatureModel(
+//                                    title = "Hypnosis",
+//                                    subtitle = "Can influence humans and gather familiars"
+//                                ),
+//                            )
+//                        ),
+//                        UnlockModel(
+//                            title = "New job: Mortician",
+//                            subtitle = "You work in a morgue",
+//                            unlockFeatures = listOf(
+//                                UnlockFeatureModel(
+//                                    title = "Corpses access",
+//                                    subtitle = "People bring them TO YOU",
+//                                ),
+//                                UnlockFeatureModel(
+//                                    title = "Solitary job",
+//                                    subtitle = "People don't pay attention as long as the job gets done"
+//                                ),
+//                            )
+//                        ),
+//                    )
                 ) { unlock ->
-                    Column(modifier = Modifier
-                        .background(Pallete.Red)
-                        .padding(4.dp)) {
+                    Column(
+                        modifier = Modifier
+                            .background(Pallete.Red)
+                            .padding(4.dp)
+                    ) {
                         Text(
                             text = unlock.title,
                             color = Color.White,
