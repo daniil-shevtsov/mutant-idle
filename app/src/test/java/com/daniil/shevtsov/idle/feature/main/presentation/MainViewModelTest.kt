@@ -995,7 +995,6 @@ internal class MainViewModelTest {
                 locationSelectionState = locationSelectionState(
                     allLocations = listOf(availableLocation),
                 ),
-                availableLocations = listOf(availableLocation),
             )
         )
 
