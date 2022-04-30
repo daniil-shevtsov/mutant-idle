@@ -9,9 +9,15 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
+import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
+import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
+import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
+import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
+import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
+import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
@@ -312,611 +318,269 @@ class MainPresentationFunctionalCoreTest {
         )
             .hasRatioName("Manhunt")
     }
-//
-//    @Test
-//    fun `should update both ratios correctly when actions change them both`() = runBlockingTest {
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                ratios = listOf(
-//                    ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.0),
-//                    ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
-//                ),
-//                actions = listOf(
-//                    action(id = 0L, ratioChanges = mapOf(RatioKey.Suspicion to 0.15f)),
-//                    action(id = 1L, ratioChanges = mapOf(RatioKey.Mutanity to 0.25f)),
-//                ),
-//            )
-//        )
-//
-//        viewModel.state.test {
-//            viewModel.handleAction(MainViewAction.ActionClicked(id = 0L))
-//            assertThat(expectMostRecentItem()).all {
-//                extractingSuspicion().assertPercentage(0.15)
-//                extractingMutanity().assertPercentage(0.0)
-//            }
-//
-//            viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
-//            assertThat(expectMostRecentItem()).all {
-//                extractingSuspicion().assertPercentage(0.15)
-//                extractingMutanity().assertPercentage(0.25)
-//            }
-//        }
-//    }
-//
-//    @Test
-//    fun `should update blood when action clicked`() = runBlockingTest {
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                resources = listOf(resource(key = ResourceKey.Blood, value = 1000.0)),
-//                actions = listOf(
-//                    action(id = 1L, resourceChanges = mapOf(ResourceKey.Blood to 50.0))
-//                ),
-//            )
-//        )
-//
-//        viewModel.state.test {
-//            assertThat(expectMostRecentItem())
-//                .extractingBlood()
-//                .isEqualTo("1000")
-//
-//            viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
-//
-//            assertThat(expectMostRecentItem())
-//                .extractingBlood()
-//                .isEqualTo("1050")
-//        }
-//    }
-//
-//    @Test
-//    fun `should update both resources when action with several changes clicked`() =
-//        runBlockingTest {
-//            imperativeShell.updateState(
-//                newState = mainFunctionalCoreState(
-//                    resources = listOf(
-//                        resource(key = ResourceKey.Blood, name = "Blood", value = 1000.0),
-//                        resource(key = ResourceKey.Money, name = "Money", value = 500.0),
-//                    ),
-//                    actions = listOf(
-//                        action(
-//                            id = 1L,
-//                            resourceChanges = mapOf(
-//                                ResourceKey.Blood to 50.0,
-//                                ResourceKey.Money to -30.0,
-//                            ),
-//                        )
-//                    ),
-//                )
-//            )
-//
-//            viewModel.state.test {
-//                assertThat(expectMostRecentItem())
-//                    .extractingResourceNameAndValues()
-//                    .containsExactly("Blood" to "1000", "Money" to "500")
-//
-//                viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
-//
-//                assertThat(expectMostRecentItem())
-//                    .extractingResourceNameAndValues()
-//                    .containsExactly("Blood" to "1050", "Money" to "470")
-//            }
-//        }
-//
-//    @Test
-//    fun `should toggle corresponding collapse state when toggle clicked`() = runBlockingTest {
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                sections = listOf(sectionState(key = SectionKey.Resources, isCollapsed = false)),
-//            )
-//        )
-//
-//        viewModel.state.test {
-//            viewModel.handleAction(MainViewAction.ToggleSectionCollapse(key = SectionKey.Resources))
-//
-//            assertThat(expectMostRecentItem())
-//                .extractingMainState()
-//                .prop(MainViewState.Success::sectionCollapse)
-//                .contains(SectionKey.Resources to true)
-//
-//            viewModel.handleAction(MainViewAction.ToggleSectionCollapse(key = SectionKey.Resources))
-//
-//            assertThat(expectMostRecentItem())
-//                .extractingMainState()
-//                .prop(MainViewState.Success::sectionCollapse)
-//                .contains(SectionKey.Resources to false)
-//        }
-//    }
-//
-//    @Test
-//    fun `should not apply action if it requires unavailable resources`() = runBlockingTest {
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                resources = listOf(resource(key = ResourceKey.Money, value = 10.0)),
-//                actions = listOf(
-//                    action(
-//                        id = 1L,
-//                        resourceChanges = mapOf(ResourceKey.Money to -30.0),
-//                    )
-//                ),
-//            )
-//        )
-//
-//        viewModel.state.test {
-//            viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
-//
-//            assertThat(expectMostRecentItem())
-//                .extractingMainState()
-//                .prop(MainViewState.Success::resources)
-//                .extracting(ResourceModel::value)
-//                .containsExactly("10")
-//        }
-//    }
-//
-//    @Test
-//    fun `should not apply action if it requires both available and not available resources`() =
-//        runBlockingTest {
-//            imperativeShell.updateState(
-//                newState = mainFunctionalCoreState(
-//                    resources = listOf(
-//                        resource(key = ResourceKey.Blood, value = 30.0),
-//                        resource(key = ResourceKey.Money, value = 40.0),
-//                    ),
-//                    actions = listOf(
-//                        action(
-//                            id = 1L,
-//                            resourceChanges = mapOf(
-//                                ResourceKey.Money to -30.0,
-//                                ResourceKey.Blood to -50.0,
-//                            ),
-//                        )
-//                    ),
-//                )
-//            )
-//
-//            viewModel.state.test {
-//                viewModel.handleAction(MainViewAction.ActionClicked(id = 1L))
-//
-//                assertThat(expectMostRecentItem())
-//                    .all {
-//                        extractingMoney().isEqualTo("40")
-//                        extractingBlood().isEqualTo("30")
-//                    }
-//            }
-//        }
-//
-//    @Test
-//    fun `should disable actions if it requires not available resources`() = runBlockingTest {
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                resources = listOf(
-//                    resource(key = ResourceKey.Money, value = 35.0),
-//                ),
-//                actions = listOf(
-//                    action(
-//                        id = 1L,
-//                        resourceChanges = mapOf(
-//                            ResourceKey.Money to -30.0,
-//                        ),
-//                    ),
-//                    action(
-//                        id = 2L,
-//                        resourceChanges = mapOf(
-//                            ResourceKey.Money to -50.0,
-//                        ),
-//                    )
-//                ),
-//            )
-//        )
-//
-//        viewModel.state.test {
-//            assertThat(expectMostRecentItem())
-//                .extractingHumanActions()
-//                .extracting(ActionModel::id, ActionModel::isEnabled)
-//                .containsExactly(
-//                    1L to true,
-//                    2L to false,
-//                )
-//        }
-//    }
-//
-//    @Test
-//    fun `show enabled actions before disabled if got both`() = runBlockingTest {
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                resources = listOf(
-//                    resource(key = ResourceKey.Money, value = 35.0),
-//                ),
-//                actions = listOf(
-//                    action(
-//                        id = 1L,
-//                        resourceChanges = mapOf(
-//                            ResourceKey.Money to -60.0,
-//                        ),
-//                    ),
-//                    action(
-//                        id = 2L,
-//                        resourceChanges = mapOf(
-//                            ResourceKey.Money to -10.0,
-//                        ),
-//                    ),
-//                    action(
-//                        id = 3L,
-//                        resourceChanges = mapOf(
-//                            ResourceKey.Money to -50.0,
-//                        ),
-//                    ),
-//                ),
-//            )
-//        )
-//
-//        viewModel.state.test {
-//            assertThat(expectMostRecentItem())
-//                .extractingHumanActions()
-//                .extracting(ActionModel::id)
-//                .containsExactly(2L, 1L, 3L)
-//        }
-//    }
-//
-//    @Test
-//    fun `should show debug job selection if has any`() = runBlockingTest {
-//        val availableJobs = listOf(
-//            playerJob(id = 0L),
-//            playerJob(id = 1L),
-//            playerJob(id = 2L),
-//        )
-//
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                drawerTabs = listOf(drawerTab(id = DrawerTabId.Debug, isSelected = true)),
-//                availableJobs = availableJobs,
-//            )
-//        )
-//
-//        viewModel.state.test {
-//            assertThat(expectMostRecentItem())
-//                .extractingDebugState()
-//                .extractingJobSelection()
-//                .extracting(PlayerJobModel::id)
-//                .containsExactly(0L, 1L, 2L)
-//        }
-//    }
-//
-//    @Test
-//    fun `should show debug species selection if has any`() = runBlockingTest {
-//        val availableSpecies = listOf(
-//            playerSpecies(id = 0L),
-//            playerSpecies(id = 1L),
-//            playerSpecies(id = 2L),
-//        )
-//
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                drawerTabs = listOf(drawerTab(id = DrawerTabId.Debug, isSelected = true)),
-//                availableSpecies = availableSpecies,
-//            )
-//        )
-//
-//        viewModel.state.test {
-//            assertThat(expectMostRecentItem())
-//                .extractingDebugState()
-//                .extractingSpeciesSelection()
-//                .extracting(PlayerSpeciesModel::id)
-//                .containsExactly(0L, 1L, 2L)
-//        }
-//    }
-//
-//    @Test
-//    fun `should add job tags to player when job selected`() = runBlockingTest {
-//        val job = playerJob(
-//            tags = listOf(
-//                tag(name = "lol"),
-//                tag(name = "kek"),
-//            )
-//        )
-//
-//        val jobTags = job.tags
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                drawerTabs = listOf(drawerTab(id = DrawerTabId.PlayerInfo, isSelected = true)),
-//                availableJobs = listOf(job),
-//            )
-//        )
-//        viewModel.handleAction(MainViewAction.DebugJobSelected(id = job.id))
-//
-//        viewModel.state.test {
-//            assertThat(expectMostRecentItem())
-//                .extractingMainState()
-//                .prop(MainViewState.Success::drawerState)
-//                .prop(DrawerViewState::drawerContent)
-//                .isInstanceOf(DrawerContentViewState.PlayerInfo::class)
-//                .prop(DrawerContentViewState.PlayerInfo::playerInfo)
-//                .prop(PlayerInfoState::playerTags)
-//                .containsSubList(jobTags)
-//        }
-//    }
-//
-//    @Test
-//    fun `should add species tags to player when species selected`() = runBlockingTest {
-//        val species = playerSpecies(
-//            id = 1L,
-//            tags = listOf(
-//                tag(name = "lol"),
-//                tag(name = "kek"),
-//            )
-//        )
-//
-//        val speciesTags = species.tags
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                drawerTabs = listOf(drawerTab(id = DrawerTabId.PlayerInfo, isSelected = true)),
-//                availableSpecies = listOf(species),
-//            )
-//        )
-//        viewModel.handleAction(MainViewAction.DebugSpeciesSelected(id = species.id))
-//
-//        viewModel.state.test {
-//            assertThat(expectMostRecentItem())
-//                .extractingMainState()
-//                .prop(MainViewState.Success::drawerState)
-//                .prop(DrawerViewState::drawerContent)
-//                .isInstanceOf(DrawerContentViewState.PlayerInfo::class)
-//                .prop(DrawerContentViewState.PlayerInfo::playerInfo)
-//                .prop(PlayerInfoState::playerTags)
-//                .containsSubList(speciesTags)
-//        }
-//    }
-//
-//    @Test
-//    fun `should remove previous job tags if job changed`() = runBlockingTest {
-//        val previousJob = playerJob(
-//            id = 0L,
-//            tags = listOf(
-//                Tags.MeatAccess,
-//                Tags.SocialJob,
-//            )
-//        )
-//        val newJob = playerJob(
-//            id = 1L,
-//            tags = listOf(
-//                Tags.CorpseAccess,
-//                Tags.SocialJob,
-//            )
-//        )
-//
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                availableJobs = listOf(
-//                    previousJob,
-//                    newJob,
-//                ),
-//            )
-//        )
-//
-//        viewModel.handleAction(MainViewAction.DebugJobSelected(id = previousJob.id))
-//        viewModel.handleAction(MainViewAction.DebugJobSelected(id = newJob.id))
-//
-//        viewModel.state.test {
-//            assertThat(expectMostRecentItem())
-//                .extractingMainState()
-//                .prop(MainViewState.Success::drawerState)
-//                .prop(DrawerViewState::drawerContent)
-//                .isInstanceOf(DrawerContentViewState.PlayerInfo::class)
-//                .prop(DrawerContentViewState.PlayerInfo::playerInfo)
-//                .prop(PlayerInfoState::playerTags)
-//                .containsExactly(
-//                    Tags.CorpseAccess,
-//                    Tags.SocialJob,
-//                )
-//        }
-//    }
-//
-//    @Test
-//    fun `should keep other player tags when changing jobs`() = runBlockingTest {
-//        val playerTags = listOf(
-//            tag(name = "player tag 1"),
-//            tag(name = "player tag 2"),
-//        )
-//        val previousJob = playerJob(
-//            id = 0L,
-//            tags = listOf(
-//                tag(name = "old job tag 1"),
-//                tag(name = "old job tag 2"),
-//            )
-//        )
-//        val newJob = playerJob(
-//            id = 1L,
-//            tags = listOf(
-//                tag(name = "new job tag 1"),
-//                tag(name = "new job tag 2"),
-//            )
-//        )
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                availableJobs = listOf(
-//                    previousJob,
-//                    newJob,
-//                ),
-//                player = player(
-//                    generalTags = playerTags,
-//                ),
-//            )
-//        )
-//
-//        viewModel.handleAction(MainViewAction.DebugJobSelected(id = previousJob.id))
-//        viewModel.handleAction(MainViewAction.DebugJobSelected(id = newJob.id))
-//
-//        viewModel.state.test {
-//            assertThat(expectMostRecentItem())
-//                .extractingMainState()
-//                .prop(MainViewState.Success::drawerState)
-//                .prop(DrawerViewState::drawerContent)
-//                .isInstanceOf(DrawerContentViewState.PlayerInfo::class)
-//                .prop(DrawerContentViewState.PlayerInfo::playerInfo)
-//                .prop(PlayerInfoState::playerTags)
-//                .all {
-//                    containsSubList(playerTags)
-//                    containsSubList(newJob.tags)
-//                    containsNone(previousJob.tags)
-//                }
-//        }
-//    }
-//
-//    @Test
-//    fun `should show only actions that require avialable tags`() = runBlockingTest {
-//        val availableTag = tag(name = "lol")
-//        val notAvailableTag = tag(name = "kek")
-//
-//        val availableAction = action(
-//            id = 1L,
-//            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
-//        )
-//        val notAvailableAction = action(
-//            id = 2L,
-//            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag, notAvailableTag))
-//        )
-//
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                actions = listOf(
-//                    availableAction,
-//                    notAvailableAction,
-//                ),
-//                player = player(
-//                    generalTags = listOf(
-//                        availableTag
-//                    )
-//                ),
-//            )
-//        )
-//
-//        viewModel.state.test {
-//            assertThat(expectMostRecentItem())
-//                .extractingMainState()
-//                .prop(MainViewState.Success::actionState)
-//                .prop(ActionsState::actionPanes)
-//                .index(0)
-//                .prop(ActionPane::actions)
-//                .extracting(ActionModel::id)
-//                .containsExactly(availableAction.id)
-//        }
-//    }
-//
-//    @Test
-//    fun `should handle requiredAny tag relation for actions`() = runBlockingTest {
-//        val availableTag = tag(name = "available")
-//        val oneTagOption = tag(name = "required tag option 1")
-//        val anotherTagOption = tag(name = "required tag option 2")
-//        val notAvailableTag = tag(name = "not available tag")
-//
-//        val availableAction = action(
-//            id = 1L,
-//            tags = mapOf(
-//                TagRelation.RequiredAll to listOf(availableTag),
-//                TagRelation.RequiredAny to listOf(oneTagOption, anotherTagOption)
-//            )
-//        )
-//        val notAvailableAction = action(
-//            id = 2L,
-//            tags = mapOf(
-//                TagRelation.RequiredAll to listOf(notAvailableTag),
-//            )
-//        )
-//
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                actions = listOf(
-//                    availableAction,
-//                    notAvailableAction,
-//                ),
-//                player = player(
-//                    generalTags = listOf(
-//                        availableTag,
-//                        oneTagOption,
-//                    )
-//                ),
-//            )
-//        )
-//
-//        viewModel.state.test {
-//            assertThat(expectMostRecentItem())
-//                .extractingMainState()
-//                .prop(MainViewState.Success::actionState)
-//                .prop(ActionsState::actionPanes)
-//                .index(0)
-//                .prop(ActionPane::actions)
-//                .extracting(ActionModel::id)
-//                .containsExactly(availableAction.id)
-//        }
-//
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                actions = listOf(
-//                    availableAction,
-//                    notAvailableAction,
-//                ),
-//                player = player(
-//                    generalTags = listOf(
-//                        availableTag,
-//                        anotherTagOption,
-//                    )
-//                ),
-//            )
-//        )
-//
-//        viewModel.state.test {
-//            assertThat(expectMostRecentItem())
-//                .extractingMainState()
-//                .prop(MainViewState.Success::actionState)
-//                .prop(ActionsState::actionPanes)
-//                .index(0)
-//                .prop(ActionPane::actions)
-//                .extracting(ActionModel::id)
-//                .containsExactly(availableAction.id)
-//        }
-//    }
-//
-//    @Test
-//    fun `should handle requiredNone tag relation for actions`() = runBlockingTest {
-//        val availableTag = tag(name = "available")
-//        val forbiddenTag = tag(name = "forbidden")
-//
-//        val availableAction = action(
-//            id = 1L,
-//            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
-//        )
-//        val notAvailableAction = action(
-//            id = 2L,
-//            tags = mapOf(
-//                TagRelation.RequiredAll to listOf(availableTag),
-//                TagRelation.RequiresNone to listOf(forbiddenTag),
-//            )
-//        )
-//
-//        imperativeShell.updateState(
-//            newState = mainFunctionalCoreState(
-//                actions = listOf(
-//                    availableAction,
-//                    notAvailableAction,
-//                ),
-//                player = player(
-//                    generalTags = listOf(
-//                        availableTag,
-//                        forbiddenTag,
-//                    )
-//                ),
-//            )
-//        )
-//
-//        viewModel.state.test {
-//            assertThat(expectMostRecentItem())
-//                .extractingMainState()
-//                .prop(MainViewState.Success::actionState)
-//                .prop(ActionsState::actionPanes)
-//                .index(0)
-//                .prop(ActionPane::actions)
-//                .extracting(ActionModel::id)
-//                .containsExactly(availableAction.id)
-//        }
-//    }
+
+
+    @Test
+    fun `should disable actions if it requires not available resources`() = runBlockingTest {
+        val state = mainFunctionalCoreState(
+            resources = listOf(
+                resource(key = ResourceKey.Money, value = 35.0),
+            ),
+            actions = listOf(
+                action(
+                    id = 1L,
+                    resourceChanges = mapOf(
+                        ResourceKey.Money to -30.0,
+                    ),
+                ),
+                action(
+                    id = 2L,
+                    resourceChanges = mapOf(
+                        ResourceKey.Money to -50.0,
+                    ),
+                )
+            ),
+        )
+        val viewState = mainPresentationFunctionalCore(state = state)
+
+        assertThat(viewState)
+            .extractingHumanActions()
+            .extracting(ActionModel::id, ActionModel::isEnabled)
+            .containsExactly(
+                1L to true,
+                2L to false,
+            )
+    }
+
+    @Test
+    fun `show enabled actions before disabled if got both`() = runBlockingTest {
+        val state = mainFunctionalCoreState(
+            resources = listOf(
+                resource(key = ResourceKey.Money, value = 35.0),
+            ),
+            actions = listOf(
+                action(
+                    id = 1L,
+                    resourceChanges = mapOf(
+                        ResourceKey.Money to -60.0,
+                    ),
+                ),
+                action(
+                    id = 2L,
+                    resourceChanges = mapOf(
+                        ResourceKey.Money to -10.0,
+                    ),
+                ),
+                action(
+                    id = 3L,
+                    resourceChanges = mapOf(
+                        ResourceKey.Money to -50.0,
+                    ),
+                ),
+            ),
+        )
+
+        val viewState = mainPresentationFunctionalCore(state = state)
+
+        assertThat(viewState)
+            .extractingHumanActions()
+            .extracting(ActionModel::id)
+            .containsExactly(2L, 1L, 3L)
+    }
+
+    @Test
+    fun `should show debug job selection if has any`() = runBlockingTest {
+        val availableJobs = listOf(
+            playerJob(id = 0L),
+            playerJob(id = 1L),
+            playerJob(id = 2L),
+        )
+
+        val state = mainFunctionalCoreState(
+            drawerTabs = listOf(drawerTab(id = DrawerTabId.Debug, isSelected = true)),
+            availableJobs = availableJobs,
+        )
+
+        val viewState = mainPresentationFunctionalCore(state = state)
+
+        assertThat(viewState)
+            .extractingDebugState()
+            .extractingJobSelection()
+            .extracting(PlayerJobModel::id)
+            .containsExactly(0L, 1L, 2L)
+    }
+
+    @Test
+    fun `should show debug species selection if has any`() = runBlockingTest {
+        val availableSpecies = listOf(
+            playerSpecies(id = 0L),
+            playerSpecies(id = 1L),
+            playerSpecies(id = 2L),
+        )
+
+        val state = mainFunctionalCoreState(
+            drawerTabs = listOf(drawerTab(id = DrawerTabId.Debug, isSelected = true)),
+            availableSpecies = availableSpecies,
+        )
+
+        val viewState = mainPresentationFunctionalCore(state = state)
+
+        assertThat(viewState)
+            .extractingDebugState()
+            .extractingSpeciesSelection()
+            .extracting(PlayerSpeciesModel::id)
+            .containsExactly(0L, 1L, 2L)
+    }
+
+    @Test
+    fun `should show only actions that require avialable tags`() = runBlockingTest {
+        val availableTag = tag(name = "lol")
+        val notAvailableTag = tag(name = "kek")
+
+        val availableAction = action(
+            id = 1L,
+            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
+        )
+        val notAvailableAction = action(
+            id = 2L,
+            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag, notAvailableTag))
+        )
+
+        val state = mainFunctionalCoreState(
+            actions = listOf(
+                availableAction,
+                notAvailableAction,
+            ),
+            player = player(
+                generalTags = listOf(
+                    availableTag
+                )
+            ),
+        )
+
+        val viewState = mainPresentationFunctionalCore(state = state)
+
+        assertThat(viewState)
+            .extractingMainState()
+            .prop(MainViewState.Success::actionState)
+            .prop(ActionsState::actionPanes)
+            .index(0)
+            .prop(ActionPane::actions)
+            .extracting(ActionModel::id)
+            .containsExactly(availableAction.id)
+    }
+
+    @Test
+    fun `should handle requiredAny tag relation for actions`() = runBlockingTest {
+        val availableTag = tag(name = "available")
+        val oneTagOption = tag(name = "required tag option 1")
+        val anotherTagOption = tag(name = "required tag option 2")
+        val notAvailableTag = tag(name = "not available tag")
+
+        val availableAction = action(
+            id = 1L,
+            tags = mapOf(
+                TagRelation.RequiredAll to listOf(availableTag),
+                TagRelation.RequiredAny to listOf(oneTagOption, anotherTagOption)
+            )
+        )
+        val notAvailableAction = action(
+            id = 2L,
+            tags = mapOf(
+                TagRelation.RequiredAll to listOf(notAvailableTag),
+            )
+        )
+
+        val state = mainFunctionalCoreState(
+            actions = listOf(
+                availableAction,
+                notAvailableAction,
+            ),
+            player = player(
+                generalTags = listOf(
+                    availableTag,
+                    oneTagOption,
+                )
+            ),
+        )
+
+        val viewState = mainPresentationFunctionalCore(state = state)
+
+        assertThat(viewState)
+            .extractingMainState()
+            .prop(MainViewState.Success::actionState)
+            .prop(ActionsState::actionPanes)
+            .index(0)
+            .prop(ActionPane::actions)
+            .extracting(ActionModel::id)
+            .containsExactly(availableAction.id)
+
+        val anotherState = mainFunctionalCoreState(
+            actions = listOf(
+                availableAction,
+                notAvailableAction,
+            ),
+            player = player(
+                generalTags = listOf(
+                    availableTag,
+                    anotherTagOption,
+                )
+            ),
+        )
+
+        val anotherViewState = mainPresentationFunctionalCore(state = anotherState)
+
+        assertThat(anotherViewState)
+            .extractingMainState()
+            .prop(MainViewState.Success::actionState)
+            .prop(ActionsState::actionPanes)
+            .index(0)
+            .prop(ActionPane::actions)
+            .extracting(ActionModel::id)
+            .containsExactly(availableAction.id)
+    }
+
+    @Test
+    fun `should handle requiredNone tag relation for actions`() = runBlockingTest {
+        val availableTag = tag(name = "available")
+        val forbiddenTag = tag(name = "forbidden")
+
+        val availableAction = action(
+            id = 1L,
+            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
+        )
+        val notAvailableAction = action(
+            id = 2L,
+            tags = mapOf(
+                TagRelation.RequiredAll to listOf(availableTag),
+                TagRelation.RequiresNone to listOf(forbiddenTag),
+            )
+        )
+
+        val state = mainFunctionalCoreState(
+                actions = listOf(
+                    availableAction,
+                    notAvailableAction,
+                ),
+                player = player(
+                    generalTags = listOf(
+                        availableTag,
+                        forbiddenTag,
+                    )
+                ),
+            )
+
+        val viewState = mainPresentationFunctionalCore(state = state)
+
+        assertThat(viewState)
+            .extractingMainState()
+            .prop(MainViewState.Success::actionState)
+            .prop(ActionsState::actionPanes)
+            .index(0)
+            .prop(ActionPane::actions)
+            .extracting(ActionModel::id)
+            .containsExactly(availableAction.id)
+    }
 //
 //    @Test
 //    fun `should replace placeholders in action description if has any`() = runBlockingTest {

@@ -216,7 +216,7 @@ class MainFunctionalCoreTest {
     }
 
     @Test
-    fun `should update everything correctly when action clicked`() = runBlockingTest {
+    fun `should update resources, ratios and tags correctly when action clicked`() = runBlockingTest {
         val providedTag = tag(name = "lol")
         val action = action(
             id = 1L,
