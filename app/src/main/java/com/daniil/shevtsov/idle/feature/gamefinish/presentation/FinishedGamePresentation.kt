@@ -7,7 +7,7 @@ fun mapFinishedGameViewState(
 ): FinishedGameViewState {
     return finishedGameViewState(
         endingState = EndingViewState(
-            description = state.endingText,
+            description = state.endings.firstOrNull()?.description.orEmpty(),
         )
     )
 }

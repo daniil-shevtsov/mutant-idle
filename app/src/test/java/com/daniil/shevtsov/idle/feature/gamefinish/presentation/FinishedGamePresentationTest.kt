@@ -4,21 +4,26 @@ import assertk.Assert
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.prop
+import com.daniil.shevtsov.idle.feature.gamefinish.domain.ending
 import com.daniil.shevtsov.idle.feature.gamefinish.domain.finishedGameState
 import org.junit.jupiter.api.Test
 
 internal class FinishedGamePresentationTest {
     @Test
     fun `should show description of ending`() {
+        val ending = ending(
+            title = "EPIC FAIL",
+            description = "YOU GET REKT M8"
+        )
         val state = finishedGameState(
-            endingText = "Epic Fail"
+            endings = listOf(ending),
         )
 
         val viewState = mapFinishedGameViewState(state = state)
 
         assertThat(viewState)
             .extractingEndingDescription()
-            .isEqualTo(state.endingText)
+            .isEqualTo(ending.description)
     }
 
     private fun Assert<FinishedGameViewState>.extractingEndingState() =

@@ -3,15 +3,15 @@ package com.daniil.shevtsov.idle.feature.gamefinish.domain
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 
 data class FinishedGameState(
-    val endingText: String,
+    val endings: List<Ending>,
 )
 
 fun GameState.toFinishedGameState()= FinishedGameState(
-    endingText = "",
+    endings = availableEndings
 )
 
 fun finishedGameState(
-    endingText: String = "",
+    endings: List<Ending>,
 ) = FinishedGameState(
-    endingText = endingText,
+    endings = endings,
 )

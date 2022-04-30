@@ -6,6 +6,7 @@ import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.flavor.Flavor
+import com.daniil.shevtsov.idle.feature.gamefinish.domain.Ending
 import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
 import com.daniil.shevtsov.idle.feature.location.domain.locationSelectionState
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
@@ -27,6 +28,7 @@ data class GameState(
     val drawerTabs: List<DrawerTab>,
     val availableJobs: List<PlayerJob>,
     val availableSpecies: List<PlayerSpecies>,
+    val availableEndings: List<Ending>,
     val locationSelectionState: LocationSelectionState,
     val flavors: List<Flavor>,
     val player: Player,
@@ -43,6 +45,7 @@ fun gameState(
     sections: List<SectionState> = emptyList(),
     availableJobs: List<PlayerJob> = emptyList(),
     availableSpecies: List<PlayerSpecies> = emptyList(),
+    availableEndings: List<Ending> = emptyList(),
     locationSelectionState: LocationSelectionState = locationSelectionState(),
     flavors: List<Flavor> = emptyList(),
     player: Player = player(),
@@ -57,6 +60,7 @@ fun gameState(
     sections = sections,
     availableJobs = availableJobs,
     availableSpecies = availableSpecies,
+    availableEndings = availableEndings,
     locationSelectionState = locationSelectionState,
     flavors = flavors,
     player = player,

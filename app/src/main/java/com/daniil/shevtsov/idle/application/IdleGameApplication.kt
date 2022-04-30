@@ -11,6 +11,7 @@ import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.flavor.createFlavors
+import com.daniil.shevtsov.idle.feature.gamefinish.domain.createEndings
 import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
 import com.daniil.shevtsov.idle.feature.location.domain.createLocations
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
@@ -45,6 +46,7 @@ class IdleGameApplication : Application() {
                     actions = createAllActions(),
                     availableJobs = createInitialJobs(),
                     availableSpecies = createInitialSpecies(),
+                    availableEndings = createEndings(),
                     locationSelectionState = createLocationSelectionState(),
                     flavors = createFlavors(),
                     player = createInitialPlayer(),
