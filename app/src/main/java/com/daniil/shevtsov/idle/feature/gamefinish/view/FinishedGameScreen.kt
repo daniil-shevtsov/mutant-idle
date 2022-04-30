@@ -1,8 +1,11 @@
 package com.daniil.shevtsov.idle.feature.gamefinish.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement.spacedBy
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
@@ -84,9 +87,6 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                             .background(Pallete.Red)
                             .padding(6.dp)
                     ) {
-                        Box() {
-
-                        }
                         Text(
                             text = unlock.title,
                             color = Color.White,
