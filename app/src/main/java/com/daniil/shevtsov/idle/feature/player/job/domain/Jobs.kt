@@ -8,10 +8,9 @@ object Jobs {
         id = 0L,
         title = "Mortician",
         tags = listOf(
+            Tags.Access.Morgue,
             Tags.Surgeon,
             Tags.SolitaryJob,
-            Tags.FreshCorpseAccess,
-            Tags.IncineratorAccess,
         )
     )
 
@@ -19,8 +18,8 @@ object Jobs {
         id = 1L,
         title = "Undertaker",
         tags = listOf(
-            Tags.CorpseAccess,
-            Tags.GraveyardAccess,
+            Tags.Access.Graveyard,
+            Tags.Access.Graveyard,
             Tags.LaborIntensive,
         )
     )
@@ -29,7 +28,7 @@ object Jobs {
         id = 2L,
         title = "Butcher",
         tags = listOf(
-            Tags.MeatAccess,
+            Tags.Access.ButcherShop,
             Tags.SocialJob,
         )
     )
@@ -38,6 +37,14 @@ object Jobs {
         id = 3L,
         title = "Unemployed",
         tags = listOf(),
+    )
+
+    val ScrapyardMechanic = playerJob(
+        id = 4L,
+        title = "Scrapyard Mechanic",
+        tags = listOf(
+            Tags.Access.Scrapyard,
+        )
     )
 
 }

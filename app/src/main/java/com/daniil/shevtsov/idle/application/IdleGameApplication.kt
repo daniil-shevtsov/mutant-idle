@@ -104,6 +104,7 @@ class IdleGameApplication : Application() {
         Jobs.Mortician,
         Jobs.Undertaker,
         Jobs.Butcher,
+        Jobs.ScrapyardMechanic,
     )
 
     private fun createInitialSpecies() = listOf(

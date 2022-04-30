@@ -22,6 +22,25 @@ object Tags {
         val Android = Tag(name = "Android")
     }
 
+    //TODO: There seems to be a need in a system
+    object Access {
+        val Graveyard = Tag(name = "Graveyard Access")
+        val Morgue = Tag(name = "Morgue Access")
+        val ButcherShop = Tag(name = "Butcher Shop Access")
+        val Scrapyard = Tag(name = "Scrapyard Access")
+
+        val Meat = Tag(name = "Meat access")
+        val FreshCorpses = Tag(name = "Fresh corpses")
+        val Incinerator = Tag(name = "Incinerator")
+    }
+
+    object Locations {
+        val Graveyard = Tag(name = "Graveyard Location")
+        val Morgue = Tag(name = "Morgue Location")
+        val ButcherShop = Tag(name = "Butcher Shop Location")
+        val Scrapyard = Tag(name = "Scrapyard Location")
+    }
+
     object Body {
         val HandSword = Tag(name = "Hand Sword")
         val Fangs = Tag(name = "Fangs")
@@ -48,12 +67,9 @@ object Tags {
     }
 
     val Surgeon = Tag(name = "Surgeon")
-    val FreshCorpseAccess = Tag(name = "Fresh Corpse Access")
     val SolitaryJob = Tag(name = "Solitary Job")
-    val IncineratorAccess = Tag(name = "Incinerator Access")
     val CorpseAccess = Tag(name = "Corpse Access")
     val MeatAccess = Tag(name = "Meat Access")
-    val GraveyardAccess = Tag(name = "Graveyard Access")
     val LaborIntensive = Tag(name = "Labor intensive job")
     val SocialJob = Tag(name = "Social Job")
 }
