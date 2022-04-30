@@ -55,7 +55,6 @@ fun handleLocationSelectionExpandChange(
         locationSelectionState = state.locationSelectionState.copy(
             isSelectionExpanded = !state.locationSelectionState.isSelectionExpanded,
         ),
-        isLocationSelectionExpanded = !state.isLocationSelectionExpanded,
     )
 }
 

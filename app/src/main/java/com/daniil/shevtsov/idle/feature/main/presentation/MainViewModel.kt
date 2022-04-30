@@ -81,7 +81,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun createMainViewState(state: MainFunctionalCoreState): MainViewState {
-        return mainViewState(
+        return MainViewState.Success(
             resources = state.resources.filter { it.value > 0.0 }.map { resource ->
                 ResourceModelMapper.map(
                     resource = resource,
