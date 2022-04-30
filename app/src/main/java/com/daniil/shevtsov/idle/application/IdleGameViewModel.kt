@@ -2,8 +2,6 @@ package com.daniil.shevtsov.idle.application
 
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
-import com.daniil.shevtsov.idle.feature.resource.data.ResourcesStorage
-import com.daniil.shevtsov.idle.feature.resource.domain.ResourceBehavior
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.time.data.TimeStorage
 import com.daniil.shevtsov.idle.feature.time.domain.Time
@@ -18,15 +16,9 @@ import kotlin.time.Duration
 class IdleGameViewModel @Inject constructor(
     private val balanceConfig: BalanceConfig,
     private val timeStorage: TimeStorage,
-    private val resourcesStorage: ResourcesStorage,
     private val imperativeShell: MainImperativeShell,
 ) {
     private val scope = CoroutineScope(Job() + Dispatchers.Main.immediate)
-
-    suspend fun onSuspendStart(until: Duration = Duration.INFINITE) {
-        startTime(until)
-        doEverythingElse()
-    }
 
     fun onStart(until: Duration = Duration.INFINITE) {
         scope.launch {
@@ -45,17 +37,11 @@ class IdleGameViewModel @Inject constructor(
 
     private fun doEverythingElse() {
         scope.launch {
-            TimeBehavior.observeTime(timeStorage)
+            timeStorage.observeChange()
                 .map { Time(it.inWholeMilliseconds) }
                 .onEach { time ->
-                    ResourceBehavior.updateResourceByTime(
-                        resourcesStorage = resourcesStorage,
-                        resourceKey = ResourceKey.Blood,
-                        passedTime = time,
-                        rate = balanceConfig.resourcePerMillisecond,
-                    )
-
                     val currentState = imperativeShell.getState()
+
                     imperativeShell.updateState(
                         newState = currentState.copy(
                             resources = currentState.resources.map { resource ->
