@@ -95,7 +95,27 @@ class MainViewModel @Inject constructor(
                 )
             },
             actionState = createActionState(state.actions, state.resources, state.player, state),
-            locationSelectionViewState = state.locationSelectionState.toViewState(playerTags = state.player.tags),
+            locationSelectionViewState = state.locationSelectionState.toViewState(playerTags = state.player.tags)
+                .let { viewState ->
+                    viewState.copy(
+                        locations = viewState.locations.map { location ->
+                            location.copy(
+                                description = flavorMachine(
+                                    original = location.description,
+                                    flavors = state.flavors,
+                                    tags = state.player.tags,
+                                )
+                            )
+                        },
+                        selectedLocation = viewState.selectedLocation.copy(
+                            description = flavorMachine(
+                                original =  viewState.selectedLocation.description,
+                                flavors = state.flavors,
+                                tags = state.player.tags,
+                            )
+                        )
+                    )
+                },
             shop = state.upgrades
                 .filter { upgrade ->
                     satisfiesAllTagsRelations(

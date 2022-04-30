@@ -67,4 +67,5 @@ fun createFlavors() = listOf(
     Flavors.invisibilityGain,
     Flavors.peopleName,
     Flavors.derogativePeopleName,
+    Flavors.objectifiedPeopleName,
 )
