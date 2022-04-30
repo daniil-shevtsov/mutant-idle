@@ -7,6 +7,7 @@ import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
+import com.daniil.shevtsov.idle.feature.location.domain.location
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
@@ -363,5 +364,21 @@ class MainFunctionalCoreTest {
                 SectionKey.Resources to false,
                 SectionKey.Actions to false,
             )
+    }
+
+    @Test
+    fun `should select location when clicked`() {
+        val location = location(id =  1L, title = "lol")
+
+        val state = mainFunctionalCore(
+            state = mainFunctionalCoreState(
+                availableLocations = listOf(location),
+            ),
+            viewAction = MainViewAction.LocationSelected(id = location.id)
+        )
+
+        assertThat(state)
+            .prop(MainFunctionalCoreState::location)
+            .isEqualTo(location)
     }
 }

@@ -35,8 +35,27 @@ fun mainFunctionalCore(
             state = state,
             viewAction = viewAction,
         )
+        is MainViewAction.LocationSelected -> handleLocationSelected(
+            state = state,
+            viewAction = viewAction,
+        )
     }
     return newState
+}
+
+fun handleLocationSelected(
+    state: MainFunctionalCoreState,
+    viewAction: MainViewAction.LocationSelected
+): MainFunctionalCoreState {
+    val selectedLocation = state.availableLocations.find { it.id == viewAction.id }
+
+    return when {
+        selectedLocation != null -> state.copy(
+            location = selectedLocation,
+        )
+        else -> state
+    }
+
 }
 
 fun handleSpeciesSelected(
