@@ -43,6 +43,7 @@ fun mainFunctionalCore(
             state = state,
             viewAction = viewAction,
         )
+        MainViewAction.Init -> state
     }
     return newState
 }

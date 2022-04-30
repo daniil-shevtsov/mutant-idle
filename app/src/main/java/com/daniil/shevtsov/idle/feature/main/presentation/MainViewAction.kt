@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.feature.main.presentation
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 
 sealed class MainViewAction {
+    object Init : MainViewAction()
     data class ActionClicked(val id: Long) : MainViewAction()
     data class UpgradeSelected(val id: Long) : MainViewAction()
     data class ToggleSectionCollapse(val key: SectionKey) : MainViewAction()
