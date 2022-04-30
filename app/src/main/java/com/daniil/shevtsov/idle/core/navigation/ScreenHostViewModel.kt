@@ -31,8 +31,12 @@ class ScreenHostViewModel @Inject constructor(
                 )
 
                 imperativeShell.updateState(newState)
+            }
+            .launchIn(viewModelScope)
 
-                _state.value = screenPresentationFunctionalCore(state = newState)
+        imperativeShell.observeState()
+            .onEach { state ->
+                _state.value = screenPresentationFunctionalCore(state = state)
             }
             .launchIn(viewModelScope)
     }
