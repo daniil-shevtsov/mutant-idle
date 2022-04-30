@@ -156,10 +156,10 @@ class FlavorsMachineTest {
     @Test
     fun `should replace complex two-level placeholder with correct values`() {
         val cheburekChildTag = tag(name = "cheburek")
-        val gulashChildTag = tag(name="gulash")
+        val gulashChildTag = tag(name = "gulash")
 
         val ayranChildTag = tag(name = "ayran")
-        val colaChildTag = tag(name="cola")
+        val colaChildTag = tag(name = "cola")
 
         val foodRootTag = tag("food")
         val drinkRootTag = tag("drink")
