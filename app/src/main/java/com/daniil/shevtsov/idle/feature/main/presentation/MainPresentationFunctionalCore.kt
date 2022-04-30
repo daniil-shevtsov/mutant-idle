@@ -33,8 +33,7 @@ import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModelMapper
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
 
 fun mainPresentationFunctionalCore(
-    state: MainFunctionalCoreState,
-    viewAction: MainViewAction,
+    state: MainFunctionalCoreState
 ): MainViewState {
     return createMainViewState(state)
 }
