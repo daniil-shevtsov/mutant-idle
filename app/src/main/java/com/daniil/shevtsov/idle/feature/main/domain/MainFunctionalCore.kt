@@ -62,9 +62,15 @@ fun handleLocationSelected(
 ): MainFunctionalCoreState {
     val selectedLocation = state.availableLocations.find { it.id == viewAction.id }
 
+    val oldTags = state.location.tags[TagRelation.Provides].orEmpty()
+    val newTags = selectedLocation?.tags?.get(TagRelation.Provides).orEmpty()
+
     return when {
         selectedLocation != null -> state.copy(
             location = selectedLocation,
+            player = state.player.copy(
+                generalTags = state.player.generalTags - oldTags + newTags
+            )
         )
         else -> state
     }

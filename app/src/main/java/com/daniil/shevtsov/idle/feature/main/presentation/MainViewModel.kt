@@ -98,7 +98,7 @@ class MainViewModel @Inject constructor(
                         id = id,
                         title = title,
                         description = description,
-                        isSelected = state.availableLocations.firstOrNull()?.id == location.id,
+                        isSelected = state.location.id == location.id,
                     )
                 }
             },

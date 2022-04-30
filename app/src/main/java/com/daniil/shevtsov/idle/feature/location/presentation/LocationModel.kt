@@ -6,3 +6,15 @@ data class LocationModel(
     val description: String,
     val isSelected: Boolean,
 )
+
+fun locationModel(
+    id: Long = 0L,
+    title: String = "",
+    description: String = "",
+    isSelected: Boolean = false,
+) = LocationModel(
+    id = id,
+    title = title,
+    description = description,
+    isSelected = isSelected,
+)
