@@ -369,6 +369,31 @@ class MainFunctionalCoreTest {
     }
 
     @Test
+    fun `should change location selection expanded state when switched`() {
+        val stateAfterFirstSwitch = mainFunctionalCore(
+            state = mainFunctionalCoreState(
+                locationSelectionState = locationSelectionState(
+                    isSelectionExpanded = false,
+                )
+            ),
+            viewAction = MainViewAction.LocationSelectionExpandChange,
+        )
+        assertThat(stateAfterFirstSwitch)
+            .prop(MainFunctionalCoreState::locationSelectionState)
+            .prop(LocationSelectionState::isSelectionExpanded)
+            .isEqualTo(true)
+
+        val stateAfterSecondSwitch = mainFunctionalCore(
+            state = stateAfterFirstSwitch,
+            viewAction = MainViewAction.LocationSelectionExpandChange,
+        )
+        assertThat(stateAfterSecondSwitch)
+            .prop(MainFunctionalCoreState::locationSelectionState)
+            .prop(LocationSelectionState::isSelectionExpanded)
+            .isEqualTo(false)
+    }
+
+    @Test
     fun `should select location when clicked`() {
         val location = location(id =  1L, title = "lol")
 

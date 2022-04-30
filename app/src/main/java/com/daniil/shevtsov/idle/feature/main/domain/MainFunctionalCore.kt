@@ -52,6 +52,9 @@ fun handleLocationSelectionExpandChange(
     viewAction: MainViewAction.LocationSelectionExpandChange
 ): MainFunctionalCoreState {
     return state.copy(
+        locationSelectionState = state.locationSelectionState.copy(
+            isSelectionExpanded = !state.locationSelectionState.isSelectionExpanded,
+        ),
         isLocationSelectionExpanded = !state.isLocationSelectionExpanded,
     )
 }
