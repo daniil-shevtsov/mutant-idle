@@ -82,7 +82,7 @@ class IdleGameApplication : Application() {
 
     private fun createBalanceConfig() = BalanceConfig(
         tickRateMillis = 1L,
-        resourcePerMillisecond = 0.002,
+        resourcePerMillisecond = 0.0002,
         resourceSpentForFullMutant = 100.0,
     )
 

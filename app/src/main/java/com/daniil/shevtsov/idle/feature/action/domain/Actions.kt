@@ -214,5 +214,19 @@ fun createAllActions() = listOf(
                 Tags.Armed
             )
         )
+    ),
+    action(
+        id = 19L,
+        title = "Beg for money",
+        subtitle = "It's not much but they don't seem to mind",
+        resourceChanges = mapOf(
+            ResourceKey.Money to 0.5
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.HumanAppearance,
+                Tags.Knowledge.SocialNorms,
+            )
+        )
     )
 )
