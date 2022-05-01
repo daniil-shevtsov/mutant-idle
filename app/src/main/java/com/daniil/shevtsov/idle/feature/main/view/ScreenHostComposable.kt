@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.feature.main.view
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -14,6 +15,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.daniil.shevtsov.idle.core.navigation.GeneralViewAction
+import com.daniil.shevtsov.idle.core.navigation.ScreenHostViewModel
+import com.daniil.shevtsov.idle.core.navigation.ScreenViewAction
+import com.daniil.shevtsov.idle.core.navigation.ScreenViewState
 import com.daniil.shevtsov.idle.core.ui.*
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
@@ -22,6 +27,7 @@ import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewAction
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
 import com.daniil.shevtsov.idle.feature.drawer.view.DrawerTabSelector
+import com.daniil.shevtsov.idle.feature.gamefinish.view.FinishedGameScreen
 import com.daniil.shevtsov.idle.feature.location.view.LocationSelection
 import com.daniil.shevtsov.idle.feature.main.presentation.*
 import com.daniil.shevtsov.idle.feature.player.info.view.PlayerInfoComposable
@@ -85,7 +91,7 @@ fun MainDrawerDebugPreview() {
 )
 @Composable
 fun MainPreview() {
-    MainContent(
+    MainScreen(
         state = mainViewState(
             resources = resourceStubs(),
             ratios = ratiosStubs(),
@@ -104,48 +110,44 @@ fun MainPreview() {
             ),
         ),
         onViewAction = {},
-        onActionClicked = {},
-        onUpgradeSelected = {},
-        onToggleCollapse = {}
     )
+}
+
+@Composable
+fun ScreenHostComposable(
+    viewModel: ScreenHostViewModel
+) {
+    val delegatedViewState by viewModel.state.collectAsState()
+
+    BackHandler {
+        viewModel.handleAction(ScreenViewAction.General(GeneralViewAction.Back))
+    }
+
+    when (val viewState = delegatedViewState) {
+        is ScreenViewState.Main -> {
+            MainScreen(
+                state = viewState.state,
+                onViewAction = { action -> viewModel.handleAction(ScreenViewAction.Main(action)) },
+            )
+        }
+        is ScreenViewState.FinishedGame -> {
+            FinishedGameScreen(
+                state = viewState.state,
+            )
+        }
+    }
 }
 
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel
-) {
-    val viewState by viewModel.state.collectAsState()
-    MainContent(
-        state = viewState,
-        onViewAction = { action -> viewModel.handleAction(action) },
-        onActionClicked = { actionId ->
-            viewModel.handleAction(MainViewAction.ActionClicked(id = actionId))
-        },
-        onUpgradeSelected = { upgradeId ->
-            viewModel.handleAction(MainViewAction.UpgradeSelected(id = upgradeId))
-        },
-        onToggleCollapse = { sectionKey ->
-            viewModel.handleAction(MainViewAction.ToggleSectionCollapse(key = sectionKey))
-        }
-    )
-}
-
-@Composable
-fun MainContent(
     state: MainViewState,
     onViewAction: (MainViewAction) -> Unit,
-    onActionClicked: (actionId: Long) -> Unit,
-    onUpgradeSelected: (upgradeId: Long) -> Unit,
-    onToggleCollapse: (key: SectionKey) -> Unit,
 ) {
     when (state) {
         is MainViewState.Loading -> LoadingContent()
         is MainViewState.Success -> SuccessContent(
             state = state,
             onViewAction = onViewAction,
-            onActionClicked = onActionClicked,
-            onUpgradeSelected = onUpgradeSelected,
-            onToggleCollapse = onToggleCollapse
         )
     }
 
@@ -161,9 +163,6 @@ fun SuccessContent(
     state: MainViewState.Success,
     onViewAction: (MainViewAction) -> Unit,
     modifier: Modifier = Modifier,
-    onActionClicked: (actionId: Long) -> Unit = {},
-    onUpgradeSelected: (upgradeId: Long) -> Unit = {},
-    onToggleCollapse: (key: SectionKey) -> Unit,
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
 
@@ -174,9 +173,6 @@ fun SuccessContent(
             ContentBody(
                 state = state,
                 onViewAction = onViewAction,
-                onActionClicked = onActionClicked,
-                onUpgradeSelected = onUpgradeSelected,
-                onToggleCollapse = onToggleCollapse
             )
         }
     )
@@ -225,9 +221,6 @@ fun ContentBody(
     state: MainViewState.Success,
     modifier: Modifier = Modifier,
     onViewAction: (MainViewAction) -> Unit = {},
-    onActionClicked: (actionId: Long) -> Unit = {},
-    onUpgradeSelected: (upgradeId: Long) -> Unit = {},
-    onToggleCollapse: (key: SectionKey) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -253,7 +246,7 @@ fun ContentBody(
                 resources = state.resources,
                 isCollapsed = state.sectionCollapse[SectionKey.Resources] ?: false,
                 modifier = modifier,
-                onToggleCollapse = { onToggleCollapse(SectionKey.Resources) },
+                onToggleCollapse = { onViewAction(MainViewAction.ToggleSectionCollapse(SectionKey.Resources)) },
             )
             MutantRatioPane(state.ratios, modifier = modifier)
         }
@@ -283,8 +276,14 @@ fun ContentBody(
                     state = state.actionState,
                     isCollapsed = isActionsCollapsed,
                     modifier = modifier,
-                    onToggleCollapse = { onToggleCollapse(SectionKey.Actions) },
-                    onActionClicked = onActionClicked,
+                    onToggleCollapse = {
+                        onViewAction(
+                            MainViewAction.ToggleSectionCollapse(
+                                SectionKey.Actions
+                            )
+                        )
+                    },
+                    onActionClicked = { id -> onViewAction(MainViewAction.ActionClicked(id)) },
                 )
             }
             Spacer(
@@ -301,8 +300,14 @@ fun ContentBody(
                     shop = state.shop,
                     isCollapsed = isShopCollapsed,
                     modifier = modifier,
-                    onToggleCollapse = { onToggleCollapse(SectionKey.Upgrades) },
-                    onUpgradeSelected = onUpgradeSelected,
+                    onToggleCollapse = {
+                        onViewAction(
+                            MainViewAction.ToggleSectionCollapse(
+                                SectionKey.Upgrades
+                            )
+                        )
+                    },
+                    onUpgradeSelected = { id -> onViewAction(MainViewAction.UpgradeSelected(id)) },
                 )
             }
         }

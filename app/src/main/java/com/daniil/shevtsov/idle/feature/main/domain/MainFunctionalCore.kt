@@ -43,6 +43,7 @@ fun mainFunctionalCore(
             state = state,
             viewAction = viewAction,
         )
+        MainViewAction.Init -> state
     }
     return newState
 }
@@ -156,7 +157,11 @@ fun handleActionClicked(
             resources = updatedResources,
             player = state.player.copy(
                 generalTags = newTags
-            )
+            ),
+//            currentScreen = when {
+//                updatedRatios.find { it.key == RatioKey.Suspicion }?.value ?: 0.0 >= 1.0 -> Screen.FinishedGame
+//                else -> state.currentScreen
+//            }
         )
     } else {
         state

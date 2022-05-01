@@ -1,7 +1,9 @@
 package com.daniil.shevtsov.idle.feature.main.domain
 
 import com.daniil.shevtsov.idle.core.BalanceConfig
+import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.action.domain.Action
+import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.flavor.Flavor
 import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
@@ -26,4 +28,37 @@ data class MainFunctionalCoreState(
     val locationSelectionState: LocationSelectionState,
     val flavors: List<Flavor>,
     val player: Player,
+    val currentScreen: Screen,
+)
+
+fun MainFunctionalCoreState.updateGameState(currentState: GameState): GameState = currentState.copy(
+    balanceConfig = balanceConfig,
+    resources = resources,
+    ratios = ratios,
+    upgrades = upgrades,
+    actions = actions,
+    drawerTabs = drawerTabs,
+    sections = sections,
+    availableJobs = availableJobs,
+    availableSpecies = availableSpecies,
+    locationSelectionState = locationSelectionState,
+    flavors = flavors,
+    player = player,
+    currentScreen = currentScreen,
+)
+
+fun GameState.toMainState() = MainFunctionalCoreState(
+    balanceConfig = balanceConfig,
+    resources = resources,
+    ratios = ratios,
+    upgrades = upgrades,
+    actions = actions,
+    drawerTabs = drawerTabs,
+    sections = sections,
+    availableJobs = availableJobs,
+    availableSpecies = availableSpecies,
+    locationSelectionState = locationSelectionState,
+    flavors = flavors,
+    player = player,
+    currentScreen = currentScreen,
 )
