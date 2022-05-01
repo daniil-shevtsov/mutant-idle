@@ -168,7 +168,7 @@ fun createAllActions() = listOf(
         title = "Steal money from people",
         subtitle = "For some reason they don't like it",
         resourceChanges = mapOf(
-            ResourceKey.Money to 5.0
+            ResourceKey.Money to 15.0
         ),
         ratioChanges = mapOf(
             RatioKey.Suspicion to 0.05f
@@ -188,10 +188,10 @@ fun createAllActions() = listOf(
         title = "Rob people",
         subtitle = "They scare so easily",
         resourceChanges = mapOf(
-            ResourceKey.Money to 50.0
+            ResourceKey.Money to 40.0
         ),
         ratioChanges = mapOf(
-            RatioKey.Suspicion to 0.1f
+            RatioKey.Suspicion to 0.015f
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
@@ -204,7 +204,7 @@ fun createAllActions() = listOf(
         title = "Buy a knife",
         subtitle = "",
         resourceChanges = mapOf(
-            ResourceKey.Money to -10.0
+            ResourceKey.Money to -80.0
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
