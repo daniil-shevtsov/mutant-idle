@@ -16,21 +16,23 @@ import com.daniil.shevtsov.idle.core.ui.Pallete
 @Preview
 @Composable
 fun MainPreview() {
-    Column{
-        TitleWithProgress(
-            title = "Title",
-            progress = 0.5f,
-        )
-        TitleWithProgress(
-            title = "Suspicion",
-            progress = 0.5f,
-        )
+    Column {
+        listOf("Kek", "Covert", "Investigation").forEach { name ->
+            listOf(0.25f, 0.5f, 0.6f, 0.75f).forEach { percentage ->
+                TitleWithProgress(
+                    title = "Lol",
+                    name = name,
+                    progress = percentage,
+                )
+            }
+        }
     }
 }
 
 @Composable
 fun TitleWithProgress(
     title: String,
+    name: String,
     progress: Float,
     modifier: Modifier = Modifier,
 ) {
@@ -49,9 +51,20 @@ fun TitleWithProgress(
             color = Color.White,
             textAlign = TextAlign.Start
         )
-        MyProgressBar(
-            progressPercentage = progress,
+        Box(
             modifier = modifier.weight(0.65f),
-        )
+            contentAlignment = Alignment.Center,
+        ) {
+            MyProgressBar(
+                progressPercentage = progress,
+            )
+            Text(
+                text = name,
+                color = when {
+                    progress >= 0.65f -> Color.White
+                    else -> Color.Black
+                }
+            )
+        }
     }
 }

@@ -10,7 +10,6 @@ import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpecie
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
-import com.daniil.shevtsov.idle.feature.suspicion.presentation.SuspicionModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.PriceModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
@@ -23,11 +22,6 @@ internal fun resourcePreviewStub() = ResourceModel(
 internal fun resourceStubs() = listOf(
     ResourceModel(name = "Blood", value = "10 000"),
     ResourceModel(name = "Money", value = "500"),
-)
-
-internal fun suspicionStub() = SuspicionModel(
-    title = "Investigation",
-    percent = 0.5
 )
 
 internal fun actionStatePreviewStub() = ActionsState(

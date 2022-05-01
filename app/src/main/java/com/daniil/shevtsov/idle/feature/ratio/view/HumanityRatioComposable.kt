@@ -27,6 +27,7 @@ fun MutantRatioPane(
         ratios.forEach { model ->
             TitleWithProgress(
                 title = model.title,
+                name = model.name,
                 progress = model.percent.toFloat(),
                 modifier = modifier,
             )
