@@ -33,6 +33,7 @@ data class GameState(
     val flavors: List<Flavor>,
     val player: Player,
     val currentScreen: Screen,
+    val screenStack: List<Screen>,
 )
 
 fun gameState(
@@ -50,6 +51,7 @@ fun gameState(
     flavors: List<Flavor> = emptyList(),
     player: Player = player(),
     currentScreen: Screen = Screen.Main,
+    screenStack: List<Screen> = emptyList(),
 ) = GameState(
     balanceConfig = balanceConfig,
     resources = resources,
@@ -65,4 +67,5 @@ fun gameState(
     flavors = flavors,
     player = player,
     currentScreen = currentScreen,
+    screenStack = screenStack,
 )

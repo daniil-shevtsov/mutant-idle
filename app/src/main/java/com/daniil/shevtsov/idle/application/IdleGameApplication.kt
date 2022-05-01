@@ -51,6 +51,7 @@ class IdleGameApplication : Application() {
                     flavors = createFlavors(),
                     player = createInitialPlayer(),
                     currentScreen = Screen.Main,
+                    screenStack = listOf(Screen.Main),
                 )
             )
     }
