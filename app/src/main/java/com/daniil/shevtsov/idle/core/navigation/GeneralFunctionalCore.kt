@@ -11,11 +11,15 @@ fun generalFunctionalCore(
         screenStack = state.screenStack + listOf(viewAction.screen)
     )
     is GeneralViewAction.Back -> {
-        val newScreenStack = state.screenStack.dropLast(1)
-        val newCurrentScreen = newScreenStack.last()
-        state.copy(
-            currentScreen = newCurrentScreen,
-            screenStack = newScreenStack,
-        )
+        if(state.screenStack.size > 1) {
+            val newScreenStack = state.screenStack.dropLast(1)
+            val newCurrentScreen = newScreenStack.last()
+            state.copy(
+                currentScreen = newCurrentScreen,
+                screenStack = newScreenStack,
+            )
+        } else {
+            state
+        }
     }
 }

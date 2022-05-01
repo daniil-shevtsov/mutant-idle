@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.core.navigation
 
+import assertk.all
 import assertk.assertThat
 import assertk.assertions.containsExactly
 import assertk.assertions.isEqualTo
@@ -61,6 +62,23 @@ internal class GeneralFunctionalCoreTest {
         assertThat(state)
             .prop(GameState::screenStack)
             .containsExactly(Screen.Main)
+    }
+
+    @Test
+    fun `should do nothing on back click when only one screen in stack`() {
+        val state = generalFunctionalCore(
+            state = gameState(
+                currentScreen = Screen.Main,
+                screenStack = listOf(Screen.Main)
+            ),
+            viewAction = GeneralViewAction.Back
+        )
+
+        assertThat(state)
+            .all {
+                prop(GameState::currentScreen).isEqualTo(Screen.Main)
+                prop(GameState::screenStack).containsExactly(Screen.Main)
+            }
     }
 
 }
