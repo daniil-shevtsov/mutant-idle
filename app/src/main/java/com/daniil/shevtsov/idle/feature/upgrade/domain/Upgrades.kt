@@ -33,7 +33,10 @@ fun createUpgrades() = listOf(
         subtitle = "Lifting a car or crushing a lock is not a problem anymore",
         price = 25.0,
         tags = mapOf(
-            TagRelation.Provides to listOf(Tags.Body.SuperStrength),
+            TagRelation.Provides to listOf(
+                Tags.Body.SuperStrength,
+                Tags.PersonCapturer,
+            ),
             TagRelation.RequiredAny to listOf(
                 Tags.Species.Devourer,
                 Tags.Species.ShapeShifter,
@@ -58,4 +61,4 @@ fun createUpgrades() = listOf(
         )
     ),
 
-)
+    )

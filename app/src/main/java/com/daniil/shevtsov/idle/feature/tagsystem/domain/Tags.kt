@@ -6,6 +6,8 @@ object Tags {
     val Immortal = Tag(name = "Immortal", description = "Can't be killed in any way")
     val Mutating = Tag(name = "Mutating")
     val Growth = Tag(name = "Growth")
+    val Nimble = Tag(name = "Nimble")
+    val Armed = Tag(name = "Armed")
 
     val PersonCapturer = Tag(name = "Person Capturer")
 

@@ -163,4 +163,56 @@ fun createAllActions() = listOf(
             )
         ),
     ),
+    action(
+        id = 16L,
+        title = "Steal money from people",
+        subtitle = "For some reason they don't like it",
+        resourceChanges = mapOf(
+            ResourceKey.Money to 5.0
+        ),
+        ratioChanges = mapOf(
+            RatioKey.Suspicion to 0.05f
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Nimble,
+            ),
+            TagRelation.RequiredAny to listOf(
+                Tags.HumanAppearance,
+                Tags.State.Invisible,
+            )
+        )
+    ),
+    action(
+        id = 17L,
+        title = "Rob people",
+        subtitle = "They scare so easily",
+        resourceChanges = mapOf(
+            ResourceKey.Money to 50.0
+        ),
+        ratioChanges = mapOf(
+            RatioKey.Suspicion to 0.1f
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Armed
+            )
+        )
+    ),
+    action(
+        id = 18L,
+        title = "Buy a knife",
+        subtitle = "",
+        resourceChanges = mapOf(
+            ResourceKey.Money to -10.0
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.HumanAppearance,
+            ),
+            TagRelation.Provides to listOf(
+                Tags.Armed
+            )
+        )
+    )
 )

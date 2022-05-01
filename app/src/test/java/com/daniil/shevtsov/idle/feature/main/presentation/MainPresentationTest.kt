@@ -37,6 +37,7 @@ import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
 import kotlinx.coroutines.test.runBlockingTest
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class MainPresentationTest {
@@ -326,7 +327,7 @@ class MainPresentationTest {
 
 
     @Test
-    fun `should disable actions if it requires not available resources`() = runBlockingTest {
+    fun `should hide actions if it requires not available resources`() = runBlockingTest {
         val state = mainFunctionalCoreState(
             resources = listOf(
                 resource(key = ResourceKey.Money, value = 35.0),
@@ -343,7 +344,7 @@ class MainPresentationTest {
                     resourceChanges = mapOf(
                         ResourceKey.Money to -50.0,
                     ),
-                )
+                ),
             ),
         )
         val viewState = mapMainViewState(state = state)
@@ -353,10 +354,10 @@ class MainPresentationTest {
             .extracting(ActionModel::id, ActionModel::isEnabled)
             .containsExactly(
                 1L to true,
-                2L to false,
             )
     }
 
+    @Disabled("Need to figure out which actions to hide and which to show disabled")
     @Test
     fun `show enabled actions before disabled if got both`() = runBlockingTest {
         val state = mainFunctionalCoreState(

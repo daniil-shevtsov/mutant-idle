@@ -177,6 +177,12 @@ private fun createActionState(
                 tags = player.tags,
             )
         }
+        .filter { action ->
+            action.resourceChanges.all { (resourceKey, resourceChange) ->
+                val currentResource = resources.find { it.key == resourceKey }!!.value
+                currentResource + resourceChange >= 0
+            }
+        }
         .map { action ->
             action.copy(
                 subtitle = flavorMachine(
