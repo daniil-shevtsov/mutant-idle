@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.feature.main.domain
 
 import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.core.navigation.ScreenViewAction
+import com.daniil.shevtsov.idle.core.navigation.generalFunctionalCore
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
@@ -18,6 +19,10 @@ fun screenFunctionalCore(
             state = state.toMainState(),
             viewAction = viewAction.action,
         ).updateGameState(currentState = state)
+        is ScreenViewAction.General -> generalFunctionalCore(
+            state = state,
+            viewAction = viewAction.action,
+        )
     }
 }
 
