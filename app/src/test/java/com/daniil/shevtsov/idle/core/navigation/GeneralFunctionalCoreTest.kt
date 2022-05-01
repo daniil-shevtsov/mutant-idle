@@ -35,6 +35,18 @@ internal class GeneralFunctionalCoreTest {
     }
 
     @Test
+    fun `should replace screen in stack if replace flag`() {
+        val state = generalFunctionalCore(
+            state = gameState(currentScreen = Screen.Main, screenStack = listOf(Screen.Main)),
+            viewAction = GeneralViewAction.Open(screen = Screen.FinishedGame, shouldReplace = true)
+        )
+
+        assertThat(state)
+            .prop(GameState::screenStack)
+            .containsExactly(Screen.FinishedGame)
+    }
+
+    @Test
     fun `should go back when back clicked`() {
         val state = generalFunctionalCore(
             state = gameState(
