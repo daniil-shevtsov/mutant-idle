@@ -1,15 +1,11 @@
 package com.daniil.shevtsov.idle.feature.resource.domain
 
+import com.daniil.shevtsov.idle.core.presentation.formatting.formatEnumName
+
 fun createResources() = ResourceKey.values().map { key ->
     Resource(
         key = key,
-        name = key.name
-            .mapIndexed { index, letter ->
-                " ".takeIf { index != 0 && letter.isUpperCase() }.orEmpty() to letter
-            }
-            .joinToString(separator = "") { (spaceOrEmpty, letter) ->
-                spaceOrEmpty + letter
-            },
+        name = formatEnumName(key.name),
         value = 0.0,
     )
 }

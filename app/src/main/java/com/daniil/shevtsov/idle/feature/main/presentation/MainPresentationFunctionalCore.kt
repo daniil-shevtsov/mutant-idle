@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.feature.main.presentation
 
+import com.daniil.shevtsov.idle.core.presentation.formatting.formatEnumName
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
@@ -46,11 +47,11 @@ private fun createMainViewState(state: MainFunctionalCoreState): MainViewState {
                 name = resource.name,
             )
         },
-        ratios = state.ratios.map {
+        ratios = state.ratios.map { ratio ->
             HumanityRatioModel(
-                title = "",
-                name = getNameForRatio(it),
-                percent = it.value
+                title = formatEnumName(name = ratio.key.name),
+                name = getNameForRatio(ratio),
+                percent = ratio.value,
             )
         },
         actionState = createActionState(state.actions, state.resources, state.player, state),

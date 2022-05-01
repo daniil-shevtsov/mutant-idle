@@ -76,7 +76,7 @@ class MainPresentationTest {
                 extractingResourceNameAndValues()
                     .containsExactly("Blood" to "10", "Money" to "20")
                 extractingRatios()
-                    .containsExactly("Human" to 0.0, "Unknown" to 0.0)
+                    .containsExactly("Mutanity" to 0.0, "Suspicion" to 0.0)
 
                 extractingMainState().all {
                     prop(MainViewState.Success::shop)
@@ -739,7 +739,7 @@ class MainPresentationTest {
 
     private fun Assert<MainViewState>.extractingRatios() = extractingMainState()
         .prop(MainViewState.Success::ratios)
-        .extracting(HumanityRatioModel::name, HumanityRatioModel::percent)
+        .extracting(HumanityRatioModel::title, HumanityRatioModel::percent)
 
 
     private fun Assert<MainViewState>.hasRatioName(expectedName: String) =

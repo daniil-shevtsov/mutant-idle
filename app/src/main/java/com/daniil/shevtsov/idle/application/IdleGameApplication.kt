@@ -6,6 +6,7 @@ import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.core.di.DaggerAppComponent
 import com.daniil.shevtsov.idle.core.di.koin.appModule
 import com.daniil.shevtsov.idle.core.navigation.Screen
+import com.daniil.shevtsov.idle.core.presentation.formatting.formatEnumName
 import com.daniil.shevtsov.idle.feature.action.domain.createAllActions
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
@@ -86,10 +87,13 @@ class IdleGameApplication : Application() {
         resourceSpentForFullMutant = 100.0,
     )
 
-    private fun createInitialRatios() = listOf(
-        Ratio(key = RatioKey.Mutanity, title = "", value = 0.0),
-        Ratio(key = RatioKey.Suspicion, title = "", value = 0.0),
-    )
+    private fun createInitialRatios() = RatioKey.values().map { ratioKey ->
+        Ratio(
+            key = ratioKey,
+            title = formatEnumName(ratioKey.name),
+            value = 0.0,
+        )
+    }
 
     private fun createInitialSectionState() = listOf(
         SectionState(key = SectionKey.Resources, isCollapsed = false),
