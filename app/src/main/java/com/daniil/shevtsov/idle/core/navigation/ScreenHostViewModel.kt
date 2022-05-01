@@ -3,7 +3,6 @@ package com.daniil.shevtsov.idle.core.navigation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
-import com.daniil.shevtsov.idle.feature.main.domain.screenFunctionalCore
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
 import kotlinx.coroutines.flow.*

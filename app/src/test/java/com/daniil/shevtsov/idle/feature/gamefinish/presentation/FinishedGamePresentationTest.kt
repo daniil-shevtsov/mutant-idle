@@ -32,7 +32,10 @@ internal class FinishedGamePresentationTest {
 
     @Test
     fun `should show unlocks of ending`() {
-        val unlockTag = tag(name = "Folders of memes")
+        val unlockTag = tag(
+            name = "Folders of memes",
+            description = "Years of hoarding were not in vain"
+        )
         val unlock = unlock(
             title = "Scholar of Memes",
             newTags = listOf(unlockTag)
