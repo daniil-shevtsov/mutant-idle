@@ -66,4 +66,34 @@ fun createLocations() = listOf(
             )
         )
     ),
+    location(
+        id = 5L,
+        title = "Streets",
+        description = "A busy place with crowds of people",
+        tags = mapOf(
+            TagRelation.Provides to listOf(
+                Tags.Locations.Streets
+            )
+        )
+    ),
+    location(
+        id = 6L,
+        title = "Dark Alley",
+        description = "Sometimes people go through here to save time",
+        tags = mapOf(
+            TagRelation.Provides to listOf(
+                Tags.Locations.DarkAlley
+            )
+        )
+    ),
+    location(
+        id = 7L,
+        title = "Super Market",
+        description = "The food everywhere",
+        tags = mapOf(
+            TagRelation.Provides to listOf(
+                Tags.Locations.SuperMarket
+            )
+        )
+    )
 )

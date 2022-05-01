@@ -32,6 +32,7 @@ fun createAllActions() = listOf(
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
                 Tags.HumanAppearance,
+                Tags.Locations.SuperMarket,
             )
         ),
     ),
@@ -144,7 +145,8 @@ fun createAllActions() = listOf(
             TagRelation.Provides to listOf(
                 Tags.State.Invisible
             ),
-            TagRelation.RequiresNone to listOf( //TODO: Maybe this should be default behavior for providing tags?
+            TagRelation.RequiresNone to listOf(
+                //TODO: Maybe this should be default behavior for providing tags?
                 Tags.State.Invisible,
             )
         ),
@@ -171,11 +173,12 @@ fun createAllActions() = listOf(
             ResourceKey.Money to 15.0
         ),
         ratioChanges = mapOf(
-            RatioKey.Suspicion to 0.05f
+            RatioKey.Suspicion to 0.005f
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
                 Tags.Nimble,
+                Tags.Locations.Streets,
             ),
             TagRelation.RequiredAny to listOf(
                 Tags.HumanAppearance,
@@ -195,20 +198,22 @@ fun createAllActions() = listOf(
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
-                Tags.Armed
+                Tags.Armed,
+                Tags.Locations.DarkAlley,
             )
         )
     ),
     action(
         id = 18L,
         title = "Buy a knife",
-        subtitle = "",
+        subtitle = "It's useful in a myriad of situations",
         resourceChanges = mapOf(
             ResourceKey.Money to -80.0
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
                 Tags.HumanAppearance,
+                Tags.Locations.Streets,
             ),
             TagRelation.Provides to listOf(
                 Tags.Armed
@@ -226,7 +231,26 @@ fun createAllActions() = listOf(
             TagRelation.RequiredAll to listOf(
                 Tags.HumanAppearance,
                 Tags.Knowledge.SocialNorms,
+                Tags.Locations.Streets,
             )
         )
-    )
+    ),
+    action(
+        id = 20L,
+        title = "Steal Food",
+        subtitle = "It's just lying there",
+        resourceChanges = mapOf(
+            ResourceKey.HumanFood to 1.0,
+        ),
+        ratioChanges = mapOf(
+          RatioKey.Suspicion to 0.005f,
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.HumanAppearance,
+                Tags.Nimble,
+                Tags.Locations.SuperMarket,
+            )
+        ),
+    ),
 )
