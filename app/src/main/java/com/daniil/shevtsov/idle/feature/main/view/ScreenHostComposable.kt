@@ -91,7 +91,7 @@ fun MainDrawerDebugPreview() {
 )
 @Composable
 fun MainPreview() {
-    MainContent(
+    MainScreen(
         state = mainViewState(
             resources = resourceStubs(),
             ratios = ratiosStubs(),
@@ -114,7 +114,7 @@ fun MainPreview() {
 }
 
 @Composable
-fun MainScreen(
+fun ScreenHostComposable(
     viewModel: ScreenHostViewModel
 ) {
     val delegatedViewState by viewModel.state.collectAsState()
@@ -125,7 +125,7 @@ fun MainScreen(
 
     when (val viewState = delegatedViewState) {
         is ScreenViewState.Main -> {
-            MainContent(
+            MainScreen(
                 state = viewState.state,
                 onViewAction = { action -> viewModel.handleAction(ScreenViewAction.Main(action)) },
             )
@@ -139,7 +139,7 @@ fun MainScreen(
 }
 
 @Composable
-fun MainContent(
+fun MainScreen(
     state: MainViewState,
     onViewAction: (MainViewAction) -> Unit,
 ) {
