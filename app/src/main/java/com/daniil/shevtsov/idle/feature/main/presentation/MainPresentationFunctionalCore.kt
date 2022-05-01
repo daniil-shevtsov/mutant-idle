@@ -48,6 +48,7 @@ private fun createMainViewState(state: MainFunctionalCoreState): MainViewState {
         },
         ratios = state.ratios.map {
             HumanityRatioModel(
+                title = "",
                 name = getNameForRatio(it),
                 percent = it.value
             )

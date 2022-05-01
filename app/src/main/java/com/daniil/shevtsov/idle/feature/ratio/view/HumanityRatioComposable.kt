@@ -4,14 +4,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.daniil.shevtsov.idle.core.ui.ratiosStubs
 import com.daniil.shevtsov.idle.core.ui.widgets.TitleWithProgress
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
+import com.daniil.shevtsov.idle.feature.ratio.presentation.humanityRatioModel
 
 @Preview
 @Composable
 fun MainPreview() {
-    MutantRatioPane(ratios = ratiosStubs())
+    MutantRatioPane(ratios = listOf(
+        humanityRatioModel(title = "Mutanity", name = "Covert", percent = 0.75),
+        humanityRatioModel(title = "Suspicion", name = "Investigation", percent = 0.35),
+    ))
 }
 
 

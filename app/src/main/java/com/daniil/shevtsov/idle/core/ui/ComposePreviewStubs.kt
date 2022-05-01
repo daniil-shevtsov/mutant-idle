@@ -25,22 +25,6 @@ internal fun resourceStubs() = listOf(
     ResourceModel(name = "Money", value = "500"),
 )
 
-internal fun ratiosStubs() = listOf(
-    HumanityRatioModel(
-        name = "Dormant",
-        percent = 0.5,
-    ),
-    HumanityRatioModel(
-        name = "Suspicion",
-        percent = 0.25,
-    ),
-)
-
-internal fun humanityRatioStub() = HumanityRatioModel(
-    name = "Dormant",
-    percent = 0.5,
-)
-
 internal fun suspicionStub() = SuspicionModel(
     title = "Investigation",
     percent = 0.5

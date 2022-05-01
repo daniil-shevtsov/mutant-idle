@@ -32,6 +32,9 @@ import com.daniil.shevtsov.idle.feature.location.view.LocationSelection
 import com.daniil.shevtsov.idle.feature.main.presentation.*
 import com.daniil.shevtsov.idle.feature.player.info.view.PlayerInfoComposable
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJobModel
+import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
+import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
+import com.daniil.shevtsov.idle.feature.ratio.presentation.humanityRatioModel
 import com.daniil.shevtsov.idle.feature.ratio.view.MutantRatioPane
 import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
 import com.daniil.shevtsov.idle.feature.shop.view.Shop
@@ -94,7 +97,10 @@ fun MainPreview() {
     MainScreen(
         state = mainViewState(
             resources = resourceStubs(),
-            ratios = ratiosStubs(),
+            ratios = listOf(
+                humanityRatioModel(title = "Mutanity", name = "Covert", percent = 0.75),
+                humanityRatioModel(title = "Suspicion", name = "Investigation", percent = 0.35),
+            ),
             actionState = actionStatePreviewStub(),
             shop = shopStatePreviewStub(),
             sectionCollapse = mapOf(
