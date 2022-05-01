@@ -12,8 +12,8 @@ import com.daniil.shevtsov.idle.feature.ratio.presentation.humanityRatioModel
 @Composable
 fun MainPreview() {
     MutantRatioPane(ratios = listOf(
-        humanityRatioModel(title = "Mutanity", name = "Covert", percent = 0.75),
-        humanityRatioModel(title = "Suspicion", name = "Investigation", percent = 0.35),
+        humanityRatioModel(title = "Mutanity", name = "Covert", percent = 0.75, percentLabel = "75 %"),
+        humanityRatioModel(title = "Suspicion", name = "Investigation", percent = 0.35, percentLabel = "35 %"),
     ))
 }
 
@@ -27,7 +27,7 @@ fun MutantRatioPane(
         ratios.forEach { model ->
             TitleWithProgress(
                 title = model.title,
-                name = model.name,
+                name = model.percentLabel + " " + model.name,
                 progress = model.percent.toFloat(),
                 modifier = modifier,
             )
