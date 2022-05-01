@@ -45,7 +45,7 @@ fun createAllActions() = listOf(
             ResourceKey.Prisoner to 1.0,
         ),
         ratioChanges = mapOf(
-            RatioKey.Suspicion to 0.1f,
+            RatioKey.Suspicion to 0.2f,
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
@@ -253,4 +253,50 @@ fun createAllActions() = listOf(
             )
         ),
     ),
+    action(
+        id = 21L,
+        title = "Capture a rat",
+        subtitle = "It's small but tasty",
+        resourceChanges = mapOf(
+            ResourceKey.FreshMeat to 1.0
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Species.Devourer,
+                Tags.Locations.DarkAlley,
+            )
+        )
+    ),
+    action(
+        id = 22L,
+        title = "Eat fresh meat",
+        subtitle = "It's good but I need something bigger",
+        resourceChanges = mapOf(
+            ResourceKey.FreshMeat to -1.0,
+            ResourceKey.Blood to 1.0,
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Species.Devourer
+            )
+        )
+    ),
+    action(
+        id = 23L,
+        title = "Eat the remains",
+        subtitle = "They can't find anything if there is nothing",
+        resourceChanges = mapOf(
+            ResourceKey.Blood to -5.0,
+            ResourceKey.Remains to -1.0,
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Species.Devourer,
+                Tags.Body.IronJaws,
+            )
+        ),
+        ratioChanges = mapOf(
+            RatioKey.Suspicion to -0.1f,
+        )
+    )
 )
