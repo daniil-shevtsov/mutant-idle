@@ -76,6 +76,7 @@ class MainPresentationTest {
                 extractingResourceNameAndValues()
                     .containsExactly("Blood" to "10", "Money" to "20")
                 extractingRatios()
+                    .extracting(HumanityRatioModel::title, HumanityRatioModel::percent)
                     .containsExactly("Mutanity" to 0.0, "Suspicion" to 0.0)
 
                 extractingMainState().all {
@@ -97,6 +98,26 @@ class MainPresentationTest {
                             SectionKey.Upgrades to false,
                         )
                 }
+            }
+    }
+
+    @Test
+    fun `should display ratio label`() {
+        val state = mainFunctionalCoreState(
+            ratios = listOf(
+                ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.105),
+            ),
+        )
+
+        val viewState = mapMainViewState(state = state)
+
+        assertThat(viewState)
+            .extractingRatios()
+            .index(0)
+            .all {
+                prop(HumanityRatioModel::title).isEqualTo("Mutanity")
+                prop(HumanityRatioModel::percent).isEqualTo(0.105)
+                prop(HumanityRatioModel::percentLabel).isEqualTo("10.5 %")
             }
     }
 
@@ -739,7 +760,6 @@ class MainPresentationTest {
 
     private fun Assert<MainViewState>.extractingRatios() = extractingMainState()
         .prop(MainViewState.Success::ratios)
-        .extracting(HumanityRatioModel::title, HumanityRatioModel::percent)
 
 
     private fun Assert<MainViewState>.hasRatioName(expectedName: String) =

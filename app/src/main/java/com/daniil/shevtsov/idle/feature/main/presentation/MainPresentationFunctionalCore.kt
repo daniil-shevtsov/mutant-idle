@@ -51,8 +51,9 @@ private fun createMainViewState(state: MainFunctionalCoreState): MainViewState {
         ratios = state.ratios.map { ratio ->
             HumanityRatioModel(
                 title = formatEnumName(name = ratio.key.name),
-                name = ratio.value.formatRound(digits = 2) + " % " + getNameForRatio(ratio),
+                name = getNameForRatio(ratio),
                 percent = ratio.value,
+                percentLabel = (ratio.value * 100).formatRound(digits = 2) + " %",
             )
         },
         actionState = createActionState(state.actions, state.resources, state.player, state),
