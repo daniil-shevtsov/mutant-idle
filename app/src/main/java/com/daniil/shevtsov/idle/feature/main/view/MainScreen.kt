@@ -1,6 +1,5 @@
 package com.daniil.shevtsov.idle.feature.main.view
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -10,16 +9,14 @@ import androidx.compose.material.ModalDrawer
 import androidx.compose.material.Text
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.daniil.shevtsov.idle.core.navigation.GeneralViewAction
-import com.daniil.shevtsov.idle.core.navigation.ScreenHostViewModel
-import com.daniil.shevtsov.idle.core.navigation.ScreenViewAction
-import com.daniil.shevtsov.idle.core.navigation.ScreenViewState
 import com.daniil.shevtsov.idle.core.ui.*
+import com.daniil.shevtsov.idle.core.ui.actionStatePreviewStub
+import com.daniil.shevtsov.idle.core.ui.debugViewState
+import com.daniil.shevtsov.idle.core.ui.resourceStubs
+import com.daniil.shevtsov.idle.core.ui.shopStatePreviewStub
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugComposable
@@ -27,13 +24,10 @@ import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewAction
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
 import com.daniil.shevtsov.idle.feature.drawer.view.DrawerTabSelector
-import com.daniil.shevtsov.idle.feature.gamefinish.view.FinishedGameScreen
 import com.daniil.shevtsov.idle.feature.location.view.LocationSelection
 import com.daniil.shevtsov.idle.feature.main.presentation.*
 import com.daniil.shevtsov.idle.feature.player.info.view.PlayerInfoComposable
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJobModel
-import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
-import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
 import com.daniil.shevtsov.idle.feature.ratio.presentation.humanityRatioModel
 import com.daniil.shevtsov.idle.feature.ratio.view.MutantRatioPane
 import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
@@ -117,31 +111,6 @@ fun MainPreview() {
         ),
         onViewAction = {},
     )
-}
-
-@Composable
-fun ScreenHostComposable(
-    viewModel: ScreenHostViewModel
-) {
-    val delegatedViewState by viewModel.state.collectAsState()
-
-    BackHandler {
-        viewModel.handleAction(ScreenViewAction.General(GeneralViewAction.Back))
-    }
-
-    when (val viewState = delegatedViewState) {
-        is ScreenViewState.Main -> {
-            MainScreen(
-                state = viewState.state,
-                onViewAction = { action -> viewModel.handleAction(ScreenViewAction.Main(action)) },
-            )
-        }
-        is ScreenViewState.FinishedGame -> {
-            FinishedGameScreen(
-                state = viewState.state,
-            )
-        }
-    }
 }
 
 @Composable
@@ -319,4 +288,3 @@ fun ContentBody(
         }
     }
 }
-
