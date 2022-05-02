@@ -29,7 +29,7 @@ import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
-import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
+import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
@@ -81,8 +81,7 @@ class MainPresentationTest {
 
                 extractingMainState().all {
                     prop(MainViewState.Success::shop)
-                        .prop(ShopState::upgradeLists)
-                        .index(0)
+                        .prop(UpgradesViewState::upgrades)
                         .extracting(UpgradeModel::id)
                         .containsExactly(0L, 1L, 2L, 3L)
                     prop(MainViewState.Success::actionState)
@@ -714,8 +713,7 @@ class MainPresentationTest {
     private fun Assert<MainViewState>.extractingUpgrades() =
         extractingMainState()
             .prop(MainViewState.Success::shop)
-            .prop(ShopState::upgradeLists)
-            .index(0)
+            .prop(UpgradesViewState::upgrades)
 
     private fun Assert<MainViewState>.extractingLocationSelectionViewState() =
         extractingMainState()

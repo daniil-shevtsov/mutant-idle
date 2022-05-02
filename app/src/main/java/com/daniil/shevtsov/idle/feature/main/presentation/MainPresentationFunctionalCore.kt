@@ -25,7 +25,7 @@ import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMapper
-import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
+import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
@@ -106,7 +106,11 @@ private fun createMainViewState(state: MainFunctionalCoreState): MainViewState {
                     UpgradeStatusModel.Bought -> 2
                 }
             }
-            .let { ShopState(upgradeLists = listOf(it)) },
+            .let { upgrades ->
+                UpgradesViewState(
+                    upgrades = upgrades,
+                )
+            },
         sectionCollapse = state.sections.map { it.key to it.isCollapsed }.toMap(),
         drawerState = DrawerViewState(
             tabSelectorState = state.drawerTabs,

@@ -2,10 +2,7 @@ package com.daniil.shevtsov.idle.feature.main.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -16,12 +13,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.daniil.shevtsov.idle.core.ui.*
 import com.daniil.shevtsov.idle.core.ui.actionStatePreviewStub
 import com.daniil.shevtsov.idle.core.ui.debugViewState
 import com.daniil.shevtsov.idle.core.ui.resourceStubs
-import com.daniil.shevtsov.idle.core.ui.shopStatePreviewStub
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.core.ui.widgets.CollapseButton
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
@@ -37,12 +32,9 @@ import com.daniil.shevtsov.idle.feature.player.job.domain.playerJobModel
 import com.daniil.shevtsov.idle.feature.ratio.presentation.humanityRatioModel
 import com.daniil.shevtsov.idle.feature.ratio.view.MutantRatioPane
 import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
-import com.daniil.shevtsov.idle.feature.shop.view.Shop
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
-import com.daniil.shevtsov.idle.feature.upgrade.view.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.view.UpgradeList
 import com.google.accompanist.insets.statusBarsHeight
-import com.google.accompanist.pager.HorizontalPager
 import kotlinx.coroutines.launch
 
 @Preview(
@@ -106,7 +98,7 @@ fun MainPreview() {
                 humanityRatioModel(title = "Suspicion", name = "Investigation", percent = 0.35),
             ),
             actionState = actionStatePreviewStub(),
-            shop = shopStatePreviewStub(),
+            upgradeState = upgradeViewState(),
             sectionCollapse = mapOf(
                 SectionKey.Resources to false,
                 SectionKey.Actions to false,
@@ -256,7 +248,7 @@ fun ContentBody(
                     modifier = modifier,
                 ) {
                     UpgradeList(
-                        upgradeList = state.shop.upgradeLists[0],
+                        upgradeList = state.shop.upgrades,
                         onUpgradeSelected = { id -> onViewAction(MainViewAction.UpgradeSelected(id)) },
                         modifier = Modifier.fillMaxHeight()
                     )
