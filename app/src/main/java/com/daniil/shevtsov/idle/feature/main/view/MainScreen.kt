@@ -2,14 +2,16 @@ package com.daniil.shevtsov.idle.feature.main.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.DrawerValue
-import androidx.compose.material.ModalDrawer
-import androidx.compose.material.Text
-import androidx.compose.material.rememberDrawerState
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.*
@@ -33,7 +35,11 @@ import com.daniil.shevtsov.idle.feature.ratio.view.MutantRatioPane
 import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
 import com.daniil.shevtsov.idle.feature.shop.view.Shop
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
+import com.daniil.shevtsov.idle.feature.upgrade.view.Upgrade
+import com.daniil.shevtsov.idle.feature.upgrade.view.UpgradeList
 import com.google.accompanist.insets.statusBarsHeight
+import com.google.accompanist.pager.HorizontalPager
+import kotlinx.coroutines.launch
 
 @Preview(
     widthDp = 320,
@@ -129,11 +135,6 @@ fun MainScreen(
 }
 
 @Composable
-fun LoadingContent() {
-    Text("Loading")
-}
-
-@Composable
 fun SuccessContent(
     state: MainViewState.Success,
     onViewAction: (MainViewAction) -> Unit,
@@ -151,6 +152,11 @@ fun SuccessContent(
             )
         }
     )
+}
+
+@Composable
+fun LoadingContent() {
+    Text("Loading")
 }
 
 @Composable
@@ -197,93 +203,109 @@ fun ContentBody(
     modifier: Modifier = Modifier,
     onViewAction: (MainViewAction) -> Unit = {},
 ) {
-    Column(
-        modifier = modifier
-            .background(Pallete.Red),
-        verticalArrangement = Arrangement.Top,
-    ) {
-        Spacer(
-            modifier
-                .statusBarsHeight()
-                .fillMaxWidth()
-        )
-        LocationSelection(
-            state = state.locationSelectionViewState,
-            onExpandChange = { onViewAction(MainViewAction.LocationSelectionExpandChange) },
-            onLocationSelected = { id -> onViewAction(MainViewAction.LocationSelected(id)) },
-        )
-        Column(
-            modifier = modifier
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            ResourcePane(
-                resources = state.resources,
-                isCollapsed = state.sectionCollapse[SectionKey.Resources] ?: false,
-                modifier = modifier,
-                onToggleCollapse = { onViewAction(MainViewAction.ToggleSectionCollapse(SectionKey.Resources)) },
-            )
-            MutantRatioPane(state.ratios, modifier = modifier)
-        }
+    val scope = rememberCoroutineScope()
 
-        Column(
-            modifier = modifier
-                .weight(1f)
-                .background(Pallete.Red)
-                .padding(4.dp)
-        ) {
-            fun hackyWeight(
-                isCollapsed: Boolean
-            ): Modifier {
-                return if (isCollapsed) {
-                    modifier
-                } else {
-                    modifier.weight(0.5f, fill = false)
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
+    )
+
+    BottomSheetScaffold(
+        scaffoldState = bottomSheetScaffoldState,
+        sheetContent = {
+            Column(modifier= Modifier.height(500.dp)) {
+                val isShopCollapsed = state.sectionCollapse[SectionKey.Upgrades] ?: false
+                Cavity(
+                    mainColor = Pallete.Red,
+                    modifier = modifier,
+                ) {
+                    Shop(
+                        shop = state.shop,
+                        isCollapsed = isShopCollapsed,
+                        modifier = modifier,
+                        onToggleCollapse = {
+                            onViewAction(
+                                MainViewAction.ToggleSectionCollapse(
+                                    SectionKey.Upgrades
+                                )
+                            )
+                        },
+                        onUpgradeSelected = { id -> onViewAction(MainViewAction.UpgradeSelected(id)) },
+                    )
                 }
             }
-
-            val isActionsCollapsed = state.sectionCollapse[SectionKey.Actions] ?: false
-            Cavity(
-                mainColor = Pallete.Red,
-                modifier = hackyWeight(isCollapsed = isActionsCollapsed),
-            ) {
-                ActionSection(
-                    state = state.actionState,
-                    isCollapsed = isActionsCollapsed,
-                    modifier = modifier,
-                    onToggleCollapse = {
-                        onViewAction(
-                            MainViewAction.ToggleSectionCollapse(
-                                SectionKey.Actions
-                            )
-                        )
-                    },
-                    onActionClicked = { id -> onViewAction(MainViewAction.ActionClicked(id)) },
-                )
-            }
+        },
+        sheetPeekHeight = 56.dp
+    ) {
+        Column(
+            modifier = modifier
+                .background(Pallete.Red),
+            verticalArrangement = Arrangement.Top,
+        ) {
             Spacer(
                 modifier
-                    .height(8.dp)
+                    .statusBarsHeight()
                     .fillMaxWidth()
             )
-            val isShopCollapsed = state.sectionCollapse[SectionKey.Upgrades] ?: false
-            Cavity(
-                mainColor = Pallete.Red,
-                modifier = hackyWeight(isCollapsed = isShopCollapsed)
+            LocationSelection(
+                state = state.locationSelectionViewState,
+                onExpandChange = { onViewAction(MainViewAction.LocationSelectionExpandChange) },
+                onLocationSelected = { id -> onViewAction(MainViewAction.LocationSelected(id)) },
+            )
+            Column(
+                modifier = modifier
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                Shop(
-                    shop = state.shop,
-                    isCollapsed = isShopCollapsed,
+                ResourcePane(
+                    resources = state.resources,
+                    isCollapsed = state.sectionCollapse[SectionKey.Resources] ?: false,
                     modifier = modifier,
                     onToggleCollapse = {
                         onViewAction(
                             MainViewAction.ToggleSectionCollapse(
-                                SectionKey.Upgrades
+                                SectionKey.Resources
                             )
                         )
                     },
-                    onUpgradeSelected = { id -> onViewAction(MainViewAction.UpgradeSelected(id)) },
                 )
+                MutantRatioPane(state.ratios, modifier = modifier)
+            }
+
+            Column(
+                modifier = modifier
+                    .weight(1f)
+                    .background(Pallete.Red)
+                    .padding(4.dp)
+            ) {
+                fun hackyWeight(
+                    isCollapsed: Boolean
+                ): Modifier {
+                    return if (isCollapsed) {
+                        modifier
+                    } else {
+                        modifier.weight(0.5f, fill = false)
+                    }
+                }
+
+                val isActionsCollapsed = state.sectionCollapse[SectionKey.Actions] ?: false
+                Cavity(
+                    mainColor = Pallete.Red,
+                    modifier = hackyWeight(isCollapsed = isActionsCollapsed),
+                ) {
+                    ActionSection(
+                        state = state.actionState,
+                        isCollapsed = isActionsCollapsed,
+                        modifier = modifier,
+                        onToggleCollapse = {
+                            onViewAction(
+                                MainViewAction.ToggleSectionCollapse(
+                                    SectionKey.Actions
+                                )
+                            )
+                        },
+                        onActionClicked = { id -> onViewAction(MainViewAction.ActionClicked(id)) },
+                    )
+                }
             }
         }
     }
