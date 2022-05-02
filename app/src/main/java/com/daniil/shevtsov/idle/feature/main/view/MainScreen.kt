@@ -10,16 +10,20 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.daniil.shevtsov.idle.core.ui.*
 import com.daniil.shevtsov.idle.core.ui.actionStatePreviewStub
 import com.daniil.shevtsov.idle.core.ui.debugViewState
 import com.daniil.shevtsov.idle.core.ui.resourceStubs
 import com.daniil.shevtsov.idle.core.ui.shopStatePreviewStub
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
+import com.daniil.shevtsov.idle.core.ui.widgets.CollapseButton
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugComposable
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewAction
@@ -204,7 +208,6 @@ fun ContentBody(
     onViewAction: (MainViewAction) -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
-
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
     )
@@ -212,24 +215,50 @@ fun ContentBody(
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
         sheetContent = {
-            Column(modifier= Modifier.height(500.dp)) {
-                val isShopCollapsed = state.sectionCollapse[SectionKey.Upgrades] ?: false
+            Column(
+                modifier = Modifier
+                    .height(500.dp)
+                    .background(Pallete.LightRed)
+                    .padding(top = 2.dp)
+                    .background(Pallete.Red)
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .background(Pallete.Red)
+                        .padding(vertical = 4.dp)
+
+                ) {
+                    CollapseButton(
+                        isCollapsed = bottomSheetScaffoldState.bottomSheetState.isExpanded,
+                        modifier = modifier,
+                        onClick = {
+                            scope.launch {
+                                if(bottomSheetScaffoldState.bottomSheetState.isCollapsed) {
+                                    bottomSheetScaffoldState.bottomSheetState.expand()
+                                } else {
+                                    bottomSheetScaffoldState.bottomSheetState.collapse()
+                                }
+                            }
+                        }
+                    )
+                    Text(
+                        text = "Upgrades",
+                        color = Color.White,
+                        fontSize = 24.sp,
+                        modifier = modifier
+                    )
+                }
                 Cavity(
                     mainColor = Pallete.Red,
                     modifier = modifier,
                 ) {
-                    Shop(
-                        shop = state.shop,
-                        isCollapsed = isShopCollapsed,
-                        modifier = modifier,
-                        onToggleCollapse = {
-                            onViewAction(
-                                MainViewAction.ToggleSectionCollapse(
-                                    SectionKey.Upgrades
-                                )
-                            )
-                        },
+                    UpgradeList(
+                        upgradeList = state.shop.upgradeLists[0],
                         onUpgradeSelected = { id -> onViewAction(MainViewAction.UpgradeSelected(id)) },
+                        modifier = Modifier.fillMaxHeight()
                     )
                 }
             }
