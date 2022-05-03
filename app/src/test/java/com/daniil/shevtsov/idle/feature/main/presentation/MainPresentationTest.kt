@@ -6,10 +6,7 @@ import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.action.domain.action
-import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
-import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
-import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
-import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
+import com.daniil.shevtsov.idle.feature.action.presentation.*
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
@@ -688,6 +685,36 @@ class MainPresentationTest {
             .containsExactly(
                 humanAction.id to ActionIcon(Icons.Human),
                 monsterAction.id to ActionIcon(Icons.Monster),
+            )
+    }
+
+    @Test
+    fun `should display action resource changes`() = runBlockingTest {
+        val action = action(
+            id = 1L,
+            resourceChanges = mapOf(
+                ResourceKey.Blood to 10.0,
+                ResourceKey.Money to -5.0,
+            )
+        )
+        val state = mainFunctionalCoreState(
+            resources = listOf(
+                resource(key = ResourceKey.Blood, value = 1.0),
+                resource(key = ResourceKey.Money, value = 5.0),
+            ),
+            actions = listOf(action),
+        )
+
+        val viewState = mapMainViewState(state = state)
+
+        assertThat(viewState)
+            .extractingHumanActions()
+            .index(0)
+            .prop(ActionModel::resourceChanges)
+            .extracting(ResourceChangeModel::icon, ResourceChangeModel::value)
+            .containsExactly(
+                Icons.Blood to 10.0,
+                Icons.Money to -5.0,
             )
     }
 
