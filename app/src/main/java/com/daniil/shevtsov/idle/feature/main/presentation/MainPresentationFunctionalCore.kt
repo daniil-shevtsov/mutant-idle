@@ -241,15 +241,20 @@ private fun createActionState(
                     }
                 ),
                 resourceChanges = resourceChanges.map { (resourceKey, changeValue) ->
+                    val formattedValue =
+                        ("+".takeIf { changeValue > 0 } ?: "") + changeValue.formatRound(digits = 2)
                     ResourceChangeModel(
                         icon = resourceKey.chooseIcon(),
-                        value = changeValue,
+                        value = formattedValue,
                     )
                 },
                 ratioChanges = ratioChanges.map { (ratioKey, changeValue) ->
+                    val formattedValue =
+                        ("+".takeIf { changeValue > 0 } ?: "") + changeValue.toDouble()
+                            .formatRound(digits = 2) + " %"
                     RatioChangeModel(
                         icon = ratioKey.chooseIcon(),
-                        value = changeValue.toDouble(),
+                        value = formattedValue,
                     )
                 },
                 isEnabled = isActive,

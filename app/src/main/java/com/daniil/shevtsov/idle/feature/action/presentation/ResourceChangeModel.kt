@@ -2,12 +2,12 @@ package com.daniil.shevtsov.idle.feature.action.presentation
 
 data class ResourceChangeModel(
     val icon: String,
-    val value: Double,
+    val value: String,
 )
 
 fun resourceChangeModel(
     icon: String = "",
-    value: Double = 0.0,
+    value: String = "",
 ) = ResourceChangeModel(
     icon = icon,
     value = value,

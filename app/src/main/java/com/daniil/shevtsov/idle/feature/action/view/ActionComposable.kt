@@ -199,8 +199,7 @@ fun Action(
                         )
                         Text(
                             modifier = Modifier.padding(start = 4.dp),
-                            text = ("+".takeIf { resourceChange.value > 0 }
-                                ?: "") + resourceChange.value.toString(),
+                            text = resourceChange.value,
                             color = Color.White,
                             fontSize = 16.sp,
                         )
@@ -225,8 +224,7 @@ fun Action(
                         )
                         Text(
                             modifier = Modifier.padding(start = 4.dp),
-                            text = ("+".takeIf { ratioChange.value > 0 }
-                                ?: "") + ratioChange.value.toString() + " %",
+                            text = ratioChange.value,
                             color = Color.White,
                             fontSize = 16.sp,
                         )
@@ -246,12 +244,12 @@ fun actionComposeStub(
     title = "Eat human food",
     subtitle = "It's not enough",
     resourceChanges = listOf(
-        resourceChangeModel(icon = Icons.Blood, value = 2.0),
-        resourceChangeModel(icon = Icons.HumanFood, value = -1.0),
+        resourceChangeModel(icon = Icons.Blood, value = "2.0"),
+        resourceChangeModel(icon = Icons.HumanFood, value = "-1.0"),
     ),
     ratioChanges = listOf(
-        ratioChangeModel(icon = Icons.Mutanity, value = 10.0),
-        ratioChangeModel(icon = Icons.Suspicion, value = -5.0),
+        ratioChangeModel(icon = Icons.Mutanity, value = "10.0"),
+        ratioChangeModel(icon = Icons.Suspicion, value = "-5.0"),
     ),
     isEnabled = isEnabled,
 )

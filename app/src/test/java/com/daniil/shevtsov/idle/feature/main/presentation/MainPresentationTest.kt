@@ -713,8 +713,8 @@ class MainPresentationTest {
             .prop(ActionModel::resourceChanges)
             .extracting(ResourceChangeModel::icon, ResourceChangeModel::value)
             .containsExactly(
-                Icons.Blood to 10.0,
-                Icons.Money to -5.0,
+                Icons.Blood to "+10",
+                Icons.Money to "-5",
             )
     }
 
@@ -743,8 +743,8 @@ class MainPresentationTest {
             .prop(ActionModel::ratioChanges)
             .extracting(RatioChangeModel::icon, RatioChangeModel::value)
             .containsExactly(
-                Icons.Mutanity to 10.0,
-                Icons.Suspicion to -5.0,
+                Icons.Mutanity to "+10 %",
+                Icons.Suspicion to "-5 %",
             )
     }
 
