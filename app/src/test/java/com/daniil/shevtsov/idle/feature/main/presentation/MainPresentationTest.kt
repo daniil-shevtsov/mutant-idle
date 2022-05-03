@@ -719,6 +719,36 @@ class MainPresentationTest {
     }
 
     @Test
+    fun `should display action ratio changes`() = runBlockingTest {
+        val action = action(
+            id = 1L,
+            ratioChanges = mapOf(
+                RatioKey.Mutanity to 10.0f,
+                RatioKey.Suspicion to -5.0f,
+            )
+        )
+        val state = mainFunctionalCoreState(
+            ratios = listOf(
+                ratio(key = RatioKey.Mutanity, value = 10.0),
+                ratio(key = RatioKey.Suspicion, value = 5.0),
+            ),
+            actions = listOf(action),
+        )
+
+        val viewState = mapMainViewState(state = state)
+
+        assertThat(viewState)
+            .extractingHumanActions()
+            .index(0)
+            .prop(ActionModel::ratioChanges)
+            .extracting(RatioChangeModel::icon, RatioChangeModel::value)
+            .containsExactly(
+                Icons.Mutanity to 10.0,
+                Icons.Suspicion to -5.0,
+            )
+    }
+
+    @Test
     fun `should replace placeholders in action description if has any`() = runBlockingTest {
         val tag = tag(name = "flavor tag")
         val flavoredDescription = "flavored"

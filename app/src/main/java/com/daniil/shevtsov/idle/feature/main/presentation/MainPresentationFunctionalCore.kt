@@ -246,6 +246,12 @@ private fun createActionState(
                         value = changeValue,
                     )
                 },
+                ratioChanges = ratioChanges.map { (ratioKey, changeValue) ->
+                    RatioChangeModel(
+                        icon = ratioKey.chooseIcon(),
+                        value = changeValue.toDouble(),
+                    )
+                },
                 isEnabled = isActive,
             )
         }

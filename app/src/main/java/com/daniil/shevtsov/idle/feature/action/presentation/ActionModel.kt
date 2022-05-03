@@ -6,5 +6,6 @@ data class ActionModel(
     val subtitle: String,
     val icon: ActionIcon,
     val resourceChanges: List<ResourceChangeModel>,
+    val ratioChanges: List<RatioChangeModel>,
     val isEnabled: Boolean = true,
 )
