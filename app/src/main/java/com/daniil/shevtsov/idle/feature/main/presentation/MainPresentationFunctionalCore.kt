@@ -250,7 +250,7 @@ private fun createActionState(
                 },
                 ratioChanges = ratioChanges.map { (ratioKey, changeValue) ->
                     val formattedValue =
-                        ("+".takeIf { changeValue > 0 } ?: "") + changeValue.toDouble()
+                        ("+".takeIf { changeValue > 0 } ?: "") + (changeValue * 100).toDouble()
                             .formatRound(digits = 2) + " %"
                     RatioChangeModel(
                         icon = ratioKey.chooseIcon(),

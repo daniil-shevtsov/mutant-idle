@@ -723,14 +723,14 @@ class MainPresentationTest {
         val action = action(
             id = 1L,
             ratioChanges = mapOf(
-                RatioKey.Mutanity to 10.0f,
-                RatioKey.Suspicion to -5.0f,
+                RatioKey.Mutanity to 0.5f,
+                RatioKey.Suspicion to -0.01f,
             )
         )
         val state = mainFunctionalCoreState(
             ratios = listOf(
-                ratio(key = RatioKey.Mutanity, value = 10.0),
-                ratio(key = RatioKey.Suspicion, value = 5.0),
+                ratio(key = RatioKey.Mutanity, value = 0.3),
+                ratio(key = RatioKey.Suspicion, value = 0.5),
             ),
             actions = listOf(action),
         )
@@ -743,8 +743,8 @@ class MainPresentationTest {
             .prop(ActionModel::ratioChanges)
             .extracting(RatioChangeModel::icon, RatioChangeModel::value)
             .containsExactly(
-                Icons.Mutanity to "+10 %",
-                Icons.Suspicion to "-5 %",
+                Icons.Mutanity to "+50 %",
+                Icons.Suspicion to "-1 %",
             )
     }
 
