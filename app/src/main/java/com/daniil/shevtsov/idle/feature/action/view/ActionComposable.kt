@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.feature.action.view
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement.SpaceBetween
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
@@ -22,6 +23,7 @@ import com.daniil.shevtsov.idle.core.ui.widgets.Collapsable
 import com.daniil.shevtsov.idle.feature.action.domain.actionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
+import com.daniil.shevtsov.idle.feature.action.presentation.ratioChangeModel
 import com.daniil.shevtsov.idle.feature.action.presentation.resourceChangeModel
 import com.daniil.shevtsov.idle.feature.main.presentation.actionPane
 import com.daniil.shevtsov.idle.feature.main.presentation.actionsState
@@ -176,26 +178,64 @@ fun Action(
                 .padding(start = 4.dp)
                 .padding(bottom = 4.dp)
         )
-        Column(verticalArrangement = spacedBy(4.dp)) {
-            action.resourceChanges.forEach { resourceChange ->
-                Row(
-                    horizontalArrangement = spacedBy(4.dp),
-                    verticalAlignment = CenterVertically,
-                ) {
-                    Text(
-                        text = resourceChange.icon,
-                        fontSize = 16.sp,
-                    )
-                    Text(
-                        text = ("+".takeIf { resourceChange.value > 0 }
-                            ?: "") + resourceChange.value.toString(),
-                        color = Color.White,
-                        fontSize = 16.sp,
-                    )
-                }
+        Row(
+            modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = SpaceBetween
+        ) {
+            Column(
+                modifier = Modifier.width(IntrinsicSize.Max),
+                verticalArrangement = spacedBy(4.dp),
+                horizontalAlignment = Alignment.Start,
+            ) {
+                action.resourceChanges.forEach { resourceChange ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = SpaceBetween,
+                        verticalAlignment = CenterVertically,
+                    ) {
+                        Text(
+                            text = resourceChange.icon,
+                            fontSize = 16.sp,
+                        )
+                        Text(
+                            modifier = Modifier.padding(start = 4.dp),
+                            text = ("+".takeIf { resourceChange.value > 0 }
+                                ?: "") + resourceChange.value.toString(),
+                            color = Color.White,
+                            fontSize = 16.sp,
+                        )
+                    }
 
+                }
+            }
+            Column(
+                modifier = Modifier.width(IntrinsicSize.Max),
+                verticalArrangement = spacedBy(4.dp),
+                horizontalAlignment = Alignment.End,
+            ) {
+                action.ratioChanges.forEach { ratioChange ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = SpaceBetween,
+                        verticalAlignment = CenterVertically,
+                    ) {
+                        Text(
+                            text = ratioChange.icon,
+                            fontSize = 16.sp,
+                        )
+                        Text(
+                            modifier = Modifier.padding(start = 4.dp),
+                            text = ("+".takeIf { ratioChange.value > 0 }
+                                ?: "") + ratioChange.value.toString() + " %",
+                            color = Color.White,
+                            fontSize = 16.sp,
+                        )
+                    }
+
+                }
             }
         }
+
     }
 
 }
@@ -208,6 +248,10 @@ fun actionComposeStub(
     resourceChanges = listOf(
         resourceChangeModel(icon = Icons.Blood, value = 2.0),
         resourceChangeModel(icon = Icons.HumanFood, value = -1.0),
+    ),
+    ratioChanges = listOf(
+        ratioChangeModel(icon = Icons.Mutanity, value = 10.0),
+        ratioChangeModel(icon = Icons.Suspicion, value = -5.0),
     ),
     isEnabled = isEnabled,
 )
