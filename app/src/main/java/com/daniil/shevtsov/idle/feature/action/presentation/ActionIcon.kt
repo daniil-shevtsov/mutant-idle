@@ -1,6 +1,5 @@
 package com.daniil.shevtsov.idle.feature.action.presentation
 
-enum class ActionIcon {
-    Mutant,
-    Human,
-}
+data class ActionIcon(
+    val value: String
+)

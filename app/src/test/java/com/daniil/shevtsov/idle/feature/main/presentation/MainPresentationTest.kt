@@ -4,7 +4,9 @@ import assertk.Assert
 import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
+import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.action.domain.action
+import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
@@ -31,6 +33,7 @@ import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
@@ -606,6 +609,37 @@ class MainPresentationTest {
             .prop(ActionPane::actions)
             .extracting(ActionModel::id)
             .containsExactly(availableAction.id)
+    }
+
+    @Test
+    fun `should show correct icon for human and monster actions`() = runBlockingTest {
+        val humanAction = action(
+            id = 1L,
+            tags = mapOf(TagRelation.RequiredAll to listOf(Tags.HumanAppearance))
+        )
+        val monsterAction = action(id = 2L)
+
+        val state = mainFunctionalCoreState(
+            actions = listOf(
+                humanAction,
+                monsterAction,
+            ),
+            player = player(generalTags = listOf(Tags.HumanAppearance)),
+        )
+
+        val viewState = mapMainViewState(state = state)
+
+        assertThat(viewState)
+            .extractingMainState()
+            .prop(MainViewState.Success::actionState)
+            .prop(ActionsState::actionPanes)
+            .index(0)
+            .prop(ActionPane::actions)
+            .extracting(ActionModel::id, ActionModel::icon)
+            .containsExactly(
+                humanAction.id to ActionIcon(Icons.Human),
+                monsterAction.id to ActionIcon(Icons.Monster),
+            )
     }
 
     @Test

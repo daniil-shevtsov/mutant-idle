@@ -1,14 +1,9 @@
 package com.daniil.shevtsov.idle.core.ui
 
-import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
-import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
-import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
-import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
-import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.PriceModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
@@ -21,40 +16,6 @@ internal fun resourcePreviewStub() = ResourceModel(
 internal fun resourceStubs() = listOf(
     ResourceModel(name = "Blood", value = "10 000"),
     ResourceModel(name = "Money", value = "500"),
-)
-
-internal fun actionStatePreviewStub() = ActionsState(
-    actionPanes = listOf(
-        actionPanePreviewStub(icon = ActionIcon.Human),
-        actionPanePreviewStub(icon = ActionIcon.Mutant),
-    ),
-)
-
-internal fun actionPanePreviewStub(
-    icon: ActionIcon,
-) = ActionPane(
-    actions = (0..10).map { index ->
-        actionPreviewStub(
-            id = index.toLong(),
-            title = "${icon.name} action",
-            subtitle = "Some very very very very long text",
-            actionIcon = icon,
-        )
-    }
-)
-
-internal fun actionPreviewStub(
-    id: Long = 0L,
-    title: String = "Lol Kek",
-    subtitle: String = "Some very very very very long text",
-    actionIcon: ActionIcon = ActionIcon.Human,
-    isEnabled: Boolean = true,
-) = ActionModel(
-    id = id,
-    title = title,
-    subtitle = subtitle,
-    icon = actionIcon,
-    isEnabled = isEnabled,
 )
 
 internal fun upgradePreviewStub(

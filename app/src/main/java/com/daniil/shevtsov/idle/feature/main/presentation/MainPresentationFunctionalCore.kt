@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.feature.main.presentation
 
 import com.daniil.shevtsov.idle.core.presentation.formatting.formatEnumName
 import com.daniil.shevtsov.idle.core.presentation.formatting.formatRound
+import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
@@ -260,11 +261,13 @@ private fun Action.toModel(resources: List<Resource>): ActionModel {
         id = id,
         title = title,
         subtitle = subtitle,
-        icon = when {
-            tags[TagRelation.RequiredAll].orEmpty()
-                .contains(Tags.HumanAppearance) -> ActionIcon.Human
-            else -> ActionIcon.Mutant
-        },
+        icon = ActionIcon(
+            value = when {
+                tags[TagRelation.RequiredAll].orEmpty()
+                    .contains(Tags.HumanAppearance) -> Icons.Human
+                else -> Icons.Monster
+            }
+        ),
         isEnabled = isActive,
     )
 }

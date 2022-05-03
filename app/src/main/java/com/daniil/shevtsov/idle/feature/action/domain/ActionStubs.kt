@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.feature.action.domain
 
+import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
@@ -27,7 +28,7 @@ fun actionModel(
     id: Long = 0L,
     title: String = "",
     subtitle: String = "",
-    icon: ActionIcon = ActionIcon.Human,
+    icon: ActionIcon = ActionIcon(value = Icons.Human),
     isEnabled: Boolean = true,
 ) = ActionModel(
     id = id,

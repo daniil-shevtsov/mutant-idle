@@ -13,8 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.daniil.shevtsov.idle.core.ui.*
-import com.daniil.shevtsov.idle.core.ui.actionStatePreviewStub
+import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.debugViewState
 import com.daniil.shevtsov.idle.core.ui.resourceStubs
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
@@ -97,7 +96,7 @@ fun MainPreview() {
                 humanityRatioModel(title = "Mutanity", name = "Covert", percent = 0.75),
                 humanityRatioModel(title = "Suspicion", name = "Investigation", percent = 0.35),
             ),
-            actionState = actionStatePreviewStub(),
+            actionState = actionsState(),
             upgradeState = upgradeViewState(),
             sectionCollapse = mapOf(
                 SectionKey.Resources to false,

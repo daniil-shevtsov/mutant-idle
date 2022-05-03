@@ -16,11 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Pallete
-import com.daniil.shevtsov.idle.core.ui.actionPreviewStub
-import com.daniil.shevtsov.idle.core.ui.actionStatePreviewStub
 import com.daniil.shevtsov.idle.core.ui.widgets.Collapsable
 import com.daniil.shevtsov.idle.feature.action.domain.actionModel
-import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.main.presentation.actionPane
@@ -32,8 +29,8 @@ import com.google.accompanist.pager.HorizontalPager
 @Composable
 fun ActionPreview() {
     Column {
-        Action(action = actionPreviewStub(isEnabled = true))
-        Action(action = actionPreviewStub(isEnabled = false))
+        Action(action = actionModel(isEnabled = true))
+        Action(action = actionModel(isEnabled = false))
     }
 }
 
@@ -44,7 +41,7 @@ fun ActionPreview() {
 @Composable
 fun ActionPanesPreview() {
     ActionSection(
-        state = actionStatePreviewStub(),
+        state = actionsState(),
         isCollapsed = false,
         onToggleCollapse = {},
     )
@@ -144,10 +141,7 @@ fun Action(
             .clickable { onClicked() },
         verticalArrangement = spacedBy(4.dp)
     ) {
-        val actionIcon = when (action.icon) {
-            ActionIcon.Human -> "\uD83D\uDE42"
-            ActionIcon.Mutant -> "\uD83D\uDC79"
-        }
+        val actionIcon = action.icon.value
 
         Row(
             verticalAlignment = Alignment.Top,
