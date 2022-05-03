@@ -72,6 +72,7 @@ fun ResourcePanel(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
+        Text(text = resource.icon, fontSize = 24.sp)
         Text(
             modifier = modifier.weight(0.35f),
             text = resource.name,
