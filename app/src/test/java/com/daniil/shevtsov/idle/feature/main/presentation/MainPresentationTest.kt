@@ -29,7 +29,7 @@ import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
-import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
+import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
@@ -37,6 +37,7 @@ import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
 import kotlinx.coroutines.test.runBlockingTest
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class MainPresentationTest {
@@ -75,12 +76,12 @@ class MainPresentationTest {
                 extractingResourceNameAndValues()
                     .containsExactly("Blood" to "10", "Money" to "20")
                 extractingRatios()
-                    .containsExactly("Human" to 0.0, "Unknown" to 0.0)
+                    .extracting(HumanityRatioModel::title, HumanityRatioModel::percent)
+                    .containsExactly("Mutanity" to 0.0, "Suspicion" to 0.0)
 
                 extractingMainState().all {
                     prop(MainViewState.Success::shop)
-                        .prop(ShopState::upgradeLists)
-                        .index(0)
+                        .prop(UpgradesViewState::upgrades)
                         .extracting(UpgradeModel::id)
                         .containsExactly(0L, 1L, 2L, 3L)
                     prop(MainViewState.Success::actionState)
@@ -96,6 +97,26 @@ class MainPresentationTest {
                             SectionKey.Upgrades to false,
                         )
                 }
+            }
+    }
+
+    @Test
+    fun `should display ratio label`() {
+        val state = mainFunctionalCoreState(
+            ratios = listOf(
+                ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.105),
+            ),
+        )
+
+        val viewState = mapMainViewState(state = state)
+
+        assertThat(viewState)
+            .extractingRatios()
+            .index(0)
+            .all {
+                prop(HumanityRatioModel::title).isEqualTo("Mutanity")
+                prop(HumanityRatioModel::percent).isEqualTo(0.105)
+                prop(HumanityRatioModel::percentLabel).isEqualTo("10.5 %")
             }
     }
 
@@ -326,7 +347,7 @@ class MainPresentationTest {
 
 
     @Test
-    fun `should disable actions if it requires not available resources`() = runBlockingTest {
+    fun `should hide actions if it requires not available resources`() = runBlockingTest {
         val state = mainFunctionalCoreState(
             resources = listOf(
                 resource(key = ResourceKey.Money, value = 35.0),
@@ -343,7 +364,7 @@ class MainPresentationTest {
                     resourceChanges = mapOf(
                         ResourceKey.Money to -50.0,
                     ),
-                )
+                ),
             ),
         )
         val viewState = mapMainViewState(state = state)
@@ -353,10 +374,10 @@ class MainPresentationTest {
             .extracting(ActionModel::id, ActionModel::isEnabled)
             .containsExactly(
                 1L to true,
-                2L to false,
             )
     }
 
+    @Disabled("Need to figure out which actions to hide and which to show disabled")
     @Test
     fun `show enabled actions before disabled if got both`() = runBlockingTest {
         val state = mainFunctionalCoreState(
@@ -692,8 +713,7 @@ class MainPresentationTest {
     private fun Assert<MainViewState>.extractingUpgrades() =
         extractingMainState()
             .prop(MainViewState.Success::shop)
-            .prop(ShopState::upgradeLists)
-            .index(0)
+            .prop(UpgradesViewState::upgrades)
 
     private fun Assert<MainViewState>.extractingLocationSelectionViewState() =
         extractingMainState()
@@ -738,7 +758,6 @@ class MainPresentationTest {
 
     private fun Assert<MainViewState>.extractingRatios() = extractingMainState()
         .prop(MainViewState.Success::ratios)
-        .extracting(HumanityRatioModel::name, HumanityRatioModel::percent)
 
 
     private fun Assert<MainViewState>.hasRatioName(expectedName: String) =

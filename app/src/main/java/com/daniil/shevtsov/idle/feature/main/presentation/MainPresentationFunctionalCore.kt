@@ -1,5 +1,7 @@
 package com.daniil.shevtsov.idle.feature.main.presentation
 
+import com.daniil.shevtsov.idle.core.presentation.formatting.formatEnumName
+import com.daniil.shevtsov.idle.core.presentation.formatting.formatRound
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
@@ -23,7 +25,7 @@ import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMapper
-import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
+import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
@@ -46,10 +48,12 @@ private fun createMainViewState(state: MainFunctionalCoreState): MainViewState {
                 name = resource.name,
             )
         },
-        ratios = state.ratios.map {
+        ratios = state.ratios.map { ratio ->
             HumanityRatioModel(
-                name = getNameForRatio(it),
-                percent = it.value
+                title = formatEnumName(name = ratio.key.name),
+                name = getNameForRatio(ratio),
+                percent = ratio.value,
+                percentLabel = (ratio.value * 100).formatRound(digits = 2) + " %",
             )
         },
         actionState = createActionState(state.actions, state.resources, state.player, state),
@@ -102,7 +106,11 @@ private fun createMainViewState(state: MainFunctionalCoreState): MainViewState {
                     UpgradeStatusModel.Bought -> 2
                 }
             }
-            .let { ShopState(upgradeLists = listOf(it)) },
+            .let { upgrades ->
+                UpgradesViewState(
+                    upgrades = upgrades,
+                )
+            },
         sectionCollapse = state.sections.map { it.key to it.isCollapsed }.toMap(),
         drawerState = DrawerViewState(
             tabSelectorState = state.drawerTabs,
@@ -176,6 +184,12 @@ private fun createActionState(
                 tagRelations = action.tags,
                 tags = player.tags,
             )
+        }
+        .filter { action ->
+            action.resourceChanges.all { (resourceKey, resourceChange) ->
+                val currentResource = resources.find { it.key == resourceKey }!!.value
+                currentResource + resourceChange >= 0
+            }
         }
         .map { action ->
             action.copy(

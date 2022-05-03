@@ -4,7 +4,7 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
-import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
+import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 
 sealed class MainViewState {
     object Loading : MainViewState()
@@ -14,7 +14,7 @@ sealed class MainViewState {
         val ratios: List<HumanityRatioModel> = emptyList(),
         val actionState: ActionsState,
         val locationSelectionViewState: LocationSelectionViewState,
-        val shop: ShopState,
+        val shop: UpgradesViewState,
         val sectionCollapse: Map<SectionKey, Boolean> = mapOf(),
         val drawerState: DrawerViewState,
     ) : MainViewState()

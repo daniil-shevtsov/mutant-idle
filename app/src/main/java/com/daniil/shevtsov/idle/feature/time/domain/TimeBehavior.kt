@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.takeWhile
+import timber.log.Timber
 import kotlin.time.Duration
 
 object TimeBehavior {
@@ -18,6 +19,7 @@ object TimeBehavior {
             .takeWhile { duration -> duration <= until }
             .collect { duration ->
                 val passed = duration.inWholeMilliseconds / interval.inWholeMilliseconds
+                Timber.d("duration ${duration.inWholeMicroseconds} interval ${interval.inWholeMilliseconds}")
                 timeStorage.setNewValue(Duration.milliseconds(passed))
             }
     }

@@ -6,6 +6,7 @@ import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.core.di.DaggerAppComponent
 import com.daniil.shevtsov.idle.core.di.koin.appModule
 import com.daniil.shevtsov.idle.core.navigation.Screen
+import com.daniil.shevtsov.idle.core.presentation.formatting.formatEnumName
 import com.daniil.shevtsov.idle.feature.action.domain.createAllActions
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
@@ -22,6 +23,7 @@ import com.daniil.shevtsov.idle.feature.player.species.domain.Species
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.createResources
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.upgrade.domain.createUpgrades
 import org.koin.core.Koin
 import timber.log.Timber
@@ -81,14 +83,17 @@ class IdleGameApplication : Application() {
 
     private fun createBalanceConfig() = BalanceConfig(
         tickRateMillis = 1L,
-        resourcePerMillisecond = 0.002,
+        resourcePerMillisecond = 0.0002,
         resourceSpentForFullMutant = 100.0,
     )
 
-    private fun createInitialRatios() = listOf(
-        Ratio(key = RatioKey.Mutanity, title = "", value = 0.0),
-        Ratio(key = RatioKey.Suspicion, title = "", value = 0.0),
-    )
+    private fun createInitialRatios() = RatioKey.values().map { ratioKey ->
+        Ratio(
+            key = ratioKey,
+            title = formatEnumName(ratioKey.name),
+            value = 0.0,
+        )
+    }
 
     private fun createInitialSectionState() = listOf(
         SectionState(key = SectionKey.Resources, isCollapsed = false),
@@ -110,7 +115,11 @@ class IdleGameApplication : Application() {
     private fun createInitialPlayer() = player(
         job = Jobs.Unemployed,
         species = Species.Devourer,
-        generalTags = emptyList(),
+        generalTags = listOf(
+            Tags.HumanAppearance,
+            Tags.Knowledge.SocialNorms,
+            Tags.Nimble,
+        ),
     )
 
     private fun createInitialJobs() = listOf(

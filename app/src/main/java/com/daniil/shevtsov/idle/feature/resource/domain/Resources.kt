@@ -1,13 +1,11 @@
 package com.daniil.shevtsov.idle.feature.resource.domain
 
+import com.daniil.shevtsov.idle.core.presentation.formatting.formatEnumName
+
 fun createResources() = ResourceKey.values().map { key ->
-    val value = when(key) {
-//        ResourceKey.Blood -> 1000000.0 //TODO: For debug
-        else -> 0.0
-    }
     Resource(
         key = key,
-        name = key.name,
-        value = value,
+        name = formatEnumName(key.name),
+        value = 0.0,
     )
 }

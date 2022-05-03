@@ -6,6 +6,6 @@ enum class ResourceKey {
     HumanFood,
     Prisoner,
     Remains,
-    Meat,
+    FreshMeat,
     Organs,
 }

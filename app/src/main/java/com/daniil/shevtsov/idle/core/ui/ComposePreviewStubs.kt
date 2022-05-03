@@ -7,10 +7,8 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
-import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
-import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
-import com.daniil.shevtsov.idle.feature.suspicion.presentation.SuspicionModel
+import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.PriceModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
@@ -23,27 +21,6 @@ internal fun resourcePreviewStub() = ResourceModel(
 internal fun resourceStubs() = listOf(
     ResourceModel(name = "Blood", value = "10 000"),
     ResourceModel(name = "Money", value = "500"),
-)
-
-internal fun ratiosStubs() = listOf(
-    HumanityRatioModel(
-        name = "Dormant",
-        percent = 0.5,
-    ),
-    HumanityRatioModel(
-        name = "Suspicion",
-        percent = 0.25,
-    ),
-)
-
-internal fun humanityRatioStub() = HumanityRatioModel(
-    name = "Dormant",
-    percent = 0.5,
-)
-
-internal fun suspicionStub() = SuspicionModel(
-    title = "Investigation",
-    percent = 0.5
 )
 
 internal fun actionStatePreviewStub() = ActionsState(
@@ -78,14 +55,6 @@ internal fun actionPreviewStub(
     subtitle = subtitle,
     icon = actionIcon,
     isEnabled = isEnabled,
-)
-
-internal fun shopStatePreviewStub(
-
-) = ShopState(
-    upgradeLists = (0..3).map { index ->
-        upgradeListPreviewStub().map { it.copy(title = "$index ${it.title}") }
-    }
 )
 
 internal fun upgradePreviewStub(

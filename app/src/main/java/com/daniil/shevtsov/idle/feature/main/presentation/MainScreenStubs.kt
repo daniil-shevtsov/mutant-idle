@@ -10,14 +10,14 @@ import com.daniil.shevtsov.idle.feature.location.presentation.locationSelectionV
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
-import com.daniil.shevtsov.idle.feature.shop.presentation.ShopState
+import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 
 fun mainViewState(
     resources: List<ResourceModel> = emptyList(),
     ratios: List<HumanityRatioModel> = emptyList(),
     actionState: ActionsState = actionsState(),
-    shop: ShopState = shopState(),
+    upgradeState: UpgradesViewState = upgradeViewState(),
     locationSelectionViewState: LocationSelectionViewState = locationSelectionViewState(),
     sectionCollapse: Map<SectionKey, Boolean> = mapOf(),
     drawerState: DrawerViewState = drawerViewState(),
@@ -26,7 +26,7 @@ fun mainViewState(
     ratios = ratios,
     actionState = actionState,
     locationSelectionViewState = locationSelectionViewState,
-    shop = shop,
+    shop = upgradeState,
     sectionCollapse = sectionCollapse,
     drawerState = drawerState,
 )
@@ -37,10 +37,10 @@ fun actionsState(
     actionPanes = actionPanes,
 )
 
-fun shopState(
-    upgradeLists: List<List<UpgradeModel>> = emptyList(),
-) = ShopState(
-    upgradeLists = upgradeLists,
+fun upgradeViewState(
+    upgrades: List<UpgradeModel> = emptyList(),
+) = UpgradesViewState(
+    upgrades = upgrades,
 )
 
 fun drawerViewState(

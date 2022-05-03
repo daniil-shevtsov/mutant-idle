@@ -1,42 +1,41 @@
 package com.daniil.shevtsov.idle.feature.main.view
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.DrawerValue
-import androidx.compose.material.ModalDrawer
-import androidx.compose.material.Text
-import androidx.compose.material.rememberDrawerState
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.daniil.shevtsov.idle.core.navigation.GeneralViewAction
-import com.daniil.shevtsov.idle.core.navigation.ScreenHostViewModel
-import com.daniil.shevtsov.idle.core.navigation.ScreenViewAction
-import com.daniil.shevtsov.idle.core.navigation.ScreenViewState
+import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.*
+import com.daniil.shevtsov.idle.core.ui.actionStatePreviewStub
+import com.daniil.shevtsov.idle.core.ui.debugViewState
+import com.daniil.shevtsov.idle.core.ui.resourceStubs
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
+import com.daniil.shevtsov.idle.core.ui.widgets.CollapseButton
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugComposable
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewAction
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
 import com.daniil.shevtsov.idle.feature.drawer.view.DrawerTabSelector
-import com.daniil.shevtsov.idle.feature.gamefinish.view.FinishedGameScreen
 import com.daniil.shevtsov.idle.feature.location.view.LocationSelection
 import com.daniil.shevtsov.idle.feature.main.presentation.*
 import com.daniil.shevtsov.idle.feature.player.info.view.PlayerInfoComposable
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJobModel
+import com.daniil.shevtsov.idle.feature.ratio.presentation.humanityRatioModel
 import com.daniil.shevtsov.idle.feature.ratio.view.MutantRatioPane
 import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
-import com.daniil.shevtsov.idle.feature.shop.view.Shop
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
+import com.daniil.shevtsov.idle.feature.upgrade.view.UpgradeList
 import com.google.accompanist.insets.statusBarsHeight
+import kotlinx.coroutines.launch
 
 @Preview(
     widthDp = 320,
@@ -94,9 +93,12 @@ fun MainPreview() {
     MainScreen(
         state = mainViewState(
             resources = resourceStubs(),
-            ratios = ratiosStubs(),
+            ratios = listOf(
+                humanityRatioModel(title = "Mutanity", name = "Covert", percent = 0.75),
+                humanityRatioModel(title = "Suspicion", name = "Investigation", percent = 0.35),
+            ),
             actionState = actionStatePreviewStub(),
-            shop = shopStatePreviewStub(),
+            upgradeState = upgradeViewState(),
             sectionCollapse = mapOf(
                 SectionKey.Resources to false,
                 SectionKey.Actions to false,
@@ -114,31 +116,6 @@ fun MainPreview() {
 }
 
 @Composable
-fun ScreenHostComposable(
-    viewModel: ScreenHostViewModel
-) {
-    val delegatedViewState by viewModel.state.collectAsState()
-
-    BackHandler {
-        viewModel.handleAction(ScreenViewAction.General(GeneralViewAction.Back))
-    }
-
-    when (val viewState = delegatedViewState) {
-        is ScreenViewState.Main -> {
-            MainScreen(
-                state = viewState.state,
-                onViewAction = { action -> viewModel.handleAction(ScreenViewAction.Main(action)) },
-            )
-        }
-        is ScreenViewState.FinishedGame -> {
-            FinishedGameScreen(
-                state = viewState.state,
-            )
-        }
-    }
-}
-
-@Composable
 fun MainScreen(
     state: MainViewState,
     onViewAction: (MainViewAction) -> Unit,
@@ -151,11 +128,6 @@ fun MainScreen(
         )
     }
 
-}
-
-@Composable
-fun LoadingContent() {
-    Text("Loading")
 }
 
 @Composable
@@ -176,6 +148,11 @@ fun SuccessContent(
             )
         }
     )
+}
+
+@Composable
+fun LoadingContent() {
+    Text("Loading")
 }
 
 @Composable
@@ -222,95 +199,135 @@ fun ContentBody(
     modifier: Modifier = Modifier,
     onViewAction: (MainViewAction) -> Unit = {},
 ) {
-    Column(
-        modifier = modifier
-            .background(Pallete.Red),
-        verticalArrangement = Arrangement.Top,
-    ) {
-        Spacer(
-            modifier
-                .statusBarsHeight()
-                .fillMaxWidth()
-        )
-        LocationSelection(
-            state = state.locationSelectionViewState,
-            onExpandChange = { onViewAction(MainViewAction.LocationSelectionExpandChange) },
-            onLocationSelected = { id -> onViewAction(MainViewAction.LocationSelected(id)) },
-        )
-        Column(
-            modifier = modifier
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            ResourcePane(
-                resources = state.resources,
-                isCollapsed = state.sectionCollapse[SectionKey.Resources] ?: false,
-                modifier = modifier,
-                onToggleCollapse = { onViewAction(MainViewAction.ToggleSectionCollapse(SectionKey.Resources)) },
-            )
-            MutantRatioPane(state.ratios, modifier = modifier)
-        }
+    val scope = rememberCoroutineScope()
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
+    )
 
-        Column(
-            modifier = modifier
-                .weight(1f)
-                .background(Pallete.Red)
-                .padding(4.dp)
-        ) {
-            fun hackyWeight(
-                isCollapsed: Boolean
-            ): Modifier {
-                return if (isCollapsed) {
-                    modifier
-                } else {
-                    modifier.weight(0.5f, fill = false)
+    BottomSheetScaffold(
+        scaffoldState = bottomSheetScaffoldState,
+        sheetContent = {
+            Column(
+                modifier = Modifier
+                    .height(500.dp)
+                    .background(Pallete.LightRed)
+                    .padding(top = 2.dp)
+                    .background(Pallete.Red)
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .background(Pallete.Red)
+                        .padding(vertical = 4.dp)
+
+                ) {
+                    CollapseButton(
+                        isCollapsed = bottomSheetScaffoldState.bottomSheetState.isExpanded,
+                        modifier = modifier,
+                        onClick = {
+                            scope.launch {
+                                if(bottomSheetScaffoldState.bottomSheetState.isCollapsed) {
+                                    bottomSheetScaffoldState.bottomSheetState.expand()
+                                } else {
+                                    bottomSheetScaffoldState.bottomSheetState.collapse()
+                                }
+                            }
+                        }
+                    )
+                    Text(
+                        text = "Upgrades",
+                        color = Color.White,
+                        fontSize = 24.sp,
+                        modifier = modifier
+                    )
+                }
+                Cavity(
+                    mainColor = Pallete.Red,
+                    modifier = modifier,
+                ) {
+                    UpgradeList(
+                        upgradeList = state.shop.upgrades,
+                        onUpgradeSelected = { id -> onViewAction(MainViewAction.UpgradeSelected(id)) },
+                        modifier = Modifier.fillMaxHeight()
+                    )
                 }
             }
-
-            val isActionsCollapsed = state.sectionCollapse[SectionKey.Actions] ?: false
-            Cavity(
-                mainColor = Pallete.Red,
-                modifier = hackyWeight(isCollapsed = isActionsCollapsed),
-            ) {
-                ActionSection(
-                    state = state.actionState,
-                    isCollapsed = isActionsCollapsed,
-                    modifier = modifier,
-                    onToggleCollapse = {
-                        onViewAction(
-                            MainViewAction.ToggleSectionCollapse(
-                                SectionKey.Actions
-                            )
-                        )
-                    },
-                    onActionClicked = { id -> onViewAction(MainViewAction.ActionClicked(id)) },
-                )
-            }
+        },
+        sheetPeekHeight = 56.dp
+    ) {
+        Column(
+            modifier = modifier
+                .background(Pallete.Red),
+            verticalArrangement = Arrangement.Top,
+        ) {
             Spacer(
                 modifier
-                    .height(8.dp)
+                    .statusBarsHeight()
                     .fillMaxWidth()
             )
-            val isShopCollapsed = state.sectionCollapse[SectionKey.Upgrades] ?: false
-            Cavity(
-                mainColor = Pallete.Red,
-                modifier = hackyWeight(isCollapsed = isShopCollapsed)
+            LocationSelection(
+                state = state.locationSelectionViewState,
+                onExpandChange = { onViewAction(MainViewAction.LocationSelectionExpandChange) },
+                onLocationSelected = { id -> onViewAction(MainViewAction.LocationSelected(id)) },
+            )
+            Column(
+                modifier = modifier
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                Shop(
-                    shop = state.shop,
-                    isCollapsed = isShopCollapsed,
+                ResourcePane(
+                    resources = state.resources,
+                    isCollapsed = state.sectionCollapse[SectionKey.Resources] ?: false,
                     modifier = modifier,
                     onToggleCollapse = {
                         onViewAction(
                             MainViewAction.ToggleSectionCollapse(
-                                SectionKey.Upgrades
+                                SectionKey.Resources
                             )
                         )
                     },
-                    onUpgradeSelected = { id -> onViewAction(MainViewAction.UpgradeSelected(id)) },
                 )
+                MutantRatioPane(state.ratios, modifier = modifier)
+            }
+
+            Column(
+                modifier = modifier
+                    .weight(1f)
+                    .background(Pallete.Red)
+                    .padding(4.dp)
+            ) {
+                fun hackyWeight(
+                    isCollapsed: Boolean
+                ): Modifier {
+                    return if (isCollapsed) {
+                        modifier
+                    } else {
+                        modifier.weight(0.5f, fill = false)
+                    }
+                }
+
+                val isActionsCollapsed = state.sectionCollapse[SectionKey.Actions] ?: false
+                Cavity(
+                    mainColor = Pallete.Red,
+                    modifier = hackyWeight(isCollapsed = isActionsCollapsed),
+                ) {
+                    ActionSection(
+                        state = state.actionState,
+                        isCollapsed = isActionsCollapsed,
+                        modifier = modifier,
+                        onToggleCollapse = {
+                            onViewAction(
+                                MainViewAction.ToggleSectionCollapse(
+                                    SectionKey.Actions
+                                )
+                            )
+                        },
+                        onActionClicked = { id -> onViewAction(MainViewAction.ActionClicked(id)) },
+                    )
+                }
             }
         }
     }
 }
-

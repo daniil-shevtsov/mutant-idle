@@ -11,6 +11,10 @@ fun mainFunctionalCore(
     viewAction: MainViewAction,
 ): MainFunctionalCoreState {
     val newState = when (viewAction) {
+        is MainViewAction.LocationSelected -> handleLocationSelected(
+            state = state,
+            viewAction = viewAction,
+        )
         is MainViewAction.ActionClicked -> handleActionClicked(
             state = state,
             viewAction = viewAction
@@ -36,10 +40,6 @@ fun mainFunctionalCore(
             viewAction = viewAction,
         )
         is MainViewAction.LocationSelectionExpandChange -> handleLocationSelectionExpandChange(
-            state = state,
-            viewAction = viewAction,
-        )
-        is MainViewAction.LocationSelected -> handleLocationSelected(
             state = state,
             viewAction = viewAction,
         )

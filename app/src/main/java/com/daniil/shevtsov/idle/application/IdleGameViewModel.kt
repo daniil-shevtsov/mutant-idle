@@ -10,6 +10,8 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.scan
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.Duration
 
@@ -38,16 +40,27 @@ class IdleGameViewModel @Inject constructor(
     private fun doEverythingElse() {
         scope.launch {
             timeStorage.observeChange()
-                .map { Time(it.inWholeMilliseconds) }
+                .map { it.inWholeMilliseconds }
+                .scan(0L to 0L) { previousPair, newTime -> previousPair.second to newTime }
+                .map { (previous, new) ->
+                    val difference = new - previous
+                    Timber.d("previous $previous new $new")
+                    Time(difference)
+                }
                 .onEach { time ->
                     val currentState = imperativeShell.getState()
 
+                    val oldResourceValue =
+                        currentState.resources.find { it.key == ResourceKey.Blood }!!.value
+                    val resourceChange =
+                        oldResourceValue + time.value * balanceConfig.resourcePerMillisecond
+                    Timber.d("time: $time oldResourceValue: $oldResourceValue balanceCOnfig: ${balanceConfig.resourcePerMillisecond} resource change: $resourceChange")
                     imperativeShell.updateState(
                         newState = currentState.copy(
                             resources = currentState.resources.map { resource ->
                                 when (resource.key) {
                                     ResourceKey.Blood -> resource.copy(
-                                        value = (10 + time.value * balanceConfig.resourcePerMillisecond)*10
+                                        value = resourceChange
                                     )
                                     else -> resource
                                 }
