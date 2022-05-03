@@ -11,6 +11,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.Pallete
 
 @Preview
@@ -23,6 +24,7 @@ fun MainPreview() {
                     title = "Lol",
                     name = name,
                     progress = percentage,
+                    icon = Icons.Mutanity,
                 )
             }
         }
@@ -34,6 +36,7 @@ fun TitleWithProgress(
     title: String,
     name: String,
     progress: Float,
+    icon: String,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -44,6 +47,7 @@ fun TitleWithProgress(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        Text(text = icon, fontSize = 24.sp)
         Text(
             modifier = modifier.weight(0.35f),
             text = title,

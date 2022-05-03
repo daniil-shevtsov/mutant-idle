@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.feature.action.view
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement.SpaceBetween
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
@@ -10,19 +11,20 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.Pallete
-import com.daniil.shevtsov.idle.core.ui.actionPreviewStub
-import com.daniil.shevtsov.idle.core.ui.actionStatePreviewStub
 import com.daniil.shevtsov.idle.core.ui.widgets.Collapsable
 import com.daniil.shevtsov.idle.feature.action.domain.actionModel
-import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
+import com.daniil.shevtsov.idle.feature.action.presentation.ratioChangeModel
+import com.daniil.shevtsov.idle.feature.action.presentation.resourceChangeModel
 import com.daniil.shevtsov.idle.feature.main.presentation.actionPane
 import com.daniil.shevtsov.idle.feature.main.presentation.actionsState
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -32,8 +34,8 @@ import com.google.accompanist.pager.HorizontalPager
 @Composable
 fun ActionPreview() {
     Column {
-        Action(action = actionPreviewStub(isEnabled = true))
-        Action(action = actionPreviewStub(isEnabled = false))
+        Action(action = actionComposeStub(isEnabled = true))
+        Action(action = actionComposeStub(isEnabled = false))
     }
 }
 
@@ -44,7 +46,7 @@ fun ActionPreview() {
 @Composable
 fun ActionPanesPreview() {
     ActionSection(
-        state = actionStatePreviewStub(),
+        state = actionsState(),
         isCollapsed = false,
         onToggleCollapse = {},
     )
@@ -61,8 +63,8 @@ fun MutantActionPanePreview() {
             actionPanes = listOf(
                 actionPane(
                     actions = listOf(
-                        actionModel(id = 0L),
-                        actionModel(id = 1L),
+                        actionComposeStub(),
+                        actionComposeStub(),
                     )
                 )
             )
@@ -103,7 +105,12 @@ fun ActionSection(
                     LazyVerticalGrid(
                         cells = GridCells.Fixed(count = 2),
                         modifier = modifier,
-                        contentPadding = PaddingValues(2.dp)
+                        contentPadding = PaddingValues(
+                            start = 2.dp,
+                            top = 2.dp,
+                            end = 2.dp,
+                            bottom = 30.dp
+                        )
                     ) {
                         items(actionPane.actions) { action ->
                             Action(
@@ -144,10 +151,7 @@ fun Action(
             .clickable { onClicked() },
         verticalArrangement = spacedBy(4.dp)
     ) {
-        val actionIcon = when (action.icon) {
-            ActionIcon.Human -> "\uD83D\uDE42"
-            ActionIcon.Mutant -> "\uD83D\uDC79"
-        }
+        val actionIcon = action.icon.value
 
         Row(
             verticalAlignment = Alignment.Top,
@@ -174,6 +178,78 @@ fun Action(
                 .padding(start = 4.dp)
                 .padding(bottom = 4.dp)
         )
+        Row(
+            modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = SpaceBetween
+        ) {
+            Column(
+                modifier = Modifier.width(IntrinsicSize.Max),
+                verticalArrangement = spacedBy(4.dp),
+                horizontalAlignment = Alignment.Start,
+            ) {
+                action.resourceChanges.forEach { resourceChange ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = SpaceBetween,
+                        verticalAlignment = CenterVertically,
+                    ) {
+                        Text(
+                            text = resourceChange.icon,
+                            fontSize = 16.sp,
+                        )
+                        Text(
+                            modifier = Modifier.padding(start = 4.dp),
+                            text = resourceChange.value,
+                            color = Color.White,
+                            fontSize = 16.sp,
+                        )
+                    }
+
+                }
+            }
+            Column(
+                modifier = Modifier.width(IntrinsicSize.Max),
+                verticalArrangement = spacedBy(4.dp),
+                horizontalAlignment = Alignment.End,
+            ) {
+                action.ratioChanges.forEach { ratioChange ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = SpaceBetween,
+                        verticalAlignment = CenterVertically,
+                    ) {
+                        Text(
+                            text = ratioChange.icon,
+                            fontSize = 16.sp,
+                        )
+                        Text(
+                            modifier = Modifier.padding(start = 4.dp),
+                            text = ratioChange.value,
+                            color = Color.White,
+                            fontSize = 16.sp,
+                        )
+                    }
+
+                }
+            }
+        }
+
     }
 
 }
+
+fun actionComposeStub(
+    isEnabled: Boolean = true,
+) = actionModel(
+    title = "Eat human food",
+    subtitle = "It's not enough",
+    resourceChanges = listOf(
+        resourceChangeModel(icon = Icons.Blood, value = "2.0"),
+        resourceChangeModel(icon = Icons.HumanFood, value = "-1.0"),
+    ),
+    ratioChanges = listOf(
+        ratioChangeModel(icon = Icons.Mutanity, value = "10.0"),
+        ratioChangeModel(icon = Icons.Suspicion, value = "-5.0"),
+    ),
+    isEnabled = isEnabled,
+)

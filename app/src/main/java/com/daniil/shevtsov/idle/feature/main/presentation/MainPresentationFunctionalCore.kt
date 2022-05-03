@@ -2,11 +2,9 @@ package com.daniil.shevtsov.idle.feature.main.presentation
 
 import com.daniil.shevtsov.idle.core.presentation.formatting.formatEnumName
 import com.daniil.shevtsov.idle.core.presentation.formatting.formatRound
+import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.action.domain.Action
-import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
-import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
-import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
-import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
+import com.daniil.shevtsov.idle.feature.action.presentation.*
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.flavor.flavorMachine
@@ -21,10 +19,10 @@ import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
-import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
+import com.daniil.shevtsov.idle.feature.ratio.presentation.RatioModel
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
-import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMapper
+import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
@@ -43,17 +41,23 @@ fun mapMainViewState(
 private fun createMainViewState(state: MainFunctionalCoreState): MainViewState {
     return MainViewState.Success(
         resources = state.resources.filter { it.value > 0.0 }.map { resource ->
-            ResourceModelMapper.map(
-                resource = resource,
-                name = resource.name,
-            )
+            with(resource) {
+                ResourceModel(
+                    key = key,
+                    name = name,
+                    value = value.formatRound(),
+                    icon = key.chooseIcon(),
+                )
+            }
         },
         ratios = state.ratios.map { ratio ->
-            HumanityRatioModel(
+            RatioModel(
+                key = ratio.key,
                 title = formatEnumName(name = ratio.key.name),
                 name = getNameForRatio(ratio),
                 percent = ratio.value,
                 percentLabel = (ratio.value * 100).formatRound(digits = 2) + " %",
+                icon = ratio.key.chooseIcon(),
             )
         },
         actionState = createActionState(state.actions, state.resources, state.player, state),
@@ -156,6 +160,23 @@ private fun createMainViewState(state: MainFunctionalCoreState): MainViewState {
     )
 }
 
+private fun RatioKey.chooseIcon(): String {
+    return when (this) {
+        RatioKey.Mutanity -> Icons.Mutanity
+        RatioKey.Suspicion -> Icons.Suspicion
+    }
+}
+
+private fun ResourceKey.chooseIcon() = when (this) {
+    ResourceKey.Blood -> Icons.Blood
+    ResourceKey.Money -> Icons.Money
+    ResourceKey.HumanFood -> Icons.HumanFood
+    ResourceKey.Prisoner -> Icons.Prisoner
+    ResourceKey.Remains -> Icons.Remains
+    ResourceKey.FreshMeat -> Icons.FreshMeat
+    ResourceKey.Organs -> Icons.Organs
+}
+
 private fun satisfiesAllTagsRelations(
     tagRelations: Map<TagRelation, List<Tag>>,
     tags: List<Tag>,
@@ -201,17 +222,55 @@ private fun createActionState(
             )
         }
 
+    val models = availableActions.map { action ->
+        with(action) {
+            val isActive = resourceChanges.all { (resourceKey, resourceChange) ->
+                val currentResource = resources.find { it.key == resourceKey }!!.value
+                currentResource + resourceChange >= 0
+            }
+
+            ActionModel(
+                id = id,
+                title = title,
+                subtitle = subtitle,
+                icon = ActionIcon(
+                    value = when {
+                        tags[TagRelation.RequiredAll].orEmpty()
+                            .contains(Tags.HumanAppearance) -> Icons.Human
+                        else -> Icons.Monster
+                    }
+                ),
+                resourceChanges = resourceChanges.map { (resourceKey, changeValue) ->
+                    val formattedValue =
+                        ("+".takeIf { changeValue > 0 } ?: "") + changeValue.formatRound(digits = 2)
+                    ResourceChangeModel(
+                        icon = resourceKey.chooseIcon(),
+                        value = formattedValue,
+                    )
+                },
+                ratioChanges = ratioChanges.map { (ratioKey, changeValue) ->
+                    val formattedValue =
+                        ("+".takeIf { changeValue > 0 } ?: "") + (changeValue * 100).toDouble()
+                            .formatRound(digits = 2) + " %"
+                    RatioChangeModel(
+                        icon = ratioKey.chooseIcon(),
+                        value = formattedValue,
+                    )
+                },
+                isEnabled = isActive,
+            )
+        }
+    }
+        .sortedByDescending(ActionModel::isEnabled)
+
     return ActionsState(
         actionPanes = listOf(
             ActionPane(
-                actions = availableActions.prepareActionForDisplay(resources = resources)
+                actions = models
             ),
         ),
     )
 }
-
-private fun List<Action>.prepareActionForDisplay(resources: List<Resource>) =
-    map { it.toModel(resources) }.sortedByDescending(ActionModel::isEnabled)
 
 private fun getNameForRatio(ratio: Ratio) = when (ratio.key) {
     RatioKey.Mutanity -> getMutanityNameForRatio(ratio.value)
@@ -248,25 +307,6 @@ private fun Upgrade.mapStatus(resource: Double): UpgradeStatusModel {
         else -> UpgradeStatusModel.NotAffordable
     }
     return statusModel
-}
-
-private fun Action.toModel(resources: List<Resource>): ActionModel {
-    val isActive = resourceChanges.all { (resourceKey, resourceChange) ->
-        val currentResource = resources.find { it.key == resourceKey }!!.value
-        currentResource + resourceChange >= 0
-    }
-
-    return ActionModel(
-        id = id,
-        title = title,
-        subtitle = subtitle,
-        icon = when {
-            tags[TagRelation.RequiredAll].orEmpty()
-                .contains(Tags.HumanAppearance) -> ActionIcon.Human
-            else -> ActionIcon.Mutant
-        },
-        isEnabled = isActive,
-    )
 }
 
 private fun LocationSelectionState.toViewState(playerTags: List<Tag>) =

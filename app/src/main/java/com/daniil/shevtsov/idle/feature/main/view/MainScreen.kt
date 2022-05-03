@@ -13,10 +13,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.daniil.shevtsov.idle.core.ui.*
-import com.daniil.shevtsov.idle.core.ui.actionStatePreviewStub
+import com.daniil.shevtsov.idle.core.ui.Icons
+import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.debugViewState
-import com.daniil.shevtsov.idle.core.ui.resourceStubs
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.core.ui.widgets.CollapseButton
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
@@ -29,8 +28,9 @@ import com.daniil.shevtsov.idle.feature.location.view.LocationSelection
 import com.daniil.shevtsov.idle.feature.main.presentation.*
 import com.daniil.shevtsov.idle.feature.player.info.view.PlayerInfoComposable
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJobModel
-import com.daniil.shevtsov.idle.feature.ratio.presentation.humanityRatioModel
-import com.daniil.shevtsov.idle.feature.ratio.view.MutantRatioPane
+import com.daniil.shevtsov.idle.feature.ratio.presentation.ratioModel
+import com.daniil.shevtsov.idle.feature.ratio.view.RatioPane
+import com.daniil.shevtsov.idle.feature.resource.domain.resourceModel
 import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.upgrade.view.UpgradeList
@@ -92,12 +92,15 @@ fun MainDrawerDebugPreview() {
 fun MainPreview() {
     MainScreen(
         state = mainViewState(
-            resources = resourceStubs(),
-            ratios = listOf(
-                humanityRatioModel(title = "Mutanity", name = "Covert", percent = 0.75),
-                humanityRatioModel(title = "Suspicion", name = "Investigation", percent = 0.35),
+            resources = listOf(
+                resourceModel(name = "Blood", value = "10 000", icon = Icons.Blood),
+                resourceModel(name = "Money", value = "100", icon = Icons.Money),
             ),
-            actionState = actionStatePreviewStub(),
+            ratios = listOf(
+                ratioModel(title = "Mutanity", name = "Covert", percent = 0.75),
+                ratioModel(title = "Suspicion", name = "Investigation", percent = 0.35),
+            ),
+            actionState = actionsState(),
             upgradeState = upgradeViewState(),
             sectionCollapse = mapOf(
                 SectionKey.Resources to false,
@@ -256,10 +259,11 @@ fun ContentBody(
             }
         },
         sheetPeekHeight = 56.dp
-    ) {
+    ) { paddingValues ->
         Column(
             modifier = modifier
-                .background(Pallete.Red),
+                .background(Pallete.Red)
+                .padding(bottom = paddingValues.calculateBottomPadding()),
             verticalArrangement = Arrangement.Top,
         ) {
             Spacer(
@@ -289,44 +293,29 @@ fun ContentBody(
                         )
                     },
                 )
-                MutantRatioPane(state.ratios, modifier = modifier)
+                RatioPane(state.ratios, modifier = modifier)
             }
 
-            Column(
+            Cavity(
+                mainColor = Pallete.Red,
                 modifier = modifier
                     .weight(1f)
                     .background(Pallete.Red)
-                    .padding(4.dp)
+                    .padding(4.dp),
             ) {
-                fun hackyWeight(
-                    isCollapsed: Boolean
-                ): Modifier {
-                    return if (isCollapsed) {
-                        modifier
-                    } else {
-                        modifier.weight(0.5f, fill = false)
-                    }
-                }
-
-                val isActionsCollapsed = state.sectionCollapse[SectionKey.Actions] ?: false
-                Cavity(
-                    mainColor = Pallete.Red,
-                    modifier = hackyWeight(isCollapsed = isActionsCollapsed),
-                ) {
-                    ActionSection(
-                        state = state.actionState,
-                        isCollapsed = isActionsCollapsed,
-                        modifier = modifier,
-                        onToggleCollapse = {
-                            onViewAction(
-                                MainViewAction.ToggleSectionCollapse(
-                                    SectionKey.Actions
-                                )
+                ActionSection(
+                    state = state.actionState,
+                    isCollapsed = false,
+                    modifier = modifier,
+                    onToggleCollapse = {
+                        onViewAction(
+                            MainViewAction.ToggleSectionCollapse(
+                                SectionKey.Actions
                             )
-                        },
-                        onActionClicked = { id -> onViewAction(MainViewAction.ActionClicked(id)) },
-                    )
-                }
+                        )
+                    },
+                    onActionClicked = { id -> onViewAction(MainViewAction.ActionClicked(id)) },
+                )
             }
         }
     }

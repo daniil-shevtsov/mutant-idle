@@ -13,17 +13,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.cavitary
-import com.daniil.shevtsov.idle.core.ui.resourcePreviewStub
 import com.daniil.shevtsov.idle.core.ui.widgets.CollapsableColumn
+import com.daniil.shevtsov.idle.feature.resource.domain.resourceModel
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 
 @Preview
 @Composable
 fun ResourcePreview() {
     ResourcePanel(
-        resource = resourcePreviewStub()
+        resource = resourceModel(name = "Blood", value = "10 000", icon = Icons.Blood),
     )
 }
 
@@ -32,9 +33,9 @@ fun ResourcePreview() {
 fun ResourcePanePreview() {
     ResourcePane(
         resources = listOf(
-            resourcePreviewStub(),
-            resourcePreviewStub(),
-            resourcePreviewStub(),
+            resourceModel(name = "Blood", value = "10 000", icon = Icons.Blood),
+            resourceModel(name = "Money", value = "100", icon = Icons.Money),
+            resourceModel(name = "Prisoners", value = "1", icon = Icons.Prisoner),
         ),
         isCollapsed = false,
         onToggleCollapse = {},
@@ -71,6 +72,7 @@ fun ResourcePanel(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
+        Text(text = resource.icon, fontSize = 24.sp)
         Text(
             modifier = modifier.weight(0.35f),
             text = resource.name,

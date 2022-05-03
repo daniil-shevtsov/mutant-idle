@@ -4,10 +4,9 @@ import assertk.Assert
 import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
+import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.action.domain.action
-import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
-import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
-import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
+import com.daniil.shevtsov.idle.feature.action.presentation.*
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
@@ -25,12 +24,13 @@ import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
 import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
-import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
+import com.daniil.shevtsov.idle.feature.ratio.presentation.RatioModel
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
@@ -76,7 +76,7 @@ class MainPresentationTest {
                 extractingResourceNameAndValues()
                     .containsExactly("Blood" to "10", "Money" to "20")
                 extractingRatios()
-                    .extracting(HumanityRatioModel::title, HumanityRatioModel::percent)
+                    .extracting(RatioModel::title, RatioModel::percent)
                     .containsExactly("Mutanity" to 0.0, "Suspicion" to 0.0)
 
                 extractingMainState().all {
@@ -114,9 +114,9 @@ class MainPresentationTest {
             .extractingRatios()
             .index(0)
             .all {
-                prop(HumanityRatioModel::title).isEqualTo("Mutanity")
-                prop(HumanityRatioModel::percent).isEqualTo(0.105)
-                prop(HumanityRatioModel::percentLabel).isEqualTo("10.5 %")
+                prop(RatioModel::title).isEqualTo("Mutanity")
+                prop(RatioModel::percent).isEqualTo(0.105)
+                prop(RatioModel::percentLabel).isEqualTo("10.5 %")
             }
     }
 
@@ -136,6 +136,36 @@ class MainPresentationTest {
             .extractingResources()
             .extracting(ResourceModel::name)
             .containsExactly("Blood", "Money")
+    }
+
+    @Test
+    fun `should show correct icons for resources`() = runBlockingTest {
+        val state = mainFunctionalCoreState(
+            resources = listOf(
+                resource(key = ResourceKey.Blood, value = 1.0),
+                resource(key = ResourceKey.Money, value = 1.0),
+                resource(key = ResourceKey.HumanFood, value = 1.0),
+                resource(key = ResourceKey.Prisoner, value = 1.0),
+                resource(key = ResourceKey.Remains, value = 1.0),
+                resource(key = ResourceKey.FreshMeat, value = 1.0),
+                resource(key = ResourceKey.Organs, value = 1.0),
+            ),
+        )
+
+        val viewState = mapMainViewState(state = state)
+
+        assertThat(viewState)
+            .extractingResources()
+            .extracting(ResourceModel::key, ResourceModel::icon)
+            .containsExactly(
+                ResourceKey.Blood to Icons.Blood,
+                ResourceKey.Money to Icons.Money,
+                ResourceKey.HumanFood to Icons.HumanFood,
+                ResourceKey.Prisoner to Icons.Prisoner,
+                ResourceKey.Remains to Icons.Remains,
+                ResourceKey.FreshMeat to Icons.FreshMeat,
+                ResourceKey.Organs to Icons.Organs,
+            )
     }
 
     @Test
@@ -227,6 +257,25 @@ class MainPresentationTest {
             .extractingUpgrades()
             .extracting(UpgradeModel::id, UpgradeModel::status)
             .containsExactly(0L to UpgradeStatusModel.Bought)
+    }
+
+    @Test
+    fun `should show correct ratio icons`() = runBlockingTest {
+        val state = mainFunctionalCoreState(
+            ratios = listOf(
+                ratio(key = RatioKey.Mutanity),
+                ratio(key = RatioKey.Suspicion),
+            )
+        )
+        val viewState = mapMainViewState(state = state)
+
+        assertThat(viewState)
+            .extractingRatios()
+            .extracting(RatioModel::key, RatioModel::icon)
+            .containsExactly(
+                RatioKey.Mutanity to Icons.Mutanity,
+                RatioKey.Suspicion to Icons.Suspicion,
+            )
     }
 
     @Test
@@ -609,6 +658,97 @@ class MainPresentationTest {
     }
 
     @Test
+    fun `should show correct icon for human and monster actions`() = runBlockingTest {
+        val humanAction = action(
+            id = 1L,
+            tags = mapOf(TagRelation.RequiredAll to listOf(Tags.HumanAppearance))
+        )
+        val monsterAction = action(id = 2L)
+
+        val state = mainFunctionalCoreState(
+            actions = listOf(
+                humanAction,
+                monsterAction,
+            ),
+            player = player(generalTags = listOf(Tags.HumanAppearance)),
+        )
+
+        val viewState = mapMainViewState(state = state)
+
+        assertThat(viewState)
+            .extractingMainState()
+            .prop(MainViewState.Success::actionState)
+            .prop(ActionsState::actionPanes)
+            .index(0)
+            .prop(ActionPane::actions)
+            .extracting(ActionModel::id, ActionModel::icon)
+            .containsExactly(
+                humanAction.id to ActionIcon(Icons.Human),
+                monsterAction.id to ActionIcon(Icons.Monster),
+            )
+    }
+
+    @Test
+    fun `should display action resource changes`() = runBlockingTest {
+        val action = action(
+            id = 1L,
+            resourceChanges = mapOf(
+                ResourceKey.Blood to 10.0,
+                ResourceKey.Money to -5.0,
+            )
+        )
+        val state = mainFunctionalCoreState(
+            resources = listOf(
+                resource(key = ResourceKey.Blood, value = 1.0),
+                resource(key = ResourceKey.Money, value = 5.0),
+            ),
+            actions = listOf(action),
+        )
+
+        val viewState = mapMainViewState(state = state)
+
+        assertThat(viewState)
+            .extractingHumanActions()
+            .index(0)
+            .prop(ActionModel::resourceChanges)
+            .extracting(ResourceChangeModel::icon, ResourceChangeModel::value)
+            .containsExactly(
+                Icons.Blood to "+10",
+                Icons.Money to "-5",
+            )
+    }
+
+    @Test
+    fun `should display action ratio changes`() = runBlockingTest {
+        val action = action(
+            id = 1L,
+            ratioChanges = mapOf(
+                RatioKey.Mutanity to 0.5f,
+                RatioKey.Suspicion to -0.01f,
+            )
+        )
+        val state = mainFunctionalCoreState(
+            ratios = listOf(
+                ratio(key = RatioKey.Mutanity, value = 0.3),
+                ratio(key = RatioKey.Suspicion, value = 0.5),
+            ),
+            actions = listOf(action),
+        )
+
+        val viewState = mapMainViewState(state = state)
+
+        assertThat(viewState)
+            .extractingHumanActions()
+            .index(0)
+            .prop(ActionModel::ratioChanges)
+            .extracting(RatioChangeModel::icon, RatioChangeModel::value)
+            .containsExactly(
+                Icons.Mutanity to "+50 %",
+                Icons.Suspicion to "-1 %",
+            )
+    }
+
+    @Test
     fun `should replace placeholders in action description if has any`() = runBlockingTest {
         val tag = tag(name = "flavor tag")
         val flavoredDescription = "flavored"
@@ -730,14 +870,12 @@ class MainPresentationTest {
             .index(0)
             .prop(ActionPane::actions)
 
-    private fun Assert<HumanityRatioModel>.assertPercentage(expected: Double) =
-        prop(HumanityRatioModel::percent)
+    private fun Assert<RatioModel>.assertPercentage(expected: Double) =
+        prop(RatioModel::percent)
             .isCloseTo(expected, 0.00001)
 
-    private fun Assert<MainViewState>.extractingMutanity() =
-        extractingMainState()
-            .prop(MainViewState.Success::ratios)
-            .index(0)
+    private fun Assert<MainViewState>.extractingRatios() = extractingMainState()
+        .prop(MainViewState.Success::ratios)
 
     private fun Assert<MainViewState>.extractingSuspicion() =
         extractingMainState()
@@ -748,16 +886,13 @@ class MainPresentationTest {
         extractingMainState()
             .prop(MainViewState.Success::ratios)
             .index(0)
-            .prop(HumanityRatioModel::percent)
+            .prop(RatioModel::percent)
 
     private fun Assert<MainViewState>.extractingMutanityName() =
         extractingMainState()
             .prop(MainViewState.Success::ratios)
             .index(0)
-            .prop(HumanityRatioModel::name)
-
-    private fun Assert<MainViewState>.extractingRatios() = extractingMainState()
-        .prop(MainViewState.Success::ratios)
+            .prop(RatioModel::name)
 
 
     private fun Assert<MainViewState>.hasRatioName(expectedName: String) =
@@ -768,7 +903,7 @@ class MainPresentationTest {
         extractingMainState()
             .prop(MainViewState.Success::ratios)
             .index(1)
-            .prop(HumanityRatioModel::name)
+            .prop(RatioModel::name)
             .isEqualTo(expectedName)
 
     private fun Assert<MainViewState>.extractingResources() =

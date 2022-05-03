@@ -1,20 +1,28 @@
 package com.daniil.shevtsov.idle.feature.ratio.presentation
 
-data class HumanityRatioModel(
+import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
+
+data class RatioModel(
+    val key: RatioKey,
     val title: String,
     val name: String,
     val percent: Double,
     val percentLabel: String,
+    val icon: String,
 )
 
-fun humanityRatioModel(
+fun ratioModel(
+    key: RatioKey = RatioKey.Mutanity,
     title: String = "",
     name: String = "",
     percent: Double = 0.0,
     percentLabel: String = "",
-) = HumanityRatioModel(
+    icon: String = "",
+) = RatioModel(
+    key = key,
     title = title,
     name = name,
     percent = percent,
     percentLabel = percentLabel,
+    icon = icon,
 )
