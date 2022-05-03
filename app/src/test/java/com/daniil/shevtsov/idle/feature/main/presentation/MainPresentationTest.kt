@@ -142,6 +142,36 @@ class MainPresentationTest {
     }
 
     @Test
+    fun `should show correct icons for resources`() = runBlockingTest {
+        val state = mainFunctionalCoreState(
+            resources = listOf(
+                resource(key = ResourceKey.Blood, value = 1.0),
+                resource(key = ResourceKey.Money, value = 1.0),
+                resource(key = ResourceKey.HumanFood, value = 1.0),
+                resource(key = ResourceKey.Prisoner, value = 1.0),
+                resource(key = ResourceKey.Remains, value = 1.0),
+                resource(key = ResourceKey.FreshMeat, value = 1.0),
+                resource(key = ResourceKey.Organs, value = 1.0),
+            ),
+        )
+
+        val viewState = mapMainViewState(state = state)
+
+        assertThat(viewState)
+            .extractingResources()
+            .extracting(ResourceModel::key, ResourceModel::icon)
+            .containsExactly(
+                ResourceKey.Blood to Icons.Blood,
+                ResourceKey.Money to Icons.Money,
+                ResourceKey.HumanFood to Icons.HumanFood,
+                ResourceKey.Prisoner to Icons.Prisoner,
+                ResourceKey.Remains to Icons.Remains,
+                ResourceKey.FreshMeat to Icons.FreshMeat,
+                ResourceKey.Organs to Icons.Organs,
+            )
+    }
+
+    @Test
     fun `should only show upgrades if you have all requiredAll or at least one requiredAny tag`() =
         runBlockingTest {
             val availableTag = tag(name = "lol")

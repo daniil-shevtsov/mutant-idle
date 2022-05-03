@@ -3,20 +3,9 @@ package com.daniil.shevtsov.idle.core.ui
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
-import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.PriceModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
-
-internal fun resourcePreviewStub() = ResourceModel(
-    name = "Blood",
-    value = "10 000",
-)
-
-internal fun resourceStubs() = listOf(
-    ResourceModel(name = "Blood", value = "10 000"),
-    ResourceModel(name = "Money", value = "500"),
-)
 
 internal fun upgradePreviewStub(
     id: Long = 0L,
