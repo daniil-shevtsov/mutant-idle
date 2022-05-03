@@ -27,7 +27,7 @@ import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
 import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
-import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
+import com.daniil.shevtsov.idle.feature.ratio.presentation.RatioModel
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
@@ -79,7 +79,7 @@ class MainPresentationTest {
                 extractingResourceNameAndValues()
                     .containsExactly("Blood" to "10", "Money" to "20")
                 extractingRatios()
-                    .extracting(HumanityRatioModel::title, HumanityRatioModel::percent)
+                    .extracting(RatioModel::title, RatioModel::percent)
                     .containsExactly("Mutanity" to 0.0, "Suspicion" to 0.0)
 
                 extractingMainState().all {
@@ -117,9 +117,9 @@ class MainPresentationTest {
             .extractingRatios()
             .index(0)
             .all {
-                prop(HumanityRatioModel::title).isEqualTo("Mutanity")
-                prop(HumanityRatioModel::percent).isEqualTo(0.105)
-                prop(HumanityRatioModel::percentLabel).isEqualTo("10.5 %")
+                prop(RatioModel::title).isEqualTo("Mutanity")
+                prop(RatioModel::percent).isEqualTo(0.105)
+                prop(RatioModel::percentLabel).isEqualTo("10.5 %")
             }
     }
 
@@ -260,6 +260,25 @@ class MainPresentationTest {
             .extractingUpgrades()
             .extracting(UpgradeModel::id, UpgradeModel::status)
             .containsExactly(0L to UpgradeStatusModel.Bought)
+    }
+
+    @Test
+    fun `should show correct ratio icons`() = runBlockingTest {
+        val state = mainFunctionalCoreState(
+            ratios = listOf(
+                ratio(key = RatioKey.Mutanity),
+                ratio(key = RatioKey.Suspicion),
+            )
+        )
+        val viewState = mapMainViewState(state = state)
+
+        assertThat(viewState)
+            .extractingRatios()
+            .extracting(RatioModel::key, RatioModel::icon)
+            .containsExactly(
+                RatioKey.Mutanity to Icons.Mutanity,
+                RatioKey.Suspicion to Icons.Suspicion,
+            )
     }
 
     @Test
@@ -794,14 +813,12 @@ class MainPresentationTest {
             .index(0)
             .prop(ActionPane::actions)
 
-    private fun Assert<HumanityRatioModel>.assertPercentage(expected: Double) =
-        prop(HumanityRatioModel::percent)
+    private fun Assert<RatioModel>.assertPercentage(expected: Double) =
+        prop(RatioModel::percent)
             .isCloseTo(expected, 0.00001)
 
-    private fun Assert<MainViewState>.extractingMutanity() =
-        extractingMainState()
-            .prop(MainViewState.Success::ratios)
-            .index(0)
+    private fun Assert<MainViewState>.extractingRatios() = extractingMainState()
+        .prop(MainViewState.Success::ratios)
 
     private fun Assert<MainViewState>.extractingSuspicion() =
         extractingMainState()
@@ -812,16 +829,13 @@ class MainPresentationTest {
         extractingMainState()
             .prop(MainViewState.Success::ratios)
             .index(0)
-            .prop(HumanityRatioModel::percent)
+            .prop(RatioModel::percent)
 
     private fun Assert<MainViewState>.extractingMutanityName() =
         extractingMainState()
             .prop(MainViewState.Success::ratios)
             .index(0)
-            .prop(HumanityRatioModel::name)
-
-    private fun Assert<MainViewState>.extractingRatios() = extractingMainState()
-        .prop(MainViewState.Success::ratios)
+            .prop(RatioModel::name)
 
 
     private fun Assert<MainViewState>.hasRatioName(expectedName: String) =
@@ -832,7 +846,7 @@ class MainPresentationTest {
         extractingMainState()
             .prop(MainViewState.Success::ratios)
             .index(1)
-            .prop(HumanityRatioModel::name)
+            .prop(RatioModel::name)
             .isEqualTo(expectedName)
 
     private fun Assert<MainViewState>.extractingResources() =

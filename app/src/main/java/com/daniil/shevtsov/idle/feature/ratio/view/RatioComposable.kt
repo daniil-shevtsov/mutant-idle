@@ -5,22 +5,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.daniil.shevtsov.idle.core.ui.widgets.TitleWithProgress
-import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
-import com.daniil.shevtsov.idle.feature.ratio.presentation.humanityRatioModel
+import com.daniil.shevtsov.idle.feature.ratio.presentation.RatioModel
+import com.daniil.shevtsov.idle.feature.ratio.presentation.ratioModel
 
 @Preview
 @Composable
-fun MainPreview() {
-    MutantRatioPane(ratios = listOf(
-        humanityRatioModel(title = "Mutanity", name = "Covert", percent = 0.75, percentLabel = "75 %"),
-        humanityRatioModel(title = "Suspicion", name = "Investigation", percent = 0.35, percentLabel = "35 %"),
-    ))
+fun RatioPanePreview() {
+    RatioPane(
+        ratios = listOf(
+            ratioModel(title = "Mutanity", name = "Covert", percent = 0.75, percentLabel = "75 %"),
+            ratioModel(
+                title = "Suspicion",
+                name = "Investigation",
+                percent = 0.35,
+                percentLabel = "35 %"
+            ),
+        )
+    )
 }
 
 
 @Composable
-fun MutantRatioPane(
-    ratios: List<HumanityRatioModel>,
+fun RatioPane(
+    ratios: List<RatioModel>,
     modifier: Modifier = Modifier,
 ) {
     Column {

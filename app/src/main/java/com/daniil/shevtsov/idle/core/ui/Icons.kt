@@ -4,8 +4,25 @@ object Icons {
     val Human = "\uD83D\uDE42"
     val Monster = "\uD83D\uDC79"
 
+//    object Suspicion {
+//        val Unknown = "\uD83D\uDC64"
+//        val Rumors = "\uD83D\uDDE3️"
+//        val News = "\uD83D\uDCF0"
+//        val Investigation = "\uD83D\uDD75️\u200D♂️"
+//        val Manhunt = "\uD83D\uDE93"
+//    }
+
+//    object Mutanity {
+//        val Human = ""
+//        val Dormant = ""
+//        val Hidden = ""
+//        val Covert = "\uD83D\uDC79"
+//        val Honest = "\uD83E\uDEE0"
+//    }
+
     val Suspicion = "\uD83D\uDD75️\u200D♂️"
     val Mutanity = "\uD83E\uDEE0"
+
 
     val Blood = "\uD83E\uDE78"
     val Money = "\uD83D\uDCB0"

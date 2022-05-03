@@ -22,7 +22,7 @@ import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
-import com.daniil.shevtsov.idle.feature.ratio.presentation.HumanityRatioModel
+import com.daniil.shevtsov.idle.feature.ratio.presentation.RatioModel
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMapper
@@ -50,11 +50,13 @@ private fun createMainViewState(state: MainFunctionalCoreState): MainViewState {
             )
         },
         ratios = state.ratios.map { ratio ->
-            HumanityRatioModel(
+            RatioModel(
+                key = ratio.key,
                 title = formatEnumName(name = ratio.key.name),
                 name = getNameForRatio(ratio),
                 percent = ratio.value,
                 percentLabel = (ratio.value * 100).formatRound(digits = 2) + " %",
+                icon = getIconForRatio(ratio),
             )
         },
         actionState = createActionState(state.actions, state.resources, state.player, state),
@@ -155,6 +157,13 @@ private fun createMainViewState(state: MainFunctionalCoreState): MainViewState {
 
         ),
     )
+}
+
+fun getIconForRatio(ratio: Ratio): String {
+    return when (ratio.key) {
+        RatioKey.Mutanity -> Icons.Mutanity
+        RatioKey.Suspicion -> Icons.Suspicion
+    }
 }
 
 private fun satisfiesAllTagsRelations(

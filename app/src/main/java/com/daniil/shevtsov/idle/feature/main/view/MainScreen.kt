@@ -28,8 +28,8 @@ import com.daniil.shevtsov.idle.feature.location.view.LocationSelection
 import com.daniil.shevtsov.idle.feature.main.presentation.*
 import com.daniil.shevtsov.idle.feature.player.info.view.PlayerInfoComposable
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJobModel
-import com.daniil.shevtsov.idle.feature.ratio.presentation.humanityRatioModel
-import com.daniil.shevtsov.idle.feature.ratio.view.MutantRatioPane
+import com.daniil.shevtsov.idle.feature.ratio.presentation.ratioModel
+import com.daniil.shevtsov.idle.feature.ratio.view.RatioPane
 import com.daniil.shevtsov.idle.feature.resource.domain.resourceModel
 import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
@@ -97,8 +97,8 @@ fun MainPreview() {
                 resourceModel(name = "Money", value = "100", icon = Icons.Money),
             ),
             ratios = listOf(
-                humanityRatioModel(title = "Mutanity", name = "Covert", percent = 0.75),
-                humanityRatioModel(title = "Suspicion", name = "Investigation", percent = 0.35),
+                ratioModel(title = "Mutanity", name = "Covert", percent = 0.75),
+                ratioModel(title = "Suspicion", name = "Investigation", percent = 0.35),
             ),
             actionState = actionsState(),
             upgradeState = upgradeViewState(),
@@ -292,7 +292,7 @@ fun ContentBody(
                         )
                     },
                 )
-                MutantRatioPane(state.ratios, modifier = modifier)
+                RatioPane(state.ratios, modifier = modifier)
             }
 
             Column(
