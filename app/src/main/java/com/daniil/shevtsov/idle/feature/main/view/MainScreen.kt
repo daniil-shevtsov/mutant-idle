@@ -259,10 +259,11 @@ fun ContentBody(
             }
         },
         sheetPeekHeight = 56.dp
-    ) {
+    ) { paddingValues ->
         Column(
             modifier = modifier
-                .background(Pallete.Red),
+                .background(Pallete.Red)
+                .padding(bottom = paddingValues.calculateBottomPadding()),
             verticalArrangement = Arrangement.Top,
         ) {
             Spacer(
@@ -295,41 +296,26 @@ fun ContentBody(
                 RatioPane(state.ratios, modifier = modifier)
             }
 
-            Column(
+            Cavity(
+                mainColor = Pallete.Red,
                 modifier = modifier
                     .weight(1f)
                     .background(Pallete.Red)
-                    .padding(4.dp)
+                    .padding(4.dp),
             ) {
-                fun hackyWeight(
-                    isCollapsed: Boolean
-                ): Modifier {
-                    return if (isCollapsed) {
-                        modifier
-                    } else {
-                        modifier.weight(0.5f, fill = false)
-                    }
-                }
-
-                val isActionsCollapsed = state.sectionCollapse[SectionKey.Actions] ?: false
-                Cavity(
-                    mainColor = Pallete.Red,
-                    modifier = hackyWeight(isCollapsed = isActionsCollapsed),
-                ) {
-                    ActionSection(
-                        state = state.actionState,
-                        isCollapsed = isActionsCollapsed,
-                        modifier = modifier,
-                        onToggleCollapse = {
-                            onViewAction(
-                                MainViewAction.ToggleSectionCollapse(
-                                    SectionKey.Actions
-                                )
+                ActionSection(
+                    state = state.actionState,
+                    isCollapsed = false,
+                    modifier = modifier,
+                    onToggleCollapse = {
+                        onViewAction(
+                            MainViewAction.ToggleSectionCollapse(
+                                SectionKey.Actions
                             )
-                        },
-                        onActionClicked = { id -> onViewAction(MainViewAction.ActionClicked(id)) },
-                    )
-                }
+                        )
+                    },
+                    onActionClicked = { id -> onViewAction(MainViewAction.ActionClicked(id)) },
+                )
             }
         }
     }

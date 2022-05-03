@@ -103,7 +103,12 @@ fun ActionSection(
                     LazyVerticalGrid(
                         cells = GridCells.Fixed(count = 2),
                         modifier = modifier,
-                        contentPadding = PaddingValues(2.dp)
+                        contentPadding = PaddingValues(
+                            start = 2.dp,
+                            top = 2.dp,
+                            end = 2.dp,
+                            bottom = 30.dp
+                        )
                     ) {
                         items(actionPane.actions) { action ->
                             Action(
