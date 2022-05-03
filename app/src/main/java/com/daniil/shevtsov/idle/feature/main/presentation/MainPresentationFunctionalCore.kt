@@ -25,7 +25,7 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.presentation.RatioModel
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
-import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModelMapper
+import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
@@ -44,10 +44,14 @@ fun mapMainViewState(
 private fun createMainViewState(state: MainFunctionalCoreState): MainViewState {
     return MainViewState.Success(
         resources = state.resources.filter { it.value > 0.0 }.map { resource ->
-            ResourceModelMapper.map(
-                resource = resource,
-                name = resource.name,
-            )
+            with(resource) {
+                ResourceModel(
+                    key = key,
+                    name = name,
+                    value = value.formatRound(),
+                    icon = chooseIcon(),
+                )
+            }
         },
         ratios = state.ratios.map { ratio ->
             RatioModel(
@@ -56,7 +60,7 @@ private fun createMainViewState(state: MainFunctionalCoreState): MainViewState {
                 name = getNameForRatio(ratio),
                 percent = ratio.value,
                 percentLabel = (ratio.value * 100).formatRound(digits = 2) + " %",
-                icon = getIconForRatio(ratio),
+                icon = ratio.chooseIcon(),
             )
         },
         actionState = createActionState(state.actions, state.resources, state.player, state),
@@ -159,11 +163,21 @@ private fun createMainViewState(state: MainFunctionalCoreState): MainViewState {
     )
 }
 
-fun getIconForRatio(ratio: Ratio): String {
-    return when (ratio.key) {
+private fun Ratio.chooseIcon(): String {
+    return when (key) {
         RatioKey.Mutanity -> Icons.Mutanity
         RatioKey.Suspicion -> Icons.Suspicion
     }
+}
+
+private fun Resource.chooseIcon() = when (key) {
+    ResourceKey.Blood -> Icons.Blood
+    ResourceKey.Money -> Icons.Money
+    ResourceKey.HumanFood -> Icons.HumanFood
+    ResourceKey.Prisoner -> Icons.Prisoner
+    ResourceKey.Remains -> Icons.Remains
+    ResourceKey.FreshMeat -> Icons.FreshMeat
+    ResourceKey.Organs -> Icons.Organs
 }
 
 private fun satisfiesAllTagsRelations(
