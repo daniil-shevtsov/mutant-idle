@@ -10,16 +10,19 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.widgets.Collapsable
 import com.daniil.shevtsov.idle.feature.action.domain.actionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
+import com.daniil.shevtsov.idle.feature.action.presentation.resourceChangeModel
 import com.daniil.shevtsov.idle.feature.main.presentation.actionPane
 import com.daniil.shevtsov.idle.feature.main.presentation.actionsState
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -29,8 +32,8 @@ import com.google.accompanist.pager.HorizontalPager
 @Composable
 fun ActionPreview() {
     Column {
-        Action(action = actionModel(isEnabled = true))
-        Action(action = actionModel(isEnabled = false))
+        Action(action = actionComposeStub(isEnabled = true))
+        Action(action = actionComposeStub(isEnabled = false))
     }
 }
 
@@ -58,8 +61,8 @@ fun MutantActionPanePreview() {
             actionPanes = listOf(
                 actionPane(
                     actions = listOf(
-                        actionModel(id = 0L),
-                        actionModel(id = 1L),
+                        actionComposeStub(),
+                        actionComposeStub(),
                     )
                 )
             )
@@ -168,6 +171,38 @@ fun Action(
                 .padding(start = 4.dp)
                 .padding(bottom = 4.dp)
         )
+        Column(verticalArrangement = spacedBy(4.dp)) {
+            action.resourceChanges.forEach { resourceChange ->
+                Row(
+                    horizontalArrangement = spacedBy(4.dp),
+                    verticalAlignment = CenterVertically,
+                ) {
+                    Text(
+                        text = resourceChange.icon,
+                        fontSize = 16.sp,
+                    )
+                    Text(
+                        text = ("+".takeIf { resourceChange.value > 0 }
+                            ?: "") + resourceChange.value.toString(),
+                        color = Color.White,
+                        fontSize = 16.sp,
+                    )
+                }
+
+            }
+        }
     }
 
 }
+
+fun actionComposeStub(
+    isEnabled: Boolean = true,
+) = actionModel(
+    title = "Eat human food",
+    subtitle = "It's not enough",
+    resourceChanges = listOf(
+        resourceChangeModel(icon = Icons.Blood, value = 2.0),
+        resourceChangeModel(icon = Icons.HumanFood, value = -1.0),
+    ),
+    isEnabled = isEnabled,
+)
