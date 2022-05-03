@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.widgets.TitleWithProgress
 import com.daniil.shevtsov.idle.feature.ratio.presentation.RatioModel
 import com.daniil.shevtsov.idle.feature.ratio.presentation.ratioModel
@@ -13,12 +14,19 @@ import com.daniil.shevtsov.idle.feature.ratio.presentation.ratioModel
 fun RatioPanePreview() {
     RatioPane(
         ratios = listOf(
-            ratioModel(title = "Mutanity", name = "Covert", percent = 0.75, percentLabel = "75 %"),
+            ratioModel(
+                title = "Mutanity",
+                name = "Covert",
+                percent = 0.75,
+                percentLabel = "75 %",
+                icon = Icons.Mutanity,
+            ),
             ratioModel(
                 title = "Suspicion",
                 name = "Investigation",
                 percent = 0.35,
-                percentLabel = "35 %"
+                percentLabel = "35 %",
+                icon = Icons.Suspicion,
             ),
         )
     )
@@ -37,6 +45,7 @@ fun RatioPane(
                 name = model.percentLabel + " " + model.name,
                 progress = model.percent.toFloat(),
                 modifier = modifier,
+                icon = model.icon,
             )
         }
     }
