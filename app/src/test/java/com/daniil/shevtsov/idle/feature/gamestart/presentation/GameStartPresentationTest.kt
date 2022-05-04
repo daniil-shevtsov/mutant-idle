@@ -4,6 +4,7 @@ import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
+import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
 import org.junit.jupiter.api.Test
 
@@ -46,6 +47,31 @@ internal class GameStartPresentationTest {
                     prop(SpeciesSelectionItem::icon).isEqualTo(species2.icon)
                 }
             }
+    }
+
+    @Test
+    fun `should show selected species as selected`() {
+        val notSelectedSpecies = playerSpecies(id = 1L, title = "not selected species")
+        val selectedSpecies = playerSpecies(id = 2L, title = "selected species")
+        val state = gameState(
+            availableSpecies = listOf(
+                notSelectedSpecies,
+                selectedSpecies,
+            ),
+            player = player(
+                species = selectedSpecies,
+            )
+        )
+
+        val viewState = mapGameStartViewState(state = state)
+
+        assertThat(viewState)
+            .prop(GameStartViewState::speciesSelection)
+            .extracting(SpeciesSelectionItem::title, SpeciesSelectionItem::isSelected)
+            .containsExactly(
+                notSelectedSpecies.title to false,
+                selectedSpecies.title to true,
+            )
     }
 
 }

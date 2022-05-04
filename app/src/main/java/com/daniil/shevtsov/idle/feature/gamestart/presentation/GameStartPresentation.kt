@@ -10,7 +10,13 @@ fun mapGameStartViewState(
         description = "Choose species",
         speciesSelection = state.availableSpecies.map { species ->
             with(species) {
-                SpeciesSelectionItem(id = id, title = title, description = description, icon = icon)
+                SpeciesSelectionItem(
+                    id = id,
+                    title = title,
+                    description = description,
+                    icon = icon,
+                    isSelected = species.id == state.player.species.id,
+                )
             }
         }
     )
