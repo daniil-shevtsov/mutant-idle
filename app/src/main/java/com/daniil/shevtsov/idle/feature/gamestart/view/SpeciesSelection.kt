@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
@@ -34,13 +35,22 @@ fun SpeciesSelection(
             modifier = modifier
                 .background(Pallete.Red)
                 .padding(4.dp)
+                .cavitary(
+                    lightColor = Pallete.LightRed,
+                    darkColor = Pallete.DarkRed
+                )
+                .background(Pallete.DarkGray)
+                .padding(4.dp)
                 .fillMaxWidth()
                 .height(IntrinsicSize.Max),
-            horizontalArrangement = Arrangement.SpaceEvenly,
+            horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
         ) {
             (selection + selection + selection + selection).forEach { speciesItem ->
                 Column(
                     modifier = modifier
+                        .background(Pallete.LightRed)
+                        .padding(start = 1.dp, top = 1.dp)
+                        .background(Pallete.Red)
                         .width(100.dp)
                 ) {
                     Text(
@@ -52,6 +62,7 @@ fun SpeciesSelection(
                     Text(
                         modifier = modifier
                             .fillMaxHeight()
+                            .padding(4.dp)
                             .cavitary(
                                 lightColor = Pallete.LightRed,
                                 darkColor = Pallete.DarkRed
