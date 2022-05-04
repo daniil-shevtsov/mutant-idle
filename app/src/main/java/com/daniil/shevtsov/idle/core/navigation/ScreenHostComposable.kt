@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.daniil.shevtsov.idle.feature.gamefinish.view.FinishedGameScreen
+import com.daniil.shevtsov.idle.feature.gamestart.view.GameStartScreen
 import com.daniil.shevtsov.idle.feature.main.view.MainScreen
 
 @Composable
@@ -18,6 +19,11 @@ fun ScreenHostComposable(
     }
 
     when (val viewState = delegatedViewState) {
+        is ScreenViewState.GameStart -> {
+            GameStartScreen(
+                state = viewState.state
+            )
+        }
         is ScreenViewState.Main -> {
             MainScreen(
                 state = viewState.state,

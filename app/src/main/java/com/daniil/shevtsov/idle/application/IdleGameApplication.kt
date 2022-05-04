@@ -52,8 +52,8 @@ class IdleGameApplication : Application() {
                     locationSelectionState = createLocationSelectionState(),
                     flavors = createFlavors(),
                     player = createInitialPlayer(),
-                    currentScreen = Screen.Main,
-                    screenStack = listOf(Screen.Main),
+                    currentScreen = Screen.GameStart,
+                    screenStack = listOf(Screen.GameStart),
                 )
             )
     }
@@ -131,13 +131,13 @@ class IdleGameApplication : Application() {
     )
 
     private fun createInitialSpecies() = listOf(
+        Species.Devourer,
+        Species.Vampire,
+        Species.Shapeshifter,
+        Species.Parasite,
+        Species.Demon,
         Species.Alien,
         Species.Android,
-        Species.Demon,
-        Species.Devourer,
-        Species.Parasite,
-        Species.Shapeshifter,
-        Species.Vampire,
     )
 
 }

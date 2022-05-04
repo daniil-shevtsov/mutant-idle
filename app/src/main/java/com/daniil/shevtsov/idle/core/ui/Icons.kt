@@ -32,4 +32,11 @@ object Icons {
     val FreshMeat = "\uD83E\uDD69"
     val Organs = "\uD83E\uDEC1"
 
+    val Alien = "\uD83D\uDC7D"
+    val Android = "\uD83E\uDDBE"
+    val Shapeshifter = "\uD83E\uDD78"
+    val Demon = "\uD83D\uDE08"
+    val Devourer = "\uD83D\uDE2C"
+    val Parasite = "\uD83D\uDC7E"
+    val Vampire = "\uD83E\uDDDB"
 }
