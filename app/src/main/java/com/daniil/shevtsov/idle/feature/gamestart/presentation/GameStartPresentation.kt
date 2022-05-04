@@ -6,8 +6,8 @@ fun mapGameStartViewState(
     state: GameState
 ): GameStartViewState {
     return GameStartViewState(
-        title = "",
-        description = "",
+        title = "Mutant Idle",
+        description = "Choose species",
         speciesSelection = state.availableSpecies.map { species ->
             with(species) {
                 SpeciesSelectionItem(id = id, title = title, description = description, icon = icon)

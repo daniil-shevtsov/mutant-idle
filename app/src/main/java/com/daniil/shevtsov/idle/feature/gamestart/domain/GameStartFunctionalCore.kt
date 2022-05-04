@@ -13,6 +13,10 @@ fun gameStartFunctionalCore(
             state = state,
             viewAction = viewAction,
         )
+        is GameStartViewAction.StartGame -> handleStartGame(
+            state = state,
+            viewAction = viewAction,
+        )
     }
 }
 
@@ -26,6 +30,14 @@ private fun handleSpeciesSelected(
         player = state.player.copy(
             species = newSpecies,
         ),
+    )
+}
+
+fun handleStartGame(
+    state: GameState,
+    viewAction: GameStartViewAction.StartGame
+): GameState {
+    return state.copy(
         currentScreen = Screen.Main,
         screenStack = listOf(Screen.Main),
     )

@@ -76,25 +76,10 @@ internal class GameStartFunctionalCoreTest {
     }
 
     @Test
-    fun `should open main screen when species clicked`() {
-        val newSpecies = playerSpecies(
-            id = 1L,
-            title = "new species",
-            tags = listOf(
-                tag(name = "new species tag 1"),
-                tag(name = "new species tag 2"),
-            ),
-        )
-
-        val initialState = gameState(
-            availableSpecies = listOf(
-                newSpecies
-            ),
-        )
-
+    fun `should open main screen when start game clicked`() {
         val newState = gameStartFunctionalCore(
-            state = initialState,
-            viewAction = GameStartViewAction.SpeciesSelected(id = newSpecies.id)
+            state = gameState(),
+            viewAction = GameStartViewAction.StartGame,
         )
 
         assertThat(newState)

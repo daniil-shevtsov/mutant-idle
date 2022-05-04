@@ -23,7 +23,9 @@ import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.SpeciesSelectionItem
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.speciesSelectionItem
 
-@Preview(widthDp = 230)
+@Preview(
+    widthDp = 230,
+)
 @Composable
 fun SpeciesSelectionPreview() {
     SpeciesSelection(
@@ -38,17 +40,20 @@ fun SpeciesSelection(
     onItemClicked: (id: Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier.horizontalScroll(rememberScrollState())) {
+    Box(
+        modifier = modifier
+            .background(Pallete.Red)
+            .padding(4.dp)
+            .cavitary(
+                lightColor = Pallete.LightRed,
+                darkColor = Pallete.DarkRed
+            )
+            .background(Pallete.DarkGray)
+            .horizontalScroll(rememberScrollState())
+    ) {
         Row(
             modifier = modifier
-                .background(Pallete.Red)
-                .padding(4.dp)
-                .cavitary(
-                    lightColor = Pallete.LightRed,
-                    darkColor = Pallete.DarkRed
-                )
-                .background(Pallete.DarkGray)
-                .padding(4.dp)
+                .padding(horizontal = 4.dp, vertical = 8.dp)
                 .fillMaxWidth()
                 .height(IntrinsicSize.Max),
             horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
@@ -103,6 +108,7 @@ fun SpeciesSelection(
                             text = speciesItem.title,
                             textAlign = TextAlign.Center,
                             color = Color.White,
+                            fontSize = 18.sp,
                         )
                         Text(
                             modifier = modifier
@@ -115,6 +121,7 @@ fun SpeciesSelection(
                                 .background(Color.White)
                                 .padding(4.dp),
                             text = speciesItem.description,
+                            fontSize = 14.sp,
                         )
                     }
                 }
