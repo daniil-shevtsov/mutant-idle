@@ -5,5 +5,5 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 data class PlayerSpecies(
     val id: Long,
     val title: String,
-    val tags: List<Tag>
+    val tags: List<Tag>,
 )
