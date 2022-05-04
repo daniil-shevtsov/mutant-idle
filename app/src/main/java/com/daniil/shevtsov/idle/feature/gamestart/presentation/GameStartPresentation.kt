@@ -8,5 +8,10 @@ fun mapGameStartViewState(
     return GameStartViewState(
         title = "",
         description = "",
+        speciesSelection = state.availableSpecies.map { species ->
+            with(species) {
+                SpeciesSelectionItem(id = id, title = title)
+            }
+        }
     )
 }
