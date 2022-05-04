@@ -43,15 +43,15 @@ fun SpeciesSelection(
                 .padding(4.dp)
                 .fillMaxWidth()
                 .height(IntrinsicSize.Max),
-            horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
         ) {
-            (selection + selection + selection + selection).forEach { speciesItem ->
+            selection.forEach { speciesItem ->
                 Column(
                     modifier = modifier
                         .background(Pallete.LightRed)
                         .padding(start = 1.dp, top = 1.dp)
                         .background(Pallete.Red)
-                        .width(100.dp)
+                        .width(200.dp)
                 ) {
                     Text(
                         modifier = modifier.fillMaxWidth(),
