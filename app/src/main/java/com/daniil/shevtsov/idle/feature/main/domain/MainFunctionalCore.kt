@@ -82,7 +82,7 @@ fun handleLocationSelected(
 
 }
 
-fun handleSpeciesSelected(
+private fun handleSpeciesSelected(
     state: MainFunctionalCoreState,
     viewAction: MainViewAction.DebugSpeciesSelected
 ): MainFunctionalCoreState {

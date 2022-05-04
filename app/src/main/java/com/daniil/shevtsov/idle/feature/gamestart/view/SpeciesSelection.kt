@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.feature.gamestart.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement.SpaceBetween
@@ -26,13 +27,15 @@ import com.daniil.shevtsov.idle.feature.gamestart.presentation.speciesSelectionI
 @Composable
 fun SpeciesSelectionPreview() {
     SpeciesSelection(
-        selection = speciesSelectionComposeStub()
+        selection = speciesSelectionComposeStub(),
+        onItemClicked = {},
     )
 }
 
 @Composable
 fun SpeciesSelection(
     selection: List<SpeciesSelectionItem>,
+    onItemClicked: (id: Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.horizontalScroll(rememberScrollState())) {
@@ -93,6 +96,7 @@ fun SpeciesSelection(
                             .padding(start = 1.dp)
                             .background(Pallete.Red)
                             .width(200.dp)
+                            .clickable { onItemClicked(speciesItem.id) }
                     ) {
                         Text(
                             modifier = modifier.fillMaxWidth(),

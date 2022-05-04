@@ -1,3 +1,5 @@
 package com.daniil.shevtsov.idle.feature.gamestart.presentation
 
-class GameStartViewAction
+sealed class GameStartViewAction {
+    data class SpeciesSelected(val id: Long) : GameStartViewAction()
+}

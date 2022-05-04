@@ -21,7 +21,8 @@ fun ScreenHostComposable(
     when (val viewState = delegatedViewState) {
         is ScreenViewState.GameStart -> {
             GameStartScreen(
-                state = viewState.state
+                state = viewState.state,
+                onAction = { action -> viewModel.handleAction(ScreenViewAction.Start(action)) }
             )
         }
         is ScreenViewState.Main -> {
