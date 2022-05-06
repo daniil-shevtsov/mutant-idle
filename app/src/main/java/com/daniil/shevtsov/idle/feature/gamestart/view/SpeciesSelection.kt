@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
@@ -51,6 +52,7 @@ fun SpeciesSelection(
     ) {
         selection.forEachIndexed { index, item ->
             Column(
+                horizontalAlignment = CenterHorizontally,
                 modifier = if (item.isSelected) {
                     modifier
                         .background(Pallete.LightRed)
@@ -61,85 +63,56 @@ fun SpeciesSelection(
                                 else -> kek.padding(start = 1.dp, top = 1.dp, end = 1.dp)
                             }
                         }
-                        .background(Pallete.Red)
-                        .padding(4.dp)
                         .weight(1f)
                 } else {
                     modifier
                         .padding(bottom = 2.dp)
-                        .background(Pallete.Red)
-                        .padding(4.dp)
+//                        .background(Pallete.Red)
+//                        .padding(4.dp)
                         .weight(1f)
                 }
-                    .clickable { onItemClicked(item.id) },
+                    .clickable { onItemClicked(item.id) }
             ) {
-                Text(
-                    modifier = modifier.fillMaxWidth(),
-                    text = item.title,
-                    textAlign = TextAlign.Center,
-                    color = Color.White,
-                    fontSize = 18.sp,
-                )
-                Text(
+                Box(
                     modifier = modifier
-                        .fillMaxHeight()
-                        .padding(4.dp)
-                        .cavitary(
-                            lightColor = Pallete.LightRed,
-                            darkColor = Pallete.DarkRed
-                        )
-                        .background(Color.White)
+                        .size(35.dp)
+//                            .background(Pallete.LightRed)
+//                            .padding(start = 1.dp, top = 1.dp, end = 1.dp)
+                        .background(Pallete.Red),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = item.icon, fontSize = 24.sp)
+                }
+                Column(
+                    modifier = modifier
+                        .background(Pallete.Red)
                         .padding(4.dp),
-                    text = item.description,
-                    fontSize = 14.sp,
-                )
+                ) {
+                    Text(
+                        modifier = modifier.fillMaxWidth(),
+                        text = item.title,
+                        textAlign = TextAlign.Center,
+                        color = Color.White,
+                        fontSize = 18.sp,
+                    )
+                    Text(
+                        modifier = modifier
+                            .fillMaxHeight()
+                            .padding(4.dp)
+                            .cavitary(
+                                lightColor = Pallete.LightRed,
+                                darkColor = Pallete.DarkRed
+                            )
+                            .background(Color.White)
+                            .padding(4.dp),
+                        text = item.description,
+                        fontSize = 14.sp,
+                    )
+                }
             }
 
-//            Box(
-//                modifier =
-//
-//            )
         }
     }
-
-//    Box(
-//        modifier = modifier
-//            .background(Pallete.Red)
-//            .padding(4.dp)
-//            .cavitary(
-//                lightColor = Pallete.LightRed,
-//                darkColor = Pallete.DarkRed
-//            )
-//            .background(Pallete.DarkGray)
-//            .padding(top = 4.dp)
-//            .horizontalScroll(rememberScrollState())
-//    ) {
-//        Row(
-//            modifier = modifier
-//                .background(Pallete.Red)
-//                .padding(bottom = 4.dp)
-//                .background(Pallete.DarkGray)
-//                .height(IntrinsicSize.Max),
-//            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
-//        ) {
-//            selection.forEachIndexed { index, item ->
-//                Box(
-//                    modifier = modifier
-//                        .let { modifier ->
-//                            if(item.isSelected) {
-//                                modifier.background(Pallete.Red)
-//                            } else {
-//                                modifier
-//                            }
-//                        }
-//                        .padding(bottom = 2.dp)
-//                        .background(Pallete.Red)
-//                        .size(80.dp)
-//                )
-//            }
-//        }
-//    }
-
 //    Box(
 //        modifier = modifier
 //            .background(Pallete.Red)
