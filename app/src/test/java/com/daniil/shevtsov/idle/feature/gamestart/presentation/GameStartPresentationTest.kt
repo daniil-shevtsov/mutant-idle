@@ -6,6 +6,7 @@ import assertk.assertions.*
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
+import com.daniil.shevtsov.idle.feature.unlocks.domain.unlockState
 import org.junit.jupiter.api.Test
 
 internal class GameStartPresentationTest {
@@ -46,6 +47,34 @@ internal class GameStartPresentationTest {
                     prop(SpeciesSelectionItem::description).isEqualTo(species2.description)
                     prop(SpeciesSelectionItem::icon).isEqualTo(species2.icon)
                 }
+            }
+    }
+
+    @Test
+    fun `should show only unlocked species`() {
+        val unlockedSpecies = playerSpecies(id = 1L, title = "unlocked species")
+        val lockedSpecies = playerSpecies(id = 2L, title = "locked species")
+
+        val state = gameState(
+            availableSpecies = listOf(
+                unlockedSpecies,
+                lockedSpecies,
+            ),
+            unlockState = unlockState(
+                species = mapOf(
+                    unlockedSpecies.id to true,
+                    lockedSpecies.id to false,
+                )
+            )
+        )
+        val viewState = mapGameStartViewState(state)
+
+        assertThat(viewState)
+            .prop(GameStartViewState::speciesSelection)
+            .extracting(SpeciesSelectionItem::title)
+            .all {
+                contains(unlockedSpecies.title)
+                containsNone(lockedSpecies.title)
             }
     }
 

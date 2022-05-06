@@ -24,6 +24,7 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.createResources
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
+import com.daniil.shevtsov.idle.feature.unlocks.domain.UnlockState
 import com.daniil.shevtsov.idle.feature.upgrade.domain.createUpgrades
 import org.koin.core.Koin
 import timber.log.Timber
@@ -54,6 +55,14 @@ class IdleGameApplication : Application() {
                     player = createInitialPlayer(),
                     currentScreen = Screen.GameStart,
                     screenStack = listOf(Screen.GameStart),
+                    unlockState = UnlockState(
+                        species = createInitialSpecies().associate { species ->
+                            species.id to when (species) {
+                                Species.Devourer, Species.Vampire -> true
+                                else -> false
+                            }
+                        }
+                    )
                 )
             )
     }

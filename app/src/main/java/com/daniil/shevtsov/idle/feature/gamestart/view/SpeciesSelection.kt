@@ -204,7 +204,6 @@ fun SpeciesSelection(
     }
 }
 
-
 fun selectedStatesOfSpecies() = (0..2)
     .mapIndexed { index, selectedIndex ->
         speciesSelectionComposeStub(selectedIndex = selectedIndex)
