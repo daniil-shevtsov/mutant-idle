@@ -66,8 +66,16 @@ fun SpeciesSelection(
                 Box(
                     modifier = modifier
                         .size(35.dp)
-                        .background(Pallete.LightRed)
-                        .padding(start = 1.dp, top = 1.dp, end = 1.dp)
+                        .let { modifier ->
+                            if (item.isSelected) {
+                                modifier
+                                    .background(Pallete.LightRed)
+                                    .padding(start = 1.dp, top = 1.dp, end = 1.dp)
+                            } else {
+                                modifier
+                            }
+                        }
+
                         .background(Pallete.Red),
                     contentAlignment = Alignment.Center
                 ) {
@@ -90,18 +98,40 @@ fun SpeciesSelection(
                         modifier = modifier
                             .weight(1f)
                             .height(1.dp)
+                            .let { modifier ->
+                                if (item.isSelected) {
+                                    modifier
+                                } else {
+                                    modifier
+                                        .background(Pallete.Red)
+                                }
+                            }
                     )
                     Box(
                         modifier = modifier
                             .width(35.dp)
                             .height(1.dp)
-                            .padding(horizontal = 1.dp)
+                            .let { modifier ->
+                                if (item.isSelected) {
+                                    modifier.padding(horizontal = 1.dp)
+                                } else {
+                                    modifier
+                                }
+                            }
                             .background(Pallete.Red)
                     )
                     Box(
                         modifier = modifier
                             .weight(1f)
                             .height(1.dp)
+                            .let { modifier ->
+                                if (item.isSelected) {
+                                    modifier
+                                } else {
+                                    modifier
+                                        .background(Pallete.Red)
+                                }
+                            }
                     )
                 }
                 Column(
@@ -112,7 +142,7 @@ fun SpeciesSelection(
                                     .background(Pallete.LightRed)
                                     .let { kek ->
                                         when (index) {
-                                            0 -> kek.padding(top = 1.dp, end = 1.dp)
+                                            0 -> kek.padding(end = 1.dp)
                                             selection.size - 1 -> kek.padding(
                                                 start = 1.dp,
                                             )
@@ -158,7 +188,7 @@ fun SpeciesSelection(
 }
 
 
-fun selectedStatesOfSpecies() = (1..1)
+fun selectedStatesOfSpecies() = (0..2)
     .mapIndexed { index, selectedIndex ->
         speciesSelectionComposeStub(selectedIndex = selectedIndex)
     }
