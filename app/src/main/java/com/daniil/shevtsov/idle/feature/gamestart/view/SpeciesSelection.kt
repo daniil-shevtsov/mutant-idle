@@ -55,14 +55,6 @@ fun SpeciesSelection(
                 horizontalAlignment = CenterHorizontally,
                 modifier = if (item.isSelected) {
                     modifier
-                        .background(Pallete.LightRed)
-                        .let { kek ->
-                            when (index) {
-                                0 -> kek.padding(top = 1.dp, end = 1.dp)
-                                selection.size - 1 -> kek.padding(start = 1.dp, top = 1.dp)
-                                else -> kek.padding(start = 1.dp, top = 1.dp, end = 1.dp)
-                            }
-                        }
                         .weight(1f)
                 } else {
                     modifier
@@ -85,6 +77,29 @@ fun SpeciesSelection(
                 }
                 Column(
                     modifier = modifier
+                        .let { modifier ->
+                            if (item.isSelected) {
+                                modifier
+                                    .background(Pallete.LightRed)
+                                    .let { kek ->
+                                        when (index) {
+                                            0 -> kek.padding(top = 1.dp, end = 1.dp)
+                                            selection.size - 1 -> kek.padding(
+                                                start = 1.dp,
+                                                top = 1.dp
+                                            )
+                                            else -> kek.padding(
+                                                start = 1.dp,
+                                                top = 1.dp,
+                                                end = 1.dp
+                                            )
+                                        }
+                                    }
+                                    .background(Pallete.Red)
+                            } else {
+                                modifier
+                            }
+                        }
                         .background(Pallete.Red)
                         .padding(4.dp),
                 ) {
