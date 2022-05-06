@@ -4,6 +4,7 @@ import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.core.domain.balanceConfig
+import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
@@ -443,6 +444,27 @@ class MainFunctionalCoreTest {
             .prop(GameState::player)
             .prop(Player::generalTags)
             .containsExactly(newTag)
+    }
+
+    @Test
+    fun `should open finished screen if suspicion gained maximum value`() {
+        val state = gameState(
+            ratios = listOf(
+                ratio(key = RatioKey.Suspicion, value = 0.95),
+            ),
+            actions = listOf(
+                action(id = 1L, ratioChanges = mapOf(RatioKey.Suspicion to 0.05f))
+            )
+        )
+
+        val newState = mainFunctionalCore(
+            state = state,
+            viewAction = MainViewAction.ActionClicked(id = 1L)
+        )
+
+        assertThat(newState)
+            .prop(GameState::currentScreen)
+            .isEqualTo(Screen.FinishedGame)
     }
 
 }

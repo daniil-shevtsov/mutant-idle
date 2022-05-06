@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.feature.main.domain
 
+import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
@@ -159,10 +160,10 @@ fun handleActionClicked(
             player = state.player.copy(
                 generalTags = newTags
             ),
-//            currentScreen = when {
-//                updatedRatios.find { it.key == RatioKey.Suspicion }?.value ?: 0.0 >= 1.0 -> Screen.FinishedGame
-//                else -> state.currentScreen
-//            }
+            currentScreen = when {
+                updatedRatios.find { it.key == RatioKey.Suspicion }?.value ?: 0.0 >= 1.0 -> Screen.FinishedGame
+                else -> state.currentScreen
+            }
         )
     } else {
         state
