@@ -29,6 +29,7 @@ object Versions {
     const val navigationComponent = "2.3.5"
 
     const val shadow = "7.0.0"
+    const val snapper = "0.2.1"
 
     const val timber = "5.0.1"
     const val turbine = "0.6.1"
@@ -65,8 +66,11 @@ object Deps {
         const val foundationLayout =
             "androidx.compose.foundation:foundation-layout:${Versions.compose}"
         const val material = "androidx.compose.material:material:${Versions.compose}"
-        const val materialExtended = "androidx.compose.material:material-icons-extended:${Versions.compose}"
+        const val materialExtended =
+            "androidx.compose.material:material-icons-extended:${Versions.compose}"
         const val navigation = "androidx.navigation:navigation-compose:${Versions.navCompose}"
+
+        const val snapper = "dev.chrisbanes.snapper:snapper:${Versions.snapper}"
     }
 
     object Koin {
