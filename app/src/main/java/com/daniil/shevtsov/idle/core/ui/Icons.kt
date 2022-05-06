@@ -39,4 +39,6 @@ object Icons {
     val Devourer = "\uD83D\uDE2C"
     val Parasite = "\uD83D\uDC7E"
     val Vampire = "\uD83E\uDDDB"
+
+    val LockedCharacter = "\uD83D\uDC64"
 }

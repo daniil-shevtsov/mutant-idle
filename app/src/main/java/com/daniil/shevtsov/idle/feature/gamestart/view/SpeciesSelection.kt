@@ -22,7 +22,7 @@ import com.daniil.shevtsov.idle.feature.gamestart.presentation.SpeciesSelectionI
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.speciesSelectionItem
 
 @Preview(
-    widthDp = 450,
+    widthDp = 650,
     heightDp = 600
 )
 @Composable
@@ -94,7 +94,13 @@ fun SpeciesSelection(
                             .background(Pallete.Red),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(text = item.icon, fontSize = 24.sp)
+                        Text(
+                            text = when (item.isUnlocked) {
+                                true -> item.icon
+                                else -> Icons.LockedCharacter
+                            },
+                            fontSize = 24.sp
+                        )
                     }
                     Row(
                         modifier = modifier
@@ -177,7 +183,10 @@ fun SpeciesSelection(
                     ) {
                         Text(
                             modifier = modifier.fillMaxWidth(),
-                            text = item.title,
+                            text = when (item.isUnlocked) {
+                                true -> item.title
+                                else -> "Locked"
+                            },
                             textAlign = TextAlign.Center,
                             color = Color.White,
                             fontSize = 18.sp,
@@ -193,7 +202,10 @@ fun SpeciesSelection(
                                 .background(Color.White)
                                 .padding(4.dp)
                                 .width(110.dp),
-                            text = item.description,
+                            text = when (item.isUnlocked) {
+                                true -> item.description
+                                else -> "Do X to unlock this species"
+                            },
                             fontSize = 14.sp,
                         )
                     }
@@ -227,5 +239,12 @@ fun speciesSelectionComposeStub(selectedIndex: Int = 1) = listOf(
         icon = Icons.Alien,
         description = "You have crashed on this planet and need to find a way home",
         isSelected = selectedIndex == 2,
-    )
+    ),
+    speciesSelectionItem(
+        title = "Lol",
+        icon = Icons.Alien,
+        description = "Kek",
+        isSelected = false,
+        isUnlocked = false,
+    ),
 )
