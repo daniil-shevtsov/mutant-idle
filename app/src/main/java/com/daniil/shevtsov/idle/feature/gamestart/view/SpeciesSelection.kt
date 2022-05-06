@@ -1,14 +1,20 @@
 package com.daniil.shevtsov.idle.feature.gamestart.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.Pallete
+import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.SpeciesSelectionItem
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.speciesSelectionItem
 
@@ -44,7 +50,7 @@ fun SpeciesSelection(
             .height(IntrinsicSize.Max),
     ) {
         selection.forEachIndexed { index, item ->
-            Box(
+            Column(
                 modifier = if (item.isSelected) {
                     modifier
                         .background(Pallete.LightRed)
@@ -58,16 +64,41 @@ fun SpeciesSelection(
                         .background(Pallete.Red)
                         .padding(4.dp)
                         .weight(1f)
-                        .size(80.dp)
                 } else {
                     modifier
+                        .padding(bottom = 2.dp)
                         .background(Pallete.Red)
                         .padding(4.dp)
                         .weight(1f)
-                        .size(80.dp)
                 }
+                    .clickable { onItemClicked(item.id) },
+            ) {
+                Text(
+                    modifier = modifier.fillMaxWidth(),
+                    text = item.title,
+                    textAlign = TextAlign.Center,
+                    color = Color.White,
+                    fontSize = 18.sp,
+                )
+                Text(
+                    modifier = modifier
+                        .fillMaxHeight()
+                        .padding(4.dp)
+                        .cavitary(
+                            lightColor = Pallete.LightRed,
+                            darkColor = Pallete.DarkRed
+                        )
+                        .background(Color.White)
+                        .padding(4.dp),
+                    text = item.description,
+                    fontSize = 14.sp,
+                )
+            }
 
-            )
+//            Box(
+//                modifier =
+//
+//            )
         }
     }
 
