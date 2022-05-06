@@ -6,6 +6,7 @@ data class SpeciesSelectionItem(
     val description: String,
     val icon: String,
     val isSelected: Boolean,
+    val isUnlocked: Boolean,
 )
 
 fun speciesSelectionItem(
@@ -14,10 +15,12 @@ fun speciesSelectionItem(
     description: String = "",
     icon: String = "",
     isSelected: Boolean = false,
+    isUnlocked: Boolean = true,
 ) = SpeciesSelectionItem(
     id = id,
     title = title,
     description = description,
     icon = icon,
     isSelected = isSelected,
+    isUnlocked = isUnlocked,
 )

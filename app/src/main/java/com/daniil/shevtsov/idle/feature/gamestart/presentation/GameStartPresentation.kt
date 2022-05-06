@@ -16,6 +16,7 @@ fun mapGameStartViewState(
                     description = description,
                     icon = icon,
                     isSelected = species.id == state.player.species.id,
+                    isUnlocked = state.unlockState.species[species.id] == true,
                 )
             }
         }

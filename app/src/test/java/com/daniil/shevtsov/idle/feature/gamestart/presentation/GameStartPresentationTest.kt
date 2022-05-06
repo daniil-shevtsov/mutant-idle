@@ -51,7 +51,7 @@ internal class GameStartPresentationTest {
     }
 
     @Test
-    fun `should show only unlocked species`() {
+    fun `should mark locked species as locked`() {
         val unlockedSpecies = playerSpecies(id = 1L, title = "unlocked species")
         val lockedSpecies = playerSpecies(id = 2L, title = "locked species")
 
@@ -71,11 +71,11 @@ internal class GameStartPresentationTest {
 
         assertThat(viewState)
             .prop(GameStartViewState::speciesSelection)
-            .extracting(SpeciesSelectionItem::title)
-            .all {
-                contains(unlockedSpecies.title)
-                containsNone(lockedSpecies.title)
-            }
+            .extracting(SpeciesSelectionItem::title, SpeciesSelectionItem::isUnlocked)
+            .containsExactly(
+                unlockedSpecies.title to true,
+                lockedSpecies.title to false,
+            )
     }
 
     @Test
