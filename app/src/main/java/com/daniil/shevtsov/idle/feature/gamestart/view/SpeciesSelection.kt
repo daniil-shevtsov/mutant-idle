@@ -76,6 +76,7 @@ fun SpeciesSelection(
                             .padding(bottom = 2.dp)
                     }
                         .clickable { onItemClicked(item.id) }
+                        .width(IntrinsicSize.Min)
                 ) {
                     Box(
                         modifier = modifier
@@ -190,7 +191,8 @@ fun SpeciesSelection(
                                     darkColor = Pallete.DarkRed
                                 )
                                 .background(Color.White)
-                                .padding(4.dp),
+                                .padding(4.dp)
+                                .width(110.dp),
                             text = item.description,
                             fontSize = 14.sp,
                         )
