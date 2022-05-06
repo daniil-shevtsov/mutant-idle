@@ -13,6 +13,10 @@ fun gameStartFunctionalCore(
             state = state,
             viewAction = viewAction,
         )
+        is GameStartViewAction.JobSelected -> handleJobSelected(
+            state = state,
+            viewAction = viewAction,
+        )
         is GameStartViewAction.StartGame -> handleStartGame(
             state = state,
             viewAction = viewAction,
@@ -29,6 +33,19 @@ private fun handleSpeciesSelected(
     return state.copy(
         player = state.player.copy(
             species = newSpecies,
+        ),
+    )
+}
+
+private fun handleJobSelected(
+    state: GameState,
+    viewAction: GameStartViewAction.JobSelected,
+): GameState {
+    val newJob = state.availableJobs.find { it.id == viewAction.id }!!
+
+    return state.copy(
+        player = state.player.copy(
+            job = newJob,
         ),
     )
 }

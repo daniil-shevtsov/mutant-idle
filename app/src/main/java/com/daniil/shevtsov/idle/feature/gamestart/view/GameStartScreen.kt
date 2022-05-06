@@ -58,6 +58,10 @@ fun GameStartScreen(
             selection = state.speciesSelection,
             onItemClicked = { id -> onAction(GameStartViewAction.SpeciesSelected(id)) }
         )
+        SpeciesSelection(
+            selection = state.jobSelection,
+            onItemClicked = { id -> onAction(GameStartViewAction.JobSelected(id)) }
+        )
         Box(
             modifier = modifier
                 .cavitary(

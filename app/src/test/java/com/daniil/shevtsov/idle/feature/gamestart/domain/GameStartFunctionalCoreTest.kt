@@ -12,6 +12,7 @@ import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
+import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import org.junit.jupiter.api.Test
@@ -71,6 +72,63 @@ internal class GameStartFunctionalCoreTest {
                         containsSubList(nonSpeciesTags)
                         containsNone(previousPlayerState.species.tags)
                         containsSubList(newSpecies.tags)
+                    }
+            }
+    }
+
+    @Test
+    fun `should choose job when job clicked`() {
+        val nonJobTags = listOf(
+            tag(name = "non-species tag 1"),
+            tag(name = "non-species tag 2"),
+        )
+
+        val previousJob = playerJob(
+            id = 0L,
+            title = "old job",
+            tags = listOf(
+                tag(name = "old job tag 1"),
+                tag(name = "old job tag 2"),
+            )
+        )
+        val newJob = playerJob(
+            id = 1L,
+            title = "new job",
+            tags = listOf(
+                tag(name = "new job tag 1"),
+                tag(name = "new job tag 2"),
+            ),
+        )
+
+        val previousPlayerState = player(
+            job = previousJob,
+            generalTags = nonJobTags,
+        )
+
+        val initialState = gameState(
+            player = previousPlayerState,
+            availableJobs = listOf(
+                previousPlayerState.job,
+                newJob
+            ),
+        )
+
+        val newState = gameStartFunctionalCore(
+            state = initialState,
+            viewAction = GameStartViewAction.JobSelected(id = newJob.id)
+        )
+
+        assertThat(newState)
+            .prop(GameState::player)
+            .all {
+                prop(Player::job)
+                    .isEqualTo(newJob)
+
+                prop(Player::tags)
+                    .all {
+                        containsSubList(nonJobTags)
+                        containsNone(previousPlayerState.species.tags)
+                        containsSubList(newJob.tags)
                     }
             }
     }
