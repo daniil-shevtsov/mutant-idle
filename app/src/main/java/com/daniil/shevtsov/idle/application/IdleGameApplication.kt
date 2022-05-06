@@ -61,7 +61,13 @@ class IdleGameApplication : Application() {
                                 Species.Devourer, Species.Vampire -> true
                                 else -> false
                             }
-                        }
+                        },
+                        jobs = createInitialJobs().associate { job ->
+                            job.id to when (job) {
+                                Jobs.Unemployed -> true
+                                else -> false
+                            }
+                        },
                     )
                 )
             )

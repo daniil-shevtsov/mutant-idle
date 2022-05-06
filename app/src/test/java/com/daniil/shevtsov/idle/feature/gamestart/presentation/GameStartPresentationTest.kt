@@ -5,6 +5,7 @@ import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
+import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
 import com.daniil.shevtsov.idle.feature.unlocks.domain.unlockState
 import org.junit.jupiter.api.Test
@@ -100,6 +101,86 @@ internal class GameStartPresentationTest {
             .containsExactly(
                 notSelectedSpecies.title to false,
                 selectedSpecies.title to true,
+            )
+    }
+
+    @Test
+    fun `should show available job selection initially`() {
+        val job1 = playerJob(id = 1L, title = "job 1", description = "description 1")
+        val job2 = playerJob(id = 2L, title = "job 2", description = "description 2")
+        val state = gameState(
+            availableJobs = listOf(
+                job1,
+                job2,
+            )
+        )
+
+        val viewState = mapGameStartViewState(state = state)
+
+        assertThat(viewState)
+            .prop(GameStartViewState::jobSelection)
+            .all {
+                index(0).all {
+                    prop(SpeciesSelectionItem::title).isEqualTo(job1.title)
+                    prop(SpeciesSelectionItem::description).isEqualTo(job1.description)
+                }
+                index(1).all {
+                    prop(SpeciesSelectionItem::title).isEqualTo(job2.title)
+                    prop(SpeciesSelectionItem::description).isEqualTo(job2.description)
+                }
+            }
+    }
+
+    @Test
+    fun `should mark locked jobs as locked`() {
+        val unlockedJob = playerJob(id = 1L, title = "unlocked job")
+        val lockedJob = playerJob(id = 2L, title = "locked job")
+
+        val state = gameState(
+            availableJobs = listOf(
+                unlockedJob,
+                lockedJob,
+            ),
+            unlockState = unlockState(
+                jobs = mapOf(
+                    unlockedJob.id to true,
+                    lockedJob.id to false,
+                )
+            )
+        )
+        val viewState = mapGameStartViewState(state)
+
+        assertThat(viewState)
+            .prop(GameStartViewState::jobSelection)
+            .extracting(SpeciesSelectionItem::title, SpeciesSelectionItem::isUnlocked)
+            .containsExactly(
+                unlockedJob.title to true,
+                lockedJob.title to false,
+            )
+    }
+
+    @Test
+    fun `should show selected job as selected`() {
+        val notSelectedJob = playerJob(id = 1L, title = "not selected job")
+        val selectedJob = playerJob(id = 2L, title = "selected job")
+        val state = gameState(
+            availableJobs = listOf(
+                notSelectedJob,
+                selectedJob,
+            ),
+            player = player(
+                job = selectedJob,
+            )
+        )
+
+        val viewState = mapGameStartViewState(state = state)
+
+        assertThat(viewState)
+            .prop(GameStartViewState::jobSelection)
+            .extracting(SpeciesSelectionItem::title, SpeciesSelectionItem::isSelected)
+            .containsExactly(
+                notSelectedJob.title to false,
+                selectedJob.title to true,
             )
     }
 

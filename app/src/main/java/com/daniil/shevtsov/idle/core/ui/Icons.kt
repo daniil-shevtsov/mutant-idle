@@ -41,4 +41,5 @@ object Icons {
     val Vampire = "\uD83E\uDDDB"
 
     val LockedCharacter = "\uD83D\uDC64"
+    val Job = "\uD83D\uDCDD"
 }
