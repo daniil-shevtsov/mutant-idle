@@ -5,6 +5,7 @@ import com.daniil.shevtsov.idle.core.presentation.formatting.formatRound
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.presentation.*
+import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.flavor.flavorMachine
@@ -12,7 +13,6 @@ import com.daniil.shevtsov.idle.feature.location.domain.Location
 import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
-import com.daniil.shevtsov.idle.feature.main.domain.MainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.info.presentation.PlayerInfoState
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
@@ -33,12 +33,12 @@ import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModelMapper
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
 
 fun mapMainViewState(
-    state: MainFunctionalCoreState
+    state: GameState
 ): MainViewState {
     return createMainViewState(state)
 }
 
-private fun createMainViewState(state: MainFunctionalCoreState): MainViewState {
+private fun createMainViewState(state: GameState): MainViewState {
     return MainViewState.Success(
         resources = state.resources.filter { it.value > 0.0 }.map { resource ->
             with(resource) {
@@ -197,7 +197,7 @@ private fun createActionState(
     actions: List<Action>,
     resources: List<Resource>,
     player: Player,
-    state: MainFunctionalCoreState,
+    state: GameState,
 ): ActionsState {
     val availableActions = actions
         .filter { action ->
