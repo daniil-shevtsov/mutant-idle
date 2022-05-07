@@ -14,6 +14,8 @@ import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
+import com.daniil.shevtsov.idle.feature.unlocks.domain.UnlockState
+import com.daniil.shevtsov.idle.feature.unlocks.domain.unlockState
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test
 
@@ -154,6 +156,42 @@ internal class DrawerFunctionalCoreTest {
                 DrawerTabId.PlayerInfo to false,
                 DrawerTabId.Debug to true,
             )
+    }
+
+    @Test
+    fun `should unlock jobs and species if unlock everything clicked`() {
+        val lockedJob = playerJob(id = 1L, title = "locked job")
+        val unlockedJob = playerJob(id = 2L, title = "unlocked job")
+
+        val lockedSpecies = playerSpecies(id = 3L, title = "locked species")
+        val unlockedSpecies = playerSpecies(id = 4L, title = "unlocked species")
+
+        val initialState = gameState(
+            availableJobs = listOf(lockedJob, unlockedJob),
+            availableSpecies = listOf(lockedSpecies, unlockedSpecies),
+            unlockState = unlockState(
+                jobs = mapOf(lockedJob.id to false, unlockedJob.id to true),
+                species = mapOf(lockedSpecies.id to false, unlockedSpecies.id to true),
+            )
+        )
+
+        val newState = drawerFunctionalCore(
+            state = initialState,
+            viewAction = DrawerViewAction.Debug(DebugViewAction.UnlockEverything),
+        )
+
+        assertThat(newState)
+            .prop(GameState::unlockState)
+            .all {
+                prop(UnlockState::jobs).containsOnly(
+                    lockedJob.id to true,
+                    unlockedJob.id to true,
+                )
+                prop(UnlockState::species).containsOnly(
+                    lockedSpecies.id to true,
+                    unlockedSpecies.id to true,
+                )
+            }
     }
 
 }

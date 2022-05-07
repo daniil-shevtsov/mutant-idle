@@ -22,6 +22,10 @@ fun drawerFunctionalCore(
                 state = state,
                 viewAction = debugAction,
             )
+            is DebugViewAction.UnlockEverything -> unlockEverything(
+                state = state,
+                viewAction = debugAction,
+            )
         }
     }
 }
@@ -52,3 +56,13 @@ private fun handleSpeciesSelected(
         )
     )
 }
+
+private fun unlockEverything(
+    state: GameState,
+    viewAction: DebugViewAction.UnlockEverything
+) = state.copy(
+    unlockState = state.unlockState.copy(
+        species = state.availableSpecies.map { species -> species.id to true }.toMap(),
+        jobs = state.availableJobs.map { job -> job.id to true }.toMap(),
+    )
+)
