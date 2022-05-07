@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.feature.debug.presentation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
@@ -16,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.debugViewState
+import com.daniil.shevtsov.idle.core.ui.widgets.CavityButton
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJobModel
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpeciesModel
 
@@ -53,7 +55,7 @@ fun DebugComposable(
             .fillMaxSize()
             .wrapContentSize(Alignment.TopStart)
     ) {
-        Column {
+        Column(verticalArrangement = spacedBy(4.dp)) {
             SpeciesRow(
                 modifier = modifier,
                 state = state,
@@ -67,6 +69,10 @@ fun DebugComposable(
                 expanded1 = expanded1,
                 onExpandChange = { expanded1 = it },
                 onAction = onAction,
+            )
+            CavityButton(
+                onClick = { onAction(DebugViewAction.UnlockEverything) },
+                text = "Unlock everything",
             )
         }
     }
