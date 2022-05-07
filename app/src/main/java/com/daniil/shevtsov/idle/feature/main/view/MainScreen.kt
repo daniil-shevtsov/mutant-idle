@@ -111,6 +111,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainScreen(
     state: MainViewState,
+    modifier: Modifier = Modifier,
     onViewAction: (MainViewAction) -> Unit,
 ) {
     when (state) {
@@ -118,6 +119,7 @@ fun MainScreen(
         is MainViewState.Success -> SuccessContent(
             state = state,
             onViewAction = onViewAction,
+            modifier = modifier,
         )
     }
 
@@ -132,6 +134,7 @@ fun SuccessContent(
     ContentBody(
         state = state,
         onViewAction = onViewAction,
+        modifier = modifier,
     )
 }
 

@@ -7,6 +7,7 @@ import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import com.daniil.shevtsov.idle.feature.gamefinish.view.FinishedGameScreen
 import com.daniil.shevtsov.idle.feature.gamestart.view.GameStartScreen
 import com.daniil.shevtsov.idle.feature.main.view.MainDrawer
@@ -14,7 +15,8 @@ import com.daniil.shevtsov.idle.feature.main.view.MainScreen
 
 @Composable
 fun ScreenHostComposable(
-    viewModel: ScreenHostViewModel
+    viewModel: ScreenHostViewModel,
+    modifier: Modifier = Modifier,
 ) {
     val delegatedViewState by viewModel.state.collectAsState()
 
@@ -27,20 +29,23 @@ fun ScreenHostComposable(
         drawerState = drawerState,
         drawerContent = {
             MainDrawer(
-                delegatedViewState.drawerState,
-                { action -> viewModel.handleAction(ScreenViewAction.Drawer(action)) })
+                drawerState = delegatedViewState.drawerState,
+                modifier = modifier,
+                onViewAction = { action -> viewModel.handleAction(ScreenViewAction.Drawer(action)) })
         },
         content = {
             when (val contentViewState = delegatedViewState.contentState) {
                 is ScreenContentViewState.GameStart -> {
                     GameStartScreen(
                         state = contentViewState.state,
+                        modifier = modifier,
                         onAction = { action -> viewModel.handleAction(ScreenViewAction.Start(action)) }
                     )
                 }
                 is ScreenContentViewState.Main -> {
                     MainScreen(
                         state = contentViewState.state,
+                        modifier = modifier,
                         onViewAction = { action ->
                             viewModel.handleAction(
                                 ScreenViewAction.Main(
