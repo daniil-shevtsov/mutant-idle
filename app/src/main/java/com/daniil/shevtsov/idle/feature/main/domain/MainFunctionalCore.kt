@@ -1,5 +1,7 @@
 package com.daniil.shevtsov.idle.feature.main.domain
 
+import com.daniil.shevtsov.idle.core.navigation.Screen
+import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
@@ -7,9 +9,9 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 
 fun mainFunctionalCore(
-    state: MainFunctionalCoreState,
+    state: GameState,
     viewAction: MainViewAction,
-): MainFunctionalCoreState {
+): GameState {
     val newState = when (viewAction) {
         is MainViewAction.LocationSelected -> handleLocationSelected(
             state = state,
@@ -49,9 +51,9 @@ fun mainFunctionalCore(
 }
 
 fun handleLocationSelectionExpandChange(
-    state: MainFunctionalCoreState,
+    state: GameState,
     viewAction: MainViewAction.LocationSelectionExpandChange
-): MainFunctionalCoreState {
+): GameState {
     return state.copy(
         locationSelectionState = state.locationSelectionState.copy(
             isSelectionExpanded = !state.locationSelectionState.isSelectionExpanded,
@@ -60,9 +62,9 @@ fun handleLocationSelectionExpandChange(
 }
 
 fun handleLocationSelected(
-    state: MainFunctionalCoreState,
+    state: GameState,
     viewAction: MainViewAction.LocationSelected
-): MainFunctionalCoreState {
+): GameState {
     val selectedLocation = state.locationSelectionState.allLocations.find { it.id == viewAction.id }
 
     val oldTags = state.locationSelectionState.selectedLocation.tags[TagRelation.Provides].orEmpty()
@@ -82,10 +84,10 @@ fun handleLocationSelected(
 
 }
 
-fun handleSpeciesSelected(
-    state: MainFunctionalCoreState,
+private fun handleSpeciesSelected(
+    state: GameState,
     viewAction: MainViewAction.DebugSpeciesSelected
-): MainFunctionalCoreState {
+): GameState {
     val newSpecies = state.availableSpecies.find { it.id == viewAction.id }!!
 
     return state.copy(
@@ -96,9 +98,9 @@ fun handleSpeciesSelected(
 }
 
 fun handleDrawerTabSwitched(
-    state: MainFunctionalCoreState,
+    state: GameState,
     viewAction: MainViewAction.DrawerTabSwitched
-): MainFunctionalCoreState {
+): GameState {
     return state.copy(
         drawerTabs = state.drawerTabs.map { tab ->
             tab.copy(isSelected = tab.id == viewAction.id)
@@ -107,9 +109,9 @@ fun handleDrawerTabSwitched(
 }
 
 fun handleSectionCollapsed(
-    state: MainFunctionalCoreState,
+    state: GameState,
     viewAction: MainViewAction.ToggleSectionCollapse,
-): MainFunctionalCoreState {
+): GameState {
     return state.copy(
         sections = state.sections.map { section ->
             section.copy(
@@ -123,9 +125,9 @@ fun handleSectionCollapsed(
 }
 
 fun handleActionClicked(
-    state: MainFunctionalCoreState,
+    state: GameState,
     viewAction: MainViewAction.ActionClicked
-): MainFunctionalCoreState {
+): GameState {
     val selectedAction = state.actions.find { action -> action.id == viewAction.id }!!
 
     val hasInvalidChanges = selectedAction.resourceChanges.any { (resourceKey, resourceChange) ->
@@ -158,10 +160,10 @@ fun handleActionClicked(
             player = state.player.copy(
                 generalTags = newTags
             ),
-//            currentScreen = when {
-//                updatedRatios.find { it.key == RatioKey.Suspicion }?.value ?: 0.0 >= 1.0 -> Screen.FinishedGame
-//                else -> state.currentScreen
-//            }
+            currentScreen = when {
+                updatedRatios.find { it.key == RatioKey.Suspicion }?.value ?: 0.0 >= 1.0 -> Screen.FinishedGame
+                else -> state.currentScreen
+            }
         )
     } else {
         state
@@ -169,9 +171,9 @@ fun handleActionClicked(
 }
 
 fun handleUpgradeSelected(
-    state: MainFunctionalCoreState,
+    state: GameState,
     viewAction: MainViewAction.UpgradeSelected
-): MainFunctionalCoreState {
+): GameState {
     val upgradeToBuy = state.upgrades.find { upgrade -> upgrade.id == viewAction.id }!!
 
     val currentResource = state.resources.find { resource -> resource.key == ResourceKey.Blood }!!
@@ -236,9 +238,9 @@ fun handleUpgradeSelected(
 }
 
 fun handleDebugJobSelected(
-    state: MainFunctionalCoreState,
+    state: GameState,
     viewAction: MainViewAction.DebugJobSelected
-): MainFunctionalCoreState {
+): GameState {
     val newJob = state.availableJobs.find { it.id == viewAction.id }!!
 
     return state.copy(

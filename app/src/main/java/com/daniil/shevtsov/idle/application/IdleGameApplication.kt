@@ -24,6 +24,7 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.createResources
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
+import com.daniil.shevtsov.idle.feature.unlocks.domain.UnlockState
 import com.daniil.shevtsov.idle.feature.upgrade.domain.createUpgrades
 import org.koin.core.Koin
 import timber.log.Timber
@@ -52,8 +53,22 @@ class IdleGameApplication : Application() {
                     locationSelectionState = createLocationSelectionState(),
                     flavors = createFlavors(),
                     player = createInitialPlayer(),
-                    currentScreen = Screen.Main,
-                    screenStack = listOf(Screen.Main),
+                    currentScreen = Screen.GameStart,
+                    screenStack = listOf(Screen.GameStart),
+                    unlockState = UnlockState(
+                        species = createInitialSpecies().associate { species ->
+                            species.id to when (species) {
+                                Species.Devourer, Species.Vampire -> true
+                                else -> false
+                            }
+                        },
+                        jobs = createInitialJobs().associate { job ->
+                            job.id to when (job) {
+                                Jobs.Unemployed -> true
+                                else -> false
+                            }
+                        },
+                    )
                 )
             )
     }
@@ -131,13 +146,13 @@ class IdleGameApplication : Application() {
     )
 
     private fun createInitialSpecies() = listOf(
+        Species.Devourer,
+        Species.Vampire,
+        Species.Shapeshifter,
+        Species.Parasite,
+        Species.Demon,
         Species.Alien,
         Species.Android,
-        Species.Demon,
-        Species.Devourer,
-        Species.Parasite,
-        Species.Shapeshifter,
-        Species.Vampire,
     )
 
 }

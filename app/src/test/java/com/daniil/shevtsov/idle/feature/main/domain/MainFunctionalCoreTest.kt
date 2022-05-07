@@ -4,7 +4,10 @@ import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.core.domain.balanceConfig
+import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.action.domain.action
+import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
+import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
@@ -38,7 +41,7 @@ import org.junit.jupiter.api.Test
 class MainFunctionalCoreTest {
     @Test
     fun `should buy upgrade when clicked and affordable`() = runBlockingTest {
-        val initialState = mainFunctionalCoreState(
+        val initialState = gameState(
             balanceConfig = balanceConfig(
                 resourceSpentForFullMutant = 10.0
             ),
@@ -60,15 +63,15 @@ class MainFunctionalCoreTest {
 
         assertThat(newState)
             .all {
-                prop(MainFunctionalCoreState::upgrades)
+                prop(GameState::upgrades)
                     .extracting(Upgrade::id, Upgrade::status)
                     .containsExactly(0L to UpgradeStatus.Bought)
 
-                prop(MainFunctionalCoreState::resources)
+                prop(GameState::resources)
                     .extracting(Resource::key, Resource::value)
                     .containsExactly(ResourceKey.Blood to 6.0)
 
-                prop(MainFunctionalCoreState::ratios)
+                prop(GameState::ratios)
                     .extracting(Ratio::key, Ratio::value)
                     .containsExactly(RatioKey.Mutanity to 0.4)
             }
@@ -78,7 +81,7 @@ class MainFunctionalCoreTest {
     fun `should add tags provided by upgrade when upgrade bought`() = runBlockingTest {
         val providedTag = tag(name = "lol")
 
-        val initialState = mainFunctionalCoreState(
+        val initialState = gameState(
             resources = listOf(resource(key = ResourceKey.Blood, value = 1.0)),
             ratios = listOf(ratio(key = RatioKey.Mutanity)),
             upgrades = listOf(
@@ -96,7 +99,7 @@ class MainFunctionalCoreTest {
         )
 
         assertThat(newState)
-            .prop(MainFunctionalCoreState::player)
+            .prop(GameState::player)
             .prop(Player::tags)
             .containsExactly(providedTag)
     }
@@ -130,7 +133,7 @@ class MainFunctionalCoreTest {
             generalTags = nonJobTags
         )
 
-        val initialState = mainFunctionalCoreState(
+        val initialState = gameState(
             availableJobs = listOf(
                 previousPlayerState.job,
                 newJob
@@ -144,7 +147,7 @@ class MainFunctionalCoreTest {
         )
 
         assertThat(newState)
-            .prop(MainFunctionalCoreState::player)
+            .prop(GameState::player)
             .all {
                 prop(Player::job)
                     .isEqualTo(newJob)
@@ -187,7 +190,7 @@ class MainFunctionalCoreTest {
             generalTags = nonSpeciesTags,
         )
 
-        val initialState = mainFunctionalCoreState(
+        val initialState = gameState(
             player = previousPlayerState,
             availableSpecies = listOf(
                 previousPlayerState.species,
@@ -201,7 +204,7 @@ class MainFunctionalCoreTest {
         )
 
         assertThat(newState)
-            .prop(MainFunctionalCoreState::player)
+            .prop(GameState::player)
             .all {
                 prop(Player::species)
                     .isEqualTo(newSpecies)
@@ -234,7 +237,7 @@ class MainFunctionalCoreTest {
                 )
             )
 
-            val initialState = mainFunctionalCoreState(
+            val initialState = gameState(
                 resources = listOf(
                     resource(key = ResourceKey.Blood, value = 4.0),
                     resource(key = ResourceKey.Money, value = 8.0),
@@ -253,19 +256,19 @@ class MainFunctionalCoreTest {
 
             assertThat(newState)
                 .all {
-                    prop(MainFunctionalCoreState::resources)
+                    prop(GameState::resources)
                         .extracting(Resource::key, Resource::value)
                         .containsExactly(
                             ResourceKey.Blood to 6.0,
                             ResourceKey.Money to 1.0,
                         )
-                    prop(MainFunctionalCoreState::ratios)
+                    prop(GameState::ratios)
                         .extracting(Ratio::key, Ratio::value)
                         .containsExactly(
                             RatioKey.Mutanity to 5.0,
                             RatioKey.Suspicion to 4.0,
                         )
-                    prop(MainFunctionalCoreState::player)
+                    prop(GameState::player)
                         .prop(Player::tags)
                         .containsExactly(providedTag)
                 }
@@ -279,12 +282,12 @@ class MainFunctionalCoreTest {
             tags = mapOf(TagRelation.Provides to listOf(providedTag)),
         )
         val newState = mainFunctionalCore(
-            state = mainFunctionalCoreState(actions = listOf(action)),
+            state = gameState(actions = listOf(action)),
             viewAction = MainViewAction.ActionClicked(id = action.id),
         )
 
         assertThat(newState)
-            .prop(MainFunctionalCoreState::player)
+            .prop(GameState::player)
             .prop(Player::tags)
             .containsExactly(providedTag)
     }
@@ -297,7 +300,7 @@ class MainFunctionalCoreTest {
             tags = mapOf(TagRelation.Removes to listOf(tagToRemove)),
         )
         val newState = mainFunctionalCore(
-            state = mainFunctionalCoreState(
+            state = gameState(
                 player = player(generalTags = listOf(tagToRemove)),
                 actions = listOf(action),
             ),
@@ -305,14 +308,14 @@ class MainFunctionalCoreTest {
         )
 
         assertThat(newState)
-            .prop(MainFunctionalCoreState::player)
+            .prop(GameState::player)
             .prop(Player::tags)
             .containsNone(tagToRemove)
     }
 
     @Test
     fun `should select new tab when tab switched`() {
-        val initialState = mainFunctionalCoreState(
+        val initialState = gameState(
             drawerTabs = listOf(
                 drawerTab(id = DrawerTabId.PlayerInfo, isSelected = true),
                 drawerTab(id = DrawerTabId.Debug, isSelected = false),
@@ -325,7 +328,7 @@ class MainFunctionalCoreTest {
         )
 
         assertThat(newState)
-            .prop(MainFunctionalCoreState::drawerTabs)
+            .prop(GameState::drawerTabs)
             .extracting(DrawerTab::id, DrawerTab::isSelected)
             .containsExactly(
                 DrawerTabId.PlayerInfo to false,
@@ -335,7 +338,7 @@ class MainFunctionalCoreTest {
 
     @Test
     fun `should switch section collapsed state when clicked`() {
-        val initialState = mainFunctionalCoreState(
+        val initialState = gameState(
             sections = listOf(
                 sectionState(key = SectionKey.Resources, isCollapsed = false),
                 sectionState(key = SectionKey.Actions, isCollapsed = false),
@@ -348,7 +351,7 @@ class MainFunctionalCoreTest {
         )
 
         assertThat(firstState)
-            .prop(MainFunctionalCoreState::sections)
+            .prop(GameState::sections)
             .extracting(SectionState::key, SectionState::isCollapsed)
             .containsExactly(
                 SectionKey.Resources to true,
@@ -361,7 +364,7 @@ class MainFunctionalCoreTest {
         )
 
         assertThat(secondState)
-            .prop(MainFunctionalCoreState::sections)
+            .prop(GameState::sections)
             .extracting(SectionState::key, SectionState::isCollapsed)
             .containsExactly(
                 SectionKey.Resources to false,
@@ -372,7 +375,7 @@ class MainFunctionalCoreTest {
     @Test
     fun `should change location selection expanded state when switched`() {
         val stateAfterFirstSwitch = mainFunctionalCore(
-            state = mainFunctionalCoreState(
+            state = gameState(
                 locationSelectionState = locationSelectionState(
                     isSelectionExpanded = false,
                 )
@@ -380,7 +383,7 @@ class MainFunctionalCoreTest {
             viewAction = MainViewAction.LocationSelectionExpandChange,
         )
         assertThat(stateAfterFirstSwitch)
-            .prop(MainFunctionalCoreState::locationSelectionState)
+            .prop(GameState::locationSelectionState)
             .prop(LocationSelectionState::isSelectionExpanded)
             .isEqualTo(true)
 
@@ -389,7 +392,7 @@ class MainFunctionalCoreTest {
             viewAction = MainViewAction.LocationSelectionExpandChange,
         )
         assertThat(stateAfterSecondSwitch)
-            .prop(MainFunctionalCoreState::locationSelectionState)
+            .prop(GameState::locationSelectionState)
             .prop(LocationSelectionState::isSelectionExpanded)
             .isEqualTo(false)
     }
@@ -399,7 +402,7 @@ class MainFunctionalCoreTest {
         val location = location(id = 1L, title = "lol")
 
         val state = mainFunctionalCore(
-            state = mainFunctionalCoreState(
+            state = gameState(
                 locationSelectionState = locationSelectionState(
                     allLocations = listOf(location)
                 )
@@ -408,7 +411,7 @@ class MainFunctionalCoreTest {
         )
 
         assertThat(state)
-            .prop(MainFunctionalCoreState::locationSelectionState)
+            .prop(GameState::locationSelectionState)
             .prop(LocationSelectionState::selectedLocation)
             .isEqualTo(location)
     }
@@ -429,7 +432,7 @@ class MainFunctionalCoreTest {
         )
 
         val state = mainFunctionalCore(
-            state = mainFunctionalCoreState(
+            state = gameState(
                 locationSelectionState = locationSelectionState(
                     allLocations = listOf(oldLocation, newLocation)
                 )
@@ -438,9 +441,30 @@ class MainFunctionalCoreTest {
         )
 
         assertThat(state)
-            .prop(MainFunctionalCoreState::player)
+            .prop(GameState::player)
             .prop(Player::generalTags)
             .containsExactly(newTag)
+    }
+
+    @Test
+    fun `should open finished screen if suspicion gained maximum value`() {
+        val state = gameState(
+            ratios = listOf(
+                ratio(key = RatioKey.Suspicion, value = 0.95),
+            ),
+            actions = listOf(
+                action(id = 1L, ratioChanges = mapOf(RatioKey.Suspicion to 0.05f))
+            )
+        )
+
+        val newState = mainFunctionalCore(
+            state = state,
+            viewAction = MainViewAction.ActionClicked(id = 1L)
+        )
+
+        assertThat(newState)
+            .prop(GameState::currentScreen)
+            .isEqualTo(Screen.FinishedGame)
     }
 
 }

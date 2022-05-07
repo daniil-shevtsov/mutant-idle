@@ -6,10 +6,12 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 fun playerJob(
     id: Long = 0L,
     title: String = "",
+    description: String = "",
     tags: List<Tag> = emptyList(),
 ) = PlayerJob(
     id = id,
     title = title,
+    description = description,
     tags = tags,
 )
 

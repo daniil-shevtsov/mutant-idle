@@ -4,7 +4,7 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 
 object Jobs {
 
-    val Mortician = PlayerJob(
+    val Mortician = playerJob(
         id = 0L,
         title = "Mortician",
         tags = listOf(
@@ -14,7 +14,7 @@ object Jobs {
         )
     )
 
-    val Undertaker = PlayerJob(
+    val Undertaker = playerJob(
         id = 1L,
         title = "Undertaker",
         tags = listOf(
@@ -23,7 +23,7 @@ object Jobs {
         )
     )
 
-    val Butcher = PlayerJob(
+    val Butcher = playerJob(
         id = 2L,
         title = "Butcher",
         tags = listOf(
@@ -32,9 +32,10 @@ object Jobs {
         )
     )
 
-    val Unemployed = PlayerJob(
+    val Unemployed = playerJob(
         id = 3L,
         title = "Unemployed",
+        description = "You don't have a job",
         tags = listOf(),
     )
 

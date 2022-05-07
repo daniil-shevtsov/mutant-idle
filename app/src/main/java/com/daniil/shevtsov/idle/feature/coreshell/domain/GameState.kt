@@ -16,6 +16,8 @@ import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
 import com.daniil.shevtsov.idle.feature.player.species.domain.PlayerSpecies
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
+import com.daniil.shevtsov.idle.feature.unlocks.domain.UnlockState
+import com.daniil.shevtsov.idle.feature.unlocks.domain.unlockState
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 
 data class GameState(
@@ -34,6 +36,7 @@ data class GameState(
     val player: Player,
     val currentScreen: Screen,
     val screenStack: List<Screen>,
+    val unlockState: UnlockState,
 )
 
 fun gameState(
@@ -52,6 +55,7 @@ fun gameState(
     player: Player = player(),
     currentScreen: Screen = Screen.Main,
     screenStack: List<Screen> = emptyList(),
+    unlockState: UnlockState = unlockState(),
 ) = GameState(
     balanceConfig = balanceConfig,
     resources = resources,
@@ -68,4 +72,5 @@ fun gameState(
     player = player,
     currentScreen = currentScreen,
     screenStack = screenStack,
+    unlockState = unlockState,
 )
