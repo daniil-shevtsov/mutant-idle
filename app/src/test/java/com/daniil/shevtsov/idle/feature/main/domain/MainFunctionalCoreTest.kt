@@ -325,4 +325,9 @@ class MainFunctionalCoreTest {
             .isEqualTo(Screen.FinishedGame)
     }
 
+    @Test
+    fun `should use ship repair as alien's main ratio`() {
+        
+    }
+
 }
