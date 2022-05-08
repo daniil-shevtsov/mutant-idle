@@ -1,5 +1,8 @@
 package com.daniil.shevtsov.idle.feature.player.trait.domain
 
+import com.daniil.shevtsov.idle.core.ui.Icons
+import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
+import com.daniil.shevtsov.idle.feature.player.species.domain.PlayerSpecies
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 
 data class PlayerTrait(
@@ -10,6 +13,22 @@ data class PlayerTrait(
     val tags: List<Tag>,
     val icon: String? = null,
 )
+
+fun PlayerTrait.toSpecies() = PlayerSpecies(
+    id = id,
+    icon = icon ?: Icons.TraitDefault,
+    title = title,
+    description = description,
+    tags = tags,
+)
+
+fun PlayerTrait.toJob() = PlayerJob(
+    id = id,
+    title = title,
+    description = description,
+    tags = tags,
+)
+
 
 fun playerTrait(
     id: Long = 0L,
