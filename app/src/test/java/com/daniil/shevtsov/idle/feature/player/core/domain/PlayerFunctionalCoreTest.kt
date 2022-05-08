@@ -14,6 +14,18 @@ import org.junit.jupiter.api.Test
 internal class PlayerFunctionalCoreTest {
 
     @Test
+    fun `should add selected trait tags in player tags`() {
+        val jobTag = tag(name = "job tag")
+        val speciesTag = tag(name = "species tag")
+        val player = player(
+            traits = mapOf(
+                TraitId.Job to playerTrait(tags = listOf(jobTag)),
+                TraitId.Species to playerTrait(tags = listOf(speciesTag)),
+            )
+        )
+    }
+
+    @Test
     fun `should update player traits when trait selected`() {
         val initialPlayerTrait = playerTrait(id = 1L)
         val newPlayerTrait = playerTrait(id = 2L)
@@ -49,7 +61,8 @@ internal class PlayerFunctionalCoreTest {
 
     @Test
     fun `should replace previous trait tags with the new ones`() {
-        val initialPlayerTrait = playerTrait(id = 1L, tags = listOf(tag(name = "initial trait tag")))
+        val initialPlayerTrait =
+            playerTrait(id = 1L, tags = listOf(tag(name = "initial trait tag")))
         val newPlayerTrait = playerTrait(id = 2L, tags = listOf(tag(name = "new trait tag")))
 
         val initialPlayer = player(

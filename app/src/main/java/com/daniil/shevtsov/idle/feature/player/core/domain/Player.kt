@@ -13,5 +13,5 @@ data class Player(
     val generalTags: List<Tag>,
 ) {
     val tags: List<Tag>
-        get() = generalTags + job.tags + species.tags
+        get() = generalTags + job.tags + species.tags + traits.values.map { it.tags }.flatten()
 }
