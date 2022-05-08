@@ -4,13 +4,13 @@ import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 
 data class UnlockState(
     var species: Map<Long, Boolean>,
-    val jobs: Map<Long, Boolean>,
+    var jobs: Map<Long, Boolean>,
     val traits: Map<TraitId, Map<Long, Boolean>>,
 ) {
     init {
-        species = when (traits.isNotEmpty()) {
-            true -> traits[TraitId.Species]!!
-            false -> species
+        if(traits.isNotEmpty()) {
+            species = traits[TraitId.Species]!!
+            jobs = traits[TraitId.Job]!!
         }
     }
 }
