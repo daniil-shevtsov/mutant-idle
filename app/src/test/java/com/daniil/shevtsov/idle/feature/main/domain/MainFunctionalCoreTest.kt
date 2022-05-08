@@ -326,8 +326,10 @@ class MainFunctionalCoreTest {
     }
 
     @Test
-    fun `should use ship repair as alien's main ratio`() {
-        
+    fun `should use mutanity as main ratio by default`() {
+        val state = gameState(
+            ratios = listOf(ratio(key = RatioKey.Mutanity))
+        )
     }
 
 }
