@@ -3,6 +3,8 @@ package com.daniil.shevtsov.idle.feature.gamestart.domain
 import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
+import com.daniil.shevtsov.idle.feature.player.core.domain.PlayerViewAction
+import com.daniil.shevtsov.idle.feature.player.core.domain.playerFunctionalCore
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 
 fun gameStartFunctionalCore(
@@ -60,7 +62,12 @@ private fun handleJobSelected(
                 job = newJob,
                 traits = newTraits,
             ),
-        )
+        ).let { state ->
+            playerFunctionalCore(
+                state = state,
+                action = PlayerViewAction.ChangeTrait(traitId = newTrait.traitId, id = viewAction.id),
+            )
+        }
         else -> state
     }
 }
