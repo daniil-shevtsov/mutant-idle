@@ -4,7 +4,7 @@ data class TraitSelectionItem(
     val id: Long,
     val title: String,
     val description: String,
-    val icon: String,
+    val icon: String?,
     val isSelected: Boolean,
     val isUnlocked: Boolean,
 )
