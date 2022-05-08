@@ -10,7 +10,7 @@ fun mapGameStartViewState(
     return GameStartViewState(
         title = "Mutant Idle",
         description = "Choose species and job",
-        speciesSelection = state.availableSpecies.map { species ->
+        speciesSelection = state.speciesTraits.map { species ->
             with(species) {
                 TraitSelectionItem(
                     id = id,
