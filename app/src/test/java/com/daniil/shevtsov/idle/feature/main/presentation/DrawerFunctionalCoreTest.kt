@@ -57,7 +57,7 @@ internal class DrawerFunctionalCoreTest {
 
         val initialState = gameState(
             availableJobs = listOf(
-                previousPlayerState.job,
+                previousJob,
                 newJob
             ),
             player = previousPlayerState,
@@ -76,7 +76,7 @@ internal class DrawerFunctionalCoreTest {
                 prop(Player::tags)
                     .all {
                         containsSubList(nonJobTags)
-                        containsNone(previousPlayerState.job.tags)
+                        containsNone(previousJob.tags)
                         containsSubList(newJob.tags)
                     }
             }

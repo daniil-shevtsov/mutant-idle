@@ -33,7 +33,7 @@ internal class GameStartFunctionalCoreTest {
         val initialState = gameState(
             player = initialPlayer,
             availableJobs = listOf(
-                initialPlayer.job,
+                currentJob,
                 newJob,
             ),
             unlockState = unlockState(
