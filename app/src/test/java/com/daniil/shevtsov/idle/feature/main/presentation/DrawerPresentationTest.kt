@@ -16,6 +16,7 @@ import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
 import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
+import com.daniil.shevtsov.idle.feature.player.trait.domain.toPlayerTrait
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test
 
@@ -32,6 +33,11 @@ internal class DrawerPresentationTest {
         val state = gameState(
             drawerTabs = listOf(drawerTab(id = DrawerTabId.Debug, isSelected = true)),
             availableJobs = availableJobs,
+            availableTraits = listOf(
+                playerJob(id = 0L).toPlayerTrait(),
+                playerJob(id = 1L).toPlayerTrait(),
+                playerJob(id = 2L).toPlayerTrait(),
+            )
         )
 
         val viewState = drawerPresentation(state = state)
