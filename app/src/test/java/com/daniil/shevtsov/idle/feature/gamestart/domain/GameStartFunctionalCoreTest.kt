@@ -175,7 +175,7 @@ internal class GameStartFunctionalCoreTest {
         val initialState = gameState(
             player = previousPlayerState,
             availableJobs = listOf(
-                previousPlayerState.job,
+                previousJob,
                 newJob
             ),
             unlockState = unlockState(
@@ -198,7 +198,7 @@ internal class GameStartFunctionalCoreTest {
                 prop(Player::tags)
                     .all {
                         containsSubList(nonJobTags)
-                        containsNone(previousPlayerState.species.tags)
+                        containsNone(previousJob.tags)
                         containsSubList(newJob.tags)
                     }
             }
