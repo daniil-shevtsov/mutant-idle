@@ -14,6 +14,7 @@ import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
 import com.daniil.shevtsov.idle.feature.player.species.domain.PlayerSpecies
+import com.daniil.shevtsov.idle.feature.player.trait.domain.PlayerTrait
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
@@ -32,6 +33,7 @@ data class GameState(
     val drawerTabs: List<DrawerTab>,
     val availableJobs: List<PlayerJob>,
     val availableSpecies: List<PlayerSpecies>,
+    val availableTraits: List<PlayerTrait>,
     val availableEndings: List<Ending>,
     val locationSelectionState: LocationSelectionState,
     val flavors: List<Flavor>,
@@ -52,6 +54,7 @@ fun gameState(
     sections: List<SectionState> = emptyList(),
     availableJobs: List<PlayerJob> = emptyList(),
     availableSpecies: List<PlayerSpecies> = emptyList(),
+    availableTraits: List<PlayerTrait> = emptyList(),
     availableEndings: List<Ending> = emptyList(),
     locationSelectionState: LocationSelectionState = locationSelectionState(),
     flavors: List<Flavor> = emptyList(),
@@ -70,6 +73,7 @@ fun gameState(
     sections = sections,
     availableJobs = availableJobs,
     availableSpecies = availableSpecies,
+    availableTraits = availableTraits,
     availableEndings = availableEndings,
     locationSelectionState = locationSelectionState,
     flavors = flavors,

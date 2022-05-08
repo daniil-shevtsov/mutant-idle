@@ -20,6 +20,7 @@ import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.Jobs
 import com.daniil.shevtsov.idle.feature.player.species.domain.Species
+import com.daniil.shevtsov.idle.feature.player.trait.domain.createInitialTraits
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.createResources
@@ -50,6 +51,7 @@ class IdleGameApplication : Application() {
                     actions = createAllActions(),
                     availableJobs = createInitialJobs(),
                     availableSpecies = createInitialSpecies(),
+                    availableTraits = createInitialTraits(),
                     availableEndings = createEndings(),
                     locationSelectionState = createLocationSelectionState(),
                     flavors = createFlavors(),
