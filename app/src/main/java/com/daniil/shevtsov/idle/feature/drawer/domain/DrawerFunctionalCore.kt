@@ -51,6 +51,7 @@ private fun handleSpeciesSelected(
     viewAction: DebugViewAction.SpeciesSelected
 ): GameState {
     val newTrait = state.availableTraits.find { it.traitId == TraitId.Species && it.id == viewAction.id }!!
+    val newTraits = state.player.traits.toMutableMap().apply { put(TraitId.Species, newTrait) }.toMap()
 
     val newSpecies = state.availableSpecies.find { it.id == viewAction.id }!!
 
