@@ -33,14 +33,14 @@ fun PlayerInfoComposablePreview() {
                 )
             ),
             playerTraits = listOf(
-              playerTrait(
-                  title = "Memelogist",
-                  traitId = TraitId.Job,
-                  tags = listOf(
-                      tag(name = "Knowledge of memes"),
-                      tag(name = "Hoard of meme folders")
-                  ),
-              ),
+                playerTrait(
+                    title = "Memelogist",
+                    traitId = TraitId.Job,
+                    tags = listOf(
+                        tag(name = "Knowledge of memes"),
+                        tag(name = "Hoard of meme folders")
+                    ),
+                ),
                 playerTrait(
                     title = "Neckbeard",
                     traitId = TraitId.Species,
@@ -109,7 +109,13 @@ fun PlayerInfoComposable(
                     .fillMaxWidth()
             )
             Text(
-                text = state.playerTags.joinToString(separator = "\n") { tag -> tag.name },
+                text = state.playerTags.joinToString(separator = "\n") { tag ->
+                    val traitId = state.playerTraits.find { trait ->
+                        tag in trait.tags
+                    }?.traitId
+                    val type = traitId?.name?.let(::formatEnumName) ?: "General"
+                    tag.name + " ($type)"
+                },
                 fontSize = 16.sp,
                 modifier = modifier
                     .cavitary(
