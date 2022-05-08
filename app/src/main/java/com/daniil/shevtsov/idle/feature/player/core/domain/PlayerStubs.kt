@@ -14,7 +14,6 @@ fun player(
     generalTags: List<Tag> = emptyList(),
     traits: Map<TraitId, PlayerTrait> = mapOf(),
 ) = Player(
-    job = job,
     traits = traits,
     generalTags = generalTags,
 )

@@ -56,12 +56,9 @@ private fun handleJobSelected(
     val newTrait = state.availableTraits.find { it.traitId == TraitId.Job && it.id == viewAction.id }!!
     val newTraits = state.player.traits.toMutableMap().apply { put(TraitId.Job, newTrait) }.toMap()
 
-    val newJob = state.availableJobs.find { it.id == viewAction.id }!!
-
     return when {
-        state.unlockState.jobs[newJob.id] == true -> state.copy(
+        state.unlockState.jobs[newTrait.id] == true -> state.copy(
             player = state.player.copy(
-                job = newJob,
                 traits = newTraits,
             ),
         ).let { state ->
