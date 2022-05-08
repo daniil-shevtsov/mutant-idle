@@ -30,19 +30,12 @@ internal class PlayerFunctionalCoreTest {
                 initialPlayerTrait,
                 newPlayerTrait,
 
-            )
-        )
-        val newState = gameState(
-            player = player(
-                traits = mapOf(
-                    TraitId.Job to newPlayerTrait
                 )
-            )
         )
-//            playerFunctionalCore(
-//            state = initialState,
-//            action = PlayerViewAction.ChangeTrait(traitId = TraitId.Job, id = 2L),
-//        )
+        val newState = playerFunctionalCore(
+            state = initialState,
+            action = PlayerViewAction.ChangeTrait(traitId = TraitId.Job, id = 2L),
+        )
 
         assertThat(newState)
             .prop(GameState::player)
