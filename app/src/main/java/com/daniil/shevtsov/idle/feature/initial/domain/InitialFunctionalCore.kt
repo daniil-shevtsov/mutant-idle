@@ -24,7 +24,7 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.unlocks.domain.UnlockState
 import com.daniil.shevtsov.idle.feature.upgrade.domain.createUpgrades
 
-fun createInitialGameState() : GameState {
+fun createInitialGameState(): GameState {
     return GameState(
         balanceConfig = createBalanceConfig(),
         resources = createResources(),
@@ -46,7 +46,7 @@ fun createInitialGameState() : GameState {
         unlockState = UnlockState(
             species = createInitialSpecies().associate { species ->
                 species.id to when (species.id) {
-                    Species.Devourer.id, Species.Vampire.id-> true
+                    Species.Devourer.id, Species.Vampire.id -> true
                     else -> false
                 }
             },
@@ -56,6 +56,7 @@ fun createInitialGameState() : GameState {
                     else -> false
                 }
             },
+            traits = mapOf(),
         )
     )
 }
