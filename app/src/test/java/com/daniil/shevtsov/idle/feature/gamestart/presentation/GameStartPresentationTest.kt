@@ -43,12 +43,12 @@ internal class GameStartPresentationTest {
                 index(0).all {
                     prop(TraitSelectionItem::title).isEqualTo(species1.title)
                     prop(TraitSelectionItem::description).isEqualTo(species1.description)
-                    prop(TraitSelectionItem::icon).isEqualTo(species1.icon)
+                    prop(TraitSelectionItem::icon).isNotNull().isEqualTo(species1.icon)
                 }
                 index(1).all {
                     prop(TraitSelectionItem::title).isEqualTo(species2.title)
                     prop(TraitSelectionItem::description).isEqualTo(species2.description)
-                    prop(TraitSelectionItem::icon).isEqualTo(species2.icon)
+                    prop(TraitSelectionItem::icon).isNotNull().isEqualTo(species2.icon)
                 }
             }
     }
