@@ -5,10 +5,12 @@ import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
+import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
+import com.daniil.shevtsov.idle.feature.player.trait.domain.toPlayerTrait
 import com.daniil.shevtsov.idle.feature.unlocks.domain.unlockState
 import org.junit.jupiter.api.Test
 
@@ -115,10 +117,10 @@ internal class GameStartPresentationTest {
         val job1 = playerJob(id = 1L, title = "job 1", description = "description 1")
         val job2 = playerJob(id = 2L, title = "job 2", description = "description 2")
         val state = gameState(
-            availableJobs = listOf(
+            availableTraits = listOf(
                 job1,
                 job2,
-            )
+            ).map(PlayerJob::toPlayerTrait)
         )
 
         val viewState = mapGameStartViewState(state = state)
