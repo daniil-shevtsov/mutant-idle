@@ -37,11 +37,3 @@ internal fun upgradeListPreviewStub() = listOf(
         subtitle = "Your jaws become stronger than any shark"
     ),
 )
-
-internal fun debugViewState(
-    jobSelection: List<PlayerJobModel> = emptyList(),
-    speciesSelection: List<PlayerSpeciesModel> = emptyList(),
-) = DebugViewState(
-    jobSelection = jobSelection,
-    speciesSelection = speciesSelection,
-)

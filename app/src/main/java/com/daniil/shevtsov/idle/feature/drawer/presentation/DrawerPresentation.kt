@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.feature.main.presentation
 
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
+import com.daniil.shevtsov.idle.feature.debug.presentation.debugViewState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerContentViewState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewState
@@ -44,7 +45,8 @@ fun drawerPresentation(
                                         isSelected = state.player.traits[TraitId.Species]?.id == species.id,
                                     )
                                 }
-                            }
+                            },
+                        traitSelections = emptyList(),
                     )
                 )
             }
