@@ -43,6 +43,7 @@ class IdleGameApplication : Application() {
                     balanceConfig = createBalanceConfig(),
                     resources = createResources(),
                     ratios = createInitialRatios(),
+                    mainRatioKey = RatioKey.Mutanity,
                     sections = createInitialSectionState(),
                     drawerTabs = createInitialDrawerTabs(),
                     upgrades = createUpgrades(),
