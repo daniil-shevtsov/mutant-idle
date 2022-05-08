@@ -42,7 +42,12 @@ private fun handleSpeciesSelected(
                 species = newSpecies,
                 traits = newTraits,
             ),
-        )
+        ).let { state ->
+            playerFunctionalCore(
+                state = state,
+                action = PlayerViewAction.ChangeTrait(traitId = newTrait.traitId, id = viewAction.id),
+            )
+        }
         else -> state
     }
 }

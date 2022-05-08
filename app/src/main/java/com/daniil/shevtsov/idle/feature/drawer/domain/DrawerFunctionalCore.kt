@@ -4,6 +4,8 @@ import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewAction
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
 import com.daniil.shevtsov.idle.feature.main.domain.handleDrawerTabSwitched
+import com.daniil.shevtsov.idle.feature.player.core.domain.PlayerViewAction
+import com.daniil.shevtsov.idle.feature.player.core.domain.playerFunctionalCore
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 
 fun drawerFunctionalCore(
@@ -46,7 +48,12 @@ fun handleDebugJobSelected(
             job = newJob,
             traits = newTraits,
         )
-    )
+    ).let { state ->
+        playerFunctionalCore(
+            state = state,
+            action = PlayerViewAction.ChangeTrait(traitId = newTrait.traitId, id = viewAction.id),
+        )
+    }
 
 }
 
@@ -64,7 +71,12 @@ private fun handleSpeciesSelected(
             species = newSpecies,
             traits = newTraits,
         )
-    )
+    ).let { state ->
+        playerFunctionalCore(
+            state = state,
+            action = PlayerViewAction.ChangeTrait(traitId = newTrait.traitId, id = viewAction.id),
+        )
+    }
 }
 
 private fun unlockEverything(
