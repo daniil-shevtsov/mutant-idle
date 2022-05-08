@@ -20,6 +20,7 @@ import com.daniil.shevtsov.idle.core.ui.debugViewState
 import com.daniil.shevtsov.idle.core.ui.widgets.CavityButton
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJobModel
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpeciesModel
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 
 @Preview(
     widthDp = 230,
@@ -126,7 +127,7 @@ private fun SpeciesRow(
                     DropdownMenuItem(
                         modifier = modifier.background(Color.White),
                         onClick = {
-                            onAction(DebugViewAction.SpeciesSelected(species.id))
+                            onAction(DebugViewAction.TraitSelected(TraitId.Species, species.id))
                             onExpandChange(false)
                         }
                     ) {
@@ -186,7 +187,7 @@ private fun JobRow(
                     DropdownMenuItem(
                         modifier = modifier.background(Color.White),
                         onClick = {
-                            onAction(DebugViewAction.JobSelected(job.id))
+                            onAction(DebugViewAction.TraitSelected(TraitId.Job, job.id))
                             onExpandChange(false)
                         }
                     ) {
