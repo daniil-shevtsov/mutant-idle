@@ -16,6 +16,8 @@ import com.daniil.shevtsov.idle.feature.player.core.domain.assertSpeciesSelected
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
+import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.unlocks.domain.unlockState
 import org.junit.jupiter.api.Test
@@ -52,24 +54,31 @@ internal class GameStartFunctionalCoreTest {
     }
 
     @Test
-    fun `should not do anything when locked species clicked`() {
-        val newSpecies =
-            playerSpecies(id = 2L, title = "new species", tags = listOf(tag(name = "kek")))
+    fun `should not do anything when locked trait clicked`() {
+        val newTrait = playerTrait(
+            id = 2L,
+            traitId = TraitId.Species,
+            title = "new species",
+            tags = listOf(tag(name = "kek"))
+        )
         val initialPlayer = player()
 
         val initialState = gameState(
             player = initialPlayer,
-            availableSpecies = listOf(
-                newSpecies,
+            availableTraits = listOf(
+                newTrait
             ),
             unlockState = unlockState(
-                species = mapOf(newSpecies.id to false)
+                species = mapOf(newTrait.id to false)
             )
         )
 
         val newState = gameStartFunctionalCore(
             state = initialState,
-            viewAction = GameStartViewAction.SpeciesSelected(id = newSpecies.id)
+            viewAction = GameStartViewAction.TraitSelected(
+                traitId = TraitId.Species,
+                id = newTrait.id
+            )
         )
 
         assertThat(newState)
