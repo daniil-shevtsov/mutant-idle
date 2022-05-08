@@ -15,12 +15,73 @@ import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
+import com.daniil.shevtsov.idle.feature.unlocks.domain.unlockState
 import org.junit.jupiter.api.Test
 
 internal class GameStartFunctionalCoreTest {
 
     @Test
-    fun `should choose species when species clicked`() {
+    fun `should not do anything when locked job clicked`() {
+        val currentJob = playerJob(id = 1L, title = "current job", tags = listOf(tag(name = "lol")))
+        val newJob = playerJob(id = 2L, title = "new job", tags = listOf(tag(name = "kek")))
+        val initialPlayer = player(
+            job = currentJob
+        )
+
+        val initialState = gameState(
+            player = initialPlayer,
+            availableJobs = listOf(
+                initialPlayer.job,
+                newJob,
+            ),
+            unlockState = unlockState(
+                jobs = mapOf(newJob.id to false)
+            )
+        )
+
+        val newState = gameStartFunctionalCore(
+            state = initialState,
+            viewAction = GameStartViewAction.JobSelected(id = newJob.id)
+        )
+
+        assertThat(newState)
+            .prop(GameState::player)
+            .isEqualTo(initialPlayer)
+    }
+
+    @Test
+    fun `should not do anything when locked species clicked`() {
+        val currentSpecies =
+            playerSpecies(id = 1L, title = "current species", tags = listOf(tag(name = "lol")))
+        val newSpecies =
+            playerSpecies(id = 2L, title = "new species", tags = listOf(tag(name = "kek")))
+        val initialPlayer = player(
+            species = currentSpecies
+        )
+
+        val initialState = gameState(
+            player = initialPlayer,
+            availableSpecies = listOf(
+                initialPlayer.species,
+                newSpecies,
+            ),
+            unlockState = unlockState(
+                species = mapOf(newSpecies.id to false)
+            )
+        )
+
+        val newState = gameStartFunctionalCore(
+            state = initialState,
+            viewAction = GameStartViewAction.SpeciesSelected(id = newSpecies.id)
+        )
+
+        assertThat(newState)
+            .prop(GameState::player)
+            .isEqualTo(initialPlayer)
+    }
+
+    @Test
+    fun `should choose species when unlocked species clicked`() {
         val nonSpeciesTags = listOf(
             tag(name = "non-species tag 1"),
             tag(name = "non-species tag 2"),
@@ -54,6 +115,11 @@ internal class GameStartFunctionalCoreTest {
                 previousPlayerState.species,
                 newSpecies
             ),
+            unlockState = unlockState(
+                species = mapOf(
+                    newSpecies.id to true
+                )
+            ),
         )
 
         val newState = gameStartFunctionalCore(
@@ -77,7 +143,7 @@ internal class GameStartFunctionalCoreTest {
     }
 
     @Test
-    fun `should choose job when job clicked`() {
+    fun `should choose job when unlocked job clicked`() {
         val nonJobTags = listOf(
             tag(name = "non-species tag 1"),
             tag(name = "non-species tag 2"),
@@ -110,6 +176,11 @@ internal class GameStartFunctionalCoreTest {
             availableJobs = listOf(
                 previousPlayerState.job,
                 newJob
+            ),
+            unlockState = unlockState(
+                jobs = mapOf(
+                    newJob.id to true
+                )
             ),
         )
 

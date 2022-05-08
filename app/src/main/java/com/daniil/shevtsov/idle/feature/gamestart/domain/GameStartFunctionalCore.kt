@@ -30,11 +30,14 @@ private fun handleSpeciesSelected(
 ): GameState {
     val newSpecies = state.availableSpecies.find { it.id == viewAction.id }!!
 
-    return state.copy(
-        player = state.player.copy(
-            species = newSpecies,
-        ),
-    )
+    return when {
+        state.unlockState.species[newSpecies.id] == true -> state.copy(
+            player = state.player.copy(
+                species = newSpecies,
+            ),
+        )
+        else -> state
+    }
 }
 
 private fun handleJobSelected(
@@ -43,11 +46,14 @@ private fun handleJobSelected(
 ): GameState {
     val newJob = state.availableJobs.find { it.id == viewAction.id }!!
 
-    return state.copy(
-        player = state.player.copy(
-            job = newJob,
-        ),
-    )
+    return when {
+        state.unlockState.jobs[newJob.id] == true -> state.copy(
+            player = state.player.copy(
+                job = newJob,
+            ),
+        )
+        else -> state
+    }
 }
 
 fun handleStartGame(
