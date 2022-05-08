@@ -107,7 +107,6 @@ internal class DrawerFunctionalCoreTest {
         )
 
         val previousPlayerState = player(
-            species = previousSpecies,
             generalTags = nonSpeciesTags,
         )
 
