@@ -83,15 +83,19 @@ internal class GameStartPresentationTest {
 
     @Test
     fun `should show selected species as selected`() {
-        val notSelectedSpecies = playerSpecies(id = 1L, title = "not selected species")
-        val selectedSpecies = playerSpecies(id = 2L, title = "selected species")
+        val notSelectedSpecies =
+            playerTrait(id = 1L, traitId = TraitId.Species, title = "not selected species")
+        val selectedSpecies =
+            playerTrait(id = 2L, traitId = TraitId.Species, title = "selected species")
         val state = gameState(
-            availableSpecies = listOf(
+            availableTraits = listOf(
                 notSelectedSpecies,
                 selectedSpecies,
             ),
             player = player(
-                species = selectedSpecies,
+                traits = mapOf(
+                    TraitId.Species to selectedSpecies
+                ),
             ),
         )
 
