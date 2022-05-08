@@ -10,9 +10,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.Pallete
+import com.daniil.shevtsov.idle.core.ui.debugViewState
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.core.ui.widgets.CollapseButton
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
@@ -21,7 +24,9 @@ import com.daniil.shevtsov.idle.feature.drawer.view.DrawerTabSelector
 import com.daniil.shevtsov.idle.feature.location.view.LocationSelection
 import com.daniil.shevtsov.idle.feature.main.presentation.*
 import com.daniil.shevtsov.idle.feature.player.info.view.PlayerInfoComposable
+import com.daniil.shevtsov.idle.feature.ratio.presentation.ratioModel
 import com.daniil.shevtsov.idle.feature.ratio.view.RatioPane
+import com.daniil.shevtsov.idle.feature.resource.domain.resourceModel
 import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
 import com.daniil.shevtsov.idle.feature.upgrade.view.UpgradeList
 import com.google.accompanist.insets.statusBarsHeight
@@ -74,39 +79,39 @@ import kotlinx.coroutines.launch
 //    )
 //}
 
-//@Preview(
-//    widthDp = 320,
-//    heightDp = 534,
-//)
-//@Composable
-//fun MainPreview() {
-//    MainScreen(
-//        state = mainViewState(
-//            resources = listOf(
-//                resourceModel(name = "Blood", value = "10 000", icon = Icons.Blood),
-//                resourceModel(name = "Money", value = "100", icon = Icons.Money),
-//            ),
-//            ratios = listOf(
-//                ratioModel(title = "Mutanity", name = "Covert", percent = 0.75),
-//                ratioModel(title = "Suspicion", name = "Investigation", percent = 0.35),
-//            ),
-//            actionState = actionsState(),
-//            upgradeState = upgradeViewState(),
-//            sectionCollapse = mapOf(
-//                SectionKey.Resources to false,
-//                SectionKey.Actions to false,
-//                SectionKey.Upgrades to false,
-//            ),
-//            drawerState = DrawerViewState(
-//                tabSelectorState = emptyList(),
-//                drawerContent = DrawerContentViewState.Debug(
-//                    state = debugViewState()
-//                )
-//            ),
-//        ),
-//        onViewAction = {},
-//    )
-//}
+@Preview(
+    widthDp = 320,
+    heightDp = 534,
+)
+@Composable
+fun MainPreview() {
+    MainScreen(
+        state = mainViewState(
+            resources = listOf(
+                resourceModel(name = "Blood", value = "10 000", icon = Icons.Blood),
+                resourceModel(name = "Money", value = "100", icon = Icons.Money),
+            ),
+            ratios = listOf(
+                ratioModel(title = "Mutanity", name = "Covert", percent = 0.75),
+                ratioModel(title = "Suspicion", name = "Investigation", percent = 0.35),
+            ),
+            actionState = actionsState(),
+            upgradeState = upgradeViewState(),
+            sectionCollapse = mapOf(
+                SectionKey.Resources to false,
+                SectionKey.Actions to false,
+                SectionKey.Upgrades to false,
+            ),
+            drawerState = DrawerViewState(
+                tabSelectorState = emptyList(),
+                drawerContent = DrawerContentViewState.Debug(
+                    state = debugViewState()
+                )
+            ),
+        ),
+        onViewAction = {},
+    )
+}
 
 @Composable
 fun MainScreen(
