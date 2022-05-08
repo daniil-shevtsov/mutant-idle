@@ -49,7 +49,7 @@ data class GameState(
         .filter { trait -> trait.traitId == TraitId.Job }
 
     val speciesTraits: List<PlayerTrait> = availableTraits
-        .filter { trait -> trait.traitId == TraitId.Job }
+        .filter { trait -> trait.traitId == TraitId.Species }
 }
 
 fun gameState(
