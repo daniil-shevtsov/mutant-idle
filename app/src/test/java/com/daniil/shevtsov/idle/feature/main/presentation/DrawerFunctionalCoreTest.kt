@@ -89,14 +89,13 @@ internal class DrawerFunctionalCoreTest {
             tag(name = "non-species tag 2"),
         )
 
-        val previousSpeciesTags = listOf(
-            tag(name = "old species tag 1"),
-            tag(name = "old species tag 2"),
-        )
         val previousSpecies = playerSpecies(
             id = 0L,
             title = "old species",
-            tags = previousSpeciesTags
+            tags = listOf(
+                tag(name = "old species tag 1"),
+                tag(name = "old species tag 2"),
+            )
         )
         val newSpecies = playerSpecies(
             id = 1L,
