@@ -38,6 +38,7 @@ private fun handleSpeciesSelected(
         state.unlockState.species[newSpecies.id] == true -> state.copy(
             player = state.player.copy(
                 species = newSpecies,
+                traits = newTraits,
             ),
         )
         else -> state
@@ -57,6 +58,7 @@ private fun handleJobSelected(
         state.unlockState.jobs[newJob.id] == true -> state.copy(
             player = state.player.copy(
                 job = newJob,
+                traits = newTraits,
             ),
         )
         else -> state
