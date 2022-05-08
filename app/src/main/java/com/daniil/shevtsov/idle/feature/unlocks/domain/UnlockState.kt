@@ -8,9 +8,13 @@ data class UnlockState(
     val traits: Map<TraitId, Map<Long, Boolean>>,
 ) {
     init {
-        if(traits.isNotEmpty()) {
-            species = traits[TraitId.Species]!!
-            jobs = traits[TraitId.Job]!!
+        val speciesTraits = traits[TraitId.Species]
+        val jobTraits = traits[TraitId.Job]
+        if(speciesTraits != null) {
+            species = speciesTraits
+        }
+        if(jobTraits != null) {
+            jobs = jobTraits
         }
     }
 }

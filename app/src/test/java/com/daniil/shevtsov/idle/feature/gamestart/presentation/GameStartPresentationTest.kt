@@ -150,9 +150,11 @@ internal class GameStartPresentationTest {
                 lockedJob,
             ),
             unlockState = unlockState(
-                jobs = mapOf(
-                    unlockedJob.id to true,
-                    lockedJob.id to false,
+                traits = mapOf(
+                    TraitId.Job to mapOf(
+                        unlockedJob.id to true,
+                        lockedJob.id to false,
+                    )
                 )
             )
         )
