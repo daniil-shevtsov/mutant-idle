@@ -15,10 +15,7 @@ import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.player.species.domain.PlayerSpecies
-import com.daniil.shevtsov.idle.feature.player.trait.domain.PlayerTrait
-import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
-import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
-import com.daniil.shevtsov.idle.feature.player.trait.domain.toPlayerTrait
+import com.daniil.shevtsov.idle.feature.player.trait.domain.*
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
@@ -51,6 +48,7 @@ data class GameState(
             true -> availableSpecies.map(PlayerSpecies::toPlayerTrait) + availableJobs.map(PlayerJob::toPlayerTrait)
             else -> availableTraits
         }
+        availableJobs = availableTraits.filter { it.traitId == TraitId.Job }.map(PlayerTrait::toJob)
     }
 
     val jobTraits: List<PlayerTrait> = availableTraits
