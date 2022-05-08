@@ -8,6 +8,7 @@ import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewState
 import com.daniil.shevtsov.idle.feature.player.info.presentation.PlayerInfoState
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 
 fun drawerPresentation(
     state: GameState
@@ -30,7 +31,9 @@ fun drawerPresentation(
                                 )
                             }
                         },
-                        speciesSelection = state.availableSpecies.map { species ->
+                        speciesSelection = state.availableTraits
+                            .filter { trait -> trait.traitId == TraitId.Species }
+                            .map { species ->
                             with(species) {
                                 PlayerSpeciesModel(
                                     id = id,
