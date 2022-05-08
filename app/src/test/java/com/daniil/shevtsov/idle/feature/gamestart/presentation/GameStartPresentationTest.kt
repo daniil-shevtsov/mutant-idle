@@ -41,14 +41,14 @@ internal class GameStartPresentationTest {
             .prop(GameStartViewState::speciesSelection)
             .all {
                 index(0).all {
-                    prop(SpeciesSelectionItem::title).isEqualTo(species1.title)
-                    prop(SpeciesSelectionItem::description).isEqualTo(species1.description)
-                    prop(SpeciesSelectionItem::icon).isEqualTo(species1.icon)
+                    prop(TraitSelectionItem::title).isEqualTo(species1.title)
+                    prop(TraitSelectionItem::description).isEqualTo(species1.description)
+                    prop(TraitSelectionItem::icon).isEqualTo(species1.icon)
                 }
                 index(1).all {
-                    prop(SpeciesSelectionItem::title).isEqualTo(species2.title)
-                    prop(SpeciesSelectionItem::description).isEqualTo(species2.description)
-                    prop(SpeciesSelectionItem::icon).isEqualTo(species2.icon)
+                    prop(TraitSelectionItem::title).isEqualTo(species2.title)
+                    prop(TraitSelectionItem::description).isEqualTo(species2.description)
+                    prop(TraitSelectionItem::icon).isEqualTo(species2.icon)
                 }
             }
     }
@@ -74,7 +74,7 @@ internal class GameStartPresentationTest {
 
         assertThat(viewState)
             .prop(GameStartViewState::speciesSelection)
-            .extracting(SpeciesSelectionItem::title, SpeciesSelectionItem::isUnlocked)
+            .extracting(TraitSelectionItem::title, TraitSelectionItem::isUnlocked)
             .containsExactly(
                 unlockedSpecies.title to true,
                 lockedSpecies.title to false,
@@ -99,7 +99,7 @@ internal class GameStartPresentationTest {
 
         assertThat(viewState)
             .prop(GameStartViewState::speciesSelection)
-            .extracting(SpeciesSelectionItem::title, SpeciesSelectionItem::isSelected)
+            .extracting(TraitSelectionItem::title, TraitSelectionItem::isSelected)
             .containsExactly(
                 notSelectedSpecies.title to false,
                 selectedSpecies.title to true,
@@ -123,12 +123,12 @@ internal class GameStartPresentationTest {
             .prop(GameStartViewState::jobSelection)
             .all {
                 index(0).all {
-                    prop(SpeciesSelectionItem::title).isEqualTo(job1.title)
-                    prop(SpeciesSelectionItem::description).isEqualTo(job1.description)
+                    prop(TraitSelectionItem::title).isEqualTo(job1.title)
+                    prop(TraitSelectionItem::description).isEqualTo(job1.description)
                 }
                 index(1).all {
-                    prop(SpeciesSelectionItem::title).isEqualTo(job2.title)
-                    prop(SpeciesSelectionItem::description).isEqualTo(job2.description)
+                    prop(TraitSelectionItem::title).isEqualTo(job2.title)
+                    prop(TraitSelectionItem::description).isEqualTo(job2.description)
                 }
             }
     }
@@ -154,7 +154,7 @@ internal class GameStartPresentationTest {
 
         assertThat(viewState)
             .prop(GameStartViewState::jobSelection)
-            .extracting(SpeciesSelectionItem::title, SpeciesSelectionItem::isUnlocked)
+            .extracting(TraitSelectionItem::title, TraitSelectionItem::isUnlocked)
             .containsExactly(
                 unlockedJob.title to true,
                 lockedJob.title to false,
@@ -181,7 +181,7 @@ internal class GameStartPresentationTest {
 
         assertThat(viewState)
             .prop(GameStartViewState::jobSelection)
-            .extracting(SpeciesSelectionItem::title, SpeciesSelectionItem::isSelected)
+            .extracting(TraitSelectionItem::title, TraitSelectionItem::isSelected)
             .containsExactly(
                 notSelectedJob.title to false,
                 selectedJob.title to true,

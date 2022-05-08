@@ -12,7 +12,7 @@ fun mapGameStartViewState(
         description = "Choose species and job",
         speciesSelection = state.availableSpecies.map { species ->
             with(species) {
-                SpeciesSelectionItem(
+                TraitSelectionItem(
                     id = id,
                     title = title,
                     description = description,
@@ -24,7 +24,7 @@ fun mapGameStartViewState(
         },
         jobSelection = state.jobTraits.map { job ->
             with(job) {
-                SpeciesSelectionItem(
+                TraitSelectionItem(
                     id = id,
                     title = title,
                     description = description,

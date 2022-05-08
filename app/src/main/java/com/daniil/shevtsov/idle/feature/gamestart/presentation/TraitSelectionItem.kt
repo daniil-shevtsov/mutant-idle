@@ -1,6 +1,6 @@
 package com.daniil.shevtsov.idle.feature.gamestart.presentation
 
-data class SpeciesSelectionItem(
+data class TraitSelectionItem(
     val id: Long,
     val title: String,
     val description: String,
@@ -9,14 +9,14 @@ data class SpeciesSelectionItem(
     val isUnlocked: Boolean,
 )
 
-fun speciesSelectionItem(
+fun traitSelectionItem(
     id: Long = 0L,
     title: String = "",
     description: String = "",
     icon: String = "",
     isSelected: Boolean = false,
     isUnlocked: Boolean = true,
-) = SpeciesSelectionItem(
+) = TraitSelectionItem(
     id = id,
     title = title,
     description = description,

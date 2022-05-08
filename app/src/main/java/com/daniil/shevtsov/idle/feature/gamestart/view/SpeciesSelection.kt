@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.cavitary
-import com.daniil.shevtsov.idle.feature.gamestart.presentation.SpeciesSelectionItem
-import com.daniil.shevtsov.idle.feature.gamestart.presentation.speciesSelectionItem
+import com.daniil.shevtsov.idle.feature.gamestart.presentation.TraitSelectionItem
+import com.daniil.shevtsov.idle.feature.gamestart.presentation.traitSelectionItem
 
 @Preview(
     widthDp = 650,
@@ -39,7 +39,7 @@ fun SpeciesSelectionPreview() {
 
 @Composable
 fun SpeciesSelection(
-    selection: List<SpeciesSelectionItem>,
+    selection: List<TraitSelectionItem>,
     onItemClicked: (id: Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -222,25 +222,25 @@ fun selectedStatesOfSpecies() = (0..2)
     }
 
 fun speciesSelectionComposeStub(selectedIndex: Int = 1) = listOf(
-    speciesSelectionItem(
+    traitSelectionItem(
         title = "Devourer",
         icon = Icons.Devourer,
         description = "You are a growing creature with insatiable hunger",
         isSelected = selectedIndex == 0,
     ),
-    speciesSelectionItem(
+    traitSelectionItem(
         title = "Vampire",
         icon = Icons.Vampire,
         description = "You are a bloodsucking immortal creature",
         isSelected = selectedIndex == 1,
     ),
-    speciesSelectionItem(
+    traitSelectionItem(
         title = "Alien",
         icon = Icons.Alien,
         description = "You have crashed on this planet and need to find a way home",
         isSelected = selectedIndex == 2,
     ),
-    speciesSelectionItem(
+    traitSelectionItem(
         title = "Lol",
         icon = Icons.Alien,
         description = "Kek",
