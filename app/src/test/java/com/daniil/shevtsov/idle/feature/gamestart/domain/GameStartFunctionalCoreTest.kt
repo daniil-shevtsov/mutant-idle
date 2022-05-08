@@ -11,6 +11,7 @@ import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
+import com.daniil.shevtsov.idle.feature.player.core.domain.assertSpeciesSelected
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
@@ -130,8 +131,7 @@ internal class GameStartFunctionalCoreTest {
         assertThat(newState)
             .prop(GameState::player)
             .all {
-                prop(Player::species)
-                    .isEqualTo(newSpecies)
+                assertSpeciesSelected(id = newSpecies.id)
 
                 prop(Player::tags)
                     .all {
