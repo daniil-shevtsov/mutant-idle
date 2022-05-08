@@ -88,11 +88,11 @@ private fun unlockEverything(
     viewAction: DebugViewAction.UnlockEverything
 ) = state.copy(
     unlockState = state.unlockState.copy(
-        species = state.availableSpecies.map { species -> species.id to true }.toMap(),
-        jobs = state.availableJobs.map { job -> job.id to true }.toMap(),
-        traits = mapOf(
-            TraitId.Species to state.availableSpecies.map { species -> species.id to true }.toMap(),
-            TraitId.Job to state.availableJobs.map { job -> job.id to true }.toMap(),
-        )
+        species = state.availableSpecies.associate { species -> species.id to true },
+        jobs = state.availableJobs.associate { job -> job.id to true },
+        traits = TraitId.values().associate { traitId ->
+            traitId to state.availableTraits.filter { trait -> trait.traitId == traitId }
+                .associate { trait -> trait.id to true }
+        }
     )
 )
