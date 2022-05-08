@@ -1,5 +1,9 @@
 package com.daniil.shevtsov.idle.feature.player.core.domain
 
+import assertk.assertThat
+import assertk.assertions.containsOnly
+import assertk.assertions.prop
+import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
@@ -39,6 +43,13 @@ internal class PlayerFunctionalCoreTest {
 //            state = initialState,
 //            action = PlayerViewAction.ChangeTrait(traitId = TraitId.Job, id = 2L),
 //        )
+
+        assertThat(newState)
+            .prop(GameState::player)
+            .prop(Player::traits)
+            .containsOnly(
+                TraitId.Job to newPlayerTrait
+            )
     }
 
 }

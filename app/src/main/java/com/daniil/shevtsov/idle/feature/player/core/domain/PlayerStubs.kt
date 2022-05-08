@@ -16,5 +16,6 @@ fun player(
 ) = Player(
     job = job,
     species = species,
+    traits = traits,
     generalTags = generalTags,
 )
