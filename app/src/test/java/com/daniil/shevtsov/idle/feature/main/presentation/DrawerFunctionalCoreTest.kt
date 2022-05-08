@@ -112,7 +112,20 @@ internal class DrawerFunctionalCoreTest {
                     lockedSpecies.id to true,
                     unlockedSpecies.id to true,
                 )
-
+                prop(UnlockState::traits).all {
+                    contains(
+                        TraitId.Job, mapOf(
+                            lockedJob.id to true,
+                            unlockedJob.id to true,
+                        )
+                    )
+                    contains(
+                        TraitId.Species, mapOf(
+                            lockedSpecies.id to true,
+                            unlockedSpecies.id to true,
+                        )
+                    )
+                }
             }
     }
 
