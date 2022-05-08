@@ -24,6 +24,10 @@ fun gameStartFunctionalCore(
             state = state,
             viewAction = viewAction,
         )
+        is GameStartViewAction.TraitSelected -> handleTraitSelected(
+            state = state,
+            viewAction = viewAction,
+        )
     }
 }
 
@@ -55,6 +59,28 @@ private fun handleJobSelected(
 ): GameState {
     val newTrait = state.availableTraits.find { it.traitId == TraitId.Job && it.id == viewAction.id }!!
     val newTraits = state.player.traits.toMutableMap().apply { put(TraitId.Job, newTrait) }.toMap()
+
+    return when {
+        state.unlockState.jobs[newTrait.id] == true -> state.copy(
+            player = state.player.copy(
+                traits = newTraits,
+            ),
+        ).let { state ->
+            playerFunctionalCore(
+                state = state,
+                action = PlayerViewAction.ChangeTrait(traitId = newTrait.traitId, id = viewAction.id),
+            )
+        }
+        else -> state
+    }
+}
+
+private fun handleTraitSelected(
+    state: GameState,
+    viewAction: GameStartViewAction.TraitSelected,
+): GameState {
+    val newTrait = state.availableTraits.find { it.traitId == viewAction.traitId && it.id == viewAction.id }!!
+    val newTraits = state.player.traits.toMutableMap().apply { put(viewAction.traitId, newTrait) }.toMap()
 
     return when {
         state.unlockState.jobs[newTrait.id] == true -> state.copy(
