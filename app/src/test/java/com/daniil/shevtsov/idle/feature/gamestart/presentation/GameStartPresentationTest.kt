@@ -7,6 +7,8 @@ import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
+import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
 import com.daniil.shevtsov.idle.feature.unlocks.domain.unlockState
 import org.junit.jupiter.api.Test
 
@@ -90,7 +92,7 @@ internal class GameStartPresentationTest {
             ),
             player = player(
                 species = selectedSpecies,
-            )
+            ),
         )
 
         val viewState = mapGameStartViewState(state = state)
@@ -170,6 +172,9 @@ internal class GameStartPresentationTest {
             ),
             player = player(
                 job = selectedJob,
+                traits = mapOf(
+                    TraitId.Job to playerTrait(id = selectedJob.id, traitId = TraitId.Job, title = selectedJob.title)
+                )
             )
         )
 
