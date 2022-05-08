@@ -8,6 +8,7 @@ data class PlayerTrait(
     val title: String,
     val description: String,
     val tags: List<Tag>,
+    val icon: String? = null,
 )
 
 fun playerTrait(
@@ -16,10 +17,12 @@ fun playerTrait(
     title: String = "",
     description: String = "",
     tags: List<Tag> = emptyList(),
+    icon: String? = null,
 ) = PlayerTrait(
     id = id,
     traitId = traitId,
     title = title,
     description = description,
     tags = tags,
+    icon = icon,
 )
