@@ -16,10 +16,7 @@ import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.Jobs
 import com.daniil.shevtsov.idle.feature.player.species.domain.Species
-import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
-import com.daniil.shevtsov.idle.feature.player.trait.domain.createInitialTraits
-import com.daniil.shevtsov.idle.feature.player.trait.domain.toJob
-import com.daniil.shevtsov.idle.feature.player.trait.domain.toPlayerTrait
+import com.daniil.shevtsov.idle.feature.player.trait.domain.*
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.createResources
@@ -49,7 +46,7 @@ fun createInitialGameState() : GameState {
         unlockState = UnlockState(
             species = createInitialSpecies().associate { species ->
                 species.id to when (species) {
-                    Species.Devourer, Species.Vampire -> true
+                    Species.Devourer.toSpecies(), Species.Vampire.toSpecies() -> true
                     else -> false
                 }
             },
@@ -96,7 +93,7 @@ private fun createInitialDrawerTabs() = listOf(
 
 private fun createInitialPlayer() = player(
     job = Jobs.Unemployed.toJob(),
-    species = Species.Devourer,
+    species = Species.Devourer.toSpecies(),
     generalTags = listOf(
         Tags.HumanAppearance,
         Tags.Knowledge.SocialNorms,
@@ -104,6 +101,7 @@ private fun createInitialPlayer() = player(
     ),
     traits = mapOf(
         TraitId.Job to Jobs.Unemployed,
+        TraitId.Species to Species.Devourer,
     )
 )
 
@@ -123,4 +121,4 @@ private fun createInitialSpecies() = listOf(
     Species.Demon,
     Species.Alien,
     Species.Android,
-)
+).map { it.toSpecies() }

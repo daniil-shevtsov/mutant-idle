@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.feature.player.species.domain
 
 import com.daniil.shevtsov.idle.core.ui.Icons
+import com.daniil.shevtsov.idle.feature.player.trait.domain.toPlayerTrait
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 
 object Species {
@@ -12,7 +13,7 @@ object Species {
         tags = listOf(
             Tags.Species.Devourer,
         )
-    )
+    ).toPlayerTrait()
 
     val Shapeshifter = playerSpecies(
         id = 1L,
@@ -22,7 +23,7 @@ object Species {
         tags = listOf(
             Tags.Species.ShapeShifter,
         )
-    )
+    ).toPlayerTrait()
 
     val Vampire = playerSpecies(
         id = 2L,
@@ -36,7 +37,7 @@ object Species {
             Tags.Immortal,
             Tags.Hypnosis,
         )
-    )
+    ).toPlayerTrait()
 
     val Parasite = playerSpecies(
         id = 3L,
@@ -46,7 +47,7 @@ object Species {
         tags = listOf(
             Tags.Species.Parasite,
         )
-    )
+    ).toPlayerTrait()
 
     val Demon = playerSpecies(
         id = 4L,
@@ -57,7 +58,7 @@ object Species {
             Tags.Species.Demon,
             Tags.Nature.Magic,
         )
-    )
+    ).toPlayerTrait()
 
     val Alien = playerSpecies(
         id = 5L,
@@ -68,7 +69,7 @@ object Species {
             Tags.Species.Alien,
             Tags.Nature.Tech,
         )
-    )
+    ).toPlayerTrait()
 
     val Android = playerSpecies(
         id = 6L,
@@ -79,5 +80,5 @@ object Species {
             Tags.Species.Android,
             Tags.Nature.Tech,
         )
-    )
+    ).toPlayerTrait()
 }
