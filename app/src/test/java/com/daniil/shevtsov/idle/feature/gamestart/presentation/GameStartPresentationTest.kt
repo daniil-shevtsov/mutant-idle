@@ -139,11 +139,11 @@ internal class GameStartPresentationTest {
 
     @Test
     fun `should mark locked jobs as locked`() {
-        val unlockedJob = playerJob(id = 1L, title = "unlocked job")
-        val lockedJob = playerJob(id = 2L, title = "locked job")
+        val unlockedJob = playerTrait(id = 1L, title = "unlocked job")
+        val lockedJob = playerTrait(id = 2L, title = "locked job")
 
         val state = gameState(
-            availableJobs = listOf(
+            availableTraits = listOf(
                 unlockedJob,
                 lockedJob,
             ),
