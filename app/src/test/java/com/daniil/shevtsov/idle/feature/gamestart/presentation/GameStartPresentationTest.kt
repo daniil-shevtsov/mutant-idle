@@ -163,17 +163,16 @@ internal class GameStartPresentationTest {
 
     @Test
     fun `should show selected job as selected`() {
-        val notSelectedJob = playerJob(id = 1L, title = "not selected job")
-        val selectedJob = playerJob(id = 2L, title = "selected job")
+        val notSelectedJob = playerTrait(id = 1L, traitId = TraitId.Job, title = "not selected job")
+        val selectedJob = playerTrait(id = 2L, traitId = TraitId.Job, title = "selected job")
         val state = gameState(
-            availableJobs = listOf(
+            availableTraits = listOf(
                 notSelectedJob,
                 selectedJob,
             ),
             player = player(
-                job = selectedJob,
                 traits = mapOf(
-                    TraitId.Job to playerTrait(id = selectedJob.id, traitId = TraitId.Job, title = selectedJob.title)
+                    TraitId.Job to selectedJob
                 )
             )
         )

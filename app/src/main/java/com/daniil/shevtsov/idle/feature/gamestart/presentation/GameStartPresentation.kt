@@ -22,7 +22,7 @@ fun mapGameStartViewState(
                 )
             }
         },
-        jobSelection = state.availableJobs.map { job ->
+        jobSelection = state.jobTraits.map { job ->
             with(job) {
                 SpeciesSelectionItem(
                     id = id,
