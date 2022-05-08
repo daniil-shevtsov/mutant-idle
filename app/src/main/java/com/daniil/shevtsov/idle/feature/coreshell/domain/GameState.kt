@@ -89,6 +89,7 @@ fun gameState(
                     id = id,
                     traitId = TraitId.Species,
                     title = title,
+                    icon = playerSpecies.icon,
                     description = description,
                     tags = tags,
                 )
