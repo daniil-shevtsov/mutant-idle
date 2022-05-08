@@ -56,7 +56,20 @@ fun createInitialGameState(): GameState {
                     else -> false
                 }
             },
-            traits = mapOf(),
+            traits = mapOf(
+                TraitId.Species to createInitialSpecies().associate { species ->
+                    species.id to when (species.id) {
+                        Species.Devourer.id, Species.Vampire.id -> true
+                        else -> false
+                    }
+                },
+                TraitId.Job to createInitialJobs().associate { job ->
+                    job.id to when (job.id) {
+                        Jobs.Unemployed.id -> true
+                        else -> false
+                    }
+                }
+            ),
         )
     )
 }
