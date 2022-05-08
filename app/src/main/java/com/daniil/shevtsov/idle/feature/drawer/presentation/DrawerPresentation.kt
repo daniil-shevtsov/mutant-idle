@@ -34,15 +34,15 @@ fun drawerPresentation(
                         speciesSelection = state.availableTraits
                             .filter { trait -> trait.traitId == TraitId.Species }
                             .map { species ->
-                            with(species) {
-                                PlayerSpeciesModel(
-                                    id = id,
-                                    title = title,
-                                    tags = tags,
-                                    isSelected = state.player.species.id == species.id,
-                                )
+                                with(species) {
+                                    PlayerSpeciesModel(
+                                        id = id,
+                                        title = title,
+                                        tags = tags,
+                                        isSelected = state.player.traits[TraitId.Species]?.id == species.id,
+                                    )
+                                }
                             }
-                        }
                     )
                 )
             }
