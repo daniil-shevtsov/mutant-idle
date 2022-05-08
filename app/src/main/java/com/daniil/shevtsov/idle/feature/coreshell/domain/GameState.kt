@@ -45,7 +45,7 @@ data class GameState(
 ) {
     init {
         availableTraits = when (availableTraits.isEmpty()) {
-            true -> availableSpecies.map(PlayerSpecies::toPlayerTrait) + availableJobs.map(PlayerJob::toPlayerTrait)
+            true -> availableSpecies.map(PlayerSpecies::toPlayerTrait)
             else -> availableTraits
         }
         availableJobs = availableTraits.filter { it.traitId == TraitId.Job }.map(PlayerTrait::toJob)
