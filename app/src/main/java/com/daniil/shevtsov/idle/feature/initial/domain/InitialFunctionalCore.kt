@@ -45,14 +45,14 @@ fun createInitialGameState() : GameState {
         screenStack = listOf(Screen.GameStart),
         unlockState = UnlockState(
             species = createInitialSpecies().associate { species ->
-                species.id to when (species) {
-                    Species.Devourer.toSpecies(), Species.Vampire.toSpecies() -> true
+                species.id to when (species.id) {
+                    Species.Devourer.id, Species.Vampire.id-> true
                     else -> false
                 }
             },
             jobs = createInitialJobs().associate { job ->
-                job.id to when (job) {
-                    Jobs.Unemployed.toJob() -> true
+                job.id to when (job.id) {
+                    Jobs.Unemployed.id -> true
                     else -> false
                 }
             },
