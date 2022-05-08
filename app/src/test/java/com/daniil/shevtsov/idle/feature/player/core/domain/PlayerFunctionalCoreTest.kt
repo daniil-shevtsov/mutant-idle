@@ -15,33 +15,34 @@ internal class PlayerFunctionalCoreTest {
 
     @Test
     fun `should update player traits when trait selected`() {
-        val initialPlayerTrait = playerTrait(id = 1L, title = "Initial Job")
-        val newPlayerTrait = playerTrait(id = 2L, title = "new Job")
+        val initialPlayerTrait = playerTrait(id = 1L)
+        val newPlayerTrait = playerTrait(id = 2L)
 
         val initialPlayer = player(
             traits = mapOf(
-                TraitId.Job to initialPlayerTrait
-            ),
-            generalTags = listOf(tag("Non trait tag"))
+                initialPlayerTrait.traitId to initialPlayerTrait
+            )
         )
         val initialState = gameState(
             player = initialPlayer,
             availableTraits = listOf(
                 initialPlayerTrait,
                 newPlayerTrait,
-
-                )
+            )
         )
         val newState = playerFunctionalCore(
             state = initialState,
-            action = PlayerViewAction.ChangeTrait(traitId = TraitId.Job, id = 2L),
+            action = PlayerViewAction.ChangeTrait(
+                traitId = newPlayerTrait.traitId,
+                id = newPlayerTrait.id,
+            ),
         )
 
         assertThat(newState)
             .prop(GameState::player)
             .prop(Player::traits)
             .containsOnly(
-                TraitId.Job to newPlayerTrait
+                newPlayerTrait.traitId to newPlayerTrait
             )
     }
 
