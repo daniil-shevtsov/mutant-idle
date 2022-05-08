@@ -36,11 +36,15 @@ fun handleDebugJobSelected(
     state: GameState,
     viewAction: DebugViewAction.JobSelected
 ): GameState {
+    val newTrait = state.availableTraits.find { it.traitId == TraitId.Job && it.id == viewAction.id }!!
+    val newTraits = state.player.traits.toMutableMap().apply { put(TraitId.Job, newTrait) }.toMap()
+
     val newJob = state.availableJobs.find { it.id == viewAction.id }!!
 
     return state.copy(
         player = state.player.copy(
             job = newJob,
+            traits = newTraits,
         )
     )
 
