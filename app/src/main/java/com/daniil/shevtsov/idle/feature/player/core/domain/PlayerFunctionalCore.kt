@@ -5,7 +5,24 @@ import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 fun playerFunctionalCore(
     state: GameState,
     action: PlayerViewAction,
-): GameState {
+): GameState = when (action) {
+    is PlayerViewAction.ChangeTrait -> changeTrait(state, action)
+}
 
-    return state
+fun changeTrait(
+    state: GameState,
+    action: PlayerViewAction.ChangeTrait
+): GameState {
+    return state.copy(
+        player = state.player.copy(
+            traits = state.player.traits.toMutableMap().apply {
+                val newTrait =
+                    state.availableTraits.find { trait -> trait.traitId == action.traitId && trait.id == action.id }
+                if (newTrait != null) {
+                    put(action.traitId, newTrait)
+                }
+            }
+                .toMap()
+        )
+    )
 }
