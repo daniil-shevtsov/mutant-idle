@@ -88,16 +88,10 @@ private fun handleTraitSelected(
     }
 
     return when {
-        unlockStatus[newTrait.id] == true -> state.copy(
-            player = state.player.copy(
-                traits = newTraits,
-            ),
-        ).let { state ->
-            playerFunctionalCore(
-                state = state,
-                action = PlayerViewAction.ChangeTrait(traitId = newTrait.traitId, id = viewAction.id),
-            )
-        }
+        unlockStatus[newTrait.id] == true -> playerFunctionalCore(
+            state = state,
+            action = PlayerViewAction.ChangeTrait(traitId = newTrait.traitId, id = viewAction.id),
+        )
         else -> state
     }
 }
