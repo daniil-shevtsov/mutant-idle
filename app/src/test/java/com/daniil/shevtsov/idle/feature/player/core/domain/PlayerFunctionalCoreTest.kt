@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 internal class PlayerFunctionalCoreTest {
 
     @Test
-    fun `should add selected trait tags in player tags`() {
+    fun `should add selected trait tags into player tags`() {
         val jobTag = tag(name = "job tag")
         val speciesTag = tag(name = "species tag")
         val player = player(
@@ -82,21 +82,13 @@ internal class PlayerFunctionalCoreTest {
             )
         )
 
-        val newState = gameState(
-            player = player(
-                generalTags = initialPlayer.generalTags,
-                traits = mapOf(
-                    newPlayerTrait.traitId to newPlayerTrait
-                )
-            )
+        val newState = playerFunctionalCore(
+            state = initialState,
+            action = PlayerViewAction.ChangeTrait(
+                traitId = newPlayerTrait.traitId,
+                id = newPlayerTrait.id,
+            ),
         )
-//            playerFunctionalCore(
-//            state = initialState,
-//            action = PlayerViewAction.ChangeTrait(
-//                traitId = newPlayerTrait.traitId,
-//                id = newPlayerTrait.id,
-//            ),
-//        )
 
         assertThat(newState)
             .prop(GameState::player)
