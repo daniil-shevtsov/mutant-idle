@@ -58,6 +58,7 @@ private fun handleSpeciesSelected(
     return state.copy(
         player = state.player.copy(
             species = newSpecies,
+            traits = newTraits,
         )
     )
 }
