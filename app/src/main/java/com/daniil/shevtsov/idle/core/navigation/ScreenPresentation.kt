@@ -4,7 +4,7 @@ import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.gamefinish.domain.toFinishedGameState
 import com.daniil.shevtsov.idle.feature.gamefinish.presentation.mapFinishedGameViewState
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.mapGameStartViewState
-import com.daniil.shevtsov.idle.feature.main.presentation.drawerPresentation
+import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerPresentation
 import com.daniil.shevtsov.idle.feature.main.presentation.mapMainViewState
 
 fun screenPresentationFunctionalCore(
