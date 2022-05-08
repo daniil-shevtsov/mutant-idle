@@ -28,63 +28,7 @@ import org.junit.jupiter.api.Test
 internal class DrawerFunctionalCoreTest {
 
     @Test
-    fun `should change player job when job selected`() = runBlockingTest {
-        val nonJobTags = listOf(
-            tag(name = "non-job tag 1"),
-            tag(name = "non-job tag 2"),
-        )
-
-        val previousJob = playerJob(
-            id = 0L,
-            title = "old job",
-            tags = listOf(
-                tag(name = "old job tag 1"),
-                tag(name = "old job tag 2"),
-            )
-        )
-        val newJob = playerJob(
-            id = 1L,
-            title = "new job",
-            tags = listOf(
-                tag(name = "new job tag 1"),
-                tag(name = "new job tag 2"),
-            ),
-        )
-
-        val previousPlayerState = player(
-            job = previousJob,
-            generalTags = nonJobTags
-        )
-
-        val initialState = gameState(
-            availableJobs = listOf(
-                previousJob,
-                newJob
-            ),
-            player = previousPlayerState,
-        )
-
-        val newState = drawerFunctionalCore(
-            state = initialState,
-            viewAction = DrawerViewAction.Debug(DebugViewAction.JobSelected(id = newJob.id))
-        )
-
-        assertThat(newState)
-            .prop(GameState::player)
-            .all {
-                assertJobSelected(id = newJob.id)
-
-                prop(Player::tags)
-                    .all {
-                        containsSubList(nonJobTags)
-                        containsNone(previousJob.tags)
-                        containsSubList(newJob.tags)
-                    }
-            }
-    }
-
-    @Test
-    fun `should change player species when species selected`() = runBlockingTest {
+    fun `should change player trait when trait selected`() = runBlockingTest {
         val newSpecies = playerTrait(traitId = TraitId.Species)
         val initialState = gameState(availableTraits = listOf(newSpecies))
 
