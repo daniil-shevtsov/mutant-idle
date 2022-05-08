@@ -4,6 +4,7 @@ import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewAction
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
 import com.daniil.shevtsov.idle.feature.main.domain.handleDrawerTabSwitched
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 
 fun drawerFunctionalCore(
     state: GameState,
@@ -49,6 +50,8 @@ private fun handleSpeciesSelected(
     state: GameState,
     viewAction: DebugViewAction.SpeciesSelected
 ): GameState {
+    val newTrait = state.availableTraits.find { it.traitId == TraitId.Species && it.id == viewAction.id }!!
+
     val newSpecies = state.availableSpecies.find { it.id == viewAction.id }!!
 
     return state.copy(
