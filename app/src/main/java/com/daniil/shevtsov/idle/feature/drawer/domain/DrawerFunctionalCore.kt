@@ -90,5 +90,9 @@ private fun unlockEverything(
     unlockState = state.unlockState.copy(
         species = state.availableSpecies.map { species -> species.id to true }.toMap(),
         jobs = state.availableJobs.map { job -> job.id to true }.toMap(),
+        traits = mapOf(
+            TraitId.Species to state.availableSpecies.map { species -> species.id to true }.toMap(),
+            TraitId.Job to state.availableJobs.map { job -> job.id to true }.toMap(),
+        )
     )
 )

@@ -112,6 +112,7 @@ internal class DrawerFunctionalCoreTest {
                     lockedSpecies.id to true,
                     unlockedSpecies.id to true,
                 )
+
             }
     }
 
