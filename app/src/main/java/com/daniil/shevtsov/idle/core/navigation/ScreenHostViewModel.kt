@@ -2,9 +2,9 @@ package com.daniil.shevtsov.idle.core.navigation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerViewState
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
-import com.daniil.shevtsov.idle.feature.main.presentation.drawerViewState
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject

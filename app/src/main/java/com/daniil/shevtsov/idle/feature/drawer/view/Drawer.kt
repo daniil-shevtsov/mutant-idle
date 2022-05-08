@@ -8,10 +8,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugComposable
-import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
-import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
+import com.daniil.shevtsov.idle.feature.drawer.presentation.*
 import com.daniil.shevtsov.idle.feature.drawer.view.DrawerTabSelector
-import com.daniil.shevtsov.idle.feature.main.presentation.*
 import com.daniil.shevtsov.idle.feature.player.info.view.PlayerInfoComposable
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJobModel
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag

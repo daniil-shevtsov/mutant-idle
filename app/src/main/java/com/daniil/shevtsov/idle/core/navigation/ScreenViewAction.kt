@@ -1,7 +1,7 @@
 package com.daniil.shevtsov.idle.core.navigation
 
+import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
-import com.daniil.shevtsov.idle.feature.main.presentation.DrawerViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 
 sealed class ScreenViewAction {

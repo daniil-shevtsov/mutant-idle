@@ -8,7 +8,9 @@ import assertk.assertions.isInstanceOf
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
+import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerContentViewState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
+import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel

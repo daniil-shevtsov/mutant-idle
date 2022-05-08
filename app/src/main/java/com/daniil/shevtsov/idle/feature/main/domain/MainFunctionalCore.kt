@@ -2,7 +2,7 @@ package com.daniil.shevtsov.idle.feature.main.domain
 
 import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
-import com.daniil.shevtsov.idle.feature.main.presentation.DrawerViewAction
+import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey

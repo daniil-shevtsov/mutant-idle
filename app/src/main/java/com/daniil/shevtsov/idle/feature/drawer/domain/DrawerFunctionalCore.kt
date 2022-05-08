@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.feature.main.presentation
 
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewAction
+import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
 import com.daniil.shevtsov.idle.feature.main.domain.handleDrawerTabSwitched
 
 fun drawerFunctionalCore(

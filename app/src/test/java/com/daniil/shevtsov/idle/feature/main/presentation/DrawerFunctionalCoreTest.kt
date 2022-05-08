@@ -8,6 +8,7 @@ import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewAction
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
+import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
