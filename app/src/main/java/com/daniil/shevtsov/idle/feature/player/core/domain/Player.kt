@@ -9,10 +9,9 @@ import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 
 data class Player(
-    val job: PlayerJob = playerJob(),
     val traits: Map<TraitId, PlayerTrait>,
     val generalTags: List<Tag>,
 ) {
     val tags: List<Tag>
-        get() = generalTags + job.tags + traits.values.map { it.tags }.flatten()
+        get() = generalTags + traits.values.map { it.tags }.flatten()
 }
