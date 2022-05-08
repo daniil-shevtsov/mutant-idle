@@ -15,7 +15,6 @@ fun player(
     traits: Map<TraitId, PlayerTrait> = mapOf(),
 ) = Player(
     job = job,
-    species = species,
     traits = traits,
     generalTags = generalTags,
 )

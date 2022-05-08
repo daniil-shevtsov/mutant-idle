@@ -34,12 +34,9 @@ private fun handleSpeciesSelected(
     val newTrait = state.availableTraits.find { it.traitId == TraitId.Species && it.id == viewAction.id }!!
     val newTraits = state.player.traits.toMutableMap().apply { put(TraitId.Species, newTrait) }.toMap()
 
-    val newSpecies = state.availableSpecies.find { it.id == viewAction.id }!!
-
     return when {
-        state.unlockState.species[newSpecies.id] == true -> state.copy(
+        state.unlockState.species[newTrait.id] == true -> state.copy(
             player = state.player.copy(
-                species = newSpecies,
                 traits = newTraits,
             ),
         ).let { state ->
