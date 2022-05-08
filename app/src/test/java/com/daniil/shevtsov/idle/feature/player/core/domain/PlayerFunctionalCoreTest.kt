@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.feature.player.core.domain
 
 import assertk.assertThat
+import assertk.assertions.containsAll
 import assertk.assertions.containsOnly
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
@@ -23,6 +24,9 @@ internal class PlayerFunctionalCoreTest {
                 TraitId.Species to playerTrait(tags = listOf(speciesTag)),
             )
         )
+
+        assertThat(player::tags)
+            .containsAll(jobTag, speciesTag)
     }
 
     @Test
