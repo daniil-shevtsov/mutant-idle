@@ -1,9 +1,8 @@
 package com.daniil.shevtsov.idle.feature.player.core.domain
 
+import assertk.all
 import assertk.assertThat
-import assertk.assertions.containsAll
-import assertk.assertions.containsOnly
-import assertk.assertions.prop
+import assertk.assertions.*
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
@@ -83,20 +82,30 @@ internal class PlayerFunctionalCoreTest {
             )
         )
 
-        val newState = playerFunctionalCore(
-            state = initialState,
-            action = PlayerViewAction.ChangeTrait(
-                traitId = newPlayerTrait.traitId,
-                id = newPlayerTrait.id,
-            ),
+        val newState = gameState(
+            player = player(
+                generalTags = initialPlayer.generalTags,
+                traits = mapOf(
+                    newPlayerTrait.traitId to newPlayerTrait
+                )
+            )
         )
+//            playerFunctionalCore(
+//            state = initialState,
+//            action = PlayerViewAction.ChangeTrait(
+//                traitId = newPlayerTrait.traitId,
+//                id = newPlayerTrait.id,
+//            ),
+//        )
 
-//        assertThat(newState)
-//            .prop(GameState::player)
-//            .prop(Player::traits)
-//            .containsOnly(
-//                newPlayerTrait.traitId to newPlayerTrait
-//            )
+        assertThat(newState)
+            .prop(GameState::player)
+            .prop(Player::tags)
+            .all {
+                containsSubList(initialPlayer.generalTags)
+                containsSubList(newPlayerTrait.tags)
+                containsNone(initialPlayerTrait.tags)
+            }
     }
 
 }
