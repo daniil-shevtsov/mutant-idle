@@ -87,23 +87,25 @@ internal class GameStartFunctionalCoreTest {
     }
 
     @Test
-    fun `should choose species when unlocked species clicked`() {
+    fun `should choose trait when unlocked trait clicked`() {
         val nonSpeciesTags = listOf(
             tag(name = "non-species tag 1"),
             tag(name = "non-species tag 2"),
         )
 
-        val previousSpecies = playerSpecies(
+        val previousSpecies = playerTrait(
             id = 0L,
             title = "old species",
+            traitId = TraitId.Species,
             tags = listOf(
                 tag(name = "old species tag 1"),
                 tag(name = "old species tag 2"),
             )
         )
-        val newSpecies = playerSpecies(
+        val newSpecies = playerTrait(
             id = 1L,
             title = "new species",
+            traitId = TraitId.Species,
             tags = listOf(
                 tag(name = "new species tag 1"),
                 tag(name = "new species tag 2"),
@@ -112,13 +114,16 @@ internal class GameStartFunctionalCoreTest {
 
         val previousPlayerState = player(
             generalTags = nonSpeciesTags,
+            traits = mapOf(
+                TraitId.Species to previousSpecies
+            )
         )
 
         val initialState = gameState(
             player = previousPlayerState,
-            availableSpecies = listOf(
+            availableTraits = listOf(
                 previousSpecies,
-                newSpecies
+                newSpecies,
             ),
             unlockState = unlockState(
                 species = mapOf(
@@ -129,7 +134,7 @@ internal class GameStartFunctionalCoreTest {
 
         val newState = gameStartFunctionalCore(
             state = initialState,
-            viewAction = GameStartViewAction.SpeciesSelected(id = newSpecies.id)
+            viewAction = GameStartViewAction.TraitSelected(traitId = TraitId.Species, id = newSpecies.id)
         )
 
         assertThat(newState)
