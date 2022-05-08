@@ -21,16 +21,18 @@ fun drawerPresentation(
             DrawerTabId.Debug -> {
                 DrawerContentViewState.Debug(
                     state = DebugViewState(
-                        jobSelection = state.availableJobs.map { job ->
-                            with(job) {
-                                PlayerJobModel(
-                                    id = id,
-                                    title = title,
-                                    tags = tags,
-                                    isSelected = state.player.job.id == job.id,
-                                )
-                            }
-                        },
+                        jobSelection = state.availableTraits
+                            .filter { trait -> trait.traitId == TraitId.Job }
+                            .map { job ->
+                                with(job) {
+                                    PlayerJobModel(
+                                        id = id,
+                                        title = title,
+                                        tags = tags,
+                                        isSelected = state.player.traits[TraitId.Job]?.id == job.id,
+                                    )
+                                }
+                            },
                         speciesSelection = state.availableTraits
                             .filter { trait -> trait.traitId == TraitId.Species }
                             .map { species ->
