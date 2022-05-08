@@ -36,7 +36,7 @@ data class GameState(
     val drawerTabs: List<DrawerTab>,
     val availableJobs: List<PlayerJob>,
     val availableSpecies: List<PlayerSpecies>,
-    val availableTraits: List<PlayerTrait>,
+    var availableTraits: List<PlayerTrait>,
     val availableEndings: List<Ending>,
     val locationSelectionState: LocationSelectionState,
     val flavors: List<Flavor>,
@@ -45,6 +45,34 @@ data class GameState(
     val screenStack: List<Screen>,
     val unlockState: UnlockState,
 ) {
+    init {
+        availableTraits = when (availableTraits.isEmpty()) {
+            true -> availableSpecies.map { playerSpecies ->
+                with(playerSpecies) {
+                    playerTrait(
+                        id = id,
+                        traitId = TraitId.Species,
+                        title = title,
+                        icon = playerSpecies.icon,
+                        description = description,
+                        tags = tags,
+                    )
+                }
+            } + availableJobs.map { playerJob ->
+                with(playerJob) {
+                    playerTrait(
+                        id = id,
+                        traitId = TraitId.Job,
+                        title = title,
+                        description = description,
+                        tags = tags,
+                    )
+                }
+            }
+            else -> availableTraits
+        }
+    }
+
     val jobTraits: List<PlayerTrait> = availableTraits
         .filter { trait -> trait.traitId == TraitId.Job }
 
@@ -82,31 +110,7 @@ fun gameState(
     sections = sections,
     availableJobs = availableJobs,
     availableSpecies = availableSpecies,
-    availableTraits = when (availableTraits.isEmpty()) {
-        true -> availableSpecies.map { playerSpecies ->
-            with(playerSpecies) {
-                playerTrait(
-                    id = id,
-                    traitId = TraitId.Species,
-                    title = title,
-                    icon = playerSpecies.icon,
-                    description = description,
-                    tags = tags,
-                )
-            }
-        } + availableJobs.map { playerJob ->
-            with(playerJob) {
-                playerTrait(
-                    id = id,
-                    traitId = TraitId.Job,
-                    title = title,
-                    description = description,
-                    tags = tags,
-                )
-            }
-        }
-        else -> availableTraits
-    },
+    availableTraits = availableTraits,
     availableEndings = availableEndings,
     locationSelectionState = locationSelectionState,
     flavors = flavors,
