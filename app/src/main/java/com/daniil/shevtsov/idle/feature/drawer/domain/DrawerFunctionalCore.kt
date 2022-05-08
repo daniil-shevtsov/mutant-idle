@@ -22,6 +22,13 @@ fun drawerFunctionalCore(
                 state = state,
                 viewAction = debugAction,
             )
+            is DebugViewAction.TraitSelected -> playerFunctionalCore(
+                state = state,
+                action = PlayerViewAction.ChangeTrait(
+                    traitId = debugAction.traitId,
+                    id = debugAction.id,
+                )
+            )
             is DebugViewAction.SpeciesSelected -> handleSpeciesSelected(
                 state = state,
                 viewAction = debugAction,
@@ -38,7 +45,8 @@ fun handleDebugJobSelected(
     state: GameState,
     viewAction: DebugViewAction.JobSelected
 ): GameState {
-    val newTrait = state.availableTraits.find { it.traitId == TraitId.Job && it.id == viewAction.id }!!
+    val newTrait =
+        state.availableTraits.find { it.traitId == TraitId.Job && it.id == viewAction.id }!!
     val newTraits = state.player.traits.toMutableMap().apply { put(TraitId.Job, newTrait) }.toMap()
 
     return state.copy(
@@ -58,8 +66,10 @@ private fun handleSpeciesSelected(
     state: GameState,
     viewAction: DebugViewAction.SpeciesSelected
 ): GameState {
-    val newTrait = state.availableTraits.find { it.traitId == TraitId.Species && it.id == viewAction.id }!!
-    val newTraits = state.player.traits.toMutableMap().apply { put(TraitId.Species, newTrait) }.toMap()
+    val newTrait =
+        state.availableTraits.find { it.traitId == TraitId.Species && it.id == viewAction.id }!!
+    val newTraits =
+        state.player.traits.toMutableMap().apply { put(TraitId.Species, newTrait) }.toMap()
 
     return state.copy(
         player = state.player.copy(
