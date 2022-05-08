@@ -25,13 +25,6 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 fun PlayerInfoComposablePreview() {
     PlayerInfoComposable(
         state = PlayerInfoState(
-            playerJob = playerJob(
-                title = "Memelogist",
-                tags = listOf(
-                    tag(name = "Knowledge of memes"),
-                    tag(name = "Hoard of meme folders")
-                )
-            ),
             playerTraits = listOf(
                 playerTrait(
                     title = "Memelogist",
