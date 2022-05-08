@@ -25,35 +25,6 @@ import org.junit.jupiter.api.Test
 internal class GameStartFunctionalCoreTest {
 
     @Test
-    fun `should not do anything when locked job clicked`() {
-        val currentJob = playerJob(id = 1L, title = "current job", tags = listOf(tag(name = "lol")))
-        val newJob = playerJob(id = 2L, title = "new job", tags = listOf(tag(name = "kek")))
-        val initialPlayer = player(
-            job = currentJob
-        )
-
-        val initialState = gameState(
-            player = initialPlayer,
-            availableJobs = listOf(
-                currentJob,
-                newJob,
-            ),
-            unlockState = unlockState(
-                jobs = mapOf(newJob.id to false)
-            )
-        )
-
-        val newState = gameStartFunctionalCore(
-            state = initialState,
-            viewAction = GameStartViewAction.JobSelected(id = newJob.id)
-        )
-
-        assertThat(newState)
-            .prop(GameState::player)
-            .isEqualTo(initialPlayer)
-    }
-
-    @Test
     fun `should not do anything when locked trait clicked`() {
         val newTrait = playerTrait(
             id = 2L,
@@ -147,67 +118,6 @@ internal class GameStartFunctionalCoreTest {
                         containsSubList(nonSpeciesTags)
                         containsNone(previousSpecies.tags)
                         containsSubList(newSpecies.tags)
-                    }
-            }
-    }
-
-    @Test
-    fun `should choose job when unlocked job clicked`() {
-        val nonJobTags = listOf(
-            tag(name = "non-species tag 1"),
-            tag(name = "non-species tag 2"),
-        )
-
-        val previousJob = playerJob(
-            id = 0L,
-            title = "old job",
-            tags = listOf(
-                tag(name = "old job tag 1"),
-                tag(name = "old job tag 2"),
-            )
-        )
-        val newJob = playerJob(
-            id = 1L,
-            title = "new job",
-            tags = listOf(
-                tag(name = "new job tag 1"),
-                tag(name = "new job tag 2"),
-            ),
-        )
-
-        val previousPlayerState = player(
-            job = previousJob,
-            generalTags = nonJobTags,
-        )
-
-        val initialState = gameState(
-            player = previousPlayerState,
-            availableJobs = listOf(
-                previousJob,
-                newJob
-            ),
-            unlockState = unlockState(
-                jobs = mapOf(
-                    newJob.id to true
-                )
-            ),
-        )
-
-        val newState = gameStartFunctionalCore(
-            state = initialState,
-            viewAction = GameStartViewAction.JobSelected(id = newJob.id)
-        )
-
-        assertThat(newState)
-            .prop(GameState::player)
-            .all {
-                assertJobSelected(id = newJob.id)
-
-                prop(Player::tags)
-                    .all {
-                        containsSubList(nonJobTags)
-                        containsNone(previousJob.tags)
-                        containsSubList(newJob.tags)
                     }
             }
     }

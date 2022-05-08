@@ -80,7 +80,6 @@ private fun handleTraitSelected(
     viewAction: GameStartViewAction.TraitSelected,
 ): GameState {
     val newTrait = state.availableTraits.find { it.traitId == viewAction.traitId && it.id == viewAction.id }!!
-    val newTraits = state.player.traits.toMutableMap().apply { put(viewAction.traitId, newTrait) }.toMap()
 
     val unlockStatus = when(newTrait.traitId) {
         TraitId.Species -> state.unlockState.species
