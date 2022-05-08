@@ -42,4 +42,5 @@ object Icons {
 
     val LockedCharacter = "\uD83D\uDC64"
     val Job = "\uD83D\uDCDD"
+    val TraitDefault = Devourer
 }

@@ -96,7 +96,7 @@ fun SpeciesSelection(
                     ) {
                         Text(
                             text = when (item.isUnlocked) {
-                                true -> item.icon
+                                true -> item.icon ?: Icons.TraitDefault
                                 else -> Icons.LockedCharacter
                             },
                             fontSize = 24.sp
