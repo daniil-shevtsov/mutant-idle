@@ -30,6 +30,7 @@ internal class PlayerFunctionalCoreTest {
                 newPlayerTrait,
             )
         )
+
         val newState = playerFunctionalCore(
             state = initialState,
             action = PlayerViewAction.ChangeTrait(
@@ -44,6 +45,41 @@ internal class PlayerFunctionalCoreTest {
             .containsOnly(
                 newPlayerTrait.traitId to newPlayerTrait
             )
+    }
+
+    @Test
+    fun `should replace previous trait tags with the new ones`() {
+        val initialPlayerTrait = playerTrait(id = 1L, tags = listOf(tag(name = "initial trait tag")))
+        val newPlayerTrait = playerTrait(id = 2L, tags = listOf(tag(name = "new trait tag")))
+
+        val initialPlayer = player(
+            generalTags = listOf(tag(name = "non-trait tag")),
+            traits = mapOf(
+                initialPlayerTrait.traitId to initialPlayerTrait
+            )
+        )
+        val initialState = gameState(
+            player = initialPlayer,
+            availableTraits = listOf(
+                initialPlayerTrait,
+                newPlayerTrait,
+            )
+        )
+
+        val newState = playerFunctionalCore(
+            state = initialState,
+            action = PlayerViewAction.ChangeTrait(
+                traitId = newPlayerTrait.traitId,
+                id = newPlayerTrait.id,
+            ),
+        )
+
+//        assertThat(newState)
+//            .prop(GameState::player)
+//            .prop(Player::traits)
+//            .containsOnly(
+//                newPlayerTrait.traitId to newPlayerTrait
+//            )
     }
 
 }
