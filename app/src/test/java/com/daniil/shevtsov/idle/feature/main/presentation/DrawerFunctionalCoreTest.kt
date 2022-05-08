@@ -12,6 +12,7 @@ import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
+import com.daniil.shevtsov.idle.feature.player.core.domain.assertJobSelected
 import com.daniil.shevtsov.idle.feature.player.core.domain.assertSpeciesSelected
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
@@ -70,8 +71,7 @@ internal class DrawerFunctionalCoreTest {
         assertThat(newState)
             .prop(GameState::player)
             .all {
-                prop(Player::job)
-                    .isEqualTo(newJob)
+                assertJobSelected(id = newJob.id)
 
                 prop(Player::tags)
                     .all {
