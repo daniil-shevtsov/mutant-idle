@@ -114,7 +114,7 @@ internal class DrawerFunctionalCoreTest {
         val initialState = gameState(
             player = previousPlayerState,
             availableSpecies = listOf(
-                previousPlayerState.species,
+                previousSpecies,
                 newSpecies
             ),
         )
