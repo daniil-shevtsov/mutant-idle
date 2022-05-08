@@ -1,6 +1,9 @@
 package com.daniil.shevtsov.idle.feature.player.job.domain
 
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
+import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
+import com.daniil.shevtsov.idle.feature.player.trait.domain.toJob
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 
 fun playerJob(
@@ -8,12 +11,13 @@ fun playerJob(
     title: String = "",
     description: String = "",
     tags: List<Tag> = emptyList(),
-) = PlayerJob(
+) = playerTrait(
     id = id,
+    traitId = TraitId.Job,
     title = title,
     description = description,
     tags = tags,
-)
+).toJob()
 
 fun playerJobModel(
     id: Long = 0L,
