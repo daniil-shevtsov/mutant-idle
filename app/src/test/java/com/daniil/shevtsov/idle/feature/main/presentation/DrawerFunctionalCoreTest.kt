@@ -104,14 +104,6 @@ internal class DrawerFunctionalCoreTest {
         assertThat(newState)
             .prop(GameState::unlockState)
             .all {
-                prop(UnlockState::jobs).containsOnly(
-                    lockedJob.id to true,
-                    unlockedJob.id to true,
-                )
-                prop(UnlockState::species).containsOnly(
-                    lockedSpecies.id to true,
-                    unlockedSpecies.id to true,
-                )
                 prop(UnlockState::traits).all {
                     contains(
                         TraitId.Job, mapOf(
