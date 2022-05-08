@@ -18,6 +18,8 @@ import com.daniil.shevtsov.idle.feature.main.presentation.sectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.species.domain.Species
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
+import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
@@ -330,7 +332,9 @@ class MainFunctionalCoreTest {
     fun `should use mutanity as main ratio of devourer`() {
         val state = gameState(
             ratios = listOf(ratio(key = RatioKey.Mutanity)),
-            player = player(species = Species.Devourer),
+            player = player(traits = mapOf(
+                TraitId.Species to playerTrait(id = Species.Devourer.id)
+            )),
         )
 
         assertThat(state).prop(GameState::mainRatioKey).isEqualTo(RatioKey.Mutanity)

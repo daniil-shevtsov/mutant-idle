@@ -102,7 +102,6 @@ internal class GameStartFunctionalCoreTest {
         )
 
         val previousPlayerState = player(
-            species = previousSpecies,
             generalTags = nonSpeciesTags,
         )
 
