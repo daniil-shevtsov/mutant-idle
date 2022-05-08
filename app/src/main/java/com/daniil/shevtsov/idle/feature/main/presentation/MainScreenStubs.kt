@@ -20,7 +20,6 @@ fun mainViewState(
     upgradeState: UpgradesViewState = upgradeViewState(),
     locationSelectionViewState: LocationSelectionViewState = locationSelectionViewState(),
     sectionCollapse: Map<SectionKey, Boolean> = mapOf(),
-    drawerState: DrawerViewState = drawerViewState(),
 ) = MainViewState.Success(
     resources = resources,
     ratios = ratios,
@@ -28,7 +27,6 @@ fun mainViewState(
     locationSelectionViewState = locationSelectionViewState,
     shop = upgradeState,
     sectionCollapse = sectionCollapse,
-    drawerState = drawerState,
 )
 
 fun actionsState(

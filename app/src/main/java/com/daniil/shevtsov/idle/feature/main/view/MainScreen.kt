@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.Pallete
-import com.daniil.shevtsov.idle.core.ui.debugViewState
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.core.ui.widgets.CollapseButton
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
@@ -101,12 +100,6 @@ fun MainPreview() {
                 SectionKey.Resources to false,
                 SectionKey.Actions to false,
                 SectionKey.Upgrades to false,
-            ),
-            drawerState = DrawerViewState(
-                tabSelectorState = emptyList(),
-                drawerContent = DrawerContentViewState.Debug(
-                    state = debugViewState()
-                )
             ),
         ),
         onViewAction = {},
