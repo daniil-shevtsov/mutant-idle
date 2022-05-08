@@ -52,6 +52,7 @@ fun drawerPresentation(
                 DrawerContentViewState.PlayerInfo(
                     playerInfo = PlayerInfoState(
                         playerJob = state.player.job,
+                        playerTraits = state.player.traits.values.toList(),
                         playerTags = state.player.tags,
                     )
                 )

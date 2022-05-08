@@ -15,6 +15,7 @@ import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.feature.player.info.presentation.PlayerInfoState
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
+import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 
 @Preview
@@ -28,6 +29,15 @@ fun PlayerInfoComposablePreview() {
                     tag(name = "Knowledge of memes"),
                     tag(name = "Hoard of meme folders")
                 )
+            ),
+            playerTraits = listOf(
+              playerTrait(
+                  title = "Memelogist",
+                  tags = listOf(
+                      tag(name = "Knowledge of memes"),
+                      tag(name = "Hoard of meme folders")
+                  ),
+              )
             ),
             playerTags = listOf(
                 tag(name = "Antisocial"),
