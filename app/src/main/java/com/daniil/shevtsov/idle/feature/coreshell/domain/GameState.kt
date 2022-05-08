@@ -49,6 +49,7 @@ data class GameState(
             else -> availableTraits
         }
         availableJobs = availableTraits.filter { it.traitId == TraitId.Job }.map(PlayerTrait::toJob)
+        availableSpecies = availableTraits.filter { it.traitId == TraitId.Species }.map(PlayerTrait::toSpecies)
     }
 
     val jobTraits: List<PlayerTrait> = availableTraits
