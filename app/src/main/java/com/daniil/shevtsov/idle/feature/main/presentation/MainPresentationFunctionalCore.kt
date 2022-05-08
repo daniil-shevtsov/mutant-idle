@@ -6,17 +6,12 @@ import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.presentation.*
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
-import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
-import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.flavor.flavorMachine
 import com.daniil.shevtsov.idle.feature.location.domain.Location
 import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
-import com.daniil.shevtsov.idle.feature.player.info.presentation.PlayerInfoState
-import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
-import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.presentation.RatioModel
@@ -116,47 +111,6 @@ private fun createMainViewState(state: GameState): MainViewState {
                 )
             },
         sectionCollapse = state.sections.map { it.key to it.isCollapsed }.toMap(),
-        drawerState = DrawerViewState(
-            tabSelectorState = state.drawerTabs,
-            drawerContent = when (state.drawerTabs.find { it.isSelected }?.id
-                ?: DrawerTabId.PlayerInfo) {
-                DrawerTabId.Debug -> {
-                    DrawerContentViewState.Debug(
-                        state = DebugViewState(
-                            jobSelection = state.availableJobs.map { job ->
-                                with(job) {
-                                    PlayerJobModel(
-                                        id = id,
-                                        title = title,
-                                        tags = tags,
-                                        isSelected = state.player.job.id == job.id,
-                                    )
-                                }
-                            },
-                            speciesSelection = state.availableSpecies.map { species ->
-                                with(species) {
-                                    PlayerSpeciesModel(
-                                        id = id,
-                                        title = title,
-                                        tags = tags,
-                                        isSelected = state.player.species.id == species.id,
-                                    )
-                                }
-                            }
-                        )
-                    )
-                }
-                DrawerTabId.PlayerInfo -> {
-                    DrawerContentViewState.PlayerInfo(
-                        playerInfo = PlayerInfoState(
-                            playerJob = state.player.job,
-                            playerTags = state.player.tags,
-                        )
-                    )
-                }
-            }
-
-        ),
     )
 }
 

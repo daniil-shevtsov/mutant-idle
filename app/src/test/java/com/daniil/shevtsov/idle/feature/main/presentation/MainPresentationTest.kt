@@ -7,9 +7,6 @@ import assertk.assertions.*
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.action.presentation.*
-import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
-import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
-import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
 import com.daniil.shevtsov.idle.feature.flavor.Flavors
 import com.daniil.shevtsov.idle.feature.flavor.flavor
 import com.daniil.shevtsov.idle.feature.location.domain.location
@@ -18,10 +15,6 @@ import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
-import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
-import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
-import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
-import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
 import com.daniil.shevtsov.idle.feature.ratio.presentation.RatioModel
@@ -464,50 +457,6 @@ class MainPresentationTest {
     }
 
     @Test
-    fun `should show debug job selection if has any`() = runBlockingTest {
-        val availableJobs = listOf(
-            playerJob(id = 0L),
-            playerJob(id = 1L),
-            playerJob(id = 2L),
-        )
-
-        val state = mainFunctionalCoreState(
-            drawerTabs = listOf(drawerTab(id = DrawerTabId.Debug, isSelected = true)),
-            availableJobs = availableJobs,
-        )
-
-        val viewState = mapMainViewState(state = state)
-
-        assertThat(viewState)
-            .extractingDebugState()
-            .extractingJobSelection()
-            .extracting(PlayerJobModel::id)
-            .containsExactly(0L, 1L, 2L)
-    }
-
-    @Test
-    fun `should show debug species selection if has any`() = runBlockingTest {
-        val availableSpecies = listOf(
-            playerSpecies(id = 0L),
-            playerSpecies(id = 1L),
-            playerSpecies(id = 2L),
-        )
-
-        val state = mainFunctionalCoreState(
-            drawerTabs = listOf(drawerTab(id = DrawerTabId.Debug, isSelected = true)),
-            availableSpecies = availableSpecies,
-        )
-
-        val viewState = mapMainViewState(state = state)
-
-        assertThat(viewState)
-            .extractingDebugState()
-            .extractingSpeciesSelection()
-            .extracting(PlayerSpeciesModel::id)
-            .containsExactly(0L, 1L, 2L)
-    }
-
-    @Test
     fun `should show only actions that require avialable tags`() = runBlockingTest {
         val availableTag = tag(name = "lol")
         val notAvailableTag = tag(name = "kek")
@@ -870,23 +819,8 @@ class MainPresentationTest {
             .index(0)
             .prop(ActionPane::actions)
 
-    private fun Assert<RatioModel>.assertPercentage(expected: Double) =
-        prop(RatioModel::percent)
-            .isCloseTo(expected, 0.00001)
-
     private fun Assert<MainViewState>.extractingRatios() = extractingMainState()
         .prop(MainViewState.Success::ratios)
-
-    private fun Assert<MainViewState>.extractingSuspicion() =
-        extractingMainState()
-            .prop(MainViewState.Success::ratios)
-            .index(1)
-
-    private fun Assert<MainViewState>.extractingMutanityValue() =
-        extractingMainState()
-            .prop(MainViewState.Success::ratios)
-            .index(0)
-            .prop(RatioModel::percent)
 
     private fun Assert<MainViewState>.extractingMutanityName() =
         extractingMainState()
@@ -899,13 +833,6 @@ class MainPresentationTest {
         extractingMutanityName()
             .isEqualTo(expectedName)
 
-    private fun Assert<MainViewState>.hasSuspicionRatioName(expectedName: String) =
-        extractingMainState()
-            .prop(MainViewState.Success::ratios)
-            .index(1)
-            .prop(RatioModel::name)
-            .isEqualTo(expectedName)
-
     private fun Assert<MainViewState>.extractingResources() =
         extractingMainState()
             .prop(MainViewState.Success::resources)
@@ -913,27 +840,6 @@ class MainPresentationTest {
     private fun Assert<MainViewState>.extractingResourceNameAndValues() =
         extractingResources()
             .extracting(ResourceModel::name, ResourceModel::value)
-
-    private fun Assert<MainViewState>.extractingBlood() =
-        extractingMainState()
-            .prop(MainViewState.Success::resources)
-            .index(0)
-            .prop(ResourceModel::value)
-
-    private fun Assert<MainViewState>.extractingMoney() = extractingMainState()
-        .prop(MainViewState.Success::resources)
-        .index(1)
-        .prop(ResourceModel::value)
-
-    private fun Assert<MainViewState>.extractingDebugState() = extractingMainState()
-        .prop(MainViewState.Success::drawerState)
-        .prop(DrawerViewState::drawerContent)
-        .isInstanceOf(DrawerContentViewState.Debug::class)
-        .prop(DrawerContentViewState.Debug::state)
-
-    private fun Assert<DebugViewState>.extractingJobSelection() = prop(DebugViewState::jobSelection)
-    private fun Assert<DebugViewState>.extractingSpeciesSelection() =
-        prop(DebugViewState::speciesSelection)
 
     private fun Assert<MainViewState>.extractingMainState() =
         isInstanceOf(MainViewState.Success::class)

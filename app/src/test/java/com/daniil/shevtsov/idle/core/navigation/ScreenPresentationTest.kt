@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.core.navigation
 
 import assertk.assertThat
 import assertk.assertions.isInstanceOf
+import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import org.junit.jupiter.api.Test
 
@@ -12,7 +13,9 @@ internal class ScreenPresentationTest {
 
         val viewState = screenPresentationFunctionalCore(state = state)
 
-        assertThat(viewState).isInstanceOf(ScreenViewState.Main::class)
+        assertThat(viewState)
+            .prop(ScreenHostViewState::contentState)
+            .isInstanceOf(ScreenContentViewState.Main::class)
     }
 
     @Test
@@ -21,6 +24,8 @@ internal class ScreenPresentationTest {
 
         val viewState = screenPresentationFunctionalCore(state = state)
 
-        assertThat(viewState).isInstanceOf(ScreenViewState.FinishedGame::class)
+        assertThat(viewState)
+            .prop(ScreenHostViewState::contentState)
+            .isInstanceOf(ScreenContentViewState.FinishedGame::class)
     }
 }

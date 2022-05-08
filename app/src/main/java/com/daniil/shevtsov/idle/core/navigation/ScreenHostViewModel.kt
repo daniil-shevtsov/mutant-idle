@@ -2,9 +2,9 @@ package com.daniil.shevtsov.idle.core.navigation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerViewState
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
-import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,7 +14,7 @@ class ScreenHostViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _state =
-        MutableStateFlow<ScreenViewState>(ScreenViewState.Main(MainViewState.Loading))
+        MutableStateFlow(createInitialState())
     val state = _state.asStateFlow()
 
     private val viewActionFlow = MutableSharedFlow<ScreenViewAction>()
@@ -44,5 +44,10 @@ class ScreenHostViewModel @Inject constructor(
             viewActionFlow.emit(action)
         }
     }
+
+    private fun createInitialState() = ScreenHostViewState(
+        drawerState = drawerViewState(),
+        contentState = ScreenContentViewState.Loading,
+    )
 
 }

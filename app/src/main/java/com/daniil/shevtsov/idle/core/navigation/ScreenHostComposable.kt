@@ -1,16 +1,22 @@
 package com.daniil.shevtsov.idle.core.navigation
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.material.DrawerValue
+import androidx.compose.material.ModalDrawer
+import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import com.daniil.shevtsov.idle.feature.gamefinish.view.FinishedGameScreen
 import com.daniil.shevtsov.idle.feature.gamestart.view.GameStartScreen
+import com.daniil.shevtsov.idle.feature.main.MainDrawer
 import com.daniil.shevtsov.idle.feature.main.view.MainScreen
 
 @Composable
 fun ScreenHostComposable(
-    viewModel: ScreenHostViewModel
+    viewModel: ScreenHostViewModel,
+    modifier: Modifier = Modifier,
 ) {
     val delegatedViewState by viewModel.state.collectAsState()
 
@@ -18,23 +24,44 @@ fun ScreenHostComposable(
         viewModel.handleAction(ScreenViewAction.General(GeneralViewAction.Back))
     }
 
-    when (val viewState = delegatedViewState) {
-        is ScreenViewState.GameStart -> {
-            GameStartScreen(
-                state = viewState.state,
-                onAction = { action -> viewModel.handleAction(ScreenViewAction.Start(action)) }
-            )
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    ModalDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            MainDrawer(
+                drawerState = delegatedViewState.drawerState,
+                modifier = modifier,
+                onViewAction = { action -> viewModel.handleAction(ScreenViewAction.Drawer(action)) })
+        },
+        content = {
+            when (val contentViewState = delegatedViewState.contentState) {
+                is ScreenContentViewState.GameStart -> {
+                    GameStartScreen(
+                        state = contentViewState.state,
+                        modifier = modifier,
+                        onAction = { action -> viewModel.handleAction(ScreenViewAction.Start(action)) }
+                    )
+                }
+                is ScreenContentViewState.Main -> {
+                    MainScreen(
+                        state = contentViewState.state,
+                        modifier = modifier,
+                        onViewAction = { action ->
+                            viewModel.handleAction(
+                                ScreenViewAction.Main(
+                                    action
+                                )
+                            )
+                        },
+                    )
+                }
+                is ScreenContentViewState.FinishedGame -> {
+                    FinishedGameScreen(
+                        state = contentViewState.state,
+                    )
+                }
+            }
         }
-        is ScreenViewState.Main -> {
-            MainScreen(
-                state = viewState.state,
-                onViewAction = { action -> viewModel.handleAction(ScreenViewAction.Main(action)) },
-            )
-        }
-        is ScreenViewState.FinishedGame -> {
-            FinishedGameScreen(
-                state = viewState.state,
-            )
-        }
-    }
+    )
+
 }

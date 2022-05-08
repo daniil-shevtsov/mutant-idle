@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.feature.main.domain
 
 import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
+import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
@@ -25,19 +26,7 @@ fun mainFunctionalCore(
             state = state,
             viewAction = viewAction,
         )
-        is MainViewAction.DebugJobSelected -> handleDebugJobSelected(
-            state = state,
-            viewAction = viewAction,
-        )
-        is MainViewAction.DrawerTabSwitched -> handleDrawerTabSwitched(
-            state = state,
-            viewAction = viewAction,
-        )
         is MainViewAction.ToggleSectionCollapse -> handleSectionCollapsed(
-            state = state,
-            viewAction = viewAction,
-        )
-        is MainViewAction.DebugSpeciesSelected -> handleSpeciesSelected(
             state = state,
             viewAction = viewAction,
         )
@@ -84,22 +73,9 @@ fun handleLocationSelected(
 
 }
 
-private fun handleSpeciesSelected(
-    state: GameState,
-    viewAction: MainViewAction.DebugSpeciesSelected
-): GameState {
-    val newSpecies = state.availableSpecies.find { it.id == viewAction.id }!!
-
-    return state.copy(
-        player = state.player.copy(
-            species = newSpecies,
-        )
-    )
-}
-
 fun handleDrawerTabSwitched(
     state: GameState,
-    viewAction: MainViewAction.DrawerTabSwitched
+    viewAction: DrawerViewAction.TabSwitched
 ): GameState {
     return state.copy(
         drawerTabs = state.drawerTabs.map { tab ->
@@ -235,18 +211,4 @@ fun handleUpgradeSelected(
         }
         else -> state
     }
-}
-
-fun handleDebugJobSelected(
-    state: GameState,
-    viewAction: MainViewAction.DebugJobSelected
-): GameState {
-    val newJob = state.availableJobs.find { it.id == viewAction.id }!!
-
-    return state.copy(
-        player = state.player.copy(
-            job = newJob,
-        )
-    )
-
 }
