@@ -1,4 +1,4 @@
-package com.daniil.shevtsov.idle.feature.main.presentation
+package com.daniil.shevtsov.idle.feature.drawer.domain
 
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewAction

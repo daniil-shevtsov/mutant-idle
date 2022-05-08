@@ -15,6 +15,8 @@ import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
 import com.daniil.shevtsov.idle.feature.player.species.domain.PlayerSpecies
 import com.daniil.shevtsov.idle.feature.player.trait.domain.PlayerTrait
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
+import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
@@ -73,7 +75,30 @@ fun gameState(
     sections = sections,
     availableJobs = availableJobs,
     availableSpecies = availableSpecies,
-    availableTraits = availableTraits,
+    availableTraits = when (availableTraits.isEmpty()) {
+        true -> availableSpecies.map { playerSpecies ->
+            with(playerSpecies) {
+                playerTrait(
+                    id = id,
+                    traitId = TraitId.Species,
+                    title = title,
+                    description = description,
+                    tags = tags,
+                )
+            }
+        } + availableJobs.map { playerJob ->
+            with(playerJob) {
+                playerTrait(
+                    id = id,
+                    traitId = TraitId.Job,
+                    title = title,
+                    description = description,
+                    tags = tags,
+                )
+            }
+        }
+        else -> availableTraits
+    },
     availableEndings = availableEndings,
     locationSelectionState = locationSelectionState,
     flavors = flavors,

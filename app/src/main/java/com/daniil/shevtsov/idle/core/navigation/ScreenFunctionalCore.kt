@@ -3,7 +3,7 @@ package com.daniil.shevtsov.idle.core.navigation
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.gamestart.domain.gameStartFunctionalCore
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
-import com.daniil.shevtsov.idle.feature.main.presentation.drawerFunctionalCore
+import com.daniil.shevtsov.idle.feature.drawer.domain.drawerFunctionalCore
 
 fun screenFunctionalCore(
     state: GameState,
