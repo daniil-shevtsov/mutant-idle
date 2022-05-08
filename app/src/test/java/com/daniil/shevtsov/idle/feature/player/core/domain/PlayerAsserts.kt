@@ -10,7 +10,7 @@ import com.daniil.shevtsov.idle.feature.player.trait.domain.PlayerTrait
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 
 fun Assert<Player>.assertSpeciesSelected(id: Long) = prop(Player::traits)
-    .prop(name = "Lol", extract = { traits -> traits[TraitId.Species] })
+    .prop(name = "speciesTrait", extract = { traits -> traits[TraitId.Species] })
     .isNotNull()
     .prop(PlayerTrait::id)
     .isEqualTo(id)
