@@ -18,6 +18,7 @@ import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
+import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.unlocks.domain.UnlockState
 import com.daniil.shevtsov.idle.feature.unlocks.domain.unlockState
@@ -84,57 +85,22 @@ internal class DrawerFunctionalCoreTest {
 
     @Test
     fun `should change player species when species selected`() = runBlockingTest {
-        val nonSpeciesTags = listOf(
-            tag(name = "non-species tag 1"),
-            tag(name = "non-species tag 2"),
-        )
-
-        val previousSpecies = playerSpecies(
-            id = 0L,
-            title = "old species",
-            tags = listOf(
-                tag(name = "old species tag 1"),
-                tag(name = "old species tag 2"),
-            )
-        )
-        val newSpecies = playerSpecies(
-            id = 1L,
-            title = "new species",
-            tags = listOf(
-                tag(name = "new species tag 1"),
-                tag(name = "new species tag 2"),
-            ),
-        )
-
-        val previousPlayerState = player(
-            generalTags = nonSpeciesTags,
-        )
-
-        val initialState = gameState(
-            player = previousPlayerState,
-            availableSpecies = listOf(
-                previousSpecies,
-                newSpecies
-            ),
-        )
+        val newSpecies = playerTrait(traitId = TraitId.Species)
+        val initialState = gameState(availableTraits = listOf(newSpecies))
 
         val newState = drawerFunctionalCore(
             state = initialState,
-            viewAction = DrawerViewAction.Debug(DebugViewAction.SpeciesSelected(id = newSpecies.id))
+            viewAction = DrawerViewAction.Debug(
+                DebugViewAction.TraitSelected(
+                    traitId = newSpecies.traitId,
+                    id = newSpecies.id
+                )
+            )
         )
 
         assertThat(newState)
             .prop(GameState::player)
-            .all {
-                assertSpeciesSelected(id = newSpecies.id)
-
-                prop(Player::tags)
-                    .all {
-                        containsSubList(nonSpeciesTags)
-                        containsNone(previousSpecies.tags)
-                        containsSubList(newSpecies.tags)
-                    }
-            }
+            .assertSpeciesSelected(id = newSpecies.id)
     }
 
     @Test
