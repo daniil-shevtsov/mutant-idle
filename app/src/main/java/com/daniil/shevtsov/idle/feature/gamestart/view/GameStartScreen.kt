@@ -19,6 +19,7 @@ import com.daniil.shevtsov.idle.core.ui.protrusive
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewState
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.gameStartViewState
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 
 @Preview(
     widthDp = 230,
@@ -54,11 +55,11 @@ fun GameStartScreen(
         Text(text = state.description, color = Color.White, fontSize = 24.sp)
         SpeciesSelection(
             selection = state.speciesSelection,
-            onItemClicked = { id -> onAction(GameStartViewAction.SpeciesSelected(id)) }
+            onItemClicked = { id -> onAction(GameStartViewAction.TraitSelected(TraitId.Species, id)) }
         )
         SpeciesSelection(
             selection = state.jobSelection,
-            onItemClicked = { id -> onAction(GameStartViewAction.JobSelected(id)) }
+            onItemClicked = { id -> onAction(GameStartViewAction.TraitSelected(TraitId.Job, id)) }
         )
         Box(
             modifier = modifier
