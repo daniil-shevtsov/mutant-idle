@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.feature.gamestart.domain
 import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 
 fun gameStartFunctionalCore(
     state: GameState,
@@ -28,6 +29,9 @@ private fun handleSpeciesSelected(
     state: GameState,
     viewAction: GameStartViewAction.SpeciesSelected,
 ): GameState {
+    val newTrait = state.availableTraits.find { it.traitId == TraitId.Species && it.id == viewAction.id }!!
+    val newTraits = state.player.traits.toMutableMap().apply { put(TraitId.Species, newTrait) }.toMap()
+
     val newSpecies = state.availableSpecies.find { it.id == viewAction.id }!!
 
     return when {
@@ -44,6 +48,9 @@ private fun handleJobSelected(
     state: GameState,
     viewAction: GameStartViewAction.JobSelected,
 ): GameState {
+    val newTrait = state.availableTraits.find { it.traitId == TraitId.Job && it.id == viewAction.id }!!
+    val newTraits = state.player.traits.toMutableMap().apply { put(TraitId.Job, newTrait) }.toMap()
+
     val newJob = state.availableJobs.find { it.id == viewAction.id }!!
 
     return when {
