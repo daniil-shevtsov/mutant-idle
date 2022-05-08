@@ -53,18 +53,13 @@ internal class GameStartFunctionalCoreTest {
 
     @Test
     fun `should not do anything when locked species clicked`() {
-        val previousSpecies =
-            playerSpecies(id = 1L, title = "current species", tags = listOf(tag(name = "lol")))
         val newSpecies =
             playerSpecies(id = 2L, title = "new species", tags = listOf(tag(name = "kek")))
-        val initialPlayer = player(
-            species = previousSpecies
-        )
+        val initialPlayer = player()
 
         val initialState = gameState(
             player = initialPlayer,
             availableSpecies = listOf(
-                previousSpecies,
                 newSpecies,
             ),
             unlockState = unlockState(
