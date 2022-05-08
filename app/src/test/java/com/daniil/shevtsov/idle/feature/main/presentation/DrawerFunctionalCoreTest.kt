@@ -19,6 +19,7 @@ import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
+import com.daniil.shevtsov.idle.feature.player.trait.domain.toPlayerTrait
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.unlocks.domain.UnlockState
 import com.daniil.shevtsov.idle.feature.unlocks.domain.unlockState
@@ -79,11 +80,19 @@ internal class DrawerFunctionalCoreTest {
         val unlockedSpecies = playerSpecies(id = 4L, title = "unlocked species")
 
         val initialState = gameState(
-            availableJobs = listOf(lockedJob, unlockedJob),
-            availableSpecies = listOf(lockedSpecies, unlockedSpecies),
+            availableTraits = listOf(
+                lockedJob.toPlayerTrait(),
+                unlockedJob.toPlayerTrait(),
+                lockedSpecies.toPlayerTrait(),
+                unlockedSpecies.toPlayerTrait(),
+            ),
             unlockState = unlockState(
                 jobs = mapOf(lockedJob.id to false, unlockedJob.id to true),
                 species = mapOf(lockedSpecies.id to false, unlockedSpecies.id to true),
+                traits = mapOf(
+                    TraitId.Species to mapOf(lockedJob.id to false, unlockedJob.id to true),
+                    TraitId.Job to mapOf(lockedSpecies.id to false, unlockedSpecies.id to true),
+                )
             )
         )
 
