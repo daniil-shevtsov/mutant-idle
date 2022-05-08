@@ -16,7 +16,10 @@ import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.Jobs
 import com.daniil.shevtsov.idle.feature.player.species.domain.Species
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.player.trait.domain.createInitialTraits
+import com.daniil.shevtsov.idle.feature.player.trait.domain.toJob
+import com.daniil.shevtsov.idle.feature.player.trait.domain.toPlayerTrait
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.createResources
@@ -52,7 +55,7 @@ fun createInitialGameState() : GameState {
             },
             jobs = createInitialJobs().associate { job ->
                 job.id to when (job) {
-                    Jobs.Unemployed -> true
+                    Jobs.Unemployed.toJob() -> true
                     else -> false
                 }
             },
@@ -92,13 +95,16 @@ private fun createInitialDrawerTabs() = listOf(
 )
 
 private fun createInitialPlayer() = player(
-    job = Jobs.Unemployed,
+    job = Jobs.Unemployed.toJob(),
     species = Species.Devourer,
     generalTags = listOf(
         Tags.HumanAppearance,
         Tags.Knowledge.SocialNorms,
         Tags.Nimble,
     ),
+    traits = mapOf(
+        TraitId.Job to Jobs.Unemployed,
+    )
 )
 
 private fun createInitialJobs() = listOf(
@@ -107,7 +113,7 @@ private fun createInitialJobs() = listOf(
     Jobs.Undertaker,
     Jobs.Butcher,
     Jobs.ScrapyardMechanic,
-)
+).map { it.toJob() }
 
 private fun createInitialSpecies() = listOf(
     Species.Devourer,
