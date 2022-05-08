@@ -330,6 +330,8 @@ class MainFunctionalCoreTest {
         val state = gameState(
             ratios = listOf(ratio(key = RatioKey.Mutanity))
         )
+
+        assertThat(state).prop(GameState::mainRatioKey).isEqualTo(RatioKey.Mutanity)
     }
 
 }
