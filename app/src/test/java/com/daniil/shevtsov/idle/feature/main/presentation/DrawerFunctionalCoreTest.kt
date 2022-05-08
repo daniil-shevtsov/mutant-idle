@@ -87,7 +87,6 @@ internal class DrawerFunctionalCoreTest {
                 unlockedSpecies.toPlayerTrait(),
             ),
             unlockState = unlockState(
-                jobs = mapOf(lockedJob.id to false, unlockedJob.id to true),
                 species = mapOf(lockedSpecies.id to false, unlockedSpecies.id to true),
                 traits = mapOf(
                     TraitId.Species to mapOf(lockedJob.id to false, unlockedJob.id to true),
