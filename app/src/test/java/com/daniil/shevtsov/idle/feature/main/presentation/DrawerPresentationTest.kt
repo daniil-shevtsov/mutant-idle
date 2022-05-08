@@ -20,15 +20,8 @@ internal class DrawerPresentationTest {
 
     @Test
     fun `should show debug job selection if has any`() = runBlockingTest {
-        val availableJobs = listOf(
-            playerJob(id = 0L),
-            playerJob(id = 1L),
-            playerJob(id = 2L),
-        )
-
         val state = gameState(
             drawerTabs = listOf(drawerTab(id = DrawerTabId.Debug, isSelected = true)),
-            availableJobs = availableJobs,
             availableTraits = listOf(
                 playerJob(id = 0L).toPlayerTrait(),
                 playerJob(id = 1L).toPlayerTrait(),
@@ -40,19 +33,15 @@ internal class DrawerPresentationTest {
 
         assertThat(viewState)
             .extractingDebugState()
-            .extractingJobSelection()
-            .extracting(PlayerJobModel::id)
+            .extractingTraitSelections()
+            .index(0)
+            .prop(DebugTraitSelection::traits)
+            .extracting(PlayerTrait::id)
             .containsExactly(0L, 1L, 2L)
     }
 
     @Test
     fun `should show debug species selection if has any`() = runBlockingTest {
-        val availableSpecies = listOf(
-            playerSpecies(id = 0L),
-            playerSpecies(id = 1L),
-            playerSpecies(id = 2L),
-        )
-
         val state = gameState(
             drawerTabs = listOf(drawerTab(id = DrawerTabId.Debug, isSelected = true)),
             availableTraits = listOf(
@@ -60,7 +49,6 @@ internal class DrawerPresentationTest {
                 playerSpecies(id = 1L).toPlayerTrait(),
                 playerSpecies(id = 2L).toPlayerTrait(),
             ),
-            availableSpecies = availableSpecies,
         )
 
         val viewState = drawerPresentation(state = state)
