@@ -12,7 +12,7 @@ fun createUpgrades() = listOf(
         title = "Iron jaws",
         subtitle = "Your bite is stronger than of a shark",
         price = 10.0,
-        resourceChanges = mapOf(ResourceKey.Blood to 10.0),
+        resourceChanges = mapOf(ResourceKey.Blood to -10.0),
         status = UpgradeStatus.NotBought,
         tags = mapOf(
             TagRelation.Provides to listOf(Tags.Body.IronJaws),
@@ -24,7 +24,7 @@ fun createUpgrades() = listOf(
         title = "Super Strength",
         subtitle = "Lifting a car or crushing a lock is not a problem anymore",
         price = 25.0,
-        resourceChanges = mapOf(ResourceKey.Blood to 25.0),
+        resourceChanges = mapOf(ResourceKey.Blood to -25.0),
         tags = mapOf(
             TagRelation.Provides to listOf(
                 Tags.Body.SuperStrength,
@@ -44,7 +44,7 @@ fun createUpgrades() = listOf(
         title = "Invisibility",
         subtitle = Flavors.invisibilityGain.placeholder,
         price = 1.0,
-        resourceChanges = mapOf(ResourceKey.Blood to 1.0),
+        resourceChanges = mapOf(ResourceKey.Blood to -1.0),
         tags = mapOf(
             TagRelation.Provides to listOf(Tags.Abilities.Invisibility),
             TagRelation.RequiredAny to listOf(

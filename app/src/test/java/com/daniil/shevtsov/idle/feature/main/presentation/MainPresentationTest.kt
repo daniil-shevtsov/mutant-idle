@@ -46,14 +46,14 @@ class MainPresentationTest {
                 ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
             ),
             upgrades = listOf(
-                upgrade(id = 0L, price = 32.0, resourceChanges = mapOf(ResourceKey.Blood to 32.0)),
-                upgrade(id = 1L, price = 35.0, resourceChanges = mapOf(ResourceKey.Blood to 25.0)),
+                upgrade(id = 0L, price = 32.0, resourceChanges = mapOf(ResourceKey.Blood to -32.0)),
+                upgrade(id = 1L, price = 35.0, resourceChanges = mapOf(ResourceKey.Blood to -25.0)),
                 upgrade(
                     id = 2L,
                     price = 150.0,
-                    resourceChanges = mapOf(ResourceKey.Blood to 150.0)
+                    resourceChanges = mapOf(ResourceKey.Blood to -150.0)
                 ),
-                upgrade(id = 3L, price = 30.0, resourceChanges = mapOf(ResourceKey.Blood to 30.0)),
+                upgrade(id = 3L, price = 30.0, resourceChanges = mapOf(ResourceKey.Blood to -30.0)),
             ),
             actions = listOf(
                 action(id = 0L, title = "human action"),
@@ -214,7 +214,7 @@ class MainPresentationTest {
                 upgrade(
                     id = 0L,
                     price = 5.0,
-                    resourceChanges = mapOf(ResourceKey.Blood to 5.0)
+                    resourceChanges = mapOf(ResourceKey.Blood to -5.0)
                 )
             ),
         )
@@ -236,7 +236,7 @@ class MainPresentationTest {
                     upgrade(
                         id = 0L,
                         price = 20.0,
-                        resourceChanges = mapOf(ResourceKey.Blood to 20.0)
+                        resourceChanges = mapOf(ResourceKey.Blood to -20.0)
                     )
                 ),
             )
@@ -261,7 +261,7 @@ class MainPresentationTest {
                 upgrade(
                     id = 0L,
                     price = 10.0,
-                    resourceChanges = mapOf(ResourceKey.Blood to 10.0),
+                    resourceChanges = mapOf(ResourceKey.Blood to -10.0),
                     status = UpgradeStatus.Bought
                 )
             ),
