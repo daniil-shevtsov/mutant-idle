@@ -1,8 +1,7 @@
 package com.daniil.shevtsov.idle.core.ui
 
-import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
-import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
-import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
+import com.daniil.shevtsov.idle.feature.action.presentation.RatioChangeModel
+import com.daniil.shevtsov.idle.feature.action.presentation.ResourceChangeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.PriceModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
@@ -12,12 +11,16 @@ internal fun upgradePreviewStub(
     title: String = "Hand-sword",
     subtitle: String = "Transform your hand into a sharp blade",
     status: UpgradeStatusModel = UpgradeStatusModel.Affordable,
+    resourceChanges: List<ResourceChangeModel> = emptyList(),
+    ratioChanges: List<RatioChangeModel> = emptyList(),
 ) = UpgradeModel(
     id = id,
     title = title,
     subtitle = subtitle,
     price = PriceModel("75"),
     status = status,
+    resourceChanges = resourceChanges,
+    ratioChanges = ratioChanges,
 )
 
 internal fun upgradeListPreviewStub() = listOf(

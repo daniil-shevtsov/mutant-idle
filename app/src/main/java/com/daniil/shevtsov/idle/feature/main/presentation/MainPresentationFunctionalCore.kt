@@ -24,7 +24,8 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
-import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModelMapper
+import com.daniil.shevtsov.idle.feature.upgrade.presentation.PriceModel
+import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
 
 fun mapMainViewState(
@@ -87,18 +88,23 @@ private fun createMainViewState(state: GameState): MainViewState {
                 )
             }
             .map { upgrade ->
-                UpgradeModelMapper.map(
-                    upgrade = upgrade.copy(
+                with(upgrade) {
+                    UpgradeModel(
+                        id = id,
+                        title = title,
                         subtitle = flavorMachine(
                             original = upgrade.subtitle,
                             flavors = state.flavors,
                             tags = state.player.tags,
-                        )
-                    ),
-                    status = upgrade.mapStatus(
-                        state.resources.find { it.key == ResourceKey.Blood }?.value ?: 0.0
+                        ),
+                        price = PriceModel(value = price.value.toString()),
+                        status = mapStatus(
+                            state.resources.find { it.key == ResourceKey.Blood }?.value ?: 0.0
+                        ),
+                        resourceChanges = mapResourceChanges(resourceChanges),
+                        ratioChanges = mapRatioChanges(ratioChanges),
                     )
-                )
+                }
             }
             .sortedBy {
                 when (it.status) {
@@ -200,23 +206,8 @@ private fun createActionState(
                         else -> Icons.Monster
                     }
                 ),
-                resourceChanges = resourceChanges.map { (resourceKey, changeValue) ->
-                    val formattedValue =
-                        ("+".takeIf { changeValue > 0 } ?: "") + changeValue.formatRound(digits = 2)
-                    ResourceChangeModel(
-                        icon = resourceKey.chooseIcon(),
-                        value = formattedValue,
-                    )
-                },
-                ratioChanges = ratioChanges.map { (ratioKey, changeValue) ->
-                    val formattedValue =
-                        ("+".takeIf { changeValue > 0 } ?: "") + (changeValue * 100)
-                            .formatRound(digits = 2) + " %"
-                    RatioChangeModel(
-                        icon = ratioKey.chooseIcon(),
-                        value = formattedValue,
-                    )
-                },
+                resourceChanges = mapResourceChanges(resourceChanges),
+                ratioChanges = mapRatioChanges(ratioChanges),
                 isEnabled = isActive,
             )
         }
@@ -231,6 +222,27 @@ private fun createActionState(
         ),
     )
 }
+
+private fun mapResourceChanges(resourceChanges: Map<ResourceKey, Double>) =
+    resourceChanges.map { (resourceKey, changeValue) ->
+        val formattedValue =
+            ("+".takeIf { changeValue > 0 } ?: "") + changeValue.formatRound(digits = 2)
+        ResourceChangeModel(
+            icon = resourceKey.chooseIcon(),
+            value = formattedValue,
+        )
+    }
+
+private fun mapRatioChanges(ratioChanges: Map<RatioKey, Double>) =
+    ratioChanges.map { (ratioKey, changeValue) ->
+        val formattedValue =
+            ("+".takeIf { changeValue > 0 } ?: "") + (changeValue * 100)
+                .formatRound(digits = 2) + " %"
+        RatioChangeModel(
+            icon = ratioKey.chooseIcon(),
+            value = formattedValue,
+        )
+    }
 
 private fun getNameForRatio(ratio: Ratio) = when (ratio.key) {
     RatioKey.Mutanity -> getMutanityNameForRatio(ratio.value)

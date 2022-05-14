@@ -16,6 +16,8 @@ import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.upgradeListPreviewStub
 import com.daniil.shevtsov.idle.core.ui.upgradePreviewStub
+import com.daniil.shevtsov.idle.feature.ratio.view.RatioChanges
+import com.daniil.shevtsov.idle.feature.resource.view.ResourceChanges
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
 
@@ -104,5 +106,19 @@ fun Upgrade(
                 .padding(4.dp)
                 .padding(bottom = 4.dp)
         )
+
+        Row(
+            modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            ResourceChanges(
+                resourceChanges = upgrade.resourceChanges,
+                modifier = modifier,
+            )
+            RatioChanges(
+                ratioChanges = upgrade.ratioChanges,
+                modifier = modifier,
+            )
+        }
     }
 }
