@@ -23,7 +23,7 @@ object Icons {
     val Suspicion = "\uD83D\uDD75️\u200D♂️"
     val Mutanity = "\uD83E\uDDEC"
     val Power = "\uD83E\uDD87"
-    val ShipReapir = "\uD83D\uDD27"
+    val ShipRepair = "\uD83D\uDD27"
 
 
     val Blood = "\uD83E\uDE78"

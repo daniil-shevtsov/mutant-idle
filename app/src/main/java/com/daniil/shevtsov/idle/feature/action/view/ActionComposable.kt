@@ -158,7 +158,7 @@ fun Action(
 
         Text(
             text = action.subtitle,
-            color = Color.Black,
+            color = AppTheme.colors.textDark,
             fontSize = 16.sp,
             modifier = Modifier
                 .fillMaxWidth()

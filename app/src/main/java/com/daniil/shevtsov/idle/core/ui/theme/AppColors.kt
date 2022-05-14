@@ -76,4 +76,15 @@ fun devourerColors(): AppColors = AppColors(
     iconLight = Color.White,
 )
 
+fun alienColors(): AppColors = AppColors(
+    backgroundLight = Color(0xFFCDDEE5),
+    background = Color(0xFF94ACB6),
+    backgroundDark = Color(0xFF5A6E76),
+    backgroundDarkest = Color(0xFF36454B),
+    backgroundText = Color.White,
+    textDark = Color(0xFF26235A),
+    textLight = Color(0xFFE0DEFB),
+    iconLight = Color(0xFFE0DEFB),
+)
+
 internal val LocalColors = staticCompositionLocalOf { devourerColors() }

@@ -127,7 +127,7 @@ private fun RatioKey.chooseIcon(): String {
         RatioKey.Mutanity -> Icons.Mutanity
         RatioKey.Suspicion -> Icons.Suspicion
         RatioKey.Power -> Icons.Power
-        RatioKey.ShipRepair -> Icons.ShipReapir
+        RatioKey.ShipRepair -> Icons.ShipRepair
     }
 }
 
