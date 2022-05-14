@@ -27,6 +27,7 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ratioChangeModel
 import com.daniil.shevtsov.idle.feature.action.presentation.resourceChangeModel
 import com.daniil.shevtsov.idle.feature.main.presentation.actionPane
 import com.daniil.shevtsov.idle.feature.main.presentation.actionsState
+import com.daniil.shevtsov.idle.feature.resource.view.ResourceChanges
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 
@@ -37,19 +38,6 @@ fun ActionPreview() {
         Action(action = actionComposeStub(isEnabled = true))
         Action(action = actionComposeStub(isEnabled = false))
     }
-}
-
-@Preview(
-    widthDp = 400,
-    heightDp = 400,
-)
-@Composable
-fun ActionPanesPreview() {
-    ActionSection(
-        state = actionsState(),
-        isCollapsed = false,
-        onToggleCollapse = {},
-    )
 }
 
 @Preview(
@@ -182,31 +170,10 @@ fun Action(
             modifier = modifier.fillMaxWidth(),
             horizontalArrangement = SpaceBetween
         ) {
-            Column(
-                modifier = Modifier.width(IntrinsicSize.Max),
-                verticalArrangement = spacedBy(4.dp),
-                horizontalAlignment = Alignment.Start,
-            ) {
-                action.resourceChanges.forEach { resourceChange ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = SpaceBetween,
-                        verticalAlignment = CenterVertically,
-                    ) {
-                        Text(
-                            text = resourceChange.icon,
-                            fontSize = 16.sp,
-                        )
-                        Text(
-                            modifier = Modifier.padding(start = 4.dp),
-                            text = resourceChange.value,
-                            color = Color.White,
-                            fontSize = 16.sp,
-                        )
-                    }
-
-                }
-            }
+            ResourceChanges(
+                resourceChanges = action.resourceChanges,
+                modifier = modifier,
+            )
             Column(
                 modifier = Modifier.width(IntrinsicSize.Max),
                 verticalArrangement = spacedBy(4.dp),
@@ -243,13 +210,15 @@ fun actionComposeStub(
 ) = actionModel(
     title = "Eat human food",
     subtitle = "It's not enough",
-    resourceChanges = listOf(
-        resourceChangeModel(icon = Icons.Blood, value = "2.0"),
-        resourceChangeModel(icon = Icons.HumanFood, value = "-1.0"),
-    ),
+    resourceChanges = resourceChangesComposeStub(),
     ratioChanges = listOf(
         ratioChangeModel(icon = Icons.Mutanity, value = "10.0"),
         ratioChangeModel(icon = Icons.Suspicion, value = "-5.0"),
     ),
     isEnabled = isEnabled,
+)
+
+fun resourceChangesComposeStub() = listOf(
+    resourceChangeModel(icon = Icons.Blood, value = "2.0"),
+    resourceChangeModel(icon = Icons.HumanFood, value = "-1.0"),
 )

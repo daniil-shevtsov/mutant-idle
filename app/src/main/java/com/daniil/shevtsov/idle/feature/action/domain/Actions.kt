@@ -298,5 +298,5 @@ fun createAllActions() = listOf(
         ratioChanges = mapOf(
             RatioKey.Suspicion to -0.1,
         )
-    )
+    ),
 )
