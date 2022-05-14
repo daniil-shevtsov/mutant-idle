@@ -22,6 +22,8 @@ fun playerSpecies(
     icon = icon,
     description = description,
     tags = tags,
+    mainRatio =  mainRatio,
+    mainResource = mainResource,
 )
 
 fun playerSpeciesModel(
