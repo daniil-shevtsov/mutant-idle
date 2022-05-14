@@ -192,12 +192,6 @@ fun handleUpgradeSelected(
                     upgrade
                 }
             }
-            val resourceToUpdate =
-                state.resources.find { resource -> resource.key == ResourceKey.Blood }!!
-
-            val updatedResource = resourceToUpdate.copy(
-                value = resourceToUpdate.value - upgradeToBuy.price.value
-            )
 
             val updatedResources = applyResourceChanges(
                 currentResources = state.resources,
