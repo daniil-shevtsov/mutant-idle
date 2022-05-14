@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.presentation.formatting.formatEnumName
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
@@ -68,7 +67,7 @@ fun PlayerInfoComposable(
                 Row {
                     Text(
                         text = formatEnumName(trait.traitId.name),
-                        fontSize = 24.sp,
+                        style = AppTheme.typography.title,
                         color = AppTheme.colors.textLight,
                         modifier = Modifier
                             .background(AppTheme.colors.background)
@@ -76,7 +75,7 @@ fun PlayerInfoComposable(
                     )
                     Text(
                         text = trait.title,
-                        fontSize = 16.sp,
+                        style = AppTheme.typography.body,
                         color = AppTheme.colors.textDark,
                         modifier = modifier
                             .cavitary(
@@ -93,7 +92,7 @@ fun PlayerInfoComposable(
         Column(verticalArrangement = spacedBy(8.dp)) {
             Text(
                 text = "Tags",
-                fontSize = 24.sp,
+                style = AppTheme.typography.title,
                 color = AppTheme.colors.textLight,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -108,8 +107,8 @@ fun PlayerInfoComposable(
                     val type = traitId?.name?.let(::formatEnumName) ?: "General"
                     tag.name + " ($type)"
                 },
+                style = AppTheme.typography.body,
                 color = AppTheme.colors.textDark,
-                fontSize = 16.sp,
                 modifier = modifier
                     .cavitary(
                         lightColor = AppTheme.colors.backgroundLight,

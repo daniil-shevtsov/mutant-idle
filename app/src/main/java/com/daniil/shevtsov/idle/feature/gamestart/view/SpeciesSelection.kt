@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
@@ -98,7 +97,7 @@ fun SpeciesSelection(
                                 true -> item.icon ?: Icons.TraitDefault
                                 else -> Icons.LockedCharacter
                             },
-                            fontSize = 24.sp
+                            style = AppTheme.typography.icon,
                         )
                     }
                     Row(
@@ -187,8 +186,8 @@ fun SpeciesSelection(
                                 else -> "Locked"
                             },
                             textAlign = TextAlign.Center,
+                            style = AppTheme.typography.title,
                             color = AppTheme.colors.textLight,
-                            fontSize = 18.sp,
                         )
                         Text(
                             modifier = modifier
@@ -205,8 +204,8 @@ fun SpeciesSelection(
                                 true -> item.description
                                 else -> "Do X to unlock this species"
                             },
-                            fontSize = 14.sp,
                             color = AppTheme.colors.textDark,
+                            style = AppTheme.typography.body,
                         )
                     }
                 }

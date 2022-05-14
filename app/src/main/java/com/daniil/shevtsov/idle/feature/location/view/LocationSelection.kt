@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
@@ -59,13 +58,13 @@ fun LocationSelection(
             Text(
                 modifier = modifier.weight(1f),
                 text = "Current location:",
-                fontSize = 24.sp,
+                style = AppTheme.typography.title,
                 color = AppTheme.colors.textLight
             )
             Box(modifier = modifier.weight(1f)) {
                 Text(
                     text = state.selectedLocation.title,
-                    fontSize = 16.sp,
+                    style = AppTheme.typography.body,
                     color = AppTheme.colors.textDark,
                     modifier = modifier
                         .fillMaxWidth()
@@ -97,8 +96,8 @@ fun LocationSelection(
         }
         Text(
             text = state.selectedLocation.description,
+            style = AppTheme.typography.body,
             color = AppTheme.colors.textDark,
-            fontSize = 16.sp,
             modifier = modifier
                 .fillMaxWidth()
                 .cavitary(

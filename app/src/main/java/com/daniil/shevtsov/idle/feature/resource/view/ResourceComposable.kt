@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
@@ -71,16 +70,17 @@ fun ResourcePanel(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Text(text = resource.icon, fontSize = 24.sp)
+        Text(text = resource.icon, style = AppTheme.typography.icon)
         Text(
             modifier = modifier.weight(0.35f),
             text = resource.name,
-            fontSize = 24.sp,
-            color = AppTheme.colors.textLight
+            style = AppTheme.typography.title,
+            color = AppTheme.colors.textLight,
         )
         Text(
             text = resource.value,
-            fontSize = 16.sp,
+            style = AppTheme.typography.body,
+            color = AppTheme.colors.textDark,
             modifier = modifier
                 .weight(0.65f)
                 .fillMaxWidth()

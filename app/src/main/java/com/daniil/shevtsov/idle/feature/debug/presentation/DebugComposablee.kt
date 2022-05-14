@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.widgets.CavityButton
@@ -95,7 +94,7 @@ private fun SpeciesRow(
         Text(
             modifier = modifier.weight(1f),
             text = "Selected Species:",
-            fontSize = 24.sp,
+            style = AppTheme.typography.title,
             color = AppTheme.colors.textLight
         )
         Box(modifier = modifier.weight(1f)) {
@@ -106,7 +105,8 @@ private fun SpeciesRow(
                     null -> "EMPTY"
                     else -> selectedSpecies.title
                 },
-                fontSize = 16.sp,
+                style = AppTheme.typography.title,
+                color = AppTheme.colors.textDark,
                 modifier = modifier
                     .fillMaxWidth()
                     .cavitary(
@@ -129,7 +129,11 @@ private fun SpeciesRow(
                             onExpandChange(false)
                         }
                     ) {
-                        Text(text = species.title)
+                        Text(
+                            text = species.title,
+                            style = AppTheme.typography.body,
+                            color = AppTheme.colors.textDark,
+                        )
                     }
                 }
             }
@@ -155,7 +159,7 @@ private fun JobRow(
         Text(
             modifier = modifier.weight(1f),
             text = "Selected Job:",
-            fontSize = 24.sp,
+            style = AppTheme.typography.title,
             color = AppTheme.colors.textLight
         )
         Box(modifier = modifier.weight(1f)) {
@@ -166,7 +170,8 @@ private fun JobRow(
                     null -> "EMPTY"
                     else -> selectedJob.title
                 },
-                fontSize = 16.sp,
+                style = AppTheme.typography.body,
+                color = AppTheme.colors.textDark,
                 modifier = modifier
                     .fillMaxWidth()
                     .cavitary(
@@ -189,7 +194,11 @@ private fun JobRow(
                             onExpandChange(false)
                         }
                     ) {
-                        Text(text = job.title)
+                        Text(
+                            text = job.title,
+                            style = AppTheme.typography.body,
+                            color = AppTheme.colors.textDark,
+                        )
                     }
                 }
             }

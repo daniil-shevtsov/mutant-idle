@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.theme.vampireColors
@@ -50,11 +49,11 @@ fun TitleWithProgress(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(text = icon, fontSize = 24.sp, color = AppTheme.colors.textLight)
+        Text(text = icon, style = AppTheme.typography.icon, color = AppTheme.colors.textLight)
         Text(
             modifier = modifier.weight(0.35f),
             text = title,
-            fontSize = 24.sp,
+            style = AppTheme.typography.title,
             color = AppTheme.colors.textLight,
             textAlign = TextAlign.Start
         )
@@ -67,6 +66,7 @@ fun TitleWithProgress(
             )
             Text(
                 text = name,
+                style = AppTheme.typography.body,
                 color = when {
                     progress >= 0.65f -> AppTheme.colors.textLight
                     else -> AppTheme.colors.textDark

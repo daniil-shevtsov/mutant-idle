@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.theme.vampireColors
@@ -167,8 +166,8 @@ fun ContentBody(
                     )
                     Text(
                         text = "Upgrades",
+                        style = AppTheme.typography.title,
                         color = AppTheme.colors.textLight,
-                        fontSize = 24.sp,
                         modifier = modifier
                     )
                 }

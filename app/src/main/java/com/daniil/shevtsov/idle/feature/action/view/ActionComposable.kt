@@ -15,10 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
-
 import com.daniil.shevtsov.idle.core.ui.widgets.Collapsable
 import com.daniil.shevtsov.idle.feature.action.domain.actionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
@@ -146,11 +144,11 @@ fun Action(
             verticalAlignment = Alignment.Top,
             horizontalArrangement = spacedBy(8.dp)
         ) {
-            Text(text = actionIcon, fontSize = 24.sp)
+            Text(text = actionIcon, style = AppTheme.typography.icon)
             Text(
                 text = action.title,
+                style = AppTheme.typography.title,
                 color = AppTheme.colors.textLight,
-                fontSize = 24.sp,
                 modifier = Modifier
                     .fillMaxWidth()
             )
@@ -158,8 +156,8 @@ fun Action(
 
         Text(
             text = action.subtitle,
+            style = AppTheme.typography.subtitle,
             color = AppTheme.colors.textDark,
-            fontSize = 16.sp,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(AppTheme.colors.backgroundText)

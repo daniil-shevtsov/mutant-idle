@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.protrusive
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
@@ -46,9 +45,9 @@ fun CavityButton(
                 .padding(4.dp)
                 .fillMaxWidth(),
             text = text,
-            textAlign = TextAlign.Center,
-            fontSize = 24.sp,
+            style = AppTheme.typography.button,
             color = AppTheme.colors.backgroundText,
+            textAlign = TextAlign.Center,
         )
     }
 }

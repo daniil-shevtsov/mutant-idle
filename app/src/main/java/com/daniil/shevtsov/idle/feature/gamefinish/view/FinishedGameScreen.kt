@@ -11,11 +11,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.feature.gamefinish.presentation.*
@@ -68,7 +66,7 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                 .fillMaxWidth()
                 .padding(25.dp),
             text = state.endingState.description,
-            fontSize = 24.sp,
+            style = AppTheme.typography.title,
             color = AppTheme.colors.textLight,
             textAlign = TextAlign.Center,
         )
@@ -88,8 +86,8 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                     ) {
                         Text(
                             text = unlock.title,
+                            style = AppTheme.typography.title,
                             color = AppTheme.colors.textLight,
-                            fontSize = 24.sp,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(AppTheme.colors.backgroundDark)
@@ -98,7 +96,7 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                         Text(
                             text = unlock.subtitle,
                             color = AppTheme.colors.textLight,
-                            fontSize = 20.sp,
+                            style = AppTheme.typography.subtitle,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(AppTheme.colors.backgroundDark)
@@ -114,17 +112,18 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                                 Column {
                                     Text(
                                         text = feature.title,
-                                        fontSize = 18.sp,
-                                        fontWeight = FontWeight.Bold,
+                                        style = AppTheme.typography.bodyTitle,
+                                        color = AppTheme.colors.textDark,
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .background(AppTheme.colors.backgroundText)
                                             .padding(4.dp)
                                     )
-                                    if(feature.subtitle.isNotEmpty()) {
+                                    if (feature.subtitle.isNotEmpty()) {
                                         Text(
                                             text = feature.subtitle,
-                                            fontSize = 16.sp,
+                                            style = AppTheme.typography.body,
+                                            color = AppTheme.colors.textDark,
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .background(AppTheme.colors.backgroundText)

@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.theme.vampireColors
 import com.daniil.shevtsov.idle.core.ui.upgradeListPreviewStub
@@ -82,8 +81,8 @@ fun Upgrade(
         Box {
             Text(
                 text = upgrade.title,
+                style = AppTheme.typography.title,
                 color = AppTheme.colors.textLight,
-                fontSize = 24.sp,
                 modifier = modifier
                     .fillMaxWidth()
                     .background(AppTheme.colors.backgroundDark)
@@ -91,8 +90,8 @@ fun Upgrade(
             )
             Text(
                 text = priceText,
+                style = AppTheme.typography.title,
                 color = priceColor,
-                fontSize = 24.sp,
                 modifier = modifier
                     .background(AppTheme.colors.backgroundDark)
                     .padding(4.dp)
@@ -102,7 +101,8 @@ fun Upgrade(
 
         Text(
             text = upgrade.subtitle,
-            fontSize = 16.sp,
+            style = AppTheme.typography.body,
+            color = AppTheme.colors.textDark,
             modifier = modifier
                 .fillMaxWidth()
                 .background(AppTheme.colors.backgroundText)
