@@ -3,7 +3,6 @@ package com.daniil.shevtsov.idle.feature.player.job.domain
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
-import com.daniil.shevtsov.idle.feature.player.trait.domain.toJob
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 
 fun playerJob(
