@@ -2,7 +2,6 @@ package com.daniil.shevtsov.idle.feature.upgrade.domain
 
 import com.daniil.shevtsov.idle.feature.flavor.Flavors
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
-import com.daniil.shevtsov.idle.feature.resource.domain.resourceChange
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 
@@ -44,7 +43,7 @@ fun createUpgrades() = listOf(
         title = "Invisibility",
         subtitle = Flavors.invisibilityGain.placeholder,
         price = 1.0,
-        resourceChanges = mapOf(ResourceKey.Blood to -1.0),
+        resourceChanges = mapOf(ResourceKey.Scrap to -1.0),
         tags = mapOf(
             TagRelation.Provides to listOf(Tags.Abilities.Invisibility),
             TagRelation.RequiredAny to listOf(

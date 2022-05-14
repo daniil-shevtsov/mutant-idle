@@ -74,7 +74,8 @@ fun Upgrade(
         modifier = modifier
             .background(Pallete.Red)
             .clickable { onClicked() }
-            .padding(4.dp),
+            .padding(4.dp)
+            .background(Pallete.DarkRed),
     ) {
         Box {
             Text(
@@ -108,7 +109,9 @@ fun Upgrade(
         )
 
         Row(
-            modifier = modifier.fillMaxWidth(),
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(4.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             ResourceChanges(
