@@ -27,15 +27,16 @@ private fun handleTraitSelected(
     state: GameState,
     viewAction: GameStartViewAction.TraitSelected,
 ): GameState {
-    val newTrait = state.availableTraits.find { it.traitId == viewAction.traitId && it.id == viewAction.id }!!
+    val newTrait =
+        state.availableTraits.find { it.traitId == viewAction.traitId && it.id == viewAction.id }!!
 
-    val unlockStatus = when(newTrait.traitId) {
+    val unlockStatus = when (newTrait.traitId) {
         TraitId.Species -> state.unlockState.species
-        TraitId.Job -> state.unlockState.jobs
+        TraitId.Job -> state.unlockState.traits[TraitId.Job]
     }
 
     return when {
-        unlockStatus[newTrait.id] == true -> playerFunctionalCore(
+        unlockStatus?.get(newTrait.id) == true -> playerFunctionalCore(
             state = state,
             action = PlayerViewAction.ChangeTrait(traitId = newTrait.traitId, id = viewAction.id),
         )
