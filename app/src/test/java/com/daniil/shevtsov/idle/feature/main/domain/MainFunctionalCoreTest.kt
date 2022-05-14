@@ -76,31 +76,33 @@ class MainFunctionalCoreTest {
     }
 
     @Test
-    fun `should add tags provided by upgrade when upgrade bought`() = runBlockingTest {
-        val providedTag = tag(name = "lol")
+    fun `should update resources, ratios and tags correctly when upgrade bought`() =
+        runBlockingTest {
+            val providedTag = tag(name = "lol")
 
-        val initialState = gameState(
-            resources = listOf(resource(key = ResourceKey.Blood, value = 1.0)),
-            ratios = listOf(ratio(key = RatioKey.Mutanity)),
-            upgrades = listOf(
-                upgrade(
-                    id = 0L, tags = mapOf(
-                        TagRelation.Provides to listOf(providedTag)
+            val initialState = gameState(
+                resources = listOf(resource(key = ResourceKey.Blood, value = 1.0)),
+                ratios = listOf(ratio(key = RatioKey.Mutanity)),
+                upgrades = listOf(
+                    upgrade(
+                        id = 1L,
+                        tags = mapOf(TagRelation.Provides to listOf(providedTag)),
+                        resourceChanges = mapOf(ResourceKey.Blood to -0.5),
+                        ratioChanges = mapOf(RatioKey.Suspicion to 0.5),
                     )
-                )
-            ),
-        )
+                ),
+            )
 
-        val newState = mainFunctionalCore(
-            state = initialState,
-            viewAction = MainViewAction.UpgradeSelected(id = 0L),
-        )
+            val newState = mainFunctionalCore(
+                state = initialState,
+                viewAction = MainViewAction.UpgradeSelected(id = 1L),
+            )
 
-        assertThat(newState)
-            .prop(GameState::player)
-            .prop(Player::tags)
-            .containsExactly(providedTag)
-    }
+            assertThat(newState)
+                .prop(GameState::player)
+                .prop(Player::tags)
+                .containsExactly(providedTag)
+        }
 
     @Test
     fun `should update resources, ratios and tags correctly when action clicked`() =
