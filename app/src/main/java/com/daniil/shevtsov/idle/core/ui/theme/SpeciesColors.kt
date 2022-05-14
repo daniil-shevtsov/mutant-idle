@@ -40,9 +40,12 @@ fun ThemeColorsPreview() {
 fun chooseColorsForId(speciesId: Long): AppColors {
     return when (speciesId) {
         Species.Devourer.id -> devourerColors()
+        Species.Vampire.id -> vampireColors()
+        Species.Shapeshifter.id -> shapeshifterColors()
+        Species.Parasite.id -> parasiteColors()
+        Species.Demon.id -> demonColors()
         Species.Alien.id -> alienColors()
         Species.Android.id -> androidColors()
-        Species.Vampire.id -> vampireColors()
         else -> devourerColors()
     }
 }
@@ -56,6 +59,50 @@ fun devourerColors(): AppColors = AppColors(
     textDark = Color.Black,
     textLight = Color.White,
     iconLight = Color.White,
+)
+
+fun vampireColors(): AppColors = AppColors(
+    backgroundLight = Color(0xFFAF3550),
+    background = Color(0xFF911A34),
+    backgroundDark = Color(0xFF600B1E),
+    backgroundDarkest = Color(0xFF2F000F),
+    backgroundText = Color(0xFFFACBE2),
+    textDark = Color(0xFF3D0D1C),
+    textLight = Color(0xFFfffeff),
+    iconLight = Color(0xFFfffeff),
+)
+
+fun shapeshifterColors() = AppColors(
+    backgroundLight = Color(0xFFFFD8AB),
+    background = Color(0xFFD9A05F),
+    backgroundDark = Color(0xFF815D33),
+    backgroundDarkest = Color(0xFF4B2A1A),
+    backgroundText = Color(0xFFFAE0D0),
+    textDark = Color(0xFF1E0C0C),
+    textLight = Color(0xFFFFDEDE),
+    iconLight = Color(0xFFFFDEDE),
+)
+
+fun parasiteColors() = AppColors(
+    backgroundLight = Color(0xFFAB84FF),
+    background = Color(0xFF5F39B0),
+    backgroundDark = Color(0xFF41257D),
+    backgroundDarkest = Color(0xFF1A112D),
+    backgroundText = Color(0xFFE2D4FF),
+    textDark = Color(0xFF1E182A),
+    textLight = Color(0xFFDBCDFA),
+    iconLight = Color(0xFFDBCDFA),
+)
+
+fun demonColors() = AppColors(
+    backgroundLight = Color(0xFFD63421),
+    background = Color(0xFF841508),
+    backgroundDark = Color(0xFF53150E),
+    backgroundDarkest = Color(0xFF2F0C08),
+    backgroundText = Color(0xFFFFCBC2),
+    textDark = Color(0xFF360C08),
+    textLight = Color(0xFFFF1A00),
+    iconLight = Color(0xFFFF1A00),
 )
 
 fun alienColors(): AppColors = AppColors(
@@ -78,15 +125,4 @@ fun androidColors(): AppColors = AppColors(
     textDark = Color(0xFF26235A),
     textLight = Color(0xFFE0DEFB),
     iconLight = Color(0xFFE0DEFB),
-)
-
-fun vampireColors(): AppColors = AppColors(
-    backgroundLight = Color(0xFFAF3550),
-    background = Color(0xFF911A34),
-    backgroundDark = Color(0xFF600B1E),
-    backgroundDarkest = Color(0xFF2F000F),
-    backgroundText = Color(0xFFFACBE2),
-    textDark = Color(0xFFc79ab0),
-    textLight = Color(0xFFfffeff),
-    iconLight = Color(0xFFfffeff),
 )
