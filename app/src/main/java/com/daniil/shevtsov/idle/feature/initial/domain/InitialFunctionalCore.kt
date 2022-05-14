@@ -34,7 +34,6 @@ fun createInitialGameState(): GameState {
         drawerTabs = createInitialDrawerTabs(),
         upgrades = createUpgrades(),
         actions = createAllActions(),
-        availableJobs = createInitialJobs(),
         availableSpecies = createInitialSpecies(),
         availableTraits = createInitialTraits(),
         availableEndings = createEndings(),
