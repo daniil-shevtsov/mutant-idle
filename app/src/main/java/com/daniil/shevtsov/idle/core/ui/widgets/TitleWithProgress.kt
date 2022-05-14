@@ -12,20 +12,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
+import com.daniil.shevtsov.idle.core.ui.theme.vampireColors
 
 
 @Preview
 @Composable
 fun MainPreview() {
-    Column {
-        listOf("Kek", "Covert", "Investigation").forEach { name ->
-            listOf(0.25f, 0.5f, 0.6f, 0.75f).forEach { percentage ->
-                TitleWithProgress(
-                    title = "Lol",
-                    name = name,
-                    progress = percentage,
-                    icon = Icons.Mutanity,
-                )
+    AppTheme(colors = vampireColors()) {
+        Column {
+            listOf("Kek", "Covert", "Investigation").forEach { name ->
+                listOf(0.25f, 0.5f, 0.6f, 0.75f).forEach { percentage ->
+                    TitleWithProgress(
+                        title = "Lol",
+                        name = name,
+                        progress = percentage,
+                        icon = Icons.Mutanity,
+                    )
+                }
             }
         }
     }
@@ -47,7 +50,7 @@ fun TitleWithProgress(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(text = icon, fontSize = 24.sp)
+        Text(text = icon, fontSize = 24.sp, color = AppTheme.colors.textLight)
         Text(
             modifier = modifier.weight(0.35f),
             text = title,

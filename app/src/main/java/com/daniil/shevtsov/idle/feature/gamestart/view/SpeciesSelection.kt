@@ -206,6 +206,7 @@ fun SpeciesSelection(
                                 else -> "Do X to unlock this species"
                             },
                             fontSize = 14.sp,
+                            color = AppTheme.colors.textDark,
                         )
                     }
                 }

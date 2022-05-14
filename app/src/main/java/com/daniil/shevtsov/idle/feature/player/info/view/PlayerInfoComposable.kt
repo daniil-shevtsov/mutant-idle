@@ -77,6 +77,7 @@ fun PlayerInfoComposable(
                     Text(
                         text = trait.title,
                         fontSize = 16.sp,
+                        color = AppTheme.colors.textDark,
                         modifier = modifier
                             .cavitary(
                                 lightColor = AppTheme.colors.backgroundLight,
@@ -84,7 +85,7 @@ fun PlayerInfoComposable(
                             )
                             .background(AppTheme.colors.backgroundText)
                             .padding(4.dp)
-                            .weight(1f)
+                            .weight(1f),
                     )
                 }
             }
@@ -107,6 +108,7 @@ fun PlayerInfoComposable(
                     val type = traitId?.name?.let(::formatEnumName) ?: "General"
                     tag.name + " ($type)"
                 },
+                color = AppTheme.colors.textDark,
                 fontSize = 16.sp,
                 modifier = modifier
                     .cavitary(

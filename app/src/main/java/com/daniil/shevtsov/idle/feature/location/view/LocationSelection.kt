@@ -66,6 +66,7 @@ fun LocationSelection(
                 Text(
                     text = state.selectedLocation.title,
                     fontSize = 16.sp,
+                    color = AppTheme.colors.textDark,
                     modifier = modifier
                         .fillMaxWidth()
                         .cavitary(
@@ -88,7 +89,7 @@ fun LocationSelection(
                                 onExpandChange()
                             }
                         ) {
-                            Text(text = location.title)
+                            Text(text = location.title, color = AppTheme.colors.textDark)
                         }
                     }
                 }
@@ -96,6 +97,7 @@ fun LocationSelection(
         }
         Text(
             text = state.selectedLocation.description,
+            color = AppTheme.colors.textDark,
             fontSize = 16.sp,
             modifier = modifier
                 .fillMaxWidth()

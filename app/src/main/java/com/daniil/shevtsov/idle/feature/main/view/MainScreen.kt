@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
-import com.daniil.shevtsov.idle.core.ui.theme.alienColors
+import com.daniil.shevtsov.idle.core.ui.theme.vampireColors
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.core.ui.widgets.CollapseButton
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
@@ -33,8 +33,8 @@ import kotlinx.coroutines.launch
     heightDp = 534,
 )
 @Composable
-fun AlienMainPreview() {
-    AppTheme(colors = alienColors()) {
+fun ThemeMainPreview() {
+    AppTheme(colors = vampireColors()) {
         MainScreen(
             state = mainViewState(
                 resources = listOf(
