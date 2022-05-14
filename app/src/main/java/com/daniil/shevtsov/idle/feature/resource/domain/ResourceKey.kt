@@ -8,4 +8,6 @@ enum class ResourceKey {
     Remains,
     FreshMeat,
     Organs,
+    Familiar,
+    Scrap,
 }

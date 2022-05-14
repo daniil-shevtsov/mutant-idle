@@ -39,7 +39,9 @@ object Species {
             Tags.Heliophobia,
             Tags.Immortal,
             Tags.Hypnosis,
-        )
+        ),
+        mainResource = ResourceKey.Blood,
+        mainRatio = RatioKey.Power,
     )
 
     val Parasite = playerSpecies(
@@ -71,7 +73,9 @@ object Species {
         tags = listOf(
             Tags.Species.Alien,
             Tags.Nature.Tech,
-        )
+        ),
+        mainResource = ResourceKey.Scrap,
+        mainRatio = RatioKey.ShipRepair,
     )
 
     val Android = playerSpecies(
@@ -82,6 +86,7 @@ object Species {
         tags = listOf(
             Tags.Species.Android,
             Tags.Nature.Tech,
+        ),
+
         )
-    )
 }

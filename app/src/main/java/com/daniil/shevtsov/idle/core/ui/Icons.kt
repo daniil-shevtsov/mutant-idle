@@ -22,6 +22,8 @@ object Icons {
 
     val Suspicion = "\uD83D\uDD75️\u200D♂️"
     val Mutanity = "\uD83E\uDDEC"
+    val Power = "\uD83E\uDD87"
+    val ShipReapir = "\uD83D\uDD27"
 
 
     val Blood = "\uD83E\uDE78"
@@ -31,6 +33,8 @@ object Icons {
     val Remains = "\uD83D\uDC80"
     val FreshMeat = "\uD83E\uDD69"
     val Organs = "\uD83E\uDEC1"
+    val Familiar = "\uD83D\uDE41"
+    val Scrap = "⚙️"
 
     val Alien = "\uD83D\uDC7D"
     val Android = "\uD83E\uDDBE"

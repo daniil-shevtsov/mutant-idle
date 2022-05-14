@@ -6,18 +6,14 @@ import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.presentation.*
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
-import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.flavor.flavorMachine
 import com.daniil.shevtsov.idle.feature.location.domain.Location
 import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
-import com.daniil.shevtsov.idle.feature.player.core.domain.player
-import com.daniil.shevtsov.idle.feature.player.species.domain.Species
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
-import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
 import com.daniil.shevtsov.idle.feature.ratio.presentation.RatioModel
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
@@ -122,6 +118,8 @@ private fun RatioKey.chooseIcon(): String {
     return when (this) {
         RatioKey.Mutanity -> Icons.Mutanity
         RatioKey.Suspicion -> Icons.Suspicion
+        RatioKey.Power -> Icons.Power
+        RatioKey.ShipRepair -> Icons.ShipReapir
     }
 }
 
@@ -133,6 +131,8 @@ private fun ResourceKey.chooseIcon() = when (this) {
     ResourceKey.Remains -> Icons.Remains
     ResourceKey.FreshMeat -> Icons.FreshMeat
     ResourceKey.Organs -> Icons.Organs
+    ResourceKey.Familiar -> Icons.Familiar
+    ResourceKey.Scrap -> Icons.Scrap
 }
 
 private fun satisfiesAllTagsRelations(
@@ -233,6 +233,8 @@ private fun createActionState(
 private fun getNameForRatio(ratio: Ratio) = when (ratio.key) {
     RatioKey.Mutanity -> getMutanityNameForRatio(ratio.value)
     RatioKey.Suspicion -> getSuspicionNameForRatio(ratio.value)
+    RatioKey.Power -> ""
+    RatioKey.ShipRepair -> ""
 }
 
 private fun getSuspicionNameForRatio(
