@@ -16,7 +16,9 @@ import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.Jobs
 import com.daniil.shevtsov.idle.feature.player.species.domain.Species
-import com.daniil.shevtsov.idle.feature.player.trait.domain.*
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
+import com.daniil.shevtsov.idle.feature.player.trait.domain.toJob
+import com.daniil.shevtsov.idle.feature.player.trait.domain.toSpecies
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.createResources
@@ -49,12 +51,7 @@ fun createInitialGameState(): GameState {
                     else -> false
                 }
             },
-            jobs = createInitialJobs().associate { job ->
-                job.id to when (job.id) {
-                    Jobs.Unemployed.id -> true
-                    else -> false
-                }
-            },
+            jobs = mapOf(),
             traits = mapOf(
                 TraitId.Species to createInitialSpecies().associate { species ->
                     species.id to when (species.id) {
@@ -135,3 +132,18 @@ private fun createInitialSpecies() = listOf(
     Species.Alien,
     Species.Android,
 ).map { it.toSpecies() }
+
+private fun createInitialTraits() = listOf(
+    Jobs.Unemployed,
+    Jobs.Mortician,
+    Jobs.Undertaker,
+    Jobs.Butcher,
+    Jobs.ScrapyardMechanic,
+    Species.Devourer,
+    Species.Vampire,
+    Species.Shapeshifter,
+    Species.Parasite,
+    Species.Demon,
+    Species.Alien,
+    Species.Android,
+)
