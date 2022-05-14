@@ -5,6 +5,7 @@ import androidx.compose.material.DrawerValue
 import androidx.compose.material.ModalDrawer
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -17,6 +18,7 @@ import com.daniil.shevtsov.idle.feature.gamestart.view.GameStartScreen
 import com.daniil.shevtsov.idle.feature.main.MainDrawer
 import com.daniil.shevtsov.idle.feature.main.view.MainScreen
 import com.daniil.shevtsov.idle.feature.player.species.domain.Species
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun ScreenHostComposable(
@@ -25,11 +27,20 @@ fun ScreenHostComposable(
 ) {
     val delegatedViewState by viewModel.state.collectAsState()
 
+    val systemUiController = rememberSystemUiController()
+
     BackHandler {
         viewModel.handleAction(ScreenViewAction.General(GeneralViewAction.Back))
     }
 
     AppTheme(colors = chooseColorsForId(delegatedViewState.speciesId)) {
+        val toolbarColor = AppTheme.colors.background
+        SideEffect {
+            systemUiController.setSystemBarsColor(
+                color = toolbarColor,
+            )
+        }
+
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         ModalDrawer(
             drawerState = drawerState,
