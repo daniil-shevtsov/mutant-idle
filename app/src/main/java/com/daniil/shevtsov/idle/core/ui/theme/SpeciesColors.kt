@@ -1,14 +1,18 @@
 package com.daniil.shevtsov.idle.core.ui.theme
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.upgradePreviewStub
+import com.daniil.shevtsov.idle.core.ui.widgets.MyProgressBar
 import com.daniil.shevtsov.idle.feature.initial.domain.createInitialTraits
 import com.daniil.shevtsov.idle.feature.player.species.domain.Species
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
@@ -25,13 +29,20 @@ fun ThemeColorsPreview() {
         contentPadding = PaddingValues(4.dp)
     ) {
         items(species) { trait ->
-            AppTheme(colors = chooseColorsForId(speciesId = trait.id)) {
-                Upgrade(
-                    upgrade = upgradePreviewStub(
-                        title = trait.title + "'s  upgrade",
-                        status = UpgradeStatusModel.Affordable,
-                    ),
-                )
+            AppTheme(
+                colors = chooseColorsForId(speciesId = trait.id),
+                shapes = chooseShapesForId(speciesId = trait.id),
+            ) {
+                Column {
+                    Upgrade(
+                        upgrade = upgradePreviewStub(
+                            title = trait.title + "'s  upgrade",
+                            status = UpgradeStatusModel.Affordable,
+                        ),
+                    )
+                    MyProgressBar(progressPercentage = 0.75f)
+                }
+
             }
         }
     }
@@ -47,6 +58,19 @@ fun chooseColorsForId(speciesId: Long): AppColors {
         Species.Alien.id -> alienColors()
         Species.Android.id -> androidColors()
         else -> devourerColors()
+    }
+}
+
+fun chooseShapesForId(speciesId: Long): AppShapes {
+    return when (speciesId) {
+        Species.Devourer.id -> devourerShapes()
+        Species.Vampire.id -> vampireShapes()
+        Species.Shapeshifter.id -> devourerShapes()
+        Species.Parasite.id -> devourerShapes()
+        Species.Demon.id -> devourerShapes()
+        Species.Alien.id -> devourerShapes()
+        Species.Android.id -> devourerShapes()
+        else -> devourerShapes()
     }
 }
 
@@ -125,4 +149,12 @@ fun androidColors(): AppColors = AppColors(
     textDark = Color(0xFF26235A),
     textLight = Color(0xFFE0DEFB),
     iconLight = Color(0xFFE0DEFB),
+)
+
+fun devourerShapes() = AppShapes(
+    progressBar = RectangleShape,
+)
+
+fun vampireShapes() = AppShapes(
+    progressBar = CutCornerShape(percent = 50),
 )

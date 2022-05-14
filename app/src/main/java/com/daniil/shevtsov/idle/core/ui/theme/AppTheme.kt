@@ -18,6 +18,10 @@ object AppTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalDimensions.current
+    val shapes: AppShapes
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalShapes.current
 }
 
 @Composable
@@ -25,14 +29,17 @@ fun AppTheme(
     colors: AppColors = AppTheme.colors,
     typography: AppTypography = AppTheme.typography,
     dimensions: AppDimensions = AppTheme.dimensions,
+    shapes: AppShapes = AppTheme.shapes,
     content: @Composable () -> Unit
 ) {
     // creating a new object for colors to not mutate the initial colors set when updating the values
     val rememberedColors = remember { colors.copy() }.apply { updateColorsFrom(colors) }
+    val rememberedShapes = remember { shapes.copy() }.apply { updateShapesFrom(shapes) }
     CompositionLocalProvider(
         LocalColors provides rememberedColors,
         LocalDimensions provides dimensions,
         LocalTypography provides typography,
+        LocalShapes provides rememberedShapes,
     ) {
         content()
     }
