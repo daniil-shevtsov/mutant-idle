@@ -44,7 +44,7 @@ data class AppTypography(
     val button: TextStyle = TextStyle(
         fontFamily = default,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
+        fontSize = 24.sp
     ),
     val icon: TextStyle = TextStyle(
         fontFamily = default,

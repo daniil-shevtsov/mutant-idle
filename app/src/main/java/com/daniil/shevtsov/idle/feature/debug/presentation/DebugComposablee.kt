@@ -105,7 +105,7 @@ private fun SpeciesRow(
                     null -> "EMPTY"
                     else -> selectedSpecies.title
                 },
-                style = AppTheme.typography.title,
+                style = AppTheme.typography.body,
                 color = AppTheme.colors.textDark,
                 modifier = modifier
                     .fillMaxWidth()
