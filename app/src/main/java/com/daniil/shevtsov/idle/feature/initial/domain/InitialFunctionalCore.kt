@@ -19,6 +19,7 @@ import com.daniil.shevtsov.idle.feature.player.species.domain.Species
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.domain.createResources
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.unlocks.domain.UnlockState
@@ -30,6 +31,7 @@ fun createInitialGameState(): GameState {
         resources = createResources(),
         ratios = createInitialRatios(),
         mainRatioKey = RatioKey.Mutanity,
+        mainResourceKey = ResourceKey.Blood,
         sections = createInitialSectionState(),
         drawerTabs = createInitialDrawerTabs(),
         upgrades = createUpgrades(),

@@ -16,6 +16,7 @@ import com.daniil.shevtsov.idle.feature.player.trait.domain.*
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.unlocks.domain.UnlockState
 import com.daniil.shevtsov.idle.feature.unlocks.domain.unlockState
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
@@ -25,6 +26,7 @@ data class GameState(
     val resources: List<Resource>,
     val ratios: List<Ratio>,
     val mainRatioKey: RatioKey,
+    val mainResourceKey: ResourceKey,
     val upgrades: List<Upgrade>,
     val actions: List<Action>,
     val sections: List<SectionState>,
@@ -44,6 +46,7 @@ fun gameState(
     resources: List<Resource> = emptyList(),
     ratios: List<Ratio> = emptyList(),
     mainRatioKey: RatioKey = RatioKey.Mutanity,
+    mainResourceKey: ResourceKey = ResourceKey.Blood,
     upgrades: List<Upgrade> = emptyList(),
     actions: List<Action> = emptyList(),
     drawerTabs: List<DrawerTab> = emptyList(),
@@ -61,6 +64,7 @@ fun gameState(
     resources = resources,
     ratios = ratios,
     mainRatioKey = mainRatioKey,
+    mainResourceKey = mainResourceKey,
     upgrades = upgrades,
     actions = actions,
     drawerTabs = drawerTabs,

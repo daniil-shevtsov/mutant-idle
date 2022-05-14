@@ -328,16 +328,4 @@ class MainFunctionalCoreTest {
             .isEqualTo(Screen.FinishedGame)
     }
 
-    @Test
-    fun `should use mutanity as main ratio of devourer`() {
-        val state = gameState(
-            ratios = listOf(ratio(key = RatioKey.Mutanity)),
-            player = player(traits = mapOf(
-                TraitId.Species to playerTrait(id = Species.Devourer.id)
-            )),
-        )
-
-        assertThat(state).prop(GameState::mainRatioKey).isEqualTo(RatioKey.Mutanity)
-    }
-
 }

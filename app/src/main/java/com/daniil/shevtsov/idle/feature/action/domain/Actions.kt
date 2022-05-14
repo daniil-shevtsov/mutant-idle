@@ -173,7 +173,7 @@ fun createAllActions() = listOf(
             ResourceKey.Money to 15.0
         ),
         ratioChanges = mapOf(
-            RatioKey.Suspicion to 0.005f
+            RatioKey.Suspicion to 0.005f,
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
