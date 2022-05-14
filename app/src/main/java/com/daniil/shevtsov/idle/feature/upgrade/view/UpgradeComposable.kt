@@ -72,10 +72,10 @@ fun Upgrade(
     }
     Column(
         modifier = modifier
-            .background(Pallete.Red)
+            .background(Pallete.Background)
             .clickable { onClicked() }
             .padding(4.dp)
-            .background(Pallete.DarkRed),
+            .background(Pallete.BackgroundDark),
     ) {
         Box {
             Text(
@@ -84,7 +84,7 @@ fun Upgrade(
                 fontSize = 24.sp,
                 modifier = modifier
                     .fillMaxWidth()
-                    .background(Pallete.DarkRed)
+                    .background(Pallete.BackgroundDark)
                     .padding(4.dp)
             )
             Text(
@@ -92,7 +92,7 @@ fun Upgrade(
                 color = priceColor,
                 fontSize = 24.sp,
                 modifier = modifier
-                    .background(Pallete.DarkRed)
+                    .background(Pallete.BackgroundDark)
                     .padding(4.dp)
                     .align(Alignment.CenterEnd)
             )

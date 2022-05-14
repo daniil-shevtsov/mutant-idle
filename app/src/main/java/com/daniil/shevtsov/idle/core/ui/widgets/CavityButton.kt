@@ -26,10 +26,10 @@ fun CavityButton(
     Box(
         modifier = modifier
             .cavitary(
-                lightColor = Pallete.LightRed,
-                darkColor = Pallete.DarkRed,
+                lightColor = Pallete.BackgroundLight,
+                darkColor = Pallete.BackgroundDark,
             )
-            .background(Pallete.DarkGray)
+            .background(Pallete.BackgroundDarkest)
             .padding(2.dp),
         contentAlignment = Alignment.Center,
     ) {
@@ -38,12 +38,12 @@ fun CavityButton(
                 .clickable {
                     onClick()
                 }
-                .background(Pallete.Red)
+                .background(Pallete.Background)
                 .protrusive(
-                    lightColor = Pallete.LightRed,
-                    darkColor = Pallete.DarkRed,
+                    lightColor = Pallete.BackgroundLight,
+                    darkColor = Pallete.BackgroundDark,
                 )
-                .background(Pallete.Red)
+                .background(Pallete.Background)
                 .padding(4.dp)
                 .fillMaxWidth(),
             text = text,

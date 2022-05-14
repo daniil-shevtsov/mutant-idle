@@ -51,7 +51,7 @@ fun DebugComposable(
     var expanded2: Boolean by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier
-            .background(Pallete.Red)
+            .background(Pallete.Background)
             .fillMaxSize()
             .wrapContentSize(Alignment.TopStart)
     ) {
@@ -89,7 +89,7 @@ private fun SpeciesRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(Pallete.Red),
+            .background(Pallete.Background),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
@@ -111,8 +111,8 @@ private fun SpeciesRow(
                 modifier = modifier
                     .fillMaxWidth()
                     .cavitary(
-                        lightColor = Pallete.LightRed,
-                        darkColor = Pallete.DarkRed
+                        lightColor = Pallete.BackgroundLight,
+                        darkColor = Pallete.BackgroundDark
                     )
                     .background(Color.White)
                     .clickable(onClick = { onExpandChange(true) })
@@ -149,7 +149,7 @@ private fun JobRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(Pallete.Red),
+            .background(Pallete.Background),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
@@ -171,8 +171,8 @@ private fun JobRow(
                 modifier = modifier
                     .fillMaxWidth()
                     .cavitary(
-                        lightColor = Pallete.LightRed,
-                        darkColor = Pallete.DarkRed
+                        lightColor = Pallete.BackgroundLight,
+                        darkColor = Pallete.BackgroundDark
                     )
                     .background(Color.White)
                     .clickable(onClick = { onExpandChange(true) })

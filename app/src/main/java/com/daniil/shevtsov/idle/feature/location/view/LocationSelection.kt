@@ -47,13 +47,13 @@ fun LocationSelection(
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier
-            .background(Pallete.Red)
+            .background(Pallete.Background)
             .padding(4.dp)
     ) {
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .background(Pallete.Red),
+                .background(Pallete.Background),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
@@ -70,8 +70,8 @@ fun LocationSelection(
                     modifier = modifier
                         .fillMaxWidth()
                         .cavitary(
-                            lightColor = Pallete.LightRed,
-                            darkColor = Pallete.DarkRed
+                            lightColor = Pallete.BackgroundLight,
+                            darkColor = Pallete.BackgroundDark
                         )
                         .background(Color.White)
                         .clickable(onClick = { onExpandChange() })
@@ -101,8 +101,8 @@ fun LocationSelection(
             modifier = modifier
                 .fillMaxWidth()
                 .cavitary(
-                    lightColor = Pallete.LightRed,
-                    darkColor = Pallete.DarkRed
+                    lightColor = Pallete.BackgroundLight,
+                    darkColor = Pallete.BackgroundDark
                 )
                 .background(Color.White)
                 .clickable(onClick = { onExpandChange() })

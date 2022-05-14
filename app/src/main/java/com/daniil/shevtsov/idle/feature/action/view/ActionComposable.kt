@@ -126,8 +126,8 @@ fun Action(
         true -> 1f
         false -> 0.5f
     }
-    val lightColor = Pallete.Red.copy(alpha = colorAlpha)
-    val darkColor = Pallete.DarkRed.copy(alpha = colorAlpha)
+    val lightColor = Pallete.Background.copy(alpha = colorAlpha)
+    val darkColor = Pallete.BackgroundDark.copy(alpha = colorAlpha)
 
     Column(
         modifier = modifier

@@ -45,7 +45,7 @@ fun GameStartScreen(
 ) {
     Column(
         modifier = modifier
-            .background(Pallete.Red)
+            .background(Pallete.Background)
             .fillMaxHeight()
             .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -64,10 +64,10 @@ fun GameStartScreen(
         Box(
             modifier = modifier
                 .cavitary(
-                    lightColor = Pallete.LightRed,
-                    darkColor = Pallete.DarkRed,
+                    lightColor = Pallete.BackgroundLight,
+                    darkColor = Pallete.BackgroundDark,
                 )
-                .background(Pallete.DarkGray)
+                .background(Pallete.BackgroundDarkest)
                 .padding(2.dp),
             contentAlignment = Alignment.Center,
         ) {
@@ -76,12 +76,12 @@ fun GameStartScreen(
                     .clickable {
                         onAction(GameStartViewAction.StartGame)
                     }
-                    .background(Pallete.Red)
+                    .background(Pallete.Background)
                     .protrusive(
-                        lightColor = Pallete.LightRed,
-                        darkColor = Pallete.DarkRed,
+                        lightColor = Pallete.BackgroundLight,
+                        darkColor = Pallete.BackgroundDark,
                     )
-                    .background(Pallete.Red)
+                    .background(Pallete.Background)
                     .padding(4.dp)
                     .fillMaxWidth(),
                 text = "Start Game",

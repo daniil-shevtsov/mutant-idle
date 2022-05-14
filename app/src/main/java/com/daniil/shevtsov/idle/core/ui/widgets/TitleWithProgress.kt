@@ -42,7 +42,7 @@ fun TitleWithProgress(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(Pallete.Red)
+            .background(Pallete.Background)
             .padding(4.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,

@@ -92,7 +92,7 @@ fun Collapsable(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
                 .fillMaxWidth()
-                .background(Pallete.Red)
+                .background(Pallete.Background)
                 .padding(4.dp)
 
         ) {

@@ -63,7 +63,7 @@ fun FinishedGameScreenPreview() {
 
 @Composable
 fun FinishedGameScreen(state: FinishedGameViewState) {
-    Column(modifier = Modifier.background(Pallete.Red)) {
+    Column(modifier = Modifier.background(Pallete.Background)) {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
@@ -73,7 +73,7 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
             color = Color.White,
             textAlign = TextAlign.Center,
         )
-        Cavity(mainColor = Pallete.Red, modifier = Modifier.fillMaxWidth()) {
+        Cavity(mainColor = Pallete.Background, modifier = Modifier.fillMaxWidth()) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -84,7 +84,7 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                 items(state.unlocks) { unlock ->
                     Column(
                         modifier = Modifier
-                            .background(Pallete.Red)
+                            .background(Pallete.Background)
                             .padding(6.dp)
                     ) {
                         Text(
@@ -93,7 +93,7 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                             fontSize = 24.sp,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(Pallete.DarkRed)
+                                .background(Pallete.BackgroundDark)
                                 .padding(8.dp)
                         )
                         Text(
@@ -102,7 +102,7 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                             fontSize = 20.sp,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(Pallete.DarkRed)
+                                .background(Pallete.BackgroundDark)
                                 .padding(8.dp)
                         )
                         Column(

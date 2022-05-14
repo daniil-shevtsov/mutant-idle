@@ -67,7 +67,7 @@ fun ResourcePanel(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(Pallete.Red)
+            .background(Pallete.Background)
             .padding(4.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -86,8 +86,8 @@ fun ResourcePanel(
                 .weight(0.65f)
                 .fillMaxWidth()
                 .cavitary(
-                    lightColor = Pallete.LightRed,
-                    darkColor = Pallete.DarkRed
+                    lightColor = Pallete.BackgroundLight,
+                    darkColor = Pallete.BackgroundDark
                 )
                 .background(Color.White)
                 .padding(4.dp)

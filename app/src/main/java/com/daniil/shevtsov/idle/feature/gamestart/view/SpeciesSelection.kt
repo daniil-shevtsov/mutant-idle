@@ -45,13 +45,13 @@ fun SpeciesSelection(
 ) {
     Box(
         modifier = modifier
-            .background(Pallete.Red)
+            .background(Pallete.Background)
             .padding(4.dp)
             .cavitary(
-                lightColor = Pallete.LightRed,
-                darkColor = Pallete.DarkRed
+                lightColor = Pallete.BackgroundLight,
+                darkColor = Pallete.BackgroundDark
             )
-            .background(Pallete.DarkGray)
+            .background(Pallete.BackgroundDarkest)
             .padding(4.dp)
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState())
@@ -59,9 +59,9 @@ fun SpeciesSelection(
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
             modifier = modifier
-                .background(Pallete.Red)
+                .background(Pallete.Background)
                 .padding(bottom = 4.dp)
-                .background(Pallete.DarkGray)
+                .background(Pallete.BackgroundDarkest)
                 .padding(top = 4.dp)
                 .height(IntrinsicSize.Max)
                 .fillMaxWidth(),
@@ -84,14 +84,14 @@ fun SpeciesSelection(
                             .let { modifier ->
                                 if (item.isSelected) {
                                     modifier
-                                        .background(Pallete.LightRed)
+                                        .background(Pallete.BackgroundLight)
                                         .padding(start = 1.dp, top = 1.dp, end = 1.dp)
                                 } else {
                                     modifier
                                 }
                             }
 
-                            .background(Pallete.Red),
+                            .background(Pallete.Background),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -108,7 +108,7 @@ fun SpeciesSelection(
                             .fillMaxWidth()
                             .let { modifier ->
                                 if (item.isSelected) {
-                                    modifier.background(Pallete.LightRed)
+                                    modifier.background(Pallete.BackgroundLight)
                                 } else {
                                     modifier
                                 }
@@ -124,7 +124,7 @@ fun SpeciesSelection(
                                         modifier
                                     } else {
                                         modifier
-                                            .background(Pallete.Red)
+                                            .background(Pallete.Background)
                                     }
                                 }
                         )
@@ -139,7 +139,7 @@ fun SpeciesSelection(
                                         modifier
                                     }
                                 }
-                                .background(Pallete.Red)
+                                .background(Pallete.Background)
                         )
                         Box(
                             modifier = modifier
@@ -150,7 +150,7 @@ fun SpeciesSelection(
                                         modifier
                                     } else {
                                         modifier
-                                            .background(Pallete.Red)
+                                            .background(Pallete.Background)
                                     }
                                 }
                         )
@@ -160,7 +160,7 @@ fun SpeciesSelection(
                             .let { modifier ->
                                 if (item.isSelected) {
                                     modifier
-                                        .background(Pallete.LightRed)
+                                        .background(Pallete.BackgroundLight)
                                         .let { kek ->
                                             when (index) {
                                                 0 -> kek.padding(end = 1.dp)
@@ -173,12 +173,12 @@ fun SpeciesSelection(
                                                 )
                                             }
                                         }
-                                        .background(Pallete.Red)
+                                        .background(Pallete.Background)
                                 } else {
                                     modifier
                                 }
                             }
-                            .background(Pallete.Red)
+                            .background(Pallete.Background)
                             .padding(4.dp),
                     ) {
                         Text(
@@ -196,8 +196,8 @@ fun SpeciesSelection(
                                 .fillMaxHeight()
                                 .padding(4.dp)
                                 .cavitary(
-                                    lightColor = Pallete.LightRed,
-                                    darkColor = Pallete.DarkRed
+                                    lightColor = Pallete.BackgroundLight,
+                                    darkColor = Pallete.BackgroundDark
                                 )
                                 .background(Color.White)
                                 .padding(4.dp)

@@ -49,9 +49,9 @@ fun DrawerTabSelector(
     Row(
         horizontalArrangement = spacedBy(4.dp),
         modifier = modifier
-            .background(Pallete.Red)
+            .background(Pallete.Background)
             .padding(bottom = 4.dp)
-            .background(Pallete.DarkGray)
+            .background(Pallete.BackgroundDarkest)
             .padding(top = 4.dp)
     ) {
         tabs.forEachIndexed { index, tab ->
@@ -61,7 +61,7 @@ fun DrawerTabSelector(
                 textAlign = TextAlign.Center,
                 modifier = if (tab.isSelected) {
                     modifier
-                        .background(Pallete.LightRed)
+                        .background(Pallete.BackgroundLight)
                         .let { kek ->
                             when (index) {
                                 0 -> kek.padding(top = 1.dp, end = 1.dp)
@@ -69,13 +69,13 @@ fun DrawerTabSelector(
                                 else -> kek.padding(start = 1.dp, top = 1.dp, end = 1.dp)
                             }
                         }
-                        .background(Pallete.Red)
+                        .background(Pallete.Background)
                         .clickable { onTabSelected(tab.id) }
                         .padding(4.dp)
                         .weight(1f)
                 } else {
                     modifier
-                        .background(Pallete.Red)
+                        .background(Pallete.Background)
                         .padding(4.dp)
                         .clickable { onTabSelected(tab.id) }
                         .weight(1f)

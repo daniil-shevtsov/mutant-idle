@@ -15,7 +15,6 @@ import com.daniil.shevtsov.idle.core.presentation.formatting.formatEnumName
 import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.feature.player.info.presentation.PlayerInfoState
-import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
@@ -59,7 +58,7 @@ fun PlayerInfoComposable(
 ) {
     Column(
         modifier = modifier
-            .background(Pallete.Red)
+            .background(Pallete.Background)
             .fillMaxSize(),
         verticalArrangement = spacedBy(16.dp)
     ) {
@@ -73,7 +72,7 @@ fun PlayerInfoComposable(
                         fontSize = 24.sp,
                         color = Color.White,
                         modifier = Modifier
-                            .background(Pallete.Red)
+                            .background(Pallete.Background)
                             .weight(1f)
                     )
                     Text(
@@ -81,8 +80,8 @@ fun PlayerInfoComposable(
                         fontSize = 16.sp,
                         modifier = modifier
                             .cavitary(
-                                lightColor = Pallete.LightRed,
-                                darkColor = Pallete.DarkRed
+                                lightColor = Pallete.BackgroundLight,
+                                darkColor = Pallete.BackgroundDark
                             )
                             .background(Color.White)
                             .padding(4.dp)
@@ -98,7 +97,7 @@ fun PlayerInfoComposable(
                 color = Color.White,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .background(Pallete.Red)
+                    .background(Pallete.Background)
                     .fillMaxWidth()
             )
             Text(
@@ -112,8 +111,8 @@ fun PlayerInfoComposable(
                 fontSize = 16.sp,
                 modifier = modifier
                     .cavitary(
-                        lightColor = Pallete.LightRed,
-                        darkColor = Pallete.DarkRed
+                        lightColor = Pallete.BackgroundLight,
+                        darkColor = Pallete.BackgroundDark
                     )
                     .background(Color.White)
                     .padding(4.dp)
