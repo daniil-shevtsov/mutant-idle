@@ -171,8 +171,13 @@ fun handleUpgradeSelected(
 
     val currentResource = state.resources.find { resource -> resource.key == ResourceKey.Blood }!!
 
+    val hasInvalidChanges = hasInvalidChanges(
+        currentResources = state.resources,
+        resourceChanges = upgradeToBuy.resourceChanges,
+    )
+
     return when {
-        upgradeToBuy.price.value <= currentResource.value -> {
+        !hasInvalidChanges -> {
             val newStatus = when {
                 upgradeToBuy.price.value <= currentResource.value -> UpgradeStatus.Bought
                 else -> UpgradeStatus.NotBought
@@ -180,10 +185,7 @@ fun handleUpgradeSelected(
 
             val boughtUpgrade = upgradeToBuy.copy(status = newStatus)
 
-            val hasInvalidChanges = hasInvalidChanges(
-                currentResources = state.resources,
-                resourceChanges = upgradeToBuy.resourceChanges,
-            )
+
             val updatedResourcesz = applyResourceChanges(
                 currentResources = state.resources,
                 resourceChanges = upgradeToBuy.resourceChanges
