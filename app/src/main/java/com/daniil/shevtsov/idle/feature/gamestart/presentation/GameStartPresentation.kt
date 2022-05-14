@@ -30,7 +30,7 @@ fun mapGameStartViewState(
                     description = description,
                     icon = Icons.Job,
                     isSelected = job.id == state.player.traits[TraitId.Job]?.id,
-                    isUnlocked = state.unlockState.jobs[job.id] == true,
+                    isUnlocked = state.unlockState.traits[TraitId.Job]?.get(job.id) == true,
                 )
             }
         },
