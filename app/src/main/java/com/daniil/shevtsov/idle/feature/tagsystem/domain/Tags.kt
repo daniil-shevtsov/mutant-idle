@@ -26,6 +26,7 @@ object Tags {
 
     //TODO: There seems to be a need in a system
     object Access {
+        val Home = Tag("Home")
         val Graveyard = Tag(name = "Graveyard Access")
         val Morgue = Tag(name = "Morgue Access")
         val ButcherShop = Tag(name = "Butcher Shop Access")

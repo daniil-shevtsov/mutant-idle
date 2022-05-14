@@ -13,6 +13,7 @@ object Species {
         icon = Icons.Devourer,
         tags = listOf(
             Tags.Species.Devourer,
+            Tags.Access.Home,
         ),
         mainResource = ResourceKey.Blood,
         mainRatio = RatioKey.Mutanity,
@@ -35,6 +36,7 @@ object Species {
         icon = Icons.Vampire,
         tags = listOf(
             Tags.Species.Vampire,
+            Tags.Access.Home,
             Tags.Nature.Magic,
             Tags.Heliophobia,
             Tags.Immortal,
