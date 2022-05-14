@@ -118,7 +118,7 @@ private fun createInitialJobs() = listOf(
     Jobs.Undertaker,
     Jobs.Butcher,
     Jobs.ScrapyardMechanic,
-).map { it.toJob() }
+)
 
 private fun createInitialSpecies() = listOf(
     Species.Devourer,
