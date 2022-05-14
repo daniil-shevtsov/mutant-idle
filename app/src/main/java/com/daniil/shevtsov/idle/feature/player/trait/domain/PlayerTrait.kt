@@ -14,14 +14,6 @@ data class PlayerTrait(
     val icon: String? = null,
 )
 
-fun PlayerTrait.toSpecies() = PlayerSpecies(
-    id = id,
-    icon = icon ?: Icons.TraitDefault,
-    title = title,
-    description = description,
-    tags = tags,
-)
-
 fun playerTrait(
     id: Long = 0L,
     traitId: TraitId = TraitId.Job,

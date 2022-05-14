@@ -3,7 +3,6 @@ package com.daniil.shevtsov.idle.feature.player.species.domain
 import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
-import com.daniil.shevtsov.idle.feature.player.trait.domain.toSpecies
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 
 fun playerSpecies(
