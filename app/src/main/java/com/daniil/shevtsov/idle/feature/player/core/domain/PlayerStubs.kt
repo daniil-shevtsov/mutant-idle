@@ -9,8 +9,6 @@ import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 
 fun player(
-    job: PlayerJob = playerJob(),
-    species: PlayerSpecies = playerSpecies(),
     generalTags: List<Tag> = emptyList(),
     traits: Map<TraitId, PlayerTrait> = mapOf(),
 ) = Player(

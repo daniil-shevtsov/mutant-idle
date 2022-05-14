@@ -101,8 +101,6 @@ private fun createInitialDrawerTabs() = listOf(
 )
 
 private fun createInitialPlayer() = player(
-    job = Jobs.Unemployed.toJob(),
-    species = Species.Devourer.toSpecies(),
     generalTags = listOf(
         Tags.HumanAppearance,
         Tags.Knowledge.SocialNorms,
