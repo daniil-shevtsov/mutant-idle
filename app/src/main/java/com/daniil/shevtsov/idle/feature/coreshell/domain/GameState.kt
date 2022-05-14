@@ -57,7 +57,6 @@ fun gameState(
     actions: List<Action> = emptyList(),
     drawerTabs: List<DrawerTab> = emptyList(),
     sections: List<SectionState> = emptyList(),
-    availableSpecies: List<PlayerSpecies> = emptyList(),
     availableTraits: List<PlayerTrait> = emptyList(),
     availableEndings: List<Ending> = emptyList(),
     locationSelectionState: LocationSelectionState = locationSelectionState(),
