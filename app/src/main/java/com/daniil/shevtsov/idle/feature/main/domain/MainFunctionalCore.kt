@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.feature.main.domain
 
 import com.daniil.shevtsov.idle.core.navigation.Screen
+import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
@@ -116,12 +117,7 @@ fun handleActionClicked(
         resourceChanges = selectedAction.resourceChanges
     )
 
-    val updatedRatios = state.ratios.map { ratio ->
-        when (val ratioChange = selectedAction.ratioChanges[ratio.key]) {
-            null -> ratio
-            else -> ratio.copy(value = ratio.value + ratioChange)
-        }
-    }
+    val updatedRatios = applyRatioChanges(state, selectedAction)
 
     val newTags =
         state.player.generalTags + selectedAction.tags[TagRelation.Provides].orEmpty() - selectedAction.tags[TagRelation.Removes].orEmpty()
@@ -140,6 +136,16 @@ fun handleActionClicked(
         )
     } else {
         state
+    }
+}
+
+private fun applyRatioChanges(
+    state: GameState,
+    selectedAction: Action
+) = state.ratios.map { ratio ->
+    when (val ratioChange = selectedAction.ratioChanges[ratio.key]) {
+        null -> ratio
+        else -> ratio.copy(value = ratio.value + ratioChange)
     }
 }
 
