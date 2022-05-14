@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.daniil.shevtsov.idle.core.ui.Pallete
+
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.widgets.CavityButton
@@ -112,8 +112,8 @@ private fun SpeciesRow(
                 modifier = modifier
                     .fillMaxWidth()
                     .cavitary(
-                        lightColor = Pallete.BackgroundLight,
-                        darkColor = Pallete.BackgroundDark
+                        lightColor = AppTheme.colors.backgroundLight,
+                        darkColor = AppTheme.colors.backgroundDark
                     )
                     .background(Color.White)
                     .clickable(onClick = { onExpandChange(true) })
@@ -172,8 +172,8 @@ private fun JobRow(
                 modifier = modifier
                     .fillMaxWidth()
                     .cavitary(
-                        lightColor = Pallete.BackgroundLight,
-                        darkColor = Pallete.BackgroundDark
+                        lightColor = AppTheme.colors.backgroundLight,
+                        darkColor = AppTheme.colors.backgroundDark
                     )
                     .background(Color.White)
                     .clickable(onClick = { onExpandChange(true) })

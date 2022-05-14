@@ -16,8 +16,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
-import com.daniil.shevtsov.idle.core.ui.Pallete
+
 import com.daniil.shevtsov.idle.core.ui.cavitary
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.TraitSelectionItem
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.traitSelectionItem
 
@@ -45,13 +46,13 @@ fun SpeciesSelection(
 ) {
     Box(
         modifier = modifier
-            .background(Pallete.Background)
+            .background(AppTheme.colors.background)
             .padding(4.dp)
             .cavitary(
-                lightColor = Pallete.BackgroundLight,
-                darkColor = Pallete.BackgroundDark
+                lightColor = AppTheme.colors.backgroundLight,
+                darkColor = AppTheme.colors.backgroundDark
             )
-            .background(Pallete.BackgroundDarkest)
+            .background(AppTheme.colors.backgroundDarkest)
             .padding(4.dp)
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState())
@@ -59,9 +60,9 @@ fun SpeciesSelection(
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
             modifier = modifier
-                .background(Pallete.Background)
+                .background(AppTheme.colors.background)
                 .padding(bottom = 4.dp)
-                .background(Pallete.BackgroundDarkest)
+                .background(AppTheme.colors.backgroundDarkest)
                 .padding(top = 4.dp)
                 .height(IntrinsicSize.Max)
                 .fillMaxWidth(),
@@ -84,14 +85,14 @@ fun SpeciesSelection(
                             .let { modifier ->
                                 if (item.isSelected) {
                                     modifier
-                                        .background(Pallete.BackgroundLight)
+                                        .background(AppTheme.colors.backgroundLight)
                                         .padding(start = 1.dp, top = 1.dp, end = 1.dp)
                                 } else {
                                     modifier
                                 }
                             }
 
-                            .background(Pallete.Background),
+                            .background(AppTheme.colors.background),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -108,7 +109,7 @@ fun SpeciesSelection(
                             .fillMaxWidth()
                             .let { modifier ->
                                 if (item.isSelected) {
-                                    modifier.background(Pallete.BackgroundLight)
+                                    modifier.background(AppTheme.colors.backgroundLight)
                                 } else {
                                     modifier
                                 }
@@ -124,7 +125,7 @@ fun SpeciesSelection(
                                         modifier
                                     } else {
                                         modifier
-                                            .background(Pallete.Background)
+                                            .background(AppTheme.colors.background)
                                     }
                                 }
                         )
@@ -139,7 +140,7 @@ fun SpeciesSelection(
                                         modifier
                                     }
                                 }
-                                .background(Pallete.Background)
+                                .background(AppTheme.colors.background)
                         )
                         Box(
                             modifier = modifier
@@ -150,7 +151,7 @@ fun SpeciesSelection(
                                         modifier
                                     } else {
                                         modifier
-                                            .background(Pallete.Background)
+                                            .background(AppTheme.colors.background)
                                     }
                                 }
                         )
@@ -160,7 +161,7 @@ fun SpeciesSelection(
                             .let { modifier ->
                                 if (item.isSelected) {
                                     modifier
-                                        .background(Pallete.BackgroundLight)
+                                        .background(AppTheme.colors.backgroundLight)
                                         .let { kek ->
                                             when (index) {
                                                 0 -> kek.padding(end = 1.dp)
@@ -173,12 +174,12 @@ fun SpeciesSelection(
                                                 )
                                             }
                                         }
-                                        .background(Pallete.Background)
+                                        .background(AppTheme.colors.background)
                                 } else {
                                     modifier
                                 }
                             }
-                            .background(Pallete.Background)
+                            .background(AppTheme.colors.background)
                             .padding(4.dp),
                     ) {
                         Text(
@@ -196,8 +197,8 @@ fun SpeciesSelection(
                                 .fillMaxHeight()
                                 .padding(4.dp)
                                 .cavitary(
-                                    lightColor = Pallete.BackgroundLight,
-                                    darkColor = Pallete.BackgroundDark
+                                    lightColor = AppTheme.colors.backgroundLight,
+                                    darkColor = AppTheme.colors.backgroundDark
                                 )
                                 .background(Color.White)
                                 .padding(4.dp)

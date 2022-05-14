@@ -10,9 +10,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.daniil.shevtsov.idle.core.ui.Pallete
+
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.protrusive
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 
 @Composable
 fun MyProgressBar(
@@ -26,8 +27,8 @@ fun MyProgressBar(
                 .fillMaxWidth()
                 .height(height)
                 .cavitary(
-                    lightColor = Pallete.BackgroundLight,
-                    darkColor = Pallete.BackgroundDark
+                    lightColor = AppTheme.colors.backgroundLight,
+                    darkColor = AppTheme.colors.backgroundDark
                 )
                 .background(Color.White),
         )
@@ -37,10 +38,10 @@ fun MyProgressBar(
                 .height(height)
                 .padding(4.dp)
                 .protrusive(
-                    lightColor = Pallete.BackgroundLight,
-                    darkColor = Pallete.BackgroundDark
+                    lightColor = AppTheme.colors.backgroundLight,
+                    darkColor = AppTheme.colors.backgroundDark
                 )
-                .background(Pallete.Background),
+                .background(AppTheme.colors.background),
         )
     }
 }

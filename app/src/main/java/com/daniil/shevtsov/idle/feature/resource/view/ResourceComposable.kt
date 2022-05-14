@@ -14,8 +14,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
-import com.daniil.shevtsov.idle.core.ui.Pallete
+
 import com.daniil.shevtsov.idle.core.ui.cavitary
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.widgets.CollapsableColumn
 import com.daniil.shevtsov.idle.feature.resource.domain.resourceModel
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
@@ -67,7 +68,7 @@ fun ResourcePanel(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(Pallete.Background)
+            .background(AppTheme.colors.background)
             .padding(4.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -86,8 +87,8 @@ fun ResourcePanel(
                 .weight(0.65f)
                 .fillMaxWidth()
                 .cavitary(
-                    lightColor = Pallete.BackgroundLight,
-                    darkColor = Pallete.BackgroundDark
+                    lightColor = AppTheme.colors.backgroundLight,
+                    darkColor = AppTheme.colors.backgroundDark
                 )
                 .background(Color.White)
                 .padding(4.dp)

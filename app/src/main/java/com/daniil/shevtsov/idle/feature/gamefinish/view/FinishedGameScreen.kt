@@ -17,7 +17,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.daniil.shevtsov.idle.core.ui.Pallete
+
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.feature.gamefinish.presentation.*
 
@@ -63,7 +64,7 @@ fun FinishedGameScreenPreview() {
 
 @Composable
 fun FinishedGameScreen(state: FinishedGameViewState) {
-    Column(modifier = Modifier.background(Pallete.Background)) {
+    Column(modifier = Modifier.background(AppTheme.colors.background)) {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
@@ -73,7 +74,7 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
             color = Color.White,
             textAlign = TextAlign.Center,
         )
-        Cavity(mainColor = Pallete.Background, modifier = Modifier.fillMaxWidth()) {
+        Cavity(mainColor = AppTheme.colors.background, modifier = Modifier.fillMaxWidth()) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -84,7 +85,7 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                 items(state.unlocks) { unlock ->
                     Column(
                         modifier = Modifier
-                            .background(Pallete.Background)
+                            .background(AppTheme.colors.background)
                             .padding(6.dp)
                     ) {
                         Text(
@@ -93,7 +94,7 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                             fontSize = 24.sp,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(Pallete.BackgroundDark)
+                                .background(AppTheme.colors.backgroundDark)
                                 .padding(8.dp)
                         )
                         Text(
@@ -102,7 +103,7 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                             fontSize = 20.sp,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(Pallete.BackgroundDark)
+                                .background(AppTheme.colors.backgroundDark)
                                 .padding(8.dp)
                         )
                         Column(

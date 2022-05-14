@@ -13,8 +13,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.daniil.shevtsov.idle.core.ui.Pallete
+
 import com.daniil.shevtsov.idle.core.ui.cavitary
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
 import com.daniil.shevtsov.idle.feature.location.presentation.locationModel
 import com.daniil.shevtsov.idle.feature.location.presentation.locationSelectionViewState
@@ -47,13 +48,13 @@ fun LocationSelection(
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier
-            .background(Pallete.Background)
+            .background(AppTheme.colors.background)
             .padding(4.dp)
     ) {
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .background(Pallete.Background),
+                .background(AppTheme.colors.background),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
@@ -70,8 +71,8 @@ fun LocationSelection(
                     modifier = modifier
                         .fillMaxWidth()
                         .cavitary(
-                            lightColor = Pallete.BackgroundLight,
-                            darkColor = Pallete.BackgroundDark
+                            lightColor = AppTheme.colors.backgroundLight,
+                            darkColor = AppTheme.colors.backgroundDark
                         )
                         .background(Color.White)
                         .clickable(onClick = { onExpandChange() })
@@ -101,8 +102,8 @@ fun LocationSelection(
             modifier = modifier
                 .fillMaxWidth()
                 .cavitary(
-                    lightColor = Pallete.BackgroundLight,
-                    darkColor = Pallete.BackgroundDark
+                    lightColor = AppTheme.colors.backgroundLight,
+                    darkColor = AppTheme.colors.backgroundDark
                 )
                 .background(Color.White)
                 .clickable(onClick = { onExpandChange() })

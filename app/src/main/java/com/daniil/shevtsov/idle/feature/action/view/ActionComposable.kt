@@ -17,7 +17,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
-import com.daniil.shevtsov.idle.core.ui.Pallete
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
+
 import com.daniil.shevtsov.idle.core.ui.widgets.Collapsable
 import com.daniil.shevtsov.idle.feature.action.domain.actionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
@@ -126,8 +127,8 @@ fun Action(
         true -> 1f
         false -> 0.5f
     }
-    val lightColor = Pallete.Background.copy(alpha = colorAlpha)
-    val darkColor = Pallete.BackgroundDark.copy(alpha = colorAlpha)
+    val lightColor = AppTheme.colors.background.copy(alpha = colorAlpha)
+    val darkColor = AppTheme.colors.backgroundDark.copy(alpha = colorAlpha)
 
     Column(
         modifier = modifier

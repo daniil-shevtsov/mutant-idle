@@ -13,9 +13,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.daniil.shevtsov.idle.core.ui.Pallete
+
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.protrusive
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 
 @Composable
 fun CavityButton(
@@ -26,10 +27,10 @@ fun CavityButton(
     Box(
         modifier = modifier
             .cavitary(
-                lightColor = Pallete.BackgroundLight,
-                darkColor = Pallete.BackgroundDark,
+                lightColor = AppTheme.colors.backgroundLight,
+                darkColor = AppTheme.colors.backgroundDark,
             )
-            .background(Pallete.BackgroundDarkest)
+            .background(AppTheme.colors.backgroundDarkest)
             .padding(2.dp),
         contentAlignment = Alignment.Center,
     ) {
@@ -38,12 +39,12 @@ fun CavityButton(
                 .clickable {
                     onClick()
                 }
-                .background(Pallete.Background)
+                .background(AppTheme.colors.background)
                 .protrusive(
-                    lightColor = Pallete.BackgroundLight,
-                    darkColor = Pallete.BackgroundDark,
+                    lightColor = AppTheme.colors.backgroundLight,
+                    darkColor = AppTheme.colors.backgroundDark,
                 )
-                .background(Pallete.Background)
+                .background(AppTheme.colors.background)
                 .padding(4.dp)
                 .fillMaxWidth(),
             text = text,

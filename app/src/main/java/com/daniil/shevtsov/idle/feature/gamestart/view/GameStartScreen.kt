@@ -13,9 +13,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.daniil.shevtsov.idle.core.ui.Pallete
+
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.protrusive
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewState
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.gameStartViewState
@@ -45,7 +46,7 @@ fun GameStartScreen(
 ) {
     Column(
         modifier = modifier
-            .background(Pallete.Background)
+            .background(AppTheme.colors.background)
             .fillMaxHeight()
             .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -64,10 +65,10 @@ fun GameStartScreen(
         Box(
             modifier = modifier
                 .cavitary(
-                    lightColor = Pallete.BackgroundLight,
-                    darkColor = Pallete.BackgroundDark,
+                    lightColor = AppTheme.colors.backgroundLight,
+                    darkColor = AppTheme.colors.backgroundDark,
                 )
-                .background(Pallete.BackgroundDarkest)
+                .background(AppTheme.colors.backgroundDarkest)
                 .padding(2.dp),
             contentAlignment = Alignment.Center,
         ) {
@@ -76,12 +77,12 @@ fun GameStartScreen(
                     .clickable {
                         onAction(GameStartViewAction.StartGame)
                     }
-                    .background(Pallete.Background)
+                    .background(AppTheme.colors.background)
                     .protrusive(
-                        lightColor = Pallete.BackgroundLight,
-                        darkColor = Pallete.BackgroundDark,
+                        lightColor = AppTheme.colors.backgroundLight,
+                        darkColor = AppTheme.colors.backgroundDark,
                     )
-                    .background(Pallete.Background)
+                    .background(AppTheme.colors.background)
                     .padding(4.dp)
                     .fillMaxWidth(),
                 text = "Start Game",

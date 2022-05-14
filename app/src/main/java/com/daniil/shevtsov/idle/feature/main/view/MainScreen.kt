@@ -14,7 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
-import com.daniil.shevtsov.idle.core.ui.Pallete
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
+
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.core.ui.widgets.CollapseButton
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
@@ -109,16 +110,16 @@ fun ContentBody(
             Column(
                 modifier = Modifier
                     .height(500.dp)
-                    .background(Pallete.BackgroundLight)
+                    .background(AppTheme.colors.backgroundLight)
                     .padding(top = 2.dp)
-                    .background(Pallete.Background)
+                    .background(AppTheme.colors.background)
             ) {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = modifier
                         .fillMaxWidth()
-                        .background(Pallete.Background)
+                        .background(AppTheme.colors.background)
                         .padding(vertical = 4.dp)
 
                 ) {
@@ -143,7 +144,7 @@ fun ContentBody(
                     )
                 }
                 Cavity(
-                    mainColor = Pallete.Background,
+                    mainColor = AppTheme.colors.background,
                     modifier = modifier,
                 ) {
                     UpgradeList(
@@ -158,7 +159,7 @@ fun ContentBody(
     ) { paddingValues ->
         Column(
             modifier = modifier
-                .background(Pallete.Background)
+                .background(AppTheme.colors.background)
                 .padding(bottom = paddingValues.calculateBottomPadding()),
             verticalArrangement = Arrangement.Top,
         ) {
@@ -193,10 +194,10 @@ fun ContentBody(
             }
 
             Cavity(
-                mainColor = Pallete.Background,
+                mainColor = AppTheme.colors.background,
                 modifier = modifier
                     .weight(1f)
-                    .background(Pallete.Background)
+                    .background(AppTheme.colors.background)
                     .padding(4.dp),
             ) {
                 ActionSection(

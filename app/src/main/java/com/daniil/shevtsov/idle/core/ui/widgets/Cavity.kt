@@ -9,13 +9,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.daniil.shevtsov.idle.core.ui.Pallete
+
 import com.daniil.shevtsov.idle.core.ui.cavitary
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 
 @Preview
 @Composable
 fun CavityPreview() {
-    Cavity(mainColor = Pallete.Background) {
+    Cavity(mainColor = AppTheme.colors.background) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -35,10 +36,10 @@ fun Cavity(
         modifier = modifier
             .background(mainColor)
             .cavitary(
-                lightColor = Pallete.BackgroundLight,
-                darkColor = Pallete.BackgroundDark
+                lightColor = AppTheme.colors.backgroundLight,
+                darkColor = AppTheme.colors.backgroundDark
             )
-            .background(Pallete.BackgroundDarkest)
+            .background(AppTheme.colors.backgroundDarkest)
     ) {
         content()
     }

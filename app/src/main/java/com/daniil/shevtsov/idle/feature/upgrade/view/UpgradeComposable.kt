@@ -13,7 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.daniil.shevtsov.idle.core.ui.Pallete
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
+
 import com.daniil.shevtsov.idle.core.ui.upgradeListPreviewStub
 import com.daniil.shevtsov.idle.core.ui.upgradePreviewStub
 import com.daniil.shevtsov.idle.feature.ratio.view.RatioChanges
@@ -72,10 +73,10 @@ fun Upgrade(
     }
     Column(
         modifier = modifier
-            .background(Pallete.Background)
+            .background(AppTheme.colors.background)
             .clickable { onClicked() }
             .padding(4.dp)
-            .background(Pallete.BackgroundDark),
+            .background(AppTheme.colors.backgroundDark),
     ) {
         Box {
             Text(
@@ -84,7 +85,7 @@ fun Upgrade(
                 fontSize = 24.sp,
                 modifier = modifier
                     .fillMaxWidth()
-                    .background(Pallete.BackgroundDark)
+                    .background(AppTheme.colors.backgroundDark)
                     .padding(4.dp)
             )
             Text(
@@ -92,7 +93,7 @@ fun Upgrade(
                 color = priceColor,
                 fontSize = 24.sp,
                 modifier = modifier
-                    .background(Pallete.BackgroundDark)
+                    .background(AppTheme.colors.backgroundDark)
                     .padding(4.dp)
                     .align(Alignment.CenterEnd)
             )

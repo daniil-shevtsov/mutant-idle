@@ -17,7 +17,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.daniil.shevtsov.idle.core.ui.Pallete
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
+
 
 @Preview(heightDp = 400)
 @Composable
@@ -92,7 +93,7 @@ fun Collapsable(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
                 .fillMaxWidth()
-                .background(Pallete.Background)
+                .background(AppTheme.colors.background)
                 .padding(4.dp)
 
         ) {

@@ -12,7 +12,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
-import com.daniil.shevtsov.idle.core.ui.Pallete
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
+
 
 @Preview
 @Composable
@@ -42,7 +43,7 @@ fun TitleWithProgress(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(Pallete.Background)
+            .background(AppTheme.colors.background)
             .padding(4.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
