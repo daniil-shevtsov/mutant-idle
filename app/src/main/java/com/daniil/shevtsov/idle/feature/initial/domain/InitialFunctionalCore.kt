@@ -51,7 +51,6 @@ fun createInitialGameState(): GameState {
                     else -> false
                 }
             },
-            jobs = mapOf(),
             traits = mapOf(
                 TraitId.Species to createInitialSpecies().associate { species ->
                     species.id to when (species.id) {
