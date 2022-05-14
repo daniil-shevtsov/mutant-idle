@@ -9,6 +9,4 @@ import dagger.Module
         ViewModelModule::class,
     ]
 )
-interface AppModule {
-
-}
+interface AppModule
