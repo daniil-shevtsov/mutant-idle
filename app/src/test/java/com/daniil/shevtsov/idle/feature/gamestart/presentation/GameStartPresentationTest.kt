@@ -9,6 +9,7 @@ import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
+import com.daniil.shevtsov.idle.feature.player.trait.domain.toPlayerTrait
 import com.daniil.shevtsov.idle.feature.unlocks.domain.unlockState
 import org.junit.jupiter.api.Test
 
@@ -29,9 +30,9 @@ internal class GameStartPresentationTest {
         val species1 = playerSpecies(id = 1L, title = "species 1", description = "description 1")
         val species2 = playerSpecies(id = 2L, title = "species 2", description = "description 2")
         val state = gameState(
-            availableSpecies = listOf(
-                species1,
-                species2,
+            availableTraits = listOf(
+                species1.toPlayerTrait(),
+                species2.toPlayerTrait(),
             )
         )
 
@@ -59,9 +60,9 @@ internal class GameStartPresentationTest {
         val lockedSpecies = playerSpecies(id = 2L, title = "locked species")
 
         val state = gameState(
-            availableSpecies = listOf(
-                unlockedSpecies,
-                lockedSpecies,
+            availableTraits = listOf(
+                unlockedSpecies.toPlayerTrait(),
+                lockedSpecies.toPlayerTrait(),
             ),
             unlockState = unlockState(
                 traits = mapOf(

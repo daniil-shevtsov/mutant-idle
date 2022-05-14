@@ -31,7 +31,6 @@ data class GameState(
     val actions: List<Action>,
     val sections: List<SectionState>,
     val drawerTabs: List<DrawerTab>,
-    var availableSpecies: List<PlayerSpecies>,
     var availableTraits: List<PlayerTrait>,
     val availableEndings: List<Ending>,
     val locationSelectionState: LocationSelectionState,
@@ -41,13 +40,6 @@ data class GameState(
     val screenStack: List<Screen>,
     val unlockState: UnlockState,
 ) {
-    init {
-        availableTraits = when (availableTraits.isEmpty()) {
-            true -> availableSpecies.map(PlayerSpecies::toPlayerTrait)
-            else -> availableTraits
-        }
-        availableSpecies = availableTraits.filter { it.traitId == TraitId.Species }.map(PlayerTrait::toSpecies)
-    }
 
     val jobTraits: List<PlayerTrait> = availableTraits
         .filter { trait -> trait.traitId == TraitId.Job }
@@ -83,7 +75,6 @@ fun gameState(
     actions = actions,
     drawerTabs = drawerTabs,
     sections = sections,
-    availableSpecies = availableSpecies,
     availableTraits = availableTraits,
     availableEndings = availableEndings,
     locationSelectionState = locationSelectionState,
