@@ -66,9 +66,11 @@ internal class GameStartPresentationTest {
                 lockedSpecies,
             ),
             unlockState = unlockState(
-                species = mapOf(
-                    unlockedSpecies.id to true,
-                    lockedSpecies.id to false,
+                traits = mapOf(
+                    TraitId.Species to mapOf(
+                        unlockedSpecies.id to true,
+                        lockedSpecies.id to false,
+                    )
                 )
             )
         )

@@ -40,7 +40,7 @@ internal class GameStartFunctionalCoreTest {
                 newTrait
             ),
             unlockState = unlockState(
-                species = mapOf(newTrait.id to false)
+                traits = mapOf(newTrait.traitId to mapOf(newTrait.id to false))
             )
         )
 
@@ -97,15 +97,16 @@ internal class GameStartFunctionalCoreTest {
                 newSpecies,
             ),
             unlockState = unlockState(
-                species = mapOf(
-                    newSpecies.id to true
-                )
+                traits = mapOf(newSpecies.traitId to mapOf(newSpecies.id to true))
             ),
         )
 
         val newState = gameStartFunctionalCore(
             state = initialState,
-            viewAction = GameStartViewAction.TraitSelected(traitId = TraitId.Species, id = newSpecies.id)
+            viewAction = GameStartViewAction.TraitSelected(
+                traitId = TraitId.Species,
+                id = newSpecies.id
+            )
         )
 
         assertThat(newState)
