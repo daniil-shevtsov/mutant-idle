@@ -31,7 +31,7 @@ private fun handleTraitSelected(
         state.availableTraits.find { it.traitId == viewAction.traitId && it.id == viewAction.id }!!
 
     val unlockStatus = when (newTrait.traitId) {
-        TraitId.Species -> state.unlockState.species
+        TraitId.Species -> state.unlockState.traits[TraitId.Species]
         TraitId.Job -> state.unlockState.traits[TraitId.Job]
     }
 
