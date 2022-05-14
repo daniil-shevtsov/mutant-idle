@@ -44,12 +44,6 @@ fun createInitialGameState(): GameState {
         currentScreen = Screen.GameStart,
         screenStack = listOf(Screen.GameStart),
         unlockState = UnlockState(
-            species = createInitialSpecies().associate { species ->
-                species.id to when (species.id) {
-                    Species.Devourer.id, Species.Vampire.id -> true
-                    else -> false
-                }
-            },
             traits = mapOf(
                 TraitId.Species to createInitialSpecies().associate { species ->
                     species.id to when (species.id) {
