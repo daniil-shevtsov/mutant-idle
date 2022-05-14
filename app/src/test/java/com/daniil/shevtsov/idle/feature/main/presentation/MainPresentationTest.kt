@@ -15,6 +15,8 @@ import com.daniil.shevtsov.idle.feature.location.domain.locationSelectionState
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
+import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
 import com.daniil.shevtsov.idle.feature.ratio.presentation.RatioModel
@@ -820,6 +822,26 @@ class MainPresentationTest {
             .extractingAvailableLocations()
             .extracting(LocationModel::title)
             .containsExactly(availableLocation.title)
+    }
+
+    @Test
+    fun `should only show main ratio beside suspicion`() {
+        val mainRatio = RatioKey.ShipRepair
+        val state = gameState(
+            player = player(traits = mapOf(TraitId.Species to playerTrait(mainRatio = mainRatio))),
+            ratios = listOf(
+                ratio(key = RatioKey.Mutanity),
+                ratio(key = RatioKey.ShipRepair),
+                ratio(key = RatioKey.Suspicion),
+            )
+        )
+
+        val viewState = mapMainViewState(state = state)
+
+        assertThat(viewState)
+            .extractingRatios()
+            .extracting(RatioModel::key)
+            .containsExactly(mainRatio, RatioKey.Suspicion)
     }
 
     private fun Assert<MainViewState>.extractingUpgrades() =

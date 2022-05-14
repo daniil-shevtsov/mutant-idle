@@ -45,16 +45,18 @@ private fun createMainViewState(state: GameState): MainViewState {
                 )
             }
         },
-        ratios = state.ratios.map { ratio ->
-            RatioModel(
-                key = ratio.key,
-                title = formatEnumName(name = ratio.key.name),
-                name = getNameForRatio(ratio),
-                percent = ratio.value,
-                percentLabel = (ratio.value * 100).formatRound(digits = 2) + " %",
-                icon = ratio.key.chooseIcon(),
-            )
-        },
+        ratios = state.ratios
+            .filter { ratio -> ratio.key == RatioKey.Suspicion || ratio.key == state.player.mainRatioKey }
+            .map { ratio ->
+                RatioModel(
+                    key = ratio.key,
+                    title = formatEnumName(name = ratio.key.name),
+                    name = getNameForRatio(ratio),
+                    percent = ratio.value,
+                    percentLabel = (ratio.value * 100).formatRound(digits = 2) + " %",
+                    icon = ratio.key.chooseIcon(),
+                )
+            },
         actionState = createActionState(state.actions, state.resources, state.player, state),
         locationSelectionViewState = state.locationSelectionState.toViewState(playerTags = state.player.tags)
             .let { viewState ->
