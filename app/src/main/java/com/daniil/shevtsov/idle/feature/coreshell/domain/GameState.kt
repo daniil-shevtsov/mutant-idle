@@ -12,10 +12,11 @@ import com.daniil.shevtsov.idle.feature.location.domain.locationSelectionState
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
-import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
-import com.daniil.shevtsov.idle.feature.player.species.domain.PlayerSpecies
+import com.daniil.shevtsov.idle.feature.player.trait.domain.*
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
+import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.unlocks.domain.UnlockState
 import com.daniil.shevtsov.idle.feature.unlocks.domain.unlockState
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
@@ -28,8 +29,7 @@ data class GameState(
     val actions: List<Action>,
     val sections: List<SectionState>,
     val drawerTabs: List<DrawerTab>,
-    val availableJobs: List<PlayerJob>,
-    val availableSpecies: List<PlayerSpecies>,
+    val availableTraits: List<PlayerTrait>,
     val availableEndings: List<Ending>,
     val locationSelectionState: LocationSelectionState,
     val flavors: List<Flavor>,
@@ -47,8 +47,7 @@ fun gameState(
     actions: List<Action> = emptyList(),
     drawerTabs: List<DrawerTab> = emptyList(),
     sections: List<SectionState> = emptyList(),
-    availableJobs: List<PlayerJob> = emptyList(),
-    availableSpecies: List<PlayerSpecies> = emptyList(),
+    availableTraits: List<PlayerTrait> = emptyList(),
     availableEndings: List<Ending> = emptyList(),
     locationSelectionState: LocationSelectionState = locationSelectionState(),
     flavors: List<Flavor> = emptyList(),
@@ -64,8 +63,7 @@ fun gameState(
     actions = actions,
     drawerTabs = drawerTabs,
     sections = sections,
-    availableJobs = availableJobs,
-    availableSpecies = availableSpecies,
+    availableTraits = availableTraits,
     availableEndings = availableEndings,
     locationSelectionState = locationSelectionState,
     flavors = flavors,

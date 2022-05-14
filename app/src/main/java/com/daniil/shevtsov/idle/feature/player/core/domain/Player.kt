@@ -1,14 +1,21 @@
 package com.daniil.shevtsov.idle.feature.player.core.domain
 
-import com.daniil.shevtsov.idle.feature.player.job.domain.PlayerJob
-import com.daniil.shevtsov.idle.feature.player.species.domain.PlayerSpecies
+
+import com.daniil.shevtsov.idle.feature.player.trait.domain.PlayerTrait
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
+import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 
 data class Player(
-    val job: PlayerJob,
-    val species: PlayerSpecies,
+    val traits: Map<TraitId, PlayerTrait>,
     val generalTags: List<Tag>,
 ) {
     val tags: List<Tag>
-        get() = generalTags + job.tags + species.tags
+        get() = generalTags + traits.values.map { it.tags }.flatten()
+
+    val mainResourceKey: ResourceKey
+        get() = traits[TraitId.Species]?.mainResource ?: ResourceKey.Blood
+    val mainRatioKey: RatioKey
+        get() = traits[TraitId.Species]?.mainRatio ?: RatioKey.Mutanity
 }

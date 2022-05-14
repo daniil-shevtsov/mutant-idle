@@ -10,6 +10,6 @@ data class Action(
     val title: String,
     val subtitle: String,
     val resourceChanges: Map<ResourceKey, Double>,
-    val ratioChanges: Map<RatioKey, Float>,
+    val ratioChanges: Map<RatioKey, Double>,
     val tags: Map<TagRelation, List<Tag>>,
 )

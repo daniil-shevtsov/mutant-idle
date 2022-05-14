@@ -1,9 +1,12 @@
-package com.daniil.shevtsov.idle.feature.main.presentation
+package com.daniil.shevtsov.idle.feature.drawer.domain
 
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewAction
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
 import com.daniil.shevtsov.idle.feature.main.domain.handleDrawerTabSwitched
+import com.daniil.shevtsov.idle.feature.player.core.domain.PlayerViewAction
+import com.daniil.shevtsov.idle.feature.player.core.domain.playerFunctionalCore
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 
 fun drawerFunctionalCore(
     state: GameState,
@@ -18,6 +21,13 @@ fun drawerFunctionalCore(
             is DebugViewAction.JobSelected -> handleDebugJobSelected(
                 state = state,
                 viewAction = debugAction,
+            )
+            is DebugViewAction.TraitSelected -> playerFunctionalCore(
+                state = state,
+                action = PlayerViewAction.ChangeTrait(
+                    traitId = debugAction.traitId,
+                    id = debugAction.id,
+                )
             )
             is DebugViewAction.SpeciesSelected -> handleSpeciesSelected(
                 state = state,
@@ -35,13 +45,20 @@ fun handleDebugJobSelected(
     state: GameState,
     viewAction: DebugViewAction.JobSelected
 ): GameState {
-    val newJob = state.availableJobs.find { it.id == viewAction.id }!!
+    val newTrait =
+        state.availableTraits.find { it.traitId == TraitId.Job && it.id == viewAction.id }!!
+    val newTraits = state.player.traits.toMutableMap().apply { put(TraitId.Job, newTrait) }.toMap()
 
     return state.copy(
         player = state.player.copy(
-            job = newJob,
+            traits = newTraits,
         )
-    )
+    ).let { state ->
+        playerFunctionalCore(
+            state = state,
+            action = PlayerViewAction.ChangeTrait(traitId = newTrait.traitId, id = viewAction.id),
+        )
+    }
 
 }
 
@@ -49,13 +66,21 @@ private fun handleSpeciesSelected(
     state: GameState,
     viewAction: DebugViewAction.SpeciesSelected
 ): GameState {
-    val newSpecies = state.availableSpecies.find { it.id == viewAction.id }!!
+    val newTrait =
+        state.availableTraits.find { it.traitId == TraitId.Species && it.id == viewAction.id }!!
+    val newTraits =
+        state.player.traits.toMutableMap().apply { put(TraitId.Species, newTrait) }.toMap()
 
     return state.copy(
         player = state.player.copy(
-            species = newSpecies,
+            traits = newTraits,
         )
-    )
+    ).let { state ->
+        playerFunctionalCore(
+            state = state,
+            action = PlayerViewAction.ChangeTrait(traitId = newTrait.traitId, id = viewAction.id),
+        )
+    }
 }
 
 private fun unlockEverything(
@@ -63,7 +88,9 @@ private fun unlockEverything(
     viewAction: DebugViewAction.UnlockEverything
 ) = state.copy(
     unlockState = state.unlockState.copy(
-        species = state.availableSpecies.map { species -> species.id to true }.toMap(),
-        jobs = state.availableJobs.map { job -> job.id to true }.toMap(),
+        traits = TraitId.values().associate { traitId ->
+            traitId to state.availableTraits.filter { trait -> trait.traitId == traitId }
+                .associate { trait -> trait.id to true }
+        }
     )
 )

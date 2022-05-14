@@ -74,7 +74,7 @@ fun MainDrawer(
             DebugComposable(
                 state = drawerContentState.state,
                 modifier = modifier
-                    .background(Pallete.Red)
+                    .background(Pallete.Background)
                     .padding(8.dp),
                 onAction = { debugAction ->
                     onViewAction(DrawerViewAction.Debug(action = debugAction))
@@ -84,7 +84,7 @@ fun MainDrawer(
             PlayerInfoComposable(
                 state = drawerContentState.playerInfo,
                 modifier = modifier
-                    .background(Pallete.Red)
+                    .background(Pallete.Background)
                     .padding(8.dp)
             )
         }

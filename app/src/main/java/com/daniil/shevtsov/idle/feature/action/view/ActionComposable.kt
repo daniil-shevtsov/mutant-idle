@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,6 +26,8 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ratioChangeModel
 import com.daniil.shevtsov.idle.feature.action.presentation.resourceChangeModel
 import com.daniil.shevtsov.idle.feature.main.presentation.actionPane
 import com.daniil.shevtsov.idle.feature.main.presentation.actionsState
+import com.daniil.shevtsov.idle.feature.ratio.view.RatioChanges
+import com.daniil.shevtsov.idle.feature.resource.view.ResourceChanges
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 
@@ -37,19 +38,6 @@ fun ActionPreview() {
         Action(action = actionComposeStub(isEnabled = true))
         Action(action = actionComposeStub(isEnabled = false))
     }
-}
-
-@Preview(
-    widthDp = 400,
-    heightDp = 400,
-)
-@Composable
-fun ActionPanesPreview() {
-    ActionSection(
-        state = actionsState(),
-        isCollapsed = false,
-        onToggleCollapse = {},
-    )
 }
 
 @Preview(
@@ -138,8 +126,8 @@ fun Action(
         true -> 1f
         false -> 0.5f
     }
-    val lightColor = Pallete.Red.copy(alpha = colorAlpha)
-    val darkColor = Pallete.DarkRed.copy(alpha = colorAlpha)
+    val lightColor = Pallete.Background.copy(alpha = colorAlpha)
+    val darkColor = Pallete.BackgroundDark.copy(alpha = colorAlpha)
 
     Column(
         modifier = modifier
@@ -182,58 +170,15 @@ fun Action(
             modifier = modifier.fillMaxWidth(),
             horizontalArrangement = SpaceBetween
         ) {
-            Column(
-                modifier = Modifier.width(IntrinsicSize.Max),
-                verticalArrangement = spacedBy(4.dp),
-                horizontalAlignment = Alignment.Start,
-            ) {
-                action.resourceChanges.forEach { resourceChange ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = SpaceBetween,
-                        verticalAlignment = CenterVertically,
-                    ) {
-                        Text(
-                            text = resourceChange.icon,
-                            fontSize = 16.sp,
-                        )
-                        Text(
-                            modifier = Modifier.padding(start = 4.dp),
-                            text = resourceChange.value,
-                            color = Color.White,
-                            fontSize = 16.sp,
-                        )
-                    }
-
-                }
-            }
-            Column(
-                modifier = Modifier.width(IntrinsicSize.Max),
-                verticalArrangement = spacedBy(4.dp),
-                horizontalAlignment = Alignment.End,
-            ) {
-                action.ratioChanges.forEach { ratioChange ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = SpaceBetween,
-                        verticalAlignment = CenterVertically,
-                    ) {
-                        Text(
-                            text = ratioChange.icon,
-                            fontSize = 16.sp,
-                        )
-                        Text(
-                            modifier = Modifier.padding(start = 4.dp),
-                            text = ratioChange.value,
-                            color = Color.White,
-                            fontSize = 16.sp,
-                        )
-                    }
-
-                }
-            }
+            ResourceChanges(
+                resourceChanges = action.resourceChanges,
+                modifier = modifier,
+            )
+            RatioChanges(
+                ratioChanges = action.ratioChanges,
+                modifier = modifier,
+            )
         }
-
     }
 
 }
@@ -243,13 +188,17 @@ fun actionComposeStub(
 ) = actionModel(
     title = "Eat human food",
     subtitle = "It's not enough",
-    resourceChanges = listOf(
-        resourceChangeModel(icon = Icons.Blood, value = "2.0"),
-        resourceChangeModel(icon = Icons.HumanFood, value = "-1.0"),
-    ),
-    ratioChanges = listOf(
-        ratioChangeModel(icon = Icons.Mutanity, value = "10.0"),
-        ratioChangeModel(icon = Icons.Suspicion, value = "-5.0"),
-    ),
+    resourceChanges = resourceChangesComposeStub(),
+    ratioChanges = ratioChangesComposeStub(),
     isEnabled = isEnabled,
+)
+
+fun resourceChangesComposeStub() = listOf(
+    resourceChangeModel(icon = Icons.Blood, value = "2.0"),
+    resourceChangeModel(icon = Icons.HumanFood, value = "-1.0"),
+)
+
+fun ratioChangesComposeStub() = listOf(
+    ratioChangeModel(icon = Icons.Mutanity, value = "10.0"),
+    ratioChangeModel(icon = Icons.Suspicion, value = "-5.0"),
 )

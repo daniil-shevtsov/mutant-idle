@@ -9,7 +9,7 @@ fun createLocations() = listOf(
         id = 0L,
         title = "Home",
         description = "It's safe space where no one can bother you",
-        tags = mapOf(),
+        tags = mapOf(TagRelation.RequiredAll to listOf(Tags.Access.Home)),
     ),
     location(
         id = 1L,

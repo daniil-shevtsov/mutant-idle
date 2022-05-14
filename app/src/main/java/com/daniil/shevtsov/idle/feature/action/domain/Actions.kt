@@ -45,7 +45,7 @@ fun createAllActions() = listOf(
             ResourceKey.Prisoner to 1.0,
         ),
         ratioChanges = mapOf(
-            RatioKey.Suspicion to 0.2f,
+            RatioKey.Suspicion to 0.2,
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
@@ -63,7 +63,7 @@ fun createAllActions() = listOf(
             ResourceKey.Remains to 1.0,
         ),
         ratioChanges = mapOf(
-            RatioKey.Suspicion to 0.05f,
+            RatioKey.Suspicion to 0.05,
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
@@ -93,7 +93,7 @@ fun createAllActions() = listOf(
             ResourceKey.Remains to -1.0,
         ),
         ratioChanges = mapOf(
-            RatioKey.Suspicion to -0.05f,
+            RatioKey.Suspicion to -0.05,
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
@@ -109,7 +109,7 @@ fun createAllActions() = listOf(
             ResourceKey.Organs to 1.0,
         ),
         ratioChanges = mapOf(
-            RatioKey.Suspicion to 0.1f,
+            RatioKey.Suspicion to 0.1,
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
@@ -126,7 +126,7 @@ fun createAllActions() = listOf(
             ResourceKey.Remains to -1.0,
         ),
         ratioChanges = mapOf(
-            RatioKey.Suspicion to -0.1f,
+            RatioKey.Suspicion to -0.1,
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
@@ -173,7 +173,7 @@ fun createAllActions() = listOf(
             ResourceKey.Money to 15.0
         ),
         ratioChanges = mapOf(
-            RatioKey.Suspicion to 0.005f
+            RatioKey.Suspicion to 0.005,
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
@@ -194,7 +194,7 @@ fun createAllActions() = listOf(
             ResourceKey.Money to 40.0
         ),
         ratioChanges = mapOf(
-            RatioKey.Suspicion to 0.015f
+            RatioKey.Suspicion to 0.015
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
@@ -243,7 +243,7 @@ fun createAllActions() = listOf(
             ResourceKey.HumanFood to 1.0,
         ),
         ratioChanges = mapOf(
-          RatioKey.Suspicion to 0.005f,
+          RatioKey.Suspicion to 0.005,
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
@@ -296,7 +296,7 @@ fun createAllActions() = listOf(
             )
         ),
         ratioChanges = mapOf(
-            RatioKey.Suspicion to -0.1f,
+            RatioKey.Suspicion to -0.1,
         )
-    )
+    ),
 )

@@ -17,6 +17,9 @@ import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.main.presentation.sectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
+import com.daniil.shevtsov.idle.feature.player.species.domain.Species
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
+import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
@@ -37,9 +40,6 @@ class MainFunctionalCoreTest {
     @Test
     fun `should buy upgrade when clicked and affordable`() = runBlockingTest {
         val initialState = gameState(
-            balanceConfig = balanceConfig(
-                resourceSpentForFullMutant = 10.0
-            ),
             resources = listOf(
                 resource(key = ResourceKey.Blood, value = 10.0),
             ),
@@ -47,7 +47,12 @@ class MainFunctionalCoreTest {
                 ratio(key = RatioKey.Mutanity, value = 0.0)
             ),
             upgrades = listOf(
-                upgrade(id = 0L, price = 4.0)
+                upgrade(
+                    id = 0L,
+                    price = 4.0,
+                    resourceChanges = mapOf(ResourceKey.Blood to -4.0),
+                    ratioChanges = mapOf(RatioKey.Mutanity to 0.4),
+                )
             ),
         )
 
@@ -73,31 +78,33 @@ class MainFunctionalCoreTest {
     }
 
     @Test
-    fun `should add tags provided by upgrade when upgrade bought`() = runBlockingTest {
-        val providedTag = tag(name = "lol")
+    fun `should update tags correctly when upgrade bought`() =
+        runBlockingTest {
+            val providedTag = tag(name = "lol")
 
-        val initialState = gameState(
-            resources = listOf(resource(key = ResourceKey.Blood, value = 1.0)),
-            ratios = listOf(ratio(key = RatioKey.Mutanity)),
-            upgrades = listOf(
-                upgrade(
-                    id = 0L, tags = mapOf(
-                        TagRelation.Provides to listOf(providedTag)
+            val initialState = gameState(
+                resources = listOf(resource(key = ResourceKey.Blood, value = 1.0)),
+                ratios = listOf(ratio(key = RatioKey.Mutanity, value = 0.2)),
+                upgrades = listOf(
+                    upgrade(
+                        id = 1L,
+                        tags = mapOf(TagRelation.Provides to listOf(providedTag)),
+                        resourceChanges = mapOf(ResourceKey.Blood to -0.4),
+                        ratioChanges = mapOf(RatioKey.Mutanity to 0.5),
                     )
-                )
-            ),
-        )
+                ),
+            )
 
-        val newState = mainFunctionalCore(
-            state = initialState,
-            viewAction = MainViewAction.UpgradeSelected(id = 0L),
-        )
+            val newState = mainFunctionalCore(
+                state = initialState,
+                viewAction = MainViewAction.UpgradeSelected(id = 1L),
+            )
 
-        assertThat(newState)
-            .prop(GameState::player)
-            .prop(Player::tags)
-            .containsExactly(providedTag)
-    }
+            assertThat(newState)
+                .prop(GameState::player)
+                .prop(Player::tags)
+                .containsExactly(providedTag)
+        }
 
     @Test
     fun `should update resources, ratios and tags correctly when action clicked`() =
@@ -110,8 +117,8 @@ class MainFunctionalCoreTest {
                     resourceChange(key = ResourceKey.Money, change = -7.0),
                 ),
                 ratioChanges = mapOf(
-                    ratioChange(key = RatioKey.Mutanity, change = 2.0f),
-                    ratioChange(key = RatioKey.Suspicion, change = -3.0f),
+                    ratioChange(key = RatioKey.Mutanity, change = 2.0),
+                    ratioChange(key = RatioKey.Suspicion, change = -3.0),
                 ),
                 tags = mapOf(
                     TagRelation.Provides to listOf(providedTag)
@@ -311,7 +318,7 @@ class MainFunctionalCoreTest {
                 ratio(key = RatioKey.Suspicion, value = 0.95),
             ),
             actions = listOf(
-                action(id = 1L, ratioChanges = mapOf(RatioKey.Suspicion to 0.05f))
+                action(id = 1L, ratioChanges = mapOf(RatioKey.Suspicion to 0.05))
             )
         )
 

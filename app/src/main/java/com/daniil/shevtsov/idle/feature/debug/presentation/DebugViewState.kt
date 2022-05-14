@@ -6,4 +6,5 @@ import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpecie
 data class DebugViewState(
     val jobSelection: List<PlayerJobModel>,
     val speciesSelection: List<PlayerSpeciesModel>,
+    val traitSelections: List<DebugTraitSelection>,
 )

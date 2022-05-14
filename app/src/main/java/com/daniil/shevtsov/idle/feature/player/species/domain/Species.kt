@@ -1,6 +1,8 @@
 package com.daniil.shevtsov.idle.feature.player.species.domain
 
 import com.daniil.shevtsov.idle.core.ui.Icons
+import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 
 object Species {
@@ -11,7 +13,10 @@ object Species {
         icon = Icons.Devourer,
         tags = listOf(
             Tags.Species.Devourer,
-        )
+            Tags.Access.Home,
+        ),
+        mainResource = ResourceKey.Blood,
+        mainRatio = RatioKey.Mutanity,
     )
 
     val Shapeshifter = playerSpecies(
@@ -31,11 +36,14 @@ object Species {
         icon = Icons.Vampire,
         tags = listOf(
             Tags.Species.Vampire,
+            Tags.Access.Home,
             Tags.Nature.Magic,
             Tags.Heliophobia,
             Tags.Immortal,
             Tags.Hypnosis,
-        )
+        ),
+        mainResource = ResourceKey.Blood,
+        mainRatio = RatioKey.Power,
     )
 
     val Parasite = playerSpecies(
@@ -67,7 +75,9 @@ object Species {
         tags = listOf(
             Tags.Species.Alien,
             Tags.Nature.Tech,
-        )
+        ),
+        mainResource = ResourceKey.Scrap,
+        mainRatio = RatioKey.ShipRepair,
     )
 
     val Android = playerSpecies(
@@ -78,6 +88,7 @@ object Species {
         tags = listOf(
             Tags.Species.Android,
             Tags.Nature.Tech,
+        ),
+
         )
-    )
 }

@@ -109,16 +109,16 @@ fun ContentBody(
             Column(
                 modifier = Modifier
                     .height(500.dp)
-                    .background(Pallete.LightRed)
+                    .background(Pallete.BackgroundLight)
                     .padding(top = 2.dp)
-                    .background(Pallete.Red)
+                    .background(Pallete.Background)
             ) {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = modifier
                         .fillMaxWidth()
-                        .background(Pallete.Red)
+                        .background(Pallete.Background)
                         .padding(vertical = 4.dp)
 
                 ) {
@@ -143,7 +143,7 @@ fun ContentBody(
                     )
                 }
                 Cavity(
-                    mainColor = Pallete.Red,
+                    mainColor = Pallete.Background,
                     modifier = modifier,
                 ) {
                     UpgradeList(
@@ -158,7 +158,7 @@ fun ContentBody(
     ) { paddingValues ->
         Column(
             modifier = modifier
-                .background(Pallete.Red)
+                .background(Pallete.Background)
                 .padding(bottom = paddingValues.calculateBottomPadding()),
             verticalArrangement = Arrangement.Top,
         ) {
@@ -193,10 +193,10 @@ fun ContentBody(
             }
 
             Cavity(
-                mainColor = Pallete.Red,
+                mainColor = Pallete.Background,
                 modifier = modifier
                     .weight(1f)
-                    .background(Pallete.Red)
+                    .background(Pallete.Background)
                     .padding(4.dp),
             ) {
                 ActionSection(

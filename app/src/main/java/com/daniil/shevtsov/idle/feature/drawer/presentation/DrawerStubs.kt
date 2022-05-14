@@ -1,6 +1,6 @@
 package com.daniil.shevtsov.idle.feature.drawer.presentation
 
-import com.daniil.shevtsov.idle.core.ui.debugViewState
+import com.daniil.shevtsov.idle.feature.debug.presentation.debugViewState
 import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 
 fun drawerTab(

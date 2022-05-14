@@ -15,7 +15,7 @@ fun action(
     title: String = "",
     subtitle: String = "",
     resourceChanges: Map<ResourceKey, Double> = mapOf(),
-    ratioChanges: Map<RatioKey, Float> = mapOf(),
+    ratioChanges: Map<RatioKey, Double> = mapOf(),
     tags: Map<TagRelation, List<Tag>> = mapOf(),
 ) = Action(
     id = id,

@@ -26,8 +26,8 @@ fun MyProgressBar(
                 .fillMaxWidth()
                 .height(height)
                 .cavitary(
-                    lightColor = Pallete.LightRed,
-                    darkColor = Pallete.DarkRed
+                    lightColor = Pallete.BackgroundLight,
+                    darkColor = Pallete.BackgroundDark
                 )
                 .background(Color.White),
         )
@@ -37,10 +37,10 @@ fun MyProgressBar(
                 .height(height)
                 .padding(4.dp)
                 .protrusive(
-                    lightColor = Pallete.LightRed,
-                    darkColor = Pallete.DarkRed
+                    lightColor = Pallete.BackgroundLight,
+                    darkColor = Pallete.BackgroundDark
                 )
-                .background(Pallete.Red),
+                .background(Pallete.Background),
         )
     }
 }

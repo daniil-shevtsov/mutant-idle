@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.cavitary
-import com.daniil.shevtsov.idle.feature.gamestart.presentation.SpeciesSelectionItem
-import com.daniil.shevtsov.idle.feature.gamestart.presentation.speciesSelectionItem
+import com.daniil.shevtsov.idle.feature.gamestart.presentation.TraitSelectionItem
+import com.daniil.shevtsov.idle.feature.gamestart.presentation.traitSelectionItem
 
 @Preview(
     widthDp = 650,
@@ -39,19 +39,19 @@ fun SpeciesSelectionPreview() {
 
 @Composable
 fun SpeciesSelection(
-    selection: List<SpeciesSelectionItem>,
+    selection: List<TraitSelectionItem>,
     onItemClicked: (id: Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
-            .background(Pallete.Red)
+            .background(Pallete.Background)
             .padding(4.dp)
             .cavitary(
-                lightColor = Pallete.LightRed,
-                darkColor = Pallete.DarkRed
+                lightColor = Pallete.BackgroundLight,
+                darkColor = Pallete.BackgroundDark
             )
-            .background(Pallete.DarkGray)
+            .background(Pallete.BackgroundDarkest)
             .padding(4.dp)
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState())
@@ -59,9 +59,9 @@ fun SpeciesSelection(
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
             modifier = modifier
-                .background(Pallete.Red)
+                .background(Pallete.Background)
                 .padding(bottom = 4.dp)
-                .background(Pallete.DarkGray)
+                .background(Pallete.BackgroundDarkest)
                 .padding(top = 4.dp)
                 .height(IntrinsicSize.Max)
                 .fillMaxWidth(),
@@ -84,19 +84,19 @@ fun SpeciesSelection(
                             .let { modifier ->
                                 if (item.isSelected) {
                                     modifier
-                                        .background(Pallete.LightRed)
+                                        .background(Pallete.BackgroundLight)
                                         .padding(start = 1.dp, top = 1.dp, end = 1.dp)
                                 } else {
                                     modifier
                                 }
                             }
 
-                            .background(Pallete.Red),
+                            .background(Pallete.Background),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = when (item.isUnlocked) {
-                                true -> item.icon
+                                true -> item.icon ?: Icons.TraitDefault
                                 else -> Icons.LockedCharacter
                             },
                             fontSize = 24.sp
@@ -108,7 +108,7 @@ fun SpeciesSelection(
                             .fillMaxWidth()
                             .let { modifier ->
                                 if (item.isSelected) {
-                                    modifier.background(Pallete.LightRed)
+                                    modifier.background(Pallete.BackgroundLight)
                                 } else {
                                     modifier
                                 }
@@ -124,7 +124,7 @@ fun SpeciesSelection(
                                         modifier
                                     } else {
                                         modifier
-                                            .background(Pallete.Red)
+                                            .background(Pallete.Background)
                                     }
                                 }
                         )
@@ -139,7 +139,7 @@ fun SpeciesSelection(
                                         modifier
                                     }
                                 }
-                                .background(Pallete.Red)
+                                .background(Pallete.Background)
                         )
                         Box(
                             modifier = modifier
@@ -150,7 +150,7 @@ fun SpeciesSelection(
                                         modifier
                                     } else {
                                         modifier
-                                            .background(Pallete.Red)
+                                            .background(Pallete.Background)
                                     }
                                 }
                         )
@@ -160,7 +160,7 @@ fun SpeciesSelection(
                             .let { modifier ->
                                 if (item.isSelected) {
                                     modifier
-                                        .background(Pallete.LightRed)
+                                        .background(Pallete.BackgroundLight)
                                         .let { kek ->
                                             when (index) {
                                                 0 -> kek.padding(end = 1.dp)
@@ -173,12 +173,12 @@ fun SpeciesSelection(
                                                 )
                                             }
                                         }
-                                        .background(Pallete.Red)
+                                        .background(Pallete.Background)
                                 } else {
                                     modifier
                                 }
                             }
-                            .background(Pallete.Red)
+                            .background(Pallete.Background)
                             .padding(4.dp),
                     ) {
                         Text(
@@ -196,8 +196,8 @@ fun SpeciesSelection(
                                 .fillMaxHeight()
                                 .padding(4.dp)
                                 .cavitary(
-                                    lightColor = Pallete.LightRed,
-                                    darkColor = Pallete.DarkRed
+                                    lightColor = Pallete.BackgroundLight,
+                                    darkColor = Pallete.BackgroundDark
                                 )
                                 .background(Color.White)
                                 .padding(4.dp)
@@ -222,25 +222,25 @@ fun selectedStatesOfSpecies() = (0..2)
     }
 
 fun speciesSelectionComposeStub(selectedIndex: Int = 1) = listOf(
-    speciesSelectionItem(
+    traitSelectionItem(
         title = "Devourer",
         icon = Icons.Devourer,
         description = "You are a growing creature with insatiable hunger",
         isSelected = selectedIndex == 0,
     ),
-    speciesSelectionItem(
+    traitSelectionItem(
         title = "Vampire",
         icon = Icons.Vampire,
         description = "You are a bloodsucking immortal creature",
         isSelected = selectedIndex == 1,
     ),
-    speciesSelectionItem(
+    traitSelectionItem(
         title = "Alien",
         icon = Icons.Alien,
         description = "You have crashed on this planet and need to find a way home",
         isSelected = selectedIndex == 2,
     ),
-    speciesSelectionItem(
+    traitSelectionItem(
         title = "Lol",
         icon = Icons.Alien,
         description = "Kek",

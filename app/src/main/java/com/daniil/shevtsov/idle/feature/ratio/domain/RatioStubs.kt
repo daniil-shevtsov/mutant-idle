@@ -12,5 +12,5 @@ fun ratio(
 
 fun ratioChange(
     key: RatioKey = RatioKey.Mutanity,
-    change: Float = 0.0f,
+    change: Double = 0.0,
 ) = key to change

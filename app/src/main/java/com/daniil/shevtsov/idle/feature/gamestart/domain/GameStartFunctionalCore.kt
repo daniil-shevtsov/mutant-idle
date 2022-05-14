@@ -3,54 +3,42 @@ package com.daniil.shevtsov.idle.feature.gamestart.domain
 import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
+import com.daniil.shevtsov.idle.feature.player.core.domain.PlayerViewAction
+import com.daniil.shevtsov.idle.feature.player.core.domain.playerFunctionalCore
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 
 fun gameStartFunctionalCore(
     state: GameState,
     viewAction: GameStartViewAction,
 ): GameState {
     return when (viewAction) {
-        is GameStartViewAction.SpeciesSelected -> handleSpeciesSelected(
-            state = state,
-            viewAction = viewAction,
-        )
-        is GameStartViewAction.JobSelected -> handleJobSelected(
-            state = state,
-            viewAction = viewAction,
-        )
         is GameStartViewAction.StartGame -> handleStartGame(
             state = state,
             viewAction = viewAction,
         )
-    }
-}
-
-private fun handleSpeciesSelected(
-    state: GameState,
-    viewAction: GameStartViewAction.SpeciesSelected,
-): GameState {
-    val newSpecies = state.availableSpecies.find { it.id == viewAction.id }!!
-
-    return when {
-        state.unlockState.species[newSpecies.id] == true -> state.copy(
-            player = state.player.copy(
-                species = newSpecies,
-            ),
+        is GameStartViewAction.TraitSelected -> handleTraitSelected(
+            state = state,
+            viewAction = viewAction,
         )
-        else -> state
     }
 }
 
-private fun handleJobSelected(
+private fun handleTraitSelected(
     state: GameState,
-    viewAction: GameStartViewAction.JobSelected,
+    viewAction: GameStartViewAction.TraitSelected,
 ): GameState {
-    val newJob = state.availableJobs.find { it.id == viewAction.id }!!
+    val newTrait =
+        state.availableTraits.find { it.traitId == viewAction.traitId && it.id == viewAction.id }!!
+
+    val unlockStatus = when (newTrait.traitId) {
+        TraitId.Species -> state.unlockState.traits[TraitId.Species]
+        TraitId.Job -> state.unlockState.traits[TraitId.Job]
+    }
 
     return when {
-        state.unlockState.jobs[newJob.id] == true -> state.copy(
-            player = state.player.copy(
-                job = newJob,
-            ),
+        unlockStatus?.get(newTrait.id) == true -> playerFunctionalCore(
+            state = state,
+            action = PlayerViewAction.ChangeTrait(traitId = newTrait.traitId, id = viewAction.id),
         )
         else -> state
     }

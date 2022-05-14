@@ -7,14 +7,16 @@ import assertk.assertions.*
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.action.presentation.*
+import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.flavor.Flavors
 import com.daniil.shevtsov.idle.feature.flavor.flavor
 import com.daniil.shevtsov.idle.feature.location.domain.location
 import com.daniil.shevtsov.idle.feature.location.domain.locationSelectionState
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
-import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCoreState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
+import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
 import com.daniil.shevtsov.idle.feature.ratio.presentation.RatioModel
@@ -36,7 +38,7 @@ import org.junit.jupiter.api.Test
 class MainPresentationTest {
     @Test
     fun `should form correct initial state`() = runBlockingTest {
-        val state = mainFunctionalCoreState(
+        val state = gameState(
             resources = listOf(
                 resource(key = ResourceKey.Blood, name = "Blood", value = 10.0),
                 resource(key = ResourceKey.Money, name = "Money", value = 20.0),
@@ -46,10 +48,14 @@ class MainPresentationTest {
                 ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
             ),
             upgrades = listOf(
-                upgrade(id = 0L, price = 32.0),
-                upgrade(id = 1L, price = 35.0),
-                upgrade(id = 2L, price = 150.0),
-                upgrade(id = 3L, price = 30.0),
+                upgrade(id = 0L, price = 32.0, resourceChanges = mapOf(ResourceKey.Blood to -32.0)),
+                upgrade(id = 1L, price = 35.0, resourceChanges = mapOf(ResourceKey.Blood to -25.0)),
+                upgrade(
+                    id = 2L,
+                    price = 150.0,
+                    resourceChanges = mapOf(ResourceKey.Blood to -150.0)
+                ),
+                upgrade(id = 3L, price = 30.0, resourceChanges = mapOf(ResourceKey.Blood to -30.0)),
             ),
             actions = listOf(
                 action(id = 0L, title = "human action"),
@@ -95,7 +101,7 @@ class MainPresentationTest {
 
     @Test
     fun `should display ratio label`() {
-        val state = mainFunctionalCoreState(
+        val state = gameState(
             ratios = listOf(
                 ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.105),
             ),
@@ -115,7 +121,7 @@ class MainPresentationTest {
 
     @Test
     fun `should only show resources that you have`() = runBlockingTest {
-        val state = mainFunctionalCoreState(
+        val state = gameState(
             resources = listOf(
                 resource(key = ResourceKey.Blood, name = "Blood", value = 10.0),
                 resource(key = ResourceKey.Money, name = "Money", value = 20.0),
@@ -133,7 +139,7 @@ class MainPresentationTest {
 
     @Test
     fun `should show correct icons for resources`() = runBlockingTest {
-        val state = mainFunctionalCoreState(
+        val state = gameState(
             resources = listOf(
                 resource(key = ResourceKey.Blood, value = 1.0),
                 resource(key = ResourceKey.Money, value = 1.0),
@@ -189,7 +195,7 @@ class MainPresentationTest {
                 )
             )
 
-            val state = mainFunctionalCoreState(
+            val state = gameState(
                 upgrades = expectedAvailableUpgrades + expectedUnavailableUpgrades,
                 player = player(generalTags = listOf(availableTag)),
             )
@@ -204,9 +210,15 @@ class MainPresentationTest {
 
     @Test
     fun `should mark upgrade as affordable if its price less than resource`() = runBlockingTest {
-        val state = mainFunctionalCoreState(
+        val state = gameState(
             resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
-            upgrades = listOf(upgrade(id = 0L, price = 5.0)),
+            upgrades = listOf(
+                upgrade(
+                    id = 0L,
+                    price = 5.0,
+                    resourceChanges = mapOf(ResourceKey.Blood to -5.0)
+                )
+            ),
         )
 
         val viewState = mapMainViewState(state = state)
@@ -220,9 +232,15 @@ class MainPresentationTest {
     @Test
     fun `should mark upgrade as not affordable if its price higher than resource`() =
         runBlockingTest {
-            val state = mainFunctionalCoreState(
+            val state = gameState(
                 resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
-                upgrades = listOf(upgrade(id = 0L, price = 20.0)),
+                upgrades = listOf(
+                    upgrade(
+                        id = 0L,
+                        price = 20.0,
+                        resourceChanges = mapOf(ResourceKey.Blood to -20.0)
+                    )
+                ),
             )
 
             val viewState = mapMainViewState(state = state)
@@ -235,13 +253,20 @@ class MainPresentationTest {
 
     @Test
     fun `should mark upgrade as bought if it is bought`() = runBlockingTest {
-        val state = mainFunctionalCoreState(
+        val state = gameState(
             resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
             ratios = listOf(
                 ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.0),
                 ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
             ),
-            upgrades = listOf(upgrade(id = 0L, price = 10.0, status = UpgradeStatus.Bought)),
+            upgrades = listOf(
+                upgrade(
+                    id = 0L,
+                    price = 10.0,
+                    resourceChanges = mapOf(ResourceKey.Blood to -10.0),
+                    status = UpgradeStatus.Bought
+                )
+            ),
         )
 
         val viewState = mapMainViewState(state = state)
@@ -254,7 +279,7 @@ class MainPresentationTest {
 
     @Test
     fun `should show correct ratio icons`() = runBlockingTest {
-        val state = mainFunctionalCoreState(
+        val state = gameState(
             ratios = listOf(
                 ratio(key = RatioKey.Mutanity),
                 ratio(key = RatioKey.Suspicion),
@@ -275,7 +300,7 @@ class MainPresentationTest {
     fun `should update mutant ratio names correctly`() = runBlockingTest {
         assertThat(
             mapMainViewState(
-                state = mainFunctionalCoreState(
+                state = gameState(
                     ratios = listOf(
                         ratio(key = RatioKey.Mutanity, value = 0.14)
                     )
@@ -286,7 +311,7 @@ class MainPresentationTest {
 
         assertThat(
             mapMainViewState(
-                state = mainFunctionalCoreState(
+                state = gameState(
                     ratios = listOf(
                         ratio(key = RatioKey.Mutanity, value = 0.16)
                     )
@@ -297,7 +322,7 @@ class MainPresentationTest {
 
         assertThat(
             mapMainViewState(
-                state = mainFunctionalCoreState(
+                state = gameState(
                     ratios = listOf(
                         ratio(key = RatioKey.Mutanity, value = 0.26)
                     )
@@ -308,7 +333,7 @@ class MainPresentationTest {
 
         assertThat(
             mapMainViewState(
-                state = mainFunctionalCoreState(
+                state = gameState(
                     ratios = listOf(
                         ratio(key = RatioKey.Mutanity, value = 0.51)
                     )
@@ -319,7 +344,7 @@ class MainPresentationTest {
 
         assertThat(
             mapMainViewState(
-                state = mainFunctionalCoreState(
+                state = gameState(
                     ratios = listOf(
                         ratio(key = RatioKey.Mutanity, value = 0.81)
                     )
@@ -333,7 +358,7 @@ class MainPresentationTest {
     fun `should update suspicion ratio names correctly`() = runBlockingTest {
         assertThat(
             mapMainViewState(
-                state = mainFunctionalCoreState(
+                state = gameState(
                     ratios = listOf(
                         ratio(key = RatioKey.Suspicion, value = 0.14)
                     )
@@ -344,7 +369,7 @@ class MainPresentationTest {
 
         assertThat(
             mapMainViewState(
-                state = mainFunctionalCoreState(
+                state = gameState(
                     ratios = listOf(
                         ratio(key = RatioKey.Suspicion, value = 0.16)
                     )
@@ -355,7 +380,7 @@ class MainPresentationTest {
 
         assertThat(
             mapMainViewState(
-                state = mainFunctionalCoreState(
+                state = gameState(
                     ratios = listOf(
                         ratio(key = RatioKey.Suspicion, value = 0.26)
                     )
@@ -366,7 +391,7 @@ class MainPresentationTest {
 
         assertThat(
             mapMainViewState(
-                state = mainFunctionalCoreState(
+                state = gameState(
                     ratios = listOf(
                         ratio(key = RatioKey.Suspicion, value = 0.51)
                     )
@@ -377,7 +402,7 @@ class MainPresentationTest {
 
         assertThat(
             mapMainViewState(
-                state = mainFunctionalCoreState(
+                state = gameState(
                     ratios = listOf(
                         ratio(key = RatioKey.Suspicion, value = 0.81)
                     )
@@ -390,7 +415,7 @@ class MainPresentationTest {
 
     @Test
     fun `should hide actions if it requires not available resources`() = runBlockingTest {
-        val state = mainFunctionalCoreState(
+        val state = gameState(
             resources = listOf(
                 resource(key = ResourceKey.Money, value = 35.0),
             ),
@@ -422,7 +447,7 @@ class MainPresentationTest {
     @Disabled("Need to figure out which actions to hide and which to show disabled")
     @Test
     fun `show enabled actions before disabled if got both`() = runBlockingTest {
-        val state = mainFunctionalCoreState(
+        val state = gameState(
             resources = listOf(
                 resource(key = ResourceKey.Money, value = 35.0),
             ),
@@ -470,7 +495,7 @@ class MainPresentationTest {
             tags = mapOf(TagRelation.RequiredAll to listOf(availableTag, notAvailableTag))
         )
 
-        val state = mainFunctionalCoreState(
+        val state = gameState(
             actions = listOf(
                 availableAction,
                 notAvailableAction,
@@ -515,7 +540,7 @@ class MainPresentationTest {
             )
         )
 
-        val state = mainFunctionalCoreState(
+        val state = gameState(
             actions = listOf(
                 availableAction,
                 notAvailableAction,
@@ -539,7 +564,7 @@ class MainPresentationTest {
             .extracting(ActionModel::id)
             .containsExactly(availableAction.id)
 
-        val anotherState = mainFunctionalCoreState(
+        val anotherState = gameState(
             actions = listOf(
                 availableAction,
                 notAvailableAction,
@@ -581,7 +606,7 @@ class MainPresentationTest {
             )
         )
 
-        val state = mainFunctionalCoreState(
+        val state = gameState(
             actions = listOf(
                 availableAction,
                 notAvailableAction,
@@ -614,7 +639,7 @@ class MainPresentationTest {
         )
         val monsterAction = action(id = 2L)
 
-        val state = mainFunctionalCoreState(
+        val state = gameState(
             actions = listOf(
                 humanAction,
                 monsterAction,
@@ -646,7 +671,7 @@ class MainPresentationTest {
                 ResourceKey.Money to -5.0,
             )
         )
-        val state = mainFunctionalCoreState(
+        val state = gameState(
             resources = listOf(
                 resource(key = ResourceKey.Blood, value = 1.0),
                 resource(key = ResourceKey.Money, value = 5.0),
@@ -672,11 +697,11 @@ class MainPresentationTest {
         val action = action(
             id = 1L,
             ratioChanges = mapOf(
-                RatioKey.Mutanity to 0.5f,
-                RatioKey.Suspicion to -0.01f,
+                RatioKey.Mutanity to 0.5,
+                RatioKey.Suspicion to -0.01,
             )
         )
-        val state = mainFunctionalCoreState(
+        val state = gameState(
             ratios = listOf(
                 ratio(key = RatioKey.Mutanity, value = 0.3),
                 ratio(key = RatioKey.Suspicion, value = 0.5),
@@ -706,7 +731,7 @@ class MainPresentationTest {
             values = mapOf(tag to flavoredDescription),
         )
 
-        val state = mainFunctionalCoreState(
+        val state = gameState(
             actions = listOf(
                 action(subtitle = flavor.placeholder)
             ),
@@ -733,7 +758,7 @@ class MainPresentationTest {
             values = mapOf(tag to flavoredDescription),
         )
 
-        val state = mainFunctionalCoreState(
+        val state = gameState(
             upgrades = listOf(
                 upgrade(subtitle = flavor.placeholder)
             ),
@@ -755,7 +780,7 @@ class MainPresentationTest {
     fun `should show locations if has any`() = runBlockingTest {
         val availableLocation = location(id = 1L)
 
-        val state = mainFunctionalCoreState(
+        val state = gameState(
             locationSelectionState = locationSelectionState(
                 allLocations = listOf(availableLocation),
             ),
@@ -784,7 +809,7 @@ class MainPresentationTest {
             tags = mapOf(TagRelation.RequiredAll to listOf(unavailableTag))
         )
 
-        val state = mainFunctionalCoreState(
+        val state = gameState(
             player = player(generalTags = listOf(availableTag)),
             locationSelectionState = locationSelectionState(
                 allLocations = listOf(availableLocation, unavailableLocation),
@@ -797,6 +822,26 @@ class MainPresentationTest {
             .extractingAvailableLocations()
             .extracting(LocationModel::title)
             .containsExactly(availableLocation.title)
+    }
+
+    @Test
+    fun `should only show main ratio beside suspicion`() {
+        val mainRatio = RatioKey.ShipRepair
+        val state = gameState(
+            player = player(traits = mapOf(TraitId.Species to playerTrait(mainRatio = mainRatio))),
+            ratios = listOf(
+                ratio(key = RatioKey.Mutanity),
+                ratio(key = RatioKey.ShipRepair),
+                ratio(key = RatioKey.Suspicion),
+            )
+        )
+
+        val viewState = mapMainViewState(state = state)
+
+        assertThat(viewState)
+            .extractingRatios()
+            .extracting(RatioModel::key)
+            .containsExactly(mainRatio, RatioKey.Suspicion)
     }
 
     private fun Assert<MainViewState>.extractingUpgrades() =

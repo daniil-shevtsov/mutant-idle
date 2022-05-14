@@ -19,6 +19,7 @@ import com.daniil.shevtsov.idle.core.ui.protrusive
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewState
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.gameStartViewState
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 
 @Preview(
     widthDp = 230,
@@ -44,7 +45,7 @@ fun GameStartScreen(
 ) {
     Column(
         modifier = modifier
-            .background(Pallete.Red)
+            .background(Pallete.Background)
             .fillMaxHeight()
             .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -54,19 +55,19 @@ fun GameStartScreen(
         Text(text = state.description, color = Color.White, fontSize = 24.sp)
         SpeciesSelection(
             selection = state.speciesSelection,
-            onItemClicked = { id -> onAction(GameStartViewAction.SpeciesSelected(id)) }
+            onItemClicked = { id -> onAction(GameStartViewAction.TraitSelected(TraitId.Species, id)) }
         )
         SpeciesSelection(
             selection = state.jobSelection,
-            onItemClicked = { id -> onAction(GameStartViewAction.JobSelected(id)) }
+            onItemClicked = { id -> onAction(GameStartViewAction.TraitSelected(TraitId.Job, id)) }
         )
         Box(
             modifier = modifier
                 .cavitary(
-                    lightColor = Pallete.LightRed,
-                    darkColor = Pallete.DarkRed,
+                    lightColor = Pallete.BackgroundLight,
+                    darkColor = Pallete.BackgroundDark,
                 )
-                .background(Pallete.DarkGray)
+                .background(Pallete.BackgroundDarkest)
                 .padding(2.dp),
             contentAlignment = Alignment.Center,
         ) {
@@ -75,12 +76,12 @@ fun GameStartScreen(
                     .clickable {
                         onAction(GameStartViewAction.StartGame)
                     }
-                    .background(Pallete.Red)
+                    .background(Pallete.Background)
                     .protrusive(
-                        lightColor = Pallete.LightRed,
-                        darkColor = Pallete.DarkRed,
+                        lightColor = Pallete.BackgroundLight,
+                        darkColor = Pallete.BackgroundDark,
                     )
-                    .background(Pallete.Red)
+                    .background(Pallete.Background)
                     .padding(4.dp)
                     .fillMaxWidth(),
                 text = "Start Game",

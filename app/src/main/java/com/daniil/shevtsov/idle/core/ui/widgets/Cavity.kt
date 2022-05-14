@@ -15,11 +15,13 @@ import com.daniil.shevtsov.idle.core.ui.cavitary
 @Preview
 @Composable
 fun CavityPreview() {
-    Cavity(mainColor = Pallete.Red) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(36.dp)
-            .background(Color.White))
+    Cavity(mainColor = Pallete.Background) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(36.dp)
+                .background(Color.White)
+        )
     }
 }
 
@@ -33,10 +35,10 @@ fun Cavity(
         modifier = modifier
             .background(mainColor)
             .cavitary(
-                lightColor = Pallete.LightRed,
-                darkColor = Pallete.DarkRed
+                lightColor = Pallete.BackgroundLight,
+                darkColor = Pallete.BackgroundDark
             )
-            .background(Pallete.DarkGray)
+            .background(Pallete.BackgroundDarkest)
     ) {
         content()
     }
