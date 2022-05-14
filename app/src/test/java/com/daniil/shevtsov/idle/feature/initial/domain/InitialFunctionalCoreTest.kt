@@ -11,6 +11,8 @@ import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
+import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import org.junit.jupiter.api.Test
 
 internal class InitialFunctionalCoreTest {
@@ -25,6 +27,18 @@ internal class InitialFunctionalCoreTest {
         )
 
         assertThat(state).prop(GameState::mainRatioKey).isEqualTo(RatioKey.Mutanity)
+    }
+
+    @Test
+    fun `should use blood as main resource of devourer`() {
+        val state = gameState(
+            resources = listOf(resource(key = ResourceKey.Blood)),
+            player = player(traits = mapOf(
+                TraitId.Species to playerTrait(id = Species.Devourer.id)
+            )),
+        )
+
+        assertThat(state).prop(GameState::mainResourceKey).isEqualTo(ResourceKey.Blood)
     }
 
 }
