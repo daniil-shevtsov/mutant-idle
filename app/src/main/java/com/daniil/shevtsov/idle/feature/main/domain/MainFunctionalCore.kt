@@ -5,6 +5,7 @@ import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
+import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
@@ -106,12 +107,10 @@ fun handleActionClicked(
 ): GameState {
     val selectedAction = state.actions.find { action -> action.id == viewAction.id }!!
 
-    val hasInvalidChanges = selectedAction.resourceChanges.any { (resourceKey, resourceChange) ->
-        val currentResourceValue = state.resources
-            .find { resource -> resource.key == resourceKey }!!.value
-
-        currentResourceValue + resourceChange < 0
-    }
+    val hasInvalidChanges = hasInvalidChanges(
+        currentResources = state.resources,
+        resourceChanges = selectedAction.resourceChanges,
+    )
 
     val updatedResources = state.resources.map { resource ->
         when (val resourceChange = selectedAction.resourceChanges[resource.key]) {
@@ -144,6 +143,16 @@ fun handleActionClicked(
     } else {
         state
     }
+}
+
+private fun hasInvalidChanges(
+    currentResources: List<Resource>,
+    resourceChanges: Map<ResourceKey, Double>,
+) = resourceChanges.any { (resourceKey, resourceChange) ->
+    val currentResourceValue = currentResources
+        .find { resource -> resource.key == resourceKey }!!.value
+
+    currentResourceValue + resourceChange < 0
 }
 
 fun handleUpgradeSelected(
