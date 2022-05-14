@@ -185,12 +185,6 @@ fun handleUpgradeSelected(
 
             val boughtUpgrade = upgradeToBuy.copy(status = newStatus)
 
-
-            val updatedResourcesz = applyResourceChanges(
-                currentResources = state.resources,
-                resourceChanges = upgradeToBuy.resourceChanges
-            )
-
             val updatedUpgrades = state.upgrades.map { upgrade ->
                 if (upgrade.id == boughtUpgrade.id) {
                     boughtUpgrade
@@ -205,12 +199,10 @@ fun handleUpgradeSelected(
                 value = resourceToUpdate.value - upgradeToBuy.price.value
             )
 
-            val updatedResources = state.resources.map { resource ->
-                when (resource.key) {
-                    updatedResource.key -> updatedResource
-                    else -> resource
-                }
-            }
+            val updatedResources = applyResourceChanges(
+                currentResources = state.resources,
+                resourceChanges = upgradeToBuy.resourceChanges
+            )
 
             val ratioToUpdate = state.ratios.find { ratio -> ratio.key == RatioKey.Mutanity }!!
 
