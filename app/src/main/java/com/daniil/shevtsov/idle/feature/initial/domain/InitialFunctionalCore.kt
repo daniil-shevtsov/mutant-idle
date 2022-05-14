@@ -30,8 +30,6 @@ fun createInitialGameState(): GameState {
         balanceConfig = createBalanceConfig(),
         resources = createResources(),
         ratios = createInitialRatios(),
-        mainRatioKey = RatioKey.Mutanity,
-        mainResourceKey = ResourceKey.Blood,
         sections = createInitialSectionState(),
         drawerTabs = createInitialDrawerTabs(),
         upgrades = createUpgrades(),

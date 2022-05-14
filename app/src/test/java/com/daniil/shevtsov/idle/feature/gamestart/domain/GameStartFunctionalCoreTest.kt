@@ -111,16 +111,7 @@ internal class GameStartFunctionalCoreTest {
 
         assertThat(newState)
             .prop(GameState::player)
-            .all {
-                assertSpeciesSelected(id = newSpecies.id)
-
-                prop(Player::tags)
-                    .all {
-                        containsSubList(nonSpeciesTags)
-                        containsNone(previousSpecies.tags)
-                        containsSubList(newSpecies.tags)
-                    }
-            }
+            .assertSpeciesSelected(id = newSpecies.id)
     }
 
     @Test

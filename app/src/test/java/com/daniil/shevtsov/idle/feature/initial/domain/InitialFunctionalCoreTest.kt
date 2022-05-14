@@ -17,28 +17,5 @@ import org.junit.jupiter.api.Test
 
 internal class InitialFunctionalCoreTest {
 
-    @Test
-    fun `should use mutanity as main ratio of devourer`() {
-        val state = gameState(
-            ratios = listOf(ratio(key = RatioKey.Mutanity)),
-            player = player(traits = mapOf(
-                TraitId.Species to playerTrait(id = Species.Devourer.id)
-            )),
-        )
-
-        assertThat(state).prop(GameState::mainRatioKey).isEqualTo(RatioKey.Mutanity)
-    }
-
-    @Test
-    fun `should use blood as main resource of devourer`() {
-        val state = gameState(
-            resources = listOf(resource(key = ResourceKey.Blood)),
-            player = player(traits = mapOf(
-                TraitId.Species to playerTrait(id = Species.Devourer.id)
-            )),
-        )
-
-        assertThat(state).prop(GameState::mainResourceKey).isEqualTo(ResourceKey.Blood)
-    }
 
 }
