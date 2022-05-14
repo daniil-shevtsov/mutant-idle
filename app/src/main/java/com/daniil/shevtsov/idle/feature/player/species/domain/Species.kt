@@ -1,7 +1,6 @@
 package com.daniil.shevtsov.idle.feature.player.species.domain
 
 import com.daniil.shevtsov.idle.core.ui.Icons
-import com.daniil.shevtsov.idle.feature.player.trait.domain.toPlayerTrait
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 
 object Species {

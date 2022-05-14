@@ -22,15 +22,6 @@ fun PlayerTrait.toSpecies() = PlayerSpecies(
     tags = tags,
 )
 
-fun PlayerSpecies.toPlayerTrait() = PlayerTrait(
-    id = id,
-    traitId = TraitId.Species,
-    title = title,
-    description =description,
-    tags = tags,
-    icon = icon,
-)
-
 fun playerTrait(
     id: Long = 0L,
     traitId: TraitId = TraitId.Job,

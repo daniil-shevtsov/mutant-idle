@@ -43,21 +43,25 @@ fun createInitialGameState(): GameState {
         currentScreen = Screen.GameStart,
         screenStack = listOf(Screen.GameStart),
         unlockState = UnlockState(
-            traits = mapOf(
-                TraitId.Species to createInitialSpecies().associate { species ->
-                    species.id to when (species.id) {
-                        Species.Devourer.id, Species.Vampire.id -> true
-                        else -> false
+            traits = TraitId.values().associate { traitId ->
+                val traits = createInitialTraits().filter { trait -> trait.traitId == traitId }
+
+                traitId to when (traitId) {
+                    TraitId.Species -> traits.associate { trait ->
+                        trait.id to when (trait.id) {
+                            Species.Devourer.id, Species.Vampire.id -> true
+                            else -> false
+                        }
                     }
-                },
-                TraitId.Job to createInitialJobs().associate { job ->
-                    job.id to when (job.id) {
-                        Jobs.Unemployed.id -> true
-                        else -> false
+                    TraitId.Job -> traits.associate { trait ->
+                        trait.id to when (trait.id) {
+                            Jobs.Unemployed.id -> true
+                            else -> false
+                        }
                     }
                 }
-            ),
-        )
+            }
+        ),
     )
 }
 
@@ -103,24 +107,6 @@ private fun createInitialPlayer() = player(
         TraitId.Species to Species.Devourer,
     )
 )
-
-private fun createInitialJobs() = listOf(
-    Jobs.Unemployed,
-    Jobs.Mortician,
-    Jobs.Undertaker,
-    Jobs.Butcher,
-    Jobs.ScrapyardMechanic,
-)
-
-private fun createInitialSpecies() = listOf(
-    Species.Devourer,
-    Species.Vampire,
-    Species.Shapeshifter,
-    Species.Parasite,
-    Species.Demon,
-    Species.Alien,
-    Species.Android,
-).map { it.toSpecies() }
 
 private fun createInitialTraits() = listOf(
     Jobs.Unemployed,

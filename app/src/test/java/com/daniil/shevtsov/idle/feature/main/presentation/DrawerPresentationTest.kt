@@ -8,11 +8,8 @@ import com.daniil.shevtsov.idle.feature.debug.presentation.DebugTraitSelection
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.*
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
-import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
-import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
 import com.daniil.shevtsov.idle.feature.player.trait.domain.PlayerTrait
-import com.daniil.shevtsov.idle.feature.player.trait.domain.toPlayerTrait
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test
 
