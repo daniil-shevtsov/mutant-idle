@@ -82,13 +82,13 @@ class MainFunctionalCoreTest {
 
             val initialState = gameState(
                 resources = listOf(resource(key = ResourceKey.Blood, value = 1.0)),
-                ratios = listOf(ratio(key = RatioKey.Mutanity)),
+                ratios = listOf(ratio(key = RatioKey.Mutanity, value = 0.2)),
                 upgrades = listOf(
                     upgrade(
                         id = 1L,
                         tags = mapOf(TagRelation.Provides to listOf(providedTag)),
-                        resourceChanges = mapOf(ResourceKey.Blood to -0.5),
-                        ratioChanges = mapOf(RatioKey.Suspicion to 0.5),
+                        resourceChanges = mapOf(ResourceKey.Blood to -0.4),
+                        ratioChanges = mapOf(RatioKey.Mutanity to 0.5),
                     )
                 ),
             )
@@ -99,9 +99,19 @@ class MainFunctionalCoreTest {
             )
 
             assertThat(newState)
-                .prop(GameState::player)
-                .prop(Player::tags)
-                .containsExactly(providedTag)
+                .all {
+                    prop(GameState::resources)
+                        .extracting(Resource::key, Resource::value)
+                        .containsExactly(ResourceKey.Blood to 0.6)
+
+//                    prop(GameState::ratios)
+//                        .extracting(Ratio::key, Ratio::value)
+//                        .containsExactly(RatioKey.Mutanity to 0.7)
+
+                    prop(GameState::player)
+                        .prop(Player::tags)
+                        .containsExactly(providedTag)
+                }
         }
 
     @Test
