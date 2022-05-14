@@ -13,7 +13,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
-import com.daniil.shevtsov.idle.core.ui.theme.vampireColors
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.core.ui.widgets.CollapseButton
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
@@ -26,36 +25,6 @@ import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
 import com.daniil.shevtsov.idle.feature.upgrade.view.UpgradeList
 import com.google.accompanist.insets.statusBarsHeight
 import kotlinx.coroutines.launch
-
-@Preview(
-    widthDp = 320,
-    heightDp = 534,
-)
-@Composable
-fun ThemeMainPreview() {
-    AppTheme(colors = vampireColors()) {
-        MainScreen(
-            state = mainViewState(
-                resources = listOf(
-                    resourceModel(name = "Scrap", value = "10 000", icon = Icons.Scrap),
-                    resourceModel(name = "Money", value = "100", icon = Icons.Money),
-                ),
-                ratios = listOf(
-                    ratioModel(title = "Ship Repair", icon = Icons.ShipRepair, percent = 0.75),
-                    ratioModel(title = "Suspicion", name = "Investigation", percent = 0.35),
-                ),
-                actionState = actionsState(),
-                upgradeState = upgradeViewState(),
-                sectionCollapse = mapOf(
-                    SectionKey.Resources to false,
-                    SectionKey.Actions to false,
-                    SectionKey.Upgrades to false,
-                ),
-            ),
-            onViewAction = {},
-        )
-    }
-}
 
 @Preview(
     widthDp = 320,

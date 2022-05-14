@@ -11,23 +11,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
-import com.daniil.shevtsov.idle.core.ui.theme.vampireColors
 
 
 @Preview
 @Composable
 fun MainPreview() {
-    AppTheme(colors = vampireColors()) {
-        Column {
-            listOf("Kek", "Covert", "Investigation").forEach { name ->
-                listOf(0.25f, 0.5f, 0.6f, 0.75f).forEach { percentage ->
-                    TitleWithProgress(
-                        title = "Lol",
-                        name = name,
-                        progress = percentage,
-                        icon = Icons.Mutanity,
-                    )
-                }
+    Column {
+        listOf("Kek", "Covert", "Investigation").forEach { name ->
+            listOf(0.25f, 0.5f, 0.6f, 0.75f).forEach { percentage ->
+                TitleWithProgress(
+                    title = "Lol",
+                    name = name,
+                    progress = percentage,
+                    icon = Icons.Mutanity,
+                )
             }
         }
     }

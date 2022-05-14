@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 
 class AppShapes(
@@ -23,4 +24,8 @@ class AppShapes(
     }
 }
 
-internal val LocalShapes = staticCompositionLocalOf { devourerShapes() }
+fun defaultShapes() = AppShapes(
+    progressBar = RectangleShape,
+)
+
+internal val LocalShapes = staticCompositionLocalOf { defaultShapes() }

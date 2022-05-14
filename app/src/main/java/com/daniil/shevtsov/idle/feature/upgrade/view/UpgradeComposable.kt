@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
-import com.daniil.shevtsov.idle.core.ui.theme.vampireColors
 import com.daniil.shevtsov.idle.core.ui.upgradeListPreviewStub
 import com.daniil.shevtsov.idle.core.ui.upgradePreviewStub
 import com.daniil.shevtsov.idle.feature.ratio.view.RatioChanges
@@ -23,9 +22,7 @@ import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
 @Preview
 @Composable
 fun UpgradePreview() {
-    AppTheme(colors = vampireColors()) {
-        Upgrade(upgrade = upgradePreviewStub(status = UpgradeStatusModel.Affordable))
-    }
+    Upgrade(upgrade = upgradePreviewStub(status = UpgradeStatusModel.Affordable))
 }
 
 @Preview(heightDp = 270)

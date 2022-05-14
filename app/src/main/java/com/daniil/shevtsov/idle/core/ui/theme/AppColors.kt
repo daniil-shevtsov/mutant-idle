@@ -65,6 +65,17 @@ class AppColors(
     }
 }
 
+fun defaultColors(): AppColors = AppColors(
+    backgroundLight = Color(0xFFD64747),
+    background = Color(0xFFAF0A0A),
+    backgroundDark = Color(0xFF750404),
+    backgroundDarkest = Color(0xFF2F1B1B),
+    backgroundText = Color.White,
+    textDark = Color.Black,
+    textLight = Color.White,
+    iconLight = Color.White,
+)
+
 fun testColors(): AppColors = AppColors(
     backgroundLight = Color(0xFFFF0000),
     background = Color(0xFFFF0000),
@@ -76,4 +87,4 @@ fun testColors(): AppColors = AppColors(
     iconLight = Color(0xFFFF0000),
 )
 
-internal val LocalColors = staticCompositionLocalOf { devourerColors() }
+internal val LocalColors = staticCompositionLocalOf { defaultColors() }

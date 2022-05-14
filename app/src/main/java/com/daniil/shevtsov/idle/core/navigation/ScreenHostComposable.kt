@@ -10,7 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
-import com.daniil.shevtsov.idle.core.ui.theme.chooseColorsForId
+import com.daniil.shevtsov.idle.core.ui.theme.chooseThemeForId
 import com.daniil.shevtsov.idle.feature.gamefinish.view.FinishedGameScreen
 import com.daniil.shevtsov.idle.feature.gamestart.view.GameStartScreen
 import com.daniil.shevtsov.idle.feature.main.MainDrawer
@@ -29,8 +29,11 @@ fun ScreenHostComposable(
     BackHandler {
         viewModel.handleAction(ScreenViewAction.General(GeneralViewAction.Back))
     }
-
-    AppTheme(colors = chooseColorsForId(delegatedViewState.speciesId)) {
+    val theme = chooseThemeForId(delegatedViewState.speciesId)
+    AppTheme(
+        colors = theme.colors,
+        shapes = theme.shapes,
+    ) {
         val toolbarColor = AppTheme.colors.background
         SideEffect {
             systemUiController.setSystemBarsColor(
