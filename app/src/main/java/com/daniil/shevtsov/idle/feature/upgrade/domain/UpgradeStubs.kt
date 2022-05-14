@@ -17,6 +17,7 @@ fun upgrade(
     title = title,
     subtitle = subtitle,
     price = price(value = price),
+    resourceChanges = resourceChanges,
     status = status,
     tags = tags,
 )
