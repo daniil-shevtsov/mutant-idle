@@ -144,7 +144,7 @@ fun handleActionClicked(
 
 private fun applyRatioChanges(
     currentRatios: List<Ratio>,
-    ratioChanges: Map<RatioKey, Float>,
+    ratioChanges: Map<RatioKey, Double>,
 ): List<Ratio> = currentRatios.map { ratio ->
     when (val ratioChange = ratioChanges[ratio.key]) {
         null -> ratio
@@ -154,7 +154,7 @@ private fun applyRatioChanges(
 
 private fun applyResourceChanges(
     currentResources: List<Resource>,
-    resourceChanges: Map<ResourceKey, Double>
+    resourceChanges: Map<ResourceKey, Double>,
 ) = currentResources.map { resource ->
     when (val resourceChange = resourceChanges[resource.key]) {
         null -> resource
@@ -222,6 +222,11 @@ fun handleUpgradeSelected(
                     else -> ratio
                 }
             }
+
+            val newRatios = applyRatioChanges(
+                currentRatios = state.ratios,
+                ratioChanges = boughtUpgrade.ratioChanges,
+            )
 
             return state.copy(
                 upgrades = updatedUpgrades,

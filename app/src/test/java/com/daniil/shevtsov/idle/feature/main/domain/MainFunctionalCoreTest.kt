@@ -125,8 +125,8 @@ class MainFunctionalCoreTest {
                     resourceChange(key = ResourceKey.Money, change = -7.0),
                 ),
                 ratioChanges = mapOf(
-                    ratioChange(key = RatioKey.Mutanity, change = 2.0f),
-                    ratioChange(key = RatioKey.Suspicion, change = -3.0f),
+                    ratioChange(key = RatioKey.Mutanity, change = 2.0),
+                    ratioChange(key = RatioKey.Suspicion, change = -3.0),
                 ),
                 tags = mapOf(
                     TagRelation.Provides to listOf(providedTag)
@@ -326,7 +326,7 @@ class MainFunctionalCoreTest {
                 ratio(key = RatioKey.Suspicion, value = 0.95),
             ),
             actions = listOf(
-                action(id = 1L, ratioChanges = mapOf(RatioKey.Suspicion to 0.05f))
+                action(id = 1L, ratioChanges = mapOf(RatioKey.Suspicion to 0.05))
             )
         )
 

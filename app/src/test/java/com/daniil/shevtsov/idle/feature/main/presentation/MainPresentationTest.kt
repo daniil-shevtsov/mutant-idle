@@ -695,8 +695,8 @@ class MainPresentationTest {
         val action = action(
             id = 1L,
             ratioChanges = mapOf(
-                RatioKey.Mutanity to 0.5f,
-                RatioKey.Suspicion to -0.01f,
+                RatioKey.Mutanity to 0.5,
+                RatioKey.Suspicion to -0.01,
             )
         )
         val state = gameState(
