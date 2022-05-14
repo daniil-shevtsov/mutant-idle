@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.cavitary
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.widgets.CavityButton
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJobModel
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpeciesModel
@@ -51,7 +52,7 @@ fun DebugComposable(
     var expanded2: Boolean by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier
-            .background(Pallete.Background)
+            .background(AppTheme.colors.background)
             .fillMaxSize()
             .wrapContentSize(Alignment.TopStart)
     ) {
@@ -89,7 +90,7 @@ private fun SpeciesRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(Pallete.Background),
+            .background(AppTheme.colors.background),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
@@ -149,7 +150,7 @@ private fun JobRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(Pallete.Background),
+            .background(AppTheme.colors.background),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
