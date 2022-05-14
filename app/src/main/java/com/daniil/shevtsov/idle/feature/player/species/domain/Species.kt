@@ -14,7 +14,8 @@ object Species {
         tags = listOf(
             Tags.Species.Devourer,
         ),
-
+        mainResource = ResourceKey.Blood,
+        mainRatio = RatioKey.Mutanity,
     )
 
     val Shapeshifter = playerSpecies(
