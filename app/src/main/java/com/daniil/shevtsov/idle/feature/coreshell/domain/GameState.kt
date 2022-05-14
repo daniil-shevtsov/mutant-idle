@@ -12,8 +12,6 @@ import com.daniil.shevtsov.idle.feature.location.domain.locationSelectionState
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
-import com.daniil.shevtsov.idle.feature.player.job.presentation.PlayerJobModel
-import com.daniil.shevtsov.idle.feature.player.species.domain.PlayerSpecies
 import com.daniil.shevtsov.idle.feature.player.trait.domain.*
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
@@ -31,7 +29,7 @@ data class GameState(
     val actions: List<Action>,
     val sections: List<SectionState>,
     val drawerTabs: List<DrawerTab>,
-    var availableTraits: List<PlayerTrait>,
+    val availableTraits: List<PlayerTrait>,
     val availableEndings: List<Ending>,
     val locationSelectionState: LocationSelectionState,
     val flavors: List<Flavor>,
@@ -39,14 +37,7 @@ data class GameState(
     val currentScreen: Screen,
     val screenStack: List<Screen>,
     val unlockState: UnlockState,
-) {
-
-    val jobTraits: List<PlayerTrait> = availableTraits
-        .filter { trait -> trait.traitId == TraitId.Job }
-
-    val speciesTraits: List<PlayerTrait> = availableTraits
-        .filter { trait -> trait.traitId == TraitId.Species }
-}
+)
 
 fun gameState(
     balanceConfig: BalanceConfig = balanceConfig(),
