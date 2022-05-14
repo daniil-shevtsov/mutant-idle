@@ -31,8 +31,8 @@ internal class GameStartPresentationTest {
         val species2 = playerSpecies(id = 2L, title = "species 2", description = "description 2")
         val state = gameState(
             availableTraits = listOf(
-                species1.toPlayerTrait(),
-                species2.toPlayerTrait(),
+                species1,
+                species2,
             )
         )
 
@@ -61,8 +61,8 @@ internal class GameStartPresentationTest {
 
         val state = gameState(
             availableTraits = listOf(
-                unlockedSpecies.toPlayerTrait(),
-                lockedSpecies.toPlayerTrait(),
+                unlockedSpecies,
+                lockedSpecies,
             ),
             unlockState = unlockState(
                 traits = mapOf(

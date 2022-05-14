@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.feature.player.species.domain
 
 import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
 import com.daniil.shevtsov.idle.feature.player.trait.domain.toSpecies
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
@@ -14,10 +15,11 @@ fun playerSpecies(
 ) = playerTrait(
     id = id,
     title = title,
+    traitId = TraitId.Species,
     icon = icon,
     description = description,
     tags = tags,
-).toSpecies()
+)
 
 fun playerSpeciesModel(
     id: Long = 0L,

@@ -83,8 +83,8 @@ internal class DrawerFunctionalCoreTest {
             availableTraits = listOf(
                 lockedJob,
                 unlockedJob,
-                lockedSpecies.toPlayerTrait(),
-                unlockedSpecies.toPlayerTrait(),
+                lockedSpecies,
+                unlockedSpecies,
             ),
             unlockState = unlockState(
                 traits = mapOf(
