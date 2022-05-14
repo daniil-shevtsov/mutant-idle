@@ -88,7 +88,6 @@ private fun unlockEverything(
     viewAction: DebugViewAction.UnlockEverything
 ) = state.copy(
     unlockState = state.unlockState.copy(
-        species = state.availableSpecies.associate { species -> species.id to true },
         traits = TraitId.values().associate { traitId ->
             traitId to state.availableTraits.filter { trait -> trait.traitId == traitId }
                 .associate { trait -> trait.id to true }
