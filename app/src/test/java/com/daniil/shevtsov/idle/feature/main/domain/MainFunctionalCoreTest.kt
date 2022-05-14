@@ -40,9 +40,6 @@ class MainFunctionalCoreTest {
     @Test
     fun `should buy upgrade when clicked and affordable`() = runBlockingTest {
         val initialState = gameState(
-            balanceConfig = balanceConfig(
-                resourceSpentForFullMutant = 10.0
-            ),
             resources = listOf(
                 resource(key = ResourceKey.Blood, value = 10.0),
             ),
@@ -50,7 +47,12 @@ class MainFunctionalCoreTest {
                 ratio(key = RatioKey.Mutanity, value = 0.0)
             ),
             upgrades = listOf(
-                upgrade(id = 0L, price = 4.0, resourceChanges = mapOf(ResourceKey.Blood to -4.0))
+                upgrade(
+                    id = 0L,
+                    price = 4.0,
+                    resourceChanges = mapOf(ResourceKey.Blood to -4.0),
+                    ratioChanges = mapOf(RatioKey.Mutanity to 0.4),
+                )
             ),
         )
 
@@ -76,7 +78,7 @@ class MainFunctionalCoreTest {
     }
 
     @Test
-    fun `should update resources, ratios and tags correctly when upgrade bought`() =
+    fun `should update tags correctly when upgrade bought`() =
         runBlockingTest {
             val providedTag = tag(name = "lol")
 
@@ -99,19 +101,9 @@ class MainFunctionalCoreTest {
             )
 
             assertThat(newState)
-                .all {
-                    prop(GameState::resources)
-                        .extracting(Resource::key, Resource::value)
-                        .containsExactly(ResourceKey.Blood to 0.6)
-
-//                    prop(GameState::ratios)
-//                        .extracting(Ratio::key, Ratio::value)
-//                        .containsExactly(RatioKey.Mutanity to 0.7)
-
-                    prop(GameState::player)
-                        .prop(Player::tags)
-                        .containsExactly(providedTag)
-                }
+                .prop(GameState::player)
+                .prop(Player::tags)
+                .containsExactly(providedTag)
         }
 
     @Test

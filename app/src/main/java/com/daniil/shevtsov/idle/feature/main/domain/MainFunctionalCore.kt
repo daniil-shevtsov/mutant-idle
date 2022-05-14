@@ -207,23 +207,7 @@ fun handleUpgradeSelected(
                 resourceChanges = upgradeToBuy.resourceChanges
             )
 
-            val ratioToUpdate = state.ratios.find { ratio -> ratio.key == RatioKey.Mutanity }!!
-
-            val upgradePercent =
-                boughtUpgrade.price.value / state.balanceConfig.resourceSpentForFullMutant
-
-            val updatedRatio = ratioToUpdate.copy(
-                value = ratioToUpdate.value + upgradePercent
-            )
-
-            val updatedRatios = state.ratios.map { ratio ->
-                when (ratio.key) {
-                    updatedRatio.key -> updatedRatio
-                    else -> ratio
-                }
-            }
-
-            val newRatios = applyRatioChanges(
+            val updatedRatios = applyRatioChanges(
                 currentRatios = state.ratios,
                 ratioChanges = boughtUpgrade.ratioChanges,
             )
