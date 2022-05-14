@@ -9,12 +9,12 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.daniil.shevtsov.idle.core.ui.theme.*
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
+import com.daniil.shevtsov.idle.core.ui.theme.chooseColorsForId
 import com.daniil.shevtsov.idle.feature.gamefinish.view.FinishedGameScreen
 import com.daniil.shevtsov.idle.feature.gamestart.view.GameStartScreen
 import com.daniil.shevtsov.idle.feature.main.MainDrawer
 import com.daniil.shevtsov.idle.feature.main.view.MainScreen
-import com.daniil.shevtsov.idle.feature.player.species.domain.Species
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
@@ -83,15 +83,5 @@ fun ScreenHostComposable(
                 }
             }
         )
-    }
-}
-
-fun chooseColorsForId(speciesId: Long): AppColors {
-    return when (speciesId) {
-        Species.Devourer.id -> devourerColors()
-        Species.Alien.id -> alienColors()
-        Species.Android.id -> androidColors()
-        Species.Vampire.id -> vampireColors()
-        else -> devourerColors()
     }
 }

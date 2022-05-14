@@ -11,7 +11,6 @@ import com.daniil.shevtsov.idle.feature.flavor.createFlavors
 import com.daniil.shevtsov.idle.feature.gamefinish.domain.createEndings
 import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
 import com.daniil.shevtsov.idle.feature.location.domain.createLocations
-import com.daniil.shevtsov.idle.feature.location.domain.location
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
@@ -20,7 +19,6 @@ import com.daniil.shevtsov.idle.feature.player.species.domain.Species
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
-import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.domain.createResources
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
@@ -110,7 +108,7 @@ private fun createInitialPlayer() = player(
     )
 )
 
-private fun createInitialTraits() = listOf(
+fun createInitialTraits() = listOf(
     Jobs.Unemployed,
     Jobs.Mortician,
     Jobs.Undertaker,
