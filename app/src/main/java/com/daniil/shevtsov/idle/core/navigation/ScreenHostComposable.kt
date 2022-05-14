@@ -8,11 +8,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import com.daniil.shevtsov.idle.core.ui.theme.AppColors
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
+import com.daniil.shevtsov.idle.core.ui.theme.alienColors
+import com.daniil.shevtsov.idle.core.ui.theme.devourerColors
 import com.daniil.shevtsov.idle.feature.gamefinish.view.FinishedGameScreen
 import com.daniil.shevtsov.idle.feature.gamestart.view.GameStartScreen
 import com.daniil.shevtsov.idle.feature.main.MainDrawer
 import com.daniil.shevtsov.idle.feature.main.view.MainScreen
+import com.daniil.shevtsov.idle.feature.player.species.domain.Species
 
 @Composable
 fun ScreenHostComposable(
@@ -25,7 +29,7 @@ fun ScreenHostComposable(
         viewModel.handleAction(ScreenViewAction.General(GeneralViewAction.Back))
     }
 
-    AppTheme {
+    AppTheme(colors = chooseColorsForId(delegatedViewState.speciesId)) {
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         ModalDrawer(
             drawerState = drawerState,
@@ -71,5 +75,13 @@ fun ScreenHostComposable(
                 }
             }
         )
+    }
+}
+
+fun chooseColorsForId(speciesId: Long): AppColors {
+    return when (speciesId) {
+        Species.Devourer.id -> devourerColors()
+        Species.Alien.id -> alienColors()
+        else -> devourerColors()
     }
 }

@@ -59,9 +59,9 @@ class IdleGameViewModel @Inject constructor(
                         newState = currentState.copy(
                             resources = currentState.resources.map { resource ->
                                 when (resource.key) {
-                                    ResourceKey.Blood -> resource.copy(
-                                        value = resourceChange
-                                    )
+//                                    ResourceKey.Blood -> resource.copy(
+//                                        value = resourceChange
+//                                    )
                                     else -> resource
                                 }
                             }

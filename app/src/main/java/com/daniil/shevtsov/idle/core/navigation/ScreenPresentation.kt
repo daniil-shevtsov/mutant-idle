@@ -1,11 +1,13 @@
 package com.daniil.shevtsov.idle.core.navigation
 
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
+import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerPresentation
 import com.daniil.shevtsov.idle.feature.gamefinish.domain.toFinishedGameState
 import com.daniil.shevtsov.idle.feature.gamefinish.presentation.mapFinishedGameViewState
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.mapGameStartViewState
-import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerPresentation
 import com.daniil.shevtsov.idle.feature.main.presentation.mapMainViewState
+import com.daniil.shevtsov.idle.feature.player.species.domain.Species.Devourer
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 
 fun screenPresentationFunctionalCore(
     state: GameState
@@ -18,6 +20,7 @@ fun screenPresentationFunctionalCore(
     }
 
     return ScreenHostViewState(
+        speciesId = state.player.traits[TraitId.Species]?.id ?: Devourer.id,
         drawerState = drawerState,
         contentState = contentState,
     )
