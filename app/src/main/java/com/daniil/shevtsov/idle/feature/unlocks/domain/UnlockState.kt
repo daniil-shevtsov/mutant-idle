@@ -3,7 +3,7 @@ package com.daniil.shevtsov.idle.feature.unlocks.domain
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 
 data class UnlockState(
-    var species: Map<Long, Boolean>,
+    var species: Map<Long, Boolean> = mapOf(),
     val traits: Map<TraitId, Map<Long, Boolean>>,
 ) {
     init {
@@ -15,9 +15,7 @@ data class UnlockState(
 }
 
 fun unlockState(
-    species: Map<Long, Boolean> = mapOf(),
     traits: Map<TraitId, Map<Long, Boolean>> = mapOf(),
 ) = UnlockState(
-    species = species,
     traits = traits,
 )
