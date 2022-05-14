@@ -111,13 +111,11 @@ fun handleActionClicked(
         currentResources = state.resources,
         resourceChanges = selectedAction.resourceChanges,
     )
+    val updatedResources = applyResourceChanges(
+        currentResources = state.resources,
+        resourceChanges = selectedAction.resourceChanges
+    )
 
-    val updatedResources = state.resources.map { resource ->
-        when (val resourceChange = selectedAction.resourceChanges[resource.key]) {
-            null -> resource
-            else -> resource.copy(value = resource.value + resourceChange)
-        }
-    }
     val updatedRatios = state.ratios.map { ratio ->
         when (val ratioChange = selectedAction.ratioChanges[ratio.key]) {
             null -> ratio
@@ -145,10 +143,20 @@ fun handleActionClicked(
     }
 }
 
+private fun applyResourceChanges(
+    currentResources: List<Resource>,
+    resourceChanges: Map<ResourceKey, Double>
+) = currentResources.map { resource ->
+    when (val resourceChange = resourceChanges[resource.key]) {
+        null -> resource
+        else -> resource.copy(value = resource.value + resourceChange)
+    }
+}
+
 private fun hasInvalidChanges(
     currentResources: List<Resource>,
     resourceChanges: Map<ResourceKey, Double>,
-) = resourceChanges.any { (resourceKey, resourceChange) ->
+): Boolean = resourceChanges.any { (resourceKey, resourceChange) ->
     val currentResourceValue = currentResources
         .find { resource -> resource.key == resourceKey }!!.value
 
@@ -171,6 +179,15 @@ fun handleUpgradeSelected(
             }
 
             val boughtUpgrade = upgradeToBuy.copy(status = newStatus)
+
+            val hasInvalidChanges = hasInvalidChanges(
+                currentResources = state.resources,
+                resourceChanges = upgradeToBuy.resourceChanges,
+            )
+            val updatedResourcesz = applyResourceChanges(
+                currentResources = state.resources,
+                resourceChanges = upgradeToBuy.resourceChanges
+            )
 
             val updatedUpgrades = state.upgrades.map { upgrade ->
                 if (upgrade.id == boughtUpgrade.id) {
