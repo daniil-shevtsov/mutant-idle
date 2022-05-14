@@ -46,10 +46,14 @@ class MainPresentationTest {
                 ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
             ),
             upgrades = listOf(
-                upgrade(id = 0L, price = 32.0),
-                upgrade(id = 1L, price = 35.0),
-                upgrade(id = 2L, price = 150.0),
-                upgrade(id = 3L, price = 30.0),
+                upgrade(id = 0L, price = 32.0, resourceChanges = mapOf(ResourceKey.Blood to 32.0)),
+                upgrade(id = 1L, price = 35.0, resourceChanges = mapOf(ResourceKey.Blood to 25.0)),
+                upgrade(
+                    id = 2L,
+                    price = 150.0,
+                    resourceChanges = mapOf(ResourceKey.Blood to 150.0)
+                ),
+                upgrade(id = 3L, price = 30.0, resourceChanges = mapOf(ResourceKey.Blood to 30.0)),
             ),
             actions = listOf(
                 action(id = 0L, title = "human action"),
@@ -206,7 +210,13 @@ class MainPresentationTest {
     fun `should mark upgrade as affordable if its price less than resource`() = runBlockingTest {
         val state = gameState(
             resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
-            upgrades = listOf(upgrade(id = 0L, price = 5.0)),
+            upgrades = listOf(
+                upgrade(
+                    id = 0L,
+                    price = 5.0,
+                    resourceChanges = mapOf(ResourceKey.Blood to 5.0)
+                )
+            ),
         )
 
         val viewState = mapMainViewState(state = state)
@@ -222,7 +232,13 @@ class MainPresentationTest {
         runBlockingTest {
             val state = gameState(
                 resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
-                upgrades = listOf(upgrade(id = 0L, price = 20.0)),
+                upgrades = listOf(
+                    upgrade(
+                        id = 0L,
+                        price = 20.0,
+                        resourceChanges = mapOf(ResourceKey.Blood to 20.0)
+                    )
+                ),
             )
 
             val viewState = mapMainViewState(state = state)
@@ -241,7 +257,14 @@ class MainPresentationTest {
                 ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.0),
                 ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
             ),
-            upgrades = listOf(upgrade(id = 0L, price = 10.0, status = UpgradeStatus.Bought)),
+            upgrades = listOf(
+                upgrade(
+                    id = 0L,
+                    price = 10.0,
+                    resourceChanges = mapOf(ResourceKey.Blood to 10.0),
+                    status = UpgradeStatus.Bought
+                )
+            ),
         )
 
         val viewState = mapMainViewState(state = state)

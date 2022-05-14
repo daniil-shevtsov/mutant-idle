@@ -50,7 +50,7 @@ class MainFunctionalCoreTest {
                 ratio(key = RatioKey.Mutanity, value = 0.0)
             ),
             upgrades = listOf(
-                upgrade(id = 0L, price = 4.0)
+                upgrade(id = 0L, price = 4.0, resourceChanges = mapOf(ResourceKey.Blood to 4.0))
             ),
         )
 
