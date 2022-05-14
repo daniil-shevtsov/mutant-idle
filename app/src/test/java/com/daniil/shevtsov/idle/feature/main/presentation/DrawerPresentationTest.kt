@@ -23,9 +23,9 @@ internal class DrawerPresentationTest {
         val state = gameState(
             drawerTabs = listOf(drawerTab(id = DrawerTabId.Debug, isSelected = true)),
             availableTraits = listOf(
-                playerJob(id = 0L).toPlayerTrait(),
-                playerJob(id = 1L).toPlayerTrait(),
-                playerJob(id = 2L).toPlayerTrait(),
+                playerJob(id = 0L),
+                playerJob(id = 1L),
+                playerJob(id = 2L),
             )
         )
 

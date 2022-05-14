@@ -13,7 +13,7 @@ object Jobs {
             Tags.Surgeon,
             Tags.SolitaryJob,
         )
-    ).toPlayerTrait()
+    )
 
     val Undertaker = playerJob(
         id = 1L,
@@ -22,7 +22,7 @@ object Jobs {
             Tags.Access.Graveyard,
             Tags.LaborIntensive,
         )
-    ).toPlayerTrait()
+    )
 
     val Butcher = playerJob(
         id = 2L,
@@ -31,14 +31,14 @@ object Jobs {
             Tags.Access.ButcherShop,
             Tags.SocialJob,
         )
-    ).toPlayerTrait()
+    )
 
     val Unemployed = playerJob(
         id = 3L,
         title = "Unemployed",
         description = "You don't have a job",
         tags = listOf(),
-    ).toPlayerTrait()
+    )
 
     val ScrapyardMechanic = playerJob(
         id = 4L,
@@ -46,7 +46,7 @@ object Jobs {
         tags = listOf(
             Tags.Access.Scrapyard,
         )
-    ).toPlayerTrait()
+    )
 
 }
 

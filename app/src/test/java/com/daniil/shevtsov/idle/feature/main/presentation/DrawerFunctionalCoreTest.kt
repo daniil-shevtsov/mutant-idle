@@ -81,8 +81,8 @@ internal class DrawerFunctionalCoreTest {
 
         val initialState = gameState(
             availableTraits = listOf(
-                lockedJob.toPlayerTrait(),
-                unlockedJob.toPlayerTrait(),
+                lockedJob,
+                unlockedJob,
                 lockedSpecies.toPlayerTrait(),
                 unlockedSpecies.toPlayerTrait(),
             ),

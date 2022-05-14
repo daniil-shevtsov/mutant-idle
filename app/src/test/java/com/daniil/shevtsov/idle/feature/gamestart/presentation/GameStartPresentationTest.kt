@@ -122,7 +122,7 @@ internal class GameStartPresentationTest {
             availableTraits = listOf(
                 job1,
                 job2,
-            ).map(PlayerJob::toPlayerTrait)
+            )
         )
 
         val viewState = mapGameStartViewState(state = state)

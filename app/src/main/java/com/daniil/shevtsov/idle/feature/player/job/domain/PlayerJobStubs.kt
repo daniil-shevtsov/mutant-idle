@@ -17,7 +17,7 @@ fun playerJob(
     title = title,
     description = description,
     tags = tags,
-).toJob()
+)
 
 fun playerJobModel(
     id: Long = 0L,
