@@ -1,8 +1,5 @@
 package com.daniil.shevtsov.idle.feature.player.trait.domain
 
-import com.daniil.shevtsov.idle.core.ui.Icons
-
-import com.daniil.shevtsov.idle.feature.player.species.domain.PlayerSpecies
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 
 data class PlayerTrait(
