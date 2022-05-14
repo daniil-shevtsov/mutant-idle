@@ -14,6 +14,7 @@ class AppColors(
     backgroundText: Color,
     textDark: Color,
     textLight: Color,
+    iconLight: Color,
 ) {
     var backgroundLight by mutableStateOf(backgroundLight)
         private set
@@ -29,6 +30,8 @@ class AppColors(
         private set
     var textLight by mutableStateOf(textLight)
         private set
+    var iconLight by mutableStateOf(iconLight)
+        private set
 
     fun copy(
         backgroundLight: Color = this.backgroundLight,
@@ -38,6 +41,7 @@ class AppColors(
         backgroundText: Color = this.backgroundText,
         textDark: Color = this.textDark,
         textLight: Color = this.textLight,
+        iconLight: Color = this.iconLight,
     ): AppColors = AppColors(
         backgroundLight = backgroundLight,
         background = background,
@@ -46,6 +50,7 @@ class AppColors(
         backgroundText = backgroundText,
         textDark = textDark,
         textLight = textLight,
+        iconLight = iconLight,
     )
 
     fun updateColorsFrom(other: AppColors) {
@@ -56,6 +61,7 @@ class AppColors(
         backgroundText = other.backgroundText
         textDark = other.textDark
         textLight = other.textLight
+        iconLight = other.iconLight
     }
 }
 
@@ -67,6 +73,7 @@ fun devourerColors(): AppColors = AppColors(
     backgroundText = Color.White,
     textDark = Color.Black,
     textLight = Color.White,
+    iconLight = Color.White,
 )
 
 internal val LocalColors = staticCompositionLocalOf { devourerColors() }

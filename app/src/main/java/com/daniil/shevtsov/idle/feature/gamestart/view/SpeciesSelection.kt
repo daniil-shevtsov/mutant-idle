@@ -10,13 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
-
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.TraitSelectionItem
@@ -189,7 +187,7 @@ fun SpeciesSelection(
                                 else -> "Locked"
                             },
                             textAlign = TextAlign.Center,
-                            color = Color.White,
+                            color = AppTheme.colors.textLight,
                             fontSize = 18.sp,
                         )
                         Text(
@@ -200,7 +198,7 @@ fun SpeciesSelection(
                                     lightColor = AppTheme.colors.backgroundLight,
                                     darkColor = AppTheme.colors.backgroundDark
                                 )
-                                .background(Color.White)
+                                .background(AppTheme.colors.backgroundText)
                                 .padding(4.dp)
                                 .width(110.dp),
                             text = when (item.isUnlocked) {

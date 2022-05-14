@@ -6,7 +6,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -53,7 +52,7 @@ fun TitleWithProgress(
             modifier = modifier.weight(0.35f),
             text = title,
             fontSize = 24.sp,
-            color = Color.White,
+            color = AppTheme.colors.textLight,
             textAlign = TextAlign.Start
         )
         Box(
@@ -66,8 +65,8 @@ fun TitleWithProgress(
             Text(
                 text = name,
                 color = when {
-                    progress >= 0.65f -> Color.White
-                    else -> Color.Black
+                    progress >= 0.65f -> AppTheme.colors.textLight
+                    else -> AppTheme.colors.textDark
                 }
             )
         }

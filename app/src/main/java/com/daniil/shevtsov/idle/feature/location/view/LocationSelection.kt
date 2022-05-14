@@ -9,11 +9,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
@@ -62,7 +60,7 @@ fun LocationSelection(
                 modifier = modifier.weight(1f),
                 text = "Current location:",
                 fontSize = 24.sp,
-                color = Color.White
+                color = AppTheme.colors.textLight
             )
             Box(modifier = modifier.weight(1f)) {
                 Text(
@@ -74,7 +72,7 @@ fun LocationSelection(
                             lightColor = AppTheme.colors.backgroundLight,
                             darkColor = AppTheme.colors.backgroundDark
                         )
-                        .background(Color.White)
+                        .background(AppTheme.colors.backgroundText)
                         .clickable(onClick = { onExpandChange() })
                         .padding(4.dp)
                 )
@@ -84,7 +82,7 @@ fun LocationSelection(
                     onDismissRequest = { onExpandChange() }) {
                     state.locations.forEach { location ->
                         DropdownMenuItem(
-                            modifier = modifier.background(Color.White),
+                            modifier = modifier.background(AppTheme.colors.backgroundText),
                             onClick = {
                                 onLocationSelected(location.id)
                                 onExpandChange()
@@ -105,7 +103,7 @@ fun LocationSelection(
                     lightColor = AppTheme.colors.backgroundLight,
                     darkColor = AppTheme.colors.backgroundDark
                 )
-                .background(Color.White)
+                .background(AppTheme.colors.backgroundText)
                 .clickable(onClick = { onExpandChange() })
                 .padding(4.dp)
         )

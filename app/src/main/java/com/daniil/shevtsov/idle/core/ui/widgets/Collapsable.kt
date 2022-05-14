@@ -40,7 +40,7 @@ fun CollapsablePreview() {
                     .fillMaxWidth()
                     .height(120.dp)
                     .padding(8.dp)
-                    .background(Color.White)
+                    .background(AppTheme.colors.backgroundText)
             )
         },
         onToggleCollapse = {},
@@ -104,7 +104,7 @@ fun Collapsable(
             )
             Text(
                 text = title,
-                color = Color.White,
+                color = AppTheme.colors.textLight,
                 fontSize = 24.sp,
                 modifier = modifier
             )
@@ -144,7 +144,7 @@ fun CollapseButton(
             if (isCollapsed) Icons.Filled.ArrowDropDown else Icons.Filled.ArrowDropUp,
             contentDescription = "Collapse / Expand",
             modifier = modifier.fillMaxSize(),
-            tint = Color.White,
+            tint = AppTheme.colors.iconLight,
         )
     }
 }

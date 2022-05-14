@@ -9,13 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
-
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.core.ui.widgets.CollapseButton
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
@@ -138,7 +136,7 @@ fun ContentBody(
                     )
                     Text(
                         text = "Upgrades",
-                        color = Color.White,
+                        color = AppTheme.colors.textLight,
                         fontSize = 24.sp,
                         modifier = modifier
                     )

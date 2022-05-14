@@ -6,13 +6,11 @@ import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.presentation.formatting.formatEnumName
-
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.feature.player.info.presentation.PlayerInfoState
@@ -71,7 +69,7 @@ fun PlayerInfoComposable(
                     Text(
                         text = formatEnumName(trait.traitId.name),
                         fontSize = 24.sp,
-                        color = Color.White,
+                        color = AppTheme.colors.textLight,
                         modifier = Modifier
                             .background(AppTheme.colors.background)
                             .weight(1f)
@@ -84,7 +82,7 @@ fun PlayerInfoComposable(
                                 lightColor = AppTheme.colors.backgroundLight,
                                 darkColor = AppTheme.colors.backgroundDark
                             )
-                            .background(Color.White)
+                            .background(AppTheme.colors.backgroundText)
                             .padding(4.dp)
                             .weight(1f)
                     )
@@ -95,7 +93,7 @@ fun PlayerInfoComposable(
             Text(
                 text = "Tags",
                 fontSize = 24.sp,
-                color = Color.White,
+                color = AppTheme.colors.textLight,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .background(AppTheme.colors.background)
@@ -115,7 +113,7 @@ fun PlayerInfoComposable(
                         lightColor = AppTheme.colors.backgroundLight,
                         darkColor = AppTheme.colors.backgroundDark
                     )
-                    .background(Color.White)
+                    .background(AppTheme.colors.backgroundText)
                     .padding(4.dp)
                     .fillMaxWidth()
             )

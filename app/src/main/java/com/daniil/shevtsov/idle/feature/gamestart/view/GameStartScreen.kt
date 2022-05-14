@@ -8,12 +8,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.protrusive
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
@@ -52,11 +50,18 @@ fun GameStartScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = spacedBy(8.dp, Alignment.CenterVertically),
     ) {
-        Text(text = state.title, color = Color.White, fontSize = 32.sp)
-        Text(text = state.description, color = Color.White, fontSize = 24.sp)
+        Text(text = state.title, color = AppTheme.colors.textLight, fontSize = 32.sp)
+        Text(text = state.description, color = AppTheme.colors.textLight, fontSize = 24.sp)
         SpeciesSelection(
             selection = state.speciesSelection,
-            onItemClicked = { id -> onAction(GameStartViewAction.TraitSelected(TraitId.Species, id)) }
+            onItemClicked = { id ->
+                onAction(
+                    GameStartViewAction.TraitSelected(
+                        TraitId.Species,
+                        id
+                    )
+                )
+            }
         )
         SpeciesSelection(
             selection = state.jobSelection,
@@ -88,7 +93,7 @@ fun GameStartScreen(
                 text = "Start Game",
                 textAlign = TextAlign.Center,
                 fontSize = 24.sp,
-                color = Color.White,
+                color = AppTheme.colors.textLight,
             )
         }
     }

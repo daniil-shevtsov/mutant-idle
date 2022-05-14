@@ -9,12 +9,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
-
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.widgets.CollapsableColumn
@@ -78,7 +76,7 @@ fun ResourcePanel(
             modifier = modifier.weight(0.35f),
             text = resource.name,
             fontSize = 24.sp,
-            color = Color.White
+            color = AppTheme.colors.textLight
         )
         Text(
             text = resource.value,
@@ -90,7 +88,7 @@ fun ResourcePanel(
                     lightColor = AppTheme.colors.backgroundLight,
                     darkColor = AppTheme.colors.backgroundDark
                 )
-                .background(Color.White)
+                .background(AppTheme.colors.backgroundText)
                 .padding(4.dp)
         )
     }

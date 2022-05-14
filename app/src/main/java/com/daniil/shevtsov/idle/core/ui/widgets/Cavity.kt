@@ -21,7 +21,7 @@ fun CavityPreview() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(36.dp)
-                .background(Color.White)
+                .background(AppTheme.colors.background)
         )
     }
 }

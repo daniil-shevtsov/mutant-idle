@@ -11,13 +11,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.feature.gamefinish.presentation.*
@@ -71,7 +69,7 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                 .padding(25.dp),
             text = state.endingState.description,
             fontSize = 24.sp,
-            color = Color.White,
+            color = AppTheme.colors.textLight,
             textAlign = TextAlign.Center,
         )
         Cavity(mainColor = AppTheme.colors.background, modifier = Modifier.fillMaxWidth()) {
@@ -90,7 +88,7 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                     ) {
                         Text(
                             text = unlock.title,
-                            color = Color.White,
+                            color = AppTheme.colors.textLight,
                             fontSize = 24.sp,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -99,7 +97,7 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                         )
                         Text(
                             text = unlock.subtitle,
-                            color = Color.White,
+                            color = AppTheme.colors.textLight,
                             fontSize = 20.sp,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -109,7 +107,7 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(Color.White)
+                                .background(AppTheme.colors.backgroundText)
                                 .padding(4.dp)
                         ) {
                             unlock.unlockFeatures.forEach { feature ->
@@ -120,7 +118,7 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                                         fontWeight = FontWeight.Bold,
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .background(Color.White)
+                                            .background(AppTheme.colors.backgroundText)
                                             .padding(4.dp)
                                     )
                                     if(feature.subtitle.isNotEmpty()) {
@@ -129,7 +127,7 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                                             fontSize = 16.sp,
                                             modifier = Modifier
                                                 .fillMaxWidth()
-                                                .background(Color.White)
+                                                .background(AppTheme.colors.backgroundText)
                                                 .padding(4.dp)
                                         )
                                     }

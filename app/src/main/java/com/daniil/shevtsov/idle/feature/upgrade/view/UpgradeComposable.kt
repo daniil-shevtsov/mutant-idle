@@ -9,12 +9,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
-
 import com.daniil.shevtsov.idle.core.ui.upgradeListPreviewStub
 import com.daniil.shevtsov.idle.core.ui.upgradePreviewStub
 import com.daniil.shevtsov.idle.feature.ratio.view.RatioChanges
@@ -63,9 +61,9 @@ fun Upgrade(
     onClicked: () -> Unit = {},
 ) {
     val priceColor = when (upgrade.status) {
-        UpgradeStatusModel.Affordable -> Color.White
-        UpgradeStatusModel.NotAffordable -> Color.Black
-        UpgradeStatusModel.Bought -> Color.White
+        UpgradeStatusModel.Affordable -> AppTheme.colors.textLight
+        UpgradeStatusModel.NotAffordable -> AppTheme.colors.textDark
+        UpgradeStatusModel.Bought -> AppTheme.colors.textLight
     }
     val priceText = when (upgrade.status) {
         UpgradeStatusModel.Bought -> "Bought"
@@ -81,7 +79,7 @@ fun Upgrade(
         Box {
             Text(
                 text = upgrade.title,
-                color = Color.White,
+                color = AppTheme.colors.textLight,
                 fontSize = 24.sp,
                 modifier = modifier
                     .fillMaxWidth()
@@ -104,7 +102,7 @@ fun Upgrade(
             fontSize = 16.sp,
             modifier = modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(AppTheme.colors.backgroundText)
                 .padding(4.dp)
                 .padding(bottom = 4.dp)
         )

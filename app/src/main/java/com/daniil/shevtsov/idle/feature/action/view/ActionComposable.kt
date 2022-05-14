@@ -149,7 +149,7 @@ fun Action(
             Text(text = actionIcon, fontSize = 24.sp)
             Text(
                 text = action.title,
-                color = Color.White,
+                color = AppTheme.colors.textLight,
                 fontSize = 24.sp,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -162,7 +162,7 @@ fun Action(
             fontSize = 16.sp,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(AppTheme.colors.backgroundText)
                 .padding(4.dp)
                 .padding(start = 4.dp)
                 .padding(bottom = 4.dp)

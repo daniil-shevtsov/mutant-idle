@@ -8,9 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.protrusive
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
@@ -30,7 +28,7 @@ fun MyProgressBar(
                     lightColor = AppTheme.colors.backgroundLight,
                     darkColor = AppTheme.colors.backgroundDark
                 )
-                .background(Color.White),
+                .background(AppTheme.colors.backgroundText),
         )
         Box(
             modifier = modifier

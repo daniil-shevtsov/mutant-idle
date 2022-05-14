@@ -10,11 +10,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.widgets.CavityButton
@@ -98,7 +96,7 @@ private fun SpeciesRow(
             modifier = modifier.weight(1f),
             text = "Selected Species:",
             fontSize = 24.sp,
-            color = Color.White
+            color = AppTheme.colors.textLight
         )
         Box(modifier = modifier.weight(1f)) {
             Text(
@@ -115,7 +113,7 @@ private fun SpeciesRow(
                         lightColor = AppTheme.colors.backgroundLight,
                         darkColor = AppTheme.colors.backgroundDark
                     )
-                    .background(Color.White)
+                    .background(AppTheme.colors.backgroundText)
                     .clickable(onClick = { onExpandChange(true) })
                     .padding(4.dp)
             )
@@ -125,7 +123,7 @@ private fun SpeciesRow(
                 onDismissRequest = { onExpandChange(false) }) {
                 state.speciesSelection.forEach { species ->
                     DropdownMenuItem(
-                        modifier = modifier.background(Color.White),
+                        modifier = modifier.background(AppTheme.colors.backgroundText),
                         onClick = {
                             onAction(DebugViewAction.TraitSelected(TraitId.Species, species.id))
                             onExpandChange(false)
@@ -158,7 +156,7 @@ private fun JobRow(
             modifier = modifier.weight(1f),
             text = "Selected Job:",
             fontSize = 24.sp,
-            color = Color.White
+            color = AppTheme.colors.textLight
         )
         Box(modifier = modifier.weight(1f)) {
             Text(
@@ -175,7 +173,7 @@ private fun JobRow(
                         lightColor = AppTheme.colors.backgroundLight,
                         darkColor = AppTheme.colors.backgroundDark
                     )
-                    .background(Color.White)
+                    .background(AppTheme.colors.backgroundText)
                     .clickable(onClick = { onExpandChange(true) })
                     .padding(4.dp)
             )
@@ -185,7 +183,7 @@ private fun JobRow(
                 onDismissRequest = { onExpandChange(false) }) {
                 state.jobSelection.forEach { job ->
                     DropdownMenuItem(
-                        modifier = modifier.background(Color.White),
+                        modifier = modifier.background(AppTheme.colors.backgroundText),
                         onClick = {
                             onAction(DebugViewAction.TraitSelected(TraitId.Job, job.id))
                             onExpandChange(false)
