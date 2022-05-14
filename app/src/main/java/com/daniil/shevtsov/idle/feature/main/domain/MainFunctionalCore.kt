@@ -117,7 +117,7 @@ fun handleActionClicked(
         resourceChanges = selectedAction.resourceChanges
     )
 
-    val updatedRatios = applyRatioChanges(state, selectedAction.ratioChanges)
+    val updatedRatios = applyRatioChanges(selectedAction.ratioChanges, state.ratios)
 
     val newTags =
         state.player.generalTags + selectedAction.tags[TagRelation.Provides].orEmpty() - selectedAction.tags[TagRelation.Removes].orEmpty()
@@ -140,9 +140,9 @@ fun handleActionClicked(
 }
 
 private fun applyRatioChanges(
-    state: GameState,
-    ratioChanges: Map<RatioKey, Float>
-): List<Ratio> = state.ratios.map { ratio ->
+    ratioChanges: Map<RatioKey, Float>,
+    currentRatios: List<Ratio>
+): List<Ratio> = currentRatios.map { ratio ->
     when (val ratioChange = ratioChanges[ratio.key]) {
         null -> ratio
         else -> ratio.copy(value = ratio.value + ratioChange)
