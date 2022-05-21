@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -172,6 +173,24 @@ fun Shape() {
                         addOvalAt(endSupportPoint, radius = 5f, color = Color.White)
                     }
                 }
+
+                val outlinePath = createOutlinePath(bounds = Rect(Offset(0f, 0f), size))
+                drawPath(Path().apply {
+                    outlinePath.forEachIndexed { index, outlinePoint ->
+                        when {
+                            index == 0 -> {
+                                reset()
+                                moveTo(outlinePoint.x, outlinePoint.y)
+                            }
+                            index < outlinePath.size - 1 -> {
+                                lineTo(outlinePoint.x, outlinePoint.y)
+                            }
+                            else -> {
+                                close()
+                            }
+                        }
+                    }
+                }, Color.Blue)
             }
         )
     }
