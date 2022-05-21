@@ -6,12 +6,15 @@ fun generateBezier(
     points: List<Offset>
 ): List<BezierPoint> {
     return points.zipWithNext().map { (startPoint, secondPoint) ->
-        val center = startPoint.x + (secondPoint.x - startPoint.x) / 2
+        val center = Offset(
+            x = startPoint.x + (secondPoint.x - startPoint.x) / 2,
+            y = startPoint.y + (secondPoint.y - startPoint.y) / 2,
+        )
         BezierPoint(
             startPoint = startPoint,
             endPoint = secondPoint,
-            startSupportPoint = Offset(center, startPoint.y),
-            endSupportPoint = Offset(center, secondPoint.y),
+            startSupportPoint = center,
+            endSupportPoint = center,
         )
     }
 }

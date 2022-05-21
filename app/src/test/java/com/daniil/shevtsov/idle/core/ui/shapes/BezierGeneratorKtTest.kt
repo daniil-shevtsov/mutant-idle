@@ -60,5 +60,16 @@ internal class BezierGeneratorKtTest {
             )
     }
 
-    
+    @Test
+    fun `should return correct for two vertical points`() {
+        assertThat(generateBezier(points = listOf(Offset(0f, 0f), Offset(0f, 10f))))
+            .containsExactly(
+                BezierPoint(
+                    startPoint = Offset(0f, 0f),
+                    endPoint = Offset(0f, 10f),
+                    startSupportPoint = Offset(0f, 5f),
+                    endSupportPoint = Offset(0f, 5f)
+                )
+            )
+    }
 }
