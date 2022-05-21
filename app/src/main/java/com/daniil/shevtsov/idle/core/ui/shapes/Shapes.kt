@@ -18,13 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlin.random.Random
 
-data class BezierOutlineConfig(
-    val size: Size,
-    val numberOfSegments: Int = 10,
-    val topOffset: Float = size.height * 0.5f,
-    val delta: Float = size.height * 0.2f,
-)
-
 fun standardBezierPoints(size: Size): List<BezierPoint> {
     return emptyList()
 }
@@ -32,42 +25,9 @@ fun standardBezierPoints(size: Size): List<BezierPoint> {
 fun WavyShape(
     bezierPointsGenerator: (size: Size) -> List<BezierPoint>
 ) = GenericShape { size, _ ->
-
-//    val topLeft = Offset(0f, 0f)
-//    val topRight = Offset(size.width, 0f)
-//    val bottomRight = Offset(size.width, size.height)
-//    val bottomLeft = Offset(0f, size.height)
-//    val center = topLeft.plus(Offset(size.width, size.height))
-//
-//    val segmentXs = createSegments(size.width, numberOfSegments)
-//    val segments = createOffsets(segmentXs, topOffsetHeightPercent * size.height)
-//
-//    val scatteredPoints = applyDeltas(
-//        segments = segments,
-//        deltaSign = ::isEven,
-//        deltaSize = { index ->
-//            val delta = deltaHeightPercent * size.height
-//            -delta * 0.5f + delta * randomFloats[index]
-//        },
-//    )
-//    val bezierPoints = generateBezier(scatteredPoints)
-//
     drawBezierOutlinePath(
         size,
         bezierPointsGenerator(size)
-    )
-}
-
-private fun createSegments(
-    size: Size,
-    numberOfSegments: Int = 10,
-    randomFloats: List<Float>,
-    topOffset: Float,
-    delta: Float,
-) = randomFloats.mapIndexed { segment, randomFloat ->
-    Offset(
-        x = (size.width / numberOfSegments) * segment,
-        y = topOffset - delta * 0.5f + delta * randomFloat
     )
 }
 
@@ -162,39 +122,12 @@ fun Shape() {
                 val bottomLeft = Offset(0f, size.height)
                 val center = topLeft.plus(Offset(size.width / 2, size.height / 2))
 
-
-                val segmentXs = createSegments(size.width, numberOfSegments)
-//                val segments = createDeltas(
-//                    segments = segmentXs,
-//                    deltaGenerator = { segment ->
-//                        Offset(
-//                            segment,
-//                            topOffset - delta * 0.5f + delta * randomFloats[segmentXs.indexOf(
-//                                segment
-//                            )]
-//                        )
-//                    }
-//                ).map { it.delta }
-
-//                val bezierPoints = generateBezier(segments)
-//                drawPath(Path().apply { drawBezierOutlinePath(size, bezierPoints) }, Color.Cyan)
-
                 addOvalAt(topLeft, color = Color.Black)
                 addOvalAt(topRight, color = Color.Blue)
                 addOvalAt(bottomRight, color = Color.Green)
                 addOvalAt(bottomLeft, color = Color.Gray)
                 addOvalAt(center)
 
-//                randomFloats.mapIndexed { segment, randomFloat ->
-//                    Offset(
-//                        x = topLeft.x + (size.width / numberOfSegments) * segment,
-//                        y = topLeft.y + topOffset * -delta * 0.5f + delta * randomFloat
-//                    )
-//                }
-
-//                segments.forEach { segment ->
-//                    addOvalAt(segment, radius = 5f, color = Color.Yellow)
-//                }
                 bezierGenerator(size).forEach { bezierPoint ->
                     with(bezierPoint) {
                         addOvalAt(startPoint, radius = 5f, color = Color.Gray)
@@ -203,24 +136,6 @@ fun Shape() {
                         addOvalAt(endSupportPoint, radius = 5f, color = Color.White)
                     }
                 }
-
-//                val outlinePath = createOutlinePath(bounds = Rect(Offset(0f, 0f), size)).points
-//                drawPath(Path().apply {
-//                    outlinePath.forEachIndexed { index, outlinePoint ->
-//                        when {
-//                            index == 0 -> {
-//                                reset()
-//                                moveTo(outlinePoint.x, outlinePoint.y)
-//                            }
-//                            index < outlinePath.size - 1 -> {
-//                                lineTo(outlinePoint.x, outlinePoint.y)
-//                            }
-//                            else -> {
-//                                close()
-//                            }
-//                        }
-//                    }
-//                }, Color.Blue)
             }
         )
     }
