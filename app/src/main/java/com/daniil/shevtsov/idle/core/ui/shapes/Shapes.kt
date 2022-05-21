@@ -40,11 +40,11 @@ fun WavyShape(
 
     val segmentXs = createSegments(size.width, numberOfSegments)
 
-    val scatteredPoints = createDeltas(
-        segments = segmentXs,
-        deltaGenerator = ::oddEvenDeltaGenerator,
-    ).map { it.delta }
-    val bezierPoints = generateBezier(scatteredPoints)
+//    val scatteredPoints = createDeltas(
+//        segments = segmentXs,
+//        deltaGenerator = ::oddEvenDeltaGenerator,
+//    ).map { it.delta }
+//    val bezierPoints = generateBezier(scatteredPoints)
 
     drawBezierOutlinePath(
         size,
@@ -151,20 +151,20 @@ fun Shape() {
                 val delta = size.height * 0.2f
                 val topOffset = size.height * 0.5f
                 val segmentXs = createSegments(size.width, numberOfSegments)
-                val segments = createDeltas(
-                    segments = segmentXs,
-                    deltaGenerator = { segment ->
-                        Offset(
-                            segment,
-                            topOffset - delta * 0.5f + delta * randomFloats[segmentXs.indexOf(
-                                segment
-                            )]
-                        )
-                    }
-                ).map { it.delta }
+//                val segments = createDeltas(
+//                    segments = segmentXs,
+//                    deltaGenerator = { segment ->
+//                        Offset(
+//                            segment,
+//                            topOffset - delta * 0.5f + delta * randomFloats[segmentXs.indexOf(
+//                                segment
+//                            )]
+//                        )
+//                    }
+//                ).map { it.delta }
 
-                val bezierPoints = generateBezier(segments)
-                drawPath(Path().apply { drawBezierOutlinePath(size, bezierPoints) }, Color.Cyan)
+//                val bezierPoints = generateBezier(segments)
+//                drawPath(Path().apply { drawBezierOutlinePath(size, bezierPoints) }, Color.Cyan)
 
                 addOvalAt(topLeft, color = Color.Black)
                 addOvalAt(topRight, color = Color.Blue)
@@ -179,17 +179,17 @@ fun Shape() {
                     )
                 }
 
-                segments.forEach { segment ->
-                    addOvalAt(segment, radius = 5f, color = Color.Yellow)
-                }
-                bezierPoints.forEach { bezierPoint ->
-                    with(bezierPoint) {
-                        addOvalAt(startPoint, radius = 5f, color = Color.Black)
-                        addOvalAt(endPoint, radius = 5f, color = Color.Black)
-                        addOvalAt(startSupportPoint, radius = 5f, color = Color.White)
-                        addOvalAt(endSupportPoint, radius = 5f, color = Color.White)
-                    }
-                }
+//                segments.forEach { segment ->
+//                    addOvalAt(segment, radius = 5f, color = Color.Yellow)
+//                }
+//                bezierPoints.forEach { bezierPoint ->
+//                    with(bezierPoint) {
+//                        addOvalAt(startPoint, radius = 5f, color = Color.Black)
+//                        addOvalAt(endPoint, radius = 5f, color = Color.Black)
+//                        addOvalAt(startSupportPoint, radius = 5f, color = Color.White)
+//                        addOvalAt(endSupportPoint, radius = 5f, color = Color.White)
+//                    }
+//                }
 
 //                val outlinePath = createOutlinePath(bounds = Rect(Offset(0f, 0f), size)).points
 //                drawPath(Path().apply {

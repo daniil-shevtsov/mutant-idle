@@ -30,14 +30,49 @@ internal class OutlinePathCreatorKtTest {
     }
 
     @Test
-    fun `should create deltas`() {
-        val segments = listOf(0f, 11f, 20f)
-        assertThat(createDeltas(segments, ::oddEvenDeltaGenerator))
+    fun `should create offsets`() {
+        assertThat(createOffsets(segmentXs = listOf(0f, 10f, 20f), y = 10f))
             .containsExactly(
-                DeltaSegment(0f, Offset(0f, -10f)),
-                DeltaSegment(11f, Offset(11f, 10f)),
-                DeltaSegment(20f, Offset(20f, -10f)),
+                Offset(x = 0f, y = 10f),
+                Offset(x = 10f, y = 10f),
+                Offset(x = 20f, y = 10f),
             )
     }
+
+    @Test
+    fun `should create deltas`() {
+        assertThat(
+            applyDeltas(
+                segments = listOf(
+                    Offset(0f, 10f),
+                    Offset(10f, 10f),
+                    Offset(20f, 10f),
+                ),
+                deltaSize = { 5f },
+                deltaSign = ::isEven,
+            )
+        )
+            .containsExactly(
+                Offset(x = 0f, y = 5f),
+                Offset(x = 10f, y = 15f),
+                Offset(x = 20f, y = 5f),
+            )
+    }
+
+
+//    fun applyDeltas(): List<Offset> {
+//        y = topOffset - delta * 0.5f + delta * randomFloat
+//    }
+
+//    @Test
+//    fun `should create deltas`() {
+//        val segments = listOf(0f, 11f, 20f)
+//        assertThat(createDeltas(segments, ::oddEventDelta))
+//            .containsExactly(
+//                DeltaSegment(0f, -10f),
+//                DeltaSegment(11f, 10f),
+//                DeltaSegment(20f, -10f),
+//            )
+//    }
 
 }

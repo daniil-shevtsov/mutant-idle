@@ -33,22 +33,51 @@ fun bezierEffect(outlinePath: OutlinePath): List<Offset> {
 fun createSegments(
     length: Float,
     numberOfSegments: Int,
-): List<Float> =
-    IntRange(0, numberOfSegments).map { segment ->
-        (length / numberOfSegments) * segment
-    }
+): List<Float> = IntRange(0, numberOfSegments).map { segment ->
+    (length / numberOfSegments) * segment
+}
 
-fun createDeltas(
-    segments: List<Float>,
-    deltaGenerator: (segment: Float) -> Offset
-): List<DeltaSegment> {
-    return segments.map { segment ->
-        DeltaSegment(
-            segment = segment,
-            delta = deltaGenerator(segment),
+fun createOffsets(
+    segmentXs: List<Float>,
+    y: Float,
+): List<Offset> = segmentXs.map { segmentX ->
+    Offset(segmentX, y)
+}
+
+fun applyDeltas(
+    segments: List<Offset>,
+    deltaSign: (index: Int) -> Boolean,
+    deltaSize: (index: Int) -> Float,
+): List<Offset> {
+    return segments.mapIndexed { index, segment ->
+        val sign = when (deltaSign(index)) {
+            true -> -1
+            false -> 1
+        }
+        segment.copy(
+            x = segment.x,
+            y = segment.y + sign * deltaSize(index) //- delta * 0.5f + delta * randomFloat
         )
     }
 }
+
+fun isEven(index: Int): Boolean = when (index % 2) {
+    0 -> true
+    else -> false
+}
+
+//fun createDeltas(
+//    segments: List<Float>,
+//    deltaGenerator: (segment: Float) -> Offset
+//): List<DeltaSegment> {
+//    return segments.map { segment ->
+//        DeltaSegment(
+//            segment = segment,
+//            delta = deltaGenerator(segment),
+//        )
+//    }
+//}
+
 
 fun scatterSegments(
     segments: List<Float>,
@@ -56,36 +85,9 @@ fun scatterSegments(
     return emptyList()
 }
 
-fun oddEvenDeltaGenerator(segment: Float): Offset {
-    return deltaGenerator(
-        segment = segment,
-        deltaSize = Offset(
-            x = segment,
-            y = when (segment % 2) {
-                0f -> -10f
-                else -> 10f
-            }
-        ),
-    )
-}
-
-fun randomDeltaGenerator(segment: Float, randomFloat: Float): Offset {
-    return deltaGenerator(
-        segment = segment,
-        deltaSize = Offset(
-            x = segment,
-            y = randomFloat
-        ),
-    )
-}
-
-fun deltaGenerator(segment: Float, deltaSize: Offset): Offset {
-    return deltaSize
-}
-
 data class DeltaSegment(
-    val segment: Float,
-    val delta: Offset,
+    val segment: Offset,
+    val delta: Float,
 )
 
 data class OutlinePath(
