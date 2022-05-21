@@ -14,3 +14,9 @@ fun createOutlinePath(
         Offset(bounds.left, bounds.top),
     )
 }
+
+fun createSegments(
+    length: Float,
+    numberOfSegments: Int,
+): List<Float> =
+    IntRange(0, numberOfSegments).map { segment -> (length / numberOfSegments) * segment }

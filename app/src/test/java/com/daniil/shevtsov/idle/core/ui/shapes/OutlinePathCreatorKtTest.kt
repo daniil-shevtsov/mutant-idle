@@ -21,4 +21,10 @@ internal class OutlinePathCreatorKtTest {
             )
     }
 
+    @Test
+    fun `should create correct segments`() {
+        assertThat(createSegments(length = 500f, numberOfSegments = 5))
+            .containsExactly(0f, 100f, 200f, 300f, 400f, 500f)
+    }
+
 }
