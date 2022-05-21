@@ -21,7 +21,7 @@ internal class BezierGeneratorKtTest {
     }
 
     @Test
-    fun `should return correct for two diagonal points`() {
+    fun `should return correct for descending diagonal`() {
         assertThat(generateBezier(points = listOf(Offset(0f, 0f), Offset(10f, 10f))))
             .containsExactly(
                 BezierPoint(
@@ -29,6 +29,19 @@ internal class BezierGeneratorKtTest {
                     endPoint = Offset(10f, 10f),
                     startSupportPoint = Offset(5f, 0f),
                     endSupportPoint = Offset(5f, 10f)
+                )
+            )
+    }
+
+    @Test
+    fun `should return correct for ascending diagonal`() {
+        assertThat(generateBezier(points = listOf(Offset(0f, 10f), Offset(10f, 0f))))
+            .containsExactly(
+                BezierPoint(
+                    startPoint = Offset(0f, 10f),
+                    endPoint = Offset(10f, 0f),
+                    startSupportPoint = Offset(5f, 10f),
+                    endSupportPoint = Offset(5f, 0f)
                 )
             )
     }
