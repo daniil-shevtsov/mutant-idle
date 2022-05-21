@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.AbsoluteCutCornerShape
 import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -141,7 +143,20 @@ fun chooseThemeForId(speciesId: Long): SpeciesTheme {
                 iconLight = Color(0xFFDFFCF1),
             )
             shapes = AppShapes(
-                progressBar = RectangleShape,
+                progressBar = GenericShape { size, _ ->
+                    val h = size.height
+                    val halfH = h / 2f
+                    val w = size.width
+                    val delta = size.width / 3f
+
+                    reset()
+                    moveTo(0f, h)
+                    cubicTo(0f, halfH, 0f, halfH, delta, halfH)
+                    lineTo(w - delta, halfH)
+                    cubicTo(w, halfH, w, halfH, w, 0f)
+                    lineTo(w, h)
+                    close()
+                },
             )
         }
         Species.Android.id -> {
@@ -156,7 +171,7 @@ fun chooseThemeForId(speciesId: Long): SpeciesTheme {
                 iconLight = Color(0xFFE0DEFB),
             )
             shapes = AppShapes(
-                progressBar = RectangleShape,
+                progressBar = AbsoluteCutCornerShape(6.dp),
             )
         }
         else -> {
