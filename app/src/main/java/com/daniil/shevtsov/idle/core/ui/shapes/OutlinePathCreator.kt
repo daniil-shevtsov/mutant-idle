@@ -18,6 +18,18 @@ fun createOutlinePath(
     )
 }
 
+fun bezierOutlinePath(
+    outlinePath: OutlinePath
+): OutlinePath {
+    return outlinePath.copy(
+        points = bezierEffect(outlinePath)
+    )
+}
+
+fun bezierEffect(outlinePath: OutlinePath): List<Offset> {
+    return outlinePath.points.map { it }
+}
+
 fun createSegments(
     length: Float,
     numberOfSegments: Int,
