@@ -5,13 +5,16 @@ import androidx.compose.ui.geometry.Rect
 
 fun createOutlinePath(
     bounds: Rect
-): List<Offset> {
-    return listOf(
-        Offset(bounds.left, bounds.top),
-        Offset(bounds.right, bounds.top),
-        Offset(bounds.right, bounds.bottom),
-        Offset(bounds.left, bounds.bottom),
-        Offset(bounds.left, bounds.top),
+): OutlinePath {
+    return OutlinePath(
+        bounds = bounds,
+        points = listOf(
+            Offset(bounds.left, bounds.top),
+            Offset(bounds.right, bounds.top),
+            Offset(bounds.right, bounds.bottom),
+            Offset(bounds.left, bounds.bottom),
+            Offset(bounds.left, bounds.top),
+        )
     )
 }
 
@@ -53,4 +56,9 @@ fun deltaGenerator(segment: Float, deltaSize: Offset): Offset {
 data class DeltaSegment(
     val segment: Float,
     val delta: Offset,
+)
+
+data class OutlinePath(
+    val bounds: Rect,
+    val points: List<Offset>,
 )

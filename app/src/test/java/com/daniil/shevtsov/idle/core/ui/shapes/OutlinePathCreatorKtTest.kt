@@ -5,6 +5,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import assertk.assertThat
 import assertk.assertions.containsExactly
+import assertk.assertions.prop
 import org.junit.jupiter.api.Test
 
 internal class OutlinePathCreatorKtTest {
@@ -13,14 +14,14 @@ internal class OutlinePathCreatorKtTest {
     fun `should composite`() {
         val bounds = Rect(Offset(0f, 0f), Size(10f, 10f))
 
-        val result = createOutlinePath(bounds = bounds).let { outlinePath ->
-            outlinePath
-        }
+        val result = createOutlinePath(bounds = bounds)
+            .let { outlinePath -> outlinePath }
     }
 
     @Test
     fun `should return rectangle in simple case`() {
         assertThat(createOutlinePath(bounds = Rect(Offset(0f, 0f), Size(10f, 10f))))
+            .prop(OutlinePath::points)
             .containsExactly(
                 Offset(0f, 0f),
                 Offset(10f, 0f),

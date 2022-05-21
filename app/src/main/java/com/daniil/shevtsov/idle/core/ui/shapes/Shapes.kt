@@ -174,7 +174,7 @@ fun Shape() {
                     }
                 }
 
-                val outlinePath = createOutlinePath(bounds = Rect(Offset(0f, 0f), size))
+                val outlinePath = createOutlinePath(bounds = Rect(Offset(0f, 0f), size)).points
                 drawPath(Path().apply {
                     outlinePath.forEachIndexed { index, outlinePoint ->
                         when {
