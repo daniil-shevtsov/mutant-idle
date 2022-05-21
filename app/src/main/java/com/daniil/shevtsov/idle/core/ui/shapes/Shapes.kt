@@ -40,10 +40,29 @@ private fun Path.drawMyPath(
     val bottomLeft = Offset(0f, size.height)
     val center = topLeft.plus(Offset(size.width / 2, size.height / 2))
 
-    reset()
-    moveTo(topLeft.x, topLeft.y)
-    lineTo(center.x, center.y)
-    lineTo(topRight.x, topRight.y)
+    val bezierPoints = generateBezier(segments)
+
+    bezierPoints.forEachIndexed { index, bezierPoint ->
+        with(bezierPoint) {
+            if (index == 0) {
+                reset()
+                moveTo(startPoint.x, startPoint.y)
+            }
+            cubicTo(
+                startSupportPoint.x,
+                startSupportPoint.y,
+                endSupportPoint.x,
+                endSupportPoint.y,
+                endPoint.x,
+                endPoint.y
+            )
+            if (index == bezierPoints.size - 1) {
+                lineTo(bottomRight.x, bottomRight.y)
+                lineTo(bottomLeft.x, bottomLeft.y)
+                lineTo(topLeft.x, topLeft.y)
+            }
+        }
+    }
     close()
 }
 
@@ -111,6 +130,15 @@ fun Shape() {
 
                 segments.forEach { segment ->
                     addOvalAt(segment, radius = 5f, color = Color.Yellow)
+                }
+                val bezierPoints = generateBezier(segments)
+                bezierPoints.forEach { bezierPoint ->
+                    with(bezierPoint) {
+                        addOvalAt(startPoint, radius = 5f, color = Color.Black)
+                        addOvalAt(endPoint, radius = 5f, color = Color.Black)
+                        addOvalAt(startSupportPoint, radius = 5f, color = Color.White)
+                        addOvalAt(endSupportPoint, radius = 5f, color = Color.White)
+                    }
                 }
             }
         )
