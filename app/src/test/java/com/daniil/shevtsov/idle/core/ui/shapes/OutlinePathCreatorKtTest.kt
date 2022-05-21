@@ -10,6 +10,15 @@ import org.junit.jupiter.api.Test
 internal class OutlinePathCreatorKtTest {
 
     @Test
+    fun `should composite`() {
+        val bounds = Rect(Offset(0f, 0f), Size(10f, 10f))
+
+        val result = createOutlinePath(bounds = bounds).let { outlinePath ->
+            outlinePath
+        }
+    }
+
+    @Test
     fun `should return rectangle in simple case`() {
         assertThat(createOutlinePath(bounds = Rect(Offset(0f, 0f), Size(10f, 10f))))
             .containsExactly(
@@ -25,6 +34,17 @@ internal class OutlinePathCreatorKtTest {
     fun `should create correct segments`() {
         assertThat(createSegments(length = 500f, numberOfSegments = 5))
             .containsExactly(0f, 100f, 200f, 300f, 400f, 500f)
+    }
+
+    @Test
+    fun `should create deltas`() {
+        val segments = listOf(0f, 11f, 20f)
+        assertThat(createDeltas(segments, ::oddEvenDeltaGenerator))
+            .containsExactly(
+                DeltaSegment(0f, Offset(0f, -10f)),
+                DeltaSegment(11f, Offset(11f, 10f)),
+                DeltaSegment(20f, Offset(20f, -10f)),
+            )
     }
 
 }
