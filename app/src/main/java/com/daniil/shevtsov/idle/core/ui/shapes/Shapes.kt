@@ -19,7 +19,26 @@ import androidx.compose.ui.unit.dp
 import kotlin.random.Random
 
 fun standardBezierPoints(size: Size): List<BezierPoint> {
-    return emptyList()
+    return bezierGenerator(size)
+}
+
+fun bezierGenerator(
+    size: Size,
+    numberOfSegments: Int = 10,
+    deltaPercentage: (index: Int) -> Float = ::defaultDeltaPercentage
+): List<BezierPoint> {
+    val segmentXs = createSegments(size.width, numberOfSegments)
+    val segments = createOffsets(segmentXs, topOffset(size.height))
+
+    val scatteredPoints = applyDeltas(
+        segments = segments,
+        deltaSign = ::isEven,
+        deltaSize = { index ->
+            val delta = delta(size.height)
+            -delta * 0.5f + delta * deltaPercentage(index)
+        },
+    )
+    return generateBezier(scatteredPoints)
 }
 
 fun WavyShape(
@@ -72,22 +91,13 @@ fun Shape() {
     val numberOfSegments = 10
     val randomFloats = IntRange(0, numberOfSegments).map { Random.nextFloat() }
 
-    fun bezierGenerator(size: Size): List<BezierPoint> {
-        val segmentXs = createSegments(size.width, numberOfSegments)
-        val segments = createOffsets(segmentXs, topOffset(size.height))
+    fun randomBezierGenerator(size: Size) = bezierGenerator(
+        size = size,
+        numberOfSegments = 10,
+        deltaPercentage = { index -> randomFloats[index] }
+    )
 
-        val scatteredPoints = applyDeltas(
-            segments = segments,
-            deltaSign = ::isEven,
-            deltaSize = { index ->
-                val delta = delta(size.height)
-                -delta * 0.5f + delta * randomFloats[index]
-            },
-        )
-        return generateBezier(scatteredPoints)
-    }
-
-    val shape = WavyShape(::bezierGenerator)
+    val shape = WavyShape(::randomBezierGenerator)
 
     Box(
         modifier = Modifier
@@ -128,7 +138,7 @@ fun Shape() {
                 addOvalAt(bottomLeft, color = Color.Gray)
                 addOvalAt(center)
 
-                bezierGenerator(size).forEach { bezierPoint ->
+                randomBezierGenerator(size).forEach { bezierPoint ->
                     with(bezierPoint) {
                         addOvalAt(startPoint, radius = 5f, color = Color.Gray)
                         addOvalAt(endPoint, radius = 5f, color = Color.Gray)

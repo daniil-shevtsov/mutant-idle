@@ -37,3 +37,5 @@ fun isEven(index: Int): Boolean = when (index % 2) {
     0 -> true
     else -> false
 }
+
+fun defaultDeltaPercentage(index: Int): Float = 1f
