@@ -21,43 +21,44 @@ internal class BezierGeneratorKtTest {
     }
 
     @Test
-    fun `should return correct for two points`() {
-        assertThat(generateBezier(points = listOf(Offset(0f, 0f), Offset(10f, 10f))))
+    fun `should return correct for two horizontal points`() {
+        assertThat(generateBezier(points = listOf(Offset(0f, 0f), Offset(10f, 0f))))
             .containsExactly(
                 BezierPoint(
                     startPoint = Offset(0f, 0f),
-                    endPoint = Offset(10f, 10f),
+                    endPoint = Offset(10f, 0f),
                     startSupportPoint = Offset(5f, 0f),
-                    endSupportPoint = Offset(5f, 10f)
+                    endSupportPoint = Offset(5f, 0f)
                 )
             )
     }
 
     @Test
-    fun `should return correct for three points`() {
+    fun `should return correct for three horizontal points`() {
         assertThat(
             generateBezier(
                 points = listOf(
                     Offset(0f, 0f),
-                    Offset(10f, 10f),
-                    Offset(20f, 20f)
+                    Offset(10f, 0f),
+                    Offset(20f, 0f)
                 )
             )
         )
             .containsExactly(
                 BezierPoint(
                     startPoint = Offset(0f, 0f),
-                    endPoint = Offset(10f, 10f),
+                    endPoint = Offset(10f, 0f),
                     startSupportPoint = Offset(5f, 0f),
-                    endSupportPoint = Offset(5f, 10f)
+                    endSupportPoint = Offset(5f, 0f)
                 ),
                 BezierPoint(
-                    startPoint = Offset(10f, 10f),
-                    endPoint = Offset(20f, 20f),
-                    startSupportPoint = Offset(15f, 10f),
-                    endSupportPoint = Offset(15f, 20f)
+                    startPoint = Offset(10f, 0f),
+                    endPoint = Offset(20f, 0f),
+                    startSupportPoint = Offset(15f, 0f),
+                    endSupportPoint = Offset(15f, 0f)
                 ),
             )
     }
 
+    
 }
