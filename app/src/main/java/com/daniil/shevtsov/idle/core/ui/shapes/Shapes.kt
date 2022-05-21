@@ -18,6 +18,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlin.random.Random
 
+data class BezierOutlineConfig(
+    val size: Size,
+    val numberOfSegments: Int = 10,
+    val topOffset: Float = size.height * 0.5f,
+    val delta: Float = size.height * 0.2f,
+)
+
 fun WavyShape(
     numberOfSegments: Int = 10,
     randomFloats: List<Float> = IntRange(0, numberOfSegments).map { Random.nextFloat() },
@@ -31,7 +38,15 @@ fun WavyShape(
     val bottomLeft = Offset(0f, size.height)
     val center = topLeft.plus(Offset(size.width, size.height))
 
-    drawMyPath(
+    val segmentXs = createSegments(size.width, numberOfSegments)
+
+    val scatteredPoints = createDeltas(
+        segments = segmentXs,
+        deltaGenerator = ::oddEvenDeltaGenerator,
+    ).map { it.delta }
+    val bezierPoints = generateBezier(scatteredPoints)
+
+    drawBezierOutlinePath(
         size,
         generateBezier(
             createSegments(
@@ -58,7 +73,7 @@ private fun createSegments(
     )
 }
 
-private fun Path.drawMyPath(
+private fun Path.drawBezierOutlinePath(
     size: Size,
     bezierPoints: List<BezierPoint>,
 ) {
@@ -135,15 +150,21 @@ fun Shape() {
 
                 val delta = size.height * 0.2f
                 val topOffset = size.height * 0.5f
-                val segments = createSegments(
-                    size = size,
-                    numberOfSegments = numberOfSegments,
-                    randomFloats = randomFloats,
-                    delta = delta,
-                    topOffset = topOffset,
-                )
+                val segmentXs = createSegments(size.width, numberOfSegments)
+                val segments = createDeltas(
+                    segments = segmentXs,
+                    deltaGenerator = { segment ->
+                        Offset(
+                            segment,
+                            topOffset - delta * 0.5f + delta * randomFloats[segmentXs.indexOf(
+                                segment
+                            )]
+                        )
+                    }
+                ).map { it.delta }
 
-                drawPath(Path().apply { drawMyPath(size, generateBezier(segments)) }, Color.Cyan)
+                val bezierPoints = generateBezier(segments)
+                drawPath(Path().apply { drawBezierOutlinePath(size, bezierPoints) }, Color.Cyan)
 
                 addOvalAt(topLeft, color = Color.Black)
                 addOvalAt(topRight, color = Color.Blue)
@@ -161,7 +182,6 @@ fun Shape() {
                 segments.forEach { segment ->
                     addOvalAt(segment, radius = 5f, color = Color.Yellow)
                 }
-                val bezierPoints = generateBezier(segments)
                 bezierPoints.forEach { bezierPoint ->
                     with(bezierPoint) {
                         addOvalAt(startPoint, radius = 5f, color = Color.Black)

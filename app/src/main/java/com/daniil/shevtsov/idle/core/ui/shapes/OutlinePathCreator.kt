@@ -34,7 +34,9 @@ fun createSegments(
     length: Float,
     numberOfSegments: Int,
 ): List<Float> =
-    IntRange(0, numberOfSegments).map { segment -> (length / numberOfSegments) * segment }
+    IntRange(0, numberOfSegments).map { segment ->
+        (length / numberOfSegments) * segment
+    }
 
 fun createDeltas(
     segments: List<Float>,
@@ -48,6 +50,12 @@ fun createDeltas(
     }
 }
 
+fun scatterSegments(
+    segments: List<Float>,
+): List<Offset> {
+    return emptyList()
+}
+
 fun oddEvenDeltaGenerator(segment: Float): Offset {
     return deltaGenerator(
         segment = segment,
@@ -57,6 +65,16 @@ fun oddEvenDeltaGenerator(segment: Float): Offset {
                 0f -> -10f
                 else -> 10f
             }
+        ),
+    )
+}
+
+fun randomDeltaGenerator(segment: Float, randomFloat: Float): Offset {
+    return deltaGenerator(
+        segment = segment,
+        deltaSize = Offset(
+            x = segment,
+            y = randomFloat
         ),
     )
 }
