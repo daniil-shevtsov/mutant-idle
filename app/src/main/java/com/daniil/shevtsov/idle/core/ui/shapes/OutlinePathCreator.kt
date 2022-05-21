@@ -56,7 +56,7 @@ fun applyDeltas(
         }
         segment.copy(
             x = segment.x,
-            y = segment.y + sign * deltaSize(index) //- delta * 0.5f + delta * randomFloat
+            y = segment.y + sign * deltaSize(index)
         )
     }
 }

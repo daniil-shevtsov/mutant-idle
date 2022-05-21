@@ -25,38 +25,36 @@ data class BezierOutlineConfig(
     val delta: Float = size.height * 0.2f,
 )
 
+fun standardBezierPoints(size: Size): List<BezierPoint> {
+    return emptyList()
+}
+
 fun WavyShape(
-    numberOfSegments: Int = 10,
-    randomFloats: List<Float> = IntRange(0, numberOfSegments).map { Random.nextFloat() },
-    topOffsetHeightPercent: Float = 0.5f,
-    deltaHeightPercent: Float = 0.2f,
+    bezierPointsGenerator: (size: Size) -> List<BezierPoint>
 ) = GenericShape { size, _ ->
 
-    val topLeft = Offset(0f, 0f)
-    val topRight = Offset(size.width, 0f)
-    val bottomRight = Offset(size.width, size.height)
-    val bottomLeft = Offset(0f, size.height)
-    val center = topLeft.plus(Offset(size.width, size.height))
-
-    val segmentXs = createSegments(size.width, numberOfSegments)
-
-//    val scatteredPoints = createDeltas(
-//        segments = segmentXs,
-//        deltaGenerator = ::oddEvenDeltaGenerator,
-//    ).map { it.delta }
+//    val topLeft = Offset(0f, 0f)
+//    val topRight = Offset(size.width, 0f)
+//    val bottomRight = Offset(size.width, size.height)
+//    val bottomLeft = Offset(0f, size.height)
+//    val center = topLeft.plus(Offset(size.width, size.height))
+//
+//    val segmentXs = createSegments(size.width, numberOfSegments)
+//    val segments = createOffsets(segmentXs, topOffsetHeightPercent * size.height)
+//
+//    val scatteredPoints = applyDeltas(
+//        segments = segments,
+//        deltaSign = ::isEven,
+//        deltaSize = { index ->
+//            val delta = deltaHeightPercent * size.height
+//            -delta * 0.5f + delta * randomFloats[index]
+//        },
+//    )
 //    val bezierPoints = generateBezier(scatteredPoints)
-
+//
     drawBezierOutlinePath(
         size,
-        generateBezier(
-            createSegments(
-                size = size,
-                numberOfSegments = numberOfSegments,
-                randomFloats = randomFloats,
-                topOffset = topOffsetHeightPercent * size.height,
-                delta = deltaHeightPercent * size.height,
-            )
-        )
+        bezierPointsGenerator(size)
     )
 }
 
@@ -105,16 +103,32 @@ private fun Path.drawBezierOutlinePath(
     close()
 }
 
+fun topOffset(height: Float, percent: Float = 0.5f) = height * percent
+fun delta(height: Float, percent: Float = 0.2f) = height * percent
+
 @Composable
 @Preview
 fun Shape() {
     val numberOfSegments = 10
     val randomFloats = IntRange(0, numberOfSegments).map { Random.nextFloat() }
 
-    val shape = WavyShape(
-        numberOfSegments = numberOfSegments,
-        randomFloats = randomFloats,
-    )
+    fun bezierGenerator(size: Size): List<BezierPoint> {
+        val segmentXs = createSegments(size.width, numberOfSegments)
+        val segments = createOffsets(segmentXs, topOffset(size.height))
+
+        val scatteredPoints = applyDeltas(
+            segments = segments,
+            deltaSign = ::isEven,
+            deltaSize = { index ->
+                val delta = delta(size.height)
+                -delta * 0.5f + delta * randomFloats[index]
+            },
+        )
+        return generateBezier(scatteredPoints)
+    }
+
+    val shape = WavyShape(::bezierGenerator)
+
     Box(
         modifier = Modifier
             .width(200.dp)
@@ -148,8 +162,7 @@ fun Shape() {
                 val bottomLeft = Offset(0f, size.height)
                 val center = topLeft.plus(Offset(size.width / 2, size.height / 2))
 
-                val delta = size.height * 0.2f
-                val topOffset = size.height * 0.5f
+
                 val segmentXs = createSegments(size.width, numberOfSegments)
 //                val segments = createDeltas(
 //                    segments = segmentXs,
@@ -172,24 +185,24 @@ fun Shape() {
                 addOvalAt(bottomLeft, color = Color.Gray)
                 addOvalAt(center)
 
-                randomFloats.mapIndexed { segment, randomFloat ->
-                    Offset(
-                        x = topLeft.x + (size.width / numberOfSegments) * segment,
-                        y = topLeft.y + topOffset * -delta * 0.5f + delta * randomFloat
-                    )
-                }
+//                randomFloats.mapIndexed { segment, randomFloat ->
+//                    Offset(
+//                        x = topLeft.x + (size.width / numberOfSegments) * segment,
+//                        y = topLeft.y + topOffset * -delta * 0.5f + delta * randomFloat
+//                    )
+//                }
 
 //                segments.forEach { segment ->
 //                    addOvalAt(segment, radius = 5f, color = Color.Yellow)
 //                }
-//                bezierPoints.forEach { bezierPoint ->
-//                    with(bezierPoint) {
-//                        addOvalAt(startPoint, radius = 5f, color = Color.Black)
-//                        addOvalAt(endPoint, radius = 5f, color = Color.Black)
-//                        addOvalAt(startSupportPoint, radius = 5f, color = Color.White)
-//                        addOvalAt(endSupportPoint, radius = 5f, color = Color.White)
-//                    }
-//                }
+                bezierGenerator(size).forEach { bezierPoint ->
+                    with(bezierPoint) {
+                        addOvalAt(startPoint, radius = 5f, color = Color.Gray)
+                        addOvalAt(endPoint, radius = 5f, color = Color.Gray)
+                        addOvalAt(startSupportPoint, radius = 5f, color = Color.White)
+                        addOvalAt(endSupportPoint, radius = 5f, color = Color.White)
+                    }
+                }
 
 //                val outlinePath = createOutlinePath(bounds = Rect(Offset(0f, 0f), size)).points
 //                drawPath(Path().apply {

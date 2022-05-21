@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.shapes.WavyShape
+import com.daniil.shevtsov.idle.core.ui.shapes.standardBezierPoints
 import com.daniil.shevtsov.idle.core.ui.upgradePreviewStub
 import com.daniil.shevtsov.idle.core.ui.widgets.TitleWithProgress
 import com.daniil.shevtsov.idle.feature.initial.domain.createInitialTraits
@@ -134,11 +135,7 @@ fun chooseThemeForId(speciesId: Long): SpeciesTheme {
                 iconLight = Color(0xFFFF1A00),
             )
             shapes = AppShapes(
-                progressBar = WavyShape(
-                    numberOfSegments = 100,
-                    topOffsetHeightPercent = 0.2f,
-                    deltaHeightPercent = 0.2f,
-                ),
+                progressBar = WavyShape(::standardBezierPoints),
             )
         }
         Species.Alien.id -> {
@@ -153,11 +150,7 @@ fun chooseThemeForId(speciesId: Long): SpeciesTheme {
                 iconLight = Color(0xFFDFFCF1),
             )
             shapes = AppShapes(
-                progressBar = WavyShape(
-                    numberOfSegments = 20,
-                    topOffsetHeightPercent = 0.2f,
-                    deltaHeightPercent = 0.2f,
-                ),
+                progressBar = WavyShape(::standardBezierPoints),
             )
         }
         Species.Android.id -> {

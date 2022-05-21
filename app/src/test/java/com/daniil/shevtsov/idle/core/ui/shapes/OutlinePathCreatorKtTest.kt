@@ -40,7 +40,7 @@ internal class OutlinePathCreatorKtTest {
     }
 
     @Test
-    fun `should create deltas`() {
+    fun `should apply deltas`() {
         assertThat(
             applyDeltas(
                 segments = listOf(
