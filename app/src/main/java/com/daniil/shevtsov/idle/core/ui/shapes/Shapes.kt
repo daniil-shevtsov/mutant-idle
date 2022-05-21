@@ -135,12 +135,14 @@ fun Shape() {
                 val bottomLeft = Offset(0f, size.height)
                 val center = topLeft.plus(Offset(size.width / 2, size.height / 2))
 
+                val delta = size.height * 0.2f
+                val topOffset = size.height * 0.5f
                 val segments = createSegments(
                     size = size,
                     numberOfSegments = numberOfSegments,
                     randomFloats = randomFloats,
-                    delta = size.height * 0.2f,
-                    topOffset = size.height * 0.5f,
+                    delta = delta,
+                    topOffset = topOffset,
                 )
 
                 drawPath(Path().apply { drawMyPath(size, segments) }, Color.Cyan)
@@ -150,6 +152,13 @@ fun Shape() {
                 addOvalAt(bottomRight, color = Color.Green)
                 addOvalAt(bottomLeft, color = Color.Gray)
                 addOvalAt(center)
+
+                randomFloats.mapIndexed { segment, randomFloat ->
+                    Offset(
+                        x = topLeft.x + (size.width / numberOfSegments) * segment,
+                        y = topLeft.y + topOffset * -delta * 0.5f + delta * randomFloat
+                    )
+                }
 
                 segments.forEach { segment ->
                     addOvalAt(segment, radius = 5f, color = Color.Yellow)
