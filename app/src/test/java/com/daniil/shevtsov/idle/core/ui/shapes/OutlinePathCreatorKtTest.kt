@@ -11,14 +11,6 @@ import org.junit.jupiter.api.Test
 internal class OutlinePathCreatorKtTest {
 
     @Test
-    fun `should composite`() {
-        val bounds = Rect(Offset(0f, 0f), Size(10f, 10f))
-
-        val result = createOutlinePath(bounds = bounds)
-            .let { outlinePath -> outlinePath }
-    }
-
-    @Test
     fun `should return rectangle in simple case`() {
         assertThat(createOutlinePath(bounds = Rect(Offset(0f, 0f), Size(10f, 10f))))
             .prop(OutlinePath::points)

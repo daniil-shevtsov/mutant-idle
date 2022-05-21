@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -34,12 +33,14 @@ fun WavyShape(
 
     drawMyPath(
         size,
-        createSegments(
-            size = size,
-            numberOfSegments = numberOfSegments,
-            randomFloats = randomFloats,
-            topOffset = topOffsetHeightPercent * size.height,
-            delta = deltaHeightPercent * size.height,
+        generateBezier(
+            createSegments(
+                size = size,
+                numberOfSegments = numberOfSegments,
+                randomFloats = randomFloats,
+                topOffset = topOffsetHeightPercent * size.height,
+                delta = deltaHeightPercent * size.height,
+            )
         )
     )
 }
@@ -59,15 +60,11 @@ private fun createSegments(
 
 private fun Path.drawMyPath(
     size: Size,
-    segments: List<Offset>,
+    bezierPoints: List<BezierPoint>,
 ) {
     val topLeft = Offset(0f, 0f)
-    val topRight = Offset(size.width, 0f)
     val bottomRight = Offset(size.width, size.height)
     val bottomLeft = Offset(0f, size.height)
-    val center = topLeft.plus(Offset(size.width / 2, size.height / 2))
-
-    val bezierPoints = generateBezier(segments)
 
     bezierPoints.forEachIndexed { index, bezierPoint ->
         with(bezierPoint) {
@@ -146,7 +143,7 @@ fun Shape() {
                     topOffset = topOffset,
                 )
 
-                drawPath(Path().apply { drawMyPath(size, segments) }, Color.Cyan)
+                drawPath(Path().apply { drawMyPath(size, generateBezier(segments)) }, Color.Cyan)
 
                 addOvalAt(topLeft, color = Color.Black)
                 addOvalAt(topRight, color = Color.Blue)
@@ -174,23 +171,23 @@ fun Shape() {
                     }
                 }
 
-                val outlinePath = createOutlinePath(bounds = Rect(Offset(0f, 0f), size)).points
-                drawPath(Path().apply {
-                    outlinePath.forEachIndexed { index, outlinePoint ->
-                        when {
-                            index == 0 -> {
-                                reset()
-                                moveTo(outlinePoint.x, outlinePoint.y)
-                            }
-                            index < outlinePath.size - 1 -> {
-                                lineTo(outlinePoint.x, outlinePoint.y)
-                            }
-                            else -> {
-                                close()
-                            }
-                        }
-                    }
-                }, Color.Blue)
+//                val outlinePath = createOutlinePath(bounds = Rect(Offset(0f, 0f), size)).points
+//                drawPath(Path().apply {
+//                    outlinePath.forEachIndexed { index, outlinePoint ->
+//                        when {
+//                            index == 0 -> {
+//                                reset()
+//                                moveTo(outlinePoint.x, outlinePoint.y)
+//                            }
+//                            index < outlinePath.size - 1 -> {
+//                                lineTo(outlinePoint.x, outlinePoint.y)
+//                            }
+//                            else -> {
+//                                close()
+//                            }
+//                        }
+//                    }
+//                }, Color.Blue)
             }
         )
     }
