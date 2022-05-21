@@ -18,15 +18,41 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlin.random.Random
 
+fun WavyShape(
+    numberOfSegments: Int = 10,
+    randomFloats: List<Float> = IntRange(0, numberOfSegments).map { Random.nextFloat() },
+    topOffsetHeightPercent: Float = 0.5f,
+    deltaHeightPercent: Float = 0.2f,
+) = GenericShape { size, _ ->
+
+    val topLeft = Offset(0f, 0f)
+    val topRight = Offset(size.width, 0f)
+    val bottomRight = Offset(size.width, size.height)
+    val bottomLeft = Offset(0f, size.height)
+    val center = topLeft.plus(Offset(size.width, size.height))
+
+    drawMyPath(
+        size,
+        createSegments(
+            size = size,
+            numberOfSegments = numberOfSegments,
+            randomFloats = randomFloats,
+            topOffset = topOffsetHeightPercent * size.height,
+            delta = deltaHeightPercent * size.height,
+        )
+    )
+}
+
 private fun createSegments(
     size: Size,
     numberOfSegments: Int = 10,
     randomFloats: List<Float>,
-    delta: Float = size.height * 0.1f,
+    topOffset: Float,
+    delta: Float,
 ) = randomFloats.mapIndexed { segment, randomFloat ->
     Offset(
         x = (size.width / numberOfSegments) * segment,
-        y = 30 - (delta - randomFloat * delta)
+        y = topOffset - delta * 0.5f + delta * randomFloat
     )
 }
 
@@ -72,19 +98,10 @@ fun Shape() {
     val numberOfSegments = 10
     val randomFloats = IntRange(0, numberOfSegments).map { Random.nextFloat() }
 
-    val shape = GenericShape { size, _ ->
-
-        val topLeft = Offset(0f, 0f)
-        val topRight = Offset(size.width, 0f)
-        val bottomRight = Offset(size.width, size.height)
-        val bottomLeft = Offset(0f, size.height)
-        val center = topLeft.plus(Offset(size.width, size.height))
-
-        drawMyPath(
-            size,
-            createSegments(size, numberOfSegments, randomFloats)
-        )
-    }
+    val shape = WavyShape(
+        numberOfSegments = numberOfSegments,
+        randomFloats = randomFloats,
+    )
     Box(
         modifier = Modifier
             .width(200.dp)
@@ -118,7 +135,13 @@ fun Shape() {
                 val bottomLeft = Offset(0f, size.height)
                 val center = topLeft.plus(Offset(size.width / 2, size.height / 2))
 
-                val segments = createSegments(size, numberOfSegments, randomFloats)
+                val segments = createSegments(
+                    size = size,
+                    numberOfSegments = numberOfSegments,
+                    randomFloats = randomFloats,
+                    delta = size.height * 0.2f,
+                    topOffset = size.height * 0.5f,
+                )
 
                 drawPath(Path().apply { drawMyPath(size, segments) }, Color.Cyan)
 

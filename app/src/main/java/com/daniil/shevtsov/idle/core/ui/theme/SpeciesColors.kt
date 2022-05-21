@@ -7,14 +7,15 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.AbsoluteCutCornerShape
 import androidx.compose.foundation.shape.CutCornerShape
-import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.daniil.shevtsov.idle.core.ui.Icons
+import com.daniil.shevtsov.idle.core.ui.shapes.WavyShape
 import com.daniil.shevtsov.idle.core.ui.upgradePreviewStub
-import com.daniil.shevtsov.idle.core.ui.widgets.MyProgressBar
+import com.daniil.shevtsov.idle.core.ui.widgets.TitleWithProgress
 import com.daniil.shevtsov.idle.feature.initial.domain.createInitialTraits
 import com.daniil.shevtsov.idle.feature.player.species.domain.Species
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
@@ -43,7 +44,12 @@ fun ThemeColorsPreview() {
                             status = UpgradeStatusModel.Affordable,
                         ),
                     )
-                    MyProgressBar(progressPercentage = 0.75f)
+                    TitleWithProgress(
+                        title = "Kek",
+                        name = "Investigation",
+                        progress = 0.85f,
+                        icon = Icons.Suspicion,
+                    )
                 }
 
             }
@@ -128,7 +134,11 @@ fun chooseThemeForId(speciesId: Long): SpeciesTheme {
                 iconLight = Color(0xFFFF1A00),
             )
             shapes = AppShapes(
-                progressBar = RectangleShape,
+                progressBar = WavyShape(
+                    numberOfSegments = 100,
+                    topOffsetHeightPercent = 0.2f,
+                    deltaHeightPercent = 0.2f,
+                ),
             )
         }
         Species.Alien.id -> {
@@ -143,20 +153,11 @@ fun chooseThemeForId(speciesId: Long): SpeciesTheme {
                 iconLight = Color(0xFFDFFCF1),
             )
             shapes = AppShapes(
-                progressBar = GenericShape { size, _ ->
-                    val h = size.height
-                    val halfH = h / 2f
-                    val w = size.width
-                    val delta = size.width / 3f
-
-                    reset()
-                    moveTo(0f, h)
-                    cubicTo(0f, halfH, 0f, halfH, delta, halfH)
-                    lineTo(w - delta, halfH)
-                    cubicTo(w, halfH, w, halfH, w, 0f)
-                    lineTo(w, h)
-                    close()
-                },
+                progressBar = WavyShape(
+                    numberOfSegments = 20,
+                    topOffsetHeightPercent = 0.2f,
+                    deltaHeightPercent = 0.2f,
+                ),
             )
         }
         Species.Android.id -> {
