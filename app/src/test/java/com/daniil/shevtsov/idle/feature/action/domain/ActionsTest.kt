@@ -19,8 +19,12 @@ internal class ActionsTest {
     fun actionClicked(oldState: GameState, id: Long): GameState {
         val action = oldState.actions.find { it.id == id }!!
         val ratioKey = RatioKey.Suspicion
-        val ratioChange = action.ratioChanges[ratioKey]!!
         val oldRatio = oldState.ratios.find { ratio -> ratio.key == ratioKey }!!
+        val isInvisible = oldState.player.generalTags.contains(Tags.State.Invisible)
+        val ratioChange = when (isInvisible) {
+            true -> 1.0
+            false -> 5.0
+        }
         val newRatio = oldRatio.copy(value = oldRatio.value + ratioChange)
 
         return oldState.copy(
