@@ -13,6 +13,8 @@ internal class TagExtensionsTest {
     fun `should work for require any`() {
         assertThat(tags.satisfies(TagRelation.RequiredAny, tag("kek")))
             .isTrue()
+        assertThat(tags.satisfies(TagRelation.RequiredAny, listOf(tag("lol"), tag("kek"))))
+            .isTrue()
         assertThat(tags.satisfies(TagRelation.RequiredAny, listOf(tag("kek"), tag("goulash"))))
             .isTrue()
         assertThat(tags.satisfies(TagRelation.RequiredAny, tag("goulash")))
