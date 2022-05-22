@@ -17,16 +17,42 @@ import org.junit.jupiter.api.Test
 internal class ActionsTest {
 
     fun actionClicked(oldState: GameState, id: Long): GameState {
-        return oldState
+        val action = oldState.actions.find { it.id == id }!!
+        val ratioKey = RatioKey.Suspicion
+        val ratioChange = action.ratioChanges[ratioKey]!!
+        val oldRatio = oldState.ratios.find { ratio -> ratio.key == ratioKey }!!
+        val newRatio = oldRatio.copy(value = oldRatio.value + ratioChange)
+
+        return oldState.copy(
+            ratios = oldState.ratios.map { ratio ->
+                when (ratio.key) {
+                    newRatio.key -> newRatio
+                    else -> ratio
+                }
+            }
+        )
+    }
+
+    private val action = action(id = 1L, ratioChanges = mapOf(RatioKey.Suspicion to 5.0))
+    private val initialState = gameState(
+        actions = listOf(action),
+        ratios = listOf(ratio(key = RatioKey.Suspicion, value = 10.0)),
+    )
+
+    @Test
+    fun `should add much suspicion when visible`() {
+        val oldState = initialState
+        val newState = actionClicked(oldState, action.id)
+
+        assertThat(newState)
+            .extractingSuspicion()
+            .isEqualTo(15.0)
     }
 
     @Test
     fun `should add little suspicion when invisible`() {
-        val action = action(id = 1L)
-        val oldState = gameState(
-            actions = listOf(action),
-            ratios = listOf(ratio(key = RatioKey.Suspicion, value = 10.0)),
-            player = player(generalTags = listOf(Tags.State.Invisible)),
+        val oldState = initialState.copy(
+            player = player(generalTags = listOf(Tags.State.Invisible))
         )
 
         val newState = actionClicked(oldState, action.id)
