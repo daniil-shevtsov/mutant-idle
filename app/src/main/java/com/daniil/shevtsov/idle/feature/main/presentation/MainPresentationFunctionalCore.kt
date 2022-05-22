@@ -4,6 +4,7 @@ import com.daniil.shevtsov.idle.core.presentation.formatting.formatEnumName
 import com.daniil.shevtsov.idle.core.presentation.formatting.formatRound
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.action.domain.Action
+import com.daniil.shevtsov.idle.feature.action.domain.RatioChanges
 import com.daniil.shevtsov.idle.feature.action.presentation.*
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.flavor.flavorMachine
@@ -233,7 +234,7 @@ private fun mapResourceChanges(resourceChanges: Map<ResourceKey, Double>) =
         )
     }
 
-private fun mapRatioChanges(ratioChanges: Map<RatioKey, Double>) =
+private fun mapRatioChanges(ratioChanges: RatioChanges) =
     ratioChanges.map { (ratioKey, changeValue) ->
         val formattedValue =
             ("+".takeIf { changeValue > 0 } ?: "") + (changeValue * 100)

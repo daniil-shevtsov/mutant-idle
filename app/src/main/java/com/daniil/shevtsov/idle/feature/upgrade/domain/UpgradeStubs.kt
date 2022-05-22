@@ -1,6 +1,6 @@
 package com.daniil.shevtsov.idle.feature.upgrade.domain
 
-import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
+import com.daniil.shevtsov.idle.feature.action.domain.RatioChanges
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
@@ -12,7 +12,7 @@ fun upgrade(
     price: Double = 0.0,
     status: UpgradeStatus = UpgradeStatus.NotBought,
     resourceChanges: Map<ResourceKey, Double> = mapOf(),
-    ratioChanges: Map<RatioKey, Double> = mapOf(),
+    ratioChanges: RatioChanges = mapOf(),
     tags: Map<TagRelation, List<Tag>> = mapOf(),
 ) = Upgrade(
     id = id,

@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.feature.main.domain
 
 import com.daniil.shevtsov.idle.core.navigation.Screen
+import com.daniil.shevtsov.idle.feature.action.domain.RatioChanges
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
@@ -144,7 +145,7 @@ fun handleActionClicked(
 
 private fun applyRatioChanges(
     currentRatios: List<Ratio>,
-    ratioChanges: Map<RatioKey, Double>,
+    ratioChanges: RatioChanges,
 ): List<Ratio> = currentRatios.map { ratio ->
     when (val ratioChange = ratioChanges[ratio.key]) {
         null -> ratio

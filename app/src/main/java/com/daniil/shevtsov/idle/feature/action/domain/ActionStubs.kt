@@ -5,7 +5,6 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.RatioChangeModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ResourceChangeModel
-import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
@@ -15,7 +14,7 @@ fun action(
     title: String = "",
     subtitle: String = "",
     resourceChanges: Map<ResourceKey, Double> = mapOf(),
-    ratioChanges: Map<RatioKey, Double> = mapOf(),
+    ratioChanges: RatioChanges = mapOf(),
     tags: Map<TagRelation, List<Tag>> = mapOf(),
 ) = Action(
     id = id,
