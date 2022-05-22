@@ -3,6 +3,22 @@ package com.daniil.shevtsov.idle.core.ui.shapes
 import androidx.compose.ui.geometry.Offset
 import kotlin.random.Random
 
+data class BezierVariation(
+    val origin: Float,
+    val minLimit: Float,
+    val maxLimit: Float,
+)
+
+fun bezierVacation(
+    origin: Float = 0.5f,
+    minLimit: Float = 0.1f,
+    maxLimit: Float = 0.15f,
+) = BezierVariation(
+    origin = origin,
+    minLimit = minLimit,
+    maxLimit = maxLimit,
+)
+
 fun createSegments(
     length: Float,
     numberOfSegments: Int,

@@ -108,8 +108,7 @@ fun chooseThemeForId(speciesId: Long): SpeciesTheme {
                     bezierGenerator(
                         size = size,
                         numberOfSegments = 10,
-                        deltaSize = { height, percent -> delta(height, 0.5f) },
-                        offsetSize = { height, percent -> topOffset(height, 0.6f) },
+                        bezierVariation = bezierVacation(),
                         supportPointsGenerator = ::bubblySupportPoints,
                     )
                 },

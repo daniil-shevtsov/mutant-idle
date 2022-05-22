@@ -29,19 +29,19 @@ fun bezierGenerator(
     size: Size,
     numberOfSegments: Int = 10,
     deltaPercentage: (index: Int) -> Float = ::defaultDeltaPercentage,
-    deltaSize: (height: Float, percent: Float) -> Float = ::delta,
-    offsetSize: (height: Float, percent: Float) -> Float = ::topOffset,
+    bezierVariation: BezierVariation = bezierVacation(),
     supportPointsGenerator: SupportPointsGenerator = ::centeredSupportPoints,
 ): List<BezierPoint> {
     val segmentXs = createSegments(size.width, numberOfSegments)
-    val segments = createOffsets(segmentXs, offsetSize(size.height, 0.5f))
+    val segments = createOffsets(segmentXs, size.height * bezierVariation.origin)
 
     val scatteredPoints = applyDeltas(
         segments = segments,
         deltaSign = ::isEven,
         deltaSize = { index ->
-            val delta = deltaSize(size.height, 0.5f)
-            -delta * 0.5f + delta * deltaPercentage(index)
+            val percentage =
+                bezierVariation.minLimit + deltaPercentage(index) * (bezierVariation.maxLimit - bezierVariation.minLimit)
+            size.height * percentage
         },
     )
     return generateBezier(scatteredPoints, supportPointsGenerator)
@@ -99,10 +99,10 @@ fun Shape() {
 
     fun randomBezierGenerator(
         size: Size,
-        supportPointsGenerator: SupportPointsGenerator = ::bubblySupportPoints,
+        supportPointsGenerator: SupportPointsGenerator = ::centeredSupportPoints,
     ) = bezierGenerator(
         size = size,
-        numberOfSegments = 5,
+        numberOfSegments = 10,
         deltaPercentage = { index -> randomFloats[index] },
         supportPointsGenerator = supportPointsGenerator,
     )
