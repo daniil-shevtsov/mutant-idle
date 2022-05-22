@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.Icons
-import com.daniil.shevtsov.idle.core.ui.shapes.*
 import com.daniil.shevtsov.idle.core.ui.upgradePreviewStub
 import com.daniil.shevtsov.idle.core.ui.widgets.TitleWithProgress
 import com.daniil.shevtsov.idle.feature.initial.domain.createInitialTraits
@@ -104,14 +103,7 @@ fun chooseThemeForId(speciesId: Long): SpeciesTheme {
                 iconLight = Color(0xFFFFDEDE),
             )
             shapes = AppShapes(
-                progressBar = WavyShape { size ->
-                    bezierGenerator(
-                        size = size,
-                        numberOfSegments = 10,
-                        bezierVariation = bezierVacation(),
-                        supportPointsGenerator = ::bubblySupportPoints,
-                    )
-                },
+                progressBar = RectangleShape,
             )
         }
         Species.Parasite.id -> {
@@ -141,7 +133,7 @@ fun chooseThemeForId(speciesId: Long): SpeciesTheme {
                 iconLight = Color(0xFFFF1A00),
             )
             shapes = AppShapes(
-                progressBar = WavyShape(::standardBezierPoints),
+                progressBar = RectangleShape,
             )
         }
         Species.Alien.id -> {
@@ -156,7 +148,7 @@ fun chooseThemeForId(speciesId: Long): SpeciesTheme {
                 iconLight = Color(0xFFDFFCF1),
             )
             shapes = AppShapes(
-                progressBar = WavyShape(::standardBezierPoints),
+                progressBar = RectangleShape,
             )
         }
         Species.Android.id -> {
