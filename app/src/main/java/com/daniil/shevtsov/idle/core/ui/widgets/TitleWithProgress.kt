@@ -6,13 +6,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
-import com.daniil.shevtsov.idle.core.ui.Pallete
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
+
 
 @Preview
 @Composable
@@ -42,17 +41,17 @@ fun TitleWithProgress(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(Pallete.Background)
+            .background(AppTheme.colors.background)
             .padding(4.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(text = icon, fontSize = 24.sp)
+        Text(text = icon, style = AppTheme.typography.icon, color = AppTheme.colors.textLight)
         Text(
             modifier = modifier.weight(0.35f),
             text = title,
-            fontSize = 24.sp,
-            color = Color.White,
+            style = AppTheme.typography.title,
+            color = AppTheme.colors.textLight,
             textAlign = TextAlign.Start
         )
         Box(
@@ -64,9 +63,10 @@ fun TitleWithProgress(
             )
             Text(
                 text = name,
+                style = AppTheme.typography.body,
                 color = when {
-                    progress >= 0.65f -> Color.White
-                    else -> Color.Black
+                    progress >= 0.65f -> AppTheme.colors.textLight
+                    else -> AppTheme.colors.textDark
                 }
             )
         }

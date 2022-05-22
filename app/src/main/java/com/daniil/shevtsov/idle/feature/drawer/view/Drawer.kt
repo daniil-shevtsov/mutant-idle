@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.daniil.shevtsov.idle.core.ui.Pallete
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.feature.debug.presentation.DebugComposable
 import com.daniil.shevtsov.idle.feature.drawer.presentation.*
 import com.daniil.shevtsov.idle.feature.drawer.view.DrawerTabSelector
@@ -74,7 +74,7 @@ fun MainDrawer(
             DebugComposable(
                 state = drawerContentState.state,
                 modifier = modifier
-                    .background(Pallete.Background)
+                    .background(AppTheme.colors.background)
                     .padding(8.dp),
                 onAction = { debugAction ->
                     onViewAction(DrawerViewAction.Debug(action = debugAction))
@@ -84,7 +84,7 @@ fun MainDrawer(
             PlayerInfoComposable(
                 state = drawerContentState.playerInfo,
                 modifier = modifier
-                    .background(Pallete.Background)
+                    .background(AppTheme.colors.background)
                     .padding(8.dp)
             )
         }

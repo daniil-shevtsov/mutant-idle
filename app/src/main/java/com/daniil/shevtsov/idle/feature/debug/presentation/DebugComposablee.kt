@@ -10,12 +10,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.cavitary
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.widgets.CavityButton
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJobModel
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpeciesModel
@@ -51,7 +49,7 @@ fun DebugComposable(
     var expanded2: Boolean by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier
-            .background(Pallete.Background)
+            .background(AppTheme.colors.background)
             .fillMaxSize()
             .wrapContentSize(Alignment.TopStart)
     ) {
@@ -89,15 +87,15 @@ private fun SpeciesRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(Pallete.Background),
+            .background(AppTheme.colors.background),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Text(
             modifier = modifier.weight(1f),
             text = "Selected Species:",
-            fontSize = 24.sp,
-            color = Color.White
+            style = AppTheme.typography.title,
+            color = AppTheme.colors.textLight
         )
         Box(modifier = modifier.weight(1f)) {
             Text(
@@ -107,14 +105,15 @@ private fun SpeciesRow(
                     null -> "EMPTY"
                     else -> selectedSpecies.title
                 },
-                fontSize = 16.sp,
+                style = AppTheme.typography.body,
+                color = AppTheme.colors.textDark,
                 modifier = modifier
                     .fillMaxWidth()
                     .cavitary(
-                        lightColor = Pallete.BackgroundLight,
-                        darkColor = Pallete.BackgroundDark
+                        lightColor = AppTheme.colors.backgroundLight,
+                        darkColor = AppTheme.colors.backgroundDark
                     )
-                    .background(Color.White)
+                    .background(AppTheme.colors.backgroundText)
                     .clickable(onClick = { onExpandChange(true) })
                     .padding(4.dp)
             )
@@ -124,13 +123,17 @@ private fun SpeciesRow(
                 onDismissRequest = { onExpandChange(false) }) {
                 state.speciesSelection.forEach { species ->
                     DropdownMenuItem(
-                        modifier = modifier.background(Color.White),
+                        modifier = modifier.background(AppTheme.colors.backgroundText),
                         onClick = {
                             onAction(DebugViewAction.TraitSelected(TraitId.Species, species.id))
                             onExpandChange(false)
                         }
                     ) {
-                        Text(text = species.title)
+                        Text(
+                            text = species.title,
+                            style = AppTheme.typography.body,
+                            color = AppTheme.colors.textDark,
+                        )
                     }
                 }
             }
@@ -149,15 +152,15 @@ private fun JobRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(Pallete.Background),
+            .background(AppTheme.colors.background),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Text(
             modifier = modifier.weight(1f),
             text = "Selected Job:",
-            fontSize = 24.sp,
-            color = Color.White
+            style = AppTheme.typography.title,
+            color = AppTheme.colors.textLight
         )
         Box(modifier = modifier.weight(1f)) {
             Text(
@@ -167,14 +170,15 @@ private fun JobRow(
                     null -> "EMPTY"
                     else -> selectedJob.title
                 },
-                fontSize = 16.sp,
+                style = AppTheme.typography.body,
+                color = AppTheme.colors.textDark,
                 modifier = modifier
                     .fillMaxWidth()
                     .cavitary(
-                        lightColor = Pallete.BackgroundLight,
-                        darkColor = Pallete.BackgroundDark
+                        lightColor = AppTheme.colors.backgroundLight,
+                        darkColor = AppTheme.colors.backgroundDark
                     )
-                    .background(Color.White)
+                    .background(AppTheme.colors.backgroundText)
                     .clickable(onClick = { onExpandChange(true) })
                     .padding(4.dp)
             )
@@ -184,13 +188,17 @@ private fun JobRow(
                 onDismissRequest = { onExpandChange(false) }) {
                 state.jobSelection.forEach { job ->
                     DropdownMenuItem(
-                        modifier = modifier.background(Color.White),
+                        modifier = modifier.background(AppTheme.colors.backgroundText),
                         onClick = {
                             onAction(DebugViewAction.TraitSelected(TraitId.Job, job.id))
                             onExpandChange(false)
                         }
                     ) {
-                        Text(text = job.title)
+                        Text(
+                            text = job.title,
+                            style = AppTheme.typography.body,
+                            color = AppTheme.colors.textDark,
+                        )
                     }
                 }
             }

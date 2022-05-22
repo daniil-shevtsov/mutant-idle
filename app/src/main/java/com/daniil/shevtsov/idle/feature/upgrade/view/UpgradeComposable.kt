@@ -9,11 +9,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.daniil.shevtsov.idle.core.ui.Pallete
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.upgradeListPreviewStub
 import com.daniil.shevtsov.idle.core.ui.upgradePreviewStub
 import com.daniil.shevtsov.idle.feature.ratio.view.RatioChanges
@@ -62,9 +60,9 @@ fun Upgrade(
     onClicked: () -> Unit = {},
 ) {
     val priceColor = when (upgrade.status) {
-        UpgradeStatusModel.Affordable -> Color.White
-        UpgradeStatusModel.NotAffordable -> Color.Black
-        UpgradeStatusModel.Bought -> Color.White
+        UpgradeStatusModel.Affordable -> AppTheme.colors.textLight
+        UpgradeStatusModel.NotAffordable -> AppTheme.colors.textDark
+        UpgradeStatusModel.Bought -> AppTheme.colors.textLight
     }
     val priceText = when (upgrade.status) {
         UpgradeStatusModel.Bought -> "Bought"
@@ -72,27 +70,27 @@ fun Upgrade(
     }
     Column(
         modifier = modifier
-            .background(Pallete.Background)
+            .background(AppTheme.colors.background)
             .clickable { onClicked() }
             .padding(4.dp)
-            .background(Pallete.BackgroundDark),
+            .background(AppTheme.colors.backgroundDark),
     ) {
         Box {
             Text(
                 text = upgrade.title,
-                color = Color.White,
-                fontSize = 24.sp,
+                style = AppTheme.typography.title,
+                color = AppTheme.colors.textLight,
                 modifier = modifier
                     .fillMaxWidth()
-                    .background(Pallete.BackgroundDark)
+                    .background(AppTheme.colors.backgroundDark)
                     .padding(4.dp)
             )
             Text(
                 text = priceText,
+                style = AppTheme.typography.title,
                 color = priceColor,
-                fontSize = 24.sp,
                 modifier = modifier
-                    .background(Pallete.BackgroundDark)
+                    .background(AppTheme.colors.backgroundDark)
                     .padding(4.dp)
                     .align(Alignment.CenterEnd)
             )
@@ -100,10 +98,11 @@ fun Upgrade(
 
         Text(
             text = upgrade.subtitle,
-            fontSize = 16.sp,
+            style = AppTheme.typography.body,
+            color = AppTheme.colors.textDark,
             modifier = modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(AppTheme.colors.backgroundText)
                 .padding(4.dp)
                 .padding(bottom = 4.dp)
         )

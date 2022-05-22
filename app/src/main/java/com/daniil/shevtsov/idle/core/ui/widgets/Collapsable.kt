@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.daniil.shevtsov.idle.core.ui.Pallete
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
+
 
 @Preview(heightDp = 400)
 @Composable
@@ -39,7 +39,7 @@ fun CollapsablePreview() {
                     .fillMaxWidth()
                     .height(120.dp)
                     .padding(8.dp)
-                    .background(Color.White)
+                    .background(AppTheme.colors.backgroundText)
             )
         },
         onToggleCollapse = {},
@@ -92,7 +92,7 @@ fun Collapsable(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
                 .fillMaxWidth()
-                .background(Pallete.Background)
+                .background(AppTheme.colors.background)
                 .padding(4.dp)
 
         ) {
@@ -103,8 +103,8 @@ fun Collapsable(
             )
             Text(
                 text = title,
-                color = Color.White,
-                fontSize = 24.sp,
+                style = AppTheme.typography.title,
+                color = AppTheme.colors.textLight,
                 modifier = modifier
             )
         }
@@ -143,7 +143,7 @@ fun CollapseButton(
             if (isCollapsed) Icons.Filled.ArrowDropDown else Icons.Filled.ArrowDropUp,
             contentDescription = "Collapse / Expand",
             modifier = modifier.fillMaxSize(),
-            tint = Color.White,
+            tint = AppTheme.colors.iconLight,
         )
     }
 }

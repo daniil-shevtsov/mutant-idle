@@ -6,14 +6,12 @@ import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.presentation.formatting.formatEnumName
-import com.daniil.shevtsov.idle.core.ui.Pallete
 import com.daniil.shevtsov.idle.core.ui.cavitary
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.feature.player.info.presentation.PlayerInfoState
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
@@ -58,7 +56,7 @@ fun PlayerInfoComposable(
 ) {
     Column(
         modifier = modifier
-            .background(Pallete.Background)
+            .background(AppTheme.colors.background)
             .fillMaxSize(),
         verticalArrangement = spacedBy(16.dp)
     ) {
@@ -69,23 +67,24 @@ fun PlayerInfoComposable(
                 Row {
                     Text(
                         text = formatEnumName(trait.traitId.name),
-                        fontSize = 24.sp,
-                        color = Color.White,
+                        style = AppTheme.typography.title,
+                        color = AppTheme.colors.textLight,
                         modifier = Modifier
-                            .background(Pallete.Background)
+                            .background(AppTheme.colors.background)
                             .weight(1f)
                     )
                     Text(
                         text = trait.title,
-                        fontSize = 16.sp,
+                        style = AppTheme.typography.body,
+                        color = AppTheme.colors.textDark,
                         modifier = modifier
                             .cavitary(
-                                lightColor = Pallete.BackgroundLight,
-                                darkColor = Pallete.BackgroundDark
+                                lightColor = AppTheme.colors.backgroundLight,
+                                darkColor = AppTheme.colors.backgroundDark
                             )
-                            .background(Color.White)
+                            .background(AppTheme.colors.backgroundText)
                             .padding(4.dp)
-                            .weight(1f)
+                            .weight(1f),
                     )
                 }
             }
@@ -93,11 +92,11 @@ fun PlayerInfoComposable(
         Column(verticalArrangement = spacedBy(8.dp)) {
             Text(
                 text = "Tags",
-                fontSize = 24.sp,
-                color = Color.White,
+                style = AppTheme.typography.title,
+                color = AppTheme.colors.textLight,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .background(Pallete.Background)
+                    .background(AppTheme.colors.background)
                     .fillMaxWidth()
             )
             Text(
@@ -108,13 +107,14 @@ fun PlayerInfoComposable(
                     val type = traitId?.name?.let(::formatEnumName) ?: "General"
                     tag.name + " ($type)"
                 },
-                fontSize = 16.sp,
+                style = AppTheme.typography.body,
+                color = AppTheme.colors.textDark,
                 modifier = modifier
                     .cavitary(
-                        lightColor = Pallete.BackgroundLight,
-                        darkColor = Pallete.BackgroundDark
+                        lightColor = AppTheme.colors.backgroundLight,
+                        darkColor = AppTheme.colors.backgroundDark
                     )
-                    .background(Color.White)
+                    .background(AppTheme.colors.backgroundText)
                     .padding(4.dp)
                     .fillMaxWidth()
             )

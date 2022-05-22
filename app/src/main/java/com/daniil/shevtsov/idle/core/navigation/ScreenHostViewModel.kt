@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerViewState
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
+import com.daniil.shevtsov.idle.feature.player.species.domain.Species.Devourer
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -46,6 +47,7 @@ class ScreenHostViewModel @Inject constructor(
     }
 
     private fun createInitialState() = ScreenHostViewState(
+        speciesId = Devourer.id,
         drawerState = drawerViewState(),
         contentState = ScreenContentViewState.Loading,
     )

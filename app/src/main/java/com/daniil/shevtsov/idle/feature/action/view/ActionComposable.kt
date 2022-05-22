@@ -15,9 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.core.ui.Icons
-import com.daniil.shevtsov.idle.core.ui.Pallete
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.widgets.Collapsable
 import com.daniil.shevtsov.idle.feature.action.domain.actionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
@@ -126,8 +125,8 @@ fun Action(
         true -> 1f
         false -> 0.5f
     }
-    val lightColor = Pallete.Background.copy(alpha = colorAlpha)
-    val darkColor = Pallete.BackgroundDark.copy(alpha = colorAlpha)
+    val lightColor = AppTheme.colors.background.copy(alpha = colorAlpha)
+    val darkColor = AppTheme.colors.backgroundDark.copy(alpha = colorAlpha)
 
     Column(
         modifier = modifier
@@ -145,11 +144,11 @@ fun Action(
             verticalAlignment = Alignment.Top,
             horizontalArrangement = spacedBy(8.dp)
         ) {
-            Text(text = actionIcon, fontSize = 24.sp)
+            Text(text = actionIcon, style = AppTheme.typography.icon)
             Text(
                 text = action.title,
-                color = Color.White,
-                fontSize = 24.sp,
+                style = AppTheme.typography.title,
+                color = AppTheme.colors.textLight,
                 modifier = Modifier
                     .fillMaxWidth()
             )
@@ -157,11 +156,11 @@ fun Action(
 
         Text(
             text = action.subtitle,
-            color = Color.Black,
-            fontSize = 16.sp,
+            style = AppTheme.typography.subtitle,
+            color = AppTheme.colors.textDark,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(AppTheme.colors.backgroundText)
                 .padding(4.dp)
                 .padding(start = 4.dp)
                 .padding(bottom = 4.dp)

@@ -9,11 +9,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.daniil.shevtsov.idle.core.ui.Pallete
+import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
@@ -49,19 +48,19 @@ fun DrawerTabSelector(
     Row(
         horizontalArrangement = spacedBy(4.dp),
         modifier = modifier
-            .background(Pallete.Background)
+            .background(AppTheme.colors.background)
             .padding(bottom = 4.dp)
-            .background(Pallete.BackgroundDarkest)
+            .background(AppTheme.colors.backgroundDarkest)
             .padding(top = 4.dp)
     ) {
         tabs.forEachIndexed { index, tab ->
             Text(
                 text = tab.title,
-                color = Color.White,
+                color = AppTheme.colors.textLight,
                 textAlign = TextAlign.Center,
                 modifier = if (tab.isSelected) {
                     modifier
-                        .background(Pallete.BackgroundLight)
+                        .background(AppTheme.colors.backgroundLight)
                         .let { kek ->
                             when (index) {
                                 0 -> kek.padding(top = 1.dp, end = 1.dp)
@@ -69,13 +68,13 @@ fun DrawerTabSelector(
                                 else -> kek.padding(start = 1.dp, top = 1.dp, end = 1.dp)
                             }
                         }
-                        .background(Pallete.Background)
+                        .background(AppTheme.colors.background)
                         .clickable { onTabSelected(tab.id) }
                         .padding(4.dp)
                         .weight(1f)
                 } else {
                     modifier
-                        .background(Pallete.Background)
+                        .background(AppTheme.colors.background)
                         .padding(4.dp)
                         .clickable { onTabSelected(tab.id) }
                         .weight(1f)
