@@ -25,11 +25,23 @@ internal class ActionsTest {
         val isHuman = oldState.player.generalTags.contains(Tags.Appearance.Human)
         val isMonster = oldState.player.generalTags.contains(Tags.Appearance.Monster)
 
-        val ratioChange = when {
-            action == stealAction && isInvisible -> 1.0
-            action == stealAction && !isInvisible -> 5.0
-            action == humanAction && isHuman -> 0.0
-            action == humanAction && isMonster -> 10.0
+        val stealActionRatioChange = mapOf(
+            RatioKey.Suspicion to when {
+                isInvisible -> 1.0
+                else -> 5.0
+            }
+        )
+        val humanRatioChange = mapOf(
+            RatioKey.Suspicion to when {
+                isHuman -> 0.0
+                isMonster -> 10.0
+                else -> 0.0
+            }
+        )
+
+        val ratioChange = when (action) {
+            stealAction -> stealActionRatioChange[RatioKey.Suspicion]!!
+            humanAction -> humanRatioChange[RatioKey.Suspicion]!!
             else -> 0.0
         }
         val newRatio = oldRatio.copy(value = oldRatio.value + ratioChange)
