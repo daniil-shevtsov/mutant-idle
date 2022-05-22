@@ -13,8 +13,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.Icons
-import com.daniil.shevtsov.idle.core.ui.shapes.WavyShape
-import com.daniil.shevtsov.idle.core.ui.shapes.standardBezierPoints
+import com.daniil.shevtsov.idle.core.ui.shapes.*
 import com.daniil.shevtsov.idle.core.ui.upgradePreviewStub
 import com.daniil.shevtsov.idle.core.ui.widgets.TitleWithProgress
 import com.daniil.shevtsov.idle.feature.initial.domain.createInitialTraits
@@ -105,7 +104,15 @@ fun chooseThemeForId(speciesId: Long): SpeciesTheme {
                 iconLight = Color(0xFFFFDEDE),
             )
             shapes = AppShapes(
-                progressBar = RectangleShape,
+                progressBar = WavyShape { size ->
+                    bezierGenerator(
+                        size = size,
+                        numberOfSegments = 10,
+                        deltaSize = { height, percent -> delta(height, 0.5f) },
+                        offsetSize = { height, percent -> topOffset(height, 0.6f) },
+                        supportPointsGenerator = ::bubblySupportPoints,
+                    )
+                },
             )
         }
         Species.Parasite.id -> {

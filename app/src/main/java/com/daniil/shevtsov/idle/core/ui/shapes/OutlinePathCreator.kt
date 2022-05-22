@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.core.ui.shapes
 
 import androidx.compose.ui.geometry.Offset
+import kotlin.random.Random
 
 fun createSegments(
     length: Float,
@@ -38,4 +39,4 @@ fun isEven(index: Int): Boolean = when (index % 2) {
     else -> false
 }
 
-fun defaultDeltaPercentage(index: Int): Float = 1f
+fun defaultDeltaPercentage(index: Int): Float = Random.nextFloat()

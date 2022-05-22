@@ -18,27 +18,33 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlin.random.Random
 
-fun standardBezierPoints(size: Size): List<BezierPoint> {
-    return bezierGenerator(size)
+fun standardBezierPoints(
+    size: Size,
+    supportPointsGenerator: SupportPointsGenerator = ::centeredSupportPoints,
+): List<BezierPoint> {
+    return bezierGenerator(size, supportPointsGenerator = supportPointsGenerator)
 }
 
 fun bezierGenerator(
     size: Size,
     numberOfSegments: Int = 10,
-    deltaPercentage: (index: Int) -> Float = ::defaultDeltaPercentage
+    deltaPercentage: (index: Int) -> Float = ::defaultDeltaPercentage,
+    deltaSize: (height: Float, percent: Float) -> Float = ::delta,
+    offsetSize: (height: Float, percent: Float) -> Float = ::topOffset,
+    supportPointsGenerator: SupportPointsGenerator = ::centeredSupportPoints,
 ): List<BezierPoint> {
     val segmentXs = createSegments(size.width, numberOfSegments)
-    val segments = createOffsets(segmentXs, topOffset(size.height))
+    val segments = createOffsets(segmentXs, offsetSize(size.height, 0.5f))
 
     val scatteredPoints = applyDeltas(
         segments = segments,
         deltaSign = ::isEven,
         deltaSize = { index ->
-            val delta = delta(size.height)
+            val delta = deltaSize(size.height, 0.5f)
             -delta * 0.5f + delta * deltaPercentage(index)
         },
     )
-    return generateBezier(scatteredPoints)
+    return generateBezier(scatteredPoints, supportPointsGenerator)
 }
 
 fun WavyShape(
@@ -91,10 +97,14 @@ fun Shape() {
     val numberOfSegments = 10
     val randomFloats = IntRange(0, numberOfSegments).map { Random.nextFloat() }
 
-    fun randomBezierGenerator(size: Size) = bezierGenerator(
+    fun randomBezierGenerator(
+        size: Size,
+        supportPointsGenerator: SupportPointsGenerator = ::bubblySupportPoints,
+    ) = bezierGenerator(
         size = size,
-        numberOfSegments = 10,
-        deltaPercentage = { index -> randomFloats[index] }
+        numberOfSegments = 5,
+        deltaPercentage = { index -> randomFloats[index] },
+        supportPointsGenerator = supportPointsGenerator,
     )
 
     val shape = WavyShape(::randomBezierGenerator)

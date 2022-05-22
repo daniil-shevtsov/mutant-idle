@@ -15,3 +15,21 @@ fun centeredSupportPoints(
         endPoint = Offset(center.x, endPoint.y),
     )
 }
+
+fun bubblySupportPoints(
+    startPoint: Offset,
+    endPoint: Offset,
+): SupportPoints {
+    val distance = endPoint - startPoint
+
+    return SupportPoints(
+        startPoint = Offset(
+            x = -distance.x,
+            y = startPoint.y,
+        ),
+        endPoint = Offset(
+            x = endPoint.x,
+            y = distance.y,
+        ),
+    )
+}
