@@ -12,7 +12,7 @@ data class BezierVariation(
 fun bezierVacation(
     origin: Float = 0.5f,
     minLimit: Float = 0.1f,
-    maxLimit: Float = 0.15f,
+    maxLimit: Float = 0.3f,
 ) = BezierVariation(
     origin = origin,
     minLimit = minLimit,

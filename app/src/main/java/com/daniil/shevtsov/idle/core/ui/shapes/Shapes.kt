@@ -28,6 +28,7 @@ fun standardBezierPoints(
 fun bezierGenerator(
     size: Size,
     numberOfSegments: Int = 10,
+    deltaSign: (index: Int) -> Boolean = ::isEven,
     deltaPercentage: (index: Int) -> Float = ::defaultDeltaPercentage,
     bezierVariation: BezierVariation = bezierVacation(),
     supportPointsGenerator: SupportPointsGenerator = ::centeredSupportPoints,
@@ -37,7 +38,7 @@ fun bezierGenerator(
 
     val scatteredPoints = applyDeltas(
         segments = segments,
-        deltaSign = ::isEven,
+        deltaSign = deltaSign,
         deltaSize = { index ->
             val percentage =
                 bezierVariation.minLimit + deltaPercentage(index) * (bezierVariation.maxLimit - bezierVariation.minLimit)
@@ -103,6 +104,7 @@ fun Shape() {
     ) = bezierGenerator(
         size = size,
         numberOfSegments = 10,
+        deltaSign = { index -> randomFloats[index].toInt() % 2 == 0 },
         deltaPercentage = { index -> randomFloats[index] },
         supportPointsGenerator = supportPointsGenerator,
     )
