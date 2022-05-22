@@ -19,4 +19,16 @@ internal class TagExtensionsTest {
             .isFalse()
     }
 
+    @Test
+    fun `should work for require all`() {
+        assertThat(tags.satisfies(TagRelation.RequiredAll, tag("kek")))
+            .isTrue()
+        assertThat(tags.satisfies(TagRelation.RequiredAll, listOf(tag("lol"), tag("kek"))))
+            .isTrue()
+        assertThat(tags.satisfies(TagRelation.RequiredAll, tag("goulash")))
+            .isFalse()
+        assertThat(tags.satisfies(TagRelation.RequiredAll, listOf(tag("lol"), tag("goulash"))))
+            .isFalse()
+    }
+
 }

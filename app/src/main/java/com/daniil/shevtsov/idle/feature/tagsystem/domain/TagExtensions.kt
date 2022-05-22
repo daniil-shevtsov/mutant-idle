@@ -11,7 +11,7 @@ fun List<Tag>.satisfies(relation: TagRelation, tags: List<Tag>): Boolean = when 
     TagRelation.Provides -> false
     TagRelation.Removes -> false
     TagRelation.RequiresNone -> false
-    TagRelation.RequiredAll -> false
+    TagRelation.RequiredAll -> tags.all { tag -> tag in this }
     TagRelation.RequiredAny -> any { tag -> tag in tags }
 }
 
