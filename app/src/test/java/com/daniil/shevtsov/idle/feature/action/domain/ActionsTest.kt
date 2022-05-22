@@ -20,10 +20,15 @@ internal class ActionsTest {
         val action = oldState.actions.find { it.id == id }!!
         val ratioKey = RatioKey.Suspicion
         val oldRatio = oldState.ratios.find { ratio -> ratio.key == ratioKey }!!
+
         val isInvisible = oldState.player.generalTags.contains(Tags.State.Invisible)
-        val ratioChange = when (isInvisible) {
-            true -> 1.0
-            false -> 5.0
+        val isHuman = oldState.player.generalTags.contains(Tags.HumanAppearance)
+
+        val ratioChange = when {
+            action == stealAction && isInvisible -> 1.0
+            action == stealAction && !isInvisible -> 5.0
+            action == humanAction -> 0.0
+            else -> 0.0
         }
         val newRatio = oldRatio.copy(value = oldRatio.value + ratioChange)
 
@@ -37,16 +42,17 @@ internal class ActionsTest {
         )
     }
 
-    private val action = action(id = 1L, ratioChanges = mapOf(RatioKey.Suspicion to 5.0))
+    private val stealAction = action(id = 1L, ratioChanges = mapOf(RatioKey.Suspicion to 5.0))
+    private val humanAction = action(id = 2L, ratioChanges = mapOf(RatioKey.Suspicion to 0.0))
     private val initialState = gameState(
-        actions = listOf(action),
+        actions = listOf(stealAction, humanAction),
         ratios = listOf(ratio(key = RatioKey.Suspicion, value = 10.0)),
     )
 
     @Test
-    fun `should add much suspicion when visible`() {
+    fun `should add much suspicion for stealing when visible`() {
         val oldState = initialState
-        val newState = actionClicked(oldState, action.id)
+        val newState = actionClicked(oldState, stealAction.id)
 
         assertThat(newState)
             .extractingSuspicion()
@@ -54,16 +60,29 @@ internal class ActionsTest {
     }
 
     @Test
-    fun `should add little suspicion when invisible`() {
+    fun `should add little suspicion for stealing when invisible`() {
         val oldState = initialState.copy(
             player = player(generalTags = listOf(Tags.State.Invisible))
         )
 
-        val newState = actionClicked(oldState, action.id)
+        val newState = actionClicked(oldState, stealAction.id)
 
         assertThat(newState)
             .extractingSuspicion()
             .isEqualTo(11.0)
+    }
+
+    @Test
+    fun `should add no suspicion for human action when human appearance`() {
+        val oldState = initialState.copy(
+            player = player(generalTags = listOf(Tags.HumanAppearance))
+        )
+
+        val newState = actionClicked(oldState, humanAction.id)
+
+        assertThat(newState)
+            .extractingSuspicion()
+            .isEqualTo(10.0)
     }
 
     private fun Assert<GameState>.extractingSuspicion() = prop(GameState::ratios)
