@@ -5,3 +5,13 @@ fun Map<Tag, TagRelation>.requiredTags(): List<Tag> =
 
 fun Map<Tag, TagRelation>.hasRequiredTag(tag: Tag): Boolean = requiredTags().contains(tag)
 
+fun List<Tag>.satisfies(relation: TagRelation, tag: Tag): Boolean = satisfies(relation, listOf(tag))
+
+fun List<Tag>.satisfies(relation: TagRelation, tags: List<Tag>): Boolean = when (relation) {
+    TagRelation.Provides -> false
+    TagRelation.Removes -> false
+    TagRelation.RequiresNone -> false
+    TagRelation.RequiredAll -> false
+    TagRelation.RequiredAny -> any { tag -> tag in tags }
+}
+
