@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.feature.main.domain
 
 import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.action.domain.RatioChanges
+import com.daniil.shevtsov.idle.feature.action.domain.ResourceChanges
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
@@ -155,7 +156,7 @@ private fun applyRatioChanges(
 
 private fun applyResourceChanges(
     currentResources: List<Resource>,
-    resourceChanges: Map<ResourceKey, Double>,
+    resourceChanges: ResourceChanges,
 ) = currentResources.map { resource ->
     when (val resourceChange = resourceChanges[resource.key]) {
         null -> resource
@@ -165,7 +166,7 @@ private fun applyResourceChanges(
 
 private fun hasInvalidChanges(
     currentResources: List<Resource>,
-    resourceChanges: Map<ResourceKey, Double>,
+    resourceChanges: ResourceChanges,
 ): Boolean = resourceChanges.any { (resourceKey, resourceChange) ->
     val currentResourceValue = currentResources
         .find { resource -> resource.key == resourceKey }!!.value
