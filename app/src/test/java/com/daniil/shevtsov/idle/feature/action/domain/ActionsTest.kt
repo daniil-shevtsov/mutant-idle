@@ -11,6 +11,7 @@ import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.satisfies
@@ -24,6 +25,19 @@ internal class ActionsTest {
         val oldRatio = oldState.ratios.find { ratio -> ratio.key == ratioKey }!!
 
         val generalTags = oldState.player.generalTags
+
+        val stealActionRatioChanges = mapOf(
+            RatioKey.Suspicion to mapOf(
+                listOf(Tags.State.Invisible) to 1.0,
+                emptyList<Tag>() to 5.0,
+            )
+        )
+        val humanActionRatioChanges = mapOf(
+            RatioKey.Suspicion to mapOf(
+                listOf(Tags.Appearance.Monster) to 10.0,
+                emptyList<Tag>() to 0.0,
+            )
+        )
 
         val stealActionRatioChange = mapOf(
             RatioKey.Suspicion to when {
@@ -39,11 +53,16 @@ internal class ActionsTest {
             }
         )
 
-        val ratioChange = when (action) {
-            stealAction -> stealActionRatioChange[RatioKey.Suspicion]!!
-            humanAction -> humanRatioChange[RatioKey.Suspicion]!!
-            else -> 0.0
+        val ratioChanges = when (action) {
+            stealAction -> stealActionRatioChanges
+            humanAction -> humanActionRatioChanges
+            else -> throw IllegalArgumentException()
         }
+
+        val ratioChange = ratioChanges[RatioKey.Suspicion]?.minByOrNull { (tags, value) ->
+            (tags - generalTags).size
+        }?.value ?: 0.0
+
         val newRatio = oldRatio.copy(value = oldRatio.value + ratioChange)
 
         return oldState.copy(
