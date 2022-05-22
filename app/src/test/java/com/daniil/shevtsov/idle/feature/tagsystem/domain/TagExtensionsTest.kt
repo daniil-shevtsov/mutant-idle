@@ -33,4 +33,16 @@ internal class TagExtensionsTest {
             .isFalse()
     }
 
+    @Test
+    fun `should work for require none`() {
+        assertThat(tags.satisfies(TagRelation.RequiresNone, tag("goulash")))
+            .isTrue()
+        assertThat(tags.satisfies(TagRelation.RequiresNone, tag("kek")))
+            .isFalse()
+        assertThat(tags.satisfies(TagRelation.RequiresNone, listOf(tag("lol"), tag("kek"))))
+            .isFalse()
+        assertThat(tags.satisfies(TagRelation.RequiresNone, listOf(tag("lol"), tag("goulash"))))
+            .isFalse()
+    }
+
 }
