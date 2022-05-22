@@ -5,11 +5,14 @@ import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 
+typealias ResourceChanges = Map<ResourceKey, Double>
+typealias RatioChanges = Map<RatioKey, Double>
+
 data class Action(
     val id: Long,
     val title: String,
     val subtitle: String,
-    val resourceChanges: Map<ResourceKey, Double>,
-    val ratioChanges: Map<RatioKey, Double>,
+    val resourceChanges: ResourceChanges,
+    val ratioChanges: RatioChanges,
     val tags: Map<TagRelation, List<Tag>>,
 )

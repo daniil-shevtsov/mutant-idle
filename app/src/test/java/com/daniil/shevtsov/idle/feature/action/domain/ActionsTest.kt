@@ -12,9 +12,7 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.satisfies
 import org.junit.jupiter.api.Test
 
 internal class ActionsTest {
@@ -37,20 +35,6 @@ internal class ActionsTest {
                 listOf(Tags.Appearance.Monster) to 10.0,
                 emptyList<Tag>() to 0.0,
             )
-        )
-
-        val stealActionRatioChange = mapOf(
-            RatioKey.Suspicion to when {
-                generalTags.satisfies(TagRelation.RequiredAll, Tags.State.Invisible) -> 1.0
-                else -> 5.0
-            }
-        )
-        val humanRatioChange = mapOf(
-            RatioKey.Suspicion to when {
-                generalTags.satisfies(TagRelation.RequiredAll, Tags.Appearance.Human) -> 0.0
-                generalTags.satisfies(TagRelation.RequiredAll, Tags.Appearance.Monster) -> 10.0
-                else -> 0.0
-            }
         )
 
         val ratioChanges = when (action) {
