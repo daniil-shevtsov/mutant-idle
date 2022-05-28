@@ -4,6 +4,8 @@ import com.daniil.shevtsov.idle.core.presentation.formatting.formatEnumName
 import com.daniil.shevtsov.idle.core.presentation.formatting.formatRound
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.action.domain.Action
+import com.daniil.shevtsov.idle.feature.action.domain.RatioChanges
+import com.daniil.shevtsov.idle.feature.action.domain.ResourceChanges
 import com.daniil.shevtsov.idle.feature.action.presentation.*
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.flavor.flavorMachine
@@ -102,7 +104,7 @@ private fun createMainViewState(state: GameState): MainViewState {
                             state.resources.find { it.key == ResourceKey.Blood }?.value ?: 0.0
                         ),
                         resourceChanges = mapResourceChanges(resourceChanges),
-                        ratioChanges = mapRatioChanges(ratioChanges),
+                        ratioChanges = mapRatioChanges(ratioChanges, state.player.tags),
                     )
                 }
             }
@@ -174,8 +176,8 @@ private fun createActionState(
         }
         .filter { action ->
             action.resourceChanges.all { (resourceKey, resourceChange) ->
-                val currentResource = resources.find { it.key == resourceKey }!!.value
-                currentResource + resourceChange >= 0
+                val currentResource = resources.find { it.key == resourceKey }?.value
+                currentResource != null && currentResource + resourceChange >= 0
             }
         }
         .map { action ->
@@ -207,7 +209,7 @@ private fun createActionState(
                     }
                 ),
                 resourceChanges = mapResourceChanges(resourceChanges),
-                ratioChanges = mapRatioChanges(ratioChanges),
+                ratioChanges = mapRatioChanges(ratioChanges, state.player.tags),
                 isEnabled = isActive,
             )
         }
@@ -223,7 +225,7 @@ private fun createActionState(
     )
 }
 
-private fun mapResourceChanges(resourceChanges: Map<ResourceKey, Double>) =
+private fun mapResourceChanges(resourceChanges: ResourceChanges) =
     resourceChanges.map { (resourceKey, changeValue) ->
         val formattedValue =
             ("+".takeIf { changeValue > 0 } ?: "") + changeValue.formatRound(digits = 2)
@@ -233,8 +235,12 @@ private fun mapResourceChanges(resourceChanges: Map<ResourceKey, Double>) =
         )
     }
 
-private fun mapRatioChanges(ratioChanges: Map<RatioKey, Double>) =
-    ratioChanges.map { (ratioKey, changeValue) ->
+private fun mapRatioChanges(
+    ratioChanges: RatioChanges,
+    tags: List<Tag>
+) =
+    ratioChanges.map { (ratioKey, tagChanges) ->
+        val changeValue = tagChanges[emptyList()] ?: 0.0
         val formattedValue =
             ("+".takeIf { changeValue > 0 } ?: "") + (changeValue * 100)
                 .formatRound(digits = 2) + " %"

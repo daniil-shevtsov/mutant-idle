@@ -6,16 +6,26 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.RatioChangeModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ResourceChangeModel
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
-import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
+import com.daniil.shevtsov.idle.feature.ratio.domain.ratioChange
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
+
+fun ratioChanges(
+    vararg entries: Pair<RatioKey, Double>,
+): RatioChanges = ratioChangesWithTags(
+    *entries.map { it.first to ratioChange(tags = emptyList(), change = it.second) }.toTypedArray()
+)
+
+fun ratioChangesWithTags(
+    vararg entries: Pair<RatioKey, RatioChangeForTags>,
+): RatioChanges = entries.associate { it.first to it.second }
 
 fun action(
     id: Long = 0L,
     title: String = "",
     subtitle: String = "",
-    resourceChanges: Map<ResourceKey, Double> = mapOf(),
-    ratioChanges: Map<RatioKey, Double> = mapOf(),
+    resourceChanges: ResourceChanges = mapOf(),
+    ratioChanges: RatioChanges = mapOf(),
     tags: Map<TagRelation, List<Tag>> = mapOf(),
 ) = Action(
     id = id,

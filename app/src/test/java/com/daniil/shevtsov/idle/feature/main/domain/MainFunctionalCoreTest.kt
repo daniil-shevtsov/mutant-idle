@@ -3,9 +3,10 @@ package com.daniil.shevtsov.idle.feature.main.domain
 import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
-import com.daniil.shevtsov.idle.core.domain.balanceConfig
 import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.action.domain.action
+import com.daniil.shevtsov.idle.feature.action.domain.ratioChanges
+import com.daniil.shevtsov.idle.feature.action.domain.ratioChangesWithTags
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
@@ -17,9 +18,6 @@ import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.main.presentation.sectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
-import com.daniil.shevtsov.idle.feature.player.species.domain.Species
-import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
-import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
@@ -51,7 +49,7 @@ class MainFunctionalCoreTest {
                     id = 0L,
                     price = 4.0,
                     resourceChanges = mapOf(ResourceKey.Blood to -4.0),
-                    ratioChanges = mapOf(RatioKey.Mutanity to 0.4),
+                    ratioChanges = ratioChanges(RatioKey.Mutanity to 0.4),
                 )
             ),
         )
@@ -90,7 +88,7 @@ class MainFunctionalCoreTest {
                         id = 1L,
                         tags = mapOf(TagRelation.Provides to listOf(providedTag)),
                         resourceChanges = mapOf(ResourceKey.Blood to -0.4),
-                        ratioChanges = mapOf(RatioKey.Mutanity to 0.5),
+                        ratioChanges = ratioChanges(RatioKey.Mutanity to 0.5),
                     )
                 ),
             )
@@ -116,9 +114,9 @@ class MainFunctionalCoreTest {
                     resourceChange(key = ResourceKey.Blood, change = 2.0),
                     resourceChange(key = ResourceKey.Money, change = -7.0),
                 ),
-                ratioChanges = mapOf(
-                    ratioChange(key = RatioKey.Mutanity, change = 2.0),
-                    ratioChange(key = RatioKey.Suspicion, change = -3.0),
+                ratioChanges = ratioChangesWithTags(
+                    RatioKey.Mutanity to ratioChange(change = 2.0),
+                    RatioKey.Suspicion to ratioChange(change = -3.0),
                 ),
                 tags = mapOf(
                     TagRelation.Provides to listOf(providedTag)
@@ -318,7 +316,7 @@ class MainFunctionalCoreTest {
                 ratio(key = RatioKey.Suspicion, value = 0.95),
             ),
             actions = listOf(
-                action(id = 1L, ratioChanges = mapOf(RatioKey.Suspicion to 0.05))
+                action(id = 1L, ratioChanges = ratioChanges(RatioKey.Suspicion to 0.05))
             )
         )
 

@@ -6,6 +6,7 @@ import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.action.domain.action
+import com.daniil.shevtsov.idle.feature.action.domain.ratioChanges
 import com.daniil.shevtsov.idle.feature.action.presentation.*
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.flavor.Flavors
@@ -22,6 +23,7 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
 import com.daniil.shevtsov.idle.feature.ratio.presentation.RatioModel
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.domain.resource
+import com.daniil.shevtsov.idle.feature.resource.domain.resourceChange
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
@@ -696,7 +698,7 @@ class MainPresentationTest {
     fun `should display action ratio changes`() = runBlockingTest {
         val action = action(
             id = 1L,
-            ratioChanges = mapOf(
+            ratioChanges = ratioChanges(
                 RatioKey.Mutanity to 0.5,
                 RatioKey.Suspicion to -0.01,
             )
@@ -842,6 +844,84 @@ class MainPresentationTest {
             .extractingRatios()
             .extracting(RatioModel::key)
             .containsExactly(mainRatio, RatioKey.Suspicion)
+    }
+
+    @Test
+    fun `should show resource changes of action`() {
+        val blood = resource(key = ResourceKey.Blood, value = 10.0)
+        val money = resource(key = ResourceKey.Money, value = 10.0)
+        val state = gameState(
+            resources = listOf(blood, money),
+            actions = listOf(
+                action(
+                    resourceChanges = mapOf(
+                        resourceChange(key = blood.key, change = 5.0),
+                        resourceChange(key = money.key, change = -5.0),
+                    )
+                )
+            )
+        )
+        val viewState = mapMainViewState(state)
+
+        assertThat(viewState)
+            .extractingHumanActions()
+            .extracting(ActionModel::resourceChanges)
+            .index(0)
+            .extracting(ResourceChangeModel::icon, ResourceChangeModel::value)
+            .containsExactly(
+                Icons.Blood to "+5",
+                Icons.Money to "-5",
+            )
+    }
+
+    @Test
+    fun `should show ratio changes of action`() {
+        val state = gameState(
+            actions = listOf(
+                action(
+                    ratioChanges = ratioChanges(
+                        RatioKey.Mutanity to -0.5,
+                        RatioKey.Suspicion to 1.0,
+                    )
+                )
+            )
+        )
+        val viewState = mapMainViewState(state)
+
+        assertThat(viewState)
+            .extractingHumanActions()
+            .extracting(ActionModel::ratioChanges)
+            .index(0)
+            .extracting(RatioChangeModel::icon, RatioChangeModel::value)
+            .containsExactly(
+                Icons.Mutanity to "-50 %",
+                Icons.Suspicion to "+100 %",
+            )
+    }
+
+    @Test
+    fun `should show ratio changes of upgrade`() {
+        val state = gameState(
+            upgrades = listOf(
+                upgrade(
+                    ratioChanges = ratioChanges(
+                        RatioKey.Mutanity to -0.5,
+                        RatioKey.Suspicion to 1.0,
+                    )
+                )
+            )
+        )
+        val viewState = mapMainViewState(state)
+
+        assertThat(viewState)
+            .extractingUpgrades()
+            .extracting(UpgradeModel::ratioChanges)
+            .index(0)
+            .extracting(RatioChangeModel::icon, RatioChangeModel::value)
+            .containsExactly(
+                Icons.Mutanity to "-50 %",
+                Icons.Suspicion to "+100 %",
+            )
     }
 
     private fun Assert<MainViewState>.extractingUpgrades() =

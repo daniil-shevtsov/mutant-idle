@@ -1,6 +1,8 @@
 package com.daniil.shevtsov.idle.feature.main.domain
 
 import com.daniil.shevtsov.idle.core.navigation.Screen
+import com.daniil.shevtsov.idle.feature.action.domain.RatioChanges
+import com.daniil.shevtsov.idle.feature.action.domain.ResourceChanges
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
@@ -8,6 +10,7 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 
@@ -34,7 +37,6 @@ fun mainFunctionalCore(
         )
         is MainViewAction.LocationSelectionExpandChange -> handleLocationSelectionExpandChange(
             state = state,
-            viewAction = viewAction,
         )
         MainViewAction.Init -> state
     }
@@ -42,8 +44,7 @@ fun mainFunctionalCore(
 }
 
 fun handleLocationSelectionExpandChange(
-    state: GameState,
-    viewAction: MainViewAction.LocationSelectionExpandChange
+    state: GameState
 ): GameState {
     return state.copy(
         locationSelectionState = state.locationSelectionState.copy(
@@ -119,11 +120,13 @@ fun handleActionClicked(
 
     val updatedRatios = applyRatioChanges(
         currentRatios = state.ratios,
-        ratioChanges = selectedAction.ratioChanges
+        ratioChanges = selectedAction.ratioChanges,
+        tags = state.player.tags,
     )
 
     val newTags =
         state.player.generalTags + selectedAction.tags[TagRelation.Provides].orEmpty() - selectedAction.tags[TagRelation.Removes].orEmpty()
+            .toSet()
 
     return if (!hasInvalidChanges) {
         state.copy(
@@ -133,7 +136,8 @@ fun handleActionClicked(
                 generalTags = newTags
             ),
             currentScreen = when {
-                updatedRatios.find { it.key == RatioKey.Suspicion }?.value ?: 0.0 >= 1.0 -> Screen.FinishedGame
+                (updatedRatios.find { it.key == RatioKey.Suspicion }?.value
+                    ?: 0.0) >= 1.0 -> Screen.FinishedGame
                 else -> state.currentScreen
             }
         )
@@ -144,9 +148,14 @@ fun handleActionClicked(
 
 private fun applyRatioChanges(
     currentRatios: List<Ratio>,
-    ratioChanges: Map<RatioKey, Double>,
+    ratioChanges: RatioChanges,
+    tags: List<Tag>,
 ): List<Ratio> = currentRatios.map { ratio ->
-    when (val ratioChange = ratioChanges[ratio.key]) {
+    val ratioChange = ratioChanges[ratio.key]
+        ?.minByOrNull { (matchedTags, _) ->
+            (tags - matchedTags.toSet()).size
+        }?.value
+    when (ratioChange) {
         null -> ratio
         else -> ratio.copy(value = ratio.value + ratioChange)
     }
@@ -154,7 +163,7 @@ private fun applyRatioChanges(
 
 private fun applyResourceChanges(
     currentResources: List<Resource>,
-    resourceChanges: Map<ResourceKey, Double>,
+    resourceChanges: ResourceChanges,
 ) = currentResources.map { resource ->
     when (val resourceChange = resourceChanges[resource.key]) {
         null -> resource
@@ -164,7 +173,7 @@ private fun applyResourceChanges(
 
 private fun hasInvalidChanges(
     currentResources: List<Resource>,
-    resourceChanges: Map<ResourceKey, Double>,
+    resourceChanges: ResourceChanges,
 ): Boolean = resourceChanges.any { (resourceKey, resourceChange) ->
     val currentResourceValue = currentResources
         .find { resource -> resource.key == resourceKey }!!.value
@@ -210,6 +219,7 @@ fun handleUpgradeSelected(
             val updatedRatios = applyRatioChanges(
                 currentRatios = state.ratios,
                 ratioChanges = boughtUpgrade.ratioChanges,
+                tags = state.player.tags,
             )
 
             return state.copy(

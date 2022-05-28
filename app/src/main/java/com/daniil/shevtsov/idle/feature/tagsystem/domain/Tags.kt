@@ -76,8 +76,16 @@ object Tags {
         val Tech = Tag(name = "Tech")
     }
 
+    object Appearance {
+        val Human = Tag(name = "Human Appearance")
+        val Monster = Tag(name = "Monster Appearance")
+    }
+
     val Surgeon = Tag(name = "Surgeon", description = "You are very precise with the scalpel")
-    val SolitaryJob = Tag(name = "Solitary Job", description = "People don't pay attention as long as the job gets done")
+    val SolitaryJob = Tag(
+        name = "Solitary Job",
+        description = "People don't pay attention as long as the job gets done"
+    )
     val CorpseAccess = Tag(name = "Corpse Access")
     val MeatAccess = Tag(name = "Meat Access")
     val LaborIntensive = Tag(name = "Labor intensive job")
