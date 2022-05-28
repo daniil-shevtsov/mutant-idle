@@ -33,8 +33,12 @@ fun Portrait(modifier: Modifier) {
             faceArea.bottomRight.translate(x = -100f, y = -400f),
         )
         val noseArea = Rect(
-            faceArea.topLeft.translate(x = 300f, y = 500f),
-            faceArea.bottomRight.translate(x = -300f, y = -200f),
+            faceArea.topLeft.translate(x = 300f, y = 400f),
+            faceArea.bottomRight.translate(x = -300f, y = -150f),
+        )
+        val mouthArea = Rect(
+            faceArea.topLeft.translate(x = 100f, y = 700f),
+            faceArea.bottomRight.translate(x = -100f, y = -20f),
         )
 
         val axisSize = 5f
@@ -105,6 +109,13 @@ fun Portrait(modifier: Modifier) {
             size = noseArea.size
         )
         drawRect(partColor, topLeft = nose.topLeft, size = nose.size)
+
+        drawRect(
+            partAreaColor,
+            style = Stroke(width = 1f),
+            topLeft = mouthArea.topLeft,
+            size = mouthArea.size
+        )
         drawRect(partColor, topLeft = mouth.topLeft, size = mouth.size)
     })
 }
