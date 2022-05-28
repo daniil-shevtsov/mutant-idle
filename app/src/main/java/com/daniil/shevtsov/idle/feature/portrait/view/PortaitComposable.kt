@@ -52,7 +52,7 @@ fun Portrait(
                 widthPercent = 0.75f,
                 heightPercent = 0.3f,
             )
-//            .move(faceArea.center)
+            .move(faceArea.center)
 
         val noseArea = Rect(
             faceArea.topLeft.translate(x = 300f, y = 400f),
@@ -168,17 +168,12 @@ fun Rect.shrink(
     widthPercent: Float,
     heightPercent: Float,
 ): Rect {
-    val shrinkWidthBy = 1 - widthPercent
-    val shrinkHeightBy = 1 - heightPercent
+    val newWidth = width * widthPercent
+    val newHeight = height * heightPercent
+
     return Rect(
-        topLeft = topLeft.translate(
-            x = width * shrinkWidthBy,
-            y = height * shrinkHeightBy
-        ),
-        bottomRight = bottomRight.translate(
-            x = -width * shrinkWidthBy,
-            y = -height * shrinkHeightBy
-        )
+        offset = topLeft,
+        size = Size(newWidth, newHeight)
     )
 }
 
