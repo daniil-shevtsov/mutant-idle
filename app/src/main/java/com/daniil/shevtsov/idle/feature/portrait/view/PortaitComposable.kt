@@ -8,6 +8,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -27,9 +28,19 @@ fun Portrait(modifier: Modifier) {
             screenArea.bottomRight.translate(-100f),
         )
 
+        val eyeArea = Rect(
+            faceArea.topLeft.translate(x = 100f, y = 200f),
+            faceArea.bottomRight.translate(x = -100f, y = -400f),
+        )
+        val noseArea = Rect(
+            faceArea.topLeft.translate(x = 300f, y = 500f),
+            faceArea.bottomRight.translate(x = -300f, y = -200f),
+        )
+
         val axisSize = 5f
         val axisColor = Color.Blue
         val partColor = Color.Green
+        val partAreaColor = Color.Black
         val horizontalAxis = Rect(
             faceArea.centerLeft.copy(y = faceArea.centerLeft.y - axisSize),
             faceArea.centerRight.copy(y = faceArea.centerLeft.y + axisSize),
@@ -78,9 +89,21 @@ fun Portrait(modifier: Modifier) {
         drawRect(axisColor, topLeft = horizontalAxis.topLeft, size = horizontalAxis.size)
         drawRect(axisColor, topLeft = verticalAxis.topLeft, size = verticalAxis.size)
 
+        drawRect(
+            partAreaColor,
+            style = Stroke(width = 1f),
+            topLeft = eyeArea.topLeft,
+            size = eyeArea.size
+        )
         drawRect(partColor, topLeft = leftEye.topLeft, size = leftEye.size)
         drawRect(partColor, topLeft = rightEye.topLeft, size = rightEye.size)
 
+        drawRect(
+            partAreaColor,
+            style = Stroke(width = 1f),
+            topLeft = noseArea.topLeft,
+            size = noseArea.size
+        )
         drawRect(partColor, topLeft = nose.topLeft, size = nose.size)
         drawRect(partColor, topLeft = mouth.topLeft, size = mouth.size)
     })
