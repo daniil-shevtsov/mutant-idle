@@ -845,6 +845,30 @@ class MainPresentationTest {
             .containsExactly(mainRatio, RatioKey.Suspicion)
     }
 
+    @Test
+    fun `should show ratio changes of action`() {
+        val state = gameState(
+            actions = listOf(
+                action(
+                    ratioChanges = ratioChanges(
+                        RatioKey.Mutanity to 0.5,
+                        RatioKey.Suspicion to 1.0,
+                    )
+                )
+            )
+        )
+        val viewState = mapMainViewState(state)
+        assertThat(viewState)
+            .extractingHumanActions()
+            .extracting(ActionModel::ratioChanges)
+            .index(0)
+            .extracting(RatioChangeModel::icon, RatioChangeModel::value)
+            .containsExactly(
+                Icons.Mutanity to "+50 %",
+                Icons.Suspicion to "+100 %",
+            )
+    }
+
     private fun Assert<MainViewState>.extractingUpgrades() =
         extractingMainState()
             .prop(MainViewState.Success::shop)
