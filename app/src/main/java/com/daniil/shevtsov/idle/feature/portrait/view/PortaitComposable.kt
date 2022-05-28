@@ -53,18 +53,20 @@ fun Portrait(
                 widthPercent = 0.75f,
                 heightPercent = 0.3f,
             )
-            .move(faceArea.center)
+            .move(faceArea.center.translate(y = -faceArea.height * (1 / 8f)))
 
         val noseArea = faceArea
             .shrink(
                 widthPercent = 0.35f,
                 heightPercent = 0.4f
             )
-            .move(position = faceArea.center)
-        val mouthArea = Rect(
-            faceArea.topLeft.translate(x = 100f, y = 700f),
-            faceArea.bottomRight.translate(x = -100f, y = -20f),
-        )
+            .move(position = faceArea.center.translate(y = faceArea.height * (1 / 8f)))
+        val mouthArea = faceArea
+            .shrink(
+                widthPercent = 0.75f,
+                heightPercent = 0.2f
+            )
+            .move(faceArea.bottomCenter.translate(y = -faceArea.height * (1 / 8f)))
 
         val axisSize = 5f
         val axisColor = Color.Blue
