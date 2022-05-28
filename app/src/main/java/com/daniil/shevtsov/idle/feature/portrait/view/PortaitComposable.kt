@@ -41,34 +41,33 @@ fun Portrait(modifier: Modifier) {
 
         val mouthSize = Size(400f, 50f)
         val mouth = Rect(
-            offset = Offset(
-                verticalAxis.center.x - mouthSize.width / 2,
-                verticalAxis.topCenter.y + verticalAxis.size.height * 0.85f
+            offset = verticalAxis.bottomCenter.translate(
+                x = -mouthSize.width / 2,
+                y = -verticalAxis.size.height * 0.10f - mouthSize.height / 2,
             ),
             size = mouthSize,
         )
 
         val noseSize = Size(50f, 300f)
         val nose = Rect(
-            offset = Offset(
-                verticalAxis.center.x - noseSize.width / 2,
-                verticalAxis.center.y,
+            offset = verticalAxis.center.translate(
+                x = -noseSize.width / 2
             ),
             size = noseSize,
         )
 
         val eyeSize = Size(100f, 50f)
         val leftEye = Rect(
-            offset = Offset(
-                horizontalAxis.centerLeft.x + horizontalAxis.width * 0.75f - eyeSize.width / 2,
-                horizontalAxis.center.y - eyeSize.height / 2,
+            offset = horizontalAxis.centerLeft.translate(
+                x = horizontalAxis.width * 0.75f - eyeSize.width / 2,
+                y = -eyeSize.height / 2
             ),
             size = eyeSize
         )
         val rightEye = Rect(
-            offset = Offset(
-                horizontalAxis.centerLeft.x + horizontalAxis.width * 0.25f - eyeSize.width / 2,
-                horizontalAxis.center.y - eyeSize.height / 2,
+            offset = horizontalAxis.centerLeft.translate(
+                x = horizontalAxis.width * 0.25f - eyeSize.width / 2,
+                y = -eyeSize.height / 2
             ),
             size = eyeSize
         )
