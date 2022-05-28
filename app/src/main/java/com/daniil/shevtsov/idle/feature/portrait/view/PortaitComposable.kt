@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.feature.portrait.view
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,18 +16,36 @@ import androidx.compose.ui.unit.dp
 @Preview
 @Composable
 fun PortraitPreview() {
-    Portrait(modifier = Modifier.size(400.dp))
+    val previewSize = 400.dp
+    Column {
+        Portrait(
+            modifier = Modifier.size(previewSize)
+        )
+//        Portrait(
+//            modifier = Modifier.size(50.dp)
+//        )
+//        Portrait(
+//            modifier = Modifier.size(previewSize)
+//        )
+//        Portrait(
+//            modifier = Modifier.size(previewSize)
+//        )
+//        Portrait(
+//            modifier = Modifier.size(previewSize)
+//        )
+    }
+
+
 }
 
 @Composable
-fun Portrait(modifier: Modifier) {
+fun Portrait(
+    modifier: Modifier = Modifier,
+) {
     Canvas(modifier = modifier, onDraw = {
         val screenArea = Rect(Offset(0f, 0f), Offset(size.width, size.height))
 
-        val faceArea = Rect(
-            screenArea.topLeft.translate(100f),
-            screenArea.bottomRight.translate(-100f),
-        )
+        val faceArea = screenArea.shrink(1 / 8f)
 
         val eyeArea = Rect(
             faceArea.topLeft.translate(x = 100f, y = 200f),
@@ -118,6 +137,19 @@ fun Portrait(modifier: Modifier) {
         )
         drawRect(partColor, topLeft = mouth.topLeft, size = mouth.size)
     })
+}
+
+private fun Rect.shrink(percent: Float): Rect {
+    return Rect(
+        topLeft = topLeft.translate(
+            x = width * percent,
+            y = height * percent
+        ),
+        bottomRight = bottomRight.translate(
+            x = -width * percent,
+            y = -height * percent
+        )
+    )
 }
 
 private fun Offset.translate(
