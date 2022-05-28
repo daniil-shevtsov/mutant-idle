@@ -6,6 +6,7 @@ import assertk.assertions.*
 import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.action.domain.ratioChanges
+import com.daniil.shevtsov.idle.feature.action.domain.ratioChangesWithTags
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
@@ -113,9 +114,9 @@ class MainFunctionalCoreTest {
                     resourceChange(key = ResourceKey.Blood, change = 2.0),
                     resourceChange(key = ResourceKey.Money, change = -7.0),
                 ),
-                ratioChanges = ratioChanges(
-                    ratioChange(key = RatioKey.Mutanity, change = 2.0),
-                    ratioChange(key = RatioKey.Suspicion, change = -3.0),
+                ratioChanges = ratioChangesWithTags(
+                    RatioKey.Mutanity to ratioChange(change = 2.0),
+                    RatioKey.Suspicion to ratioChange(change = -3.0),
                 ),
                 tags = mapOf(
                     TagRelation.Provides to listOf(providedTag)

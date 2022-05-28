@@ -37,7 +37,6 @@ fun mainFunctionalCore(
         )
         is MainViewAction.LocationSelectionExpandChange -> handleLocationSelectionExpandChange(
             state = state,
-            viewAction = viewAction,
         )
         MainViewAction.Init -> state
     }
@@ -45,8 +44,7 @@ fun mainFunctionalCore(
 }
 
 fun handleLocationSelectionExpandChange(
-    state: GameState,
-    viewAction: MainViewAction.LocationSelectionExpandChange
+    state: GameState
 ): GameState {
     return state.copy(
         locationSelectionState = state.locationSelectionState.copy(
@@ -128,6 +126,7 @@ fun handleActionClicked(
 
     val newTags =
         state.player.generalTags + selectedAction.tags[TagRelation.Provides].orEmpty() - selectedAction.tags[TagRelation.Removes].orEmpty()
+            .toSet()
 
     return if (!hasInvalidChanges) {
         state.copy(
@@ -137,7 +136,8 @@ fun handleActionClicked(
                 generalTags = newTags
             ),
             currentScreen = when {
-                updatedRatios.find { it.key == RatioKey.Suspicion }?.value ?: 0.0 >= 1.0 -> Screen.FinishedGame
+                (updatedRatios.find { it.key == RatioKey.Suspicion }?.value
+                    ?: 0.0) >= 1.0 -> Screen.FinishedGame
                 else -> state.currentScreen
             }
         )
@@ -151,9 +151,10 @@ private fun applyRatioChanges(
     ratioChanges: RatioChanges,
     tags: List<Tag>,
 ): List<Ratio> = currentRatios.map { ratio ->
-    val ratioChange = ratioChanges[ratio.key]?.minByOrNull { (matchedTags, value) ->
-        (tags - matchedTags).size
-    }?.value
+    val ratioChange = ratioChanges[ratio.key]
+        ?.minByOrNull { (matchedTags, _) ->
+            (tags - matchedTags.toSet()).size
+        }?.value
     when (ratioChange) {
         null -> ratio
         else -> ratio.copy(value = ratio.value + ratioChange)

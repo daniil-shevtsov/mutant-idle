@@ -10,9 +10,12 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 
 fun ratioChanges(
-//    vararg entries: Pair<RatioKey, Map<List<Tag>, Double>>,
     vararg entries: Pair<RatioKey, Double>,
 ): RatioChanges = entries.associate { it.first to mapOf(emptyList<Tag>() to it.second) }
+
+fun ratioChangesWithTags(
+    vararg entries: Pair<RatioKey, RatioChangeForTags>,
+): RatioChanges = entries.associate { it.first to it.second }
 
 fun action(
     id: Long = 0L,
