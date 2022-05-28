@@ -52,9 +52,29 @@ fun Portrait(modifier: Modifier) {
             size = noseSize,
         )
 
+        val eyeSize = Size(100f, 50f)
+        val leftEye = Rect(
+            offset = Offset(
+                horizontalAxis.width * 0.75f - eyeSize.width / 2,
+                horizontalAxis.center.y - eyeSize.height / 2,
+            ),
+            size = eyeSize
+        )
+        val rightEye = Rect(
+            offset = Offset(
+                horizontalAxis.width * 0.25f - eyeSize.width / 2,
+                horizontalAxis.center.y - eyeSize.height / 2,
+            ),
+            size = eyeSize
+        )
+
         drawRect(axisColor, topLeft = horizontalAxis.topLeft, size = horizontalAxis.size)
         drawRect(axisColor, topLeft = verticalAxis.topLeft, size = verticalAxis.size)
-        drawRect(partColor, topLeft = mouth.topLeft, size = mouth.size)
+
+        drawRect(partColor, topLeft = leftEye.topLeft, size = leftEye.size)
+        drawRect(partColor, topLeft = rightEye.topLeft, size = rightEye.size)
+
         drawRect(partColor, topLeft = nose.topLeft, size = nose.size)
+        drawRect(partColor, topLeft = mouth.topLeft, size = mouth.size)
     })
 }
