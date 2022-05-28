@@ -23,14 +23,8 @@ fun Portrait(modifier: Modifier) {
         val screenArea = Rect(Offset(0f, 0f), Offset(size.width, size.height))
 
         val faceArea = Rect(
-            Offset(
-                screenArea.topLeft.x + 100f,
-                screenArea.topLeft.y + 100f,
-            ),
-            Offset(
-                screenArea.bottomRight.x - 100f,
-                screenArea.bottomRight.y - 100f,
-            ),
+            screenArea.topLeft.translate(x = 100f, y = 100f),
+            screenArea.bottomRight.translate(x = -100f, y = -100f),
         )
 
         val axisSize = 5f
