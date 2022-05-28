@@ -45,12 +45,15 @@ fun Portrait(
     Canvas(modifier = modifier, onDraw = {
         val screenArea = Rect(Offset(0f, 0f), Offset(size.width, size.height))
 
-        val faceArea = screenArea.shrink(1 / 8f)
+        val faceArea = screenArea.shrink(0.8f)
 
-        val eyeArea = Rect(
-            faceArea.topLeft.translate(x = 100f, y = 200f),
-            faceArea.bottomRight.translate(x = -100f, y = -400f),
-        )
+        val eyeArea = faceArea
+            .shrink(
+                widthPercent = 0.75f,
+                heightPercent = 0.3f,
+            )
+            .move(faceArea.center)
+
         val noseArea = Rect(
             faceArea.topLeft.translate(x = 300f, y = 400f),
             faceArea.bottomRight.translate(x = -300f, y = -150f),
@@ -63,7 +66,7 @@ fun Portrait(
         val axisSize = 5f
         val axisColor = Color.Blue
         val partColor = Color.Green
-        val partAreaColor = Color.Black
+        val partAreaColor = Color.Red
         val horizontalAxis = Rect(
             faceArea.centerLeft.copy(y = faceArea.centerLeft.y - axisSize),
             faceArea.centerRight.copy(y = faceArea.centerLeft.y + axisSize),
@@ -139,27 +142,56 @@ fun Portrait(
     })
 }
 
-private fun Rect.shrink(percent: Float): Rect {
+fun Rect.shrink(percent: Float): Rect {
+    return shrink(
+        widthPercent = percent, heightPercent = percent
+    )
+}
+
+enum class Anchor {
+    Center
+}
+
+fun Rect.move(
+    position: Offset,
+    anchor: Anchor = Anchor.Center,
+) = Rect(
+    topLeft = position.translate(
+        x = -width / 2,
+        y = -height / 2,
+    ),
+    bottomRight = position.translate(
+        x = width / 2,
+        y = width / 2,
+    )
+)
+
+fun Rect.shrink(
+    widthPercent: Float,
+    heightPercent: Float,
+): Rect {
+    val shrinkWidthBy = 1 - widthPercent
+    val shrinkHeightBy = 1 - heightPercent
     return Rect(
         topLeft = topLeft.translate(
-            x = width * percent,
-            y = height * percent
+            x = width * shrinkWidthBy,
+            y = height * shrinkHeightBy
         ),
         bottomRight = bottomRight.translate(
-            x = -width * percent,
-            y = -height * percent
+            x = -width * shrinkWidthBy,
+            y = -height * shrinkHeightBy
         )
     )
 }
 
-private fun Offset.translate(
+fun Offset.translate(
     value: Float,
 ) = translate(
     x = value,
     y = value,
 )
 
-private fun Offset.translate(
+fun Offset.translate(
     x: Float = 0f,
     y: Float = 0f,
 ) = copy(
