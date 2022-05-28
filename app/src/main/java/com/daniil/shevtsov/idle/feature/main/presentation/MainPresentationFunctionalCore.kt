@@ -176,8 +176,8 @@ private fun createActionState(
         }
         .filter { action ->
             action.resourceChanges.all { (resourceKey, resourceChange) ->
-                val currentResource = resources.find { it.key == resourceKey }!!.value
-                currentResource + resourceChange >= 0
+                val currentResource = resources.find { it.key == resourceKey }?.value
+                currentResource != null && currentResource + resourceChange >= 0
             }
         }
         .map { action ->

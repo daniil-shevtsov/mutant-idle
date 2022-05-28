@@ -23,6 +23,7 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
 import com.daniil.shevtsov.idle.feature.ratio.presentation.RatioModel
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.domain.resource
+import com.daniil.shevtsov.idle.feature.resource.domain.resourceChange
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
@@ -846,6 +847,34 @@ class MainPresentationTest {
     }
 
     @Test
+    fun `should show resource changes of action`() {
+        val blood = resource(key = ResourceKey.Blood, value = 10.0)
+        val money = resource(key = ResourceKey.Money, value = 10.0)
+        val state = gameState(
+            resources = listOf(blood, money),
+            actions = listOf(
+                action(
+                    resourceChanges = mapOf(
+                        resourceChange(key = blood.key, change = 5.0),
+                        resourceChange(key = money.key, change = -5.0),
+                    )
+                )
+            )
+        )
+        val viewState = mapMainViewState(state)
+
+        assertThat(viewState)
+            .extractingHumanActions()
+            .extracting(ActionModel::resourceChanges)
+            .index(0)
+            .extracting(ResourceChangeModel::icon, ResourceChangeModel::value)
+            .containsExactly(
+                Icons.Blood to "+5",
+                Icons.Money to "-5",
+            )
+    }
+
+    @Test
     fun `should show ratio changes of action`() {
         val state = gameState(
             actions = listOf(
@@ -858,6 +887,7 @@ class MainPresentationTest {
             )
         )
         val viewState = mapMainViewState(state)
+
         assertThat(viewState)
             .extractingHumanActions()
             .extracting(ActionModel::ratioChanges)
