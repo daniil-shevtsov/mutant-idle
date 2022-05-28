@@ -52,7 +52,7 @@ fun Portrait(
                 widthPercent = 0.75f,
                 heightPercent = 0.3f,
             )
-            .move(faceArea.center)
+//            .move(faceArea.center)
 
         val noseArea = Rect(
             faceArea.topLeft.translate(x = 300f, y = 400f),
@@ -67,6 +67,7 @@ fun Portrait(
         val axisColor = Color.Blue
         val partColor = Color.Green
         val partAreaColor = Color.Red
+        val strokeWidth = 3f
         val horizontalAxis = Rect(
             faceArea.centerLeft.copy(y = faceArea.centerLeft.y - axisSize),
             faceArea.centerRight.copy(y = faceArea.centerLeft.y + axisSize),
@@ -117,7 +118,7 @@ fun Portrait(
 
         drawRect(
             partAreaColor,
-            style = Stroke(width = 1f),
+            style = Stroke(width = strokeWidth),
             topLeft = eyeArea.topLeft,
             size = eyeArea.size
         )
@@ -126,7 +127,7 @@ fun Portrait(
 
         drawRect(
             partAreaColor,
-            style = Stroke(width = 1f),
+            style = Stroke(width = strokeWidth),
             topLeft = noseArea.topLeft,
             size = noseArea.size
         )
@@ -134,7 +135,7 @@ fun Portrait(
 
         drawRect(
             partAreaColor,
-            style = Stroke(width = 1f),
+            style = Stroke(width = strokeWidth),
             topLeft = mouthArea.topLeft,
             size = mouthArea.size
         )
@@ -156,14 +157,11 @@ fun Rect.move(
     position: Offset,
     anchor: Anchor = Anchor.Center,
 ) = Rect(
-    topLeft = position.translate(
+    offset = position.translate(
         x = -width / 2,
         y = -height / 2,
     ),
-    bottomRight = position.translate(
-        x = width / 2,
-        y = width / 2,
-    )
+    size = size,
 )
 
 fun Rect.shrink(

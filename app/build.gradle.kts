@@ -96,7 +96,8 @@ dependencies {
     with(Deps.Compose) {
         implementation(ui)
         implementation(uiGraphics)
-        implementation(uiTooling)
+        debugImplementation(uiTooling)
+        implementation(uiToolingPreview)
         implementation(foundationLayout)
         implementation(materialExtended)
         implementation(material)
