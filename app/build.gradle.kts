@@ -26,7 +26,7 @@ android {
     }
 
     lint {
-        isAbortOnError = false
+        abortOnError = false
     }
 
     kotlinOptions {
@@ -53,7 +53,7 @@ android {
     }
 
     lint {
-        isAbortOnError = false
+        abortOnError = false
     }
 
     composeOptions {
