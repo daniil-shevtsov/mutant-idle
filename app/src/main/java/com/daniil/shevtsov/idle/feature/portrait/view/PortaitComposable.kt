@@ -22,23 +22,34 @@ fun Portrait(modifier: Modifier) {
     Canvas(modifier = modifier, onDraw = {
         val screenArea = Rect(Offset(0f, 0f), Offset(size.width, size.height))
 
+        val faceArea = Rect(
+            Offset(
+                screenArea.topLeft.x + 100f,
+                screenArea.topLeft.y + 100f,
+            ),
+            Offset(
+                screenArea.bottomRight.x - 100f,
+                screenArea.bottomRight.y - 100f,
+            ),
+        )
+
         val axisSize = 5f
         val axisColor = Color.Blue
         val partColor = Color.Green
         val horizontalAxis = Rect(
-            screenArea.centerLeft.copy(y = screenArea.centerLeft.y - axisSize),
-            screenArea.centerRight.copy(y = screenArea.centerLeft.y + axisSize),
+            faceArea.centerLeft.copy(y = faceArea.centerLeft.y - axisSize),
+            faceArea.centerRight.copy(y = faceArea.centerLeft.y + axisSize),
         )
         val verticalAxis = Rect(
-            screenArea.topCenter.copy(x = screenArea.topCenter.x - axisSize),
-            screenArea.bottomCenter.copy(x = screenArea.bottomCenter.x + axisSize),
+            faceArea.topCenter.copy(x = faceArea.topCenter.x - axisSize),
+            faceArea.bottomCenter.copy(x = faceArea.bottomCenter.x + axisSize),
         )
 
         val mouthSize = Size(400f, 50f)
         val mouth = Rect(
             offset = Offset(
                 verticalAxis.center.x - mouthSize.width / 2,
-                verticalAxis.size.height * 0.85f
+                verticalAxis.topCenter.y + verticalAxis.size.height * 0.85f
             ),
             size = mouthSize,
         )
@@ -55,18 +66,21 @@ fun Portrait(modifier: Modifier) {
         val eyeSize = Size(100f, 50f)
         val leftEye = Rect(
             offset = Offset(
-                horizontalAxis.width * 0.75f - eyeSize.width / 2,
+                horizontalAxis.centerLeft.x + horizontalAxis.width * 0.75f - eyeSize.width / 2,
                 horizontalAxis.center.y - eyeSize.height / 2,
             ),
             size = eyeSize
         )
         val rightEye = Rect(
             offset = Offset(
-                horizontalAxis.width * 0.25f - eyeSize.width / 2,
+                horizontalAxis.centerLeft.x + horizontalAxis.width * 0.25f - eyeSize.width / 2,
                 horizontalAxis.center.y - eyeSize.height / 2,
             ),
             size = eyeSize
         )
+
+        drawRect(Color.DarkGray, topLeft = screenArea.topLeft, size = screenArea.size)
+        drawRect(Color.Gray, topLeft = faceArea.topLeft, size = faceArea.size)
 
         drawRect(axisColor, topLeft = horizontalAxis.topLeft, size = horizontalAxis.size)
         drawRect(axisColor, topLeft = verticalAxis.topLeft, size = verticalAxis.size)
@@ -78,3 +92,18 @@ fun Portrait(modifier: Modifier) {
         drawRect(partColor, topLeft = mouth.topLeft, size = mouth.size)
     })
 }
+
+private fun Offset.translate(
+    offset: Offset
+) = translate(
+    x = offset.x,
+    y = offset.y,
+)
+
+private fun Offset.translate(
+    x: Float = 0f,
+    y: Float = 0f,
+) = copy(
+    x = this.x + x,
+    y = this.y + y,
+)
