@@ -880,7 +880,7 @@ class MainPresentationTest {
             actions = listOf(
                 action(
                     ratioChanges = ratioChanges(
-                        RatioKey.Mutanity to 0.5,
+                        RatioKey.Mutanity to -0.5,
                         RatioKey.Suspicion to 1.0,
                     )
                 )
@@ -894,7 +894,32 @@ class MainPresentationTest {
             .index(0)
             .extracting(RatioChangeModel::icon, RatioChangeModel::value)
             .containsExactly(
-                Icons.Mutanity to "+50 %",
+                Icons.Mutanity to "-50 %",
+                Icons.Suspicion to "+100 %",
+            )
+    }
+
+    @Test
+    fun `should show ratio changes of upgrade`() {
+        val state = gameState(
+            upgrades = listOf(
+                upgrade(
+                    ratioChanges = ratioChanges(
+                        RatioKey.Mutanity to -0.5,
+                        RatioKey.Suspicion to 1.0,
+                    )
+                )
+            )
+        )
+        val viewState = mapMainViewState(state)
+
+        assertThat(viewState)
+            .extractingUpgrades()
+            .extracting(UpgradeModel::ratioChanges)
+            .index(0)
+            .extracting(RatioChangeModel::icon, RatioChangeModel::value)
+            .containsExactly(
+                Icons.Mutanity to "-50 %",
                 Icons.Suspicion to "+100 %",
             )
     }
