@@ -55,10 +55,12 @@ fun Portrait(
             )
             .move(faceArea.center)
 
-        val noseArea = Rect(
-            faceArea.topLeft.translate(x = 300f, y = 400f),
-            faceArea.bottomRight.translate(x = -300f, y = -150f),
-        )
+        val noseArea = faceArea
+            .shrink(
+                widthPercent = 0.35f,
+                heightPercent = 0.4f
+            )
+            .move(position = faceArea.center)
         val mouthArea = Rect(
             faceArea.topLeft.translate(x = 100f, y = 700f),
             faceArea.bottomRight.translate(x = -100f, y = -20f),
