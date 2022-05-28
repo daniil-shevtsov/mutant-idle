@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.feature.portrait.view
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,27 +13,32 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlin.random.Random
 
-@Preview
+@Preview(
+    widthDp = 800,
+    heightDp = 800
+)
 @Composable
 fun PortraitPreview() {
     val previewSize = 400.dp
     Column {
-        Portrait(
-            modifier = Modifier.size(previewSize)
-        )
-//        Portrait(
-//            modifier = Modifier.size(50.dp)
-//        )
-//        Portrait(
-//            modifier = Modifier.size(previewSize)
-//        )
-//        Portrait(
-//            modifier = Modifier.size(previewSize)
-//        )
-//        Portrait(
-//            modifier = Modifier.size(previewSize)
-//        )
+        Row {
+            Portrait(
+                modifier = Modifier.size(previewSize)
+            )
+            Portrait(
+                modifier = Modifier.size(previewSize)
+            )
+        }
+        Row {
+            Portrait(
+                modifier = Modifier.size(previewSize)
+            )
+            Portrait(
+                modifier = Modifier.size(previewSize)
+            )
+        }
     }
 
 
@@ -91,10 +97,14 @@ fun Portrait(
             size = mouthSize,
         )
 
-        val noseSize = Size(50f, 300f)
+        val noseSize = Size(
+            width = Random.nextFloatInRange(max = noseArea.width),
+            height = Random.nextFloatInRange(max = noseArea.height),
+        )
         val nose = Rect(
-            offset = verticalAxis.center.translate(
-                x = -noseSize.width / 2
+            offset = noseArea.topCenter.translate(
+                x = -noseSize.width / 2,
+                y = Random.nextFloatInRange(max = noseArea.height - noseSize.height)
             ),
             size = noseSize,
         )
@@ -199,3 +209,8 @@ fun Offset.translate(
     x = this.x + x,
     y = this.y + y,
 )
+
+fun Random.nextFloatInRange(
+    min: Float = Float.MIN_VALUE,
+    max: Float = Float.MAX_VALUE,
+) = min + nextFloat() * (max - min)
