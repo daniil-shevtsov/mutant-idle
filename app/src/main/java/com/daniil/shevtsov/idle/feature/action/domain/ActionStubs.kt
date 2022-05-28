@@ -6,12 +6,15 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.RatioChangeModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ResourceChangeModel
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
+import com.daniil.shevtsov.idle.feature.ratio.domain.ratioChange
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 
 fun ratioChanges(
     vararg entries: Pair<RatioKey, Double>,
-): RatioChanges = entries.associate { it.first to mapOf(emptyList<Tag>() to it.second) }
+): RatioChanges = ratioChangesWithTags(
+    *entries.map { it.first to ratioChange(tags = emptyList(), change = it.second) }.toTypedArray()
+)
 
 fun ratioChangesWithTags(
     vararg entries: Pair<RatioKey, RatioChangeForTags>,
