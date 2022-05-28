@@ -45,7 +45,8 @@ fun Portrait(
     Canvas(modifier = modifier, onDraw = {
         val screenArea = Rect(Offset(0f, 0f), Offset(size.width, size.height))
 
-        val faceArea = screenArea.shrink(0.8f)
+        val faceArea = screenArea
+            .shrink(0.8f)
 
         val eyeArea = faceArea
             .shrink(
@@ -172,7 +173,10 @@ fun Rect.shrink(
     val newHeight = height * heightPercent
 
     return Rect(
-        offset = topLeft,
+        offset = topLeft.translate(
+            x = (width - newWidth) / 2,
+            y = (height - newHeight) / 2,
+        ),
         size = Size(newWidth, newHeight)
     )
 }
