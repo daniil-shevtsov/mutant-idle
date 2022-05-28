@@ -38,13 +38,23 @@ fun Portrait(modifier: Modifier) {
         val mouth = Rect(
             offset = Offset(
                 verticalAxis.center.x - mouthSize.width / 2,
-                verticalAxis.size.height * 0.75f
+                verticalAxis.size.height * 0.85f
             ),
             size = mouthSize,
+        )
+
+        val noseSize = Size(50f, 300f)
+        val nose = Rect(
+            offset = Offset(
+                verticalAxis.center.x - noseSize.width / 2,
+                verticalAxis.center.y,
+            ),
+            size = noseSize,
         )
 
         drawRect(axisColor, topLeft = horizontalAxis.topLeft, size = horizontalAxis.size)
         drawRect(axisColor, topLeft = verticalAxis.topLeft, size = verticalAxis.size)
         drawRect(partColor, topLeft = mouth.topLeft, size = mouth.size)
+        drawRect(partColor, topLeft = nose.topLeft, size = nose.size)
     })
 }
