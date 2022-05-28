@@ -44,7 +44,7 @@ fun createAllActions() = listOf(
             ResourceKey.Blood to -10.0,
             ResourceKey.Prisoner to 1.0,
         ),
-        ratioChanges = mapOf(
+        ratioChanges = ratioChanges(
             RatioKey.Suspicion to 0.2,
         ),
         tags = mapOf(
@@ -62,7 +62,7 @@ fun createAllActions() = listOf(
             ResourceKey.Prisoner to -1.0,
             ResourceKey.Remains to 1.0,
         ),
-        ratioChanges = mapOf(
+        ratioChanges = ratioChanges(
             RatioKey.Suspicion to 0.05,
         ),
         tags = mapOf(
@@ -92,7 +92,7 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.Remains to -1.0,
         ),
-        ratioChanges = mapOf(
+        ratioChanges = ratioChanges(
             RatioKey.Suspicion to -0.05,
         ),
         tags = mapOf(
@@ -108,7 +108,7 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.Organs to 1.0,
         ),
-        ratioChanges = mapOf(
+        ratioChanges = ratioChanges(
             RatioKey.Suspicion to 0.1,
         ),
         tags = mapOf(
@@ -125,7 +125,7 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.Remains to -1.0,
         ),
-        ratioChanges = mapOf(
+        ratioChanges = ratioChanges(
             RatioKey.Suspicion to -0.1,
         ),
         tags = mapOf(
@@ -172,7 +172,7 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.Money to 15.0
         ),
-        ratioChanges = mapOf(
+        ratioChanges = ratioChanges(
             RatioKey.Suspicion to 0.005,
         ),
         tags = mapOf(
@@ -193,7 +193,7 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.Money to 40.0
         ),
-        ratioChanges = mapOf(
+        ratioChanges = ratioChanges(
             RatioKey.Suspicion to 0.015
         ),
         tags = mapOf(
@@ -242,8 +242,8 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.HumanFood to 1.0,
         ),
-        ratioChanges = mapOf(
-          RatioKey.Suspicion to 0.005,
+        ratioChanges = ratioChanges(
+            RatioKey.Suspicion to 0.005,
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
@@ -295,7 +295,7 @@ fun createAllActions() = listOf(
                 Tags.Body.IronJaws,
             )
         ),
-        ratioChanges = mapOf(
+        ratioChanges = ratioChanges(
             RatioKey.Suspicion to -0.1,
         )
     ),

@@ -10,6 +10,7 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 
@@ -121,7 +122,8 @@ fun handleActionClicked(
 
     val updatedRatios = applyRatioChanges(
         currentRatios = state.ratios,
-        ratioChanges = selectedAction.ratioChanges
+        ratioChanges = selectedAction.ratioChanges,
+        tags = state.player.tags,
     )
 
     val newTags =
@@ -147,8 +149,12 @@ fun handleActionClicked(
 private fun applyRatioChanges(
     currentRatios: List<Ratio>,
     ratioChanges: RatioChanges,
+    tags: List<Tag>,
 ): List<Ratio> = currentRatios.map { ratio ->
-    when (val ratioChange = ratioChanges[ratio.key]) {
+    val ratioChange = ratioChanges[ratio.key]?.minByOrNull { (matchedTags, value) ->
+        (tags - matchedTags).size
+    }?.value
+    when (ratioChange) {
         null -> ratio
         else -> ratio.copy(value = ratio.value + ratioChange)
     }
@@ -212,6 +218,7 @@ fun handleUpgradeSelected(
             val updatedRatios = applyRatioChanges(
                 currentRatios = state.ratios,
                 ratioChanges = boughtUpgrade.ratioChanges,
+                tags = state.player.tags,
             )
 
             return state.copy(

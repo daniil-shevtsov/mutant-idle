@@ -104,7 +104,7 @@ private fun createMainViewState(state: GameState): MainViewState {
                             state.resources.find { it.key == ResourceKey.Blood }?.value ?: 0.0
                         ),
                         resourceChanges = mapResourceChanges(resourceChanges),
-                        ratioChanges = mapRatioChanges(ratioChanges),
+                        ratioChanges = mapRatioChanges(ratioChanges, state.player.tags),
                     )
                 }
             }
@@ -209,7 +209,7 @@ private fun createActionState(
                     }
                 ),
                 resourceChanges = mapResourceChanges(resourceChanges),
-                ratioChanges = mapRatioChanges(ratioChanges),
+                ratioChanges = mapRatioChanges(ratioChanges, state.player.tags),
                 isEnabled = isActive,
             )
         }
@@ -235,8 +235,12 @@ private fun mapResourceChanges(resourceChanges: ResourceChanges) =
         )
     }
 
-private fun mapRatioChanges(ratioChanges: RatioChanges) =
-    ratioChanges.map { (ratioKey, changeValue) ->
+private fun mapRatioChanges(
+    ratioChanges: RatioChanges,
+    tags: List<Tag>
+) =
+    ratioChanges.map { (ratioKey, tagChanges) ->
+        val changeValue = tagChanges[emptyList()] ?: 0.0
         val formattedValue =
             ("+".takeIf { changeValue > 0 } ?: "") + (changeValue * 100)
                 .formatRound(digits = 2) + " %"

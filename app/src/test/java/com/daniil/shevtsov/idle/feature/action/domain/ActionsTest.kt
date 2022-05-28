@@ -59,8 +59,10 @@ internal class ActionsTest {
         )
     }
 
-    private val stealAction = action(id = 1L, ratioChanges = mapOf(RatioKey.Suspicion to 5.0))
-    private val humanAction = action(id = 2L, ratioChanges = mapOf(RatioKey.Suspicion to 0.0))
+    private val stealAction =
+        action(id = 1L, ratioChanges = ratioChanges(RatioKey.Suspicion to 5.0))
+    private val humanAction =
+        action(id = 2L, ratioChanges = ratioChanges(RatioKey.Suspicion to 0.0))
     private val initialState = gameState(
         actions = listOf(stealAction, humanAction),
         ratios = listOf(ratio(key = RatioKey.Suspicion, value = 10.0)),

@@ -6,7 +6,7 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 
 typealias ResourceChanges = Map<ResourceKey, Double>
-typealias RatioChanges = Map<RatioKey, Double>
+typealias RatioChanges = Map<RatioKey, Map<List<Tag>, Double>>
 
 data class Action(
     val id: Long,

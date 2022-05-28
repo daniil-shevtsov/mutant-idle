@@ -6,6 +6,7 @@ import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.action.domain.action
+import com.daniil.shevtsov.idle.feature.action.domain.ratioChanges
 import com.daniil.shevtsov.idle.feature.action.presentation.*
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.flavor.Flavors
@@ -696,7 +697,7 @@ class MainPresentationTest {
     fun `should display action ratio changes`() = runBlockingTest {
         val action = action(
             id = 1L,
-            ratioChanges = mapOf(
+            ratioChanges = ratioChanges(
                 RatioKey.Mutanity to 0.5,
                 RatioKey.Suspicion to -0.01,
             )

@@ -5,8 +5,14 @@ import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.RatioChangeModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ResourceChangeModel
+import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
+
+fun ratioChanges(
+//    vararg entries: Pair<RatioKey, Map<List<Tag>, Double>>,
+    vararg entries: Pair<RatioKey, Double>,
+): RatioChanges = entries.associate { it.first to mapOf(emptyList<Tag>() to it.second) }
 
 fun action(
     id: Long = 0L,
