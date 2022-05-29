@@ -32,6 +32,18 @@ fun DrawScope.drawEye() {
         ),
         size = eyeAreaSize,
     )
+    val eyeLidSize = Size(
+        width = eyeArea.width,
+        height = eyeArea.height * 0.2f,
+    )
+    val topEyeLidArea = Rect(
+        offset = eyeArea.topLeft,
+        size = eyeLidSize
+    )
+    val bottomEyeLidArea = Rect(
+        offset = eyeArea.bottomLeft.translate(y = -eyeLidSize.height),
+        size = eyeLidSize
+    )
 
     val center = center
     val eyeSize = Size(
@@ -87,6 +99,8 @@ fun DrawScope.drawEye() {
     drawEyePart(pupilLight)
 
     drawArea(eyeArea)
+    drawArea(topEyeLidArea)
+    drawArea(bottomEyeLidArea)
 }
 
 fun DrawScope.drawEyePart(part: BodyPart) {
