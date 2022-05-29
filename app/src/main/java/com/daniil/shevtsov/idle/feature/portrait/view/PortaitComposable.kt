@@ -156,51 +156,71 @@ fun Nose(modifier: Modifier = Modifier, bezierState: BezierState) {
                 )
             }
 
+        val tipArea = Rect(
+            dorsumArea.bottomLeft.translate(
+                y = -(dorsumArea.bottomLeft.y - nostrilsArea.bottomLeft.y)
+            ),
+            Size(
+                width = dorsumArea.width,
+                height = dorsumArea.bottomLeft.y - nostrilsArea.bottomLeft.y
+            )
+        )
+
         drawBodyPart(nose)
+
+        val leftNostrilArea = Rect(
+            nostrilsArea.topLeft,
+            Size(
+                width = (dorsumArea.left - nostrilsArea.left),
+                height = nostrilsArea.height,
+            )
+        )
+        val rightNostrilArea = Rect(
+            nostrilsArea.topRight.translate(
+                x = -(nostrilsArea.right - dorsumArea.right)
+            ),
+            Size(
+                width = nostrilsArea.right - dorsumArea.right,
+                height = nostrilsArea.height,
+            )
+        )
+        val leftNostril = BezierState(
+            start = leftNostrilArea.topRight,
+            finish = leftNostrilArea.bottomRight,
+            support = leftNostrilArea.centerLeft.translate(x = -leftNostrilArea.width),
+        )
+        val rightNostril = BezierState(
+            start = rightNostrilArea.topLeft,
+            finish = rightNostrilArea.bottomLeft,
+            support = rightNostrilArea.centerRight.translate(x = rightNostrilArea.width),
+        )
+
+        val noseTip = BezierState(
+            start = tipArea.topLeft,
+            finish = tipArea.topRight,
+            support = tipArea.bottomCenter.translate(y = tipArea.height)
+        )
+
         drawPath(
             path = Path().apply {
-                moveTo(
-                    nose.position.x,
-                    nose.position.y + nose.size.height - nose.size.height * 0.25f
-                )
-                quadraticBezierTo(
-                    nose.position.x + bezierState.support.x - 280f,
-                    nose.position.y + nose.size.height + bezierState.support.y - 280f,
-                    nose.position.x,
-                    nose.position.y + nose.size.height,
-                )
+                drawQuadraticBezier(rightNostril)
                 close()
             },
             Color.Blue,
         )
+
         drawPath(
             path = Path().apply {
-                moveTo(
-                    nose.position.x + nose.size.width,
-                    nose.position.y + nose.size.height - nose.size.height * 0.25f
-                )
-                quadraticBezierTo(
-                    nose.position.x + nose.size.width + bezierState.support.x + 280f,
-                    nose.position.y + nose.size.height + bezierState.support.y - 280f,
-                    nose.position.x + nose.size.width,
-                    nose.position.y + nose.size.height,
-                )
+                drawQuadraticBezier(leftNostril)
                 close()
             },
             Color.Blue,
         )
+        drawBezierPoints(leftNostril)
+
         drawPath(
             path = Path().apply {
-                moveTo(
-                    nose.position.x,
-                    nose.position.y + nose.size.height
-                )
-                quadraticBezierTo(
-                    nose.position.x + nose.size.width + bezierState.support.x - 280f,
-                    nose.position.y + nose.size.height + bezierState.support.y + 280f,
-                    nose.position.x + nose.size.width,
-                    nose.position.y + nose.size.height,
-                )
+                drawQuadraticBezier(noseTip)
                 close()
             },
             Color.Blue,
@@ -208,7 +228,21 @@ fun Nose(modifier: Modifier = Modifier, bezierState: BezierState) {
 
         drawArea(dorsumArea)
         drawArea(nostrilsArea)
+        drawArea(leftNostrilArea, color = Color.Green)
+        drawArea(rightNostrilArea)
+        drawArea(tipArea)
     })
+}
+
+fun DrawScope.drawBezierPoints(
+    bezierState: BezierState,
+    pointColor: Color = Color.Black,
+    supportColor: Color = Color.Red,
+    pointRadius: Float = 8f,
+) {
+    drawCircle(pointColor, center = bezierState.start, radius = pointRadius)
+    drawCircle(pointColor, center = bezierState.finish, radius = pointRadius)
+    drawCircle(supportColor, center = bezierState.support, radius = pointRadius)
 }
 
 @Composable
@@ -389,13 +423,25 @@ fun DrawScope.drawBodyPart(part: BodyPart) {
     drawRect(part.color, topLeft = part.position, size = part.size)
 }
 
+fun Path.drawQuadraticBezier(state: BezierState) {
+    with(state) {
+        moveTo(start.x, start.y)
+        quadraticBezierTo(
+            support.x,
+            support.y,
+            finish.x,
+            finish.y,
+        )
+    }
+}
+
 fun DrawScope.drawArea(
-    area: Rect
+    area: Rect,
+    color: Color = Color.Red,
+    strokeWidth: Float = 3f,
 ) {
-    val partAreaColor = Color.Red
-    val strokeWidth = 3f
     drawRect(
-        partAreaColor,
+        color,
         style = Stroke(width = strokeWidth),
         topLeft = area.topLeft,
         size = area.size
