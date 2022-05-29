@@ -4,11 +4,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Button
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -74,63 +70,25 @@ data class NoseState(
 fun PortraitPreview() {
     val previewSize = 400.dp
 
-    var kek = remember {
-        mutableStateOf(
-            BezierState(
-                start = Offset(0f, 0f),
-                support = Offset(0f, 0f),
-                finish = Offset(0f, 0f),
-            )
-        )
-    }
-
 
     Column {
         Row {
-//            Text("Start x: ${kek.value.start.x}")
-//            Text("Start y: ${kek.value.start.y}")
-//            Text("Finish x: ${kek.value.finish.x}")
-//            Text("Finish y: ${kek.value.finish.y}")
-            Text("Support x: ${kek.value.support.x}")
-            Button(onClick = {
-                kek.value = kek.value.copy(
-                    support = kek.value.support.copy(
-                        x = kek.value.support.x + 10f
-                    )
-                )
-            }) { Text("Up") }
-            Button(onClick = {
-                kek.value = kek.value.copy(
-                    support = kek.value.support.copy(
-                        x = kek.value.support.x - 10f
-                    )
-                )
-            }) { Text("Down") }
-
+            Portrait(
+                modifier = Modifier.size(previewSize)
+            )
+            Portrait(
+                modifier = Modifier.size(previewSize)
+            )
         }
         Row {
-            Text("Support y: ${kek.value.support.y}")
-            Button(onClick = {
-                kek.value = kek.value.copy(
-                    support = kek.value.support.copy(
-                        y = kek.value.support.y + 10f
-                    )
-                )
-            }) { Text("Up") }
-            Button(onClick = {
-                kek.value = kek.value.copy(
-                    support = kek.value.support.copy(
-                        y = kek.value.support.y - 10f
-                    )
-                )
-            }) { Text("Down") }
+            Portrait(
+                modifier = Modifier.size(previewSize)
+            )
+            Portrait(
+                modifier = Modifier.size(previewSize)
+            )
         }
-        Nose(
-            modifier = Modifier.size(previewSize),
-            bezierState = kek.value
-        )
     }
-
 }
 
 @Composable
@@ -404,6 +362,97 @@ fun Portrait(
         drawBodyPart(portraitState.rightEye)
         drawBodyPart(portraitState.nose)
         drawBodyPart(portraitState.mouth)
+
+        val nose = portraitState.nose
+        val dorsumArea = nose
+            .toRect()
+            .shrink(widthPercent = 0.75f)
+        val nostrilsArea = nose
+            .toRect()
+            .shrink(heightPercent = 0.25f)
+            .let {
+                it.move(
+                    nose.position.translate(
+                        x = it.size.width / 2,
+                        y = nose.size.height - it.size.height
+                    )
+                )
+            }
+
+        val tipArea = Rect(
+            dorsumArea.bottomLeft.translate(
+                y = -(dorsumArea.bottomLeft.y - nostrilsArea.bottomLeft.y)
+            ),
+            Size(
+                width = dorsumArea.width,
+                height = dorsumArea.bottomLeft.y - nostrilsArea.bottomLeft.y
+            )
+        )
+
+        drawBodyPart(nose)
+
+        val leftNostrilArea = Rect(
+            nostrilsArea.topLeft,
+            Size(
+                width = (dorsumArea.left - nostrilsArea.left),
+                height = nostrilsArea.height,
+            )
+        )
+        val rightNostrilArea = Rect(
+            nostrilsArea.topRight.translate(
+                x = -(nostrilsArea.right - dorsumArea.right)
+            ),
+            Size(
+                width = nostrilsArea.right - dorsumArea.right,
+                height = nostrilsArea.height,
+            )
+        )
+        val leftNostril = BezierState(
+            start = leftNostrilArea.topRight,
+            finish = leftNostrilArea.bottomRight,
+            support = leftNostrilArea.centerLeft.translate(x = -leftNostrilArea.width),
+        )
+        val rightNostril = BezierState(
+            start = rightNostrilArea.topLeft,
+            finish = rightNostrilArea.bottomLeft,
+            support = rightNostrilArea.centerRight.translate(x = rightNostrilArea.width),
+        )
+
+        val noseTip = BezierState(
+            start = tipArea.topLeft,
+            finish = tipArea.topRight,
+            support = tipArea.bottomCenter.translate(y = tipArea.height)
+        )
+
+        drawPath(
+            path = Path().apply {
+                drawQuadraticBezier(rightNostril)
+                close()
+            },
+            Color.Blue,
+        )
+
+        drawPath(
+            path = Path().apply {
+                drawQuadraticBezier(leftNostril)
+                close()
+            },
+            Color.Blue,
+        )
+
+        drawPath(
+            path = Path().apply {
+                drawQuadraticBezier(noseTip)
+                close()
+            },
+            Color.Blue,
+        )
+
+        drawArea(dorsumArea)
+        drawArea(nostrilsArea)
+        drawArea(leftNostrilArea, color = Color.Green)
+        drawArea(rightNostrilArea)
+        drawArea(tipArea)
 
         drawArea(headArea)
         drawArea(faceArea)
