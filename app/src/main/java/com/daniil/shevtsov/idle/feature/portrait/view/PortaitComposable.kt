@@ -36,15 +36,14 @@ data class BodyPart(
     val color: Color,
 )
 
-data class GeneratedSize(
-    val face: Size,
+data class FacePartsSize(
     val eye: Size,
     val nose: Size,
     val mouth: Size,
 )
 
 data class PortraitState(
-    val face: BodyPart,
+    val head: BodyPart,
     val leftEye: BodyPart,
     val rightEye: BodyPart,
     val nose: BodyPart,
@@ -88,8 +87,32 @@ fun Portrait(
     Canvas(modifier = modifier, onDraw = {
         val screenArea = Rect(Offset(0f, 0f), Offset(size.width, size.height))
 
-        val faceArea = screenArea
+        val headArea = screenArea
             .shrink(0.8f)
+
+        val headSize = Size(
+            width = Random.nextFloatInRange(
+                min = headArea.width * 0.1f,
+                max = headArea.width
+            ),
+            height = Random.nextFloatInRange(
+                min = headArea.height * 0.1f,
+                max = headArea.height
+            ),
+        )
+        val head = BodyPart(
+            position = headArea.center.translate(
+                x = -headSize.width / 2,
+                y = -headSize.height / 2,
+            ),
+            size = headSize,
+            color = Color.Gray
+        )
+
+        val faceArea = Rect(
+            head.position,
+            head.size,
+        )
 
         val eyeArea = faceArea
             .shrink(
@@ -114,9 +137,7 @@ fun Portrait(
 
         val axisSize = 5f
         val axisColor = Color.Blue
-        val partColor = Color.Green
-        val partAreaColor = Color.Red
-        val strokeWidth = 3f
+
         val horizontalAxis = Rect(
             faceArea.centerLeft.copy(y = faceArea.centerLeft.y - axisSize),
             faceArea.centerRight.copy(y = faceArea.centerLeft.y + axisSize),
@@ -133,17 +154,7 @@ fun Portrait(
             mouthArea = mouthArea,
         )
 
-        val generatedSizes = GeneratedSize(
-            face = Size(
-                width = Random.nextFloatInRange(
-                    min = faceArea.width * 0.1f,
-                    max = faceArea.width
-                ),
-                height = Random.nextFloatInRange(
-                    min = faceArea.height * 0.1f,
-                    max = faceArea.height
-                ),
-            ),
+        val generatedSizes = FacePartsSize(
             eye = Size(
                 width = Random.nextFloatInRange(
                     min = eyeArea.width * 0.1f,
@@ -177,14 +188,7 @@ fun Portrait(
         )
 
         val portraitState = PortraitState(
-            face = BodyPart(
-                position = faceArea.center.translate(
-                    x = -generatedSizes.face.width / 2,
-                    y = -generatedSizes.face.height / 2,
-                ),
-                size = generatedSizes.face,
-                color = Color.Gray
-            ),
+            head = head,
             leftEye = BodyPart(
                 position = horizontalAxis.centerLeft.translate(
                     x = horizontalAxis.width * 0.75f - generatedSizes.eye.width / 2,
@@ -220,35 +224,19 @@ fun Portrait(
         )
 
         drawRect(Color.DarkGray, topLeft = screenArea.topLeft, size = screenArea.size)
-        drawBodyPart(portraitState.face)
+        drawBodyPart(portraitState.head)
         drawRect(axisColor, topLeft = horizontalAxis.topLeft, size = horizontalAxis.size)
         drawRect(axisColor, topLeft = verticalAxis.topLeft, size = verticalAxis.size)
 
-        drawRect(
-            partAreaColor,
-            style = Stroke(width = strokeWidth),
-            topLeft = eyeArea.topLeft,
-            size = eyeArea.size
-        )
         drawBodyPart(portraitState.leftEye)
         drawBodyPart(portraitState.rightEye)
-
-        drawRect(
-            partAreaColor,
-            style = Stroke(width = strokeWidth),
-            topLeft = noseArea.topLeft,
-            size = noseArea.size
-        )
         drawBodyPart(portraitState.nose)
-
-        drawRect(
-            partAreaColor,
-            style = Stroke(width = strokeWidth),
-            topLeft = mouthArea.topLeft,
-            size = mouthArea.size
-        )
-
         drawBodyPart(portraitState.mouth)
+
+        drawArea(headArea)
+        drawArea(faceArea)
+        drawArea(eyeArea)
+        drawArea(noseArea)
     })
 }
 
@@ -256,8 +244,17 @@ fun DrawScope.drawBodyPart(part: BodyPart) {
     drawRect(part.color, topLeft = part.position, size = part.size)
 }
 
-fun DrawScope.drawArea(area: Rect) {
-
+fun DrawScope.drawArea(
+    area: Rect
+) {
+    val partAreaColor = Color.Red
+    val strokeWidth = 3f
+    drawRect(
+        partAreaColor,
+        style = Stroke(width = strokeWidth),
+        topLeft = area.topLeft,
+        size = area.size
+    )
 }
 
 fun Rect.shrink(percent: Float): Rect {
