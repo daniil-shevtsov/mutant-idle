@@ -93,10 +93,21 @@ fun DrawScope.drawEye() {
         color = Color.White
     )
 
+    val eyelidHackSize = Size(
+        width = eye.size.width,
+        height = eye.size.height - eyeLidSize.height * 2
+    )
+    val eyeLid = BodyPart(
+        position = eye.toRect().centerLeft.translate(y = -eyelidHackSize.height / 2f),
+        size = eyelidHackSize,
+        color = Color.Blue,
+    )
+
     drawEyePart(eye)
     drawEyePart(iris)
     drawEyePart(pupil)
     drawEyePart(pupilLight)
+    drawEyePart(eyeLid)
 
     drawArea(eyeArea)
     drawArea(topEyeLidArea)
