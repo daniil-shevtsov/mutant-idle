@@ -134,7 +134,16 @@ fun Portrait(
         )
 
         val generatedSizes = GeneratedSize(
-            face = faceArea.size,
+            face = Size(
+                width = Random.nextFloatInRange(
+                    min = faceArea.width * 0.1f,
+                    max = faceArea.width
+                ),
+                height = Random.nextFloatInRange(
+                    min = faceArea.height * 0.1f,
+                    max = faceArea.height
+                ),
+            ),
             eye = Size(
                 width = Random.nextFloatInRange(
                     min = eyeArea.width * 0.1f,
@@ -169,8 +178,11 @@ fun Portrait(
 
         val portraitState = PortraitState(
             face = BodyPart(
-                position = faceArea.topLeft,
-                size = faceArea.size,
+                position = faceArea.center.translate(
+                    x = -generatedSizes.face.width / 2,
+                    y = -generatedSizes.face.height / 2,
+                ),
+                size = generatedSizes.face,
                 color = Color.Gray
             ),
             leftEye = BodyPart(
