@@ -110,11 +110,11 @@ fun DrawScope.drawHead(
     val generatedSizes = FacePartsSize(
         eye = Size(
             width = Random.nextFloatInRange(
-                min = eyeArea.width * 0.2f,
+                min = eyeArea.width * 0.4f,
                 max = eyeArea.width * 0.9f
             ),
             height = Random.nextFloatInRange(
-                min = eyeArea.height * 0.1f,
+                min = eyeArea.height * 0.3f,
                 max = eyeArea.height * 0.6f
             ),
         ),
@@ -182,12 +182,29 @@ fun DrawScope.drawHead(
     drawRect(Color.DarkGray, topLeft = screenArea.topLeft, size = screenArea.size)
     drawBodyPart(portraitState.head)
 
+    val eyeConfig = EyeConfig(
+        iris = Random.nextFloatInRange(
+            min = 0.4f,
+            max = 0.7f,
+        ),
+        pupil = Random.nextFloatInRange(
+            min = 0.6f,
+            max = 0.8f,
+        ),
+        squint = Random.nextFloatInRange(
+            min = 0.2f,
+            max = 0.6f,
+        ),
+    )
+
     drawEye(
         eyeArea = portraitState.leftEye.toRect(),
+        config = eyeConfig,
         shouldShowAreas = previewState.shouldShowEyeAreas
     )
     drawEye(
         eyeArea = portraitState.rightEye.toRect(),
+        config = eyeConfig,
         shouldShowAreas = previewState.shouldShowEyeAreas
     )
     drawBodyPart(portraitState.mouth)
