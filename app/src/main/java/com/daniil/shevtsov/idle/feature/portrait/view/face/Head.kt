@@ -6,8 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.ClipOp
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.feature.portrait.view.*
@@ -34,6 +37,7 @@ fun DrawScope.drawHead(headArea: Rect) {
     val bottomArea = headArea
         .shrink(heightPercent = 0.34f)
         .let { area -> area.move(position = middleArea.bottomCenter.translate(y = area.height / 2f)) }
+
     val headSize = Size(
         width = headArea.width * 0.7f,
         height = headArea.height,
@@ -47,7 +51,23 @@ fun DrawScope.drawHead(headArea: Rect) {
         color = Color.Gray
     )
 
-    drawBodyPart(head)
+    clipPath(path = Path().apply {
+        val state = BezierState(
+            start = topHeadArea.bottomLeft,
+            finish = topHeadArea.bottomRight,
+            support = topHeadArea.topLeft,
+            support2 = topHeadArea.topRight,
+        )
+        drawQuadraticBezier(state)
+        lineTo(bottomArea.bottomRight.x, bottomArea.bottomRight.y)
+        lineTo(bottomArea.bottomLeft.x, bottomArea.bottomLeft.y)
+        lineTo(topHeadArea.bottomLeft.x, topHeadArea.bottomLeft.y)
+        close()
+    }, clipOp = ClipOp.Intersect) {
+        drawBodyPart(head)
+    }
+
+
     drawArea(headArea)
     drawArea(topHeadArea)
     drawArea(middleArea)

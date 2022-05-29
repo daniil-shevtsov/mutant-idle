@@ -37,11 +37,23 @@ fun DrawScope.drawBezierPoints(
 fun Path.drawQuadraticBezier(state: BezierState) {
     with(state) {
         moveTo(start.x, start.y)
-        quadraticBezierTo(
-            support.x,
-            support.y,
-            finish.x,
-            finish.y,
-        )
+        if (state.support2 == null) {
+            quadraticBezierTo(
+                support.x,
+                support.y,
+                finish.x,
+                finish.y,
+            )
+        } else {
+            cubicTo(
+                support.x,
+                support.y,
+                support2!!.x,
+                support2.y,
+                finish.x,
+                finish.y,
+            )
+        }
+
     }
 }
