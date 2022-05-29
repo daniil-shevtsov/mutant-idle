@@ -50,7 +50,7 @@ fun DrawScope.drawEye() {
         color = Color.Green,
     )
     val pupilSize = iris.toRect().shrink(
-        percent = 0.5f
+        percent = 0.7f
     ).size
     val pupil = BodyPart(
         position = iris.toRect().center.translate(
@@ -61,9 +61,20 @@ fun DrawScope.drawEye() {
         color = Color.Black
     )
 
+    val pupilLightSize = pupil.toRect().shrink(percent = 0.3f).size
+    val pupilLight = BodyPart(
+        position = pupil.toRect().center.translate(
+            x = -pupilLightSize.width / 2f,
+            y = -pupilLightSize.height / 2f,
+        ),
+        size = pupilLightSize,
+        color = Color.White
+    )
+
     drawEyePart(eye)
     drawEyePart(iris)
     drawEyePart(pupil)
+    drawEyePart(pupilLight)
 }
 
 fun DrawScope.drawEyePart(part: BodyPart) {
