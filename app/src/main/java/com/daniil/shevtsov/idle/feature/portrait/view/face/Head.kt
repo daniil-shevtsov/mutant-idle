@@ -1,12 +1,48 @@
 package com.daniil.shevtsov.idle.feature.portrait.view.face
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.feature.portrait.view.*
 import kotlin.random.Random
+
+@Preview(
+    widthDp = 800,
+    heightDp = 800
+)
+@Composable
+fun HeadPreview() {
+    val previewSize = 400.dp
+
+    val previewMode = PreviewMode.Portaits
+
+    val state = PreviewState(
+        mode = previewMode,
+        shouldShowFaceAreas = false,
+        shouldShowNoseAreas = false,
+        shouldShowEyeAreas = false,
+    )
+    Column {
+        repeat(2) {
+            Row {
+                repeat(2) {
+                    Portrait(
+                        previewState = state,
+                        modifier = androidx.compose.ui.Modifier.size(previewSize)
+                    )
+                }
+            }
+        }
+    }
+}
 
 fun DrawScope.drawHead(
     previewState: PreviewState
@@ -66,22 +102,9 @@ fun DrawScope.drawHead(
 
 
     val axisSize = 5f
-    val axisColor = Color.Blue
-
-    val horizontalAxis = Rect(
-        faceArea.centerLeft.copy(y = faceArea.centerLeft.y - axisSize),
-        faceArea.centerRight.copy(y = faceArea.centerLeft.y + axisSize),
-    )
     val verticalAxis = Rect(
         faceArea.topCenter.copy(x = faceArea.topCenter.x - axisSize),
         faceArea.bottomCenter.copy(x = faceArea.bottomCenter.x + axisSize),
-    )
-
-    val generatingConfig = GeneratingConfig(
-        faceArea = faceArea,
-        eyesArea = eyesArea,
-        noseArea = noseArea,
-        mouthArea = mouthArea,
     )
 
     val generatedSizes = FacePartsSize(
@@ -159,8 +182,14 @@ fun DrawScope.drawHead(
     drawRect(Color.DarkGray, topLeft = screenArea.topLeft, size = screenArea.size)
     drawBodyPart(portraitState.head)
 
-    drawBodyPart(portraitState.leftEye)
-    drawBodyPart(portraitState.rightEye)
+    drawEye(
+        eyeArea = portraitState.leftEye.toRect(),
+        shouldShowAreas = previewState.shouldShowEyeAreas
+    )
+    drawEye(
+        eyeArea = portraitState.rightEye.toRect(),
+        shouldShowAreas = previewState.shouldShowEyeAreas
+    )
     drawBodyPart(portraitState.mouth)
 
     drawNose(portraitState.nose, previewState = previewState)

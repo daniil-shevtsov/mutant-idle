@@ -4,6 +4,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ClipOp
@@ -19,22 +20,14 @@ import com.daniil.shevtsov.idle.feature.portrait.view.*
 @Composable
 fun EyePreview() {
     Canvas(modifier = Modifier.size(400.dp), onDraw = {
-        drawEye()
+        drawEye(eyeArea = Rect(offset = Offset(0f, 0f), size = size))
     })
 }
 
-fun DrawScope.drawEye() {
-    val eyeAreaSize = Size(
-        width = size.width / 2f,
-        height = size.width / 4f,
-    )
-    val eyeArea = Rect(
-        offset = center.translate(
-            x = -eyeAreaSize.width / 2f,
-            y = -eyeAreaSize.height / 2f,
-        ),
-        size = eyeAreaSize,
-    )
+fun DrawScope.drawEye(
+    eyeArea: Rect,
+    shouldShowAreas: Boolean = true,
+) {
     val eyeLidSize = Size(
         width = eyeArea.width,
         height = eyeArea.height * 0.2f,
@@ -48,11 +41,8 @@ fun DrawScope.drawEye() {
         size = eyeLidSize
     )
 
-    val center = center
-    val eyeSize = Size(
-        width = size.width / 2f,
-        height = size.width / 4f,
-    )
+    val center = eyeArea.center
+    val eyeSize = eyeArea.size
     val eye = BodyPart(
         position = center.translate(
             x = -eyeSize.width / 2f,
@@ -65,7 +55,7 @@ fun DrawScope.drawEye() {
     val irisSize = Size(
         eye.size.height,
         eye.size.height
-    )
+    ) * 0.7f
     val iris = BodyPart(
         position = eye.position.translate(
             x = eye.size.width / 2f - irisSize.width / 2f,
@@ -96,11 +86,6 @@ fun DrawScope.drawEye() {
         color = Color.White
     )
 
-    val eyelidHackFill = BodyPart(
-        position = eye.position,
-        size = eye.size,
-        color = Color.Red
-    )
     val eyelidHackSize = Size(
         width = eye.size.width,
         height = eye.size.height - eyeLidSize.height * 2
@@ -110,7 +95,6 @@ fun DrawScope.drawEye() {
         size = eyelidHackSize,
         color = Color.Blue,
     )
-
     val circlePath = Path().apply {
         addOval(Rect(eyeLid.position, eyeLid.size))
     }
@@ -121,9 +105,11 @@ fun DrawScope.drawEye() {
         drawEyePart(pupilLight)
     }
 
-    drawArea(eyeArea)
-    drawArea(topEyeLidArea)
-    drawArea(bottomEyeLidArea)
+    if (shouldShowAreas) {
+        drawArea(eyeArea)
+        drawArea(topEyeLidArea)
+        drawArea(bottomEyeLidArea)
+    }
 }
 
 fun DrawScope.drawEyePart(part: BodyPart) {

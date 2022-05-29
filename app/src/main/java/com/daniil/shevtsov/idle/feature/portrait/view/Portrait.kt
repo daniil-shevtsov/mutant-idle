@@ -29,6 +29,7 @@ fun PortraitPreview() {
         mode = previewMode,
         shouldShowFaceAreas = false,
         shouldShowNoseAreas = false,
+        shouldShowEyeAreas = false,
     )
 
     when (state.mode) {
@@ -106,6 +107,7 @@ data class PreviewState(
     val mode: PreviewMode,
     val shouldShowFaceAreas: Boolean,
     val shouldShowNoseAreas: Boolean,
+    val shouldShowEyeAreas: Boolean,
 )
 
 
