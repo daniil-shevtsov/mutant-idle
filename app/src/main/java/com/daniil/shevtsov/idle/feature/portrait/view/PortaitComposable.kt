@@ -141,6 +141,19 @@ fun Nose(modifier: Modifier = Modifier, bezierState: BezierState) {
             size = Size(size.width / 2, size.height),
             color = Color.Gray
         )
+        val nostrilsArea = Rect(
+            nose.position,
+            nose.size
+        ).shrink(widthPercent = 1f, heightPercent = 0.25f)
+            .let {
+                it.move(
+                    nose.position.translate(
+                        x = it.size.width / 2,
+                        y = nose.size.height - it.size.height
+                    )
+                )
+            }
+
         drawBodyPart(nose)
         drawPath(
             path = Path().apply {
@@ -190,6 +203,8 @@ fun Nose(modifier: Modifier = Modifier, bezierState: BezierState) {
             },
             Color.Blue,
         )
+
+        drawArea(nostrilsArea)
     })
 }
 
