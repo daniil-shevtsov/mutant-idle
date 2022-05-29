@@ -160,8 +160,11 @@ fun Portrait(
                 color = Color.Green
             ),
             nose = BodyPart(
-                position = Offset(0f, 0f),
-                size = Size(0f, 0f),
+                position = noseArea.topCenter.translate(
+                    x = -generatedSizes.nose.width / 2,
+                    y = Random.nextFloatInRange(max = noseArea.height - generatedSizes.nose.height)
+                ),
+                size = generatedSizes.nose,
                 color = Color.LightGray
             ),
             mouth = BodyPart(
@@ -172,14 +175,6 @@ fun Portrait(
                 size = generatedSizes.mouth,
                 color = Color.White
             ),
-        )
-
-        val nose = Rect(
-            offset = noseArea.topCenter.translate(
-                x = -generatedSizes.nose.width / 2,
-                y = Random.nextFloatInRange(max = noseArea.height - generatedSizes.nose.height)
-            ),
-            size = generatedSizes.nose,
         )
 
         val leftEye = Rect(
@@ -218,7 +213,7 @@ fun Portrait(
             topLeft = noseArea.topLeft,
             size = noseArea.size
         )
-        drawRect(partColor, topLeft = nose.topLeft, size = nose.size)
+        drawBodyPart(portraitState.nose)
 
         drawRect(
             partAreaColor,
