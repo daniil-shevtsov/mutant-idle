@@ -92,11 +92,11 @@ fun Portrait(
 
         val headSize = Size(
             width = Random.nextFloatInRange(
-                min = headArea.width * 0.1f,
+                min = headArea.width * 0.4f,
                 max = headArea.width
             ),
             height = Random.nextFloatInRange(
-                min = headArea.height * 0.1f,
+                min = headArea.height * 0.4f,
                 max = headArea.height
             ),
         )
@@ -237,6 +237,7 @@ fun Portrait(
         drawArea(faceArea)
         drawArea(eyeArea)
         drawArea(noseArea)
+        drawArea(mouthArea)
     })
 }
 
