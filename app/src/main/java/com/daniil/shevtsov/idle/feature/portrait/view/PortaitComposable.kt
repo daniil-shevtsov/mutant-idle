@@ -146,13 +146,22 @@ fun Portrait(
                     max = noseArea.height
                 ),
             ),
-            mouth = Size(400f, 50f),
+            mouth = Size(
+                width = Random.nextFloatInRange(
+                    min = mouthArea.width * 0.3f,
+                    max = mouthArea.width
+                ),
+                height = Random.nextFloatInRange(
+                    min = mouthArea.width * 0.1f,
+                    max = mouthArea.height * 0.6f
+                )
+            ),
         )
 
         val portraitState = PortraitState(
             face = BodyPart(
-                position = Offset(0f, 0f),
-                size = Size(0f, 0f),
+                position = faceArea.topLeft,
+                size = faceArea.size,
                 color = Color.Gray
             ),
             leftEye = BodyPart(
@@ -190,8 +199,7 @@ fun Portrait(
         )
 
         drawRect(Color.DarkGray, topLeft = screenArea.topLeft, size = screenArea.size)
-        drawRect(Color.Gray, topLeft = faceArea.topLeft, size = faceArea.size)
-
+        drawBodyPart(portraitState.face)
         drawRect(axisColor, topLeft = horizontalAxis.topLeft, size = horizontalAxis.size)
         drawRect(axisColor, topLeft = verticalAxis.topLeft, size = verticalAxis.size)
 
@@ -225,6 +233,10 @@ fun Portrait(
 
 fun DrawScope.drawBodyPart(part: BodyPart) {
     drawRect(part.color, topLeft = part.position, size = part.size)
+}
+
+fun DrawScope.drawArea(area: Rect) {
+
 }
 
 fun Rect.shrink(percent: Float): Rect {
