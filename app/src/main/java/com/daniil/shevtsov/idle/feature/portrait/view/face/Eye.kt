@@ -6,8 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.ClipOp
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.feature.portrait.view.*
@@ -93,6 +96,11 @@ fun DrawScope.drawEye() {
         color = Color.White
     )
 
+    val eyelidHackFill = BodyPart(
+        position = eye.position,
+        size = eye.size,
+        color = Color.Red
+    )
     val eyelidHackSize = Size(
         width = eye.size.width,
         height = eye.size.height - eyeLidSize.height * 2
@@ -103,11 +111,15 @@ fun DrawScope.drawEye() {
         color = Color.Blue,
     )
 
-    drawEyePart(eye)
-    drawEyePart(iris)
-    drawEyePart(pupil)
-    drawEyePart(pupilLight)
-    drawEyePart(eyeLid)
+    val circlePath = Path().apply {
+        addOval(Rect(eyeLid.position, eyeLid.size))
+    }
+    clipPath(circlePath, clipOp = ClipOp.Intersect) {
+        drawEyePart(eye)
+        drawEyePart(iris)
+        drawEyePart(pupil)
+        drawEyePart(pupilLight)
+    }
 
     drawArea(eyeArea)
     drawArea(topEyeLidArea)
