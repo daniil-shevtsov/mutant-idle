@@ -364,7 +364,6 @@ fun DrawScope.drawNose(
         min = 0f,
         max = nostrilsArea.height
     )
-//    val nostrilWidth = (nostrilsArea.width - dorsumArea.width)  / 2f
     val nostrilWidth = Random.nextFloatInRange(
         min = (nostrilsArea.width - dorsumArea.width) / 8f,
         max = (nostrilsArea.width - dorsumArea.width) / 2f,
@@ -383,9 +382,9 @@ fun DrawScope.drawNose(
     val rightNostril = BezierState(
         start = rightNostrilArea.topLeft,
         finish = rightNostrilArea.bottomLeft,
-        support = rightNostrilArea.topRight
+        support = rightNostrilArea.topLeft
             .translate(
-                x = rightNostrilArea.width,
+                x = nostrilWidth * 2,
                 y = nostrilsSupportY
             ),
     )
