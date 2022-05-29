@@ -10,10 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.daniil.shevtsov.idle.feature.portrait.view.BodyPart
-import com.daniil.shevtsov.idle.feature.portrait.view.drawArea
-import com.daniil.shevtsov.idle.feature.portrait.view.drawBodyPart
-import com.daniil.shevtsov.idle.feature.portrait.view.translate
+import com.daniil.shevtsov.idle.feature.portrait.view.*
 
 @Preview
 @Composable
@@ -28,6 +25,15 @@ fun HeadPreview() {
 }
 
 fun DrawScope.drawHead(headArea: Rect) {
+    val topHeadArea = headArea
+        .shrink(heightPercent = 0.33f)
+        .let { area -> area.move(position = headArea.topCenter.translate(y = area.height / 2f)) }
+    val middleArea = headArea
+        .shrink(heightPercent = 0.33f)
+        .let { area -> area.move(position = topHeadArea.bottomCenter.translate(y = area.height / 2f)) }
+    val bottomArea = headArea
+        .shrink(heightPercent = 0.34f)
+        .let { area -> area.move(position = middleArea.bottomCenter.translate(y = area.height / 2f)) }
     val headSize = Size(
         width = headArea.width * 0.7f,
         height = headArea.height,
@@ -43,5 +49,8 @@ fun DrawScope.drawHead(headArea: Rect) {
 
     drawBodyPart(head)
     drawArea(headArea)
+    drawArea(topHeadArea)
+    drawArea(middleArea)
+    drawArea(bottomArea)
 
 }
