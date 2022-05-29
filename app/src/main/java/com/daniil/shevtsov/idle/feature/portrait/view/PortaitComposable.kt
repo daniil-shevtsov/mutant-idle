@@ -133,9 +133,18 @@ fun Portrait(
         )
 
         val generatedSizes = GeneratedSize(
-            face = Size(0f, 0f),
-            eye = Size(0f, 0f),
-            nose = Size(0f, 0f),
+            face = faceArea.size,
+            eye = Size(100f, 50f),
+            nose = Size(
+                width = Random.nextFloatInRange(
+                    min = noseArea.width * 0.2f,
+                    max = noseArea.width
+                ),
+                height = Random.nextFloatInRange(
+                    min = noseArea.width * 0.3f,
+                    max = noseArea.height
+                ),
+            ),
             mouth = Size(400f, 50f),
         )
 
@@ -165,38 +174,27 @@ fun Portrait(
             ),
         )
 
-        val noseSize = Size(
-            width = Random.nextFloatInRange(
-                min = noseArea.width * 0.2f,
-                max = noseArea.width
-            ),
-            height = Random.nextFloatInRange(
-                min = noseArea.width * 0.3f,
-                max = noseArea.height
-            ),
-        )
         val nose = Rect(
             offset = noseArea.topCenter.translate(
-                x = -noseSize.width / 2,
-                y = Random.nextFloatInRange(max = noseArea.height - noseSize.height)
+                x = -generatedSizes.nose.width / 2,
+                y = Random.nextFloatInRange(max = noseArea.height - generatedSizes.nose.height)
             ),
-            size = noseSize,
+            size = generatedSizes.nose,
         )
 
-        val eyeSize = Size(100f, 50f)
         val leftEye = Rect(
             offset = horizontalAxis.centerLeft.translate(
-                x = horizontalAxis.width * 0.75f - eyeSize.width / 2,
-                y = -eyeSize.height / 2
+                x = horizontalAxis.width * 0.75f - generatedSizes.eye.width / 2,
+                y = -generatedSizes.eye.height / 2
             ),
-            size = eyeSize
+            size = generatedSizes.eye
         )
         val rightEye = Rect(
             offset = horizontalAxis.centerLeft.translate(
-                x = horizontalAxis.width * 0.25f - eyeSize.width / 2,
-                y = -eyeSize.height / 2
+                x = horizontalAxis.width * 0.25f - generatedSizes.eye.width / 2,
+                y = -generatedSizes.eye.height / 2
             ),
-            size = eyeSize
+            size = generatedSizes.eye
         )
 
         drawRect(Color.DarkGray, topLeft = screenArea.topLeft, size = screenArea.size)
@@ -228,13 +226,8 @@ fun Portrait(
             topLeft = mouthArea.topLeft,
             size = mouthArea.size
         )
-        drawRect(
-            portraitState.mouth.color,
-            topLeft = portraitState.mouth.position,
-            size = portraitState.mouth.size
-        )
 
-//        drawBodyPart(portraitState.mouth)
+        drawBodyPart(portraitState.mouth)
     })
 }
 
