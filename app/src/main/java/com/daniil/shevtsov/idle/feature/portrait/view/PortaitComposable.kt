@@ -119,9 +119,9 @@ fun PortraitPreview() {
 
 fun DrawScope.drawBezierPoints(
     bezierState: BezierState,
-    pointColor: Color = Color.Black,
+    pointColor: Color = Color.Green,
     supportColor: Color = Color.Red,
-    pointRadius: Float = 8f,
+    pointRadius: Float = 16f,
 ) {
     drawCircle(pointColor, center = bezierState.start, radius = pointRadius)
     drawCircle(pointColor, center = bezierState.finish, radius = pointRadius)
@@ -310,7 +310,7 @@ fun DrawScope.drawNose(
         .shrink(
             widthPercent = Random.nextFloatInRange(
                 min = 0.3f,
-                max = 0.9f,
+                max = 0.8f,
             )
         )
     val nostrilsArea = noseArea
@@ -364,15 +364,22 @@ fun DrawScope.drawNose(
         min = 0f,
         max = nostrilsArea.height
     )
+//    val nostrilWidth = (nostrilsArea.width - dorsumArea.width)  / 2f
+    val nostrilWidth = Random.nextFloatInRange(
+        min = (nostrilsArea.width - dorsumArea.width) / 8f,
+        max = (nostrilsArea.width - dorsumArea.width) / 2f,
+    )
+
     val leftNostril = BezierState(
         start = leftNostrilArea.topRight,
         finish = leftNostrilArea.bottomRight,
-        support = leftNostrilArea.topLeft
+        support = leftNostrilArea.topRight
             .translate(
-                x = -leftNostrilArea.width,
+                x = -nostrilWidth * 2,
                 y = nostrilsSupportY,
             ),
     )
+
     val rightNostril = BezierState(
         start = rightNostrilArea.topLeft,
         finish = rightNostrilArea.bottomLeft,
@@ -413,12 +420,14 @@ fun DrawScope.drawNose(
         Color.LightGray,
     )
     drawBodyPart(dorsum)
+    drawBezierPoints(leftNostril)
+    drawBezierPoints(rightNostril)
 
     if (previewState.shouldShowNoseAreas) {
         drawArea(noseArea)
         drawArea(dorsumArea)
         drawArea(nostrilsArea)
-        drawArea(leftNostrilArea, color = Color.Green)
+        drawArea(leftNostrilArea)
         drawArea(rightNostrilArea)
         drawArea(tipArea)
     }
