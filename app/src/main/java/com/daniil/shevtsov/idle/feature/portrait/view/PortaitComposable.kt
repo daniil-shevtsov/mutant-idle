@@ -62,6 +62,15 @@ data class NoseState(
     val tip: BezierState
 )
 
+enum class PreviewMode {
+    Portaits,
+    Nose,
+}
+
+data class PreviewState(
+    val mode: PreviewMode
+)
+
 @Preview(
     widthDp = 800,
     heightDp = 800
@@ -70,23 +79,40 @@ data class NoseState(
 fun PortraitPreview() {
     val previewSize = 400.dp
 
+    val previewMode = PreviewMode.Nose
 
-    Column {
-        Row {
-            Portrait(
-                modifier = Modifier.size(previewSize)
-            )
-            Portrait(
-                modifier = Modifier.size(previewSize)
-            )
+    val state = PreviewState(mode = previewMode)
+
+    when (state.mode) {
+        PreviewMode.Nose -> {
+            Canvas(modifier = Modifier, onDraw = {
+                val nose = BodyPart(
+                    position = Offset(size.width / 2 - size.width / 4, 0f),
+                    size = Size(size.width / 2, size.height),
+                    color = Color.Gray
+                )
+                drawNose(nose)
+            })
         }
-        Row {
-            Portrait(
-                modifier = Modifier.size(previewSize)
-            )
-            Portrait(
-                modifier = Modifier.size(previewSize)
-            )
+        PreviewMode.Portaits -> {
+            Column {
+                Row {
+                    Portrait(
+                        modifier = Modifier.size(previewSize)
+                    )
+                    Portrait(
+                        modifier = Modifier.size(previewSize)
+                    )
+                }
+                Row {
+                    Portrait(
+                        modifier = Modifier.size(previewSize)
+                    )
+                    Portrait(
+                        modifier = Modifier.size(previewSize)
+                    )
+                }
+            }
         }
     }
 }
@@ -360,112 +386,10 @@ fun Portrait(
 
         drawBodyPart(portraitState.leftEye)
         drawBodyPart(portraitState.rightEye)
-//        drawBodyPart(portraitState.nose)
         drawBodyPart(portraitState.mouth)
 
-        val nose = portraitState.nose
-        val dorsumArea = nose
-            .toRect()
-            .shrink(widthPercent = 0.75f)
-        val nostrilsArea = nose
-            .toRect()
-            .shrink(heightPercent = 0.25f)
-            .let {
-                it.move(
-                    nose.position.translate(
-                        x = it.size.width / 2,
-                        y = nose.size.height - it.size.height
-                    )
-                )
-            }
-        val tipArea = Rect(
-            dorsumArea.bottomLeft.translate(
-                y = -(dorsumArea.bottomLeft.y - nostrilsArea.bottomLeft.y)
-            ),
-            Size(
-                width = dorsumArea.width,
-                height = dorsumArea.bottomLeft.y - nostrilsArea.bottomLeft.y
-            )
-        )
-        val dorsumSize = Size(
-            dorsumArea.width,
-            dorsumArea.height - tipArea.height
-        )
-        val dorsum = BodyPart(
-            position = dorsumArea.topCenter.translate(
-                x = -dorsumSize.width / 2f
-            ),
-            size = dorsumSize,
-            color = Color.LightGray
-        )
+        drawNose(portraitState.nose)
 
-
-
-        drawBodyPart(dorsum)
-//        drawBodyPart(nose)
-
-        val leftNostrilArea = Rect(
-            nostrilsArea.topLeft,
-            Size(
-                width = (dorsumArea.left - nostrilsArea.left),
-                height = nostrilsArea.height,
-            )
-        )
-        val rightNostrilArea = Rect(
-            nostrilsArea.topRight.translate(
-                x = -(nostrilsArea.right - dorsumArea.right)
-            ),
-            Size(
-                width = nostrilsArea.right - dorsumArea.right,
-                height = nostrilsArea.height,
-            )
-        )
-        val leftNostril = BezierState(
-            start = leftNostrilArea.topRight,
-            finish = leftNostrilArea.bottomRight,
-            support = leftNostrilArea.centerLeft.translate(x = -leftNostrilArea.width),
-        )
-        val rightNostril = BezierState(
-            start = rightNostrilArea.topLeft,
-            finish = rightNostrilArea.bottomLeft,
-            support = rightNostrilArea.centerRight.translate(x = rightNostrilArea.width),
-        )
-
-        val noseTip = BezierState(
-            start = tipArea.topLeft,
-            finish = tipArea.topRight,
-            support = tipArea.bottomCenter.translate(y = tipArea.height)
-        )
-
-        drawPath(
-            path = Path().apply {
-                drawQuadraticBezier(rightNostril)
-                close()
-            },
-            Color.LightGray,
-        )
-
-        drawPath(
-            path = Path().apply {
-                drawQuadraticBezier(leftNostril)
-                close()
-            },
-            Color.LightGray,
-        )
-
-        drawPath(
-            path = Path().apply {
-                drawQuadraticBezier(noseTip)
-                close()
-            },
-            Color.LightGray,
-        )
-
-        drawArea(dorsumArea)
-        drawArea(nostrilsArea)
-        drawArea(leftNostrilArea, color = Color.Green)
-        drawArea(rightNostrilArea)
-        drawArea(tipArea)
 
         drawArea(headArea)
         drawArea(faceArea)
@@ -474,6 +398,111 @@ fun Portrait(
         drawArea(noseArea)
         drawArea(mouthArea)
     })
+}
+
+fun DrawScope.drawNose(nose: BodyPart) {
+    val dorsumArea = nose
+        .toRect()
+        .shrink(widthPercent = 0.75f)
+    val nostrilsArea = nose
+        .toRect()
+        .shrink(heightPercent = 0.25f)
+        .let {
+            it.move(
+                nose.position.translate(
+                    x = it.size.width / 2,
+                    y = nose.size.height - it.size.height
+                )
+            )
+        }
+    val tipArea = Rect(
+        dorsumArea.bottomLeft.translate(
+            y = -(dorsumArea.bottomLeft.y - nostrilsArea.bottomLeft.y)
+        ),
+        Size(
+            width = dorsumArea.width,
+            height = dorsumArea.bottomLeft.y - nostrilsArea.bottomLeft.y
+        )
+    )
+    val dorsumSize = Size(
+        dorsumArea.width,
+        dorsumArea.height - tipArea.height
+    )
+    val dorsum = BodyPart(
+        position = dorsumArea.topCenter.translate(
+            x = -dorsumSize.width / 2f
+        ),
+        size = dorsumSize,
+        color = Color.LightGray
+    )
+
+
+
+    drawBodyPart(dorsum)
+//        drawBodyPart(nose)
+
+    val leftNostrilArea = Rect(
+        nostrilsArea.topLeft,
+        Size(
+            width = (dorsumArea.left - nostrilsArea.left),
+            height = nostrilsArea.height,
+        )
+    )
+    val rightNostrilArea = Rect(
+        nostrilsArea.topRight.translate(
+            x = -(nostrilsArea.right - dorsumArea.right)
+        ),
+        Size(
+            width = nostrilsArea.right - dorsumArea.right,
+            height = nostrilsArea.height,
+        )
+    )
+    val leftNostril = BezierState(
+        start = leftNostrilArea.topRight,
+        finish = leftNostrilArea.bottomRight,
+        support = leftNostrilArea.centerLeft.translate(x = -leftNostrilArea.width),
+    )
+    val rightNostril = BezierState(
+        start = rightNostrilArea.topLeft,
+        finish = rightNostrilArea.bottomLeft,
+        support = rightNostrilArea.centerRight.translate(x = rightNostrilArea.width),
+    )
+
+    val noseTip = BezierState(
+        start = tipArea.topLeft,
+        finish = tipArea.topRight,
+        support = tipArea.bottomCenter.translate(y = tipArea.height)
+    )
+
+    drawPath(
+        path = Path().apply {
+            drawQuadraticBezier(rightNostril)
+            close()
+        },
+        Color.LightGray,
+    )
+
+    drawPath(
+        path = Path().apply {
+            drawQuadraticBezier(leftNostril)
+            close()
+        },
+        Color.LightGray,
+    )
+
+    drawPath(
+        path = Path().apply {
+            drawQuadraticBezier(noseTip)
+            close()
+        },
+        Color.LightGray,
+    )
+
+    drawArea(dorsumArea)
+    drawArea(nostrilsArea)
+    drawArea(leftNostrilArea, color = Color.Green)
+    drawArea(rightNostrilArea)
+    drawArea(tipArea)
 }
 
 fun BodyPart.toRect() = Rect(
