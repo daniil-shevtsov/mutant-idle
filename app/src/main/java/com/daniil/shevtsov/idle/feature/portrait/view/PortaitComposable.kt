@@ -10,6 +10,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,6 +34,13 @@ data class BodyPart(
     val position: Offset,
     val size: Size,
     val color: Color,
+)
+
+data class GeneratedSize(
+    val face: Size,
+    val eye: Size,
+    val nose: Size,
+    val mouth: Size,
 )
 
 data class PortraitState(
@@ -102,12 +110,6 @@ fun Portrait(
             )
             .move(faceArea.bottomCenter.translate(y = -faceArea.height * (1 / 8f)))
 
-        val generatingConfig = GeneratingConfig(
-            faceArea = faceArea,
-            eyesArea = eyeArea,
-            noseArea = noseArea,
-            mouthArea = mouthArea,
-        )
 
         val axisSize = 5f
         val axisColor = Color.Blue
@@ -123,13 +125,44 @@ fun Portrait(
             faceArea.bottomCenter.copy(x = faceArea.bottomCenter.x + axisSize),
         )
 
-        val mouthSize = Size(400f, 50f)
-        val mouth = Rect(
-            offset = verticalAxis.bottomCenter.translate(
-                x = -mouthSize.width / 2,
-                y = -verticalAxis.size.height * 0.10f - mouthSize.height / 2,
+        val generatingConfig = GeneratingConfig(
+            faceArea = faceArea,
+            eyesArea = eyeArea,
+            noseArea = noseArea,
+            mouthArea = mouthArea,
+        )
+
+        val generatedSizes = GeneratedSize(
+            face = Size(0f, 0f),
+            eye = Size(0f, 0f),
+            nose = Size(0f, 0f),
+            mouth = Size(400f, 50f),
+        )
+
+        val portraitState = PortraitState(
+            face = BodyPart(
+                position = Offset(0f, 0f),
+                size = Size(0f, 0f),
+                color = Color.Gray
             ),
-            size = mouthSize,
+            eye = BodyPart(
+                position = Offset(0f, 0f),
+                size = Size(0f, 0f),
+                color = Color.Green
+            ),
+            nose = BodyPart(
+                position = Offset(0f, 0f),
+                size = Size(0f, 0f),
+                color = Color.LightGray
+            ),
+            mouth = BodyPart(
+                position = verticalAxis.bottomCenter.translate(
+                    x = -generatedSizes.mouth.width / 2,
+                    y = -verticalAxis.size.height * 0.10f - generatedSizes.mouth.height / 2,
+                ),
+                size = generatedSizes.mouth,
+                color = Color.White
+            ),
         )
 
         val noseSize = Size(
@@ -195,8 +228,18 @@ fun Portrait(
             topLeft = mouthArea.topLeft,
             size = mouthArea.size
         )
-        drawRect(partColor, topLeft = mouth.topLeft, size = mouth.size)
+        drawRect(
+            portraitState.mouth.color,
+            topLeft = portraitState.mouth.position,
+            size = portraitState.mouth.size
+        )
+
+//        drawBodyPart(portraitState.mouth)
     })
+}
+
+fun DrawScope.drawBodyPart(part: BodyPart) {
+    drawRect(part.color, topLeft = part.position, size = part.size)
 }
 
 fun Rect.shrink(percent: Float): Rect {
