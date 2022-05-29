@@ -10,6 +10,8 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.feature.portrait.view.BodyPart
+import com.daniil.shevtsov.idle.feature.portrait.view.shrink
+import com.daniil.shevtsov.idle.feature.portrait.view.toRect
 import com.daniil.shevtsov.idle.feature.portrait.view.translate
 
 @Preview
@@ -47,15 +49,27 @@ fun DrawScope.drawEye() {
         size = irisSize,
         color = Color.Green,
     )
-
-    drawOval(
-        eye.color,
-        topLeft = eye.position,
-        size = eye.size,
+    val pupilSize = iris.toRect().shrink(
+        percent = 0.5f
+    ).size
+    val pupil = BodyPart(
+        position = iris.toRect().center.translate(
+            x = -pupilSize.width / 2,
+            y = -pupilSize.height / 2,
+        ),
+        size = pupilSize,
+        color = Color.Black
     )
+
+    drawEyePart(eye)
+    drawEyePart(iris)
+    drawEyePart(pupil)
+}
+
+fun DrawScope.drawEyePart(part: BodyPart) {
     drawOval(
-        iris.color,
-        topLeft = iris.position,
-        size = iris.size
+        part.color,
+        topLeft = part.position,
+        size = part.size,
     )
 }
