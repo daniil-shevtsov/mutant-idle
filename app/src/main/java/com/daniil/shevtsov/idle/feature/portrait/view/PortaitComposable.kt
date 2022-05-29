@@ -389,10 +389,14 @@ fun DrawScope.drawNose(
             ),
     )
 
+    val tipHeight = Random.nextFloatInRange(
+        min = tipArea.height * 0.1f,
+        max = tipArea.height,
+    )
     val noseTip = BezierState(
         start = tipArea.topLeft,
         finish = tipArea.topRight,
-        support = tipArea.bottomCenter.translate(y = tipArea.height)
+        support = tipArea.topCenter.translate(y = tipHeight * 2)
     )
 
     drawPath(
@@ -421,6 +425,7 @@ fun DrawScope.drawNose(
     drawBodyPart(dorsum)
     drawBezierPoints(leftNostril)
     drawBezierPoints(rightNostril)
+    drawBezierPoints(noseTip)
 
     if (previewState.shouldShowNoseAreas) {
         drawArea(noseArea)
