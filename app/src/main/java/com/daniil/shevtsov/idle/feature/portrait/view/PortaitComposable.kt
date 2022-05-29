@@ -378,19 +378,6 @@ fun Portrait(
                     )
                 )
             }
-
-        val dorsumSize = Size(
-            dorsumArea.width,
-            dorsumArea.height
-        )
-        val dorsum = BodyPart(
-            position = dorsumArea.topCenter.translate(
-                x = -dorsumSize.width / 2f
-            ),
-            size = dorsumSize,
-            color = Color.LightGray
-        )
-
         val tipArea = Rect(
             dorsumArea.bottomLeft.translate(
                 y = -(dorsumArea.bottomLeft.y - nostrilsArea.bottomLeft.y)
@@ -400,6 +387,19 @@ fun Portrait(
                 height = dorsumArea.bottomLeft.y - nostrilsArea.bottomLeft.y
             )
         )
+        val dorsumSize = Size(
+            dorsumArea.width,
+            dorsumArea.height - tipArea.height
+        )
+        val dorsum = BodyPart(
+            position = dorsumArea.topCenter.translate(
+                x = -dorsumSize.width / 2f
+            ),
+            size = dorsumSize,
+            color = Color.LightGray
+        )
+
+
 
         drawBodyPart(dorsum)
 //        drawBodyPart(nose)
@@ -442,7 +442,7 @@ fun Portrait(
                 drawQuadraticBezier(rightNostril)
                 close()
             },
-            Color.Blue,
+            Color.LightGray,
         )
 
         drawPath(
@@ -450,7 +450,7 @@ fun Portrait(
                 drawQuadraticBezier(leftNostril)
                 close()
             },
-            Color.Blue,
+            Color.LightGray,
         )
 
         drawPath(
@@ -458,7 +458,7 @@ fun Portrait(
                 drawQuadraticBezier(noseTip)
                 close()
             },
-            Color.Blue,
+            Color.LightGray,
         )
 
         drawArea(dorsumArea)
