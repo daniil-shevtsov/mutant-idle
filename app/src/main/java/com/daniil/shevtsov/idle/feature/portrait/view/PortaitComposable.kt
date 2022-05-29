@@ -142,19 +142,36 @@ fun Nose(modifier: Modifier = Modifier, bezierState: BezierState) {
             color = Color.Gray
         )
         drawBodyPart(nose)
-        val path = Path().apply {
-            moveTo(nose.position.x, nose.position.y + nose.size.height - nose.size.height * 0.25f)
-            quadraticBezierTo(
-                nose.position.x + bezierState.support.x - 280f,
-                nose.position.y + nose.size.height + bezierState.support.y - 280f,
-                nose.position.x,
-                nose.position.y + nose.size.height,
-            )
-            close()
-        }
-
         drawPath(
-            path = path,
+            path = Path().apply {
+                moveTo(
+                    nose.position.x,
+                    nose.position.y + nose.size.height - nose.size.height * 0.25f
+                )
+                quadraticBezierTo(
+                    nose.position.x + bezierState.support.x - 280f,
+                    nose.position.y + nose.size.height + bezierState.support.y - 280f,
+                    nose.position.x,
+                    nose.position.y + nose.size.height,
+                )
+                close()
+            },
+            Color.Blue,
+        )
+        drawPath(
+            path = Path().apply {
+                moveTo(
+                    nose.position.x + nose.size.width,
+                    nose.position.y + nose.size.height - nose.size.height * 0.25f
+                )
+                quadraticBezierTo(
+                    nose.position.x + nose.size.width + bezierState.support.x + 280f,
+                    nose.position.y + nose.size.height + bezierState.support.y - 280f,
+                    nose.position.x + nose.size.width,
+                    nose.position.y + nose.size.height,
+                )
+                close()
+            },
             Color.Blue,
         )
     })
