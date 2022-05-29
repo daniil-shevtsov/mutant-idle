@@ -117,107 +117,6 @@ fun PortraitPreview() {
     }
 }
 
-@Composable
-fun Nose(modifier: Modifier = Modifier, bezierState: BezierState) {
-    Canvas(modifier = modifier, onDraw = {
-        val nose = BodyPart(
-            position = Offset(size.width / 2 - size.width / 4, 0f),
-            size = Size(size.width / 2, size.height),
-            color = Color.Gray
-        )
-        val dorsumArea = nose
-            .toRect()
-            .shrink(widthPercent = 0.75f)
-        val nostrilsArea = nose
-            .toRect()
-            .shrink(heightPercent = 0.25f)
-            .let {
-                it.move(
-                    nose.position.translate(
-                        x = it.size.width / 2,
-                        y = nose.size.height - it.size.height
-                    )
-                )
-            }
-
-        val tipArea = Rect(
-            dorsumArea.bottomLeft.translate(
-                y = -(dorsumArea.bottomLeft.y - nostrilsArea.bottomLeft.y)
-            ),
-            Size(
-                width = dorsumArea.width,
-                height = dorsumArea.bottomLeft.y - nostrilsArea.bottomLeft.y
-            )
-        )
-
-        drawBodyPart(nose)
-
-        val leftNostrilArea = Rect(
-            nostrilsArea.topLeft,
-            Size(
-                width = (dorsumArea.left - nostrilsArea.left),
-                height = nostrilsArea.height,
-            )
-        )
-        val rightNostrilArea = Rect(
-            nostrilsArea.topRight.translate(
-                x = -(nostrilsArea.right - dorsumArea.right)
-            ),
-            Size(
-                width = nostrilsArea.right - dorsumArea.right,
-                height = nostrilsArea.height,
-            )
-        )
-        val leftNostril = BezierState(
-            start = leftNostrilArea.topRight,
-            finish = leftNostrilArea.bottomRight,
-            support = leftNostrilArea.centerLeft.translate(x = -leftNostrilArea.width),
-        )
-        val rightNostril = BezierState(
-            start = rightNostrilArea.topLeft,
-            finish = rightNostrilArea.bottomLeft,
-            support = rightNostrilArea.centerRight.translate(x = rightNostrilArea.width),
-        )
-
-        val noseTip = BezierState(
-            start = tipArea.topLeft,
-            finish = tipArea.topRight,
-            support = tipArea.bottomCenter.translate(y = tipArea.height)
-        )
-
-        drawPath(
-            path = Path().apply {
-                drawQuadraticBezier(rightNostril)
-                close()
-            },
-            Color.Blue,
-        )
-
-        drawPath(
-            path = Path().apply {
-                drawQuadraticBezier(leftNostril)
-                close()
-            },
-            Color.Blue,
-        )
-        drawBezierPoints(leftNostril)
-
-        drawPath(
-            path = Path().apply {
-                drawQuadraticBezier(noseTip)
-                close()
-            },
-            Color.Blue,
-        )
-
-        drawArea(dorsumArea)
-        drawArea(nostrilsArea)
-        drawArea(leftNostrilArea, color = Color.Green)
-        drawArea(rightNostrilArea)
-        drawArea(tipArea)
-    })
-}
-
 fun DrawScope.drawBezierPoints(
     bezierState: BezierState,
     pointColor: Color = Color.Black,
@@ -457,15 +356,24 @@ fun DrawScope.drawNose(
             height = nostrilsArea.height,
         )
     )
+    val nostrilsSupportY = nostrilsArea.height / 2f
     val leftNostril = BezierState(
         start = leftNostrilArea.topRight,
         finish = leftNostrilArea.bottomRight,
-        support = leftNostrilArea.centerLeft.translate(x = -leftNostrilArea.width),
+        support = leftNostrilArea.topLeft
+            .translate(
+                x = -leftNostrilArea.width,
+                y = nostrilsSupportY,
+            ),
     )
     val rightNostril = BezierState(
         start = rightNostrilArea.topLeft,
         finish = rightNostrilArea.bottomLeft,
-        support = rightNostrilArea.centerRight.translate(x = rightNostrilArea.width),
+        support = rightNostrilArea.topRight
+            .translate(
+                x = rightNostrilArea.width,
+                y = nostrilsSupportY
+            ),
     )
 
     val noseTip = BezierState(
