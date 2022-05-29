@@ -192,19 +192,21 @@ fun Portrait(
         )
 
         val eyeY = Random.nextFloatInRange(max = eyeArea.height - generatedSizes.eye.height)
-
+        val eyeDistance =
+            Random.nextFloatInRange(max = eyesArea.width - generatedSizes.eye.width * 2)
         val portraitState = PortraitState(
             head = head,
             leftEye = BodyPart(
-                position = eyesArea.topLeft.translate(
+                position = eyesArea.topCenter.translate(
+                    x = (-eyeDistance / 2) - generatedSizes.eye.width,
                     y = eyeY
                 ),
                 size = generatedSizes.eye,
                 color = Color.Green
             ),
             rightEye = BodyPart(
-                position = eyesArea.topRight.translate(
-                    x = -generatedSizes.eye.width,
+                position = eyesArea.topCenter.translate(
+                    x = eyeDistance / 2,
                     y = eyeY
                 ),
                 size = generatedSizes.eye,
