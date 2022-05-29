@@ -85,7 +85,7 @@ fun PortraitPreview() {
 
     val state = PreviewState(
         mode = previewMode,
-        shouldShowFaceAreas = true,
+        shouldShowFaceAreas = false,
         shouldShowNoseAreas = false,
     )
 
@@ -281,8 +281,6 @@ fun Portrait(
 
         drawRect(Color.DarkGray, topLeft = screenArea.topLeft, size = screenArea.size)
         drawBodyPart(portraitState.head)
-        drawRect(axisColor, topLeft = horizontalAxis.topLeft, size = horizontalAxis.size)
-        drawRect(axisColor, topLeft = verticalAxis.topLeft, size = verticalAxis.size)
 
         drawBodyPart(portraitState.leftEye)
         drawBodyPart(portraitState.rightEye)
