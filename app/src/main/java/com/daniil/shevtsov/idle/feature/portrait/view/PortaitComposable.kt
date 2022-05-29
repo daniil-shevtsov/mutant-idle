@@ -135,14 +135,23 @@ fun Portrait(
 
         val generatedSizes = GeneratedSize(
             face = faceArea.size,
-            eye = Size(100f, 50f),
+            eye = Size(
+                width = Random.nextFloatInRange(
+                    min = eyeArea.width * 0.1f,
+                    max = eyeArea.width * 0.3f
+                ),
+                height = Random.nextFloatInRange(
+                    min = eyeArea.height * 0.1f,
+                    max = eyeArea.height * 0.3f
+                ),
+            ),
             nose = Size(
                 width = Random.nextFloatInRange(
-                    min = noseArea.width * 0.2f,
+                    min = noseArea.width * 0.1f,
                     max = noseArea.width
                 ),
                 height = Random.nextFloatInRange(
-                    min = noseArea.width * 0.3f,
+                    min = noseArea.height * 0.3f,
                     max = noseArea.height
                 ),
             ),
@@ -152,7 +161,7 @@ fun Portrait(
                     max = mouthArea.width
                 ),
                 height = Random.nextFloatInRange(
-                    min = mouthArea.width * 0.1f,
+                    min = mouthArea.height * 0.1f,
                     max = mouthArea.height * 0.6f
                 )
             ),
