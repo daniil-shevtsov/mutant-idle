@@ -114,12 +114,16 @@ fun Portrait(
             head.size,
         )
 
-        val eyeArea = faceArea
+        val eyesArea = faceArea
             .shrink(
                 widthPercent = 0.75f,
                 heightPercent = 0.3f,
             )
             .move(faceArea.center.translate(y = -faceArea.height * (1 / 8f)))
+        val eyeArea = eyesArea
+            .shrink(widthPercent = 0.5f, heightPercent = 1f)
+            .move(eyesArea.center.translate(x = -eyesArea.width * 0.25f))
+
 
         val noseArea = faceArea
             .shrink(
@@ -149,7 +153,7 @@ fun Portrait(
 
         val generatingConfig = GeneratingConfig(
             faceArea = faceArea,
-            eyesArea = eyeArea,
+            eyesArea = eyesArea,
             noseArea = noseArea,
             mouthArea = mouthArea,
         )
@@ -157,12 +161,12 @@ fun Portrait(
         val generatedSizes = FacePartsSize(
             eye = Size(
                 width = Random.nextFloatInRange(
-                    min = eyeArea.width * 0.1f,
-                    max = eyeArea.width * 0.3f
+                    min = eyeArea.width * 0.2f,
+                    max = eyeArea.width * 0.9f
                 ),
                 height = Random.nextFloatInRange(
                     min = eyeArea.height * 0.1f,
-                    max = eyeArea.height * 0.3f
+                    max = eyeArea.height * 0.6f
                 ),
             ),
             nose = Size(
@@ -187,20 +191,21 @@ fun Portrait(
             ),
         )
 
+        val eyeY = Random.nextFloatInRange(max = eyeArea.height - generatedSizes.eye.height)
+
         val portraitState = PortraitState(
             head = head,
             leftEye = BodyPart(
-                position = horizontalAxis.centerLeft.translate(
-                    x = horizontalAxis.width * 0.75f - generatedSizes.eye.width / 2,
-                    y = -generatedSizes.eye.height / 2
+                position = eyesArea.topLeft.translate(
+                    y = eyeY
                 ),
                 size = generatedSizes.eye,
                 color = Color.Green
             ),
             rightEye = BodyPart(
-                position = horizontalAxis.centerLeft.translate(
-                    x = horizontalAxis.width * 0.25f - generatedSizes.eye.width / 2,
-                    y = -generatedSizes.eye.height / 2
+                position = eyesArea.topRight.translate(
+                    x = -generatedSizes.eye.width,
+                    y = eyeY
                 ),
                 size = generatedSizes.eye,
                 color = Color.Green
@@ -235,6 +240,7 @@ fun Portrait(
 
         drawArea(headArea)
         drawArea(faceArea)
+        drawArea(eyesArea)
         drawArea(eyeArea)
         drawArea(noseArea)
         drawArea(mouthArea)
