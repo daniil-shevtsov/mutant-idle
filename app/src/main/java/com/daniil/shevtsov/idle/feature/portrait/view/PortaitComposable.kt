@@ -15,6 +15,33 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlin.random.Random
 
+data class AreaPercentages(
+    val faceArea: Size,
+    val eyesArea: Size,
+    val noseArea: Size,
+    val mouthArea: Size,
+)
+
+data class GeneratingConfig(
+    val faceArea: Rect,
+    val eyesArea: Rect,
+    val noseArea: Rect,
+    val mouthArea: Rect,
+)
+
+data class BodyPart(
+    val position: Offset,
+    val size: Size,
+    val color: Color,
+)
+
+data class PortraitState(
+    val face: BodyPart,
+    val eye: BodyPart,
+    val nose: BodyPart,
+    val mouth: BodyPart,
+)
+
 @Preview(
     widthDp = 800,
     heightDp = 800
@@ -22,6 +49,7 @@ import kotlin.random.Random
 @Composable
 fun PortraitPreview() {
     val previewSize = 400.dp
+
     Column {
         Row {
             Portrait(
@@ -74,6 +102,13 @@ fun Portrait(
             )
             .move(faceArea.bottomCenter.translate(y = -faceArea.height * (1 / 8f)))
 
+        val generatingConfig = GeneratingConfig(
+            faceArea = faceArea,
+            eyesArea = eyeArea,
+            noseArea = noseArea,
+            mouthArea = mouthArea,
+        )
+
         val axisSize = 5f
         val axisColor = Color.Blue
         val partColor = Color.Green
@@ -98,8 +133,14 @@ fun Portrait(
         )
 
         val noseSize = Size(
-            width = Random.nextFloatInRange(max = noseArea.width),
-            height = Random.nextFloatInRange(max = noseArea.height),
+            width = Random.nextFloatInRange(
+                min = noseArea.width * 0.2f,
+                max = noseArea.width
+            ),
+            height = Random.nextFloatInRange(
+                min = noseArea.width * 0.3f,
+                max = noseArea.height
+            ),
         )
         val nose = Rect(
             offset = noseArea.topCenter.translate(
