@@ -68,7 +68,9 @@ enum class PreviewMode {
 }
 
 data class PreviewState(
-    val mode: PreviewMode
+    val mode: PreviewMode,
+    val shouldShowFaceAreas: Boolean,
+    val shouldShowNoseAreas: Boolean,
 )
 
 @Preview(
@@ -81,7 +83,11 @@ fun PortraitPreview() {
 
     val previewMode = PreviewMode.Nose
 
-    val state = PreviewState(mode = previewMode)
+    val state = PreviewState(
+        mode = previewMode,
+        shouldShowFaceAreas = false,
+        shouldShowNoseAreas = true,
+    )
 
     when (state.mode) {
         PreviewMode.Nose -> {
@@ -91,26 +97,20 @@ fun PortraitPreview() {
                     size = Size(size.width / 2, size.height),
                     color = Color.Gray
                 )
-                drawNose(nose)
+                drawNose(nose, state)
             })
         }
         PreviewMode.Portaits -> {
             Column {
-                Row {
-                    Portrait(
-                        modifier = Modifier.size(previewSize)
-                    )
-                    Portrait(
-                        modifier = Modifier.size(previewSize)
-                    )
-                }
-                Row {
-                    Portrait(
-                        modifier = Modifier.size(previewSize)
-                    )
-                    Portrait(
-                        modifier = Modifier.size(previewSize)
-                    )
+                repeat(2) {
+                    Row {
+                        repeat(2) {
+                            Portrait(
+                                previewState = state,
+                                modifier = Modifier.size(previewSize)
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -231,6 +231,7 @@ fun DrawScope.drawBezierPoints(
 
 @Composable
 fun Portrait(
+    previewState: PreviewState,
     modifier: Modifier = Modifier,
 ) {
     Canvas(modifier = modifier, onDraw = {
@@ -388,19 +389,23 @@ fun Portrait(
         drawBodyPart(portraitState.rightEye)
         drawBodyPart(portraitState.mouth)
 
-        drawNose(portraitState.nose)
+        drawNose(portraitState.nose, previewState = previewState)
 
-
-        drawArea(headArea)
-        drawArea(faceArea)
-        drawArea(eyesArea)
-        drawArea(eyeArea)
-        drawArea(noseArea)
-        drawArea(mouthArea)
+        if (previewState.shouldShowFaceAreas) {
+            drawArea(headArea)
+            drawArea(faceArea)
+            drawArea(eyesArea)
+            drawArea(eyeArea)
+            drawArea(noseArea)
+            drawArea(mouthArea)
+        }
     })
 }
 
-fun DrawScope.drawNose(nose: BodyPart) {
+fun DrawScope.drawNose(
+    nose: BodyPart,
+    previewState: PreviewState,
+) {
     val dorsumArea = nose
         .toRect()
         .shrink(widthPercent = 0.75f)
@@ -435,11 +440,6 @@ fun DrawScope.drawNose(nose: BodyPart) {
         size = dorsumSize,
         color = Color.LightGray
     )
-
-
-
-    drawBodyPart(dorsum)
-//        drawBodyPart(nose)
 
     val leftNostrilArea = Rect(
         nostrilsArea.topLeft,
@@ -497,12 +497,15 @@ fun DrawScope.drawNose(nose: BodyPart) {
         },
         Color.LightGray,
     )
+    drawBodyPart(dorsum)
 
-    drawArea(dorsumArea)
-    drawArea(nostrilsArea)
-    drawArea(leftNostrilArea, color = Color.Green)
-    drawArea(rightNostrilArea)
-    drawArea(tipArea)
+    if (previewState.shouldShowNoseAreas) {
+        drawArea(dorsumArea)
+        drawArea(nostrilsArea)
+        drawArea(leftNostrilArea, color = Color.Green)
+        drawArea(rightNostrilArea)
+        drawArea(tipArea)
+    }
 }
 
 fun BodyPart.toRect() = Rect(
