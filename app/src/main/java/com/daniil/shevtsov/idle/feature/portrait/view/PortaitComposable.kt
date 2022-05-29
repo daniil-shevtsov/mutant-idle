@@ -61,6 +61,11 @@ data class BezierState(
     val finish: Offset,
 )
 
+data class NoseState(
+    val nostril: BezierState,
+    val tip: BezierState
+)
+
 @Preview(
     widthDp = 800,
     heightDp = 800
@@ -140,8 +145,8 @@ fun Nose(modifier: Modifier = Modifier, bezierState: BezierState) {
         val path = Path().apply {
             moveTo(nose.position.x, nose.position.y + nose.size.height - nose.size.height * 0.25f)
             quadraticBezierTo(
-                nose.position.x + bezierState.support.x,
-                nose.position.y + nose.size.height + bezierState.support.y,
+                nose.position.x + bezierState.support.x - 280f,
+                nose.position.y + nose.size.height + bezierState.support.y - 280f,
                 nose.position.x,
                 nose.position.y + nose.size.height,
             )
