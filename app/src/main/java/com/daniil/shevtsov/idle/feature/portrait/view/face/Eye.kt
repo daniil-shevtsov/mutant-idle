@@ -4,15 +4,13 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.daniil.shevtsov.idle.feature.portrait.view.BodyPart
-import com.daniil.shevtsov.idle.feature.portrait.view.shrink
-import com.daniil.shevtsov.idle.feature.portrait.view.toRect
-import com.daniil.shevtsov.idle.feature.portrait.view.translate
+import com.daniil.shevtsov.idle.feature.portrait.view.*
 
 @Preview
 @Composable
@@ -23,6 +21,18 @@ fun EyePreview() {
 }
 
 fun DrawScope.drawEye() {
+    val eyeAreaSize = Size(
+        width = size.width / 2f,
+        height = size.width / 4f,
+    )
+    val eyeArea = Rect(
+        offset = center.translate(
+            x = -eyeAreaSize.width / 2f,
+            y = -eyeAreaSize.height / 2f,
+        ),
+        size = eyeAreaSize,
+    )
+
     val center = center
     val eyeSize = Size(
         width = size.width / 2f,
@@ -75,6 +85,8 @@ fun DrawScope.drawEye() {
     drawEyePart(iris)
     drawEyePart(pupil)
     drawEyePart(pupilLight)
+
+    drawArea(eyeArea)
 }
 
 fun DrawScope.drawEyePart(part: BodyPart) {
