@@ -12,8 +12,8 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.daniil.shevtsov.idle.feature.portrait.view.face.drawHead
 import com.daniil.shevtsov.idle.feature.portrait.view.face.drawNose
+import com.daniil.shevtsov.idle.feature.portrait.view.face.drawPortrait
 
 @Preview(
     widthDp = 800,
@@ -66,7 +66,7 @@ fun Portrait(
     modifier: Modifier = Modifier,
 ) {
     Canvas(modifier = modifier, onDraw = {
-        drawHead(previewState)
+        drawPortrait(previewState)
     })
 }
 
