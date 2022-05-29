@@ -81,12 +81,12 @@ data class PreviewState(
 fun PortraitPreview() {
     val previewSize = 400.dp
 
-    val previewMode = PreviewMode.Nose
+    val previewMode = PreviewMode.Portaits
 
     val state = PreviewState(
         mode = previewMode,
-        shouldShowFaceAreas = false,
-        shouldShowNoseAreas = true,
+        shouldShowFaceAreas = true,
+        shouldShowNoseAreas = false,
     )
 
     when (state.mode) {
@@ -423,9 +423,6 @@ fun DrawScope.drawNose(
         Color.LightGray,
     )
     drawBodyPart(dorsum)
-    drawBezierPoints(leftNostril)
-    drawBezierPoints(rightNostril)
-    drawBezierPoints(noseTip)
 
     if (previewState.shouldShowNoseAreas) {
         drawArea(noseArea)
@@ -434,6 +431,9 @@ fun DrawScope.drawNose(
         drawArea(leftNostrilArea)
         drawArea(rightNostrilArea)
         drawArea(tipArea)
+        drawBezierPoints(leftNostril)
+        drawBezierPoints(rightNostril)
+        drawBezierPoints(noseTip)
     }
 }
 
