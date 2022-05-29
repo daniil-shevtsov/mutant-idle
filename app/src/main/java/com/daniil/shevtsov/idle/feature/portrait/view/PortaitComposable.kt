@@ -45,7 +45,8 @@ data class GeneratedSize(
 
 data class PortraitState(
     val face: BodyPart,
-    val eye: BodyPart,
+    val leftEye: BodyPart,
+    val rightEye: BodyPart,
     val nose: BodyPart,
     val mouth: BodyPart,
 )
@@ -154,9 +155,20 @@ fun Portrait(
                 size = Size(0f, 0f),
                 color = Color.Gray
             ),
-            eye = BodyPart(
-                position = Offset(0f, 0f),
-                size = Size(0f, 0f),
+            leftEye = BodyPart(
+                position = horizontalAxis.centerLeft.translate(
+                    x = horizontalAxis.width * 0.75f - generatedSizes.eye.width / 2,
+                    y = -generatedSizes.eye.height / 2
+                ),
+                size = generatedSizes.eye,
+                color = Color.Green
+            ),
+            rightEye = BodyPart(
+                position = horizontalAxis.centerLeft.translate(
+                    x = horizontalAxis.width * 0.25f - generatedSizes.eye.width / 2,
+                    y = -generatedSizes.eye.height / 2
+                ),
+                size = generatedSizes.eye,
                 color = Color.Green
             ),
             nose = BodyPart(
@@ -177,21 +189,6 @@ fun Portrait(
             ),
         )
 
-        val leftEye = Rect(
-            offset = horizontalAxis.centerLeft.translate(
-                x = horizontalAxis.width * 0.75f - generatedSizes.eye.width / 2,
-                y = -generatedSizes.eye.height / 2
-            ),
-            size = generatedSizes.eye
-        )
-        val rightEye = Rect(
-            offset = horizontalAxis.centerLeft.translate(
-                x = horizontalAxis.width * 0.25f - generatedSizes.eye.width / 2,
-                y = -generatedSizes.eye.height / 2
-            ),
-            size = generatedSizes.eye
-        )
-
         drawRect(Color.DarkGray, topLeft = screenArea.topLeft, size = screenArea.size)
         drawRect(Color.Gray, topLeft = faceArea.topLeft, size = faceArea.size)
 
@@ -204,8 +201,8 @@ fun Portrait(
             topLeft = eyeArea.topLeft,
             size = eyeArea.size
         )
-        drawRect(partColor, topLeft = leftEye.topLeft, size = leftEye.size)
-        drawRect(partColor, topLeft = rightEye.topLeft, size = rightEye.size)
+        drawBodyPart(portraitState.leftEye)
+        drawBodyPart(portraitState.rightEye)
 
         drawRect(
             partAreaColor,
