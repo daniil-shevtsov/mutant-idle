@@ -141,10 +141,12 @@ fun Nose(modifier: Modifier = Modifier, bezierState: BezierState) {
             size = Size(size.width / 2, size.height),
             color = Color.Gray
         )
-        val nostrilsArea = Rect(
-            nose.position,
-            nose.size
-        ).shrink(widthPercent = 1f, heightPercent = 0.25f)
+        val dorsumArea = nose
+            .toRect()
+            .shrink(widthPercent = 0.75f)
+        val nostrilsArea = nose
+            .toRect()
+            .shrink(heightPercent = 0.25f)
             .let {
                 it.move(
                     nose.position.translate(
@@ -204,6 +206,7 @@ fun Nose(modifier: Modifier = Modifier, bezierState: BezierState) {
             Color.Blue,
         )
 
+        drawArea(dorsumArea)
         drawArea(nostrilsArea)
     })
 }
@@ -377,6 +380,11 @@ fun Portrait(
     })
 }
 
+fun BodyPart.toRect() = Rect(
+    position,
+    size,
+)
+
 fun DrawScope.drawBodyPart(part: BodyPart) {
     drawRect(part.color, topLeft = part.position, size = part.size)
 }
@@ -416,8 +424,8 @@ fun Rect.move(
 )
 
 fun Rect.shrink(
-    widthPercent: Float,
-    heightPercent: Float,
+    widthPercent: Float = 1f,
+    heightPercent: Float = 1f,
 ): Rect {
     val newWidth = width * widthPercent
     val newHeight = height * heightPercent
