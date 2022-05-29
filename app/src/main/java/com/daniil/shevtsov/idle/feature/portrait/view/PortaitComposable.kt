@@ -220,11 +220,11 @@ fun Portrait(
             ),
             nose = Size(
                 width = Random.nextFloatInRange(
-                    min = noseArea.width * 0.1f,
+                    min = noseArea.width * 0.5f,
                     max = noseArea.width
                 ),
                 height = Random.nextFloatInRange(
-                    min = noseArea.height * 0.3f,
+                    min = noseArea.height * 0.5f,
                     max = noseArea.height
                 ),
             ),
@@ -242,7 +242,7 @@ fun Portrait(
 
         val eyeY = Random.nextFloatInRange(max = eyeArea.height - generatedSizes.eye.height)
         val eyeDistance =
-            Random.nextFloatInRange(max = eyesArea.width - generatedSizes.eye.width * 2)
+            Random.nextFloatInRange(max = (eyesArea.width - generatedSizes.eye.width * 2) + 5f)
         val portraitState = PortraitState(
             head = head,
             leftEye = BodyPart(
