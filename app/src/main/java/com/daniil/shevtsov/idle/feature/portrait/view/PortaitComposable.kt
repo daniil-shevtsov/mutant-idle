@@ -360,7 +360,7 @@ fun Portrait(
 
         drawBodyPart(portraitState.leftEye)
         drawBodyPart(portraitState.rightEye)
-        drawBodyPart(portraitState.nose)
+//        drawBodyPart(portraitState.nose)
         drawBodyPart(portraitState.mouth)
 
         val nose = portraitState.nose
@@ -379,6 +379,18 @@ fun Portrait(
                 )
             }
 
+        val dorsumSize = Size(
+            dorsumArea.width,
+            dorsumArea.height
+        )
+        val dorsum = BodyPart(
+            position = dorsumArea.topCenter.translate(
+                x = -dorsumSize.width / 2f
+            ),
+            size = dorsumSize,
+            color = Color.LightGray
+        )
+
         val tipArea = Rect(
             dorsumArea.bottomLeft.translate(
                 y = -(dorsumArea.bottomLeft.y - nostrilsArea.bottomLeft.y)
@@ -389,7 +401,8 @@ fun Portrait(
             )
         )
 
-        drawBodyPart(nose)
+        drawBodyPart(dorsum)
+//        drawBodyPart(nose)
 
         val leftNostrilArea = Rect(
             nostrilsArea.topLeft,
