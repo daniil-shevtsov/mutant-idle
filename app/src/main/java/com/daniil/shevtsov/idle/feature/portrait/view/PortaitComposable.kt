@@ -305,11 +305,15 @@ fun DrawScope.drawNose(
     nose: BodyPart,
     previewState: PreviewState,
 ) {
-    val dorsumArea = nose
-        .toRect()
-        .shrink(widthPercent = 0.75f)
-    val nostrilsArea = nose
-        .toRect()
+    val noseArea = nose.toRect()
+    val dorsumArea = noseArea
+        .shrink(
+            widthPercent = Random.nextFloatInRange(
+                min = 0.3f,
+                max = 0.9f,
+            )
+        )
+    val nostrilsArea = noseArea
         .shrink(heightPercent = 0.25f)
         .let {
             it.move(
@@ -411,6 +415,7 @@ fun DrawScope.drawNose(
     drawBodyPart(dorsum)
 
     if (previewState.shouldShowNoseAreas) {
+        drawArea(noseArea)
         drawArea(dorsumArea)
         drawArea(nostrilsArea)
         drawArea(leftNostrilArea, color = Color.Green)
