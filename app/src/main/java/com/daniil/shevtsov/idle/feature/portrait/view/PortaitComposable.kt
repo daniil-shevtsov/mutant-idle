@@ -4,12 +4,17 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,6 +55,12 @@ data class PortraitState(
     val mouth: BodyPart,
 )
 
+data class BezierState(
+    val start: Offset,
+    val support: Offset,
+    val finish: Offset,
+)
+
 @Preview(
     widthDp = 800,
     heightDp = 800
@@ -58,26 +69,90 @@ data class PortraitState(
 fun PortraitPreview() {
     val previewSize = 400.dp
 
-    Column {
-        Row {
-            Portrait(
-                modifier = Modifier.size(previewSize)
+    var kek = remember {
+        mutableStateOf(
+            BezierState(
+                start = Offset(0f, 0f),
+                support = Offset(0f, 0f),
+                finish = Offset(0f, 0f),
             )
-            Portrait(
-                modifier = Modifier.size(previewSize)
-            )
-        }
-        Row {
-            Portrait(
-                modifier = Modifier.size(previewSize)
-            )
-            Portrait(
-                modifier = Modifier.size(previewSize)
-            )
-        }
+        )
     }
 
 
+    Column {
+        Row {
+//            Text("Start x: ${kek.value.start.x}")
+//            Text("Start y: ${kek.value.start.y}")
+//            Text("Finish x: ${kek.value.finish.x}")
+//            Text("Finish y: ${kek.value.finish.y}")
+            Text("Support x: ${kek.value.support.x}")
+            Button(onClick = {
+                kek.value = kek.value.copy(
+                    support = kek.value.support.copy(
+                        x = kek.value.support.x + 10f
+                    )
+                )
+            }) { Text("Up") }
+            Button(onClick = {
+                kek.value = kek.value.copy(
+                    support = kek.value.support.copy(
+                        x = kek.value.support.x - 10f
+                    )
+                )
+            }) { Text("Down") }
+
+        }
+        Row {
+            Text("Support y: ${kek.value.support.y}")
+            Button(onClick = {
+                kek.value = kek.value.copy(
+                    support = kek.value.support.copy(
+                        y = kek.value.support.y + 10f
+                    )
+                )
+            }) { Text("Up") }
+            Button(onClick = {
+                kek.value = kek.value.copy(
+                    support = kek.value.support.copy(
+                        y = kek.value.support.y - 10f
+                    )
+                )
+            }) { Text("Down") }
+        }
+        Nose(
+            modifier = Modifier.size(previewSize),
+            bezierState = kek.value
+        )
+    }
+
+}
+
+@Composable
+fun Nose(modifier: Modifier = Modifier, bezierState: BezierState) {
+    Canvas(modifier = modifier, onDraw = {
+        val nose = BodyPart(
+            position = Offset(size.width / 2 - size.width / 4, 0f),
+            size = Size(size.width / 2, size.height),
+            color = Color.Gray
+        )
+        drawBodyPart(nose)
+        val path = Path().apply {
+            moveTo(nose.position.x, nose.position.y + nose.size.height - nose.size.height * 0.25f)
+            quadraticBezierTo(
+                nose.position.x + bezierState.support.x,
+                nose.position.y + nose.size.height + bezierState.support.y,
+                nose.position.x,
+                nose.position.y + nose.size.height,
+            )
+            close()
+        }
+
+        drawPath(
+            path = path,
+            Color.Blue,
+        )
+    })
 }
 
 @Composable
