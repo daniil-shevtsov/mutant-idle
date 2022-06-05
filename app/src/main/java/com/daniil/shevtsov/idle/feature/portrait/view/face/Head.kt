@@ -80,10 +80,22 @@ fun MyDragging() {
         modifier = Modifier.size(screenSizeDp).background(Color.White),
         contentAlignment = Alignment.Center
     ) {
-        Canvas(modifier = Modifier.background(Color.Gray)) {
+        Canvas(modifier = Modifier.background(Color.Blue)
+            .pointerInput(Unit) {
+                detectDragGestures { change, dragAmount ->
+                    change.consumeAllChanges()
+                    state.value = state.value.copy(
+                        support = state.value.support
+                            .translate(
+                                x = dragAmount.x,
+                                y = dragAmount.y,
+                            )
+                    )
+                }
+            }) {
+            drawRect(Color.Gray, topLeft = screenBounds.topLeft, size = screenBounds.size)
             drawPath(path = Path().apply {
                 drawQuadraticBezier(state.value)
-//                close()
             }, color = Color.Black, style = Stroke(width = 3f))
             drawBezierPoints(state.value)
         }
