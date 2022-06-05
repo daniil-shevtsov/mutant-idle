@@ -43,35 +43,51 @@ fun MyDragging() {
             )
         )
     }
+    val previousSelectedPointIndex = remember { mutableStateOf(-1) }
     Box(
         modifier = Modifier.size(screenSizeDp).background(Color.White)
             .pointerInput(Unit) {
-                detectDragGestures { change, dragAmount ->
+                detectDragGestures(
+                    onDragEnd = { previousSelectedPointIndex.value = -1 },
+                    onDragCancel = { previousSelectedPointIndex.value = -1 }
+                ) { change, dragAmount ->
                     change.consumeAllChanges()
                     val oldPoints = state.value.points()
-                    val nearestPoint = state.value.points()
+                    val selectedPointIndex = oldPoints
                         .minByOrNull { point ->
                             point.distanceTo(change.position)
-                        }
-                    if (nearestPoint != null) {
+                        }.let { oldPoints.indexOf(it) }
+                    /*when {
+                    previousSelectedPointIndex.value != -1 -> previousSelectedPointIndex.value
+                    else -> {
+                        oldPoints
+                            .minByOrNull { point ->
+                                point.distanceTo(change.position)
+                            }.let { oldPoints.indexOf(it) }
+                    }
+                }*/
+                    val selectedPoint = oldPoints.getOrNull(selectedPointIndex)
+                    if (selectedPoint != null) {
                         val newPoints = oldPoints.mapIndexed { index, point ->
-                            if (index == oldPoints.indexOf(nearestPoint)) {
+                            if (index == oldPoints.indexOf(selectedPoint)) {
                                 point.translate(
-                                    x = dragAmount.x,/*.coerceIn(
-                                        point.x - screenBounds.left,
-                                        screenBounds.right - point.x
-                                    )*/
-                                    y = dragAmount.y,/*.coerceIn(
-                                        point.y - screenBounds.top,
-                                        screenBounds.bottom - point.y
-                                    )*/
+                                    x = dragAmount.x,
+                                    y = dragAmount.y,
                                 )
                             } else {
                                 point
                             }
                         }
-                        state.value = newPoints.toBezierState()
+                        state.value = newPoints.map { point ->
+                            point.coerceIn(screenBounds)
+                        }.toBezierState()
                     }
+
+//                    Timber.d("change pressed: ${change.pressed}")
+//                    if (!change.pressed) {
+//                        Timber.d("deselect point")
+//                        previousSelectedPointIndex.value = -1
+//                    }
                 }
             },
     ) {

@@ -61,6 +61,11 @@ fun Offset.translate(
 
 fun Offset.distanceTo(offset: Offset) = sqrt((offset.x - x).pow(2) + (offset.y - y).pow(2))
 
+fun Offset.coerceIn(bounds: Rect) = Offset(
+    x = x.coerceIn(bounds.left, bounds.right),
+    y = y.coerceIn(bounds.top, bounds.bottom)
+)
+
 fun Random.nextFloatInRange(
     min: Float = Float.MIN_VALUE,
     max: Float = Float.MAX_VALUE,
