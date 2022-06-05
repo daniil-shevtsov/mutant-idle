@@ -218,7 +218,7 @@ private fun Kek(
 
 @Composable
 fun HeadPreviewComposable() {
-    val state = remember {
+    var state by remember {
         mutableStateOf(
             BezierViewState(
                 points = BezierState(
@@ -233,7 +233,7 @@ fun HeadPreviewComposable() {
     }
     Column(modifier = Modifier.background(Color.White)) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            state.value.points.points().forEachIndexed { index, point ->
+            state.points.points().forEachIndexed { index, point ->
                 val title = when (index) {
                     0 -> "Start"
                     1 -> "Finish"
@@ -257,13 +257,13 @@ fun HeadPreviewComposable() {
                 modifier = Modifier
                     .size(400.dp)
                     .background(Color.LightGray)
-                /*.bezierDragging(
-                    state = state.value,
-                    bounds = canvasBounds,
-                    updateState = { newState ->
-                        state.value = newState
-                    }
-                )*/,
+                    .bezierDragging(
+                        percentageStateValue = state,
+                        screenBounds = canvasBounds,
+                        updateState = { newState ->
+                            state = newState
+                        }
+                    ),
                 onDraw = {
                     val headArea = Rect(
                         offset = center.translate(-size.height / 2f),
@@ -276,9 +276,9 @@ fun HeadPreviewComposable() {
                     )
                     drawHead(
                         headArea = headArea,
-                        state = state.value.points,
+                        state = state.points,
                         onStateChanged = { newPoints ->
-                            state.value = state.value.copy(
+                            state = state.copy(
                                 points = newPoints
                             )
                         }
@@ -294,8 +294,8 @@ fun HeadPreviewComposable() {
 )
 @Composable
 fun HeadPreview() {
-//    HeadPreviewComposable()
-    DraggingComposable()
+    HeadPreviewComposable()
+//    DraggingComposable()
 }
 
 fun DrawScope.drawHead(
