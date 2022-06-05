@@ -158,6 +158,7 @@ fun DraggingComposable() {
     }
 
     fun updateState(newState: BezierViewState) {
+        Timber.tag("STATE-UPDATE").d("Update state from ${percentageState} to $newState")
         percentageState = newState
     }
 
@@ -176,7 +177,9 @@ private fun Kek(
     percentageStateValue: BezierViewState,
     updateState: (state: BezierViewState) -> Unit,
 ) {
+    Timber.tag("STATE-UPDATE").d("Got state before delegate: $percentageStateValue")
     val percentageStateValue by rememberUpdatedState(percentageStateValue)
+    Timber.tag("STATE-UPDATE").d("Got state after delegate: $percentageStateValue")
     Box(
         modifier = Modifier.size(screenSizeDp).background(Color.White),
         contentAlignment = Alignment.Center,
@@ -275,7 +278,8 @@ private fun Kek(
 
                             updateState(
                                 percentageStateValue.copy(
-                                    points = finalPoints.toBezierState()
+                                    points = finalPoints.toBezierState(),
+                                    previousSelectedIndex = selectedPointIndex,
                                 )
                             )
                         }
