@@ -139,7 +139,7 @@ private fun Modifier.bezierDragging(
 
 @Composable
 fun DraggingComposable() {
-    val screenSizeDp = 400.dp
+    val screenSizeDp = 200.dp
     val screenSizePx = with(LocalDensity.current) { screenSizeDp.toPx() }
     val screenSize = Size(screenSizePx, screenSizePx)
     val screenBounds = Rect(Offset.Zero, screenSize)
@@ -259,21 +259,23 @@ private fun Kek(
                                 val coercedPoints = newPoints.map { point ->
                                     point.coerceIn(screenBounds)
                                 }
+                                val finalPoints = coercedPoints.map { point ->
+                                    point.div(
+                                        x = screenBounds.width,
+                                        y = screenBounds.height
+                                    )
+                                }
                                 Timber.tag("KEK").d("Bounds: $screenBounds")
                                 Timber.tag("KEK")
                                     .d("State points: ${originalState.points()}")
                                 Timber.tag("KEK").d("Old points: ${oldPoints}")
                                 Timber.tag("KEK").d("New Points: ${newPoints}")
                                 Timber.tag("KEK").d("coerced points: ${coercedPoints}")
+                                Timber.tag("KEK").d("final points: ${finalPoints}")
 
                                 updateState(
                                     percentageStateValue.copy(
-                                        points = coercedPoints.map { point ->
-                                            point.div(
-                                                x = screenBounds.width,
-                                                y = screenBounds.height
-                                            )
-                                        }.toBezierState()
+                                        points = finalPoints.toBezierState()
                                     )
                                 )
                             }
