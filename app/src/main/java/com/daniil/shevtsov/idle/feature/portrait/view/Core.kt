@@ -3,6 +3,8 @@ package com.daniil.shevtsov.idle.feature.portrait.view
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
+import kotlin.math.pow
+import kotlin.math.sqrt
 import kotlin.random.Random
 
 fun Rect.shrink(percent: Float): Rect {
@@ -56,6 +58,8 @@ fun Offset.translate(
     x = this.x + x,
     y = this.y + y,
 )
+
+fun Offset.distanceTo(offset: Offset) = sqrt((offset.x - x).pow(2) + (offset.y - y).pow(2))
 
 fun Random.nextFloatInRange(
     min: Float = Float.MIN_VALUE,
