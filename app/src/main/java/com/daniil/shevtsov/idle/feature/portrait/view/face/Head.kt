@@ -22,14 +22,14 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.feature.portrait.view.*
+import timber.log.Timber
 
 data class BezierViewState(
     val kek: String = ""
 )
 
-@Preview
 @Composable
-fun MyDragging() {
+fun DraggingComposable() {
     val screenSizeDp = 400.dp
     val screenSize = Size(screenSizeDp.value, screenSizeDp.value)
     val screenBounds = Rect(Offset.Zero, screenSize)
@@ -45,53 +45,65 @@ fun MyDragging() {
     }
     val previousSelectedPointIndex = remember { mutableStateOf(-1) }
     Box(
-        modifier = Modifier.size(screenSizeDp).background(Color.White)
-            .pointerInput(Unit) {
-                detectDragGestures(
-                    onDragEnd = { previousSelectedPointIndex.value = -1 },
-                    onDragCancel = { previousSelectedPointIndex.value = -1 }
-                ) { change, dragAmount ->
-                    change.consumeAllChanges()
-                    val oldPoints = state.value.points()
-                    val selectedPointIndex = oldPoints
-                        .minByOrNull { point ->
-                            point.distanceTo(change.position)
-                        }.let { oldPoints.indexOf(it) }
-                    /*when {
-                    previousSelectedPointIndex.value != -1 -> previousSelectedPointIndex.value
-                    else -> {
-                        oldPoints
-                            .minByOrNull { point ->
-                                point.distanceTo(change.position)
-                            }.let { oldPoints.indexOf(it) }
-                    }
-                }*/
-                    val selectedPoint = oldPoints.getOrNull(selectedPointIndex)
-                    if (selectedPoint != null) {
-                        val newPoints = oldPoints.mapIndexed { index, point ->
-                            if (index == oldPoints.indexOf(selectedPoint)) {
-                                point.translate(
-                                    x = dragAmount.x,
-                                    y = dragAmount.y,
-                                )
-                            } else {
-                                point
+        modifier = Modifier.size(screenSizeDp).background(Color.White),
+        contentAlignment = Alignment.Center,
+    ) {
+        Canvas(
+            modifier = Modifier.background(Color.Blue)
+                .size(400.dp)
+                .pointerInput(Unit) {
+                    detectDragGestures(
+                        onDragStart = {
+                            Timber.tag("KEK").d("Drag started")
+                            previousSelectedPointIndex.value = -1
+                        },
+                        onDragEnd = {
+                            Timber.tag("KEK").d("Drag ended")
+                            previousSelectedPointIndex.value = -1
+                        },
+                        onDragCancel = {
+                            Timber.tag("KEK").d("Drag cancelled")
+                            previousSelectedPointIndex.value = -1
+                        }
+                    ) { change, dragAmount ->
+                        change.consumeAllChanges()
+                        val oldPoints = state.value.points()
+                        val selectedPointIndex = when {
+                            previousSelectedPointIndex.value != -1 -> {
+                                Timber.tag("KEK").d("Reuse position")
+                                previousSelectedPointIndex.value
+                            }
+                            else -> {
+                                Timber.tag("KEK").d("Choose nearest")
+                                oldPoints
+                                    .minByOrNull { point ->
+                                        point.distanceTo(change.position)
+                                    }.let { oldPoints.indexOf(it) }
                             }
                         }
-                        state.value = newPoints.map { point ->
-                            point.coerceIn(screenBounds)
-                        }.toBezierState()
+                        if (selectedPointIndex != previousSelectedPointIndex.value) {
+                            Timber.tag("KEK").d("Update previous point")
+                            previousSelectedPointIndex.value = selectedPointIndex
+                        }
+                        val selectedPoint = oldPoints.getOrNull(selectedPointIndex)
+                        if (selectedPoint != null) {
+                            val newPoints = oldPoints.mapIndexed { index, point ->
+                                if (index == oldPoints.indexOf(selectedPoint)) {
+                                    point.translate(
+                                        x = dragAmount.x,
+                                        y = dragAmount.y,
+                                    )
+                                } else {
+                                    point
+                                }
+                            }
+                            state.value = newPoints.map { point ->
+                                point.coerceIn(screenBounds)
+                            }.toBezierState()
+                        }
                     }
-
-//                    Timber.d("change pressed: ${change.pressed}")
-//                    if (!change.pressed) {
-//                        Timber.d("deselect point")
-//                        previousSelectedPointIndex.value = -1
-//                    }
-                }
-            },
-    ) {
-        Canvas(modifier = Modifier.background(Color.Blue)) {
+                },
+        ) {
             drawRect(Color.Gray, topLeft = screenBounds.topLeft, size = screenBounds.size)
             drawPath(path = Path().apply {
                 drawQuadraticBezier(state.value)
@@ -99,6 +111,12 @@ fun MyDragging() {
             drawBezierPoints(state.value)
         }
     }
+}
+
+@Preview
+@Composable
+fun MyDragging() {
+    DraggingComposable()
 }
 
 
