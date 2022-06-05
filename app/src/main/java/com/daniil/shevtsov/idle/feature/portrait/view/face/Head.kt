@@ -10,12 +10,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ClipOp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
@@ -55,6 +57,36 @@ fun Drag2DGestures() {
                 }
         )
         Text("Drag the box around", Modifier.align(Alignment.Center))
+    }
+}
+
+@Preview
+@Composable
+fun MyDragging() {
+    val screenSizeDp = 400.dp
+    val screenSize = Size(screenSizeDp.value, screenSizeDp.value)
+    val screenBounds = Rect(Offset.Zero, screenSize)
+    val state = remember {
+        mutableStateOf(
+            BezierState(
+                start = screenBounds.centerLeft,
+                finish = screenBounds.centerRight,
+                support = screenBounds.topLeft,
+                support2 = screenBounds.topRight,
+            )
+        )
+    }
+    Box(
+        modifier = Modifier.size(screenSizeDp).background(Color.White),
+        contentAlignment = Alignment.Center
+    ) {
+        Canvas(modifier = Modifier.background(Color.Gray)) {
+            drawPath(path = Path().apply {
+                drawQuadraticBezier(state.value)
+//                close()
+            }, color = Color.Black, style = Stroke(width = 3f))
+            drawBezierPoints(state.value)
+        }
     }
 }
 

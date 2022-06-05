@@ -32,6 +32,9 @@ fun DrawScope.drawBezierPoints(
     drawCircle(pointColor, center = bezierState.start, radius = pointRadius)
     drawCircle(pointColor, center = bezierState.finish, radius = pointRadius)
     drawCircle(supportColor, center = bezierState.support, radius = pointRadius)
+    if (bezierState.support2 != null) {
+        drawCircle(supportColor, center = bezierState.support2, radius = pointRadius)
+    }
 }
 
 fun Path.drawQuadraticBezier(state: BezierState) {
