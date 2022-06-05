@@ -2,9 +2,12 @@ package com.daniil.shevtsov.idle.feature.portrait.view.face
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
-import androidx.compose.runtime.Composable
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
@@ -14,9 +17,47 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.clipPath
+import androidx.compose.ui.input.pointer.consumeAllChanges
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.feature.portrait.view.*
+import kotlin.math.roundToInt
+
+data class BezierViewState(
+    val kek: String = ""
+)
+
+@Preview(
+    widthDp = 400,
+    heightDp = 400,
+)
+@Composable
+fun Drag2DGestures() {
+    val offsetX = remember { mutableStateOf(0f) }
+    val offsetY = remember { mutableStateOf(0f) }
+    Box(modifier = Modifier.size(400.dp)) {
+        Box(
+            Modifier
+                .offset { IntOffset(offsetX.value.roundToInt(), offsetY.value.roundToInt()) }
+                .background(Color.Blue)
+                .size(50.dp)
+                .pointerInput(Unit) {
+                    detectDragGestures { change, dragAmount ->
+                        change.consumeAllChanges()
+                        offsetX.value = (offsetX.value + dragAmount.x)
+                        //.coerceIn(0f, size.width.toFloat() - 50.dp.toPx())
+
+                        offsetY.value = (offsetY.value + dragAmount.y)
+                        //.coerceIn(0f, size.height.toFloat() - 50.dp.toPx())
+                    }
+                }
+        )
+        Text("Drag the box around", Modifier.align(Alignment.Center))
+    }
+}
+
 
 @Preview(
     widthDp = 800,
@@ -24,6 +65,10 @@ import com.daniil.shevtsov.idle.feature.portrait.view.*
 )
 @Composable
 fun HeadPreview() {
+    var state: BezierViewState by remember { mutableStateOf(BezierViewState()) }
+
+
+
     Box(
         modifier = Modifier.size(800.dp).background(Color.White),
         contentAlignment = Alignment.Center
