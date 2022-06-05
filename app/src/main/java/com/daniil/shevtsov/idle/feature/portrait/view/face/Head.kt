@@ -15,12 +15,11 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.ClipOp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
@@ -225,7 +224,7 @@ fun HeadPreviewComposable() {
                     start = Offset(0f, 0.5f),
                     finish = Offset(1f, 0.5f),
                     support = Offset(0f, 0f),
-                    support2 = Offset(1f, 1f),
+                    support2 = Offset(1f, 0f),
                 ),
                 previousSelectedIndex = -1,
             )
@@ -330,16 +329,33 @@ fun DrawScope.drawHead(
         x = topHeadArea.width,
         y = topHeadArea.height,
     )
-    clipPath(path = Path().apply {
-        drawQuadraticBezier(pixelState)
-        lineTo(bottomArea.bottomRight.x, bottomArea.bottomRight.y)
-        lineTo(bottomArea.bottomLeft.x, bottomArea.bottomLeft.y)
-        lineTo(topHeadArea.bottomLeft.x, topHeadArea.bottomLeft.y)
-        close()
-    }, clipOp = ClipOp.Intersect) {
-        drawBodyPart(head)
-        drawBodyPart(BodyPart(topHeadArea.topLeft, topHeadArea.size, Color.Blue))
-    }
+    drawPath(
+        path = Path().apply {
+            drawQuadraticBezier(pixelState)
+            lineTo(pixelState.finish.x, bottomArea.bottomRight.y)
+            lineTo(pixelState.start.x, bottomArea.bottomRight.x)
+            lineTo(pixelState.start.x, pixelState.start.y)
+        },
+        color = Color.Cyan,
+        style = Fill,
+    )
+    drawPath(
+        path = Path().apply {
+            drawQuadraticBezier(pixelState)
+        },
+        color = Color.Yellow,
+        style = Stroke(width = 3f),
+    )
+//    clipPath(path = Path().apply {
+//        drawQuadraticBezier(pixelState)
+//        lineTo(bottomArea.bottomRight.x, bottomArea.bottomRight.y)
+//        lineTo(bottomArea.bottomLeft.x, bottomArea.bottomLeft.y)
+//        lineTo(topHeadArea.bottomLeft.x, topHeadArea.bottomLeft.y)
+////        close()
+//    }, clipOp = ClipOp.Intersect) {
+//        drawBodyPart(head)
+//        drawBodyPart(BodyPart(topHeadArea.topLeft, topHeadArea.size, Color.Blue))
+//    }
 
 
     drawArea(headArea)
