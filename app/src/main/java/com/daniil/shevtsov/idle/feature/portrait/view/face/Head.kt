@@ -290,6 +290,7 @@ private fun Kek(
     percentageState: MutableState<BezierViewState>,
     updateState: (state: BezierViewState) -> Unit,
 ) {
+    val percentageStateValue = percentageState.value
     Box(
         modifier = Modifier.size(screenSizeDp).background(Color.White),
         contentAlignment = Alignment.Center,
@@ -302,7 +303,7 @@ private fun Kek(
                         onDragStart = {
                             Timber.tag("KEK").d("Drag started")
                             updateState(
-                                percentageState.value.copy(
+                                percentageStateValue.copy(
                                     previousSelectedIndex = -1
                                 )
                             )
@@ -310,7 +311,7 @@ private fun Kek(
                         onDragEnd = {
                             Timber.tag("KEK").d("Drag ended")
                             updateState(
-                                percentageState.value.copy(
+                                percentageStateValue.copy(
                                     previousSelectedIndex = -1
                                 )
                             )
@@ -318,7 +319,7 @@ private fun Kek(
                         onDragCancel = {
                             Timber.tag("KEK").d("Drag cancelled")
                             updateState(
-                                percentageState.value.copy(
+                                percentageStateValue.copy(
                                     previousSelectedIndex = -1
                                 )
                             )
@@ -326,7 +327,7 @@ private fun Kek(
                     ) { change, dragAmount ->
                         Timber.tag("KEK").d("TRIGGERED")
                         val previousSelectedPointIndex =
-                            percentageState.value.previousSelectedIndex
+                            percentageStateValue.previousSelectedIndex
                         if (screenBounds.contains(change.position)) {
                             change.consumeAllChanges()
                             val originalState = percentageState.value.points
