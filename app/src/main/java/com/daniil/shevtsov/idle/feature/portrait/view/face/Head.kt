@@ -3,8 +3,11 @@ package com.daniil.shevtsov.idle.feature.portrait.view.face
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,6 +26,7 @@ import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.feature.portrait.view.*
 import timber.log.Timber
 
@@ -131,29 +135,44 @@ fun HeadPreview() {
             )
         )
     }
-    Box(
-        modifier = Modifier.size(800.dp).background(Color.White),
-        contentAlignment = Alignment.Center
-    ) {
-        Canvas(modifier = Modifier.size(400.dp), onDraw = {
-            val headArea = Rect(
-                offset = center.translate(-size.height / 2f),
-                size = size,
-            )
-            drawRect(
-                Color.DarkGray,
-                topLeft = center.translate(-size.width / 2f, -size.height / 2f),
-                size = size
-            )
-            drawHead(
-                headArea = headArea,
-                state = state.value,
-                onStateChanged = { newState ->
-                    state.value = newState
+    Column(modifier = Modifier.background(Color.White)) {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            state.value.points().forEachIndexed { index, point ->
+                val title = when (index) {
+                    0 -> "Start"
+                    1 -> "Finish"
+                    2 -> "Support1"
+                    3 -> "Support2"
+                    else -> "Unknown"
                 }
-            )
-        })
+                Text(text = "$title: $point", fontSize = 18.sp)
+            }
+        }
+        Box(
+            modifier = Modifier.size(800.dp).background(Color.White),
+            contentAlignment = Alignment.Center
+        ) {
+            Canvas(modifier = Modifier.size(400.dp), onDraw = {
+                val headArea = Rect(
+                    offset = center.translate(-size.height / 2f),
+                    size = size,
+                )
+                drawRect(
+                    Color.DarkGray,
+                    topLeft = center.translate(-size.width / 2f, -size.height / 2f),
+                    size = size
+                )
+                drawHead(
+                    headArea = headArea,
+                    state = state.value,
+                    onStateChanged = { newState ->
+                        state.value = newState
+                    }
+                )
+            })
+        }
     }
+
 }
 
 fun DrawScope.drawHead(
@@ -184,14 +203,11 @@ fun DrawScope.drawHead(
         color = Color.Gray
     )
 
-    val supportY = ((topHeadArea.bottomLeft.y - topHeadArea.topLeft.y) * 0.5f) * 2
-    val supportX = ((topHeadArea.bottomCenter.x - topHeadArea.bottomLeft.x) * 0.5f) * 2
     val pixelState = state.multiply(
         x = topHeadArea.width,
         y = topHeadArea.height,
     )
     clipPath(path = Path().apply {
-
         drawQuadraticBezier(pixelState)
         lineTo(bottomArea.bottomRight.x, bottomArea.bottomRight.y)
         lineTo(bottomArea.bottomLeft.x, bottomArea.bottomLeft.y)
