@@ -5,7 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -113,23 +115,22 @@ fun DraggingComposable() {
     }
 }
 
-@Preview
-@Composable
-fun MyDragging() {
-    DraggingComposable()
-}
-
-
 @Preview(
     widthDp = 800,
     heightDp = 800,
 )
 @Composable
 fun HeadPreview() {
-    var state: BezierViewState by remember { mutableStateOf(BezierViewState()) }
-
-
-
+    val state = remember {
+        mutableStateOf(
+            BezierState(
+                start = Offset(0f, 0.5f),
+                finish = Offset(1f, 0.5f),
+                support = Offset(0f, 0f),
+                support2 = Offset(1f, 1f),
+            )
+        )
+    }
     Box(
         modifier = Modifier.size(800.dp).background(Color.White),
         contentAlignment = Alignment.Center
@@ -139,12 +140,27 @@ fun HeadPreview() {
                 offset = center.translate(-size.height / 2f),
                 size = size,
             )
-            drawHead(headArea = headArea)
+            drawRect(
+                Color.DarkGray,
+                topLeft = center.translate(-size.width / 2f, -size.height / 2f),
+                size = size
+            )
+            drawHead(
+                headArea = headArea,
+                state = state.value,
+                onStateChanged = { newState ->
+                    state.value = newState
+                }
+            )
         })
     }
 }
 
-fun DrawScope.drawHead(headArea: Rect) {
+fun DrawScope.drawHead(
+    headArea: Rect,
+    state: BezierState,
+    onStateChanged: (state: BezierState) -> Unit,
+) {
     val topHeadArea = headArea
         .shrink(heightPercent = 0.33f)
         .let { area -> area.move(position = headArea.topCenter.translate(y = area.height / 2f)) }
@@ -170,15 +186,13 @@ fun DrawScope.drawHead(headArea: Rect) {
 
     val supportY = ((topHeadArea.bottomLeft.y - topHeadArea.topLeft.y) * 0.5f) * 2
     val supportX = ((topHeadArea.bottomCenter.x - topHeadArea.bottomLeft.x) * 0.5f) * 2
-    val state = BezierState(
-        topHeadArea.bottomLeft,
-        topHeadArea.bottomRight,
-        topHeadArea.bottomCenter.translate(x = -topHeadArea.width, y = -topHeadArea.height),
-        topHeadArea.bottomCenter.translate(x = topHeadArea.width, y = -topHeadArea.height),
+    val pixelState = state.multiply(
+        x = topHeadArea.width,
+        y = topHeadArea.height,
     )
     clipPath(path = Path().apply {
 
-        drawQuadraticBezier(state)
+        drawQuadraticBezier(pixelState)
         lineTo(bottomArea.bottomRight.x, bottomArea.bottomRight.y)
         lineTo(bottomArea.bottomLeft.x, bottomArea.bottomLeft.y)
         lineTo(topHeadArea.bottomLeft.x, topHeadArea.bottomLeft.y)
@@ -194,5 +208,5 @@ fun DrawScope.drawHead(headArea: Rect) {
     drawArea(middleArea)
     drawArea(bottomArea)
 
-    drawBezierPoints(state)
+    drawBezierPoints(pixelState)
 }

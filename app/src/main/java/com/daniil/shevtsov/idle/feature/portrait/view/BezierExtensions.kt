@@ -22,3 +22,13 @@ fun List<Offset>.toBezierState() = BezierState(
     support = get(2),
     support2 = getOrNull(3),
 )
+
+fun BezierState.multiply(
+    x: Float = 1f,
+    y: Float = 1f
+): BezierState = points().map { point ->
+    point.copy(
+        x = point.x.times(x),
+        y = point.y.times(y)
+    )
+}.toBezierState()
