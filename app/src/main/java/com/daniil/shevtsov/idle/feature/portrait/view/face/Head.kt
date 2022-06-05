@@ -267,6 +267,10 @@ fun DraggingComposable() {
             }
         }
 
+        fun updateState(newState: BezierViewState) {
+            percentageState.value = newState
+        }
+
         Box(
             modifier = Modifier.size(screenSizeDp).background(Color.White),
             contentAlignment = Alignment.Center,
@@ -278,20 +282,26 @@ fun DraggingComposable() {
                         detectDragGestures(
                             onDragStart = {
                                 Timber.tag("KEK").d("Drag started")
-                                percentageState.value = percentageState.value.copy(
-                                    previousSelectedIndex = -1
+                                updateState(
+                                    percentageState.value.copy(
+                                        previousSelectedIndex = -1
+                                    )
                                 )
                             },
                             onDragEnd = {
                                 Timber.tag("KEK").d("Drag ended")
-                                percentageState.value = percentageState.value.copy(
-                                    previousSelectedIndex = -1
+                                updateState(
+                                    percentageState.value.copy(
+                                        previousSelectedIndex = -1
+                                    )
                                 )
                             },
                             onDragCancel = {
                                 Timber.tag("KEK").d("Drag cancelled")
-                                percentageState.value = percentageState.value.copy(
-                                    previousSelectedIndex = -1
+                                updateState(
+                                    percentageState.value.copy(
+                                        previousSelectedIndex = -1
+                                    )
                                 )
                             }
                         ) { change, dragAmount ->
