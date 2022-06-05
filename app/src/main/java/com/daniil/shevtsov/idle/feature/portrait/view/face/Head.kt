@@ -348,7 +348,7 @@ private fun Kek(
                             if (selectedPointIndex != previousSelectedPointIndex) {
                                 Timber.tag("KEK").d("Update previous point")
                                 updateState(
-                                    percentageState.value.copy(
+                                    percentageStateValue.copy(
                                         previousSelectedIndex = selectedPointIndex
                                     )
                                 )
@@ -376,7 +376,7 @@ private fun Kek(
                                 Timber.tag("KEK").d("coerced points: ${coercedPoints}")
 
                                 updateState(
-                                    percentageState.value.copy(
+                                    percentageStateValue.copy(
                                         points = coercedPoints.toBezierState()
                                     )
                                 )
