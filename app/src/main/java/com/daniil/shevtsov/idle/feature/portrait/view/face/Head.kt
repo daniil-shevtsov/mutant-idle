@@ -327,8 +327,10 @@ fun DraggingComposable() {
                                 }
                                 if (selectedPointIndex != previousSelectedPointIndex) {
                                     Timber.tag("KEK").d("Update previous point")
-                                    percentageState.value = percentageState.value.copy(
-                                        previousSelectedIndex = selectedPointIndex
+                                    updateState(
+                                        percentageState.value.copy(
+                                            previousSelectedIndex = selectedPointIndex
+                                        )
                                     )
                                 }
                                 val selectedPoint = oldPoints.getOrNull(selectedPointIndex)
@@ -353,8 +355,10 @@ fun DraggingComposable() {
                                     Timber.tag("KEK").d("New Points: ${newPoints}")
                                     Timber.tag("KEK").d("coerced points: ${coercedPoints}")
 
-                                    percentageState.value = percentageState.value.copy(
-                                        points = coercedPoints.toBezierState()
+                                    updateState(
+                                        percentageState.value.copy(
+                                            points = coercedPoints.toBezierState()
+                                        )
                                     )
                                 }
                             }
