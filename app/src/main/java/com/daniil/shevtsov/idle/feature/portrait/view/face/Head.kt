@@ -183,11 +183,11 @@ private fun Kek(
     ) {
         Canvas(
             modifier = Modifier.background(Color.Cyan)
-                .size(400.dp)
+                .size(screenSizeDp)
                 .pointerInput(Unit) {
                     detectDragGestures(
                         onDragStart = {
-                            Timber.tag("KEK").d("Drag started")
+                            Timber.tag("UPDATE-INDEX").d("Drag started")
                             updateState(
                                 percentageStateValue.copy(
                                     previousSelectedIndex = -1
@@ -195,7 +195,7 @@ private fun Kek(
                             )
                         },
                         onDragEnd = {
-                            Timber.tag("KEK").d("Drag ended")
+                            Timber.tag("UPDATE-INDEX").d("Drag ended")
                             updateState(
                                 percentageStateValue.copy(
                                     previousSelectedIndex = -1
@@ -203,7 +203,7 @@ private fun Kek(
                             )
                         },
                         onDragCancel = {
-                            Timber.tag("KEK").d("Drag cancelled")
+                            Timber.tag("UPDATE-INDEX").d("Drag cancelled")
                             updateState(
                                 percentageStateValue.copy(
                                     previousSelectedIndex = -1
@@ -211,74 +211,73 @@ private fun Kek(
                             )
                         }
                     ) { change, dragAmount ->
-                        Timber.tag("KEK").d("TRIGGERED")
+                        change.consumeAllChanges()
                         val previousSelectedPointIndex =
                             percentageStateValue.previousSelectedIndex
-                        if (screenBounds.contains(change.position)) {
-                            change.consumeAllChanges()
-                            val originalState = percentageStateValue.points
-                            val oldPoints = originalState.points().map { point ->
-                                point.times(
+                        val originalState = percentageStateValue.points
+                        val oldPoints = originalState.points().map { point ->
+                            point.times(
+                                x = screenBounds.width,
+                                y = screenBounds.height,
+                            )
+                        }
+                        val selectedPointIndex = when {
+                            previousSelectedPointIndex != -1 -> {
+                                Timber.tag("KEK").d("Reuse position $previousSelectedPointIndex")
+                                previousSelectedPointIndex
+                            }
+                            else -> {
+                                Timber.tag("UPDATE-INDEX")
+                                    .d(" index is $previousSelectedPointIndex Choose nearest")
+                                oldPoints
+                                    .minByOrNull { point ->
+                                        point.distanceTo(change.position)
+                                    }.let { oldPoints.indexOf(it) }
+                            }
+                        }
+                        if (selectedPointIndex != previousSelectedPointIndex) {
+                            Timber.tag("UPDATE-INDEX")
+                                .d("Update previous index from $previousSelectedPointIndex to $selectedPointIndex")
+                            updateState(
+                                percentageStateValue.copy(
+                                    previousSelectedIndex = selectedPointIndex
+                                )
+                            )
+                        }
+                        val selectedPoint = oldPoints.getOrNull(selectedPointIndex)
+                        if (selectedPoint != null) {
+                            val newPoints = oldPoints.mapIndexed { index, point ->
+                                if (index == oldPoints.indexOf(selectedPoint)) {
+                                    point.translate(
+                                        x = dragAmount.x,
+                                        y = dragAmount.y,
+                                    )
+                                } else {
+                                    point
+                                }
+                            }
+                            val coercedPoints = newPoints.map { point ->
+                                point.coerceIn(screenBounds)
+                            }
+                            val finalPoints = coercedPoints.map { point ->
+                                point.div(
                                     x = screenBounds.width,
-                                    y = screenBounds.height,
+                                    y = screenBounds.height
                                 )
                             }
-                            val selectedPointIndex = when {
-                                previousSelectedPointIndex != -1 -> {
-                                    Timber.tag("KEK").d("Reuse position")
-                                    previousSelectedPointIndex
-                                }
-                                else -> {
-                                    Timber.tag("KEK").d("Choose nearest")
-                                    oldPoints
-                                        .minByOrNull { point ->
-                                            point.distanceTo(change.position)
-                                        }.let { oldPoints.indexOf(it) }
-                                }
-                            }
-                            if (selectedPointIndex != previousSelectedPointIndex) {
-                                Timber.tag("KEK").d("Update previous point")
-                                updateState(
-                                    percentageStateValue.copy(
-                                        previousSelectedIndex = selectedPointIndex
-                                    )
-                                )
-                            }
-                            val selectedPoint = oldPoints.getOrNull(selectedPointIndex)
-                            if (selectedPoint != null) {
-                                val newPoints = oldPoints.mapIndexed { index, point ->
-                                    if (index == oldPoints.indexOf(selectedPoint)) {
-                                        point.translate(
-                                            x = dragAmount.x,
-                                            y = dragAmount.y,
-                                        )
-                                    } else {
-                                        point
-                                    }
-                                }
-                                val coercedPoints = newPoints.map { point ->
-                                    point.coerceIn(screenBounds)
-                                }
-                                val finalPoints = coercedPoints.map { point ->
-                                    point.div(
-                                        x = screenBounds.width,
-                                        y = screenBounds.height
-                                    )
-                                }
-                                Timber.tag("KEK").d("Bounds: $screenBounds")
-                                Timber.tag("KEK")
-                                    .d("State points: ${originalState.points()}")
-                                Timber.tag("KEK").d("Old points: ${oldPoints}")
-                                Timber.tag("KEK").d("New Points: ${newPoints}")
-                                Timber.tag("KEK").d("coerced points: ${coercedPoints}")
-                                Timber.tag("KEK").d("final points: ${finalPoints}")
+                            Timber.tag("KEK").d("Bounds: $screenBounds")
+                            Timber.tag("KEK")
+                                .d("State points: ${originalState.points()}")
+                            Timber.tag("KEK").d("Old points: ${oldPoints}")
+                            Timber.tag("KEK").d("New Points: ${newPoints}")
+                            Timber.tag("KEK").d("coerced points: ${coercedPoints}")
+                            Timber.tag("KEK").d("final points: ${finalPoints}")
 
-                                updateState(
-                                    percentageStateValue.copy(
-                                        points = finalPoints.toBezierState()
-                                    )
+                            updateState(
+                                percentageStateValue.copy(
+                                    points = finalPoints.toBezierState()
                                 )
-                            }
+                            )
                         }
 
                     }
