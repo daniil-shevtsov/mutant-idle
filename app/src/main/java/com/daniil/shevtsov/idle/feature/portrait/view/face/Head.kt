@@ -3,7 +3,10 @@ package com.daniil.shevtsov.idle.feature.portrait.view.face
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -33,19 +36,48 @@ data class BezierViewState(
 )
 
 private fun Modifier.bezierDragging(
-    state: BezierViewState,
-    bounds: Rect,
-    hackyMutableState: MutableState<BezierViewState>,
-//    updateState: (newState: BezierViewState) -> Unit,
+    percentageStateValue: BezierViewState,
+    screenBounds: Rect,
+    updateState: (newState: BezierViewState) -> Unit,
 ) = pointerInput(Unit) {
-    detectDragGestures { change, dragAmount ->
+    detectDragGestures(
+        onDragStart = {
+            Timber.tag("KEK").d("Drag started")
+            updateState(
+                percentageStateValue.copy(
+                    previousSelectedIndex = -1
+                )
+            )
+        },
+        onDragEnd = {
+            Timber.tag("KEK").d("Drag ended")
+            updateState(
+                percentageStateValue.copy(
+                    previousSelectedIndex = -1
+                )
+            )
+        },
+        onDragCancel = {
+            Timber.tag("KEK").d("Drag cancelled")
+            updateState(
+                percentageStateValue.copy(
+                    previousSelectedIndex = -1
+                )
+            )
+        }
+    ) { change, dragAmount ->
         Timber.tag("KEK").d("TRIGGERED")
-        val screenBounds = bounds
-        var originalState = state.points
-        var previousSelectedPointIndex = state.previousSelectedIndex
+        val previousSelectedPointIndex =
+            percentageStateValue.previousSelectedIndex
         if (screenBounds.contains(change.position)) {
             change.consumeAllChanges()
-            val oldPoints = originalState.points()
+            val originalState = percentageStateValue.points
+            val oldPoints = originalState.points().map { point ->
+                point.times(
+                    x = screenBounds.width,
+                    y = screenBounds.height,
+                )
+            }
             val selectedPointIndex = when {
                 previousSelectedPointIndex != -1 -> {
                     Timber.tag("KEK").d("Reuse position")
@@ -61,7 +93,11 @@ private fun Modifier.bezierDragging(
             }
             if (selectedPointIndex != previousSelectedPointIndex) {
                 Timber.tag("KEK").d("Update previous point")
-                previousSelectedPointIndex = selectedPointIndex
+                updateState(
+                    percentageStateValue.copy(
+                        previousSelectedIndex = selectedPointIndex
+                    )
+                )
             }
             val selectedPoint = oldPoints.getOrNull(selectedPointIndex)
             if (selectedPoint != null) {
@@ -78,83 +114,34 @@ private fun Modifier.bezierDragging(
                 val coercedPoints = newPoints.map { point ->
                     point.coerceIn(screenBounds)
                 }
-                Timber.tag("KEK").d("Bounds: $bounds")
-                Timber.tag("KEK").d("State points: ${state.points.points()}")
+                Timber.tag("KEK").d("Bounds: $screenBounds")
+                Timber.tag("KEK")
+                    .d("State points: ${originalState.points()}")
                 Timber.tag("KEK").d("Old points: ${oldPoints}")
                 Timber.tag("KEK").d("New Points: ${newPoints}")
                 Timber.tag("KEK").d("coerced points: ${coercedPoints}")
-                originalState = coercedPoints.toBezierState()
-                hackyMutableState.value = hackyMutableState.value.copy(
-                    points = originalState
+
+                updateState(
+                    percentageStateValue.copy(
+                        points = coercedPoints.map { point ->
+                            point.div(
+                                x = screenBounds.width,
+                                y = screenBounds.height
+                            )
+                        }.toBezierState()
+                    )
                 )
-//                updateState(
-//                    state.copy(
-//                        points = originalState,
-//                        previousSelectedIndex = previousSelectedPointIndex
-//                    )
-//                )
             }
         }
-//        change.consumeAllChanges()
-//        val oldPoints = state.points.points()/*.map { pointPercentage ->
-//            pointPercentage.times(
-//                x = bounds.width,
-//                y = bounds.height,
-//            )
-//        }*/
-//        val selectedPointIndex = when {
-//            state.previousSelectedIndex != -1 -> {
-//                Timber.tag("KEK").d("Reuse position")
-//                state.previousSelectedIndex
-//            }
-//            else -> {
-//                Timber.tag("KEK").d("Choose nearest")
-//                oldPoints
-//                    .minByOrNull { point ->
-//                        point.distanceTo(change.position)
-//                    }.let { oldPoints.indexOf(it) }
-//            }
-//        }
-//        if (selectedPointIndex != state.previousSelectedIndex) {
-//            Timber.tag("KEK").d("Update previous point")
-//            updateState(
-//                state.copy(
-//                    previousSelectedIndex = selectedPointIndex
-//                )
-//            )
-//        }
-//        val selectedPoint = oldPoints.getOrNull(selectedPointIndex)
-//        if (selectedPoint != null) {
-//            val newPoints = oldPoints.mapIndexed { index, point ->
-//                if (index == selectedPointIndex) {
-//                    point.translate(
-//                        x = dragAmount.x,
-//                        y = dragAmount.y,
-//                    )
-//                } else {
-//                    point
-//                }
-//            }
-//            val finalPoints = newPoints.map { point ->
-//                point/*.coerceIn(bounds)*//*.div(
-//                    x = bounds.width,
-//                    y = bounds.height
-//                )*/
-//            }
 
-//            updateState(
-//                state.copy(
-//                    points = finalPoints.toBezierState()
-//                )
-//            )
-//    }
     }
 }
 
 @Composable
 fun DraggingComposable() {
-    val screenSizeDp = 200.dp
-    val screenSize = Size(screenSizeDp.value, screenSizeDp.value)
+    val screenSizeDp = 400.dp
+    val screenSizePx = with(LocalDensity.current) { screenSizeDp.toPx() }
+    val screenSize = Size(screenSizePx, screenSizePx)
     val screenBounds = Rect(Offset.Zero, screenSize)
     var percentageState by remember {
         mutableStateOf(
@@ -164,30 +151,22 @@ fun DraggingComposable() {
                     finish = Offset(1f, 0.5f),
                     support = Offset(0f, 0f),
                     support2 = Offset(1f, 0f),
-//                    start = screenBounds.centerLeft,
-//                    finish = screenBounds.centerRight,
-//                    support = screenBounds.topLeft,
-//                    support2 = screenBounds.topRight,
                 ),
                 previousSelectedIndex = -1
             )
         )
     }
 
-    Row {
-        fun updateState(newState: BezierViewState) {
-            percentageState = newState
-        }
-
-        Kek(
-            screenSizeDp,
-            screenBounds,
-            percentageState,
-            ::updateState
-        )
-
+    fun updateState(newState: BezierViewState) {
+        percentageState = newState
     }
 
+    Kek(
+        screenSizeDp,
+        screenBounds,
+        percentageState,
+        ::updateState
+    )
 }
 
 @Composable
