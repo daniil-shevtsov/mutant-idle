@@ -329,11 +329,21 @@ fun DrawScope.drawHead(
         x = topHeadArea.width,
         y = topHeadArea.height,
     )
+    val debugChinWidth = (pixelState.finish.x - pixelState.start.x) / 2
+    val debugChin = Rect(
+        topLeft = Offset(pixelState.start.x + debugChinWidth / 2, bottomArea.bottom),
+        bottomRight = Offset(
+            pixelState.finish.x - debugChinWidth / 2,
+            bottomArea.bottom
+        )
+    )
     drawPath(
         path = Path().apply {
             drawQuadraticBezier(pixelState)
-            lineTo(pixelState.finish.x, bottomArea.bottomRight.y)
-            lineTo(pixelState.start.x, bottomArea.bottomRight.x)
+            lineTo(pixelState.finish.x, middleArea.bottom)
+            lineTo(debugChin.right, debugChin.bottom)
+            lineTo(debugChin.left, debugChin.bottom)
+            lineTo(pixelState.start.x, middleArea.bottom)
             lineTo(pixelState.start.x, pixelState.start.y)
         },
         color = Color.Cyan,
