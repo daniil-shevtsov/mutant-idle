@@ -51,15 +51,15 @@ fun DrawScope.drawHead(headArea: Rect) {
         color = Color.Gray
     )
 
-    val supportY = ((topHeadArea.bottomLeft.y - topHeadArea.topLeft.y) * 1.0f) * 2
+    val supportY = ((topHeadArea.bottomLeft.y - topHeadArea.topLeft.y) * 0.5f) * 2
     val supportX = ((topHeadArea.bottomCenter.x - topHeadArea.bottomLeft.x) * 0.5f) * 2
 
     clipPath(path = Path().apply {
         val state = BezierState(
-            start = topHeadArea.bottomLeft,
-            finish = topHeadArea.bottomRight,
-            support = topHeadArea.bottomCenter.translate(x = -supportX, y = -supportY),
-            support2 = topHeadArea.bottomCenter.translate(x = supportX, y = -supportY),
+            topHeadArea.bottomLeft,
+            topHeadArea.bottomRight,
+            topHeadArea.bottomCenter.translate(x = -supportX, y = -supportY),
+            topHeadArea.bottomCenter.translate(x = supportX, y = -supportY),
         )
         drawQuadraticBezier(state)
         lineTo(bottomArea.bottomRight.x, bottomArea.bottomRight.y)
