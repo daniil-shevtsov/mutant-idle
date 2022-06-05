@@ -3,10 +3,7 @@ package com.daniil.shevtsov.idle.feature.portrait.view.face
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -132,7 +129,7 @@ fun DraggingComposable() {
     val screenSizeDp = 400.dp
     val screenSize = Size(screenSizeDp.value, screenSizeDp.value)
     val screenBounds = Rect(Offset.Zero, screenSize)
-    val state = remember {
+    val originalState = remember {
         mutableStateOf(
             BezierState(
                 start = screenBounds.centerLeft,
@@ -143,73 +140,122 @@ fun DraggingComposable() {
         )
     }
     val previousSelectedPointIndex = remember { mutableStateOf(-1) }
-    Box(
-        modifier = Modifier.size(screenSizeDp).background(Color.White),
-        contentAlignment = Alignment.Center,
-    ) {
-        Canvas(
-            modifier = Modifier.background(Color.Blue)
-                .size(400.dp)
-                .pointerInput(Unit) {
-                    detectDragGestures(
-                        onDragStart = {
-                            Timber.tag("KEK").d("Drag started")
-                            previousSelectedPointIndex.value = -1
-                        },
-                        onDragEnd = {
-                            Timber.tag("KEK").d("Drag ended")
-                            previousSelectedPointIndex.value = -1
-                        },
-                        onDragCancel = {
-                            Timber.tag("KEK").d("Drag cancelled")
-                            previousSelectedPointIndex.value = -1
-                        }
-                    ) { change, dragAmount ->
-                        change.consumeAllChanges()
-                        val oldPoints = state.value.points()
-                        val selectedPointIndex = when {
-                            previousSelectedPointIndex.value != -1 -> {
-                                Timber.tag("KEK").d("Reuse position")
-                                previousSelectedPointIndex.value
+    val percentageState = remember {
+        mutableStateOf(
+            BezierViewState(
+                points = BezierState(
+                    start = Offset(0f, 0.5f),
+                    finish = Offset(1f, 0.5f),
+                    support = Offset(0f, 0f),
+                    support2 = Offset(1f, 0f),
+                ),
+                previousSelectedIndex = -1
+            )
+        )
+    }
+
+    Row {
+        Box(
+            modifier = Modifier.size(screenSizeDp).background(Color.White),
+            contentAlignment = Alignment.Center,
+        ) {
+            Canvas(
+                modifier = Modifier.background(Color.Blue)
+                    .size(400.dp)
+                    .pointerInput(Unit) {
+                        detectDragGestures(
+                            onDragStart = {
+                                Timber.tag("KEK").d("Drag started")
+                                previousSelectedPointIndex.value = -1
+                            },
+                            onDragEnd = {
+                                Timber.tag("KEK").d("Drag ended")
+                                previousSelectedPointIndex.value = -1
+                            },
+                            onDragCancel = {
+                                Timber.tag("KEK").d("Drag cancelled")
+                                previousSelectedPointIndex.value = -1
                             }
-                            else -> {
-                                Timber.tag("KEK").d("Choose nearest")
-                                oldPoints
-                                    .minByOrNull { point ->
-                                        point.distanceTo(change.position)
-                                    }.let { oldPoints.indexOf(it) }
-                            }
-                        }
-                        if (selectedPointIndex != previousSelectedPointIndex.value) {
-                            Timber.tag("KEK").d("Update previous point")
-                            previousSelectedPointIndex.value = selectedPointIndex
-                        }
-                        val selectedPoint = oldPoints.getOrNull(selectedPointIndex)
-                        if (selectedPoint != null) {
-                            val newPoints = oldPoints.mapIndexed { index, point ->
-                                if (index == oldPoints.indexOf(selectedPoint)) {
-                                    point.translate(
-                                        x = dragAmount.x,
-                                        y = dragAmount.y,
-                                    )
-                                } else {
-                                    point
+                        ) { change, dragAmount ->
+                            if (screenBounds.contains(change.position)) {
+                                change.consumeAllChanges()
+                                val oldPoints = originalState.value.points()
+                                val selectedPointIndex = when {
+                                    previousSelectedPointIndex.value != -1 -> {
+                                        Timber.tag("KEK").d("Reuse position")
+                                        previousSelectedPointIndex.value
+                                    }
+                                    else -> {
+                                        Timber.tag("KEK").d("Choose nearest")
+                                        oldPoints
+                                            .minByOrNull { point ->
+                                                point.distanceTo(change.position)
+                                            }.let { oldPoints.indexOf(it) }
+                                    }
+                                }
+                                if (selectedPointIndex != previousSelectedPointIndex.value) {
+                                    Timber.tag("KEK").d("Update previous point")
+                                    previousSelectedPointIndex.value = selectedPointIndex
+                                }
+                                val selectedPoint = oldPoints.getOrNull(selectedPointIndex)
+                                if (selectedPoint != null) {
+                                    val newPoints = oldPoints.mapIndexed { index, point ->
+                                        if (index == oldPoints.indexOf(selectedPoint)) {
+                                            point.translate(
+                                                x = dragAmount.x,
+                                                y = dragAmount.y,
+                                            )
+                                        } else {
+                                            point
+                                        }
+                                    }
+                                    originalState.value = newPoints.map { point ->
+                                        point.coerceIn(screenBounds)
+                                    }.toBezierState()
                                 }
                             }
-                            state.value = newPoints.map { point ->
-                                point.coerceIn(screenBounds)
-                            }.toBezierState()
+
                         }
-                    }
-                },
+                    },
+            ) {
+                drawRect(Color.Gray, topLeft = screenBounds.topLeft, size = screenBounds.size)
+                drawPath(path = Path().apply {
+                    drawQuadraticBezier(originalState.value)
+                }, color = Color.Black, style = Stroke(width = 3f))
+                drawBezierPoints(originalState.value)
+            }
+        }
+
+        Box(
+            modifier = Modifier.size(screenSizeDp).background(Color.White),
+            contentAlignment = Alignment.Center,
         ) {
-            drawRect(Color.Gray, topLeft = screenBounds.topLeft, size = screenBounds.size)
-            drawPath(path = Path().apply {
-                drawQuadraticBezier(state.value)
-            }, color = Color.Black, style = Stroke(width = 3f))
-            drawBezierPoints(state.value)
+            Canvas(
+                modifier = Modifier.background(Color.Cyan)
+                    .size(400.dp)
+                    .bezierDragging(
+                        state = percentageState.value,
+                        bounds = screenBounds,
+                        updateState = { newState ->
+                            percentageState.value = newState
+                        }
+                    ),
+            ) {
+                val normalState = percentageState.value.copy(
+                    points = percentageState.value.points.multiply(
+                        x = screenBounds.width,
+                        y = screenBounds.height
+                    )
+                )
+                drawRect(Color.Gray, topLeft = screenBounds.topLeft, size = screenBounds.size)
+                drawPath(path = Path().apply {
+                    drawQuadraticBezier(normalState.points)
+                }, color = Color.Black, style = Stroke(width = 3f))
+                drawBezierPoints(normalState.points)
+            }
         }
     }
+
 }
 
 @Composable
@@ -290,7 +336,8 @@ fun HeadPreviewComposable() {
 )
 @Composable
 fun HeadPreview() {
-    HeadPreviewComposable()
+//    HeadPreviewComposable()
+    DraggingComposable()
 }
 
 fun DrawScope.drawHead(
