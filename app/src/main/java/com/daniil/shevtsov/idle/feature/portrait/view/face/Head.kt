@@ -5,10 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -170,7 +167,7 @@ fun DraggingComposable() {
         )
     }
     val previousSelectedPointIndex = remember { mutableStateOf(-1) }
-    val percentageState = remember {
+    var percentageState by remember {
         mutableStateOf(
             BezierViewState(
                 points = BezierState(
@@ -269,7 +266,7 @@ fun DraggingComposable() {
         }
 
         fun updateState(newState: BezierViewState) {
-            percentageState.value = newState
+            percentageState = newState
         }
 
         Kek(
@@ -287,10 +284,10 @@ fun DraggingComposable() {
 private fun Kek(
     screenSizeDp: Dp,
     screenBounds: Rect,
-    percentageState: MutableState<BezierViewState>,
+    percentageStateValue: BezierViewState,
     updateState: (state: BezierViewState) -> Unit,
 ) {
-    val percentageStateValue = percentageState.value
+    val percentageStateValue by rememberUpdatedState(percentageStateValue)
     Box(
         modifier = Modifier.size(screenSizeDp).background(Color.White),
         contentAlignment = Alignment.Center,
@@ -330,7 +327,7 @@ private fun Kek(
                             percentageStateValue.previousSelectedIndex
                         if (screenBounds.contains(change.position)) {
                             change.consumeAllChanges()
-                            val originalState = percentageState.value.points
+                            val originalState = percentageStateValue.points
                             val oldPoints = originalState.points()
                             val selectedPointIndex = when {
                                 previousSelectedPointIndex != -1 -> {
@@ -386,8 +383,8 @@ private fun Kek(
                     }
                 },
         ) {
-            val normalState = percentageState.value.copy(
-                points = percentageState.value.points/*.multiply(
+            val normalState = percentageStateValue.copy(
+                points = percentageStateValue.points/*.multiply(
                         x = screenBounds.width,
                         y = screenBounds.height
                     )*/
