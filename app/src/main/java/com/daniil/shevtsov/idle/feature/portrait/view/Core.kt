@@ -66,6 +66,22 @@ fun Offset.coerceIn(bounds: Rect) = Offset(
     y = y.coerceIn(bounds.top, bounds.bottom)
 )
 
+fun Offset.times(
+    x: Float = 1f,
+    y: Float = 1f
+) = Offset(
+    x = this.x * x,
+    y = this.y * y,
+)
+
+fun Offset.div(
+    x: Float = 1f,
+    y: Float = 1f
+) = Offset(
+    x = this.x / x,
+    y = this.y / y,
+)
+
 fun Random.nextFloatInRange(
     min: Float = Float.MIN_VALUE,
     max: Float = Float.MAX_VALUE,

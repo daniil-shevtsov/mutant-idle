@@ -37,6 +37,7 @@ class ScreenHostFragment : Fragment(R.layout.fragment_main) {
         with(binding) {
             composeView.setContent {
                 ProvideWindowInsets {
+//                    HeadPreviewComposable()
                     DraggingComposable()
                     //ScreenHostComposable(viewModel = viewModel)
                 }

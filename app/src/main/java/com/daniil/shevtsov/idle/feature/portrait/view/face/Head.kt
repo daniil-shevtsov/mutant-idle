@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,8 +32,100 @@ import com.daniil.shevtsov.idle.feature.portrait.view.*
 import timber.log.Timber
 
 data class BezierViewState(
-    val kek: String = ""
+    val points: BezierState,
+    val previousSelectedIndex: Int,
 )
+
+private fun Modifier.bezierDragging(
+    state: BezierViewState,
+    bounds: Rect,
+    updateState: (newState: BezierViewState) -> Unit,
+) = pointerInput(Unit) {
+    detectDragGestures(
+        onDragStart = {
+            Timber.tag("KEK").d("Drag started")
+            updateState(
+                state.copy(
+                    previousSelectedIndex = -1
+                )
+            )
+        },
+        onDragEnd = {
+            Timber.tag("KEK").d("Drag ended")
+            updateState(
+                state.copy(
+                    previousSelectedIndex = -1
+                )
+            )
+        },
+        onDragCancel = {
+            Timber.tag("KEK").d("Drag cancelled")
+            updateState(
+                state.copy(
+                    previousSelectedIndex = -1
+                )
+            )
+        }
+    ) { change, dragAmount ->
+        change.consumeAllChanges()
+        val oldPoints = state.points.points().map { pointPercentage ->
+            pointPercentage.times(
+                x = bounds.width,
+                y = bounds.height,
+            )
+        }
+        val selectedPointIndex = when {
+            state.previousSelectedIndex != -1 -> {
+                Timber.tag("KEK").d("Reuse position")
+                state.previousSelectedIndex
+            }
+            else -> {
+                Timber.tag("KEK").d("Choose nearest")
+                oldPoints
+                    .minByOrNull { point ->
+                        point.distanceTo(change.position)
+                    }.let { oldPoints.indexOf(it) }
+            }
+        }
+        if (selectedPointIndex != state.previousSelectedIndex) {
+            Timber.tag("KEK").d("Update previous point")
+            updateState(
+                state.copy(
+                    previousSelectedIndex = selectedPointIndex
+                )
+            )
+        }
+        val selectedPoint = oldPoints.getOrNull(selectedPointIndex)
+        if (selectedPoint != null) {
+            val newPoints = oldPoints.mapIndexed { index, point ->
+                if (index == oldPoints.indexOf(selectedPoint)) {
+                    point.translate(
+                        x = dragAmount.x,
+                        y = dragAmount.y,
+                    )
+                } else {
+                    point
+                }
+            }
+            val finalPoints = newPoints.map { point ->
+                point/*.coerceIn(bounds)*/.div(
+                    x = bounds.width,
+                    y = bounds.height
+                )
+            }
+            Timber.tag("KEK").d("Bounds: $bounds")
+            Timber.tag("KEK").d("State points: ${state.points.points()}")
+            Timber.tag("KEK").d("Old points: ${oldPoints}")
+            Timber.tag("KEK").d("New Points: ${newPoints}")
+            Timber.tag("KEK").d("FInal points: ${finalPoints}")
+            updateState(
+                state.copy(
+                    points = finalPoints.toBezierState()
+                )
+            )
+        }
+    }
+}
 
 @Composable
 fun DraggingComposable() {
@@ -119,25 +212,24 @@ fun DraggingComposable() {
     }
 }
 
-@Preview(
-    widthDp = 800,
-    heightDp = 800,
-)
 @Composable
-fun HeadPreview() {
+fun HeadPreviewComposable() {
     val state = remember {
         mutableStateOf(
-            BezierState(
-                start = Offset(0f, 0.5f),
-                finish = Offset(1f, 0.5f),
-                support = Offset(0f, 0f),
-                support2 = Offset(1f, 1f),
+            BezierViewState(
+                points = BezierState(
+                    start = Offset(0f, 0.5f),
+                    finish = Offset(1f, 0.5f),
+                    support = Offset(0f, 0f),
+                    support2 = Offset(1f, 1f),
+                ),
+                previousSelectedIndex = -1,
             )
         )
     }
     Column(modifier = Modifier.background(Color.White)) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            state.value.points().forEachIndexed { index, point ->
+            state.value.points.points().forEachIndexed { index, point ->
                 val title = when (index) {
                     0 -> "Start"
                     1 -> "Finish"
@@ -152,27 +244,53 @@ fun HeadPreview() {
             modifier = Modifier.size(800.dp).background(Color.White),
             contentAlignment = Alignment.Center
         ) {
-            Canvas(modifier = Modifier.size(400.dp), onDraw = {
-                val headArea = Rect(
-                    offset = center.translate(-size.height / 2f),
-                    size = size,
-                )
-                drawRect(
-                    Color.DarkGray,
-                    topLeft = center.translate(-size.width / 2f, -size.height / 2f),
-                    size = size
-                )
-                drawHead(
-                    headArea = headArea,
-                    state = state.value,
-                    onStateChanged = { newState ->
-                        state.value = newState
-                    }
-                )
-            })
+            val canvasSize = with(LocalDensity.current) { 400.dp.toPx() }
+            val canvasBounds = Rect(
+                offset = Offset.Zero,
+                size = Size(canvasSize, canvasSize)
+            )
+            Canvas(
+                modifier = Modifier
+                    .size(400.dp)
+                    .background(Color.LightGray)
+                    .bezierDragging(
+                        state = state.value,
+                        bounds = canvasBounds,
+                        updateState = { newState ->
+                            state.value = newState
+                        }
+                    ),
+                onDraw = {
+                    val headArea = Rect(
+                        offset = center.translate(-size.height / 2f),
+                        size = size,
+                    )
+                    drawRect(
+                        Color.DarkGray,
+                        topLeft = center.translate(-size.width / 2f, -size.height / 2f),
+                        size = size
+                    )
+                    drawHead(
+                        headArea = headArea,
+                        state = state.value.points,
+                        onStateChanged = { newPoints ->
+                            state.value = state.value.copy(
+                                points = newPoints
+                            )
+                        }
+                    )
+                })
         }
     }
+}
 
+@Preview(
+    widthDp = 800,
+    heightDp = 800,
+)
+@Composable
+fun HeadPreview() {
+    HeadPreviewComposable()
 }
 
 fun DrawScope.drawHead(
