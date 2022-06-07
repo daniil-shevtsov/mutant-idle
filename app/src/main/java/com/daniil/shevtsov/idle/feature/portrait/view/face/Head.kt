@@ -24,14 +24,13 @@ import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.feature.portrait.view.*
 import timber.log.Timber
 
 data class HeadViewState(
-    val topArea: BezierState,
+    val topArea: BezierViewState,
 )
 
 data class BezierViewState(
@@ -40,9 +39,9 @@ data class BezierViewState(
 )
 
 private fun Modifier.bezierDragging(
-    percentageStateValue: BezierViewState,
+    percentageStateValue: HeadViewState,
     screenBounds: Rect,
-    updateState: (newState: BezierViewState) -> Unit,
+    updateState: (newState: HeadViewState) -> Unit,
 ) = composed {
     val percentageStateValue by rememberUpdatedState(percentageStateValue)
 
@@ -52,7 +51,9 @@ private fun Modifier.bezierDragging(
                 Timber.tag("UPDATE-INDEX").d("Drag started")
                 updateState(
                     percentageStateValue.copy(
-                        previousSelectedIndex = -1
+                        topArea = percentageStateValue.topArea.copy(
+                            previousSelectedIndex = -1
+                        ),
                     )
                 )
             },
@@ -60,7 +61,9 @@ private fun Modifier.bezierDragging(
                 Timber.tag("UPDATE-INDEX").d("Drag ended")
                 updateState(
                     percentageStateValue.copy(
-                        previousSelectedIndex = -1
+                        topArea = percentageStateValue.topArea.copy(
+                            previousSelectedIndex = -1
+                        ),
                     )
                 )
             },
@@ -68,15 +71,17 @@ private fun Modifier.bezierDragging(
                 Timber.tag("UPDATE-INDEX").d("Drag cancelled")
                 updateState(
                     percentageStateValue.copy(
-                        previousSelectedIndex = -1
+                        topArea = percentageStateValue.topArea.copy(
+                            previousSelectedIndex = -1
+                        ),
                     )
                 )
             }
         ) { change, dragAmount ->
             change.consumeAllChanges()
             val previousSelectedPointIndex =
-                percentageStateValue.previousSelectedIndex
-            val originalState = percentageStateValue.points
+                percentageStateValue.topArea.previousSelectedIndex
+            val originalState = percentageStateValue.topArea.points
             val oldPoints = originalState.points().map { point ->
                 point.times(
                     x = screenBounds.width,
@@ -137,8 +142,10 @@ private fun Modifier.bezierDragging(
 
                 updateState(
                     percentageStateValue.copy(
-                        points = finalPoints.toBezierState(),
-                        previousSelectedIndex = selectedPointIndex,
+                        topArea = percentageStateValue.topArea.copy(
+                            points = finalPoints.toBezierState(),
+                            previousSelectedIndex = selectedPointIndex,
+                        )
                     )
                 )
             }
@@ -148,95 +155,99 @@ private fun Modifier.bezierDragging(
 }
 
 
-@Composable
-fun DraggingComposable() {
-    val screenSizeDp = 200.dp
-    val screenSizePx = with(LocalDensity.current) { screenSizeDp.toPx() }
-    val screenSize = Size(screenSizePx, screenSizePx)
-    val screenBounds = Rect(Offset.Zero, screenSize)
-    var percentageState by remember {
-        mutableStateOf(
-            BezierViewState(
-                points = BezierState(
-                    start = Offset(0f, 0.5f),
-                    finish = Offset(1f, 0.5f),
-                    support = Offset(0f, 0f),
-                    support2 = Offset(1f, 0f),
-                ),
-                previousSelectedIndex = -1
-            )
-        )
-    }
+//@Composable
+//fun DraggingComposable() {
+//    val screenSizeDp = 200.dp
+//    val screenSizePx = with(LocalDensity.current) { screenSizeDp.toPx() }
+//    val screenSize = Size(screenSizePx, screenSizePx)
+//    val screenBounds = Rect(Offset.Zero, screenSize)
+//    var percentageState by remember {
+//        mutableStateOf(
+//            BezierViewState(
+//                points = BezierState(
+//                    start = Offset(0f, 0.5f),
+//                    finish = Offset(1f, 0.5f),
+//                    support = Offset(0f, 0f),
+//                    support2 = Offset(1f, 0f),
+//                ),
+//                previousSelectedIndex = -1
+//            )
+//        )
+//    }
+//
+//    fun updateState(newState: BezierViewState) {
+//        Timber.tag("STATE-UPDATE").d("Update state from ${percentageState} to $newState")
+//        percentageState = newState
+//    }
+//
+//    Kek(
+//        screenSizeDp,
+//        screenBounds,
+//        percentageState,
+//        ::updateState
+//    )
+//}
 
-    fun updateState(newState: BezierViewState) {
-        Timber.tag("STATE-UPDATE").d("Update state from ${percentageState} to $newState")
-        percentageState = newState
-    }
-
-    Kek(
-        screenSizeDp,
-        screenBounds,
-        percentageState,
-        ::updateState
-    )
-}
-
-@Composable
-private fun Kek(
-    screenSizeDp: Dp,
-    screenBounds: Rect,
-    percentageStateValue: BezierViewState,
-    updateState: (state: BezierViewState) -> Unit,
-) {
-    Timber.tag("STATE-UPDATE").d("Got state before delegate: $percentageStateValue")
-    val percentageStateValue by rememberUpdatedState(percentageStateValue)
-    Timber.tag("STATE-UPDATE").d("Got state after delegate: $percentageStateValue")
-    Box(
-        modifier = Modifier.size(screenSizeDp).background(Color.White),
-        contentAlignment = Alignment.Center,
-    ) {
-        Canvas(
-            modifier = Modifier.background(Color.Cyan)
-                .size(screenSizeDp)
-                .bezierDragging(
-                    percentageStateValue = percentageStateValue,
-                    screenBounds = screenBounds,
-                    updateState = updateState,
-                ),
-        ) {
-            val normalState = percentageStateValue.copy(
-                points = percentageStateValue.points.multiply(
-                    x = screenBounds.width,
-                    y = screenBounds.height
-                )
-            )
-            drawRect(Color.Gray, topLeft = screenBounds.topLeft, size = screenBounds.size)
-            drawPath(path = Path().apply {
-                drawQuadraticBezier(normalState.points)
-            }, color = Color.Black, style = Stroke(width = 3f))
-            drawBezierPoints(normalState.points)
-        }
-    }
-}
+//@Composable
+//private fun Kek(
+//    screenSizeDp: Dp,
+//    screenBounds: Rect,
+//    percentageStateValue: HeadViewState,
+//    updateState: (state: HeadViewState) -> Unit,
+//) {
+//    Timber.tag("STATE-UPDATE").d("Got state before delegate: $percentageStateValue")
+//    val percentageStateValue by rememberUpdatedState(percentageStateValue)
+//    Timber.tag("STATE-UPDATE").d("Got state after delegate: $percentageStateValue")
+//    Box(
+//        modifier = Modifier.size(screenSizeDp).background(Color.White),
+//        contentAlignment = Alignment.Center,
+//    ) {
+//        Canvas(
+//            modifier = Modifier.background(Color.Cyan)
+//                .size(screenSizeDp)
+//                .bezierDragging(
+//                    percentageStateValue = percentageStateValue,
+//                    screenBounds = screenBounds,
+//                    updateState = updateState,
+//                ),
+//        ) {
+//            val normalState = percentageStateValue.copy(
+//                topArea = percentageStateValue.topArea(
+//                    points = percentageStateValue.points.multiply(
+//                        x = screenBounds.width,
+//                        y = screenBounds.height
+//                    )
+//                )
+//            )
+//            drawRect(Color.Gray, topLeft = screenBounds.topLeft, size = screenBounds.size)
+//            drawPath(path = Path().apply {
+//                drawQuadraticBezier(normalState.points)
+//            }, color = Color.Black, style = Stroke(width = 3f))
+//            drawBezierPoints(normalState.points)
+//        }
+//    }
+//}
 
 @Composable
 fun HeadPreviewComposable() {
     var state by remember {
         mutableStateOf(
-            BezierViewState(
-                points = BezierState(
-                    start = Offset(0f, 0.5f),
-                    finish = Offset(1f, 0.5f),
-                    support = Offset(0f, 0f),
-                    support2 = Offset(1f, 0f),
-                ),
-                previousSelectedIndex = -1,
+            HeadViewState(
+                topArea = BezierViewState(
+                    points = BezierState(
+                        start = Offset(0f, 0.5f),
+                        finish = Offset(1f, 0.5f),
+                        support = Offset(0f, 0f),
+                        support2 = Offset(1f, 0f),
+                    ),
+                    previousSelectedIndex = -1,
+                )
             )
         )
     }
     Column(modifier = Modifier.background(Color.White)) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            state.points.points().forEachIndexed { index, point ->
+            state.topArea.points.points().forEachIndexed { index, point ->
                 val title = when (index) {
                     0 -> "Start"
                     1 -> "Finish"
@@ -279,10 +290,12 @@ fun HeadPreviewComposable() {
                     )
                     drawHead(
                         headArea = headArea,
-                        state = HeadViewState(topArea = state.points),
+                        state = state,
                         onStateChanged = { newPoints ->
                             state = state.copy(
-                                points = newPoints
+                                topArea = state.topArea.copy(
+                                    points = newPoints
+                                )
                             )
                         }
                     )
@@ -329,7 +342,7 @@ fun DrawScope.drawHead(
         color = Color.Gray
     )
 
-    val topAreaInPixels = state.topArea.multiply(
+    val topAreaInPixels = state.topArea.points.multiply(
         x = topHeadArea.width,
         y = topHeadArea.height,
     )
