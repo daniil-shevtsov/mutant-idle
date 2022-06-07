@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
@@ -81,126 +82,82 @@ private fun Modifier.bezierDragging(
         ) { change, dragAmount ->
             change.consumeAllChanges()
 
-            fun doEverything(viewState: HeadViewState): HeadViewState {
-                val previousSelectedPointIndex =
-                    percentageStateValue.topArea.previousSelectedIndex
-                val originalState = percentageStateValue.topArea.points
-                val oldPoints = originalState.points().map { point ->
-                    point.times(
-                        x = screenBounds.width,
-                        y = screenBounds.height,
-                    )
-                }
-                val selectedPointIndex = when {
-                    previousSelectedPointIndex != -1 -> {
-                        Timber.tag("KEK").d("Reuse position $previousSelectedPointIndex")
-                        previousSelectedPointIndex
-                    }
-                    else -> {
-                        Timber.tag("UPDATE-INDEX")
-                            .d(" index is $previousSelectedPointIndex Choose nearest")
-                        oldPoints
-                            .minByOrNull { point ->
-                                point.distanceTo(change.position)
-                            }.let { oldPoints.indexOf(it) }
-                    }
-                }
-
-                val selectedPoint = oldPoints.getOrNull(selectedPointIndex)
-                if (selectedPoint != null) {
-                    val newPoints = oldPoints.mapIndexed { index, point ->
-                        if (index == oldPoints.indexOf(selectedPoint)) {
-                            point.translate(
-                                x = dragAmount.x,
-                                y = dragAmount.y,
-                            )
-                        } else {
-                            point
-                        }
-                    }
-                    val coercedPoints = newPoints.map { point ->
-                        point.coerceIn(screenBounds)
-                    }
-                    val finalPoints = coercedPoints.map { point ->
-                        point.div(
-                            x = screenBounds.width,
-                            y = screenBounds.height
-                        )
-                    }
-
-                    return percentageStateValue.copy(
-                        topArea = percentageStateValue.topArea.copy(
-                            points = finalPoints.toBezierState(),
-                            previousSelectedIndex = selectedPointIndex,
-                        )
-                    )
-                } else {
-                    return percentageStateValue
-                }
-            }
 
             updateState(
-                doEverything(percentageStateValue)
+                doEverything(
+                    percentageStateValue,
+                    screenBounds,
+                    change,
+                    dragAmount
+                )
             )
-//            val previousSelectedPointIndex =
-//                percentageStateValue.topArea.previousSelectedIndex
-//            val originalState = percentageStateValue.topArea.points
-//            val oldPoints = originalState.points().map { point ->
-//                point.times(
-//                    x = screenBounds.width,
-//                    y = screenBounds.height,
-//                )
-//            }
-//            val selectedPointIndex = when {
-//                previousSelectedPointIndex != -1 -> {
-//                    Timber.tag("KEK").d("Reuse position $previousSelectedPointIndex")
-//                    previousSelectedPointIndex
-//                }
-//                else -> {
-//                    Timber.tag("UPDATE-INDEX")
-//                        .d(" index is $previousSelectedPointIndex Choose nearest")
-//                    oldPoints
-//                        .minByOrNull { point ->
-//                            point.distanceTo(change.position)
-//                        }.let { oldPoints.indexOf(it) }
-//                }
-//            }
-//
-//            val selectedPoint = oldPoints.getOrNull(selectedPointIndex)
-//            if (selectedPoint != null) {
-//                val newPoints = oldPoints.mapIndexed { index, point ->
-//                    if (index == oldPoints.indexOf(selectedPoint)) {
-//                        point.translate(
-//                            x = dragAmount.x,
-//                            y = dragAmount.y,
-//                        )
-//                    } else {
-//                        point
-//                    }
-//                }
-//                val coercedPoints = newPoints.map { point ->
-//                    point.coerceIn(screenBounds)
-//                }
-//                val finalPoints = coercedPoints.map { point ->
-//                    point.div(
-//                        x = screenBounds.width,
-//                        y = screenBounds.height
-//                    )
-//                }
-//
-//                updateState(
-//                    percentageStateValue.copy(
-//                        topArea = percentageStateValue.topArea.copy(
-//                            points = finalPoints.toBezierState(),
-//                            previousSelectedIndex = selectedPointIndex,
-//                        )
-//                    )
-//                )
-//            }
-
         }
     }
 }
+
+fun doEverything(
+    percentageStateValue: HeadViewState,
+    screenBounds: Rect,
+    change: PointerInputChange,
+    dragAmount: Offset,
+): HeadViewState {
+    val previousSelectedPointIndex =
+        percentageStateValue.topArea.previousSelectedIndex
+    val originalState = percentageStateValue.topArea.points
+    val oldPoints = originalState.points().map { point ->
+        point.times(
+            x = screenBounds.width,
+            y = screenBounds.height,
+        )
+    }
+    val selectedPointIndex = when {
+        previousSelectedPointIndex != -1 -> {
+            Timber.tag("KEK").d("Reuse position $previousSelectedPointIndex")
+            previousSelectedPointIndex
+        }
+        else -> {
+            Timber.tag("UPDATE-INDEX")
+                .d(" index is $previousSelectedPointIndex Choose nearest")
+            oldPoints
+                .minByOrNull { point ->
+                    point.distanceTo(change.position)
+                }.let { oldPoints.indexOf(it) }
+        }
+    }
+
+    val selectedPoint = oldPoints.getOrNull(selectedPointIndex)
+    if (selectedPoint != null) {
+        val newPoints = oldPoints.mapIndexed { index, point ->
+            if (index == oldPoints.indexOf(selectedPoint)) {
+                point.translate(
+                    x = dragAmount.x,
+                    y = dragAmount.y,
+                )
+            } else {
+                point
+            }
+        }
+        val coercedPoints = newPoints.map { point ->
+            point.coerceIn(screenBounds)
+        }
+        val finalPoints = coercedPoints.map { point ->
+            point.div(
+                x = screenBounds.width,
+                y = screenBounds.height
+            )
+        }
+
+        return percentageStateValue.copy(
+            topArea = percentageStateValue.topArea.copy(
+                points = finalPoints.toBezierState(),
+                previousSelectedIndex = selectedPointIndex,
+            )
+        )
+    } else {
+        return percentageStateValue
+    }
+}
+
 
 @Composable
 fun HeadPreviewComposable() {
