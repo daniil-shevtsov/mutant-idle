@@ -30,6 +30,10 @@ import androidx.compose.ui.unit.sp
 import com.daniil.shevtsov.idle.feature.portrait.view.*
 import timber.log.Timber
 
+data class HeadViewState(
+    val topArea: BezierState,
+)
+
 data class BezierViewState(
     val points: BezierState,
     val previousSelectedIndex: Int,
@@ -275,7 +279,7 @@ fun HeadPreviewComposable() {
                     )
                     drawHead(
                         headArea = headArea,
-                        state = state.points,
+                        state = HeadViewState(topArea = state.points),
                         onStateChanged = { newPoints ->
                             state = state.copy(
                                 points = newPoints
@@ -299,7 +303,7 @@ fun HeadPreview() {
 
 fun DrawScope.drawHead(
     headArea: Rect,
-    state: BezierState,
+    state: HeadViewState,
     onStateChanged: (state: BezierState) -> Unit,
 ) {
     val topHeadArea = headArea
@@ -325,53 +329,42 @@ fun DrawScope.drawHead(
         color = Color.Gray
     )
 
-    val pixelState = state.multiply(
+    val topAreaInPixels = state.topArea.multiply(
         x = topHeadArea.width,
         y = topHeadArea.height,
     )
-    val debugChinWidth = (pixelState.finish.x - pixelState.start.x) / 2
+    val debugChinWidth = (topAreaInPixels.finish.x - topAreaInPixels.start.x) / 2
     val debugChin = Rect(
-        topLeft = Offset(pixelState.start.x + debugChinWidth / 2, bottomArea.bottom),
+        topLeft = Offset(topAreaInPixels.start.x + debugChinWidth / 2, bottomArea.bottom),
         bottomRight = Offset(
-            pixelState.finish.x - debugChinWidth / 2,
+            topAreaInPixels.finish.x - debugChinWidth / 2,
             bottomArea.bottom
         )
     )
     drawPath(
         path = Path().apply {
-            drawQuadraticBezier(pixelState)
-            lineTo(pixelState.finish.x, middleArea.bottom)
+            drawQuadraticBezier(topAreaInPixels)
+            lineTo(topAreaInPixels.finish.x, middleArea.bottom)
             lineTo(debugChin.right, debugChin.bottom)
             lineTo(debugChin.left, debugChin.bottom)
-            lineTo(pixelState.start.x, middleArea.bottom)
-            lineTo(pixelState.start.x, pixelState.start.y)
+            lineTo(topAreaInPixels.start.x, middleArea.bottom)
+            lineTo(topAreaInPixels.start.x, topAreaInPixels.start.y)
         },
         color = Color.Cyan,
         style = Fill,
     )
     drawPath(
         path = Path().apply {
-            drawQuadraticBezier(pixelState)
+            drawQuadraticBezier(topAreaInPixels)
         },
         color = Color.Yellow,
         style = Stroke(width = 3f),
     )
-//    clipPath(path = Path().apply {
-//        drawQuadraticBezier(pixelState)
-//        lineTo(bottomArea.bottomRight.x, bottomArea.bottomRight.y)
-//        lineTo(bottomArea.bottomLeft.x, bottomArea.bottomLeft.y)
-//        lineTo(topHeadArea.bottomLeft.x, topHeadArea.bottomLeft.y)
-////        close()
-//    }, clipOp = ClipOp.Intersect) {
-//        drawBodyPart(head)
-//        drawBodyPart(BodyPart(topHeadArea.topLeft, topHeadArea.size, Color.Blue))
-//    }
-
 
     drawArea(headArea)
     drawArea(topHeadArea)
     drawArea(middleArea)
     drawArea(bottomArea)
 
-    drawBezierPoints(pixelState)
+    drawBezierPoints(topAreaInPixels)
 }
