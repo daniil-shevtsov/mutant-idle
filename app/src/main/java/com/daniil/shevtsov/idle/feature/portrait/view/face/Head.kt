@@ -110,7 +110,10 @@ fun doEverything(
             y = screenBounds.height,
         )
     }
-    val selectedPointIndex = when {
+
+    val clickAreaLimit = 0.1f * screenBounds.height
+
+    val selectedPointIndex: Int = when {
         previousSelectedPointIndex != -1 -> {
             Timber.tag("KEK").d("Reuse position $previousSelectedPointIndex")
             previousSelectedPointIndex
@@ -119,11 +122,15 @@ fun doEverything(
             Timber.tag("UPDATE-INDEX")
                 .d(" index is $previousSelectedPointIndex Choose nearest")
             oldPoints
-                .minByOrNull { point ->
+                .mapIndexed { index, point -> index to point }
+                .toMap()
+                .onEach { (t, u) -> Timber.d("point $t $u has distance ${u.distanceTo(change.position)} to ${change.position} and limit is $clickAreaLimit") }
+                .filterValues { point -> point.distanceTo(change.position) <= clickAreaLimit }
+                .minByOrNull { (_, point) ->
                     point.distanceTo(change.position)
-                }.let { oldPoints.indexOf(it) }
+                }?.let { (index, _) -> index }
         }
-    }
+    } ?: return percentageStateValue
 
     val selectedPoint = oldPoints.getOrNull(selectedPointIndex)
     if (selectedPoint != null) {
@@ -283,8 +290,8 @@ fun DrawScope.drawHead(
     )
 
     val topAreaInPixels = state.topArea.points.multiply(
-        x = topHeadArea.width,
-        y = topHeadArea.height,
+        x = headArea.width,
+        y = headArea.height,
     )
     val debugChinWidth = (topAreaInPixels.finish.x - topAreaInPixels.start.x) / 2
     val debugChin = Rect(

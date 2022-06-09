@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.takeWhile
-import timber.log.Timber
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 object TimeBehavior {
     suspend fun startEmitingTime(
@@ -19,8 +19,7 @@ object TimeBehavior {
             .takeWhile { duration -> duration <= until }
             .collect { duration ->
                 val passed = duration.inWholeMilliseconds / interval.inWholeMilliseconds
-                Timber.d("duration ${duration.inWholeMicroseconds} interval ${interval.inWholeMilliseconds}")
-                timeStorage.setNewValue(Duration.milliseconds(passed))
+                timeStorage.setNewValue(passed.milliseconds)
             }
     }
 
@@ -29,7 +28,7 @@ object TimeBehavior {
     }
 
     private fun timerFlow(interval: Duration): Flow<Duration> = flow {
-        var elapsedTime = Duration.milliseconds(0.0)
+        var elapsedTime = 0.0.milliseconds
         while (true) {
             emit(elapsedTime)
             elapsedTime += interval
