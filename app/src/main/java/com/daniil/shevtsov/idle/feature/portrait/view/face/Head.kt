@@ -33,6 +33,7 @@ import timber.log.Timber
 data class HeadViewState(
     val topArea: BezierViewState,
     val bottomArea: BezierViewState,
+    val previousSelectedIndex: Int,
 )
 
 data class BezierViewState(
@@ -56,6 +57,7 @@ private fun Modifier.bezierDragging(
                         topArea = percentageStateValue.topArea.copy(
                             previousSelectedIndex = -1
                         ),
+                        previousSelectedIndex = -1
                     )
                 )
             },
@@ -66,6 +68,7 @@ private fun Modifier.bezierDragging(
                         topArea = percentageStateValue.topArea.copy(
                             previousSelectedIndex = -1
                         ),
+                        previousSelectedIndex = -1
                     )
                 )
             },
@@ -76,6 +79,7 @@ private fun Modifier.bezierDragging(
                         topArea = percentageStateValue.topArea.copy(
                             previousSelectedIndex = -1
                         ),
+                        previousSelectedIndex = -1
                     )
                 )
             }
@@ -101,8 +105,8 @@ fun doEverything(
     change: PointerInputChange,
     dragAmount: Offset,
 ): HeadViewState {
-    val previousSelectedPointIndex =
-        percentageStateValue.topArea.previousSelectedIndex
+    val previousSelectedPointIndex = percentageStateValue.previousSelectedIndex
+    //percentageStateValue.topArea.previousSelectedIndex
     val originalState = percentageStateValue.topArea.points
     val oldPoints = originalState.points().map { point ->
         point.times(
@@ -158,7 +162,8 @@ fun doEverything(
             topArea = percentageStateValue.topArea.copy(
                 points = finalPoints.toBezierState(),
                 previousSelectedIndex = selectedPointIndex,
-            )
+            ),
+            previousSelectedIndex = selectedPointIndex,
         )
     } else {
         return percentageStateValue
@@ -188,7 +193,8 @@ fun HeadPreviewComposable() {
                         support2 = Offset(1f, 1f),
                     ),
                     previousSelectedIndex = -1,
-                )
+                ),
+                previousSelectedIndex = -1,
             )
         )
     }
