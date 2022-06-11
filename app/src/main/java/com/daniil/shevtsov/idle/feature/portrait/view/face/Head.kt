@@ -281,19 +281,6 @@ fun DrawScope.drawHead(
         .shrink(heightPercent = 0.34f)
         .let { area -> area.move(position = middleArea.bottomCenter.translate(y = area.height / 2f)) }
 
-    val headSize = Size(
-        width = headArea.width * 0.7f,
-        height = headArea.height,
-    )
-    val head = BodyPart(
-        position = headArea.center.translate(
-            x = -headSize.width / 2,
-            y = -headSize.height / 2,
-        ),
-        size = headSize,
-        color = Color.Gray
-    )
-
     val topAreaInPixels = state.topArea.multiply(
         x = headArea.width,
         y = headArea.height,
@@ -302,22 +289,10 @@ fun DrawScope.drawHead(
         x = headArea.width,
         y = headArea.height,
     )
-    val debugChinWidth = (topAreaInPixels.finish.x - topAreaInPixels.start.x) / 2
-    val debugChin = Rect(
-        topLeft = Offset(topAreaInPixels.start.x + debugChinWidth / 2, bottomArea.bottom),
-        bottomRight = Offset(
-            topAreaInPixels.finish.x - debugChinWidth / 2,
-            bottomArea.bottom
-        )
-    )
+
     drawPath(
         path = Path().apply {
             drawQuadraticBezier(topAreaInPixels)
-//            lineTo(topAreaInPixels.finish.x, middleArea.bottom)
-//            lineTo(debugChin.right, debugChin.bottom)
-//            lineTo(debugChin.left, debugChin.bottom)
-//            lineTo(topAreaInPixels.start.x, middleArea.bottom)
-//            lineTo(topAreaInPixels.start.x, topAreaInPixels.start.y)
         },
         color = Color.Cyan,
         style = Fill,
