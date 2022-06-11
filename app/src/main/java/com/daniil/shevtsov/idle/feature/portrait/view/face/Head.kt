@@ -38,7 +38,6 @@ data class HeadViewState(
 
 data class BezierViewState(
     val points: BezierState,
-    val previousSelectedIndex: Int,
 )
 
 private fun Modifier.bezierDragging(
@@ -54,9 +53,6 @@ private fun Modifier.bezierDragging(
                 Timber.tag("UPDATE-INDEX").d("Drag started")
                 updateState(
                     percentageStateValue.copy(
-                        topArea = percentageStateValue.topArea.copy(
-                            previousSelectedIndex = -1
-                        ),
                         previousSelectedIndex = -1
                     )
                 )
@@ -65,9 +61,6 @@ private fun Modifier.bezierDragging(
                 Timber.tag("UPDATE-INDEX").d("Drag ended")
                 updateState(
                     percentageStateValue.copy(
-                        topArea = percentageStateValue.topArea.copy(
-                            previousSelectedIndex = -1
-                        ),
                         previousSelectedIndex = -1
                     )
                 )
@@ -76,9 +69,6 @@ private fun Modifier.bezierDragging(
                 Timber.tag("UPDATE-INDEX").d("Drag cancelled")
                 updateState(
                     percentageStateValue.copy(
-                        topArea = percentageStateValue.topArea.copy(
-                            previousSelectedIndex = -1
-                        ),
                         previousSelectedIndex = -1
                     )
                 )
@@ -106,7 +96,6 @@ fun doEverything(
     dragAmount: Offset,
 ): HeadViewState {
     val previousSelectedPointIndex = percentageStateValue.previousSelectedIndex
-    //percentageStateValue.topArea.previousSelectedIndex
     val originalState = percentageStateValue.topArea.points
     val oldPoints = originalState.points().map { point ->
         point.times(
@@ -161,7 +150,6 @@ fun doEverything(
         return percentageStateValue.copy(
             topArea = percentageStateValue.topArea.copy(
                 points = finalPoints.toBezierState(),
-                previousSelectedIndex = selectedPointIndex,
             ),
             previousSelectedIndex = selectedPointIndex,
         )
@@ -183,7 +171,6 @@ fun HeadPreviewComposable() {
                         support = Offset(0f, 0f),
                         support2 = Offset(1f, 0f),
                     ),
-                    previousSelectedIndex = -1,
                 ),
                 bottomArea = BezierViewState(
                     points = BezierState(
@@ -192,7 +179,6 @@ fun HeadPreviewComposable() {
                         support = Offset(0f, 1f),
                         support2 = Offset(1f, 1f),
                     ),
-                    previousSelectedIndex = -1,
                 ),
                 previousSelectedIndex = -1,
             )
