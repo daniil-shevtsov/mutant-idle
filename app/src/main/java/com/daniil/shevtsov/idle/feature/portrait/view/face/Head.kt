@@ -91,13 +91,27 @@ fun doEverything(
     change: PointerInputChange,
     dragAmount: Offset,
 ): HeadViewState {
+    val kek = mapOf(
+        "top" to percentageStateValue.topArea,
+        "bottom" to percentageStateValue.bottomArea,
+    )
+    val kekPoints = kek
+        .toList()
+        .flatMap { (name, area) ->
+            area.points()
+                .map { point -> name to point }
+        }
+        .mapIndexed { index, (name, point) -> index to (name to point) }
+        .toMap()
+
     val previousSelectedPointIndex = percentageStateValue.previousSelectedIndex
     val originalState = percentageStateValue.topArea
-    val oldPoints = originalState.points().map { point ->
-        point.times(
+    val oldPoints = kekPoints.toList().map { (index, pointEntry) ->
+        val (name, point) = pointEntry
+        index to (name to point.times(
             x = screenBounds.width,
             y = screenBounds.height,
-        )
+        ))
     }
 
     val clickAreaLimit = 0.1f * screenBounds.height
@@ -111,11 +125,16 @@ fun doEverything(
             Timber.tag("UPDATE-INDEX")
                 .d(" index is $previousSelectedPointIndex Choose nearest")
             oldPoints
-                .mapIndexed { index, point -> index to point }
-                .toMap()
-                .onEach { (t, u) -> Timber.d("point $t $u has distance ${u.distanceTo(change.position)} to ${change.position} and limit is $clickAreaLimit") }
-                .filterValues { point -> point.distanceTo(change.position) <= clickAreaLimit }
-                .minByOrNull { (_, point) ->
+                .onEach { (index, pointEntry) ->
+                    val (name, point) = pointEntry
+                    Timber.d("point $index $name $point has distance ${point.distanceTo(change.position)} to ${change.position} and limit is $clickAreaLimit")
+                }
+                .filter { (index, pointEntry) ->
+                    val (name, point) = pointEntry
+                    point.distanceTo(change.position) <= clickAreaLimit
+                }
+                .minByOrNull { (index, pointEntry) ->
+                    val (name, point) = pointEntry
                     point.distanceTo(change.position)
                 }?.let { (index, _) -> index }
         }
@@ -123,7 +142,8 @@ fun doEverything(
 
     val selectedPoint = oldPoints.getOrNull(selectedPointIndex)
     if (selectedPoint != null) {
-        val newPoints = oldPoints.mapIndexed { index, point ->
+        val newPoints = oldPoints.map { (index, pointEntry) ->
+            val (name, point) = pointEntry
             if (index == oldPoints.indexOf(selectedPoint)) {
                 point.translate(
                     x = dragAmount.x,
