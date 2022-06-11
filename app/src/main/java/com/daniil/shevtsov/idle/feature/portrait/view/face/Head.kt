@@ -298,6 +298,10 @@ fun DrawScope.drawHead(
         x = headArea.width,
         y = headArea.height,
     )
+    val bottomAreaInPixels = state.bottomArea.multiply(
+        x = headArea.width,
+        y = headArea.height,
+    )
     val debugChinWidth = (topAreaInPixels.finish.x - topAreaInPixels.start.x) / 2
     val debugChin = Rect(
         topLeft = Offset(topAreaInPixels.start.x + debugChinWidth / 2, bottomArea.bottom),
@@ -309,21 +313,28 @@ fun DrawScope.drawHead(
     drawPath(
         path = Path().apply {
             drawQuadraticBezier(topAreaInPixels)
-            lineTo(topAreaInPixels.finish.x, middleArea.bottom)
-            lineTo(debugChin.right, debugChin.bottom)
-            lineTo(debugChin.left, debugChin.bottom)
-            lineTo(topAreaInPixels.start.x, middleArea.bottom)
-            lineTo(topAreaInPixels.start.x, topAreaInPixels.start.y)
+//            lineTo(topAreaInPixels.finish.x, middleArea.bottom)
+//            lineTo(debugChin.right, debugChin.bottom)
+//            lineTo(debugChin.left, debugChin.bottom)
+//            lineTo(topAreaInPixels.start.x, middleArea.bottom)
+//            lineTo(topAreaInPixels.start.x, topAreaInPixels.start.y)
         },
         color = Color.Cyan,
         style = Fill,
     )
     drawPath(
         path = Path().apply {
-            drawQuadraticBezier(topAreaInPixels)
+            drawQuadraticBezier(bottomAreaInPixels)
         },
         color = Color.Yellow,
         style = Stroke(width = 3f),
+    )
+    drawPath(
+        path = Path().apply {
+            drawQuadraticBezier(bottomAreaInPixels)
+        },
+        color = Color.Cyan,
+        style = Fill,
     )
 
     drawArea(headArea)
@@ -332,4 +343,5 @@ fun DrawScope.drawHead(
     drawArea(bottomArea)
 
     drawBezierPoints(topAreaInPixels)
+    drawBezierPoints(bottomAreaInPixels)
 }
