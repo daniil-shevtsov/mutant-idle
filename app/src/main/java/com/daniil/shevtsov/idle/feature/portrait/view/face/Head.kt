@@ -145,26 +145,31 @@ fun doEverything(
         val newPoints = oldPoints.map { (index, pointEntry) ->
             val (name, point) = pointEntry
             if (index == oldPoints.indexOf(selectedPoint)) {
-                point.translate(
+                name to point.translate(
                     x = dragAmount.x,
                     y = dragAmount.y,
                 )
             } else {
-                point
+                name to point
             }
         }
-        val coercedPoints = newPoints.map { point ->
-            point.coerceIn(screenBounds)
+        val coercedPoints = newPoints.map { (name, point) ->
+            name to point.coerceIn(screenBounds)
         }
-        val finalPoints = coercedPoints.map { point ->
-            point.div(
+        val finalPoints = coercedPoints.map { (name, point) ->
+            name to point.div(
                 x = screenBounds.width,
                 y = screenBounds.height
             )
         }
 
         return percentageStateValue.copy(
-            topArea = finalPoints.toBezierState(),
+            topArea = finalPoints
+                .filter { (name, _) -> name == "top" }.map { (_, point) -> point }
+                .toBezierState(),
+            bottomArea = finalPoints
+                .filter { (name, _) -> name == "bottom" }.map { (_, point) -> point }
+                .toBezierState(),
             previousSelectedIndex = selectedPointIndex,
         )
     } else {
