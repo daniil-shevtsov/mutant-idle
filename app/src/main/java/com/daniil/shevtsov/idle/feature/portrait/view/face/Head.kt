@@ -31,13 +31,9 @@ import com.daniil.shevtsov.idle.feature.portrait.view.*
 import timber.log.Timber
 
 data class HeadViewState(
-    val topArea: BezierViewState,
-    val bottomArea: BezierViewState,
+    val topArea: BezierState,
+    val bottomArea: BezierState,
     val previousSelectedIndex: Int,
-)
-
-data class BezierViewState(
-    val points: BezierState,
 )
 
 private fun Modifier.bezierDragging(
@@ -96,7 +92,7 @@ fun doEverything(
     dragAmount: Offset,
 ): HeadViewState {
     val previousSelectedPointIndex = percentageStateValue.previousSelectedIndex
-    val originalState = percentageStateValue.topArea.points
+    val originalState = percentageStateValue.topArea
     val oldPoints = originalState.points().map { point ->
         point.times(
             x = screenBounds.width,
@@ -148,9 +144,7 @@ fun doEverything(
         }
 
         return percentageStateValue.copy(
-            topArea = percentageStateValue.topArea.copy(
-                points = finalPoints.toBezierState(),
-            ),
+            topArea = finalPoints.toBezierState(),
             previousSelectedIndex = selectedPointIndex,
         )
     } else {
@@ -164,21 +158,17 @@ fun HeadPreviewComposable() {
     var state by remember {
         mutableStateOf(
             HeadViewState(
-                topArea = BezierViewState(
-                    points = BezierState(
-                        start = Offset(0f, 0.5f),
-                        finish = Offset(1f, 0.5f),
-                        support = Offset(0f, 0f),
-                        support2 = Offset(1f, 0f),
-                    ),
+                topArea = BezierState(
+                    start = Offset(0f, 0.5f),
+                    finish = Offset(1f, 0.5f),
+                    support = Offset(0f, 0f),
+                    support2 = Offset(1f, 0f),
                 ),
-                bottomArea = BezierViewState(
-                    points = BezierState(
-                        start = Offset(0f, 0.5f),
-                        finish = Offset(1f, 0.5f),
-                        support = Offset(0f, 1f),
-                        support2 = Offset(1f, 1f),
-                    ),
+                bottomArea = BezierState(
+                    start = Offset(0f, 0.5f),
+                    finish = Offset(1f, 0.5f),
+                    support = Offset(0f, 1f),
+                    support2 = Offset(1f, 1f),
                 ),
                 previousSelectedIndex = -1,
             )
@@ -186,7 +176,7 @@ fun HeadPreviewComposable() {
     }
     Column(modifier = Modifier.background(Color.White)) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            state.topArea.points.points().forEachIndexed { index, point ->
+            state.topArea.points().forEachIndexed { index, point ->
                 val title = when (index) {
                     0 -> "Start"
                     1 -> "Finish"
@@ -232,9 +222,7 @@ fun HeadPreviewComposable() {
                         state = state,
                         onStateChanged = { newPoints ->
                             state = state.copy(
-                                topArea = state.topArea.copy(
-                                    points = newPoints
-                                )
+                                topArea = newPoints
                             )
                         }
                     )
@@ -281,7 +269,7 @@ fun DrawScope.drawHead(
         color = Color.Gray
     )
 
-    val topAreaInPixels = state.topArea.points.multiply(
+    val topAreaInPixels = state.topArea.multiply(
         x = headArea.width,
         y = headArea.height,
     )
