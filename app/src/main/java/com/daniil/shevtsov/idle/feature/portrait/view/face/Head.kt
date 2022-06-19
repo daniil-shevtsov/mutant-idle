@@ -177,7 +177,6 @@ fun doEverything(
     }
 }
 
-
 @Composable
 fun HeadPreviewComposable() {
     var state by remember {
@@ -284,10 +283,14 @@ fun DrawScope.drawHead(
     val topAreaInPixels = state.topArea.multiply(
         x = headArea.width,
         y = headArea.height,
+    ).add(
+        x = topHeadArea.left,
     )
     val bottomAreaInPixels = state.bottomArea.multiply(
         x = headArea.width,
         y = headArea.height,
+    ).add(
+        x = bottomArea.left,
     )
 
     drawPath(
@@ -330,4 +333,6 @@ fun DrawScope.drawHead(
 
     drawBezierPoints(topAreaInPixels)
     drawBezierPoints(bottomAreaInPixels)
+
+
 }

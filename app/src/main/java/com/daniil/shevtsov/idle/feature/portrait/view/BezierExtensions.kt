@@ -32,3 +32,13 @@ fun BezierState.multiply(
         y = point.y.times(y)
     )
 }.toBezierState()
+
+fun BezierState.add(
+    x: Float = 0f,
+    y: Float = 0f
+): BezierState = points().map { point ->
+    point.copy(
+        x = point.x + x,
+        y = point.y + y,
+    )
+}.toBezierState()

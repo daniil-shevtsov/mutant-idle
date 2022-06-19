@@ -52,6 +52,7 @@ fun DrawScope.drawPortrait(
     val headArea = screenArea
         .shrink(0.8f)
 
+
     val headSize = Size(
         width = Random.nextFloatInRange(
             min = headArea.width * 0.4f,
@@ -195,6 +196,26 @@ fun DrawScope.drawPortrait(
             min = 0.2f,
             max = 0.6f,
         ),
+    )
+
+    drawHead(
+        headArea = faceArea,
+        state = HeadViewState(
+            topArea = BezierState(
+                start = Offset(0f, 0.5f),
+                finish = Offset(1f, 0.5f),
+                support = Offset(0f, 0f),
+                support2 = Offset(1f, 0f),
+            ),
+            bottomArea = BezierState(
+                start = Offset(0f, 0.5f),
+                finish = Offset(1f, 0.5f),
+                support = Offset(0f, 1f),
+                support2 = Offset(1f, 1f),
+            ),
+            previousSelectedIndex = -1,
+        ),
+        onStateChanged = {},
     )
 
     drawEye(
