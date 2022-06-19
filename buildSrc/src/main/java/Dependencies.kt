@@ -7,10 +7,10 @@ object Versions {
 
     const val accompanist = "0.20.2"
 
-    const val compose = "1.0.5"
+    const val compose = "1.1.1"
     const val composeMultiplatform = "1.0.0-alpha08"
 
-    const val dagger = "2.36"
+    const val dagger = "2.42"
 
     const val jupiter = "5.7.2"
     const val junit = "4.13"
@@ -18,7 +18,7 @@ object Versions {
 
     const val kBigNum = "2.2.0"
 
-    const val kotlin = "1.5.31"
+    const val kotlin = "1.6.10"
     const val kotlinCoroutines = "1.5.2-native-mt"
     const val koin = "3.1.1"
     const val kotlinterGradle = "3.4.5"
@@ -65,6 +65,7 @@ object Deps {
         const val ui = "androidx.compose.ui:ui:${Versions.compose}"
         const val uiGraphics = "androidx.compose.ui:ui-graphics:${Versions.compose}"
         const val uiTooling = "androidx.compose.ui:ui-tooling:${Versions.compose}"
+        const val uiToolingPreview = "androidx.compose.ui:ui-tooling-preview:${Versions.compose}"
         const val foundationLayout =
             "androidx.compose.foundation:foundation-layout:${Versions.compose}"
         const val material = "androidx.compose.material:material:${Versions.compose}"

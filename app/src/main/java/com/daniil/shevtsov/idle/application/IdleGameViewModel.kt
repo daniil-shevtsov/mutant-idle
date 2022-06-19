@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.scan
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 class IdleGameViewModel @Inject constructor(
     private val balanceConfig: BalanceConfig,
@@ -32,7 +32,7 @@ class IdleGameViewModel @Inject constructor(
     private suspend fun startTime(until: Duration) {
         TimeBehavior.startEmitingTime(
             timeStorage = timeStorage,
-            interval = Duration.milliseconds(balanceConfig.tickRateMillis),
+            interval = balanceConfig.tickRateMillis.milliseconds,
             until = until,
         )
     }
@@ -44,7 +44,6 @@ class IdleGameViewModel @Inject constructor(
                 .scan(0L to 0L) { previousPair, newTime -> previousPair.second to newTime }
                 .map { (previous, new) ->
                     val difference = new - previous
-                    Timber.d("previous $previous new $new")
                     Time(difference)
                 }
                 .onEach { time ->
@@ -54,7 +53,6 @@ class IdleGameViewModel @Inject constructor(
                         currentState.resources.find { it.key == ResourceKey.Blood }!!.value
                     val resourceChange =
                         oldResourceValue + time.value * balanceConfig.resourcePerMillisecond
-                    Timber.d("time: $time oldResourceValue: $oldResourceValue balanceCOnfig: ${balanceConfig.resourcePerMillisecond} resource change: $resourceChange")
                     imperativeShell.updateState(
                         newState = currentState.copy(
                             resources = currentState.resources.map { resource ->
