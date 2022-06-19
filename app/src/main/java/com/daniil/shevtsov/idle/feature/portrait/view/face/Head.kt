@@ -285,12 +285,14 @@ fun DrawScope.drawHead(
         y = headArea.height,
     ).add(
         x = topHeadArea.left,
+        y = headArea.top
     )
     val bottomAreaInPixels = state.bottomArea.multiply(
         x = headArea.width,
         y = headArea.height,
     ).add(
         x = bottomArea.left,
+        y = headArea.top
     )
 
     drawPath(
