@@ -10,7 +10,6 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.daniil.shevtsov.idle.R
 import com.daniil.shevtsov.idle.application.IdleGameApplication
 import com.daniil.shevtsov.idle.databinding.FragmentMainBinding
-import com.daniil.shevtsov.idle.feature.portrait.view.face.HeadPreviewComposable
 import com.google.accompanist.insets.ProvideWindowInsets
 import javax.inject.Inject
 
@@ -37,9 +36,7 @@ class ScreenHostFragment : Fragment(R.layout.fragment_main) {
         with(binding) {
             composeView.setContent {
                 ProvideWindowInsets {
-                    HeadPreviewComposable()
-//                    DraggingComposable()
-                    //ScreenHostComposable(viewModel = viewModel)
+                    ScreenHostComposable(viewModel = viewModel)
                 }
             }
         }
