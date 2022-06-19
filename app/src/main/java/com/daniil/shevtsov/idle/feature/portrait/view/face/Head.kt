@@ -311,6 +311,17 @@ fun DrawScope.drawHead(
         color = Color.Cyan,
         style = Fill,
     )
+    drawPath(
+        path = Path().apply {
+            moveTo(topAreaInPixels.start.x, topAreaInPixels.start.y)
+            lineTo(topAreaInPixels.finish.x, topAreaInPixels.finish.y)
+            lineTo(bottomAreaInPixels.finish.x, bottomAreaInPixels.finish.y)
+            lineTo(bottomAreaInPixels.start.x, bottomAreaInPixels.start.y)
+            lineTo(topAreaInPixels.start.x, topAreaInPixels.start.y)
+        },
+        color = Color.Cyan,
+        style = Fill,
+    )
 
     drawArea(headArea)
     drawArea(topHeadArea)
