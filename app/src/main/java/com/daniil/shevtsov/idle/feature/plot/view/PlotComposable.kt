@@ -17,26 +17,20 @@ import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 @Composable
 fun PlotComposablePreview() {
     PlotComposable(
-        plotEntries = listOf(
-            """Today was a lol, and lol and loo, and finally lol.
-                |Then there was gonna be a cheburek.
-                |
-                |Well, I didn't expect so much keks""".trimMargin(),
-            "Tomorrow there is gonna be kek",
-            "And finally Cheburek"
-        )
+        plotEntries = plotPreviewData()
     )
 }
 
 @Composable
-private fun PlotComposable(
+fun PlotComposable(
     plotEntries: List<String>,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
         modifier = modifier
             .padding(AppTheme.dimensions.paddingSmall)
-            .background(AppTheme.colors.backgroundText)
+            .background(AppTheme.colors.backgroundText),
+        reverseLayout = true,
     ) {
         items(plotEntries) { plotEntry ->
             Row(horizontalArrangement = spacedBy(AppTheme.dimensions.paddingSmall)) {
@@ -49,7 +43,15 @@ private fun PlotComposable(
                 )
                 Text(text = plotEntry, style = AppTheme.typography.body, color = textColor)
             }
-
         }
     }
 }
+
+fun plotPreviewData() = listOf(
+    """Today was a lol, and lol and loo, and finally lol.
+                |Then there was gonna be a cheburek.
+                |
+                |Well, I didn't expect so much keks""".trimMargin(),
+    "Tomorrow there is gonna be kek",
+    "And finally Cheburek",
+)

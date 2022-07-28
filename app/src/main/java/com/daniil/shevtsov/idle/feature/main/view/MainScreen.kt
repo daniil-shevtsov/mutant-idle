@@ -18,6 +18,8 @@ import com.daniil.shevtsov.idle.core.ui.widgets.CollapseButton
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
 import com.daniil.shevtsov.idle.feature.location.view.LocationSelection
 import com.daniil.shevtsov.idle.feature.main.presentation.*
+import com.daniil.shevtsov.idle.feature.plot.view.PlotComposable
+import com.daniil.shevtsov.idle.feature.plot.view.plotPreviewData
 import com.daniil.shevtsov.idle.feature.ratio.presentation.ratioModel
 import com.daniil.shevtsov.idle.feature.ratio.view.RatioPane
 import com.daniil.shevtsov.idle.feature.resource.domain.resourceModel
@@ -164,6 +166,13 @@ fun ContentBody(
                 modifier
                     .statusBarsHeight()
                     .fillMaxWidth()
+            )
+            PlotComposable(
+                plotEntries = plotPreviewData(),
+                modifier = Modifier
+                    .padding(AppTheme.dimensions.paddingSmall)
+                    .fillMaxWidth()
+                    .height(100.dp)
             )
             LocationSelection(
                 state = state.locationSelectionViewState,
