@@ -29,7 +29,8 @@ fun PlotComposable(
     LazyColumn(
         modifier = modifier
             .padding(AppTheme.dimensions.paddingSmall)
-            .background(AppTheme.colors.backgroundText),
+            .background(AppTheme.colors.backgroundText)
+            .padding(vertical = AppTheme.dimensions.paddingSmall),
         reverseLayout = true,
     ) {
         items(plotEntries) { plotEntry ->
