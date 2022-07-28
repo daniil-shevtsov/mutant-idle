@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
+import com.daniil.shevtsov.idle.feature.plot.domain.PlotEntry
+import com.daniil.shevtsov.idle.feature.plot.domain.plotEntry
 
 @Preview
 @Composable
@@ -23,7 +25,7 @@ fun PlotComposablePreview() {
 
 @Composable
 fun PlotComposable(
-    plotEntries: List<String>,
+    plotEntries: List<PlotEntry>,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -42,17 +44,19 @@ fun PlotComposable(
                     color = textColor,
                     textAlign = TextAlign.Center
                 )
-                Text(text = plotEntry, style = AppTheme.typography.body, color = textColor)
+                Text(text = plotEntry.text, style = AppTheme.typography.body, color = textColor)
             }
         }
     }
 }
 
 fun plotPreviewData() = listOf(
-    """Today was a lol, and lol and loo, and finally lol.
+    plotEntry(
+        text = """Today was a lol, and lol and loo, and finally lol.
                 |Then there was gonna be a cheburek.
                 |
-                |Well, I didn't expect so much keks""".trimMargin(),
-    "Tomorrow there is gonna be kek",
-    "And finally Cheburek",
+                |Well, I didn't expect so much keks""".trimMargin()
+    ),
+    plotEntry(text = "Tomorrow there is gonna be kek"),
+    plotEntry(text = "And finally Cheburek"),
 )
