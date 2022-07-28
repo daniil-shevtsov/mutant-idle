@@ -30,7 +30,7 @@ fun PlotComposable(
         modifier = modifier
             .padding(AppTheme.dimensions.paddingSmall)
             .background(AppTheme.colors.backgroundText)
-            .padding(vertical = AppTheme.dimensions.paddingSmall),
+            .padding(AppTheme.dimensions.paddingSmall),
         reverseLayout = true,
     ) {
         items(plotEntries) { plotEntry ->
