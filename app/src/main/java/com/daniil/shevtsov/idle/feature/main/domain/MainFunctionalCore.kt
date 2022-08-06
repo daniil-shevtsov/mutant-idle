@@ -137,6 +137,7 @@ fun handleActionClicked(
             player = state.player.copy(
                 generalTags = newTags
             ),
+            plotEntries = state.plotEntries + listOf(PlotEntry(selectedAction.plot)),
             currentScreen = when {
                 (updatedRatios.find { it.key == RatioKey.Suspicion }?.value
                     ?: 0.0) >= 1.0 -> Screen.FinishedGame

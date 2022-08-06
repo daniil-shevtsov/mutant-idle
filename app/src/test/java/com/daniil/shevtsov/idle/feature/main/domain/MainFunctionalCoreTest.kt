@@ -200,6 +200,25 @@ class MainFunctionalCoreTest {
             .containsNone(tagToRemove)
     }
 
+    //TODO: I think I need some abstractions over action, upgrade and locations
+    @Test
+    fun `should add plot by clicked action`() {
+        val action = action(
+            id = 1L,
+        )
+        val newState = mainFunctionalCore(
+            state = gameState(
+                actions = listOf(action),
+            ),
+            viewAction = MainViewAction.ActionClicked(id = action.id),
+        )
+
+        assertThat(newState)
+            .prop(GameState::plotEntries)
+            .extracting(PlotEntry::text)
+            .containsExactly(action.plot)
+    }
+
     @Test
     fun `should switch section collapsed state when clicked`() {
         val initialState = gameState(

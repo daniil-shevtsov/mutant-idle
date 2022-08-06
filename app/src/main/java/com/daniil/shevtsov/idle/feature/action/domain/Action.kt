@@ -16,4 +16,5 @@ data class Action(
     val resourceChanges: ResourceChanges,
     val ratioChanges: RatioChanges,
     val tags: Map<TagRelation, List<Tag>>,
+    val plot: String,
 )
