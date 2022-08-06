@@ -239,6 +239,7 @@ fun createAllActions() = listOf(
         id = 20L,
         title = "Steal Food",
         subtitle = "It's just lying there",
+        plot = "You've stolen some food, but it's not enough",
         resourceChanges = mapOf(
             ResourceKey.HumanFood to 1.0,
         ),
