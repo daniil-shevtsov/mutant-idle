@@ -69,7 +69,7 @@ fun createLocations() = listOf(
     location(
         id = 5L,
         title = "Streets",
-        description = "A busy place with crowds of people",
+        description = "A busy place with crowds of ${Flavors.peopleName.placeholder}",
         tags = mapOf(
             TagRelation.Provides to listOf(
                 Tags.Locations.Streets
@@ -79,7 +79,7 @@ fun createLocations() = listOf(
     location(
         id = 6L,
         title = "Dark Alley",
-        description = "Sometimes people go through here to save time",
+        description = "Sometimes ${Flavors.peopleName.placeholder} go through here to save time",
         tags = mapOf(
             TagRelation.Provides to listOf(
                 Tags.Locations.DarkAlley
@@ -89,7 +89,7 @@ fun createLocations() = listOf(
     location(
         id = 7L,
         title = "Super Market",
-        description = "The food everywhere",
+        description = "The food is everywhere",
         tags = mapOf(
             TagRelation.Provides to listOf(
                 Tags.Locations.SuperMarket

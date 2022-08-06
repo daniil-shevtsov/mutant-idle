@@ -18,6 +18,7 @@ import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.main.presentation.sectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
+import com.daniil.shevtsov.idle.feature.plot.domain.PlotEntry
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
@@ -307,6 +308,31 @@ class MainFunctionalCoreTest {
             .prop(GameState::player)
             .prop(Player::generalTags)
             .containsExactly(newTag)
+    }
+
+    @Test
+    fun `should add plot entry for selected location`() {
+        val location = location(
+            id = 1L,
+            title = "old location",
+            tags = mapOf(
+                TagRelation.Provides to listOf(tag(name = "old tag"))
+            )
+        )
+
+        val state = mainFunctionalCore(
+            state = gameState(
+                locationSelectionState = locationSelectionState(
+                    allLocations = listOf(location)
+                )
+            ),
+            viewAction = MainViewAction.LocationSelected(id = location.id)
+        )
+
+        assertThat(state)
+            .prop(GameState::plotEntries)
+            .extracting(PlotEntry::text)
+            .containsExactly(location.description)
     }
 
     @Test

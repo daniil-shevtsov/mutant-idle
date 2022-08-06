@@ -6,6 +6,7 @@ import com.daniil.shevtsov.idle.feature.action.domain.ResourceChanges
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
+import com.daniil.shevtsov.idle.feature.plot.domain.PlotEntry
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
@@ -67,6 +68,7 @@ fun handleLocationSelected(
             locationSelectionState = state.locationSelectionState.copy(
                 selectedLocation = selectedLocation,
             ),
+            plotEntries = state.plotEntries + listOf(PlotEntry(selectedLocation.plot)),
             player = state.player.copy(
                 generalTags = state.player.generalTags - oldTags + newTags
             )
