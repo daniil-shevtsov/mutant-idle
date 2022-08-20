@@ -49,7 +49,7 @@ fun handleLocationSelectionExpandChange(
 ): GameState {
     return state.copy(
         locationSelectionState = state.locationSelectionState.copy(
-            isSelectionExpanded = !state.locationSelectionState.isSelectionExpanded,
+            isSelectionExpanded = !state.locationSelectionState.isSelectionExpanded
         ),
     )
 }
