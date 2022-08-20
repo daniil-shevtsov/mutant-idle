@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,11 +30,13 @@ fun PlotComposable(
     plotEntries: List<PlotEntry>,
     modifier: Modifier = Modifier,
 ) {
+    val listState = rememberLazyListState()
     LazyColumn(
         modifier = modifier
             .padding(AppTheme.dimensions.paddingSmall)
             .background(AppTheme.colors.backgroundText)
             .padding(AppTheme.dimensions.paddingSmall),
+        state = listState,
         reverseLayout = true,
     ) {
         items(plotEntries) { plotEntry ->
@@ -47,7 +51,11 @@ fun PlotComposable(
                 Text(text = plotEntry.text, style = AppTheme.typography.body, color = textColor)
             }
         }
-        
+    }
+    LaunchedEffect(plotEntries) {
+        if (plotEntries.isNotEmpty()) {
+            listState.animateScrollToItem(index = plotEntries.size - 1)
+        }
     }
 }
 
