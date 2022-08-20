@@ -131,7 +131,11 @@ fun handleActionClicked(
             .toSet()
 
     return if (!hasInvalidChanges) {
-        val newPlotEntrieis = state.plotEntries + listOf(PlotEntry(selectedAction.plot))
+        val newPlotEntrieis = when {
+            selectedAction.plot.isNotEmpty() -> state.plotEntries + listOf(PlotEntry(selectedAction.plot))
+            else -> state.plotEntries
+        }
+
         state.copy(
             ratios = updatedRatios,
             resources = updatedResources,
