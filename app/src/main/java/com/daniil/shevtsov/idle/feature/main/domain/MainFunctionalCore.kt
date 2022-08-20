@@ -131,13 +131,14 @@ fun handleActionClicked(
             .toSet()
 
     return if (!hasInvalidChanges) {
+        val newPlotEntrieis = state.plotEntries + listOf(PlotEntry(selectedAction.plot))
         state.copy(
             ratios = updatedRatios,
             resources = updatedResources,
             player = state.player.copy(
                 generalTags = newTags
             ),
-            plotEntries = state.plotEntries + listOf(PlotEntry(selectedAction.plot)),
+            plotEntries = newPlotEntrieis,
             currentScreen = when {
                 (updatedRatios.find { it.key == RatioKey.Suspicion }?.value
                     ?: 0.0) >= 1.0 -> Screen.FinishedGame

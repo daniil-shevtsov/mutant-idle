@@ -205,6 +205,7 @@ class MainFunctionalCoreTest {
     fun `should add plot by clicked action`() {
         val action = action(
             id = 1L,
+            plot = "bla bla bla",
         )
         val newState = mainFunctionalCore(
             state = gameState(
@@ -219,10 +220,23 @@ class MainFunctionalCoreTest {
             .containsExactly(action.plot)
     }
 
-    @Test
-    fun `kek`() {
-
-    }
+//    @Test
+//    fun `should not add empty plot to plot entries`() {
+//        val action = action(
+//            id = 1L,
+//            plot = "",
+//        )
+//        val newState = mainFunctionalCore(
+//            state = gameState(
+//                actions = listOf(action),
+//            ),
+//            viewAction = MainViewAction.ActionClicked(id = action.id),
+//        )
+//
+//        assertThat(newState)
+//            .prop(GameState::plotEntries)
+//            .isEmpty()
+//    }
 
     @Test
     fun `should switch section collapsed state when clicked`() {
