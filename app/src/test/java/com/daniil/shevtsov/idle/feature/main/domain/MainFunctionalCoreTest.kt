@@ -220,6 +220,11 @@ class MainFunctionalCoreTest {
     }
 
     @Test
+    fun `kek`() {
+
+    }
+
+    @Test
     fun `should switch section collapsed state when clicked`() {
         val initialState = gameState(
             sections = listOf(
