@@ -47,6 +47,7 @@ fun PlotComposable(
                 Text(text = plotEntry.text, style = AppTheme.typography.body, color = textColor)
             }
         }
+        
     }
 }
 
