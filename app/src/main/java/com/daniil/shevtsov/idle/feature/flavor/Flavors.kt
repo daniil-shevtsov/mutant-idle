@@ -41,7 +41,7 @@ object Flavors {
             Tags.Immortal to "mere mortals",
             Tags.Species.Alien to "primitive lifeforms",
         ),
-        default = "puny people"
+        default = "puny ${peopleName.placeholder}"
     )
 
     val objectifiedPeopleName = flavor(
@@ -49,10 +49,12 @@ object Flavors {
         values = mapOf(
             Tags.Species.Devourer to "food",
             Tags.Species.ShapeShifter to "clothes",
-            Tags.Immortal to "mortal shells",
+            Tags.Species.Demon to "shells",
             Tags.Species.Parasite to "homes",
+            Tags.Species.Alien to "lifeforms",
+            Tags.Immortal to "mortals",
         ),
-        default = "people"
+        default = peopleName.placeholder
     )
 
     val GraveyardInterpretation = flavor(
