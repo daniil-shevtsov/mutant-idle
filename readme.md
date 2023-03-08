@@ -17,9 +17,11 @@ The main idea of the gameplay is the following:
 * You keep unlocking new species, powers, jobs, goals etc. This adds extreme variety, you always are guessing what interesting thing is next
 ## Features
 ### Tag System
-![tag-system1](images/tag-system1.png)
-![tag-system2](images/tag-system2.png)
-![tag-system3](images/tag-system3.png)
+<div align="center">
+<image src="images/tag-system1.png" />
+<image src="images/tag-system2.png" />
+<image src="images/tag-system3.png" />
+</div>
 My main goal was to make variety cost as low as possible. I've read twitter thread by the developer of Weird West about their tag system. That sounded great so I've implemented a simplified version of that.
 Tags can be added, removed or replaced by anything: monster species, job, current location, actions or upgrades.
 Anything can require some tag. For example, Graveyard location is accessible only if you have a job with Graveyard Access tag.
