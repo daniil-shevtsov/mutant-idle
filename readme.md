@@ -9,7 +9,7 @@ But, in my opinion, the game does not utilise these features to its full potenti
 I wanted to find a cheap way to implement as much variety as I can, so the game would feel different when you are playing as different creatures.
 
 ## Gameplay Loop
-![[Pasted image 20230308122420.png]]
+![gameplay](images/gameplay-loop.png)
 The main idea of the gameplay is the following:
 * Select a monster species and a job
 * Then through actions and upgrades you need to balance gaining power and increasing suspicion.
@@ -17,28 +17,26 @@ The main idea of the gameplay is the following:
 * You keep unlocking new species, powers, jobs, goals etc. This adds extreme variety, you always are guessing what interesting thing is next
 ## Features
 ### Tag System
-![[Pasted image 20221212103708.png]]
-![[Pasted image 20221212105235.png]]
-![[Pasted image 20221212105342.png]]
+![tag-system1](images/tag-system1.png)
+![tag-system2](images/tag-system2.png)
+![tag-system3](images/tag-system3.png)
 My main goal was to make variety cost as low as possible. I've read twitter thread by the developer of Weird West about their tag system. That sounded great so I've implemented a simplified version of that.
 Tags can be added, removed or replaced by anything: monster species, job, current location, actions or upgrades.
 Anything can require some tag. For example, Graveyard location is accessible only if you have a job with Graveyard Access tag.
 Here are some examples of that. Vampire has tags of Vampire species, fear of sun, magic, immortality and hypnosis.
 ### Species
-![[Pasted image 20221211175808.png]]
+![species](images/species.png)
 Selection of the species and job. Right now the following species implemented and some testing jobs. But this is just to show the implemented system, new species and jobs are extremely easy to add.
 ### Upgrades
-![[Pasted image 20221212120008.png]]
-
-![[Pasted image 20221222102124.png]]
+![upgrades1](images/upgrades1.png)
+![upgrades2](images/upgrades2.png)
 You can purchase upgrades which add some tags. For example, devourer can develop super strength which allows to capture people and strong jaws that allow to eat the remains in order to lower suspicion.
 ### Actions
-![[Pasted image 20221212105456.png]]
-
-![[Pasted image 20221212105643.png]]
+![actions1](images/actions1.png)
+![actions2](images/actions2.png)
 Actions can require and spend resources. For example eating a rat gives you fresh meat resource.
 ### Flavors
-![[Pasted image 20230308123852.png]]
+![flavors](images/flavors.png)
 I've found various cheap ways to increase variety. Species have different color palletes, right now they are just for testing as a proof of concept. Also I've implemented what I call flavors system. Every text in the projecct allows for adding placeholders that can be replaced with different things depending on tags. 
 The same action of invisibility described differently when you are a magical creature (like vampire or demon) and when you are technical (like alien or android).
 Another example is that people are refered by different names depending on your creature. Devourer looks at people as food and shape shifter looks at them as clothes.
