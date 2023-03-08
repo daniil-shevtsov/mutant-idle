@@ -27,7 +27,7 @@ fun action(
     resourceChanges: ResourceChanges = mapOf(),
     ratioChanges: RatioChanges = mapOf(),
     tags: Map<TagRelation, List<Tag>> = mapOf(),
-    plot: String = "",
+    plot: String,
 ) = Action(
     id = id,
     title = title,
