@@ -1,5 +1,5 @@
 ## Inspirations
-![inspirations](images/Pasted image 20230308121629.png)
+![inspirations](images/inspirations.png)
 Setting is inspired by various movies, tv shows and games about monsters and other non-humans.
 
 Main inspiration for gameplay are Evolve Idle. In this game you evolve from simple life forms to intergalactic travel. It has great replayability and variety. You can evolve into various creatures from humans, orcs and elves to fungi, ants, demons and underwater civilizations. 
