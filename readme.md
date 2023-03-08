@@ -19,9 +19,9 @@ The main idea of the gameplay is the following:
 ### Tag System
 
 <div align="center">
-<image src="images/tag-system1.png" style='height: 100%; width: 100%; object-fit: contain' />
-<image src="images/tag-system2.png" style='height: 100%; width: 100%; object-fit: contain' />
-<image src="images/tag-system3.png" style='height: 100%; width: 100%; object-fit: contain' />
+<image src="images/tag-system1.png" style='height: 100%; object-fit: contain' />
+<image src="images/tag-system2.png" style='height: 100%; object-fit: contain' />
+<image src="images/tag-system3.png" style='height: 100%; object-fit: contain' />
 </div>
 
 My main goal was to make variety cost as low as possible. I've read twitter thread by the developer of Weird West about their tag system. That sounded great so I've implemented a simplified version of that.
