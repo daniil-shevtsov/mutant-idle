@@ -8,4 +8,5 @@ sealed class MainViewAction {
 
     object LocationSelectionExpandChange : MainViewAction()
     data class LocationSelected(val id: Long) : MainViewAction()
+    data class SelectableClicked(val id: Long) : MainViewAction()
 }

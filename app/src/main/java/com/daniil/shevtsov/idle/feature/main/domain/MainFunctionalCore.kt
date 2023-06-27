@@ -1,10 +1,12 @@
 package com.daniil.shevtsov.idle.feature.main.domain
 
 import com.daniil.shevtsov.idle.core.navigation.Screen
+import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.RatioChanges
 import com.daniil.shevtsov.idle.feature.action.domain.ResourceChanges
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
+import com.daniil.shevtsov.idle.feature.location.domain.Location
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.plot.domain.PlotEntry
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
@@ -12,24 +14,40 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
+import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 
 fun mainFunctionalCore(
     state: GameState,
     viewAction: MainViewAction,
 ): GameState {
+    val selectableId = when (viewAction) {
+        is MainViewAction.LocationSelected -> viewAction.id
+        is MainViewAction.UpgradeSelected -> viewAction.id
+        is MainViewAction.ActionClicked -> viewAction.id
+        else -> null
+    }
+    val viewAction = when {
+        selectableId != null -> MainViewAction.SelectableClicked(selectableId)
+        else -> viewAction
+    }
     val newState = when (viewAction) {
         is MainViewAction.LocationSelected -> handleLocationSelected(
             state = state,
-            viewAction = viewAction,
+            selectedLocation = state.locations.find { it.id == viewAction.id }!!,
         )
 
         is MainViewAction.ActionClicked -> handleActionClicked(
             state = state,
-            viewAction = viewAction
+            state.actions.find { action -> action.id == viewAction.id }!!
         )
 
         is MainViewAction.UpgradeSelected -> handleUpgradeSelected(
+            state = state,
+            upgradeToBuy = state.upgrades.find { upgrade -> upgrade.id == viewAction.id }!!,
+        )
+
+        is MainViewAction.SelectableClicked -> handleSelectableClicked(
             state = state,
             viewAction = viewAction,
         )
@@ -60,11 +78,8 @@ fun handleLocationSelectionExpandChange(
 
 fun handleLocationSelected(
     state: GameState,
-    viewAction: MainViewAction.LocationSelected
+    selectedLocation: Location
 ): GameState {
-//    val selectedLocation = state.locationSelectionState.allLocations.find { it.id == viewAction.id }
-    val selectedLocation = state.locations.find { it.id == viewAction.id }
-
     val oldTags = state.locationSelectionState.selectedLocation.tags[TagRelation.Provides].orEmpty()
     val newTags = selectedLocation?.tags?.get(TagRelation.Provides).orEmpty()
 
@@ -135,12 +150,10 @@ fun handleSectionCollapsed(
     )
 }
 
-fun handleActionClicked(
+private fun handleActionClicked(
     state: GameState,
-    viewAction: MainViewAction.ActionClicked
+    selectedAction: Action,
 ): GameState {
-    val selectedAction = state.actions.find { action -> action.id == viewAction.id }!!
-
     val hasInvalidChanges = hasInvalidChanges(
         currentResources = state.resources,
         resourceChanges = selectedAction.resourceChanges,
@@ -214,12 +227,10 @@ private fun hasInvalidChanges(
     currentResourceValue + resourceChange < 0
 }
 
-fun handleUpgradeSelected(
+private fun handleUpgradeSelected(
     state: GameState,
-    viewAction: MainViewAction.UpgradeSelected
+    upgradeToBuy: Upgrade,
 ): GameState {
-    val upgradeToBuy = state.upgrades.find { upgrade -> upgrade.id == viewAction.id }!!
-
     val hasInvalidChanges = hasInvalidChanges(
         currentResources = state.resources,
         resourceChanges = upgradeToBuy.resourceChanges,
@@ -260,6 +271,19 @@ fun handleUpgradeSelected(
             ).addPlotEntry(boughtUpgrade)
         }
 
+        else -> state
+    }
+}
+
+fun handleSelectableClicked(
+    state: GameState,
+    viewAction: MainViewAction.SelectableClicked
+): GameState {
+    val clickedSelectable = state.selectables.find { it.id == viewAction.id }
+    return when (clickedSelectable) {
+        is Action -> handleActionClicked(state, clickedSelectable)
+        is Upgrade -> handleUpgradeSelected(state, clickedSelectable)
+        is Location -> handleLocationSelected(state, clickedSelectable)
         else -> state
     }
 }
