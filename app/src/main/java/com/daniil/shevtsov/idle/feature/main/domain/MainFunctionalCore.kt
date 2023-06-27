@@ -10,7 +10,6 @@ import com.daniil.shevtsov.idle.feature.plot.domain.PlotEntry
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
-import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
@@ -210,8 +209,6 @@ fun handleUpgradeSelected(
 ): GameState {
     val upgradeToBuy = state.upgrades.find { upgrade -> upgrade.id == viewAction.id }!!
 
-    val currentResource = state.resources.find { resource -> resource.key == ResourceKey.Blood }!!
-
     val hasInvalidChanges = hasInvalidChanges(
         currentResources = state.resources,
         resourceChanges = upgradeToBuy.resourceChanges,
@@ -219,12 +216,7 @@ fun handleUpgradeSelected(
 
     return when {
         !hasInvalidChanges -> {
-            val newStatus = when {
-                upgradeToBuy.price.value <= currentResource.value -> UpgradeStatus.Bought
-                else -> UpgradeStatus.NotBought
-            }
-
-            val boughtUpgrade = upgradeToBuy.copy(status = newStatus)
+            val boughtUpgrade = upgradeToBuy.copy(status = UpgradeStatus.Bought)
 
             val updatedUpgrades = state.upgrades.map { upgrade ->
                 if (upgrade.id == boughtUpgrade.id) {
@@ -252,7 +244,7 @@ fun handleUpgradeSelected(
                 player = state.player.copy(
                     generalTags = state.player.generalTags + boughtUpgrade.tags[TagRelation.Provides].orEmpty()
                 )
-            )
+            ).addPlotEntry(boughtUpgrade)
         }
 
         else -> state
