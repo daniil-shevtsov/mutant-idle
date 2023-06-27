@@ -61,7 +61,7 @@ class MainFunctionalCoreTest {
 
         val newState = mainFunctionalCore(
             state = initialState,
-            viewAction = MainViewAction.UpgradeSelected(id = 0L),
+            viewAction = MainViewAction.SelectableClicked(id = 0L),
         )
 
         assertThat(newState)
@@ -100,7 +100,7 @@ class MainFunctionalCoreTest {
 
             val newState = mainFunctionalCore(
                 state = initialState,
-                viewAction = MainViewAction.UpgradeSelected(id = 1L),
+                viewAction = MainViewAction.SelectableClicked(id = 1L),
             )
 
             assertThat(newState)
@@ -142,7 +142,7 @@ class MainFunctionalCoreTest {
 
             val newState = mainFunctionalCore(
                 state = initialState,
-                viewAction = MainViewAction.ActionClicked(id = action.id),
+                viewAction = MainViewAction.SelectableClicked(id = action.id),
             )
 
             assertThat(newState)
@@ -174,7 +174,7 @@ class MainFunctionalCoreTest {
         )
         val newState = mainFunctionalCore(
             state = gameState(actions = listOf(action)),
-            viewAction = MainViewAction.ActionClicked(id = action.id),
+            viewAction = MainViewAction.SelectableClicked(id = action.id),
         )
 
         assertThat(newState)
@@ -195,7 +195,7 @@ class MainFunctionalCoreTest {
                 player = player(generalTags = listOf(tagToRemove)),
                 actions = listOf(action),
             ),
-            viewAction = MainViewAction.ActionClicked(id = action.id),
+            viewAction = MainViewAction.SelectableClicked(id = action.id),
         )
 
         assertThat(newState)
@@ -215,7 +215,7 @@ class MainFunctionalCoreTest {
             state = gameState(
                 actions = listOf(action),
             ),
-            viewAction = MainViewAction.ActionClicked(id = action.id),
+            viewAction = MainViewAction.SelectableClicked(id = action.id),
         )
 
         assertThat(newState)
@@ -235,7 +235,7 @@ class MainFunctionalCoreTest {
             state = gameState(
                 actions = listOf(action),
             ),
-            viewAction = MainViewAction.ActionClicked(id = action.id),
+            viewAction = MainViewAction.SelectableClicked(id = action.id),
         )
 
         assertThat(newState)
@@ -314,7 +314,7 @@ class MainFunctionalCoreTest {
                 locations =  listOf(location),
                 locationSelectionState = locationSelectionState()
             ),
-            viewAction = MainViewAction.LocationSelected(id = location.id)
+            viewAction = MainViewAction.SelectableClicked(id = location.id)
         )
 
         assertThat(state)
@@ -343,7 +343,7 @@ class MainFunctionalCoreTest {
                 locations =  listOf(oldLocation, newLocation),
                 locationSelectionState = locationSelectionState()
             ),
-            viewAction = MainViewAction.LocationSelected(id = newLocation.id)
+            viewAction = MainViewAction.SelectableClicked(id = newLocation.id)
         )
 
         assertThat(state)
@@ -368,7 +368,7 @@ class MainFunctionalCoreTest {
                 locations =  listOf(location),
                 locationSelectionState = locationSelectionState()
             ),
-            viewAction = MainViewAction.LocationSelected(id = location.id)
+            viewAction = MainViewAction.SelectableClicked(id = location.id)
         )
 
         assertThat(state)
@@ -393,7 +393,7 @@ class MainFunctionalCoreTest {
                 locations =  listOf(location),
                 locationSelectionState = locationSelectionState()
             ),
-            viewAction = MainViewAction.LocationSelected(id = location.id)
+            viewAction = MainViewAction.SelectableClicked(id = location.id)
         )
 
         assertThat(state)
@@ -415,7 +415,7 @@ class MainFunctionalCoreTest {
 
         val newState = mainFunctionalCore(
             state = state,
-            viewAction = MainViewAction.ActionClicked(id = 1L)
+            viewAction = MainViewAction.SelectableClicked(id = 1L)
         )
 
         assertThat(newState)

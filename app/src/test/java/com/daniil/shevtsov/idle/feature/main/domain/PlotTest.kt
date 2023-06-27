@@ -30,7 +30,7 @@ class PlotTest() {
                 title = "test action",
                 plot = "action plot"
             ),
-            selectAction = MainViewAction.ActionClicked(id = 1L),
+            selectAction = MainViewAction.SelectableClicked(id = 1L),
             expectedDefaultPlot = "You performed action \"test action\""
         ),
         PlotTestData(
@@ -39,7 +39,7 @@ class PlotTest() {
                 title = "test location",
                 plot = "location plot"
             ),
-            selectAction = MainViewAction.LocationSelected(id = 2L),
+            selectAction = MainViewAction.SelectableClicked(id = 2L),
             expectedDefaultPlot = "You went to the test location"
         ),
         PlotTestData(
@@ -48,7 +48,7 @@ class PlotTest() {
                 title = "test upgrade",
                 plot = "upgrade plot"
             ),
-            selectAction = MainViewAction.UpgradeSelected(id = 3L),
+            selectAction = MainViewAction.SelectableClicked(id = 3L),
             expectedDefaultPlot = "You have gained an upgrade \"test upgrade\""
         ),
     )

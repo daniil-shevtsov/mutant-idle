@@ -21,32 +21,7 @@ fun mainFunctionalCore(
     state: GameState,
     viewAction: MainViewAction,
 ): GameState {
-    val selectableId = when (viewAction) {
-        is MainViewAction.LocationSelected -> viewAction.id
-        is MainViewAction.UpgradeSelected -> viewAction.id
-        is MainViewAction.ActionClicked -> viewAction.id
-        else -> null
-    }
-    val viewAction = when {
-        selectableId != null -> MainViewAction.SelectableClicked(selectableId)
-        else -> viewAction
-    }
     val newState = when (viewAction) {
-        is MainViewAction.LocationSelected -> handleLocationSelected(
-            state = state,
-            selectedLocation = state.locations.find { it.id == viewAction.id }!!,
-        )
-
-        is MainViewAction.ActionClicked -> handleActionClicked(
-            state = state,
-            state.actions.find { action -> action.id == viewAction.id }!!
-        )
-
-        is MainViewAction.UpgradeSelected -> handleUpgradeSelected(
-            state = state,
-            upgradeToBuy = state.upgrades.find { upgrade -> upgrade.id == viewAction.id }!!,
-        )
-
         is MainViewAction.SelectableClicked -> handleSelectableClicked(
             state = state,
             viewAction = viewAction,
@@ -81,20 +56,16 @@ fun handleLocationSelected(
     selectedLocation: Location
 ): GameState {
     val oldTags = state.locationSelectionState.selectedLocation.tags[TagRelation.Provides].orEmpty()
-    val newTags = selectedLocation?.tags?.get(TagRelation.Provides).orEmpty()
+    val newTags = selectedLocation.tags[TagRelation.Provides].orEmpty()
 
-    return when {
-        selectedLocation != null -> state.copy(
-            locationSelectionState = state.locationSelectionState.copy(
-                selectedLocation = selectedLocation,
-            ),
-            player = state.player.copy(
-                generalTags = state.player.generalTags - oldTags + newTags
-            )
-        ).addPlotEntry(selectedLocation)
-
-        else -> state
-    }
+    return state.copy(
+        locationSelectionState = state.locationSelectionState.copy(
+            selectedLocation = selectedLocation,
+        ),
+        player = state.player.copy(
+            generalTags = state.player.generalTags - oldTags + newTags
+        )
+    ).addPlotEntry(selectedLocation)
 
 }
 
