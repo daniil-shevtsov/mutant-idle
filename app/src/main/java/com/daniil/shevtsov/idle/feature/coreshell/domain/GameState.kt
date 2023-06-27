@@ -27,7 +27,6 @@ data class GameState(
     val selectables: List<Selectable>,
     val actions: List<Action>,
     val upgrades: List<Upgrade>,
-    val locations: List<Location>,
     val resources: List<Resource>,
     val ratios: List<Ratio>,
     val plotEntries: List<PlotEntry>,
@@ -41,7 +40,10 @@ data class GameState(
     val currentScreen: Screen,
     val screenStack: List<Screen>,
     val unlockState: UnlockState,
-)
+) {
+    val locations: List<Location>
+        get() = selectables.filterIsInstance<Location>()
+}
 
 fun gameState(
     balanceConfig: BalanceConfig = balanceConfig(),
@@ -64,12 +66,11 @@ fun gameState(
     unlockState: UnlockState = unlockState(),
 ) = GameState(
     balanceConfig = balanceConfig,
-    selectables = selectables,
+    selectables = (selectables + locations).distinct(),
     resources = resources,
     ratios = ratios,
     actions = actions,
     upgrades = upgrades,
-    locations = locations,
     plotEntries = plotEntries,
     drawerTabs = drawerTabs,
     sections = sections,
