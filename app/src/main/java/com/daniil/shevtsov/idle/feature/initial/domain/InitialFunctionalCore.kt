@@ -11,6 +11,7 @@ import com.daniil.shevtsov.idle.feature.flavor.createFlavors
 import com.daniil.shevtsov.idle.feature.gamefinish.domain.createEndings
 import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
 import com.daniil.shevtsov.idle.feature.location.domain.createLocations
+import com.daniil.shevtsov.idle.feature.main.domain.Selectable
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
@@ -28,6 +29,7 @@ import com.daniil.shevtsov.idle.feature.upgrade.domain.createUpgrades
 fun createInitialGameState(): GameState {
     return GameState(
         balanceConfig = createBalanceConfig(),
+        selectables = createSelectables(),
         resources = createResources(),
         ratios = createInitialRatios(),
         sections = createInitialSectionState(),
@@ -53,6 +55,7 @@ fun createInitialGameState(): GameState {
                             else -> false
                         }
                     }
+
                     TraitId.Job -> traits.associate { trait ->
                         trait.id to when (trait.id) {
                             Jobs.Unemployed.id -> true
@@ -70,6 +73,8 @@ fun createBalanceConfig() = BalanceConfig(
     resourcePerMillisecond = 0.0002,
     resourceSpentForFullMutant = 100.0,
 )
+
+private fun createSelectables(): List<Selectable> = emptyList()
 
 private fun createInitialRatios() = RatioKey.values().map { ratioKey ->
     Ratio(
