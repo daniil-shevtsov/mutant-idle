@@ -49,6 +49,7 @@ object Tags {
         val Streets = Tag(name = "Streets")
         val DarkAlley = Tag(name = "Dark Alley")
         val SuperMarket = Tag(name = "Super Market")
+        val Rooftops = Tag(name = "Rooftops")
     }
 
     object Knowledge {

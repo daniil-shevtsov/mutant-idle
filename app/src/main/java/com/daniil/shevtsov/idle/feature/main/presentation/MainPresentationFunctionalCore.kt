@@ -152,6 +152,7 @@ private fun ResourceKey.chooseIcon() = when (this) {
     ResourceKey.Organs -> Icons.Organs
     ResourceKey.Familiar -> Icons.Familiar
     ResourceKey.Scrap -> Icons.Scrap
+    ResourceKey.Information -> Icons.Information
 }
 
 private fun satisfiesAllTagsRelations(
@@ -191,6 +192,11 @@ private fun createActionState(
         }
         .map { action ->
             action.copy(
+                title = flavorMachine(
+                    original = action.title,
+                    flavors = state.flavors,
+                    tags = state.player.tags,
+                ),
                 subtitle = flavorMachine(
                     original = action.subtitle,
                     flavors = state.flavors,

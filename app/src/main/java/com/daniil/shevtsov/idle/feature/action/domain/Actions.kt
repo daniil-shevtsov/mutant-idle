@@ -199,7 +199,7 @@ fun createAllActions() = listOf(
     ),
     action(
         title = "Return to human form",
-        subtitle = "",
+        subtitle = "You become human again",
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
                 Tags.Abilities.BatForm,
@@ -216,7 +216,8 @@ fun createAllActions() = listOf(
     ),
     action(
         title = "Fly",
-        subtitle = "",
+        subtitle = "You can get to high places",
+        plot = "You are flying",
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
                 Tags.Abilities.Flight,
@@ -231,7 +232,8 @@ fun createAllActions() = listOf(
     ),
     action(
         title = "Land",
-        subtitle = "",
+        subtitle = "Enough of flying",
+        plot = "You've landed",
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
                 Tags.Abilities.Flight,
@@ -376,6 +378,33 @@ fun createAllActions() = listOf(
         ratioChanges = ratioChanges(
             RatioKey.Suspicion to -0.1,
         )
+    ),
+    action(
+        title = "Observe ${Flavors.objectifiedPeopleName.placeholder}",
+        subtitle = "Living their lives, not knowing what lurks in shadows",
+        plot = "You have learned something important about them",
+        resourceChanges = mapOf(
+            ResourceKey.Information to +1.0,
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAny to listOf(
+                Tags.Locations.Rooftops
+            )
+        ),
+    ),
+    action(
+        title = "Capture ${Flavors.personName.placeholder} when they don't suspect it",
+        subtitle = "You've learned enough about them to do this undetected",
+        plot = "Everything went smoothly, no one will know they are gone",
+        resourceChanges = mapOf(
+            ResourceKey.Information to -10.0,
+            ResourceKey.Prisoner to 1.0,
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.PersonCapturer
+            )
+        ),
     ),
 ).makeIdsUnique()
 
