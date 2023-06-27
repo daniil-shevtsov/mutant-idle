@@ -17,7 +17,7 @@ data class Action(
     val resourceChanges: ResourceChanges,
     val ratioChanges: RatioChanges,
     val tags: Map<TagRelation, List<Tag>>,
-    override val plot: String,
+    override val plot: String?,
 ) : PlotHolder {
     override fun createDefaultPlot(): String = "You performed action \"$title\""
 }

@@ -9,7 +9,7 @@ data class Location(
     val title: String,
     val description: String,
     val tags: Map<TagRelation, List<Tag>>,
-    override val plot: String,
+    override val plot: String?,
 ) : PlotHolder {
     override fun createDefaultPlot(): String = "You went to the $title"
 }

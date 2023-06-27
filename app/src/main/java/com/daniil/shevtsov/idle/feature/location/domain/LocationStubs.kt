@@ -7,7 +7,7 @@ fun location(
     id: Long = 0L,
     title: String = "",
     description: String = "",
-    plot: String = "",
+    plot: String? = null,
     tags: Map<TagRelation, List<Tag>> = mapOf(),
 ) = Location(
     id = id,

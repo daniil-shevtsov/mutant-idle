@@ -84,7 +84,7 @@ fun handleLocationSelected(
 }
 
 interface PlotHolder {
-    val plot: String
+    val plot: String?
 
     fun createDefaultPlot(): String
 }
@@ -92,12 +92,7 @@ interface PlotHolder {
 private fun GameState.addPlotEntry(
     plotHolder: PlotHolder
 ): GameState {
-    val entry = PlotEntry(
-        when {
-            plotHolder.plot.isNotEmpty() -> plotHolder.plot
-            else -> plotHolder.createDefaultPlot()
-        }
-    )
+    val entry = PlotEntry(plotHolder.plot ?: plotHolder.createDefaultPlot())
     return copy(plotEntries = plotEntries + entry)
 }
 

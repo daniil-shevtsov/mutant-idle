@@ -229,7 +229,7 @@ class MainFunctionalCoreTest {
         val action = action(
             id = 1L,
             title = "Lol",
-            plot = "",
+            plot = null,
         )
         val newState = mainFunctionalCore(
             state = gameState(
@@ -381,11 +381,11 @@ class MainFunctionalCoreTest {
     }
 
     @Test
-    fun `should add default plot entry when location plot is empty `() {
+    fun `should add default plot entry when location plot is empty`() {
         val location = location(
             id = 1L,
             title = "Test Location",
-            plot = "",
+            plot = null,
             tags = mapOf(
                 TagRelation.Provides to listOf(tag(name = "old tag"))
             )
