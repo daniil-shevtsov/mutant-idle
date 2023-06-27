@@ -24,21 +24,26 @@ fun mainFunctionalCore(
             state = state,
             viewAction = viewAction,
         )
+
         is MainViewAction.ActionClicked -> handleActionClicked(
             state = state,
             viewAction = viewAction
         )
+
         is MainViewAction.UpgradeSelected -> handleUpgradeSelected(
             state = state,
             viewAction = viewAction,
         )
+
         is MainViewAction.ToggleSectionCollapse -> handleSectionCollapsed(
             state = state,
             viewAction = viewAction,
         )
+
         is MainViewAction.LocationSelectionExpandChange -> handleLocationSelectionExpandChange(
             state = state,
         )
+
         MainViewAction.Init -> state
     }
     return newState
@@ -68,15 +73,29 @@ fun handleLocationSelected(
             locationSelectionState = state.locationSelectionState.copy(
                 selectedLocation = selectedLocation,
             ),
-            plotEntries = state.plotEntries + listOf(PlotEntry(selectedLocation.plot)),
             player = state.player.copy(
                 generalTags = state.player.generalTags - oldTags + newTags
             )
-        )
+        ).addPlotEntry(selectedLocation.plot, "You went to the ${selectedLocation.title}")
+
         else -> state
     }
 
 }
+
+private fun GameState.addPlotEntry(
+    plot: String,
+    default: String,
+): GameState {
+    val entry = PlotEntry(
+        when {
+            plot.isNotEmpty() -> plot
+            else -> default
+        }
+    )
+    return copy(plotEntries = plotEntries + entry)
+}
+
 
 fun handleDrawerTabSwitched(
     state: GameState,
@@ -131,24 +150,19 @@ fun handleActionClicked(
             .toSet()
 
     return if (!hasInvalidChanges) {
-        val newPlotEntrieis = when {
-            selectedAction.plot.isNotEmpty() -> state.plotEntries + listOf(PlotEntry(selectedAction.plot))
-            else -> state.plotEntries
-        }
-
         state.copy(
             ratios = updatedRatios,
             resources = updatedResources,
             player = state.player.copy(
                 generalTags = newTags
             ),
-            plotEntries = newPlotEntrieis,
             currentScreen = when {
                 (updatedRatios.find { it.key == RatioKey.Suspicion }?.value
                     ?: 0.0) >= 1.0 -> Screen.FinishedGame
+
                 else -> state.currentScreen
             }
-        )
+        ).addPlotEntry(selectedAction.plot, "You performed action \"${selectedAction.title}\"")
     } else {
         state
     }
@@ -239,6 +253,7 @@ fun handleUpgradeSelected(
                 )
             )
         }
+
         else -> state
     }
 }

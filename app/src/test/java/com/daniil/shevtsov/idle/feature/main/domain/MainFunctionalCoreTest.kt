@@ -2,7 +2,11 @@ package com.daniil.shevtsov.idle.feature.main.domain
 
 import assertk.all
 import assertk.assertThat
-import assertk.assertions.*
+import assertk.assertions.containsExactly
+import assertk.assertions.containsNone
+import assertk.assertions.extracting
+import assertk.assertions.isEqualTo
+import assertk.assertions.prop
 import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.action.domain.ratioChanges
@@ -221,9 +225,10 @@ class MainFunctionalCoreTest {
     }
 
     @Test
-    fun `should not add empty plot to plot entries`() {
+    fun `should add default plot entry when action plot is empty `() {
         val action = action(
             id = 1L,
+            title = "Lol",
             plot = "",
         )
         val newState = mainFunctionalCore(
@@ -235,7 +240,8 @@ class MainFunctionalCoreTest {
 
         assertThat(newState)
             .prop(GameState::plotEntries)
-            .isEmpty()
+            .extracting(PlotEntry::text)
+            .containsExactly("You performed action \"Lol\"")
     }
 
     @Test
@@ -353,6 +359,7 @@ class MainFunctionalCoreTest {
         val location = location(
             id = 1L,
             title = "old location",
+            plot = "test lol test",
             tags = mapOf(
                 TagRelation.Provides to listOf(tag(name = "old tag"))
             )
@@ -370,7 +377,33 @@ class MainFunctionalCoreTest {
         assertThat(state)
             .prop(GameState::plotEntries)
             .extracting(PlotEntry::text)
-            .containsExactly(location.description)
+            .containsExactly(location.plot)
+    }
+
+    @Test
+    fun `should add default plot entry when location plot is empty `() {
+        val location = location(
+            id = 1L,
+            title = "Test Location",
+            plot = "",
+            tags = mapOf(
+                TagRelation.Provides to listOf(tag(name = "old tag"))
+            )
+        )
+
+        val state = mainFunctionalCore(
+            state = gameState(
+                locationSelectionState = locationSelectionState(
+                    allLocations = listOf(location)
+                )
+            ),
+            viewAction = MainViewAction.LocationSelected(id = location.id)
+        )
+
+        assertThat(state)
+            .prop(GameState::plotEntries)
+            .extracting(PlotEntry::text)
+            .containsExactly("You went to the Test Location")
     }
 
     @Test
