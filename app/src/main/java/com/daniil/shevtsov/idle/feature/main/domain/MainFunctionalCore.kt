@@ -76,20 +76,24 @@ fun handleLocationSelected(
             player = state.player.copy(
                 generalTags = state.player.generalTags - oldTags + newTags
             )
-        ).addPlotEntry(selectedLocation.plot, "You went to the ${selectedLocation.title}")
+        ).addPlotEntry(selectedLocation, "You went to the ${selectedLocation.title}")
 
         else -> state
     }
 
 }
 
+interface PlotHolder {
+    val plot: String
+}
+
 private fun GameState.addPlotEntry(
-    plot: String,
+    plotHolder: PlotHolder,
     default: String,
 ): GameState {
     val entry = PlotEntry(
         when {
-            plot.isNotEmpty() -> plot
+            plotHolder.plot.isNotEmpty() -> plotHolder.plot
             else -> default
         }
     )
@@ -162,7 +166,7 @@ fun handleActionClicked(
 
                 else -> state.currentScreen
             }
-        ).addPlotEntry(selectedAction.plot, "You performed action \"${selectedAction.title}\"")
+        ).addPlotEntry(selectedAction, "You performed action \"${selectedAction.title}\"")
     } else {
         state
     }

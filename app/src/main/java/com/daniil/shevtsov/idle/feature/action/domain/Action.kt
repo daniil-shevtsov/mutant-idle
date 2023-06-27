@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.feature.action.domain
 
+import com.daniil.shevtsov.idle.feature.main.domain.PlotHolder
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
@@ -16,5 +17,5 @@ data class Action(
     val resourceChanges: ResourceChanges,
     val ratioChanges: RatioChanges,
     val tags: Map<TagRelation, List<Tag>>,
-    val plot: String,
-)
+    override val plot: String,
+) : PlotHolder
