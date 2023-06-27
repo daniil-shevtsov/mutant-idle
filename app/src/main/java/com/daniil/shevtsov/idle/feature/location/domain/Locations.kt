@@ -6,13 +6,13 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 
 fun createLocations() = listOf(
     location(
-        id = 0L,
+        id = makeLocationIdUnique(0L),
         title = "Home",
         description = "It's safe space where no one can bother you",
         tags = mapOf(TagRelation.RequiredAll to listOf(Tags.Access.Home)),
     ),
     location(
-        id = 1L,
+        id = makeLocationIdUnique(1L),
         title = "Graveyard",
         description = "A place where they hide ${Flavors.objectifiedPeopleName.placeholder} in the ground",
         tags = mapOf(
@@ -25,7 +25,7 @@ fun createLocations() = listOf(
         )
     ),
     location(
-        id = 2L,
+        id = makeLocationIdUnique(2L),
         title = "Morgue",
         description = "A place where they store ${Flavors.objectifiedPeopleName.placeholder} for a while",
         tags = mapOf(
@@ -40,7 +40,7 @@ fun createLocations() = listOf(
         )
     ),
     location(
-        id = 3L,
+        id = makeLocationIdUnique(3L),
         title = "Butcher Shop",
         description = "A place where they share pieces of meat",
         tags = mapOf(
@@ -54,7 +54,7 @@ fun createLocations() = listOf(
         )
     ),
     location(
-        id = 4L,
+        id = makeLocationIdUnique(4L),
         title = "Scrap Yard",
         description = "A place where they pile up metal",
         tags = mapOf(
@@ -67,7 +67,7 @@ fun createLocations() = listOf(
         )
     ),
     location(
-        id = 5L,
+        id = makeLocationIdUnique(5L),
         title = "Streets",
         description = "A busy place with crowds of ${Flavors.peopleName.placeholder}",
         tags = mapOf(
@@ -77,7 +77,7 @@ fun createLocations() = listOf(
         )
     ),
     location(
-        id = 6L,
+        id = makeLocationIdUnique(6L),
         title = "Dark Alley",
         description = "Sometimes ${Flavors.peopleName.placeholder} go through here to save time",
         tags = mapOf(
@@ -87,7 +87,7 @@ fun createLocations() = listOf(
         )
     ),
     location(
-        id = 7L,
+        id = makeLocationIdUnique(7L),
         title = "Super Market",
         description = "The food is everywhere",
         tags = mapOf(
@@ -97,3 +97,5 @@ fun createLocations() = listOf(
         )
     )
 )
+
+private fun makeLocationIdUnique(id: Long): Long = 30000L + id

@@ -7,7 +7,7 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 
 fun createUpgrades() = listOf(
     upgrade(
-        id = 2L,
+        id = makeUpgradeIdUnique(2L),
         title = "Iron jaws",
         subtitle = "Your bite is stronger than of a shark",
         price = 10.0,
@@ -19,7 +19,7 @@ fun createUpgrades() = listOf(
         )
     ),
     upgrade(
-        id = 3L,
+        id = makeUpgradeIdUnique(3L),
         title = "Super Strength",
         subtitle = "Lifting a car or crushing a lock is not a problem anymore",
         price = 25.0,
@@ -39,7 +39,7 @@ fun createUpgrades() = listOf(
         )
     ),
     upgrade(
-        id = 4L,
+        id = makeUpgradeIdUnique(4L),
         title = "Invisibility",
         subtitle = Flavors.invisibilityGain.placeholder,
         price = 1.0,
@@ -54,3 +54,5 @@ fun createUpgrades() = listOf(
         )
     ),
 )
+
+private fun makeUpgradeIdUnique(id: Long): Long = 20000L + id

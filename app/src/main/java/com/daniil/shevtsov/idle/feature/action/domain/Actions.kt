@@ -8,7 +8,7 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 
 fun createAllActions() = listOf(
     action(
-        id = 0L,
+        id = makeActionIdUnique(0L),
         title = "Work",
         subtitle = "The sun is high",
         plot = "You worked some more",
@@ -23,7 +23,7 @@ fun createAllActions() = listOf(
         ),
     ),
     action(
-        id = 3L,
+        id = makeActionIdUnique(3L),
         title = "Buy Groceries",
         subtitle = "It's a short walk",
         plot = "You've bought some groceries",
@@ -39,7 +39,7 @@ fun createAllActions() = listOf(
         ),
     ),
     action(
-        id = 8L,
+        id = makeActionIdUnique(8L),
         title = "Capture a person",
         subtitle = "I think I can do it if I grow enough",
         plot = "You have captured a person. What next?",
@@ -57,7 +57,7 @@ fun createAllActions() = listOf(
         ),
     ),
     action(
-        id = 9L,
+        id = makeActionIdUnique(9L),
         title = "Eat captured person",
         subtitle = "Finally a good meal",
         plot = "You've eaten. What to do about the mess?",
@@ -76,7 +76,7 @@ fun createAllActions() = listOf(
         ),
     ),
     action(
-        id = 10L,
+        id = makeActionIdUnique(10L),
         title = "Eat human food",
         subtitle = "It's not enough",
         resourceChanges = mapOf(
@@ -90,7 +90,7 @@ fun createAllActions() = listOf(
         )
     ),
     action(
-        id = 11L,
+        id = makeActionIdUnique(11L),
         title = "Bury remains",
         subtitle = "You better hope there is space",
         resourceChanges = mapOf(
@@ -106,7 +106,7 @@ fun createAllActions() = listOf(
         ),
     ),
     action(
-        id = 12L,
+        id = makeActionIdUnique(12L),
         title = "Steal organs from corpse",
         subtitle = "They won't need it",
         resourceChanges = mapOf(
@@ -123,7 +123,7 @@ fun createAllActions() = listOf(
         ),
     ),
     action(
-        id = 13L,
+        id = makeActionIdUnique(13L),
         title = "Burn remains",
         subtitle = "It won't leave a trace",
         resourceChanges = mapOf(
@@ -139,7 +139,7 @@ fun createAllActions() = listOf(
         ),
     ),
     action(
-        id = 14L,
+        id = makeActionIdUnique(14L),
         title = "Become invisible",
         subtitle = "You ${Flavors.invisibilityAction.placeholder}, ${Flavors.derogativePeopleName.placeholder} can't see you now",
         tags = mapOf(
@@ -156,7 +156,7 @@ fun createAllActions() = listOf(
         ),
     ),
     action(
-        id = 15L,
+        id = makeActionIdUnique(15L),
         title = "Become visible",
         subtitle = "You become visible again",
         tags = mapOf(
@@ -170,7 +170,7 @@ fun createAllActions() = listOf(
         ),
     ),
     action(
-        id = 16L,
+        id = makeActionIdUnique(16L),
         title = "Steal money from people",
         subtitle = "For some reason they don't like it",
         resourceChanges = mapOf(
@@ -191,7 +191,7 @@ fun createAllActions() = listOf(
         )
     ),
     action(
-        id = 17L,
+        id = makeActionIdUnique(17L),
         title = "Rob people",
         subtitle = "They scare so easily",
         resourceChanges = mapOf(
@@ -208,7 +208,7 @@ fun createAllActions() = listOf(
         )
     ),
     action(
-        id = 18L,
+        id = makeActionIdUnique(18L),
         title = "Buy a knife",
         subtitle = "It's useful in a myriad of situations",
         resourceChanges = mapOf(
@@ -225,7 +225,7 @@ fun createAllActions() = listOf(
         )
     ),
     action(
-        id = 19L,
+        id = makeActionIdUnique(19L),
         title = "Beg for money",
         subtitle = "It's not much but they don't seem to mind",
         resourceChanges = mapOf(
@@ -240,7 +240,7 @@ fun createAllActions() = listOf(
         )
     ),
     action(
-        id = 20L,
+        id = makeActionIdUnique(20L),
         title = "Steal Food",
         subtitle = "It's just lying there",
         plot = "You've stolen some food, but it's not enough",
@@ -259,7 +259,7 @@ fun createAllActions() = listOf(
         ),
     ),
     action(
-        id = 21L,
+        id = makeActionIdUnique(21L),
         title = "Capture a rat",
         subtitle = "It's small but tasty",
         resourceChanges = mapOf(
@@ -273,7 +273,7 @@ fun createAllActions() = listOf(
         )
     ),
     action(
-        id = 22L,
+        id = makeActionIdUnique(22L),
         title = "Eat fresh meat",
         subtitle = "It's good but I need something bigger",
         resourceChanges = mapOf(
@@ -287,7 +287,7 @@ fun createAllActions() = listOf(
         )
     ),
     action(
-        id = 23L,
+        id = makeActionIdUnique(23L),
         title = "Eat the remains",
         subtitle = "They can't find anything if there is nothing",
         resourceChanges = mapOf(
@@ -305,3 +305,5 @@ fun createAllActions() = listOf(
         )
     ),
 )
+
+private fun makeActionIdUnique(id: Long): Long = 10000L + id
