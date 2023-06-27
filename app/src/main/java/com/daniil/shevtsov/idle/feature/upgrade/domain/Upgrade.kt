@@ -18,4 +18,5 @@ data class Upgrade(
     override val plot: String?,
 ) : PlotHolder {
     override fun createDefaultPlot(): String = "You have gained an upgrade \"$title\""
+    override fun copy(plot: String?): PlotHolder = this@Upgrade.copy(id = id, plot = plot)
 }

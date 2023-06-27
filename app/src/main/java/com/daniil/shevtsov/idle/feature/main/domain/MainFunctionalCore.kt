@@ -87,6 +87,7 @@ interface PlotHolder {
     val plot: String?
 
     fun createDefaultPlot(): String
+    fun copy(plot: String?): PlotHolder
 }
 
 private fun GameState.addPlotEntry(

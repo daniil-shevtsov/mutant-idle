@@ -20,4 +20,5 @@ data class Action(
     override val plot: String?,
 ) : PlotHolder {
     override fun createDefaultPlot(): String = "You performed action \"$title\""
+    override fun copy(plot: String?): PlotHolder = this.copy(id = id, plot = plot)
 }

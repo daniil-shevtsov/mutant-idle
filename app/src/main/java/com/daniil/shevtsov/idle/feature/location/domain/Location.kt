@@ -12,4 +12,5 @@ data class Location(
     override val plot: String?,
 ) : PlotHolder {
     override fun createDefaultPlot(): String = "You went to the $title"
+    override fun copy(plot: String?): PlotHolder = this@Location.copy(id = id, plot = plot)
 }
