@@ -646,7 +646,7 @@ class MainPresentationTest {
     fun `should show correct icon for human and monster actions`() = runBlockingTest {
         val humanAction = action(
             id = 1L,
-            tags = mapOf(TagRelation.RequiredAll to listOf(Tags.HumanAppearance))
+            tags = mapOf(TagRelation.RequiredAll to listOf(Tags.Form.Human))
         )
         val monsterAction = action(id = 2L)
 
@@ -655,7 +655,7 @@ class MainPresentationTest {
                 humanAction,
                 monsterAction,
             ),
-            player = player(generalTags = listOf(Tags.HumanAppearance)),
+            player = player(generalTags = listOf(Tags.Form.Human)),
         )
 
         val viewState = mapMainViewState(state = state)

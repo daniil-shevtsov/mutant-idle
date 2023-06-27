@@ -11,7 +11,11 @@ object Tags {
 
     val PersonCapturer = Tag(name = "Person Capturer")
 
-    val HumanAppearance = Tag(name = "Human Appearance")
+    object Form {
+        val Human = Tag(name = "Human Form")
+        val Animal = Tag(name = "Animal Form")
+    }
+
     val Employed = Tag(name = "Employed")
 
     object Species {
@@ -62,13 +66,14 @@ object Tags {
 
     object Abilities {
         val Invisibility = Tag(name = "Invisibility Ability")
+        val BatForm = Tag(name = "Bat Form Ability")
         val Flight = Tag(name = "Flight Ability")
-        val AnimalForm = Tag(name = "Animal Form Ability")
         val TransferHost = Tag(name = "Transfer Host Ability")
     }
 
     object State {
-        val Invisible = Tag(name = "Invisible")
+        val Invisible = Tag(name = "Invisible State")
+        val Flying = Tag(name = "Flying State")
     }
 
     object Nature {

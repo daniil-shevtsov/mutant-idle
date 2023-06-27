@@ -101,7 +101,7 @@ private fun createInitialDrawerTabs() = listOf(
 
 private fun createInitialPlayer() = player(
     generalTags = listOf(
-        Tags.HumanAppearance,
+        Tags.Form.Human,
         Tags.Knowledge.SocialNorms,
         Tags.Nimble,
     ),

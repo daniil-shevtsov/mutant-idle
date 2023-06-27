@@ -1,14 +1,16 @@
 package com.daniil.shevtsov.idle.feature.action.domain
 
 import com.daniil.shevtsov.idle.feature.flavor.Flavors
+import com.daniil.shevtsov.idle.feature.location.domain.Location
+import com.daniil.shevtsov.idle.feature.main.domain.Selectable
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
+import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 
 fun createAllActions() = listOf(
     action(
-        id = makeActionIdUnique(0L),
         title = "Work",
         subtitle = "The sun is high",
         plot = "You worked some more",
@@ -17,13 +19,12 @@ fun createAllActions() = listOf(
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
-                Tags.HumanAppearance,
+                Tags.Form.Human,
                 Tags.Employed,
             )
         ),
     ),
     action(
-        id = makeActionIdUnique(3L),
         title = "Buy Groceries",
         subtitle = "It's a short walk",
         plot = "You've bought some groceries",
@@ -33,16 +34,15 @@ fun createAllActions() = listOf(
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
-                Tags.HumanAppearance,
+                Tags.Form.Human,
                 Tags.Locations.SuperMarket,
             )
         ),
     ),
     action(
-        id = makeActionIdUnique(8L),
-        title = "Capture a person",
+        title = "Capture a ${Flavors.personName.placeholder}",
         subtitle = "I think I can do it if I grow enough",
-        plot = "You have captured a person. What next?",
+        plot = "You have captured a ${Flavors.personName.placeholder}. What next?",
         resourceChanges = mapOf(
             ResourceKey.Blood to -10.0,
             ResourceKey.Prisoner to 1.0,
@@ -58,8 +58,7 @@ fun createAllActions() = listOf(
         ),
     ),
     action(
-        id = makeActionIdUnique(9L),
-        title = "Eat captured person",
+        title = "Eat captured ${Flavors.personName.placeholder}",
         subtitle = "Finally a good meal",
         plot = "You've eaten. What to do about the mess?",
         resourceChanges = mapOf(
@@ -77,7 +76,24 @@ fun createAllActions() = listOf(
         ),
     ),
     action(
-        id = makeActionIdUnique(10L),
+        title = "Drink blood of the captured ${Flavors.personName.placeholder}",
+        subtitle = "Drink up",
+        plot = "You drank the ${Flavors.personName.placeholder} dry. What to do about the mess?",
+        resourceChanges = mapOf(
+            ResourceKey.Blood to 10.0,
+            ResourceKey.Prisoner to -1.0,
+            ResourceKey.Remains to 1.0,
+        ),
+        ratioChanges = ratioChanges(
+            RatioKey.Suspicion to 0.05,
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Species.Vampire,
+            )
+        ),
+    ),
+    action(
         title = "Eat human food",
         subtitle = "It's not enough",
         resourceChanges = mapOf(
@@ -91,7 +107,6 @@ fun createAllActions() = listOf(
         )
     ),
     action(
-        id = makeActionIdUnique(11L),
         title = "Bury remains",
         subtitle = "You better hope there is space",
         resourceChanges = mapOf(
@@ -107,7 +122,6 @@ fun createAllActions() = listOf(
         ),
     ),
     action(
-        id = makeActionIdUnique(12L),
         title = "Steal organs from corpse",
         subtitle = "They won't need it",
         resourceChanges = mapOf(
@@ -124,7 +138,6 @@ fun createAllActions() = listOf(
         ),
     ),
     action(
-        id = makeActionIdUnique(13L),
         title = "Burn remains",
         subtitle = "It won't leave a trace",
         resourceChanges = mapOf(
@@ -140,7 +153,6 @@ fun createAllActions() = listOf(
         ),
     ),
     action(
-        id = makeActionIdUnique(14L),
         title = "Become invisible",
         subtitle = "You ${Flavors.invisibilityAction.placeholder}, ${Flavors.derogativePeopleName.placeholder} can't see you now",
         tags = mapOf(
@@ -157,7 +169,6 @@ fun createAllActions() = listOf(
         ),
     ),
     action(
-        id = makeActionIdUnique(15L),
         title = "Become visible",
         subtitle = "You become visible again",
         tags = mapOf(
@@ -171,7 +182,67 @@ fun createAllActions() = listOf(
         ),
     ),
     action(
-        id = makeActionIdUnique(16L),
+        title = "Become a bat",
+        subtitle = "",
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Abilities.BatForm,
+            ),
+            TagRelation.Provides to listOf(
+                Tags.Form.Animal,
+                Tags.Abilities.Flight
+            ),
+            TagRelation.RequiresNone to listOf(
+                Tags.Form.Animal
+            ),
+        ),
+    ),
+    action(
+        title = "Return to human form",
+        subtitle = "",
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Abilities.BatForm,
+                Tags.Form.Animal,
+            ),
+            TagRelation.Provides to listOf(
+                Tags.Form.Human,
+            ),
+            TagRelation.Removes to listOf(
+                Tags.Form.Animal,
+                Tags.Abilities.Flight
+            ),
+        ),
+    ),
+    action(
+        title = "Fly",
+        subtitle = "",
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Abilities.Flight,
+            ),
+            TagRelation.Provides to listOf(
+                Tags.State.Flying,
+            ),
+            TagRelation.RequiresNone to listOf(
+                Tags.State.Flying
+            ),
+        ),
+    ),
+    action(
+        title = "Land",
+        subtitle = "",
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Abilities.Flight,
+                Tags.State.Flying,
+            ),
+            TagRelation.Removes to listOf(
+                Tags.State.Flying,
+            ),
+        ),
+    ),
+    action(
         title = "Steal money from people",
         subtitle = "For some reason they don't like it",
         resourceChanges = mapOf(
@@ -186,13 +257,12 @@ fun createAllActions() = listOf(
                 Tags.Locations.Streets,
             ),
             TagRelation.RequiredAny to listOf(
-                Tags.HumanAppearance,
+                Tags.Form.Human,
                 Tags.State.Invisible,
             )
         )
     ),
     action(
-        id = makeActionIdUnique(17L),
         title = "Rob people",
         subtitle = "They scare so easily",
         resourceChanges = mapOf(
@@ -209,7 +279,6 @@ fun createAllActions() = listOf(
         )
     ),
     action(
-        id = makeActionIdUnique(18L),
         title = "Buy a knife",
         subtitle = "It's useful in a myriad of situations",
         resourceChanges = mapOf(
@@ -217,7 +286,7 @@ fun createAllActions() = listOf(
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
-                Tags.HumanAppearance,
+                Tags.Form.Human,
                 Tags.Locations.Streets,
             ),
             TagRelation.Provides to listOf(
@@ -226,7 +295,6 @@ fun createAllActions() = listOf(
         )
     ),
     action(
-        id = makeActionIdUnique(19L),
         title = "Beg for money",
         subtitle = "It's not much but they don't seem to mind",
         resourceChanges = mapOf(
@@ -234,14 +302,13 @@ fun createAllActions() = listOf(
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
-                Tags.HumanAppearance,
+                Tags.Form.Human,
                 Tags.Knowledge.SocialNorms,
                 Tags.Locations.Streets,
             )
         )
     ),
     action(
-        id = makeActionIdUnique(20L),
         title = "Steal Food",
         subtitle = "It's just lying there",
         plot = "You've stolen some food, but it's not enough",
@@ -253,14 +320,13 @@ fun createAllActions() = listOf(
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
-                Tags.HumanAppearance,
+                Tags.Form.Human,
                 Tags.Nimble,
                 Tags.Locations.SuperMarket,
             )
         ),
     ),
     action(
-        id = makeActionIdUnique(21L),
         title = "Capture a rat",
         subtitle = "It's small but tasty",
         plot = "You've caught a rat",
@@ -269,13 +335,16 @@ fun createAllActions() = listOf(
         ),
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
-                Tags.Species.Devourer,
                 Tags.Locations.DarkAlley,
+            ),
+            TagRelation.RequiredAny to listOf(
+                Tags.Species.Devourer,
+                Tags.Species.Demon,
+                Tags.Species.Vampire,
             )
         )
     ),
     action(
-        id = makeActionIdUnique(22L),
         title = "Eat fresh meat",
         subtitle = "It's good but I need something bigger",
         resourceChanges = mapOf(
@@ -283,13 +352,14 @@ fun createAllActions() = listOf(
             ResourceKey.Blood to 1.0,
         ),
         tags = mapOf(
-            TagRelation.RequiredAll to listOf(
-                Tags.Species.Devourer
+            TagRelation.RequiredAny to listOf(
+                Tags.Species.Devourer,
+                Tags.Species.Demon,
+                Tags.Species.Vampire,
             )
         )
     ),
     action(
-        id = makeActionIdUnique(23L),
         title = "Eat the remains",
         subtitle = "They can't find anything if there is nothing",
         plot = "You have devoured the remains",
@@ -307,6 +377,16 @@ fun createAllActions() = listOf(
             RatioKey.Suspicion to -0.1,
         )
     ),
-)
+).makeIdsUnique()
 
-private fun makeActionIdUnique(id: Long): Long = 10000L + id
+fun List<Selectable>.makeIdsUnique(): List<Selectable> {
+    return mapIndexed { index, selectable ->
+        val offset = when (selectable) {
+            is Action -> 10000L
+            is Upgrade -> 20000L
+            is Location -> 30000L
+            else -> 0L //TODO: Figure out why sealed interface does not work here
+        }
+        selectable.copy(id = offset + index.toLong())
+    }
+}

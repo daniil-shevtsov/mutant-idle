@@ -11,8 +11,8 @@ data class Upgrade(
     override val id: Long,
     override val title: String,
     val subtitle: String,
-    val price: Price,
-    val resourceChanges: ResourceChanges,
+    val price: Price, //TODO: Is price used for anything or it's a relic from the time before resource changes?
+    val resourceChanges: ResourceChanges, //TODO: Need to be able define alternative resources (scrap for android, blood for vampire)
     val ratioChanges: RatioChanges,
     val status: UpgradeStatus,
     val tags: Map<TagRelation, List<Tag>>,

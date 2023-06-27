@@ -213,7 +213,7 @@ private fun createActionState(
                 icon = ActionIcon(
                     value = when {
                         tags[TagRelation.RequiredAll].orEmpty()
-                            .contains(Tags.HumanAppearance) -> Icons.Human
+                            .contains(Tags.Form.Human) -> Icons.Human
 
                         else -> Icons.Monster
                     }

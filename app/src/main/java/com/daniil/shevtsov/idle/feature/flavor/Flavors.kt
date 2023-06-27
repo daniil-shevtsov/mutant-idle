@@ -24,6 +24,16 @@ object Flavors {
         )
     )
 
+    val personName = flavor(
+        id = FlavorId.PersonName,
+        placeholder = "${PREFIX}PERSON_NAME",
+        values = mapOf(
+            Tags.Immortal to "mortal",
+            Tags.Species.Alien to "lifeform",
+        ),
+        default = "person"
+    )
+
     val peopleName = flavor(
         id = FlavorId.PeopleName,
         placeholder = "${PREFIX}PEOPLE_NAME",
