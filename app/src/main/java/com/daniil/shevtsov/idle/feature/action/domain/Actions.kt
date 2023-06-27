@@ -79,7 +79,6 @@ fun createAllActions() = listOf(
         id = 10L,
         title = "Eat human food",
         subtitle = "It's not enough",
-        plot = "",
         resourceChanges = mapOf(
             ResourceKey.Blood to 2.0,
             ResourceKey.HumanFood to -1.0,
