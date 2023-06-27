@@ -3,12 +3,13 @@ package com.daniil.shevtsov.idle.feature.upgrade.domain
 import com.daniil.shevtsov.idle.feature.action.domain.RatioChanges
 import com.daniil.shevtsov.idle.feature.action.domain.ResourceChanges
 import com.daniil.shevtsov.idle.feature.main.domain.PlotHolder
+import com.daniil.shevtsov.idle.feature.main.domain.Selectable
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 
 data class Upgrade(
-    val id: Long,
-    val title: String,
+    override val id: Long,
+    override val title: String,
     val subtitle: String,
     val price: Price,
     val resourceChanges: ResourceChanges,
@@ -16,7 +17,15 @@ data class Upgrade(
     val status: UpgradeStatus,
     val tags: Map<TagRelation, List<Tag>>,
     override val plot: String?,
-) : PlotHolder {
+) : Selectable, PlotHolder {
     override fun createDefaultPlot(): String = "You have gained an upgrade \"$title\""
+
     override fun copy(plot: String?): PlotHolder = this@Upgrade.copy(id = id, plot = plot)
+    override fun copy(
+        id: Long?,
+        title: String?,
+    ): Selectable = copy(
+        id = id ?: this@Upgrade.id,
+        title = title ?: this@Upgrade.title,
+    )
 }

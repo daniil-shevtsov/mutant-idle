@@ -89,6 +89,16 @@ interface PlotHolder {
     fun copy(plot: String?): PlotHolder
 }
 
+interface Selectable {
+    val id: Long
+    val title: String
+
+    fun copy(
+        id: Long? = null,
+        title: String? = null,
+    ): Selectable
+}
+
 private fun GameState.addPlotEntry(
     plotHolder: PlotHolder
 ): GameState {
