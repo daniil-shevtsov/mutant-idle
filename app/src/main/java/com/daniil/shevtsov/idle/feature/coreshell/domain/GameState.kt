@@ -25,7 +25,6 @@ import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 data class GameState(
     val balanceConfig: BalanceConfig,
     val selectables: List<Selectable>,
-    val actions: List<Action>,
     val resources: List<Resource>,
     val ratios: List<Ratio>,
     val plotEntries: List<PlotEntry>,
@@ -44,6 +43,8 @@ data class GameState(
         get() = selectables.filterIsInstance<Location>()
     val upgrades: List<Upgrade>
         get() = selectables.filterIsInstance<Upgrade>()
+    val actions: List<Action>
+        get() = selectables.filterIsInstance<Action>()
 }
 
 fun gameState(
@@ -70,7 +71,6 @@ fun gameState(
     selectables = (selectables + locations + upgrades + actions).distinct(),
     resources = resources,
     ratios = ratios,
-    actions = actions,
     plotEntries = plotEntries,
     drawerTabs = drawerTabs,
     sections = sections,

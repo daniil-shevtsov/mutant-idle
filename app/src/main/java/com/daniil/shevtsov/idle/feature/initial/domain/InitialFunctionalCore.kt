@@ -30,7 +30,6 @@ fun createInitialGameState(): GameState {
     return GameState(
         balanceConfig = createBalanceConfig(),
         selectables = createSelectables(),
-        actions = createAllActions(),
         resources = createResources(),
         ratios = createInitialRatios(),
         sections = createInitialSectionState(),
