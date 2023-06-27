@@ -793,9 +793,7 @@ class MainPresentationTest {
 
         val state = gameState(
             locations =  listOf(availableLocation),
-            locationSelectionState = locationSelectionState(
-                allLocations = listOf(availableLocation),
-            ),
+            locationSelectionState = locationSelectionState(),
         )
 
         val viewState = mapMainViewState(state = state)
@@ -824,9 +822,7 @@ class MainPresentationTest {
         val state = gameState(
             player = player(generalTags = listOf(availableTag)),
             locations =  listOf(availableLocation, unavailableLocation),
-            locationSelectionState = locationSelectionState(
-                allLocations = listOf(availableLocation, unavailableLocation),
-            ),
+            locationSelectionState = locationSelectionState(),
         )
 
         val viewState = mapMainViewState(state = state)

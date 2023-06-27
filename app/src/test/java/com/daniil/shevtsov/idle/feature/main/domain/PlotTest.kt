@@ -75,11 +75,7 @@ class PlotTest() {
                             locations = listOfNotNull(
                                 plotHolder as? Location
                             ),
-                            locationSelectionState = locationSelectionState(
-                                allLocations = listOfNotNull(
-                                    plotHolder as? Location
-                                )
-                            )
+                            locationSelectionState = locationSelectionState()
                         ),
                         viewAction = plotTestData.selectAction,
                     )
