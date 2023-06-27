@@ -74,7 +74,7 @@ fun createBalanceConfig() = BalanceConfig(
     resourceSpentForFullMutant = 100.0,
 )
 
-private fun createSelectables(): List<Selectable> = emptyList()
+private fun createSelectables(): List<Selectable> = createLocations() + createUpgrades() + createAllActions()
 
 private fun createInitialRatios() = RatioKey.values().map { ratioKey ->
     Ratio(

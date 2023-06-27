@@ -43,6 +43,8 @@ data class GameState(
 ) {
     val locations: List<Location>
         get() = selectables.filterIsInstance<Location>()
+    val upgradess: List<Upgrade>
+        get() = selectables.filterIsInstance<Upgrade>()
 }
 
 fun gameState(
@@ -66,7 +68,7 @@ fun gameState(
     unlockState: UnlockState = unlockState(),
 ) = GameState(
     balanceConfig = balanceConfig,
-    selectables = (selectables + locations).distinct(),
+    selectables = (selectables + locations + upgrades + actions).distinct(),
     resources = resources,
     ratios = ratios,
     actions = actions,
