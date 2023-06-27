@@ -4,16 +4,13 @@ import assertk.assertThat
 import assertk.assertions.containsExactly
 import assertk.assertions.extracting
 import assertk.assertions.prop
-import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
-import com.daniil.shevtsov.idle.feature.location.domain.Location
 import com.daniil.shevtsov.idle.feature.location.domain.location
 import com.daniil.shevtsov.idle.feature.location.domain.locationSelectionState
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.plot.domain.PlotEntry
-import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -63,18 +60,15 @@ class PlotTest() {
                 plotTestData.plotHolder to plotTestData.plotHolder.plot,
                 plotTestData.plotHolder.copy(plot = null) to plotTestData.expectedDefaultPlot
             ).map { (plotHolder, expected) ->
+                val selectable = plotHolder as Selectable
                 val testName = when (plotHolder.plot) {
-                    null -> "when holder without plot selected - then should add its default plot"
-                    else -> "when holder selected - then should add its plot"
+                    null -> "when ${selectable.title} without plot selected - then should add its default plot"
+                    else -> "when ${selectable.title} selected - then should add its plot"
                 }
                 DynamicTest.dynamicTest(testName) {
                     val newState = mainFunctionalCore(
                         state = gameState(
-                            actions = listOfNotNull(plotHolder as? Action),
-                            upgrades = listOfNotNull(plotHolder as? Upgrade),
-                            locations = listOfNotNull(
-                                plotHolder as? Location
-                            ),
+                            selectables = listOf(selectable),
                             locationSelectionState = locationSelectionState()
                         ),
                         viewAction = plotTestData.selectAction,
