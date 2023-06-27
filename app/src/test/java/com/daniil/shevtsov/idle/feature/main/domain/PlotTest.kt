@@ -8,7 +8,6 @@ import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.location.domain.location
-import com.daniil.shevtsov.idle.feature.location.domain.locationSelectionState
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.plot.domain.PlotEntry
 import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
@@ -19,7 +18,6 @@ class PlotTest() {
 
     private data class PlotTestData(
         val plotHolder: PlotHolder,
-        val selectAction: MainViewAction,
         val expectedDefaultPlot: String,
     )
 
@@ -30,7 +28,6 @@ class PlotTest() {
                 title = "test action",
                 plot = "action plot"
             ),
-            selectAction = MainViewAction.SelectableClicked(id = 1L),
             expectedDefaultPlot = "You performed action \"test action\""
         ),
         PlotTestData(
@@ -39,7 +36,6 @@ class PlotTest() {
                 title = "test location",
                 plot = "location plot"
             ),
-            selectAction = MainViewAction.SelectableClicked(id = 2L),
             expectedDefaultPlot = "You went to the test location"
         ),
         PlotTestData(
@@ -48,7 +44,6 @@ class PlotTest() {
                 title = "test upgrade",
                 plot = "upgrade plot"
             ),
-            selectAction = MainViewAction.SelectableClicked(id = 3L),
             expectedDefaultPlot = "You have gained an upgrade \"test upgrade\""
         ),
     )
@@ -67,11 +62,8 @@ class PlotTest() {
                 }
                 DynamicTest.dynamicTest(testName) {
                     val newState = mainFunctionalCore(
-                        state = gameState(
-                            selectables = listOf(selectable),
-                            locationSelectionState = locationSelectionState()
-                        ),
-                        viewAction = plotTestData.selectAction,
+                        state = gameState(selectables = listOf(selectable)),
+                        viewAction = MainViewAction.SelectableClicked(selectable.id),
                     )
 
                     assertThat(newState)
