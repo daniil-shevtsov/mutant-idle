@@ -72,6 +72,9 @@ class PlotTest() {
                         state = gameState(
                             actions = listOfNotNull(plotHolder as? Action),
                             upgrades = listOfNotNull(plotHolder as? Upgrade),
+                            locations = listOfNotNull(
+                                plotHolder as? Location
+                            ),
                             locationSelectionState = locationSelectionState(
                                 allLocations = listOfNotNull(
                                     plotHolder as? Location

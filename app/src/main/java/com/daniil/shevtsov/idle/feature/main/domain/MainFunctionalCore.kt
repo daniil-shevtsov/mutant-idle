@@ -62,7 +62,8 @@ fun handleLocationSelected(
     state: GameState,
     viewAction: MainViewAction.LocationSelected
 ): GameState {
-    val selectedLocation = state.locationSelectionState.allLocations.find { it.id == viewAction.id }
+//    val selectedLocation = state.locationSelectionState.allLocations.find { it.id == viewAction.id }
+    val selectedLocation = state.locations.find { it.id == viewAction.id }
 
     val oldTags = state.locationSelectionState.selectedLocation.tags[TagRelation.Provides].orEmpty()
     val newTags = selectedLocation?.tags?.get(TagRelation.Provides).orEmpty()

@@ -311,6 +311,7 @@ class MainFunctionalCoreTest {
 
         val state = mainFunctionalCore(
             state = gameState(
+                locations =  listOf(location),
                 locationSelectionState = locationSelectionState(
                     allLocations = listOf(location)
                 )
@@ -341,6 +342,7 @@ class MainFunctionalCoreTest {
 
         val state = mainFunctionalCore(
             state = gameState(
+                locations =  listOf(oldLocation, newLocation),
                 locationSelectionState = locationSelectionState(
                     allLocations = listOf(oldLocation, newLocation)
                 )
@@ -367,6 +369,7 @@ class MainFunctionalCoreTest {
 
         val state = mainFunctionalCore(
             state = gameState(
+                locations =  listOf(location),
                 locationSelectionState = locationSelectionState(
                     allLocations = listOf(location)
                 )
@@ -393,6 +396,7 @@ class MainFunctionalCoreTest {
 
         val state = mainFunctionalCore(
             state = gameState(
+                locations =  listOf(location),
                 locationSelectionState = locationSelectionState(
                     allLocations = listOf(location)
                 )

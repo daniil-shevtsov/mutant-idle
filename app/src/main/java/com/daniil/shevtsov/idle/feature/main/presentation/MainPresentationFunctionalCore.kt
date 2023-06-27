@@ -6,7 +6,12 @@ import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.RatioChanges
 import com.daniil.shevtsov.idle.feature.action.domain.ResourceChanges
-import com.daniil.shevtsov.idle.feature.action.presentation.*
+import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
+import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
+import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
+import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
+import com.daniil.shevtsov.idle.feature.action.presentation.RatioChangeModel
+import com.daniil.shevtsov.idle.feature.action.presentation.ResourceChangeModel
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.flavor.flavorMachine
 import com.daniil.shevtsov.idle.feature.location.domain.Location
@@ -61,7 +66,10 @@ private fun createMainViewState(state: GameState): MainViewState {
                 )
             },
         actionState = createActionState(state.actions, state.resources, state.player, state),
-        locationSelectionViewState = state.locationSelectionState.toViewState(playerTags = state.player.tags)
+        locationSelectionViewState = state.locationSelectionState.toViewState(
+            locations = state.locations,
+            playerTags = state.player.tags,
+        )
             .let { viewState ->
                 viewState.copy(
                     locations = viewState.locations.map { location ->
@@ -206,6 +214,7 @@ private fun createActionState(
                     value = when {
                         tags[TagRelation.RequiredAll].orEmpty()
                             .contains(Tags.HumanAppearance) -> Icons.Human
+
                         else -> Icons.Monster
                     }
                 ),
@@ -290,9 +299,12 @@ private fun Upgrade.mapStatus(resource: Double): UpgradeStatusModel {
     return statusModel
 }
 
-private fun LocationSelectionState.toViewState(playerTags: List<Tag>) =
+private fun LocationSelectionState.toViewState(
+    locations: List<Location>,
+    playerTags: List<Tag>
+) =
     LocationSelectionViewState(
-        locations = allLocations
+        locations = locations
             .filter { location ->
                 satisfiesAllTagsRelations(
                     tagRelations = location.tags,
