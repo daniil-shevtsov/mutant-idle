@@ -31,7 +31,6 @@ fun createInitialGameState(): GameState {
         balanceConfig = createBalanceConfig(),
         selectables = createSelectables(),
         actions = createAllActions(),
-        upgrades = createUpgrades(),
         resources = createResources(),
         ratios = createInitialRatios(),
         sections = createInitialSectionState(),

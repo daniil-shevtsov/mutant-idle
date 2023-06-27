@@ -218,7 +218,7 @@ fun handleUpgradeSelected(
     state: GameState,
     viewAction: MainViewAction.UpgradeSelected
 ): GameState {
-    val upgradeToBuy = state.upgradess.find { upgrade -> upgrade.id == viewAction.id }!!
+    val upgradeToBuy = state.upgrades.find { upgrade -> upgrade.id == viewAction.id }!!
 
     val hasInvalidChanges = hasInvalidChanges(
         currentResources = state.resources,
@@ -229,7 +229,7 @@ fun handleUpgradeSelected(
         !hasInvalidChanges -> {
             val boughtUpgrade = upgradeToBuy.copy(status = UpgradeStatus.Bought)
 
-            val updatedUpgrades = state.upgradess.map { upgrade ->
+            val updatedUpgrades = state.upgrades.map { upgrade ->
                 if (upgrade.id == boughtUpgrade.id) {
                     boughtUpgrade
                 } else {
@@ -249,7 +249,6 @@ fun handleUpgradeSelected(
             )
 
             return state.copy(
-                upgrades = updatedUpgrades.values.toList(),
                 selectables = state.selectables.map { selectable ->
                     updatedUpgrades[selectable.id] ?: selectable
                 },
