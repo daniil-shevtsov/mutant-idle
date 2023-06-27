@@ -27,13 +27,15 @@ fun action(
     resourceChanges: ResourceChanges = mapOf(),
     ratioChanges: RatioChanges = mapOf(),
     tags: Map<TagRelation, List<Tag>> = mapOf(),
+    plot: String = "You performed action \"$title\"",
 ) = Action(
     id = id,
     title = title,
     subtitle = subtitle,
     resourceChanges = resourceChanges,
     ratioChanges = ratioChanges,
-    tags = tags
+    tags = tags,
+    plot = plot,
 )
 
 fun actionModel(

@@ -12,11 +12,10 @@ import com.daniil.shevtsov.idle.feature.location.domain.locationSelectionState
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
-import com.daniil.shevtsov.idle.feature.player.trait.domain.*
+import com.daniil.shevtsov.idle.feature.player.trait.domain.PlayerTrait
+import com.daniil.shevtsov.idle.feature.plot.domain.PlotEntry
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
-import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
-import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.unlocks.domain.UnlockState
 import com.daniil.shevtsov.idle.feature.unlocks.domain.unlockState
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
@@ -27,6 +26,7 @@ data class GameState(
     val ratios: List<Ratio>,
     val upgrades: List<Upgrade>,
     val actions: List<Action>,
+    val plotEntries: List<PlotEntry>,
     val sections: List<SectionState>,
     val drawerTabs: List<DrawerTab>,
     val availableTraits: List<PlayerTrait>,
@@ -44,6 +44,7 @@ fun gameState(
     resources: List<Resource> = emptyList(),
     ratios: List<Ratio> = emptyList(),
     upgrades: List<Upgrade> = emptyList(),
+    plotEntries: List<PlotEntry> = emptyList(),
     actions: List<Action> = emptyList(),
     drawerTabs: List<DrawerTab> = emptyList(),
     sections: List<SectionState> = emptyList(),
@@ -61,6 +62,7 @@ fun gameState(
     ratios = ratios,
     upgrades = upgrades,
     actions = actions,
+    plotEntries = plotEntries,
     drawerTabs = drawerTabs,
     sections = sections,
     availableTraits = availableTraits,

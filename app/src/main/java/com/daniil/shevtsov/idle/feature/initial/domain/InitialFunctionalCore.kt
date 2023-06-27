@@ -36,6 +36,7 @@ fun createInitialGameState(): GameState {
         actions = createAllActions(),
         availableTraits = createInitialTraits(),
         availableEndings = createEndings(),
+        plotEntries = emptyList(),
         locationSelectionState = createLocationSelectionState(),
         flavors = createFlavors(),
         player = createInitialPlayer(),

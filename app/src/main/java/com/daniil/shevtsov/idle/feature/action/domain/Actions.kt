@@ -11,6 +11,7 @@ fun createAllActions() = listOf(
         id = 0L,
         title = "Work",
         subtitle = "The sun is high",
+        plot = "You worked some more",
         resourceChanges = mapOf(
             ResourceKey.Money to 25.0
         ),
@@ -25,6 +26,7 @@ fun createAllActions() = listOf(
         id = 3L,
         title = "Buy Groceries",
         subtitle = "It's a short walk",
+        plot = "You've bought some groceries",
         resourceChanges = mapOf(
             ResourceKey.Money to -15.0,
             ResourceKey.HumanFood to 1.0,
@@ -40,6 +42,7 @@ fun createAllActions() = listOf(
         id = 8L,
         title = "Capture a person",
         subtitle = "I think I can do it if I grow enough",
+        plot = "You have captured a person. What next?",
         resourceChanges = mapOf(
             ResourceKey.Blood to -10.0,
             ResourceKey.Prisoner to 1.0,
@@ -56,7 +59,8 @@ fun createAllActions() = listOf(
     action(
         id = 9L,
         title = "Eat captured person",
-        subtitle = "What to do about the mess",
+        subtitle = "Finally a good meal",
+        plot = "You've eaten. What to do about the mess?",
         resourceChanges = mapOf(
             ResourceKey.Blood to 25.0,
             ResourceKey.Prisoner to -1.0,
@@ -239,6 +243,7 @@ fun createAllActions() = listOf(
         id = 20L,
         title = "Steal Food",
         subtitle = "It's just lying there",
+        plot = "You've stolen some food, but it's not enough",
         resourceChanges = mapOf(
             ResourceKey.HumanFood to 1.0,
         ),

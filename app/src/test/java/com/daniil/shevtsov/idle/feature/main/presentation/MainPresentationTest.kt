@@ -18,6 +18,8 @@ import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionV
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
+import com.daniil.shevtsov.idle.feature.plot.domain.PlotEntry
+import com.daniil.shevtsov.idle.feature.plot.domain.plotEntry
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
 import com.daniil.shevtsov.idle.feature.ratio.presentation.RatioModel
@@ -59,6 +61,10 @@ class MainPresentationTest {
                 ),
                 upgrade(id = 3L, price = 30.0, resourceChanges = mapOf(ResourceKey.Blood to -30.0)),
             ),
+            plotEntries = listOf(
+                plotEntry(text = "lol"),
+                plotEntry(text = "kek"),
+            ),
             actions = listOf(
                 action(id = 0L, title = "human action"),
                 action(id = 1L, title = "mutant action"),
@@ -81,6 +87,9 @@ class MainPresentationTest {
                     .containsExactly("Mutanity" to 0.0, "Suspicion" to 0.0)
 
                 extractingMainState().all {
+                    extractingPlot()
+                        .extractingEntries()
+                        .isEqualTo(state.plotEntries)
                     prop(MainViewState.Success::shop)
                         .prop(UpgradesViewState::upgrades)
                         .extracting(UpgradeModel::id)
@@ -923,6 +932,11 @@ class MainPresentationTest {
                 Icons.Suspicion to "+100 %",
             )
     }
+
+    private fun Assert<MainViewState>.extractingPlot() = extractingMainState()
+        .prop(MainViewState.Success::plotEntries)
+
+    private fun Assert<List<PlotEntry>>.extractingEntries() = this
 
     private fun Assert<MainViewState>.extractingUpgrades() =
         extractingMainState()

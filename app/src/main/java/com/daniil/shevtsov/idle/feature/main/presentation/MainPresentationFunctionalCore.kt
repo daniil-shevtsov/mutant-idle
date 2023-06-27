@@ -82,6 +82,7 @@ private fun createMainViewState(state: GameState): MainViewState {
                     )
                 )
             },
+        plotEntries = state.plotEntries,
         shop = state.upgrades
             .filter { upgrade ->
                 satisfiesAllTagsRelations(
