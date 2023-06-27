@@ -86,6 +86,7 @@ interface Selectable {
     ): Selectable
 }
 
+//TODO: If there are several same plot entries it should be one with (x50) to the right
 private fun GameState.addPlotEntry(
     plotHolder: PlotHolder
 ): GameState {

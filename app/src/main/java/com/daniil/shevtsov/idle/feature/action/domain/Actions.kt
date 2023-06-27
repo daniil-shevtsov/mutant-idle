@@ -53,6 +53,7 @@ fun createAllActions() = listOf(
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
                 Tags.PersonCapturer,
+                Tags.Locations.DarkAlley,
             )
         ),
     ),
@@ -262,6 +263,7 @@ fun createAllActions() = listOf(
         id = makeActionIdUnique(21L),
         title = "Capture a rat",
         subtitle = "It's small but tasty",
+        plot = "You've caught a rat",
         resourceChanges = mapOf(
             ResourceKey.FreshMeat to 1.0
         ),
@@ -290,6 +292,7 @@ fun createAllActions() = listOf(
         id = makeActionIdUnique(23L),
         title = "Eat the remains",
         subtitle = "They can't find anything if there is nothing",
+        plot = "You have devoured the remains",
         resourceChanges = mapOf(
             ResourceKey.Blood to -5.0,
             ResourceKey.Remains to -1.0,

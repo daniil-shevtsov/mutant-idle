@@ -27,7 +27,7 @@ fun createUpgrades() = listOf(
         tags = mapOf(
             TagRelation.Provides to listOf(
                 Tags.Body.SuperStrength,
-                Tags.PersonCapturer,
+                Tags.PersonCapturer, //TODO: It seems the system should work in other direction. Person Capturer should define that it can be because of super srength, because of weapons, etc
             ),
             TagRelation.RequiredAny to listOf(
                 Tags.Species.Devourer,
