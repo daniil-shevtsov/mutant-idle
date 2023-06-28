@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.feature.action.domain
 
 import com.daniil.shevtsov.idle.feature.main.domain.PlotHolder
 import com.daniil.shevtsov.idle.feature.main.domain.Selectable
+import com.daniil.shevtsov.idle.feature.main.presentation.Flavorable
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
@@ -14,12 +15,12 @@ typealias RatioChanges = Map<RatioKey, RatioChangeForTags>
 data class Action(
     override val id: Long,
     override val title: String,
-    val subtitle: String,
+    override val subtitle: String,
     val resourceChanges: ResourceChanges,
     val ratioChanges: RatioChanges,
     val tags: Map<TagRelation, List<Tag>>,
     override val plot: String?,
-) : Selectable, PlotHolder {
+) : Selectable, Flavorable, PlotHolder {
     override fun createDefaultPlot(): String = "You performed action \"$title\""
     override fun copy(plot: String?): PlotHolder = this.copy(id = id, plot = plot)
     override fun copy(
@@ -28,5 +29,13 @@ data class Action(
     ): Selectable = copy(
         id = id ?: this@Action.id,
         title = title ?: this@Action.title,
+    )
+
+    override fun copy(
+        title: String?,
+        subtitle: String?,
+    ): Flavorable = copy(
+        title = title ?: this@Action.title,
+        subtitle = subtitle ?: this@Action.subtitle,
     )
 }

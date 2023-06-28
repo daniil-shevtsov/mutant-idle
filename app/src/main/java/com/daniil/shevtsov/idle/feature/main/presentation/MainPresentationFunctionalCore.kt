@@ -310,3 +310,13 @@ private fun String.withFlavor(state: GameState): String = flavorMachine(
     flavors = state.flavors,
     tags = state.player.tags
 )
+
+interface Flavorable {
+    val title: String
+    val subtitle: String
+
+    fun copy(
+        title: String? = null,
+        subtitle: String? = null,
+    ): Flavorable
+}

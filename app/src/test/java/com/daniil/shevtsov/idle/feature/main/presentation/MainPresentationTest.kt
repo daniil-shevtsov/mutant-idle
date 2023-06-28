@@ -1036,7 +1036,7 @@ class MainPresentationTest {
 
     private fun Assert<List<PlotEntry>>.extractingEntries() = this
 
-    private fun Assert<MainViewState>.extractingUpgrades() =
+    fun Assert<MainViewState>.extractingUpgrades() =
         extractingMainState()
             .prop(MainViewState.Success::shop)
             .prop(UpgradesViewState::upgrades)
@@ -1081,7 +1081,7 @@ class MainPresentationTest {
     private fun Assert<MainViewState>.extractingResourceNameAndValues() =
         extractingResources()
             .extracting(ResourceModel::name, ResourceModel::value)
-
-    private fun Assert<MainViewState>.extractingMainState() =
-        isInstanceOf(MainViewState.Success::class)
 }
+
+fun Assert<MainViewState>.extractingMainState() =
+    isInstanceOf(MainViewState.Success::class)
