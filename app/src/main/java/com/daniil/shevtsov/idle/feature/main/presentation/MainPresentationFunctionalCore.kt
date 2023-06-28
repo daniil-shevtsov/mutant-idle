@@ -69,6 +69,7 @@ private fun createMainViewState(state: GameState): MainViewState {
         locationSelectionViewState = state.locationSelectionState.toViewState(
             locations = state.locations,
             playerTags = state.player.tags,
+            state
         )
             .let { viewState ->
                 viewState.copy(
@@ -311,7 +312,8 @@ private fun Upgrade.mapStatus(resource: Double): UpgradeStatusModel {
 
 private fun LocationSelectionState.toViewState(
     locations: List<Location>,
-    playerTags: List<Tag>
+    playerTags: List<Tag>,
+    state: GameState,
 ) =
     LocationSelectionViewState(
         locations = locations
@@ -321,14 +323,26 @@ private fun LocationSelectionState.toViewState(
                     tags = playerTags,
                 )
             }
-            .map { location -> location.toModel(selectedLocationId = selectedLocation.id) },
-        selectedLocation = selectedLocation.toModel(selectedLocationId = selectedLocation.id),
+            .map { location -> location.toModel(selectedLocationId = selectedLocation.id, state) },
+        selectedLocation = selectedLocation.toModel(
+            selectedLocationId = selectedLocation.id,
+            state
+        ),
         isExpanded = isSelectionExpanded,
     )
 
-private fun Location.toModel(selectedLocationId: Long) = LocationModel(
+private fun Location.toModel(
+    selectedLocationId: Long,
+    state: GameState,
+) = LocationModel(
     id = id,
-    title = title,
-    description = description,
+    title = title.withFlavor(state),
+    description = description.withFlavor(state),
     isSelected = id == selectedLocationId,
+)
+
+private fun String.withFlavor(state: GameState): String = flavorMachine(
+    original = this,
+    flavors = state.flavors,
+    tags = state.player.tags
 )

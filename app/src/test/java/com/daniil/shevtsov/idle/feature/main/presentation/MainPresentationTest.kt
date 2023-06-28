@@ -819,43 +819,37 @@ class MainPresentationTest {
     fun `should replace placeholders in location description`() = runBlockingTest {
         val tag = tag(name = "flavor tag")
         val flavoredTitle = "flavoredTitle"
-        val flavoredSubtitle = "flavoredSubtitle"
-        val flavoredPlot = "flavoredPlot"
+        val flavoredDescription = "flavoredDescription"
         val titleFlavor = flavor(
             placeholder = "${Flavors.PREFIX}title",
             values = mapOf(tag to flavoredTitle),
         )
-        val subtitleFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}subtitle",
-            values = mapOf(tag to flavoredSubtitle),
+        val descriptionFlavor = flavor(
+            placeholder = "${Flavors.PREFIX}description",
+            values = mapOf(tag to flavoredDescription),
         )
-        val plotFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}plot",
-            values = mapOf(tag to flavoredPlot),
+        val selectedLocation = location(
+            id = 2,
+            title = titleFlavor.placeholder,
+            description = descriptionFlavor.placeholder,
         )
 
         val state = gameState(
-            upgrades = listOf(
-                upgrade(
-                    title = titleFlavor.placeholder,
-                    subtitle = subtitleFlavor.placeholder,
-                    plot = plotFlavor.placeholder,
-                )
-            ),
-            flavors = listOf(titleFlavor, subtitleFlavor, plotFlavor),
-            player = player(
-                generalTags = listOf(tag)
+            player = player(generalTags = listOf(tag)),
+            locations = listOf(selectedLocation),
+            flavors = listOf(titleFlavor, descriptionFlavor),
+            locationSelectionState = locationSelectionState(
+                selectedLocation = selectedLocation,
             ),
         )
 
         val viewState = mapMainViewState(state = state)
 
         assertThat(viewState)
-            .extractingUpgrades()
-            .index(0)
+            .extractSelectedLocation()
             .all {
-                prop(UpgradeModel::title).isEqualTo(flavoredTitle)
-                prop(UpgradeModel::subtitle).isEqualTo(flavoredSubtitle)
+                prop(LocationModel::title).isEqualTo(flavoredTitle)
+                prop(LocationModel::description).isEqualTo(flavoredDescription)
             }
     }
 
