@@ -736,17 +736,25 @@ class MainPresentationTest {
     @Test
     fun `should replace placeholders in action description if has any`() = runBlockingTest {
         val tag = tag(name = "flavor tag")
-        val flavoredDescription = "flavored"
-        val flavor = flavor(
-            placeholder = "${Flavors.PREFIX}placeholder",
-            values = mapOf(tag to flavoredDescription),
+        val flavoredTitle = "flavored title"
+        val flavoredSubtitle = "flavored subtitle"
+        val titleFlavor = flavor(
+            placeholder = "${Flavors.PREFIX}title",
+            values = mapOf(tag to flavoredTitle),
+        )
+        val subtitleFlavor = flavor(
+            placeholder = "${Flavors.PREFIX}subtitle",
+            values = mapOf(tag to flavoredSubtitle),
         )
 
         val state = gameState(
             actions = listOf(
-                action(subtitle = flavor.placeholder)
+                action(
+                    title = titleFlavor.placeholder,
+                    subtitle = subtitleFlavor.placeholder,
+                )
             ),
-            flavors = listOf(flavor),
+            flavors = listOf(titleFlavor, subtitleFlavor),
             player = player(
                 generalTags = listOf(tag)
             ),
@@ -756,8 +764,11 @@ class MainPresentationTest {
 
         assertThat(viewState)
             .extractingHumanActions()
-            .extracting(ActionModel::subtitle)
-            .containsExactly(flavoredDescription)
+            .index(0)
+            .all {
+                prop(ActionModel::title).isEqualTo(flavoredTitle)
+                prop(ActionModel::subtitle).isEqualTo(flavoredSubtitle)
+            }
     }
 
     @Test
