@@ -9,8 +9,6 @@ import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.action.domain.ratioChanges
 import com.daniil.shevtsov.idle.feature.action.presentation.*
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
-import com.daniil.shevtsov.idle.feature.flavor.Flavors
-import com.daniil.shevtsov.idle.feature.flavor.flavor
 import com.daniil.shevtsov.idle.feature.location.domain.location
 import com.daniil.shevtsov.idle.feature.location.domain.locationSelectionState
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
@@ -731,126 +729,6 @@ class MainPresentationTest {
                 Icons.Mutanity to "+50 %",
                 Icons.Suspicion to "-1 %",
             )
-    }
-
-    @Test
-    fun `should replace placeholders in action description if has any`() = runBlockingTest {
-        val tag = tag(name = "flavor tag")
-        val flavoredTitle = "flavored title"
-        val flavoredSubtitle = "flavored subtitle"
-        val titleFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}title",
-            values = mapOf(tag to flavoredTitle),
-        )
-        val subtitleFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}subtitle",
-            values = mapOf(tag to flavoredSubtitle),
-        )
-
-        val state = gameState(
-            actions = listOf(
-                action(
-                    title = titleFlavor.placeholder,
-                    subtitle = subtitleFlavor.placeholder,
-                )
-            ),
-            flavors = listOf(titleFlavor, subtitleFlavor),
-            player = player(
-                generalTags = listOf(tag)
-            ),
-        )
-
-        val viewState = mapMainViewState(state = state)
-
-        assertThat(viewState)
-            .extractingHumanActions()
-            .index(0)
-            .all {
-                prop(ActionModel::title).isEqualTo(flavoredTitle)
-                prop(ActionModel::subtitle).isEqualTo(flavoredSubtitle)
-            }
-    }
-
-    @Test
-    fun `should replace placeholders in upgrade text fields if has any`() = runBlockingTest {
-        val tag = tag(name = "flavor tag")
-        val flavoredTitle = "flavoredTitle"
-        val flavoredSubtitle = "flavoredSubtitle"
-        val flavoredPlot = "flavoredPlot"
-        val titleFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}title",
-            values = mapOf(tag to flavoredTitle),
-        )
-        val subtitleFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}subtitle",
-            values = mapOf(tag to flavoredSubtitle),
-        )
-        val plotFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}plot",
-            values = mapOf(tag to flavoredPlot),
-        )
-
-        val state = gameState(
-            upgrades = listOf(
-                upgrade(
-                    title = titleFlavor.placeholder,
-                    subtitle = subtitleFlavor.placeholder,
-                    plot = plotFlavor.placeholder,
-                )
-            ),
-            flavors = listOf(titleFlavor, subtitleFlavor, plotFlavor),
-            player = player(
-                generalTags = listOf(tag)
-            ),
-        )
-
-        val viewState = mapMainViewState(state = state)
-
-        assertThat(viewState)
-            .extractingUpgrades()
-            .index(0)
-            .all {
-                prop(UpgradeModel::title).isEqualTo(flavoredTitle)
-                prop(UpgradeModel::subtitle).isEqualTo(flavoredSubtitle)
-            }
-    }
-
-    @Test
-    fun `should replace placeholders in location description`() = runBlockingTest {
-        val tag = tag(name = "flavor tag")
-        val flavoredTitle = "flavoredTitle"
-        val flavoredDescription = "flavoredDescription"
-        val titleFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}title",
-            values = mapOf(tag to flavoredTitle),
-        )
-        val descriptionFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}description",
-            values = mapOf(tag to flavoredDescription),
-        )
-        val selectedLocation = location(
-            id = 2,
-            title = titleFlavor.placeholder,
-            subtitle = descriptionFlavor.placeholder,
-        )
-
-        val state = gameState(
-            player = player(generalTags = listOf(tag)),
-            locations = listOf(selectedLocation),
-            flavors = listOf(titleFlavor, descriptionFlavor),
-            locationSelectionState = locationSelectionState(
-                selectedLocation = selectedLocation,
-            ),
-        )
-
-        val viewState = mapMainViewState(state = state)
-
-        assertThat(viewState)
-            .extractSelectedLocation()
-            .all {
-                prop(LocationModel::title).isEqualTo(flavoredTitle)
-                prop(LocationModel::subtitle).isEqualTo(flavoredDescription)
-            }
     }
 
     @Test
