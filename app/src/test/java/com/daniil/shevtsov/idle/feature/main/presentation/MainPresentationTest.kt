@@ -816,6 +816,50 @@ class MainPresentationTest {
     }
 
     @Test
+    fun `should replace placeholders in location description`() = runBlockingTest {
+        val tag = tag(name = "flavor tag")
+        val flavoredTitle = "flavoredTitle"
+        val flavoredSubtitle = "flavoredSubtitle"
+        val flavoredPlot = "flavoredPlot"
+        val titleFlavor = flavor(
+            placeholder = "${Flavors.PREFIX}title",
+            values = mapOf(tag to flavoredTitle),
+        )
+        val subtitleFlavor = flavor(
+            placeholder = "${Flavors.PREFIX}subtitle",
+            values = mapOf(tag to flavoredSubtitle),
+        )
+        val plotFlavor = flavor(
+            placeholder = "${Flavors.PREFIX}plot",
+            values = mapOf(tag to flavoredPlot),
+        )
+
+        val state = gameState(
+            upgrades = listOf(
+                upgrade(
+                    title = titleFlavor.placeholder,
+                    subtitle = subtitleFlavor.placeholder,
+                    plot = plotFlavor.placeholder,
+                )
+            ),
+            flavors = listOf(titleFlavor, subtitleFlavor, plotFlavor),
+            player = player(
+                generalTags = listOf(tag)
+            ),
+        )
+
+        val viewState = mapMainViewState(state = state)
+
+        assertThat(viewState)
+            .extractingUpgrades()
+            .index(0)
+            .all {
+                prop(UpgradeModel::title).isEqualTo(flavoredTitle)
+                prop(UpgradeModel::subtitle).isEqualTo(flavoredSubtitle)
+            }
+    }
+
+    @Test
     fun `should show locations if has any`() = runBlockingTest {
         val availableLocation = location(id = 1L)
 
@@ -859,6 +903,40 @@ class MainPresentationTest {
             .extractingAvailableLocations()
             .extracting(LocationModel::title)
             .containsExactly(availableLocation.title)
+    }
+
+    @Test
+    fun `should show selected location info`() = runBlockingTest {
+        val availableTag = tag(name = "available tag")
+        val otherLocation = location(
+            id = 1L,
+            title = "other location",
+            description = "other location description",
+            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
+        )
+        val selectedLocation = location(
+            id = 2,
+            title = "selected location",
+            description = "selected location description",
+            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
+        )
+
+        val state = gameState(
+            player = player(generalTags = listOf(availableTag)),
+            locations = listOf(otherLocation, selectedLocation),
+            locationSelectionState = locationSelectionState(
+                selectedLocation = selectedLocation,
+            ),
+        )
+
+        val viewState = mapMainViewState(state = state)
+
+        assertThat(viewState)
+            .extractSelectedLocation()
+            .all {
+                prop(LocationModel::id).isEqualTo(selectedLocation.id)
+                prop(LocationModel::title).isEqualTo(selectedLocation.title)
+            }
     }
 
     @Test
@@ -976,6 +1054,10 @@ class MainPresentationTest {
     private fun Assert<MainViewState>.extractingAvailableLocations() =
         extractingLocationSelectionViewState()
             .prop(LocationSelectionViewState::locations)
+
+    private fun Assert<MainViewState>.extractSelectedLocation() =
+        extractingLocationSelectionViewState()
+            .prop(LocationSelectionViewState::selectedLocation)
 
     private fun Assert<MainViewState>.extractingHumanActions() =
         extractingMainState()
