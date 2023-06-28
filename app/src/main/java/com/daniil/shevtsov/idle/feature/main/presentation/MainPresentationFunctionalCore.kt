@@ -70,27 +70,7 @@ private fun createMainViewState(state: GameState): MainViewState {
             locations = state.locations,
             playerTags = state.player.tags,
             state
-        )
-            .let { viewState ->
-                viewState.copy(
-                    locations = viewState.locations.map { location ->
-                        location.copy(
-                            description = flavorMachine(
-                                original = location.description,
-                                flavors = state.flavors,
-                                tags = state.player.tags,
-                            )
-                        )
-                    },
-                    selectedLocation = viewState.selectedLocation.copy(
-                        description = flavorMachine(
-                            original = viewState.selectedLocation.description,
-                            flavors = state.flavors,
-                            tags = state.player.tags,
-                        )
-                    )
-                )
-            },
+        ),
         plotEntries = state.plotEntries,
         shop = state.upgrades
             .filter { upgrade ->
@@ -103,16 +83,8 @@ private fun createMainViewState(state: GameState): MainViewState {
                 with(upgrade) {
                     UpgradeModel(
                         id = id,
-                        title = flavorMachine(
-                            original = upgrade.title,
-                            flavors = state.flavors,
-                            tags = state.player.tags,
-                        ),
-                        subtitle = flavorMachine(
-                            original = upgrade.subtitle,
-                            flavors = state.flavors,
-                            tags = state.player.tags,
-                        ),
+                        title = upgrade.title.withFlavor(state),
+                        subtitle = upgrade.subtitle.withFlavor(state),
                         price = PriceModel(value = price.value.toString()),
                         status = mapStatus(
                             state.resources.find { it.key == ResourceKey.Blood }?.value ?: 0.0
@@ -197,16 +169,8 @@ private fun createActionState(
         }
         .map { action ->
             action.copy(
-                title = flavorMachine(
-                    original = action.title,
-                    flavors = state.flavors,
-                    tags = state.player.tags,
-                ),
-                subtitle = flavorMachine(
-                    original = action.subtitle,
-                    flavors = state.flavors,
-                    tags = player.tags,
-                )
+                title = action.title.withFlavor(state),
+                subtitle = action.subtitle.withFlavor(state),
             )
         }
 
