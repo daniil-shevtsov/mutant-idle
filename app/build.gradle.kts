@@ -59,6 +59,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = Versions.compose
     }
+    namespace = "com.daniil.shevtsov.idle"
 
     tasks.withType<Test> {
         useJUnitPlatform()
