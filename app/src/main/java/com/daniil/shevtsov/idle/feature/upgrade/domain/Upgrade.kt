@@ -33,9 +33,11 @@ data class Upgrade(
     override fun copy(
         title: String?,
         subtitle: String?,
+        plot: String?,
     ): Flavorable = copy(
         title = title ?: this@Upgrade.title,
         subtitle = subtitle ?: this@Upgrade.subtitle,
+        plot = plot ?: this@Upgrade.plot,
     )
 
 }

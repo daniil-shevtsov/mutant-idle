@@ -71,7 +71,7 @@ private fun createMainViewState(state: GameState): MainViewState {
             playerTags = state.player.tags,
             state
         ),
-        plotEntries = state.plotEntries,
+        plotEntries = state.plotEntries.map { it.copy(text = it.text.withFlavor(state)) },
         shop = state.upgrades
             .filter { upgrade ->
                 satisfiesAllTagsRelations(
@@ -314,9 +314,11 @@ private fun String.withFlavor(state: GameState): String = flavorMachine(
 interface Flavorable {
     val title: String
     val subtitle: String
+    val plot: String?
 
     fun copy(
         title: String? = null,
         subtitle: String? = null,
+        plot: String? = null,
     ): Flavorable
 }

@@ -26,8 +26,10 @@ data class Location(
     override fun copy(
         title: String?,
         subtitle: String?,
+        plot: String?,
     ): Flavorable = copy(
         title = title ?: this@Location.title,
         subtitle = subtitle ?: this@Location.subtitle,
+        plot = plot ?: this@Location.plot,
     )
 }

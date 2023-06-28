@@ -34,8 +34,10 @@ data class Action(
     override fun copy(
         title: String?,
         subtitle: String?,
+        plot: String?,
     ): Flavorable = copy(
         title = title ?: this@Action.title,
         subtitle = subtitle ?: this@Action.subtitle,
+        plot = plot ?: this@Action.plot,
     )
 }
