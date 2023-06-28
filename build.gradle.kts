@@ -12,7 +12,6 @@ buildscript {
         classpath("com.android.tools.build:gradle:7.2.1")
 
         with(Deps.Gradle) {
-//            classpath(composeMultiplatform)
             classpath(kotlin)
             classpath(kotlinSerialization)
             classpath(shadow)

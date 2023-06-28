@@ -67,8 +67,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":common"))
-
     with(Deps.Android) {
         implementation(material)
     }
@@ -124,7 +122,6 @@ dependencies {
         testImplementation(jupiter)
         testImplementation(mockk)
         testImplementation(mockkAgent)
-//        testImplementation(mockkCommon)
         testImplementation(turbine)
     }
 }
