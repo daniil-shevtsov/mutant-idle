@@ -12,6 +12,8 @@ import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.flavor.Flavors
 import com.daniil.shevtsov.idle.feature.flavor.flavor
+import com.daniil.shevtsov.idle.feature.location.domain.Location
+import com.daniil.shevtsov.idle.feature.location.domain.location
 import com.daniil.shevtsov.idle.feature.main.domain.Selectable
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
@@ -28,6 +30,7 @@ class FlavorViewStateTest {
 
     private val plotHolders = listOf(
         FlavorTestData(flavorable = action(id = 1L, title = "action")),
+        FlavorTestData(flavorable = location(id = 2L, title = "location")),
         FlavorTestData(flavorable = upgrade(id = 3L, title = "upgrade")),
     )
 
@@ -78,6 +81,7 @@ private fun Assert<MainViewState.Success>.extractingFlavored(example: Flavorable
     transform {
         when (example) {
             is Action -> it.actionState.actionPanes[0].actions
+            is Location -> it.locationSelectionViewState.locations
             is Upgrade -> it.shop.upgrades
             else -> null
         }

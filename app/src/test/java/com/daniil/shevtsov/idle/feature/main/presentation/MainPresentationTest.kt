@@ -831,7 +831,7 @@ class MainPresentationTest {
         val selectedLocation = location(
             id = 2,
             title = titleFlavor.placeholder,
-            description = descriptionFlavor.placeholder,
+            subtitle = descriptionFlavor.placeholder,
         )
 
         val state = gameState(
@@ -849,7 +849,7 @@ class MainPresentationTest {
             .extractSelectedLocation()
             .all {
                 prop(LocationModel::title).isEqualTo(flavoredTitle)
-                prop(LocationModel::description).isEqualTo(flavoredDescription)
+                prop(LocationModel::subtitle).isEqualTo(flavoredDescription)
             }
     }
 
@@ -905,13 +905,13 @@ class MainPresentationTest {
         val otherLocation = location(
             id = 1L,
             title = "other location",
-            description = "other location description",
+            subtitle = "other location description",
             tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
         )
         val selectedLocation = location(
             id = 2,
             title = "selected location",
-            description = "selected location description",
+            subtitle = "selected location description",
             tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
         )
 

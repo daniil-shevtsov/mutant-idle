@@ -8,12 +8,12 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 fun createLocations() = listOf(
     location(
         title = "Home",
-        description = "It's safe space where no one can bother you",
+        subtitle = "It's safe space where no one can bother you",
         tags = mapOf(TagRelation.RequiredAll to listOf(Tags.Access.Home)),
     ),
     location(
         title = "Graveyard",
-        description = "A place where they hide ${Flavors.objectifiedPeopleName.placeholder} in the ground",
+        subtitle = "A place where they hide ${Flavors.objectifiedPeopleName.placeholder} in the ground",
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
                 Tags.Access.Graveyard
@@ -25,7 +25,7 @@ fun createLocations() = listOf(
     ),
     location(
         title = "Morgue",
-        description = "A place where they store ${Flavors.objectifiedPeopleName.placeholder} for a while",
+        subtitle = "A place where they store ${Flavors.objectifiedPeopleName.placeholder} for a while",
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
                 Tags.Access.Morgue
@@ -39,7 +39,7 @@ fun createLocations() = listOf(
     ),
     location(
         title = "Butcher Shop",
-        description = "A place where they share pieces of meat",
+        subtitle = "A place where they share pieces of meat",
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
                 Tags.Access.ButcherShop,
@@ -52,7 +52,7 @@ fun createLocations() = listOf(
     ),
     location(
         title = "Scrap Yard",
-        description = "A place where they pile up metal",
+        subtitle = "A place where they pile up metal",
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
                 Tags.Access.Scrapyard,
@@ -64,7 +64,7 @@ fun createLocations() = listOf(
     ),
     location(
         title = "Streets",
-        description = "A busy place with crowds of ${Flavors.peopleName.placeholder}",
+        subtitle = "A busy place with crowds of ${Flavors.peopleName.placeholder}",
         tags = mapOf(
             TagRelation.Provides to listOf(
                 Tags.Locations.Streets
@@ -73,7 +73,7 @@ fun createLocations() = listOf(
     ),
     location(
         title = "Dark Alley",
-        description = "Sometimes ${Flavors.peopleName.placeholder} go through here to save time",
+        subtitle = "Sometimes ${Flavors.peopleName.placeholder} go through here to save time",
         tags = mapOf(
             TagRelation.Provides to listOf(
                 Tags.Locations.DarkAlley
@@ -82,7 +82,7 @@ fun createLocations() = listOf(
     ),
     location(
         title = "Super Market",
-        description = "The food is everywhere",
+        subtitle = "The food is everywhere",
         tags = mapOf(
             TagRelation.Provides to listOf(
                 Tags.Locations.SuperMarket
@@ -91,7 +91,7 @@ fun createLocations() = listOf(
     ),
     location(
         title = "Rooftops",
-        description = "They look like ants from here",
+        subtitle = "They look like ants from here",
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
                 Tags.State.Flying,

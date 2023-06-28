@@ -301,7 +301,7 @@ private fun Location.toModel(
 ) = LocationModel(
     id = id,
     title = title.withFlavor(state),
-    description = description.withFlavor(state),
+    subtitle = subtitle.withFlavor(state),
     isSelected = id == selectedLocationId,
 )
 
