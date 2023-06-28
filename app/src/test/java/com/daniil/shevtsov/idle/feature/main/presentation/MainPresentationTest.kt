@@ -761,19 +761,33 @@ class MainPresentationTest {
     }
 
     @Test
-    fun `should replace placeholders in upgrade description if has any`() = runBlockingTest {
+    fun `should replace placeholders in upgrade text fields if has any`() = runBlockingTest {
         val tag = tag(name = "flavor tag")
-        val flavoredDescription = "flavored"
-        val flavor = flavor(
-            placeholder = "${Flavors.PREFIX}placeholder",
-            values = mapOf(tag to flavoredDescription),
+        val flavoredTitle = "flavoredTitle"
+        val flavoredSubtitle = "flavoredSubtitle"
+        val flavoredPlot = "flavoredPlot"
+        val titleFlavor = flavor(
+            placeholder = "${Flavors.PREFIX}title",
+            values = mapOf(tag to flavoredTitle),
+        )
+        val subtitleFlavor = flavor(
+            placeholder = "${Flavors.PREFIX}subtitle",
+            values = mapOf(tag to flavoredSubtitle),
+        )
+        val plotFlavor = flavor(
+            placeholder = "${Flavors.PREFIX}plot",
+            values = mapOf(tag to flavoredPlot),
         )
 
         val state = gameState(
             upgrades = listOf(
-                upgrade(subtitle = flavor.placeholder)
+                upgrade(
+                    title = titleFlavor.placeholder,
+                    subtitle = subtitleFlavor.placeholder,
+                    plot = plotFlavor.placeholder,
+                )
             ),
-            flavors = listOf(flavor),
+            flavors = listOf(titleFlavor, subtitleFlavor, plotFlavor),
             player = player(
                 generalTags = listOf(tag)
             ),
@@ -783,8 +797,11 @@ class MainPresentationTest {
 
         assertThat(viewState)
             .extractingUpgrades()
-            .extracting(UpgradeModel::subtitle)
-            .containsExactly(flavoredDescription)
+            .index(0)
+            .all {
+                prop(UpgradeModel::title).isEqualTo(flavoredTitle)
+                prop(UpgradeModel::subtitle).isEqualTo(flavoredSubtitle)
+            }
     }
 
     @Test
@@ -792,7 +809,7 @@ class MainPresentationTest {
         val availableLocation = location(id = 1L)
 
         val state = gameState(
-            locations =  listOf(availableLocation),
+            locations = listOf(availableLocation),
             locationSelectionState = locationSelectionState(),
         )
 
@@ -821,7 +838,7 @@ class MainPresentationTest {
 
         val state = gameState(
             player = player(generalTags = listOf(availableTag)),
-            locations =  listOf(availableLocation, unavailableLocation),
+            locations = listOf(availableLocation, unavailableLocation),
             locationSelectionState = locationSelectionState(),
         )
 

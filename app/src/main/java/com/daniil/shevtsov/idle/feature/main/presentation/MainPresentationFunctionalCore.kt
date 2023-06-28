@@ -102,7 +102,11 @@ private fun createMainViewState(state: GameState): MainViewState {
                 with(upgrade) {
                     UpgradeModel(
                         id = id,
-                        title = title,
+                        title = flavorMachine(
+                            original = upgrade.title,
+                            flavors = state.flavors,
+                            tags = state.player.tags,
+                        ),
                         subtitle = flavorMachine(
                             original = upgrade.subtitle,
                             flavors = state.flavors,
