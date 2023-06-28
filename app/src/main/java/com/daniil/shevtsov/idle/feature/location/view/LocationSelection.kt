@@ -2,7 +2,13 @@ package com.daniil.shevtsov.idle.feature.location.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
@@ -22,7 +28,7 @@ import com.daniil.shevtsov.idle.feature.location.presentation.locationSelectionV
 fun LocationSelectionPreview() {
     val selectedLocation = locationModel(
         title = "Graveyard",
-        description = "A place where they hide people in the ground",
+        subtitle = "A place where they hide people in the ground",
     )
     LocationSelection(
         state = locationSelectionViewState(
@@ -95,7 +101,7 @@ fun LocationSelection(
             }
         }
         Text(
-            text = state.selectedLocation.description,
+            text = state.selectedLocation.subtitle,
             style = AppTheme.typography.body,
             color = AppTheme.colors.textDark,
             modifier = modifier

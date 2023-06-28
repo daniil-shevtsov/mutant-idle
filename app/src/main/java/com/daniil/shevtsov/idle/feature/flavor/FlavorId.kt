@@ -4,5 +4,6 @@ enum class FlavorId {
     InvisibilityAction,
     InvisibilityGain,
     PeopleName,
+    PersonName,
     DerogativePeopleName,
 }

@@ -9,8 +9,6 @@ import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.action.domain.ratioChanges
 import com.daniil.shevtsov.idle.feature.action.presentation.*
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
-import com.daniil.shevtsov.idle.feature.flavor.Flavors
-import com.daniil.shevtsov.idle.feature.flavor.flavor
 import com.daniil.shevtsov.idle.feature.location.domain.location
 import com.daniil.shevtsov.idle.feature.location.domain.locationSelectionState
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
@@ -646,7 +644,7 @@ class MainPresentationTest {
     fun `should show correct icon for human and monster actions`() = runBlockingTest {
         val humanAction = action(
             id = 1L,
-            tags = mapOf(TagRelation.RequiredAll to listOf(Tags.HumanAppearance))
+            tags = mapOf(TagRelation.RequiredAll to listOf(Tags.Form.Human))
         )
         val monsterAction = action(id = 2L)
 
@@ -655,7 +653,7 @@ class MainPresentationTest {
                 humanAction,
                 monsterAction,
             ),
-            player = player(generalTags = listOf(Tags.HumanAppearance)),
+            player = player(generalTags = listOf(Tags.Form.Human)),
         )
 
         val viewState = mapMainViewState(state = state)
@@ -734,67 +732,12 @@ class MainPresentationTest {
     }
 
     @Test
-    fun `should replace placeholders in action description if has any`() = runBlockingTest {
-        val tag = tag(name = "flavor tag")
-        val flavoredDescription = "flavored"
-        val flavor = flavor(
-            placeholder = "${Flavors.PREFIX}placeholder",
-            values = mapOf(tag to flavoredDescription),
-        )
-
-        val state = gameState(
-            actions = listOf(
-                action(subtitle = flavor.placeholder)
-            ),
-            flavors = listOf(flavor),
-            player = player(
-                generalTags = listOf(tag)
-            ),
-        )
-
-        val viewState = mapMainViewState(state = state)
-
-        assertThat(viewState)
-            .extractingHumanActions()
-            .extracting(ActionModel::subtitle)
-            .containsExactly(flavoredDescription)
-    }
-
-    @Test
-    fun `should replace placeholders in upgrade description if has any`() = runBlockingTest {
-        val tag = tag(name = "flavor tag")
-        val flavoredDescription = "flavored"
-        val flavor = flavor(
-            placeholder = "${Flavors.PREFIX}placeholder",
-            values = mapOf(tag to flavoredDescription),
-        )
-
-        val state = gameState(
-            upgrades = listOf(
-                upgrade(subtitle = flavor.placeholder)
-            ),
-            flavors = listOf(flavor),
-            player = player(
-                generalTags = listOf(tag)
-            ),
-        )
-
-        val viewState = mapMainViewState(state = state)
-
-        assertThat(viewState)
-            .extractingUpgrades()
-            .extracting(UpgradeModel::subtitle)
-            .containsExactly(flavoredDescription)
-    }
-
-    @Test
     fun `should show locations if has any`() = runBlockingTest {
         val availableLocation = location(id = 1L)
 
         val state = gameState(
-            locationSelectionState = locationSelectionState(
-                allLocations = listOf(availableLocation),
-            ),
+            locations = listOf(availableLocation),
+            locationSelectionState = locationSelectionState(),
         )
 
         val viewState = mapMainViewState(state = state)
@@ -822,9 +765,8 @@ class MainPresentationTest {
 
         val state = gameState(
             player = player(generalTags = listOf(availableTag)),
-            locationSelectionState = locationSelectionState(
-                allLocations = listOf(availableLocation, unavailableLocation),
-            ),
+            locations = listOf(availableLocation, unavailableLocation),
+            locationSelectionState = locationSelectionState(),
         )
 
         val viewState = mapMainViewState(state = state)
@@ -833,6 +775,40 @@ class MainPresentationTest {
             .extractingAvailableLocations()
             .extracting(LocationModel::title)
             .containsExactly(availableLocation.title)
+    }
+
+    @Test
+    fun `should show selected location info`() = runBlockingTest {
+        val availableTag = tag(name = "available tag")
+        val otherLocation = location(
+            id = 1L,
+            title = "other location",
+            subtitle = "other location description",
+            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
+        )
+        val selectedLocation = location(
+            id = 2,
+            title = "selected location",
+            subtitle = "selected location description",
+            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
+        )
+
+        val state = gameState(
+            player = player(generalTags = listOf(availableTag)),
+            locations = listOf(otherLocation, selectedLocation),
+            locationSelectionState = locationSelectionState(
+                selectedLocation = selectedLocation,
+            ),
+        )
+
+        val viewState = mapMainViewState(state = state)
+
+        assertThat(viewState)
+            .extractSelectedLocation()
+            .all {
+                prop(LocationModel::id).isEqualTo(selectedLocation.id)
+                prop(LocationModel::title).isEqualTo(selectedLocation.title)
+            }
     }
 
     @Test
@@ -938,7 +914,7 @@ class MainPresentationTest {
 
     private fun Assert<List<PlotEntry>>.extractingEntries() = this
 
-    private fun Assert<MainViewState>.extractingUpgrades() =
+    fun Assert<MainViewState>.extractingUpgrades() =
         extractingMainState()
             .prop(MainViewState.Success::shop)
             .prop(UpgradesViewState::upgrades)
@@ -950,6 +926,10 @@ class MainPresentationTest {
     private fun Assert<MainViewState>.extractingAvailableLocations() =
         extractingLocationSelectionViewState()
             .prop(LocationSelectionViewState::locations)
+
+    private fun Assert<MainViewState>.extractSelectedLocation() =
+        extractingLocationSelectionViewState()
+            .prop(LocationSelectionViewState::selectedLocation)
 
     private fun Assert<MainViewState>.extractingHumanActions() =
         extractingMainState()
@@ -979,7 +959,7 @@ class MainPresentationTest {
     private fun Assert<MainViewState>.extractingResourceNameAndValues() =
         extractingResources()
             .extracting(ResourceModel::name, ResourceModel::value)
-
-    private fun Assert<MainViewState>.extractingMainState() =
-        isInstanceOf(MainViewState.Success::class)
 }
+
+fun Assert<MainViewState>.extractingMainState() =
+    isInstanceOf(MainViewState.Success::class)

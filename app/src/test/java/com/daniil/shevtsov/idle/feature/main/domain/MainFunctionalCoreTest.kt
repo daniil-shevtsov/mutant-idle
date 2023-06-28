@@ -2,7 +2,11 @@ package com.daniil.shevtsov.idle.feature.main.domain
 
 import assertk.all
 import assertk.assertThat
-import assertk.assertions.*
+import assertk.assertions.containsExactly
+import assertk.assertions.containsNone
+import assertk.assertions.extracting
+import assertk.assertions.isEqualTo
+import assertk.assertions.prop
 import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.action.domain.ratioChanges
@@ -57,7 +61,7 @@ class MainFunctionalCoreTest {
 
         val newState = mainFunctionalCore(
             state = initialState,
-            viewAction = MainViewAction.UpgradeSelected(id = 0L),
+            viewAction = MainViewAction.SelectableClicked(id = 0L),
         )
 
         assertThat(newState)
@@ -96,7 +100,7 @@ class MainFunctionalCoreTest {
 
             val newState = mainFunctionalCore(
                 state = initialState,
-                viewAction = MainViewAction.UpgradeSelected(id = 1L),
+                viewAction = MainViewAction.SelectableClicked(id = 1L),
             )
 
             assertThat(newState)
@@ -138,7 +142,7 @@ class MainFunctionalCoreTest {
 
             val newState = mainFunctionalCore(
                 state = initialState,
-                viewAction = MainViewAction.ActionClicked(id = action.id),
+                viewAction = MainViewAction.SelectableClicked(id = action.id),
             )
 
             assertThat(newState)
@@ -170,7 +174,7 @@ class MainFunctionalCoreTest {
         )
         val newState = mainFunctionalCore(
             state = gameState(actions = listOf(action)),
-            viewAction = MainViewAction.ActionClicked(id = action.id),
+            viewAction = MainViewAction.SelectableClicked(id = action.id),
         )
 
         assertThat(newState)
@@ -191,7 +195,7 @@ class MainFunctionalCoreTest {
                 player = player(generalTags = listOf(tagToRemove)),
                 actions = listOf(action),
             ),
-            viewAction = MainViewAction.ActionClicked(id = action.id),
+            viewAction = MainViewAction.SelectableClicked(id = action.id),
         )
 
         assertThat(newState)
@@ -211,7 +215,7 @@ class MainFunctionalCoreTest {
             state = gameState(
                 actions = listOf(action),
             ),
-            viewAction = MainViewAction.ActionClicked(id = action.id),
+            viewAction = MainViewAction.SelectableClicked(id = action.id),
         )
 
         assertThat(newState)
@@ -221,21 +225,23 @@ class MainFunctionalCoreTest {
     }
 
     @Test
-    fun `should not add empty plot to plot entries`() {
+    fun `should add default plot entry when action plot is empty `() {
         val action = action(
             id = 1L,
-            plot = "",
+            title = "Lol",
+            plot = null,
         )
         val newState = mainFunctionalCore(
             state = gameState(
                 actions = listOf(action),
             ),
-            viewAction = MainViewAction.ActionClicked(id = action.id),
+            viewAction = MainViewAction.SelectableClicked(id = action.id),
         )
 
         assertThat(newState)
             .prop(GameState::plotEntries)
-            .isEmpty()
+            .extracting(PlotEntry::text)
+            .containsExactly("You performed action \"Lol\"")
     }
 
     @Test
@@ -305,11 +311,10 @@ class MainFunctionalCoreTest {
 
         val state = mainFunctionalCore(
             state = gameState(
-                locationSelectionState = locationSelectionState(
-                    allLocations = listOf(location)
-                )
+                locations =  listOf(location),
+                locationSelectionState = locationSelectionState()
             ),
-            viewAction = MainViewAction.LocationSelected(id = location.id)
+            viewAction = MainViewAction.SelectableClicked(id = location.id)
         )
 
         assertThat(state)
@@ -335,11 +340,10 @@ class MainFunctionalCoreTest {
 
         val state = mainFunctionalCore(
             state = gameState(
-                locationSelectionState = locationSelectionState(
-                    allLocations = listOf(oldLocation, newLocation)
-                )
+                locations =  listOf(oldLocation, newLocation),
+                locationSelectionState = locationSelectionState()
             ),
-            viewAction = MainViewAction.LocationSelected(id = newLocation.id)
+            viewAction = MainViewAction.SelectableClicked(id = newLocation.id)
         )
 
         assertThat(state)
@@ -353,6 +357,7 @@ class MainFunctionalCoreTest {
         val location = location(
             id = 1L,
             title = "old location",
+            plot = "test lol test",
             tags = mapOf(
                 TagRelation.Provides to listOf(tag(name = "old tag"))
             )
@@ -360,17 +365,41 @@ class MainFunctionalCoreTest {
 
         val state = mainFunctionalCore(
             state = gameState(
-                locationSelectionState = locationSelectionState(
-                    allLocations = listOf(location)
-                )
+                locations =  listOf(location),
+                locationSelectionState = locationSelectionState()
             ),
-            viewAction = MainViewAction.LocationSelected(id = location.id)
+            viewAction = MainViewAction.SelectableClicked(id = location.id)
         )
 
         assertThat(state)
             .prop(GameState::plotEntries)
             .extracting(PlotEntry::text)
-            .containsExactly(location.description)
+            .containsExactly(location.plot)
+    }
+
+    @Test
+    fun `should add default plot entry when location plot is empty`() {
+        val location = location(
+            id = 1L,
+            title = "Test Location",
+            plot = null,
+            tags = mapOf(
+                TagRelation.Provides to listOf(tag(name = "old tag"))
+            )
+        )
+
+        val state = mainFunctionalCore(
+            state = gameState(
+                locations =  listOf(location),
+                locationSelectionState = locationSelectionState()
+            ),
+            viewAction = MainViewAction.SelectableClicked(id = location.id)
+        )
+
+        assertThat(state)
+            .prop(GameState::plotEntries)
+            .extracting(PlotEntry::text)
+            .containsExactly("You went to the Test Location")
     }
 
     @Test
@@ -386,7 +415,7 @@ class MainFunctionalCoreTest {
 
         val newState = mainFunctionalCore(
             state = state,
-            viewAction = MainViewAction.ActionClicked(id = 1L)
+            viewAction = MainViewAction.SelectableClicked(id = 1L)
         )
 
         assertThat(newState)

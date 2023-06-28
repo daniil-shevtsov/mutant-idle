@@ -35,6 +35,7 @@ object Icons {
     val Organs = "\uD83E\uDEC1"
     val Familiar = "\uD83D\uDE41"
     val Scrap = "⚙️"
+    val Information = "\uD83D\uDCDD"
 
     val Alien = "\uD83D\uDC7D"
     val Android = "\uD83E\uDDBE"

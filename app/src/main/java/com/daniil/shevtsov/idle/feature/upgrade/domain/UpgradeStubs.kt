@@ -14,6 +14,7 @@ fun upgrade(
     resourceChanges: ResourceChanges = mapOf(),
     ratioChanges: RatioChanges = mapOf(),
     tags: Map<TagRelation, List<Tag>> = mapOf(),
+    plot: String? = null,
 ) = Upgrade(
     id = id,
     title = title,
@@ -23,6 +24,7 @@ fun upgrade(
     ratioChanges = ratioChanges,
     status = status,
     tags = tags,
+    plot = plot,
 )
 
 fun price(

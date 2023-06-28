@@ -41,6 +41,7 @@ object Species {
             Tags.Heliophobia,
             Tags.Immortal,
             Tags.Hypnosis,
+            Tags.PersonCapturer,
         ),
         mainResource = ResourceKey.Blood,
         mainRatio = RatioKey.Power,

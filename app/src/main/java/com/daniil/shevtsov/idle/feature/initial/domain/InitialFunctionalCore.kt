@@ -9,8 +9,10 @@ import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.flavor.createFlavors
 import com.daniil.shevtsov.idle.feature.gamefinish.domain.createEndings
+import com.daniil.shevtsov.idle.feature.location.domain.Location
 import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
 import com.daniil.shevtsov.idle.feature.location.domain.createLocations
+import com.daniil.shevtsov.idle.feature.main.domain.Selectable
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
@@ -28,12 +30,11 @@ import com.daniil.shevtsov.idle.feature.upgrade.domain.createUpgrades
 fun createInitialGameState(): GameState {
     return GameState(
         balanceConfig = createBalanceConfig(),
+        selectables = createSelectables(),
         resources = createResources(),
         ratios = createInitialRatios(),
         sections = createInitialSectionState(),
         drawerTabs = createInitialDrawerTabs(),
-        upgrades = createUpgrades(),
-        actions = createAllActions(),
         availableTraits = createInitialTraits(),
         availableEndings = createEndings(),
         plotEntries = emptyList(),
@@ -53,6 +54,7 @@ fun createInitialGameState(): GameState {
                             else -> false
                         }
                     }
+
                     TraitId.Job -> traits.associate { trait ->
                         trait.id to when (trait.id) {
                             Jobs.Unemployed.id -> true
@@ -71,6 +73,8 @@ fun createBalanceConfig() = BalanceConfig(
     resourceSpentForFullMutant = 100.0,
 )
 
+private fun createSelectables(): List<Selectable> = createLocations() + createUpgrades() + createAllActions()
+
 private fun createInitialRatios() = RatioKey.values().map { ratioKey ->
     Ratio(
         key = ratioKey,
@@ -86,9 +90,8 @@ private fun createInitialSectionState() = listOf(
 )
 
 private fun createLocationSelectionState() = LocationSelectionState(
-    allLocations = createLocations(),
-    selectedLocation = createLocations().find { it.tags[TagRelation.Provides]?.contains(Tags.Locations.Streets) == true }
-        ?: createLocations().first(),
+    selectedLocation = createLocations().filterIsInstance<Location>().find { it.tags[TagRelation.Provides]?.contains(Tags.Locations.Streets) == true }
+        ?: createLocations().filterIsInstance<Location>().first(),
     isSelectionExpanded = false,
 )
 
@@ -99,7 +102,7 @@ private fun createInitialDrawerTabs() = listOf(
 
 private fun createInitialPlayer() = player(
     generalTags = listOf(
-        Tags.HumanAppearance,
+        Tags.Form.Human,
         Tags.Knowledge.SocialNorms,
         Tags.Nimble,
     ),

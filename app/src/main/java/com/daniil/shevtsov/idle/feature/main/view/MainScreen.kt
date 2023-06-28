@@ -1,10 +1,21 @@
 package com.daniil.shevtsov.idle.feature.main.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.BottomSheetScaffold
+import androidx.compose.material.BottomSheetValue
+import androidx.compose.material.Text
+import androidx.compose.material.rememberBottomSheetScaffoldState
+import androidx.compose.material.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -17,7 +28,12 @@ import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.core.ui.widgets.CollapseButton
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
 import com.daniil.shevtsov.idle.feature.location.view.LocationSelection
-import com.daniil.shevtsov.idle.feature.main.presentation.*
+import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
+import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
+import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
+import com.daniil.shevtsov.idle.feature.main.presentation.actionsState
+import com.daniil.shevtsov.idle.feature.main.presentation.mainViewState
+import com.daniil.shevtsov.idle.feature.main.presentation.upgradeViewState
 import com.daniil.shevtsov.idle.feature.plot.view.PlotComposable
 import com.daniil.shevtsov.idle.feature.ratio.presentation.ratioModel
 import com.daniil.shevtsov.idle.feature.ratio.view.RatioPane
@@ -147,7 +163,7 @@ fun ContentBody(
                 ) {
                     UpgradeList(
                         upgradeList = state.shop.upgrades,
-                        onUpgradeSelected = { id -> onViewAction(MainViewAction.UpgradeSelected(id)) },
+                        onUpgradeSelected = { id -> onViewAction(MainViewAction.SelectableClicked(id)) },
                         modifier = Modifier.fillMaxHeight()
                     )
                 }
@@ -176,7 +192,7 @@ fun ContentBody(
             LocationSelection(
                 state = state.locationSelectionViewState,
                 onExpandChange = { onViewAction(MainViewAction.LocationSelectionExpandChange) },
-                onLocationSelected = { id -> onViewAction(MainViewAction.LocationSelected(id)) },
+                onLocationSelected = { id -> onViewAction(MainViewAction.SelectableClicked(id)) },
             )
             Column(
                 modifier = modifier
@@ -216,7 +232,7 @@ fun ContentBody(
                             )
                         )
                     },
-                    onActionClicked = { id -> onViewAction(MainViewAction.ActionClicked(id)) },
+                    onActionClicked = { id -> onViewAction(MainViewAction.SelectableClicked(id)) },
                 )
             }
         }

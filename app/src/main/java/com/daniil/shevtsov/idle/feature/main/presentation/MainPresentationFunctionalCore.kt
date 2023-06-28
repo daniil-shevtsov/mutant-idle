@@ -6,7 +6,12 @@ import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.RatioChanges
 import com.daniil.shevtsov.idle.feature.action.domain.ResourceChanges
-import com.daniil.shevtsov.idle.feature.action.presentation.*
+import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
+import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
+import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
+import com.daniil.shevtsov.idle.feature.action.presentation.ActionsState
+import com.daniil.shevtsov.idle.feature.action.presentation.RatioChangeModel
+import com.daniil.shevtsov.idle.feature.action.presentation.ResourceChangeModel
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.flavor.flavorMachine
 import com.daniil.shevtsov.idle.feature.location.domain.Location
@@ -61,28 +66,12 @@ private fun createMainViewState(state: GameState): MainViewState {
                 )
             },
         actionState = createActionState(state.actions, state.resources, state.player, state),
-        locationSelectionViewState = state.locationSelectionState.toViewState(playerTags = state.player.tags)
-            .let { viewState ->
-                viewState.copy(
-                    locations = viewState.locations.map { location ->
-                        location.copy(
-                            description = flavorMachine(
-                                original = location.description,
-                                flavors = state.flavors,
-                                tags = state.player.tags,
-                            )
-                        )
-                    },
-                    selectedLocation = viewState.selectedLocation.copy(
-                        description = flavorMachine(
-                            original = viewState.selectedLocation.description,
-                            flavors = state.flavors,
-                            tags = state.player.tags,
-                        )
-                    )
-                )
-            },
-        plotEntries = state.plotEntries,
+        locationSelectionViewState = state.locationSelectionState.toViewState(
+            locations = state.locations,
+            playerTags = state.player.tags,
+            state
+        ),
+        plotEntries = state.plotEntries.map { it.copy(text = it.text.withFlavor(state)) },
         shop = state.upgrades
             .filter { upgrade ->
                 satisfiesAllTagsRelations(
@@ -94,12 +83,8 @@ private fun createMainViewState(state: GameState): MainViewState {
                 with(upgrade) {
                     UpgradeModel(
                         id = id,
-                        title = title,
-                        subtitle = flavorMachine(
-                            original = upgrade.subtitle,
-                            flavors = state.flavors,
-                            tags = state.player.tags,
-                        ),
+                        title = upgrade.title.withFlavor(state),
+                        subtitle = upgrade.subtitle.withFlavor(state),
                         price = PriceModel(value = price.value.toString()),
                         status = mapStatus(
                             state.resources.find { it.key == ResourceKey.Blood }?.value ?: 0.0
@@ -144,6 +129,7 @@ private fun ResourceKey.chooseIcon() = when (this) {
     ResourceKey.Organs -> Icons.Organs
     ResourceKey.Familiar -> Icons.Familiar
     ResourceKey.Scrap -> Icons.Scrap
+    ResourceKey.Information -> Icons.Information
 }
 
 private fun satisfiesAllTagsRelations(
@@ -183,11 +169,8 @@ private fun createActionState(
         }
         .map { action ->
             action.copy(
-                subtitle = flavorMachine(
-                    original = action.subtitle,
-                    flavors = state.flavors,
-                    tags = player.tags,
-                )
+                title = action.title.withFlavor(state),
+                subtitle = action.subtitle.withFlavor(state),
             )
         }
 
@@ -205,7 +188,8 @@ private fun createActionState(
                 icon = ActionIcon(
                     value = when {
                         tags[TagRelation.RequiredAll].orEmpty()
-                            .contains(Tags.HumanAppearance) -> Icons.Human
+                            .contains(Tags.Form.Human) -> Icons.Human
+
                         else -> Icons.Monster
                     }
                 ),
@@ -290,23 +274,51 @@ private fun Upgrade.mapStatus(resource: Double): UpgradeStatusModel {
     return statusModel
 }
 
-private fun LocationSelectionState.toViewState(playerTags: List<Tag>) =
+private fun LocationSelectionState.toViewState(
+    locations: List<Location>,
+    playerTags: List<Tag>,
+    state: GameState,
+) =
     LocationSelectionViewState(
-        locations = allLocations
+        locations = locations
             .filter { location ->
                 satisfiesAllTagsRelations(
                     tagRelations = location.tags,
                     tags = playerTags,
                 )
             }
-            .map { location -> location.toModel(selectedLocationId = selectedLocation.id) },
-        selectedLocation = selectedLocation.toModel(selectedLocationId = selectedLocation.id),
+            .map { location -> location.toModel(selectedLocationId = selectedLocation.id, state) },
+        selectedLocation = selectedLocation.toModel(
+            selectedLocationId = selectedLocation.id,
+            state
+        ),
         isExpanded = isSelectionExpanded,
     )
 
-private fun Location.toModel(selectedLocationId: Long) = LocationModel(
+private fun Location.toModel(
+    selectedLocationId: Long,
+    state: GameState,
+) = LocationModel(
     id = id,
-    title = title,
-    description = description,
+    title = title.withFlavor(state),
+    subtitle = subtitle.withFlavor(state),
     isSelected = id == selectedLocationId,
 )
+
+private fun String.withFlavor(state: GameState): String = flavorMachine(
+    original = this,
+    flavors = state.flavors,
+    tags = state.player.tags
+)
+
+interface Flavorable {
+    val title: String
+    val subtitle: String
+    val plot: String?
+
+    fun copy(
+        title: String? = null,
+        subtitle: String? = null,
+        plot: String? = null,
+    ): Flavorable
+}

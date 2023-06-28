@@ -10,4 +10,5 @@ enum class ResourceKey {
     Organs,
     Familiar,
     Scrap,
+    Information,
 }

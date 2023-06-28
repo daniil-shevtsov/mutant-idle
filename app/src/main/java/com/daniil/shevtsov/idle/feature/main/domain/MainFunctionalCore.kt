@@ -1,18 +1,20 @@
 package com.daniil.shevtsov.idle.feature.main.domain
 
 import com.daniil.shevtsov.idle.core.navigation.Screen
+import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.RatioChanges
 import com.daniil.shevtsov.idle.feature.action.domain.ResourceChanges
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
+import com.daniil.shevtsov.idle.feature.location.domain.Location
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.plot.domain.PlotEntry
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
-import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
+import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 
 fun mainFunctionalCore(
@@ -20,25 +22,20 @@ fun mainFunctionalCore(
     viewAction: MainViewAction,
 ): GameState {
     val newState = when (viewAction) {
-        is MainViewAction.LocationSelected -> handleLocationSelected(
+        is MainViewAction.SelectableClicked -> handleSelectableClicked(
             state = state,
             viewAction = viewAction,
         )
-        is MainViewAction.ActionClicked -> handleActionClicked(
-            state = state,
-            viewAction = viewAction
-        )
-        is MainViewAction.UpgradeSelected -> handleUpgradeSelected(
-            state = state,
-            viewAction = viewAction,
-        )
+
         is MainViewAction.ToggleSectionCollapse -> handleSectionCollapsed(
             state = state,
             viewAction = viewAction,
         )
+
         is MainViewAction.LocationSelectionExpandChange -> handleLocationSelectionExpandChange(
             state = state,
         )
+
         MainViewAction.Init -> state
     }
     return newState
@@ -56,27 +53,47 @@ fun handleLocationSelectionExpandChange(
 
 fun handleLocationSelected(
     state: GameState,
-    viewAction: MainViewAction.LocationSelected
+    selectedLocation: Location
 ): GameState {
-    val selectedLocation = state.locationSelectionState.allLocations.find { it.id == viewAction.id }
-
     val oldTags = state.locationSelectionState.selectedLocation.tags[TagRelation.Provides].orEmpty()
-    val newTags = selectedLocation?.tags?.get(TagRelation.Provides).orEmpty()
+    val newTags = selectedLocation.tags[TagRelation.Provides].orEmpty()
 
-    return when {
-        selectedLocation != null -> state.copy(
-            locationSelectionState = state.locationSelectionState.copy(
-                selectedLocation = selectedLocation,
-            ),
-            plotEntries = state.plotEntries + listOf(PlotEntry(selectedLocation.plot)),
-            player = state.player.copy(
-                generalTags = state.player.generalTags - oldTags + newTags
-            )
+    return state.copy(
+        locationSelectionState = state.locationSelectionState.copy(
+            selectedLocation = selectedLocation,
+        ),
+        player = state.player.copy(
+            generalTags = state.player.generalTags - oldTags + newTags
         )
-        else -> state
-    }
+    ).addPlotEntry(selectedLocation)
 
 }
+
+interface PlotHolder {
+    val plot: String?
+
+    fun createDefaultPlot(): String
+    fun copy(plot: String?): PlotHolder
+}
+
+interface Selectable {
+    val id: Long
+    val title: String
+
+    fun copy(
+        id: Long? = null,
+        title: String? = null,
+    ): Selectable
+}
+
+//TODO: If there are several same plot entries it should be one with (x50) to the right
+private fun GameState.addPlotEntry(
+    plotHolder: PlotHolder
+): GameState {
+    val entry = PlotEntry(plotHolder.plot ?: plotHolder.createDefaultPlot())
+    return copy(plotEntries = plotEntries + entry)
+}
+
 
 fun handleDrawerTabSwitched(
     state: GameState,
@@ -105,12 +122,10 @@ fun handleSectionCollapsed(
     )
 }
 
-fun handleActionClicked(
+private fun handleActionClicked(
     state: GameState,
-    viewAction: MainViewAction.ActionClicked
+    selectedAction: Action,
 ): GameState {
-    val selectedAction = state.actions.find { action -> action.id == viewAction.id }!!
-
     val hasInvalidChanges = hasInvalidChanges(
         currentResources = state.resources,
         resourceChanges = selectedAction.resourceChanges,
@@ -131,24 +146,19 @@ fun handleActionClicked(
             .toSet()
 
     return if (!hasInvalidChanges) {
-        val newPlotEntrieis = when {
-            selectedAction.plot.isNotEmpty() -> state.plotEntries + listOf(PlotEntry(selectedAction.plot))
-            else -> state.plotEntries
-        }
-
         state.copy(
             ratios = updatedRatios,
             resources = updatedResources,
             player = state.player.copy(
                 generalTags = newTags
             ),
-            plotEntries = newPlotEntrieis,
             currentScreen = when {
                 (updatedRatios.find { it.key == RatioKey.Suspicion }?.value
                     ?: 0.0) >= 1.0 -> Screen.FinishedGame
+
                 else -> state.currentScreen
             }
-        )
+        ).addPlotEntry(selectedAction)
     } else {
         state
     }
@@ -189,14 +199,10 @@ private fun hasInvalidChanges(
     currentResourceValue + resourceChange < 0
 }
 
-fun handleUpgradeSelected(
+private fun handleUpgradeSelected(
     state: GameState,
-    viewAction: MainViewAction.UpgradeSelected
+    upgradeToBuy: Upgrade,
 ): GameState {
-    val upgradeToBuy = state.upgrades.find { upgrade -> upgrade.id == viewAction.id }!!
-
-    val currentResource = state.resources.find { resource -> resource.key == ResourceKey.Blood }!!
-
     val hasInvalidChanges = hasInvalidChanges(
         currentResources = state.resources,
         resourceChanges = upgradeToBuy.resourceChanges,
@@ -204,12 +210,7 @@ fun handleUpgradeSelected(
 
     return when {
         !hasInvalidChanges -> {
-            val newStatus = when {
-                upgradeToBuy.price.value <= currentResource.value -> UpgradeStatus.Bought
-                else -> UpgradeStatus.NotBought
-            }
-
-            val boughtUpgrade = upgradeToBuy.copy(status = newStatus)
+            val boughtUpgrade = upgradeToBuy.copy(status = UpgradeStatus.Bought)
 
             val updatedUpgrades = state.upgrades.map { upgrade ->
                 if (upgrade.id == boughtUpgrade.id) {
@@ -217,7 +218,7 @@ fun handleUpgradeSelected(
                 } else {
                     upgrade
                 }
-            }
+            }.associateBy { it.id }
 
             val updatedResources = applyResourceChanges(
                 currentResources = state.resources,
@@ -231,14 +232,30 @@ fun handleUpgradeSelected(
             )
 
             return state.copy(
-                upgrades = updatedUpgrades,
+                selectables = state.selectables.map { selectable ->
+                    updatedUpgrades[selectable.id] ?: selectable
+                },
                 resources = updatedResources,
                 ratios = updatedRatios,
                 player = state.player.copy(
                     generalTags = state.player.generalTags + boughtUpgrade.tags[TagRelation.Provides].orEmpty()
                 )
-            )
+            ).addPlotEntry(boughtUpgrade)
         }
+
+        else -> state
+    }
+}
+
+fun handleSelectableClicked(
+    state: GameState,
+    viewAction: MainViewAction.SelectableClicked
+): GameState {
+    val clickedSelectable = state.selectables.find { it.id == viewAction.id }
+    return when (clickedSelectable) {
+        is Action -> handleActionClicked(state, clickedSelectable)
+        is Upgrade -> handleUpgradeSelected(state, clickedSelectable)
+        is Location -> handleLocationSelected(state, clickedSelectable)
         else -> state
     }
 }

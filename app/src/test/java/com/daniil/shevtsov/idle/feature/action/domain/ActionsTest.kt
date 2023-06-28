@@ -94,7 +94,7 @@ internal class ActionsTest {
     @Test
     fun `should add no suspicion for human action when human appearance`() {
         val oldState = initialState.copy(
-            player = player(generalTags = listOf(Tags.HumanAppearance))
+            player = player(generalTags = listOf(Tags.Form.Human))
         )
 
         val newState = actionClicked(oldState, humanAction.id)

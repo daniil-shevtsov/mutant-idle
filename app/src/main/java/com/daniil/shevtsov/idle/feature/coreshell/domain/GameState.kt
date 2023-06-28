@@ -7,8 +7,10 @@ import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.flavor.Flavor
 import com.daniil.shevtsov.idle.feature.gamefinish.domain.Ending
+import com.daniil.shevtsov.idle.feature.location.domain.Location
 import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
 import com.daniil.shevtsov.idle.feature.location.domain.locationSelectionState
+import com.daniil.shevtsov.idle.feature.main.domain.Selectable
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
@@ -22,10 +24,9 @@ import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 
 data class GameState(
     val balanceConfig: BalanceConfig,
+    val selectables: List<Selectable>,
     val resources: List<Resource>,
     val ratios: List<Ratio>,
-    val upgrades: List<Upgrade>,
-    val actions: List<Action>,
     val plotEntries: List<PlotEntry>,
     val sections: List<SectionState>,
     val drawerTabs: List<DrawerTab>,
@@ -37,15 +38,24 @@ data class GameState(
     val currentScreen: Screen,
     val screenStack: List<Screen>,
     val unlockState: UnlockState,
-)
+) {
+    val locations: List<Location>
+        get() = selectables.filterIsInstance<Location>()
+    val upgrades: List<Upgrade>
+        get() = selectables.filterIsInstance<Upgrade>()
+    val actions: List<Action>
+        get() = selectables.filterIsInstance<Action>()
+}
 
 fun gameState(
     balanceConfig: BalanceConfig = balanceConfig(),
+    selectables: List<Selectable> = emptyList(),
+    actions: List<Action> = emptyList(),
+    upgrades: List<Upgrade> = emptyList(),
+    locations: List<Location> = emptyList(),
     resources: List<Resource> = emptyList(),
     ratios: List<Ratio> = emptyList(),
-    upgrades: List<Upgrade> = emptyList(),
     plotEntries: List<PlotEntry> = emptyList(),
-    actions: List<Action> = emptyList(),
     drawerTabs: List<DrawerTab> = emptyList(),
     sections: List<SectionState> = emptyList(),
     availableTraits: List<PlayerTrait> = emptyList(),
@@ -58,10 +68,9 @@ fun gameState(
     unlockState: UnlockState = unlockState(),
 ) = GameState(
     balanceConfig = balanceConfig,
+    selectables = (selectables + locations + upgrades + actions).distinct(),
     resources = resources,
     ratios = ratios,
-    upgrades = upgrades,
-    actions = actions,
     plotEntries = plotEntries,
     drawerTabs = drawerTabs,
     sections = sections,
