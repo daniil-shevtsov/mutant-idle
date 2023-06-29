@@ -8,10 +8,18 @@ fun flavorMachine(
     tags: List<Tag> = emptyList(),
 ): String {
     var newOriginal = original
+    val replacedFlavors = mutableSetOf<Flavor>()
+    var isStuck = false
 
-    while(newOriginal.contains(Flavors.PREFIX)) {
+    while (!isStuck && newOriginal.contains(Flavors.PREFIX)) {
         flavors.forEach { flavor ->
+            if (flavor in replacedFlavors) {
+                println("stuck")
+                isStuck = true
+
+            }
             newOriginal = flavorMinivan(original = newOriginal, flavor = flavor, tags = tags)
+            replacedFlavors += flavor
         }
     }
 
