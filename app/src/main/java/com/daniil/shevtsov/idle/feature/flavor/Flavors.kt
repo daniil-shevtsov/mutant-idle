@@ -81,9 +81,6 @@ data class Token(
 )
 
 fun String.splitByTokens(prefix: Char, postfix: Char): List<String> {
-    val prefixIndex = indexOf(prefix)
-    val postfixIndex = indexOf(postfix)
-
     val tokenIndices = mapIndexed { index, char -> index to char }.toMap()
     val prefixCount = count { it == prefix }
 
@@ -95,6 +92,8 @@ fun String.splitByTokens(prefix: Char, postfix: Char): List<String> {
     }
 
     while (stringAfter.contains(prefix)) {
+        val prefixIndex = stringAfter.indexOf(prefix)
+        val postfixIndex = stringAfter.indexOf(postfix)
         val stringBefore2 = stringAfter.substring(0, prefixIndex)
         val token2 = stringAfter.substring(prefixIndex, postfixIndex + 1)
         val stringAfter2 = stringAfter.substring(postfixIndex + 1, stringAfter.length)
