@@ -70,11 +70,13 @@ object Flavors {
         default = "where they hide people in the ground"
     )
 
-    private fun placeholder(key: String) = "$PREFIX$key$POSTFIX"
-
-    const val PREFIX = "8"
-    const val POSTFIX = "9"
+    fun placeholder(key: String) = "$PREFIX$key$POSTFIX"
 }
+
+private const val PREFIX = "8"
+private const val POSTFIX = "9"
+
+fun String.containsFlavorPlaceholder() = contains(PREFIX) && contains(POSTFIX)
 
 //TODO: Do the same as with actions and upgrades
 fun createFlavors() = listOf(

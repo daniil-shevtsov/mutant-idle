@@ -90,8 +90,8 @@ class FlavorsMachineTest {
     @Test
     fun `should handle infinite loop case`() {
         val tag = tag(name = "tag")
-        val innerPlaceholder = "${Flavors.PREFIX}INNER_FLAVOR"
-        val outerPlaceholder = "${Flavors.PREFIX}OUTER_FLAVOR"
+        val innerPlaceholder = Flavors.placeholder("INNER_FLAVOR")
+        val outerPlaceholder = Flavors.placeholder("OUTER_FLAVOR")
         val originalString = "outer: $outerPlaceholder"
         val innerFlavor = flavor(
             id = FlavorId.PersonName,
@@ -154,11 +154,11 @@ class FlavorsMachineTest {
     @Test
     fun `should replace simple two-level placeholder when root then child in list`() {
         val childFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}CHILD-FLAVOR",
+            placeholder = Flavors.placeholder("CHILD-FLAVOR"),
             default = "cheburek"
         )
         val rootFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}ROOT-FLAVOR",
+            placeholder = Flavors.placeholder("ROOT-FLAVOR"),
             default = "kek ${childFlavor.placeholder}"
         )
         val original = "lol ${rootFlavor.placeholder}"
@@ -174,11 +174,11 @@ class FlavorsMachineTest {
     @Test
     fun `should replace simple two-level placeholder when child then root in list`() {
         val childFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}CHILD-FLAVOR",
+            placeholder = Flavors.placeholder("CHILD-FLAVOR"),
             default = "cheburek"
         )
         val rootFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}ROOT-FLAVOR",
+            placeholder = Flavors.placeholder("ROOT-FLAVOR"),
             default = "kek ${childFlavor.placeholder}"
         )
         val original = "lol ${rootFlavor.placeholder}"
@@ -203,7 +203,7 @@ class FlavorsMachineTest {
         val drinkRootTag = tag("drink")
 
         val foodChildFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}FOOD-CHILD-FLAVOR",
+            placeholder = Flavors.placeholder("FOOD-CHILD-FLAVOR"),
             values = mapOf(
                 cheburekChildTag to "cheburek",
                 gulashChildTag to "gulash"
@@ -212,7 +212,7 @@ class FlavorsMachineTest {
         )
 
         val drinkChildFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}DRINK-CHILD-FLAVOR",
+            placeholder = Flavors.placeholder("DRINK-CHILD-FLAVOR"),
             values = mapOf(
                 ayranChildTag to "ayran",
                 colaChildTag to "cola"
@@ -221,7 +221,7 @@ class FlavorsMachineTest {
         )
 
         val rootFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}ROOT-FLAVOR",
+            placeholder = Flavors.placeholder("ROOT-FLAVOR"),
             values = mapOf(
                 foodRootTag to "something to eat, ${foodChildFlavor.placeholder} maybe",
                 drinkRootTag to "something to drink, ${drinkChildFlavor.placeholder} maybe",
