@@ -2,7 +2,9 @@ package com.daniil.shevtsov.idle.feature.flavor
 
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
+import timber.log.Timber
 
+//TODO: If I forget to add new flavor into flavors list in state there is an infinite loop.
 object Flavors {
     val invisibilityAction = flavor(
         id = FlavorId.InvisibilityAction,
@@ -108,23 +110,32 @@ fun flavorMachine(
     var newOriginal = original
     val replacedFlavors = mutableSetOf<Flavor>()
     var isStuck = false
+    var unknownPlaceholder: String? = null
 
-    while (!isStuck && newOriginal.containsFlavorPlaceholder()) {
+    Timber.d("Before flavor loop")
+    while (!isStuck && unknownPlaceholder == null && newOriginal.containsFlavorPlaceholder()) {
+        val placeholders =
+            newOriginal.splitByTokens(PREFIX[0], POSTFIX[0]).filter { it.contains(PREFIX[0]) }
+        unknownPlaceholder = placeholders.find { placeholder -> flavors.none { flavor -> flavor.placeholder == placeholder } }
         flavors.forEach { flavor ->
-
+            Timber.d("line: $newOriginal")
+            Timber.d("flavor to try: $flavor")
+            Timber.d("replaced flavors: $replacedFlavors")
             if (newOriginal.contains(flavor.placeholder) && flavor in replacedFlavors) {
                 println("stuck")
                 isStuck = true
             }
-            if(newOriginal.contains(flavor.placeholder)) {
+            if (newOriginal.contains(flavor.placeholder)) {
                 replacedFlavors += flavor
             }
             newOriginal = flavorMinivan(original = newOriginal, flavor = flavor, tags = tags)
         }
     }
+    Timber.d("After flavor loop")
 
     return when {
         isStuck -> "INFINITE LOOP"
+        unknownPlaceholder != null -> "UNKNOWN_PLACEHOLDER=$unknownPlaceholder"
         else -> newOriginal
     }
 }
