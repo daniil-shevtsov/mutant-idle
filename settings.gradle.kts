@@ -9,6 +9,3 @@ pluginManagement {
 rootProject.name = "IdleGame"
 
 include(":app")
-include(":app-desktop")
-include(":app-web")
-include(":common")

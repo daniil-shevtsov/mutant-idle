@@ -42,71 +42,79 @@ fun mapMainViewState(
 }
 
 private fun createMainViewState(state: GameState): MainViewState {
+    val resources = state.resources.filter { it.value > 0.0 }.map { resource ->
+        with(resource) {
+            ResourceModel(
+                key = key,
+                name = name,
+                value = value.formatRound(),
+                icon = key.chooseIcon(),
+            )
+        }
+    }
+    val ratios = state.ratios
+        .filter { ratio -> ratio.key == RatioKey.Suspicion || ratio.key == state.player.mainRatioKey }
+        .map { ratio ->
+            RatioModel(
+                key = ratio.key,
+                title = formatEnumName(name = ratio.key.name),
+                name = getNameForRatio(ratio),
+                percent = ratio.value,
+                percentLabel = (ratio.value * 100).formatRound(digits = 2) + " %",
+                icon = ratio.key.chooseIcon(),
+            )
+        }
+    val actionState = createActionState(state.actions, state.resources, state.player, state)
+    val locationSelectionState = state.locationSelectionState.toViewState(
+        locations = state.locations,
+        playerTags = state.player.tags,
+        state
+    )
+    val plotEntries = state.plotEntries.map { it.copy(text = it.text.withFlavor(state)) }
+    val shop = state.upgrades
+        .filter { upgrade ->
+            satisfiesAllTagsRelations(
+                tagRelations = upgrade.tags,
+                tags = state.player.tags
+            )
+        }
+        .map { upgrade ->
+            with(upgrade) {
+                UpgradeModel(
+                    id = id,
+                    title = upgrade.title.withFlavor(state),
+                    subtitle = upgrade.subtitle.withFlavor(state),
+                    price = PriceModel(value = price.value.toString()),
+                    status = mapStatus(
+                        state.resources.find { it.key == ResourceKey.Blood }?.value ?: 0.0
+                    ),
+                    resourceChanges = mapResourceChanges(resourceChanges),
+                    ratioChanges = mapRatioChanges(ratioChanges, state.player.tags),
+                )
+            }
+        }
+        .sortedBy {
+            when (it.status) {
+                UpgradeStatusModel.Affordable -> 0
+                UpgradeStatusModel.NotAffordable -> 1
+                UpgradeStatusModel.Bought -> 2
+            }
+        }
+        .let { upgrades ->
+            UpgradesViewState(
+                upgrades = upgrades,
+            )
+        }
+    val sectionCollapse = state.sections.map { it.key to it.isCollapsed }.toMap()
+
     return MainViewState.Success(
-        resources = state.resources.filter { it.value > 0.0 }.map { resource ->
-            with(resource) {
-                ResourceModel(
-                    key = key,
-                    name = name,
-                    value = value.formatRound(),
-                    icon = key.chooseIcon(),
-                )
-            }
-        },
-        ratios = state.ratios
-            .filter { ratio -> ratio.key == RatioKey.Suspicion || ratio.key == state.player.mainRatioKey }
-            .map { ratio ->
-                RatioModel(
-                    key = ratio.key,
-                    title = formatEnumName(name = ratio.key.name),
-                    name = getNameForRatio(ratio),
-                    percent = ratio.value,
-                    percentLabel = (ratio.value * 100).formatRound(digits = 2) + " %",
-                    icon = ratio.key.chooseIcon(),
-                )
-            },
-        actionState = createActionState(state.actions, state.resources, state.player, state),
-        locationSelectionViewState = state.locationSelectionState.toViewState(
-            locations = state.locations,
-            playerTags = state.player.tags,
-            state
-        ),
-        plotEntries = state.plotEntries.map { it.copy(text = it.text.withFlavor(state)) },
-        shop = state.upgrades
-            .filter { upgrade ->
-                satisfiesAllTagsRelations(
-                    tagRelations = upgrade.tags,
-                    tags = state.player.tags
-                )
-            }
-            .map { upgrade ->
-                with(upgrade) {
-                    UpgradeModel(
-                        id = id,
-                        title = upgrade.title.withFlavor(state),
-                        subtitle = upgrade.subtitle.withFlavor(state),
-                        price = PriceModel(value = price.value.toString()),
-                        status = mapStatus(
-                            state.resources.find { it.key == ResourceKey.Blood }?.value ?: 0.0
-                        ),
-                        resourceChanges = mapResourceChanges(resourceChanges),
-                        ratioChanges = mapRatioChanges(ratioChanges, state.player.tags),
-                    )
-                }
-            }
-            .sortedBy {
-                when (it.status) {
-                    UpgradeStatusModel.Affordable -> 0
-                    UpgradeStatusModel.NotAffordable -> 1
-                    UpgradeStatusModel.Bought -> 2
-                }
-            }
-            .let { upgrades ->
-                UpgradesViewState(
-                    upgrades = upgrades,
-                )
-            },
-        sectionCollapse = state.sections.map { it.key to it.isCollapsed }.toMap(),
+        resources = resources,
+        ratios = ratios,
+        actionState = actionState,
+        locationSelectionViewState = locationSelectionState,
+        plotEntries = plotEntries,
+        shop = shop,
+        sectionCollapse = sectionCollapse,
     )
 }
 
@@ -128,6 +136,7 @@ private fun ResourceKey.chooseIcon() = when (this) {
     ResourceKey.FreshMeat -> Icons.FreshMeat
     ResourceKey.Organs -> Icons.Organs
     ResourceKey.Familiar -> Icons.Familiar
+    ResourceKey.ControlledMind -> Icons.Familiar //TODO: Find another icon
     ResourceKey.Scrap -> Icons.Scrap
     ResourceKey.Information -> Icons.Information
 }

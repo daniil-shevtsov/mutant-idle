@@ -58,14 +58,16 @@ fun handleLocationSelected(
     val oldTags = state.locationSelectionState.selectedLocation.tags[TagRelation.Provides].orEmpty()
     val newTags = selectedLocation.tags[TagRelation.Provides].orEmpty()
 
-    return state.copy(
+    val state = state.copy(
         locationSelectionState = state.locationSelectionState.copy(
             selectedLocation = selectedLocation,
         ),
         player = state.player.copy(
             generalTags = state.player.generalTags - oldTags + newTags
         )
-    ).addPlotEntry(selectedLocation)
+    )
+    val stateWithPlot = state.addPlotEntry(selectedLocation)
+    return stateWithPlot
 
 }
 

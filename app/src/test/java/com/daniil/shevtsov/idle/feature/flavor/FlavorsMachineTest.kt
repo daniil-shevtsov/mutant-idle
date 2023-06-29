@@ -3,6 +3,8 @@ package com.daniil.shevtsov.idle.feature.flavor
 import assertk.assertThat
 import assertk.assertions.isEmpty
 import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
+import assertk.assertions.isTrue
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import org.junit.jupiter.api.Test
@@ -116,11 +118,11 @@ class FlavorsMachineTest {
     @Test
     fun `should replace simple two-level placeholder when root then child in list`() {
         val childFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}CHILD-FLAVOR",
+            placeholder = Flavors.placeholder("CHILD-FLAVOR"),
             default = "cheburek"
         )
         val rootFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}ROOT-FLAVOR",
+            placeholder = Flavors.placeholder("ROOT-FLAVOR"),
             default = "kek ${childFlavor.placeholder}"
         )
         val original = "lol ${rootFlavor.placeholder}"
@@ -136,11 +138,11 @@ class FlavorsMachineTest {
     @Test
     fun `should replace simple two-level placeholder when child then root in list`() {
         val childFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}CHILD-FLAVOR",
+            placeholder = Flavors.placeholder("CHILD-FLAVOR"),
             default = "cheburek"
         )
         val rootFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}ROOT-FLAVOR",
+            placeholder = Flavors.placeholder("ROOT-FLAVOR"),
             default = "kek ${childFlavor.placeholder}"
         )
         val original = "lol ${rootFlavor.placeholder}"
@@ -165,7 +167,8 @@ class FlavorsMachineTest {
         val drinkRootTag = tag("drink")
 
         val foodChildFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}FOOD-CHILD-FLAVOR",
+            id = FlavorId.PersonName,
+            placeholder = Flavors.placeholder("FOOD-CHILD-FLAVOR"),
             values = mapOf(
                 cheburekChildTag to "cheburek",
                 gulashChildTag to "gulash"
@@ -174,7 +177,8 @@ class FlavorsMachineTest {
         )
 
         val drinkChildFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}DRINK-CHILD-FLAVOR",
+            id = FlavorId.PeopleName,
+            placeholder = Flavors.placeholder("DRINK-CHILD-FLAVOR"),
             values = mapOf(
                 ayranChildTag to "ayran",
                 colaChildTag to "cola"
@@ -183,7 +187,8 @@ class FlavorsMachineTest {
         )
 
         val rootFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}ROOT-FLAVOR",
+            id = FlavorId.InvisibilityAction,
+            placeholder = Flavors.placeholder("ROOT-FLAVOR"),
             values = mapOf(
                 foodRootTag to "something to eat, ${foodChildFlavor.placeholder} maybe",
                 drinkRootTag to "something to drink, ${drinkChildFlavor.placeholder} maybe",
@@ -242,5 +247,77 @@ class FlavorsMachineTest {
         ).isEqualTo("You activate the cloaking device.")
     }
 
+
+    @Test
+    fun `should handle infinite loop case`() {
+        val tag = tag(name = "tag")
+        val innerPlaceholder = Flavors.placeholder("INNER_FLAVOR")
+        val outerPlaceholder = Flavors.placeholder("OUTER_FLAVOR")
+        val originalString = "outer: $outerPlaceholder"
+        val innerFlavor = flavor(
+            id = FlavorId.PersonName,
+            placeholder = innerPlaceholder,
+            values = mapOf(
+                tag to "inner: $outerPlaceholder"
+            ),
+            default = "inner default"
+        )
+        val outerFlavor = flavor(
+            id = FlavorId.InvisibilityAction,
+            placeholder = outerPlaceholder,
+            values = mapOf(
+                tag to "outer: $innerPlaceholder"
+            ),
+            default = "outer default: $innerPlaceholder"
+        )
+
+        val withFlavor = runCatching {
+            flavorMachine(
+                original = originalString,
+                tags = listOf(tag),
+                flavors = listOf(innerFlavor, outerFlavor),
+            )
+        }
+
+        assertThat(withFlavor.isSuccess).isTrue()
+        assertThat(withFlavor.getOrNull()).isNotNull()
+            .isEqualTo("INFINITE LOOP")
+    }
+
+    @Test
+    fun `should handle unknown flavor`() {
+        val tag = tag(name = "tag")
+        val knownPlaceholder = Flavors.placeholder("INNER_FLAVOR")
+        val unknownPlaceholder = Flavors.placeholder("OUTER_FLAVOR")
+        val originalString = "known: $knownPlaceholder unknown: $unknownPlaceholder"
+        val knownFlavor = flavor(
+            id = FlavorId.PersonName,
+            placeholder = knownPlaceholder,
+            values = mapOf(
+                tag to "kek"
+            ),
+            default = "default kek"
+        )
+        val unknownFlavor = flavor(
+            id = FlavorId.InvisibilityAction,
+            placeholder = unknownPlaceholder,
+            values = mapOf(
+                tag to "cheburek"
+            ),
+            default = "default cheburek"
+        )
+
+        val withFlavor = runCatching {
+            flavorMachine(
+                original = originalString,
+                tags = listOf(tag),
+                flavors = listOf(knownFlavor),
+            )
+        }
+
+        assertThat(withFlavor.isSuccess).isTrue()
+        assertThat(withFlavor.getOrNull()).isNotNull()
+            .isEqualTo("UNKNOWN_PLACEHOLDER=$unknownPlaceholder")
+    }
 
 }

@@ -46,15 +46,15 @@ class FlavorViewStateTest {
                 val flavoredSubtitle = "flavoredSubtitle"
                 val flavoredPlot = "flavoredPlot"
                 val titleFlavor = flavor(
-                    placeholder = "${Flavors.PREFIX}title",
+                    placeholder = Flavors.placeholder("title"),
                     values = mapOf(tag to flavoredTitle),
                 )
                 val subtitleFlavor = flavor(
-                    placeholder = "${Flavors.PREFIX}subtitle",
+                    placeholder = Flavors.placeholder("subtitle"),
                     values = mapOf(tag to flavoredSubtitle),
                 )
                 val plotFlavor = flavor(
-                    placeholder = "${Flavors.PREFIX}plot",
+                    placeholder = Flavors.placeholder("plot"),
                     values = mapOf(tag to flavoredPlot),
                 )
 
@@ -90,7 +90,7 @@ class FlavorViewStateTest {
         val tag = tag(name = "flavor tag")
         val flavoredPlot = "flavoredPlot"
         val plotFlavor = flavor(
-            placeholder = "${Flavors.PREFIX}plot",
+            placeholder = Flavors.placeholder("plot"),
             values = mapOf(tag to flavoredPlot),
         )
 

@@ -9,6 +9,7 @@ enum class ResourceKey {
     FreshMeat,
     Organs,
     Familiar,
+    ControlledMind,
     Scrap,
     Information,
 }

@@ -40,7 +40,7 @@ object Species {
             Tags.Nature.Magic,
             Tags.Heliophobia,
             Tags.Immortal,
-            Tags.Hypnosis,
+            Tags.Abilities.Hypnosis,
             Tags.PersonCapturer,
         ),
         mainResource = ResourceKey.Blood,

@@ -1,9 +1,7 @@
 package com.daniil.shevtsov.idle.application
 
 import android.app.Application
-import com.daniil.shevtsov.idle.common.di.initKoin
 import com.daniil.shevtsov.idle.core.di.DaggerAppComponent
-import com.daniil.shevtsov.idle.core.di.koin.appModule
 import com.daniil.shevtsov.idle.feature.initial.domain.createBalanceConfig
 import com.daniil.shevtsov.idle.feature.initial.domain.createInitialGameState
 import com.daniil.shevtsov.idle.feature.resource.domain.createResources
@@ -32,10 +30,6 @@ class IdleGameApplication : Application() {
         super.onCreate()
 
         Timber.plant(Timber.DebugTree())
-
-        koin = initKoin {
-            modules(appModule)
-        }.koin
 
         appComponent.inject(this)
 

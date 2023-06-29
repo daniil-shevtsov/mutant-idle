@@ -8,7 +8,6 @@ object Versions {
     const val accompanist = "0.20.2"
 
     const val compose = "1.1.1"
-    const val composeMultiplatform = "1.0.0-alpha08"
 
     const val dagger = "2.42"
 
@@ -39,9 +38,6 @@ object Versions {
 
 object Deps {
     object Gradle {
-//        const val composeMultiplatform =
-//            "org.jetbrains.compose:compose-gradle-plugin:${Versions.composeMultiplatform}"
-
         const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
         const val kotlinSerialization =
             "org.jetbrains.kotlin:kotlin-serialization:${Versions.kotlin}"
@@ -119,7 +115,6 @@ object Deps {
         const val junit = "junit:junit:${Versions.junit}"
 
         const val mockk = "io.mockk:mockk:${Versions.mockk}"
-        const val mockkCommon = "io.mockk:mockk-common:${Versions.mockk}"
         const val mockkAgent = "io.mockk:mockk-agent-jvm:${Versions.mockk}"
 
         const val turbine = "app.cash.turbine:turbine:${Versions.turbine}"

@@ -59,6 +59,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = Versions.compose
     }
+    namespace = "com.daniil.shevtsov.idle"
 
     tasks.withType<Test> {
         useJUnitPlatform()
@@ -67,8 +68,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":common"))
-
     with(Deps.Android) {
         implementation(material)
     }
@@ -124,7 +123,6 @@ dependencies {
         testImplementation(jupiter)
         testImplementation(mockk)
         testImplementation(mockkAgent)
-//        testImplementation(mockkCommon)
         testImplementation(turbine)
     }
 }
