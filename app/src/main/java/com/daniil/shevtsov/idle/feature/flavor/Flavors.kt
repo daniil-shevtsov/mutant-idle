@@ -87,41 +87,27 @@ fun String.splitByTokens(prefix: Char, postfix: Char): List<String> {
     val tokenIndices = mapIndexed { index, char -> index to char }.toMap()
     val prefixCount = count { it == prefix }
 
-    return when {
-        isEmpty() -> emptyList()
-        prefixCount == 1 && prefixIndex != -1 && postfixIndex != -1 -> {
-            val stringBefore = substring(0, prefixIndex)
-            val token = substring(prefixIndex, postfixIndex + 1)
-            val stringAfter = substring(postfixIndex + 1, length)
-            listOf(
-                stringBefore,
-                token,
-                stringAfter,
-            ).filter { it.isNotEmpty() }
-        }
+    var splitTokens = mutableListOf<String>()
+    var stringAfter = this
 
-        prefixCount == 2 && prefixIndex != -1 && postfixIndex != -1 -> {
-            val stringBefore = substring(0, prefixIndex)
-            val token = substring(prefixIndex, postfixIndex + 1)
-            
-            val stringAfter = substring(postfixIndex + 1, length)
-
-            val prefixIndex = stringAfter.indexOf(prefix)
-            val postfixIndex = stringAfter.indexOf(postfix)
-            val stringBefore2 = stringAfter.substring(0, prefixIndex)
-            val token2 = stringAfter.substring(prefixIndex, postfixIndex + 1)
-            val stringAfter2 = stringAfter.substring(postfixIndex + 1, stringAfter.length)
-            listOf(
-                stringBefore,
-                token,
-                stringBefore2,
-                token2,
-                stringAfter2,
-            ).filter { it.isNotEmpty() }
-        }
-
-        else -> listOf(this)
+    if (!stringAfter.contains(prefix)) {
+        splitTokens.add(stringAfter)
     }
+
+    while (stringAfter.contains(prefix)) {
+        val stringBefore2 = stringAfter.substring(0, prefixIndex)
+        val token2 = stringAfter.substring(prefixIndex, postfixIndex + 1)
+        val stringAfter2 = stringAfter.substring(postfixIndex + 1, stringAfter.length)
+        splitTokens += listOf(stringBefore2, token2)
+        if (!stringAfter2.contains(PREFIX)) {
+            splitTokens += stringAfter2
+        }
+        stringAfter = stringAfter2
+    }
+
+    splitTokens = splitTokens.filter { it.isNotEmpty() }.toMutableList()
+
+    return splitTokens
 }
 
 fun flavorMachine(
