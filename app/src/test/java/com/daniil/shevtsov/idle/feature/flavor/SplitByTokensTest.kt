@@ -50,4 +50,15 @@ internal class SplitByTokensTest {
             "cheburek",
         )
     }
+
+    @Test
+    fun `should split when two tokens at the start`() {
+        val original = "8kek98lol9cheburek"
+        val split = original.splitByTokens(prefix = '8', postfix = '9')
+        assertThat(split).containsExactly(
+            "8kek9",
+            "8lol9",
+            "cheburek",
+        )
+    }
 }

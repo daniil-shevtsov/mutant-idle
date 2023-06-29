@@ -74,17 +74,51 @@ object Flavors {
     fun placeholder(key: String) = "$PREFIX$key$POSTFIX"
 }
 
-fun String.splitByTokens(prefix: Char, postfix: Char): List<String> {
+data class Token(
+    val prefixIndex: Int,
+    val postfixIndex: Int,
+    val text: String,
+)
 
+fun String.splitByTokens(prefix: Char, postfix: Char): List<String> {
     val prefixIndex = indexOf(prefix)
     val postfixIndex = indexOf(postfix)
+
+    val tokenIndices = mapIndexed { index, char -> index to char }.toMap()
+    val prefixCount = count { it == prefix }
+
     return when {
         isEmpty() -> emptyList()
-        prefixIndex != -1 && postfixIndex != -1 -> listOf(
-            substring(0, prefixIndex),
-            substring(prefixIndex, postfixIndex + 1),
-            substring(postfixIndex + 1, length),
-        ).filter { it.isNotEmpty() }
+        prefixCount == 1 && prefixIndex != -1 && postfixIndex != -1 -> {
+            val stringBefore = substring(0, prefixIndex)
+            val token = substring(prefixIndex, postfixIndex + 1)
+            val stringAfter = substring(postfixIndex + 1, length)
+            listOf(
+                stringBefore,
+                token,
+                stringAfter,
+            ).filter { it.isNotEmpty() }
+        }
+
+        prefixCount == 2 && prefixIndex != -1 && postfixIndex != -1 -> {
+            val stringBefore = substring(0, prefixIndex)
+            val token = substring(prefixIndex, postfixIndex + 1)
+            
+            val stringAfter = substring(postfixIndex + 1, length)
+
+            val prefixIndex = stringAfter.indexOf(prefix)
+            val postfixIndex = stringAfter.indexOf(postfix)
+            val stringBefore2 = stringAfter.substring(0, prefixIndex)
+            val token2 = stringAfter.substring(prefixIndex, postfixIndex + 1)
+            val stringAfter2 = stringAfter.substring(postfixIndex + 1, stringAfter.length)
+            listOf(
+                stringBefore,
+                token,
+                stringBefore2,
+                token2,
+                stringAfter2,
+            ).filter { it.isNotEmpty() }
+        }
 
         else -> listOf(this)
     }
