@@ -29,4 +29,14 @@ internal class SplitByTokensTest {
             "lol",
         )
     }
+
+    @Test
+    fun `should split when token at the end`() {
+        val original = "kek8lol9"
+        val split = original.splitByTokens(prefix = '8', postfix = '9')
+        assertThat(split).containsExactly(
+            "kek",
+            "8lol9",
+        )
+    }
 }

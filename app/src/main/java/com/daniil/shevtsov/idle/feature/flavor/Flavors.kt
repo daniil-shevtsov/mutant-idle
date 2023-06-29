@@ -81,6 +81,10 @@ fun String.splitByTokens(prefix: Char, postfix: Char): List<String> {
             substring(0, indexOf(postfix)+1),
             substring(indexOf(postfix)+1, length)
         )
+        get(length-1) == postfix -> listOf(
+            substring(0, indexOf(prefix)),
+            substring(indexOf(prefix), length)
+        )
         else -> listOf(this)
     }
 }
