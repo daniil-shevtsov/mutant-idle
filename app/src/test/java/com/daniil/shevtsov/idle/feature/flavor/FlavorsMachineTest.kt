@@ -120,7 +120,7 @@ class FlavorsMachineTest {
 
         assertThat(withFlavor.isSuccess).isTrue()
         assertThat(withFlavor.getOrNull()).isNotNull()
-            .isEqualTo("ERROR: infinite loop of flavors: (${FlavorId.PersonName.name}, ${FlavorId.InvisibilityAction.name})")
+            .isEqualTo("INFINITE LOOP")
     }
 
     @Test
@@ -203,6 +203,7 @@ class FlavorsMachineTest {
         val drinkRootTag = tag("drink")
 
         val foodChildFlavor = flavor(
+            id = FlavorId.PersonName,
             placeholder = Flavors.placeholder("FOOD-CHILD-FLAVOR"),
             values = mapOf(
                 cheburekChildTag to "cheburek",
@@ -212,6 +213,7 @@ class FlavorsMachineTest {
         )
 
         val drinkChildFlavor = flavor(
+            id = FlavorId.PeopleName,
             placeholder = Flavors.placeholder("DRINK-CHILD-FLAVOR"),
             values = mapOf(
                 ayranChildTag to "ayran",
@@ -221,6 +223,7 @@ class FlavorsMachineTest {
         )
 
         val rootFlavor = flavor(
+            id = FlavorId.InvisibilityAction,
             placeholder = Flavors.placeholder("ROOT-FLAVOR"),
             values = mapOf(
                 foodRootTag to "something to eat, ${foodChildFlavor.placeholder} maybe",

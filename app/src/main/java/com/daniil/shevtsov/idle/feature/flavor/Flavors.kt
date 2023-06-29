@@ -74,39 +74,30 @@ object Flavors {
     fun placeholder(key: String) = "$PREFIX$key$POSTFIX"
 }
 
-data class Token(
-    val prefixIndex: Int,
-    val postfixIndex: Int,
-    val text: String,
-)
-
 fun String.splitByTokens(prefix: Char, postfix: Char): List<String> {
-    val tokenIndices = mapIndexed { index, char -> index to char }.toMap()
-    val prefixCount = count { it == prefix }
+    val splitTokens = mutableListOf<String>()
+    var textToSplit = this
 
-    var splitTokens = mutableListOf<String>()
-    var stringAfter = this
-
-    if (!stringAfter.contains(prefix)) {
-        splitTokens.add(stringAfter)
+    if (!textToSplit.contains(prefix)) {
+        splitTokens.add(textToSplit)
     }
 
-    while (stringAfter.contains(prefix)) {
-        val prefixIndex = stringAfter.indexOf(prefix)
-        val postfixIndex = stringAfter.indexOf(postfix)
-        val stringBefore2 = stringAfter.substring(0, prefixIndex)
-        val token2 = stringAfter.substring(prefixIndex, postfixIndex + 1)
-        val stringAfter2 = stringAfter.substring(postfixIndex + 1, stringAfter.length)
-        splitTokens += listOf(stringBefore2, token2)
-        if (!stringAfter2.contains(PREFIX)) {
-            splitTokens += stringAfter2
+    while (textToSplit.contains(prefix)) {
+        val prefixIndex = textToSplit.indexOf(prefix)
+        val postfixIndex = textToSplit.indexOf(postfix)
+
+        val textBeforeToken = textToSplit.substring(0, prefixIndex)
+        val token = textToSplit.substring(prefixIndex, postfixIndex + 1)
+        val textAfterToken = textToSplit.substring(postfixIndex + 1, textToSplit.length)
+
+        splitTokens += listOf(textBeforeToken, token)
+        if (!textAfterToken.contains(prefix)) {
+            splitTokens += textAfterToken
         }
-        stringAfter = stringAfter2
+        textToSplit = textAfterToken
     }
 
-    splitTokens = splitTokens.filter { it.isNotEmpty() }.toMutableList()
-
-    return splitTokens
+    return splitTokens.filter { it.isNotEmpty() }
 }
 
 fun flavorMachine(
@@ -117,27 +108,24 @@ fun flavorMachine(
     var newOriginal = original
     val replacedFlavors = mutableSetOf<Flavor>()
     var isStuck = false
-    val appliedFlavors = mutableListOf<String>()
 
     while (!isStuck && newOriginal.containsFlavorPlaceholder()) {
         flavors.forEach { flavor ->
-            if (false) {
-                appliedFlavors += flavor.id.name
-            }
 
-            if (flavor in replacedFlavors) {
+            if (newOriginal.contains(flavor.placeholder) && flavor in replacedFlavors) {
                 println("stuck")
                 isStuck = true
             }
+            if(newOriginal.contains(flavor.placeholder)) {
+                replacedFlavors += flavor
+            }
             newOriginal = flavorMinivan(original = newOriginal, flavor = flavor, tags = tags)
-            replacedFlavors += flavor
         }
     }
 
-    return if (/*!isStuck*/true) {
-        newOriginal
-    } else {
-        "ERROR: infinite loop of flavors: (${appliedFlavors.joinToString(separator = ", ")})"
+    return when {
+        isStuck -> "INFINITE LOOP"
+        else -> newOriginal
     }
 }
 
