@@ -3,6 +3,8 @@ package com.daniil.shevtsov.idle.feature.flavor
 import assertk.assertThat
 import assertk.assertions.isEmpty
 import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
+import assertk.assertions.isTrue
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import org.junit.jupiter.api.Test
@@ -83,6 +85,32 @@ class FlavorsMachineTest {
         )
 
         assertThat(withFlavor).isEqualTo("You become invisible.")
+    }
+
+    @Test
+    fun `should handle infinite loop case`() {
+        val innerPlaceholder = "${Flavors.PREFIX}INNER_FLAVOR"
+        val outerPlaceholder = "${Flavors.PREFIX}OUTER_FLAVOR"
+        val innerFlavor = flavor(
+            id = FlavorId.PersonName,
+            placeholder = innerPlaceholder,
+            default = "inner flavor, outer: $outerPlaceholder"
+        )
+        val outerFlavor = flavor(
+            id = FlavorId.PersonName,
+            placeholder = outerPlaceholder,
+            default = "outer flavor, inner: $innerFlavor"
+        )
+
+        val withFlavor = runCatching {
+            flavorMachine(
+                original = outerFlavor.default,
+                flavors = listOf(innerFlavor, outerFlavor),
+            )
+        }
+
+        assertThat(withFlavor.isSuccess).isTrue()
+        assertThat(withFlavor.getOrNull()).isNotNull().isEmpty()
     }
 
     @Test
