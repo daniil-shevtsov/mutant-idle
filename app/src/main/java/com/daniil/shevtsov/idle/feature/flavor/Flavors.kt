@@ -78,13 +78,21 @@ fun String.splitByTokens(prefix: Char, postfix: Char): List<String> {
     return when {
         isEmpty() -> emptyList()
         get(0) == prefix -> listOf(
-            substring(0, indexOf(postfix)+1),
-            substring(indexOf(postfix)+1, length)
+            substring(0, indexOf(postfix) + 1),
+            substring(indexOf(postfix) + 1, length)
         )
-        get(length-1) == postfix -> listOf(
+
+        get(length - 1) == postfix -> listOf(
             substring(0, indexOf(prefix)),
             substring(indexOf(prefix), length)
         )
+
+        contains(prefix) -> listOf(
+            substring(0, indexOf(prefix)),
+            substring(indexOf(prefix), indexOf(postfix)+1),
+            substring(indexOf(postfix) + 1, length),
+        )
+
         else -> listOf(this)
     }
 }
