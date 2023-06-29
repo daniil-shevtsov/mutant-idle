@@ -406,6 +406,34 @@ fun createAllActions() = listOf(
             )
         ),
     ),
+    action(
+        title = "You can influence this ${Flavors.personName.placeholder}'s thoughts.",
+        subtitle = "It works in a subtle ways",
+        plot = "Everything went smoothly, no one will know they are gone",
+        resourceChanges = mapOf(
+            ResourceKey.Blood to -10.0,
+            ResourceKey.ControlledMind to 1.0,
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Abilities.Hypnosis
+            )
+        ),
+    ),
+    action(
+        title = "Make them want to give you a gift",
+        subtitle = "It's not really expensive",
+        plot = "\"Wow, how thoughtful, what gave you this idea?\"",
+        resourceChanges = mapOf(
+            ResourceKey.ControlledMind to 0.0,
+            ResourceKey.Money to 10.0,
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Abilities.Hypnosis
+            )
+        ),
+    ),
 ).makeIdsUnique()
 
 fun List<Selectable>.makeIdsUnique(): List<Selectable> {

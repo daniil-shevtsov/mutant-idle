@@ -1,7 +1,6 @@
 package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
 object Tags {
-    val Hypnosis = Tag(name = "Hypnosis", description = "Can control people")
     val Heliophobia = Tag(name = "Heliophobia", description = "Can't be in the sun")
     val Immortal = Tag(name = "Immortal", description = "Can't be killed in any way")
     val Mutating = Tag(name = "Mutating")
@@ -70,6 +69,7 @@ object Tags {
         val BatForm = Tag(name = "Bat Form Ability")
         val Flight = Tag(name = "Flight Ability")
         val TransferHost = Tag(name = "Transfer Host Ability")
+        val Hypnosis = Tag(name = "Hypnosis", description = "Can control people")
     }
 
     object State {

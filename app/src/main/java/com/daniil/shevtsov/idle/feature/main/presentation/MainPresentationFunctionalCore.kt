@@ -136,6 +136,7 @@ private fun ResourceKey.chooseIcon() = when (this) {
     ResourceKey.FreshMeat -> Icons.FreshMeat
     ResourceKey.Organs -> Icons.Organs
     ResourceKey.Familiar -> Icons.Familiar
+    ResourceKey.ControlledMind -> Icons.Familiar //TODO: Find another icon
     ResourceKey.Scrap -> Icons.Scrap
     ResourceKey.Information -> Icons.Information
 }
