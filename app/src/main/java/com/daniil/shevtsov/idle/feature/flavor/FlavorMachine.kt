@@ -10,20 +10,28 @@ fun flavorMachine(
     var newOriginal = original
     val replacedFlavors = mutableSetOf<Flavor>()
     var isStuck = false
+    val appliedFlavors = mutableListOf<String>()
 
     while (!isStuck && newOriginal.contains(Flavors.PREFIX)) {
         flavors.forEach { flavor ->
+            if(false) {
+                appliedFlavors += flavor.id.name
+            }
+
             if (flavor in replacedFlavors) {
                 println("stuck")
                 isStuck = true
-
             }
             newOriginal = flavorMinivan(original = newOriginal, flavor = flavor, tags = tags)
             replacedFlavors += flavor
         }
     }
 
-    return newOriginal
+    return if(/*!isStuck*/true) {
+        newOriginal
+    } else {
+        "ERROR: infinite loop of flavors: (${appliedFlavors.joinToString(separator = ", ")})"
+    }
 }
 
 fun flavorMinivan(

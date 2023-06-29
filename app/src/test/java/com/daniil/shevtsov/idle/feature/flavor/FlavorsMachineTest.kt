@@ -89,28 +89,38 @@ class FlavorsMachineTest {
 
     @Test
     fun `should handle infinite loop case`() {
+        val tag = tag(name = "tag")
         val innerPlaceholder = "${Flavors.PREFIX}INNER_FLAVOR"
         val outerPlaceholder = "${Flavors.PREFIX}OUTER_FLAVOR"
+        val originalString = "outer: $outerPlaceholder"
         val innerFlavor = flavor(
             id = FlavorId.PersonName,
             placeholder = innerPlaceholder,
-            default = "inner flavor, outer: $outerPlaceholder"
+            values = mapOf(
+                tag to "inner: $outerPlaceholder"
+            ),
+            default = "inner default"
         )
         val outerFlavor = flavor(
-            id = FlavorId.PersonName,
+            id = FlavorId.InvisibilityAction,
             placeholder = outerPlaceholder,
-            default = "outer flavor, inner: $innerFlavor"
+            values = mapOf(
+                tag to "outer: $innerPlaceholder"
+            ),
+            default = "outer default: $innerPlaceholder"
         )
 
         val withFlavor = runCatching {
             flavorMachine(
-                original = outerFlavor.default,
+                original = originalString,
+                tags = listOf(tag),
                 flavors = listOf(innerFlavor, outerFlavor),
             )
         }
 
         assertThat(withFlavor.isSuccess).isTrue()
-        assertThat(withFlavor.getOrNull()).isNotNull().isEmpty()
+        assertThat(withFlavor.getOrNull()).isNotNull()
+            .isEqualTo("ERROR: infinite loop of flavors: (${FlavorId.PersonName.name}, ${FlavorId.InvisibilityAction.name})")
     }
 
     @Test

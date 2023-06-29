@@ -3,11 +3,9 @@ package com.daniil.shevtsov.idle.feature.flavor
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 
 object Flavors {
-    const val PREFIX = "8"
-
     val invisibilityAction = flavor(
         id = FlavorId.InvisibilityAction,
-        placeholder = "${PREFIX}INVISIBILITY_ACTION",
+        placeholder = Flavors.placeholder("INVISIBILITY_ACTION"),
         values = mapOf(
             Tags.Nature.Magic to "become ethereal",
             Tags.Nature.Tech to "activate the cloaking device",
@@ -17,7 +15,7 @@ object Flavors {
 
     val invisibilityGain = flavor(
         id = FlavorId.InvisibilityGain,
-        placeholder = "${PREFIX}INVISIBILITY_GAIN",
+        placeholder = Flavors.placeholder("INVISIBILITY_GAIN"),
         values = mapOf(
             Tags.Nature.Magic to "Learn dark arts of invisibility",
             Tags.Nature.Tech to "Build a cloaking device from scrap",
@@ -26,7 +24,7 @@ object Flavors {
 
     val personName = flavor(
         id = FlavorId.PersonName,
-        placeholder = "${PREFIX}PERSON_NAME",
+        placeholder = Flavors.placeholder("PERSON_NAME"),
         values = mapOf(
             Tags.Immortal to "mortal",
             Tags.Species.Alien to "lifeform",
@@ -36,7 +34,7 @@ object Flavors {
 
     val peopleName = flavor(
         id = FlavorId.PeopleName,
-        placeholder = "${PREFIX}PEOPLE_NAME",
+        placeholder = Flavors.placeholder("PEOPLE_NAME"),
         values = mapOf(
             Tags.Immortal to "mortals",
             Tags.Species.Alien to "lifeforms",
@@ -46,7 +44,7 @@ object Flavors {
 
     val derogativePeopleName = flavor(
         id = FlavorId.DerogativePeopleName,
-        placeholder = "${PREFIX}DEROGATIVE_PEOPLE_NAME",
+        placeholder = Flavors.placeholder("DEROGATIVE_PEOPLE_NAME"),
         values = mapOf(
             Tags.Immortal to "mere mortals",
             Tags.Species.Alien to "primitive lifeforms",
@@ -55,7 +53,7 @@ object Flavors {
     )
 
     val objectifiedPeopleName = flavor(
-        placeholder = "$PREFIX-OBJECTIFIED-PEOPLE-NAME",
+        placeholder = Flavors.placeholder("OBJECTIFIED-PEOPLE-NAME"),
         values = mapOf(
             Tags.Species.Devourer to "food",
             Tags.Species.ShapeShifter to "clothes",
@@ -68,9 +66,14 @@ object Flavors {
     )
 
     val GraveyardInterpretation = flavor(
-        placeholder = "$PREFIX-GRAVEYARD-INTERPRETATION",
+        placeholder = Flavors.placeholder("GRAVEYARD-INTERPRETATION"),
         default = "where they hide people in the ground"
     )
+
+    private fun placeholder(key: String) = "$PREFIX$key$POSTFIX"
+
+    const val PREFIX = "8"
+    const val POSTFIX = "9"
 }
 
 //TODO: Do the same as with actions and upgrades
