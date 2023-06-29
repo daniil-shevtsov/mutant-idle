@@ -4,6 +4,16 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import timber.log.Timber
 
+//TODO: Do the same as with actions and upgrades
+fun createFlavors() = listOf(
+    Flavors.invisibilityAction,
+    Flavors.invisibilityGain,
+    Flavors.personName,
+    Flavors.peopleName,
+    Flavors.derogativePeopleName,
+    Flavors.objectifiedPeopleName,
+)
+
 //TODO: If I forget to add new flavor into flavors list in state there is an infinite loop.
 object Flavors {
     val invisibilityAction = flavor(
@@ -156,12 +166,3 @@ private const val PREFIX = "8"
 private const val POSTFIX = "9"
 
 fun String.containsFlavorPlaceholder() = contains(PREFIX) && contains(POSTFIX)
-
-//TODO: Do the same as with actions and upgrades
-fun createFlavors() = listOf(
-    Flavors.invisibilityAction,
-    Flavors.invisibilityGain,
-    Flavors.peopleName,
-    Flavors.derogativePeopleName,
-    Flavors.objectifiedPeopleName,
-)
