@@ -42,6 +42,7 @@ import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
 import com.daniil.shevtsov.idle.feature.upgrade.view.UpgradeList
 import com.google.accompanist.insets.statusBarsHeight
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Preview(
     widthDp = 320,
@@ -117,6 +118,7 @@ fun ContentBody(
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
     )
+    Timber.d("COntentBody recomposed")
 
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
