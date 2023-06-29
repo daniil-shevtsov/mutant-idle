@@ -101,4 +101,25 @@ fun createLocations() = listOf(
             )
         )
     ),
+    location(
+        title = "Forest",
+        subtitle = "It's rare to see ${Flavors.objectifiedPeopleName.placeholder} here",
+        tags = mapOf(
+            TagRelation.Provides to listOf(
+                Tags.Locations.Forest
+            )
+        )
+    ),
+    location(
+        title = "Ship Crash Site",
+        subtitle = "It won't fly again, but there are still some useful things inside.",
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Access.UfoCrashSite,
+            ),
+            TagRelation.Provides to listOf(
+                Tags.Locations.UfoCrashSite
+            )
+        )
+    ),
 ).makeIdsUnique()

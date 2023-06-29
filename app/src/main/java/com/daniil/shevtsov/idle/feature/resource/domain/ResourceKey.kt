@@ -12,4 +12,5 @@ enum class ResourceKey {
     ControlledMind,
     Scrap,
     Information,
+    Singularity,
 }

@@ -53,7 +53,7 @@ fun createUpgrades() = listOf(
         title = "Invisibility",
         subtitle = Flavors.invisibilityGain.placeholder,
         price = 1.0,
-        resourceChanges = mapOf(ResourceKey.Scrap to -1.0),
+        resourceChanges = mapOf(ResourceKey.Blood to -1.0),
         tags = mapOf(
             TagRelation.Provides to listOf(Tags.Abilities.Invisibility),
             TagRelation.RequiredAny to listOf(

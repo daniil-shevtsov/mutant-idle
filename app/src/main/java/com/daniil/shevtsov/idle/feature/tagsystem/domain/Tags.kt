@@ -27,7 +27,7 @@ object Tags {
         val Android = Tag(name = "Android")
     }
 
-    //TODO: There seems to be a need in a system
+    //TODO: There seems to be a need for a system
     object Access {
         val Home = Tag("Home")
         val Graveyard = Tag(name = "Graveyard Access")
@@ -38,6 +38,8 @@ object Tags {
         val Meat = Tag(name = "Meat access")
         val FreshCorpses = Tag(name = "Fresh corpses")
         val Incinerator = Tag(name = "Incinerator")
+
+        val UfoCrashSite = Tag(name = "Ufo Crash Site exists")
     }
 
     object Locations {
@@ -49,6 +51,8 @@ object Tags {
         val DarkAlley = Tag(name = "Dark Alley")
         val SuperMarket = Tag(name = "Super Market")
         val Rooftops = Tag(name = "Rooftops")
+        val Forest = Tag(name = "Forest")
+        val UfoCrashSite = Tag(name = "Ufo Crash Site")
     }
 
     object Knowledge {

@@ -115,7 +115,7 @@ private fun createInitialPlayer() = player(
 fun createInitialTraits() = listOf(
     Jobs.Unemployed,
     Jobs.Mortician,
-    Jobs.Undertaker,
+    Jobs.Gravedigger,
     Jobs.Butcher,
     Jobs.ScrapyardMechanic,
     Species.Devourer,

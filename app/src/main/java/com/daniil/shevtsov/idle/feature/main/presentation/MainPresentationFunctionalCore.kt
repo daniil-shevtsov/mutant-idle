@@ -139,6 +139,7 @@ private fun ResourceKey.chooseIcon() = when (this) {
     ResourceKey.ControlledMind -> Icons.Familiar //TODO: Find another icon
     ResourceKey.Scrap -> Icons.Scrap
     ResourceKey.Information -> Icons.Information
+    ResourceKey.Singularity -> Icons.Singularity
 }
 
 private fun satisfiesAllTagsRelations(

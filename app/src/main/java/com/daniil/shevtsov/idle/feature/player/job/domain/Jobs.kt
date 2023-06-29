@@ -7,6 +7,7 @@ object Jobs {
     val Mortician = playerJob(
         id = 0L,
         title = "Mortician",
+        description = "Dissecting corpses",
         tags = listOf(
             Tags.Access.Morgue,
             Tags.Surgeon,
@@ -14,9 +15,10 @@ object Jobs {
         )
     )
 
-    val Undertaker = playerJob(
+    val Gravedigger = playerJob(
         id = 1L,
-        title = "Undertaker",
+        title = "Gravedigger",
+        description = "Digging graves so you won't end up in one",
         tags = listOf(
             Tags.Access.Graveyard,
             Tags.LaborIntensive,
@@ -26,6 +28,7 @@ object Jobs {
     val Butcher = playerJob(
         id = 2L,
         title = "Butcher",
+        description = "Handling and selling meat",
         tags = listOf(
             Tags.Access.ButcherShop,
             Tags.SocialJob,
@@ -35,13 +38,14 @@ object Jobs {
     val Unemployed = playerJob(
         id = 3L,
         title = "Unemployed",
-        description = "You don't have a job",
+        description = "I think you'll find what to do with your free time",
         tags = listOf(),
     )
 
     val ScrapyardMechanic = playerJob(
         id = 4L,
         title = "Scrapyard Mechanic",
+        description = "Handling metal and parts",
         tags = listOf(
             Tags.Access.Scrapyard,
         )

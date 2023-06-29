@@ -425,7 +425,7 @@ fun createAllActions() = listOf(
         subtitle = "It's not really expensive",
         plot = "\"Wow, how thoughtful, what gave you this idea?\"",
         resourceChanges = mapOf(
-            ResourceKey.ControlledMind to 0.0,
+            ResourceKey.ControlledMind to 0.0, //TODO: I need to be able to require resource without spending it
             ResourceKey.Money to 10.0,
         ),
         tags = mapOf(
@@ -433,6 +433,65 @@ fun createAllActions() = listOf(
                 Tags.Abilities.Hypnosis
             )
         ),
+    ),
+    action(
+        title = "Make them think they did your crime",
+        subtitle = "They are going to go away for a long time, but you'll get less attention.",
+        plot = "Breaking News: seemingly an ordinary person confessed to an unthinkable", //TODO: Random variations would work well here
+        resourceChanges = mapOf(
+            ResourceKey.ControlledMind to -1.0,
+        ),
+        ratioChanges = ratioChanges(
+            RatioKey.Suspicion to -0.05
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Abilities.Hypnosis
+            )
+        ),
+    ),
+    action(
+        title = "Hide in the woods for a while",
+        subtitle = "Need to stockpile on food for this",
+        plot = "Some time has passed, things wound down a little bit",
+        resourceChanges = mapOf(
+            //TODO: workaround would be like ratioWithTags but resourceChanges is not refactored to that
+            ResourceKey.HumanFood to -5.0, //TODO: Resources should use tags too i.e. <food> does not matter what kind. Or even energy source, like for android it's not food, it's electricity
+        ),
+        ratioChanges = ratioChanges(
+            RatioKey.Suspicion to -0.05
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Locations.Forest
+            )
+        ),
+    ),
+    action(
+        title = "Gather some scrap from your ship",
+        subtitle = "This is soul-crushing to tear it apart",
+        plot = "You've managed to gather some scrap",
+        resourceChanges = mapOf(
+            ResourceKey.Scrap to 1.0
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Locations.UfoCrashSite
+            )
+        ),
+    ),
+    action(
+        id = 24L,
+        title = "Gather Scrap",
+        subtitle = "These ${Flavors.peopleName.placeholder} throw away the most useful things",
+        resourceChanges = mapOf(
+            ResourceKey.Scrap to 1.0,
+        ),
+        tags = mapOf(
+            TagRelation.RequiredAll to listOf(
+                Tags.Locations.Scrapyard
+            )
+        )
     ),
 ).makeIdsUnique()
 
