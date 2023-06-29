@@ -34,7 +34,6 @@ import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.PriceModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
-import timber.log.Timber
 
 fun mapMainViewState(
     state: GameState
@@ -43,7 +42,6 @@ fun mapMainViewState(
 }
 
 private fun createMainViewState(state: GameState): MainViewState {
-    Timber.d("createMainViewState start")
     val resources = state.resources.filter { it.value > 0.0 }.map { resource ->
         with(resource) {
             ResourceModel(
@@ -54,7 +52,6 @@ private fun createMainViewState(state: GameState): MainViewState {
             )
         }
     }
-    Timber.d("After resources")
     val ratios = state.ratios
         .filter { ratio -> ratio.key == RatioKey.Suspicion || ratio.key == state.player.mainRatioKey }
         .map { ratio ->
@@ -67,15 +64,12 @@ private fun createMainViewState(state: GameState): MainViewState {
                 icon = ratio.key.chooseIcon(),
             )
         }
-    Timber.d("After ratios")
     val actionState = createActionState(state.actions, state.resources, state.player, state)
-    Timber.d("After Actions")
     val locationSelectionState = state.locationSelectionState.toViewState(
         locations = state.locations,
         playerTags = state.player.tags,
         state
     )
-    Timber.d("After locations")
     val plotEntries = state.plotEntries.map { it.copy(text = it.text.withFlavor(state)) }
     val shop = state.upgrades
         .filter { upgrade ->
@@ -111,7 +105,6 @@ private fun createMainViewState(state: GameState): MainViewState {
                 upgrades = upgrades,
             )
         }
-    Timber.d("After upgrades")
     val sectionCollapse = state.sections.map { it.key to it.isCollapsed }.toMap()
 
     return MainViewState.Success(

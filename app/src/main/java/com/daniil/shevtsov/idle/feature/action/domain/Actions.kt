@@ -183,7 +183,7 @@ fun createAllActions() = listOf(
     ),
     action(
         title = "Become a bat",
-        subtitle = "",
+        subtitle = "Fly fly away",
         tags = mapOf(
             TagRelation.RequiredAll to listOf(
                 Tags.Abilities.BatForm,

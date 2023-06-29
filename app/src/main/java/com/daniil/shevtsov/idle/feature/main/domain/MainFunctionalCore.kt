@@ -16,7 +16,6 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
-import timber.log.Timber
 
 fun mainFunctionalCore(
     state: GameState,
@@ -56,7 +55,6 @@ fun handleLocationSelected(
     state: GameState,
     selectedLocation: Location
 ): GameState {
-    Timber.d("handleLocationSelected start")
     val oldTags = state.locationSelectionState.selectedLocation.tags[TagRelation.Provides].orEmpty()
     val newTags = selectedLocation.tags[TagRelation.Provides].orEmpty()
 
@@ -68,9 +66,7 @@ fun handleLocationSelected(
             generalTags = state.player.generalTags - oldTags + newTags
         )
     )
-    Timber.d("handleLocationSelected calculated state before plot")
     val stateWithPlot = state.addPlotEntry(selectedLocation)
-    Timber.d("handleLocationSelected calculated state with plot")
     return stateWithPlot
 
 }
