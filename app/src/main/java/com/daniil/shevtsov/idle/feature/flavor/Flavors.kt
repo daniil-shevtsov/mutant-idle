@@ -75,23 +75,16 @@ object Flavors {
 }
 
 fun String.splitByTokens(prefix: Char, postfix: Char): List<String> {
+
+    val prefixIndex = indexOf(prefix)
+    val postfixIndex = indexOf(postfix)
     return when {
         isEmpty() -> emptyList()
-        get(0) == prefix -> listOf(
-            substring(0, indexOf(postfix) + 1),
-            substring(indexOf(postfix) + 1, length)
-        )
-
-        get(length - 1) == postfix -> listOf(
-            substring(0, indexOf(prefix)),
-            substring(indexOf(prefix), length)
-        )
-
-        contains(prefix) -> listOf(
-            substring(0, indexOf(prefix)),
-            substring(indexOf(prefix), indexOf(postfix)+1),
-            substring(indexOf(postfix) + 1, length),
-        )
+        prefixIndex != -1 && postfixIndex != -1 -> listOf(
+            substring(0, prefixIndex),
+            substring(prefixIndex, postfixIndex + 1),
+            substring(postfixIndex + 1, length),
+        ).filter { it.isNotEmpty() }
 
         else -> listOf(this)
     }
