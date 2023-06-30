@@ -909,6 +909,85 @@ class MainPresentationTest {
             )
     }
 
+    @Test
+    fun `should compact identical plot entries`() {
+        val state = gameState(
+            plotEntries = listOf(
+                plotEntry(text = "kek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "lol"),
+            )
+        )
+        val viewState = mapMainViewState(state)
+
+        assertThat(viewState)
+            .extractingPlot()
+            .extracting(PlotEntry::text)
+            .containsExactly(
+                "kek",
+                "cheburek (x4)",
+                "lol",
+            )
+    }
+
+    @Test
+    fun `should compact two different identical plot entries`() {
+        val state = gameState(
+            plotEntries = listOf(
+                plotEntry(text = "kek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "lol"),
+                plotEntry(text = "cheburek2"),
+                plotEntry(text = "cheburek2"),
+                plotEntry(text = "cheburek2"),
+            )
+        )
+        val viewState = mapMainViewState(state)
+
+        assertThat(viewState)
+            .extractingPlot()
+            .extracting(PlotEntry::text)
+            .containsExactly(
+                "kek",
+                "cheburek (x4)",
+                "lol",
+                "cheburek2 (x3)",
+            )
+    }
+
+    @Test
+    fun `should compact same two identical plot entries in different places`() {
+        val state = gameState(
+            plotEntries = listOf(
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "kek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "lol"),
+            )
+        )
+        val viewState = mapMainViewState(state)
+
+        assertThat(viewState)
+            .extractingPlot()
+            .extracting(PlotEntry::text)
+            .containsExactly(
+                "cheburek (x2)",
+                "kek",
+                "cheburek (x4)",
+                "lol",
+            )
+    }
+
     private fun Assert<MainViewState>.extractingPlot() = extractingMainState()
         .prop(MainViewState.Success::plotEntries)
 

@@ -19,6 +19,7 @@ import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
+import com.daniil.shevtsov.idle.feature.plot.domain.PlotEntry
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.presentation.RatioModel
@@ -70,7 +71,16 @@ private fun createMainViewState(state: GameState): MainViewState {
         playerTags = state.player.tags,
         state
     )
-    val plotEntries = state.plotEntries.map { it.copy(text = it.text.withFlavor(state)) }
+    val plotEntries = state.plotEntries
+        .map { it.text }
+        .let { entries -> countSequentialDuplicates(entries) }
+        .map { group ->
+            when {
+                group.count > 1 -> PlotEntry(text = "${group.value} (x${group.count})")
+                else -> PlotEntry(text = group.value)
+            }
+        }
+        .map { it.copy(text = it.text.withFlavor(state)) }
     val shop = state.upgrades
         .filter { upgrade ->
             satisfiesAllTagsRelations(
@@ -117,6 +127,21 @@ private fun createMainViewState(state: GameState): MainViewState {
         sectionCollapse = sectionCollapse,
     )
 }
+
+private fun countSequentialDuplicates(values: List<String>): List<Group> {
+    val groups = mutableListOf<Group>()
+    values.forEach {
+        val last = groups.lastOrNull()
+        if (last?.value == it) {
+            last.count++
+        } else {
+            groups.add(Group(it, 1))
+        }
+    }
+    return groups
+}
+
+data class Group(val value: String, var count: Int)
 
 private fun RatioKey.chooseIcon(): String {
     return when (this) {
