@@ -1,14 +1,13 @@
 package com.daniil.shevtsov.idle.feature.location.domain
 
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
+import com.daniil.shevtsov.idle.feature.action.domain.TagRelations
 
 fun location(
     id: Long = 0L,
     title: String = "",
     subtitle: String = "",
     plot: String? = null,
-    tags: Map<TagRelation, List<Tag>> = mapOf(),
+    tags: TagRelations = mapOf(),
 ) = Location(
     id = id,
     title = title,

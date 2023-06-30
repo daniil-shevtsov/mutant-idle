@@ -1,16 +1,15 @@
 package com.daniil.shevtsov.idle.feature.location.domain
 
+import com.daniil.shevtsov.idle.feature.action.domain.TagRelations
 import com.daniil.shevtsov.idle.feature.main.domain.PlotHolder
 import com.daniil.shevtsov.idle.feature.main.domain.Selectable
 import com.daniil.shevtsov.idle.feature.main.presentation.Flavorable
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 
 data class Location(
     override val id: Long,
     override val title: String,
     override val subtitle: String,
-    val tags: Map<TagRelation, List<Tag>>,
+    val tags: TagRelations,
     override val plot: String?,
 ) : Selectable, Flavorable, PlotHolder {
     override fun createDefaultPlot(): String = "You went to the $title"

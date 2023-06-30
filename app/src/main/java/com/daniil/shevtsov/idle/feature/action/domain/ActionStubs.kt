@@ -7,8 +7,6 @@ import com.daniil.shevtsov.idle.feature.action.presentation.RatioChangeModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ResourceChangeModel
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratioChange
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 
 fun ratioChanges(
     vararg entries: Pair<RatioKey, Double>,
@@ -26,7 +24,7 @@ fun action(
     subtitle: String = "",
     resourceChanges: ResourceChanges = mapOf(),
     ratioChanges: RatioChanges = mapOf(),
-    tags: Map<TagRelation, List<Tag>> = mapOf(),
+    tags: TagRelations = mapOf(),
     plot: String? = null,
 ) = Action(
     id = id,

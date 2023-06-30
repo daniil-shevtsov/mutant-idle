@@ -6,6 +6,7 @@ import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.RatioChanges
 import com.daniil.shevtsov.idle.feature.action.domain.ResourceChanges
+import com.daniil.shevtsov.idle.feature.action.domain.TagRelations
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
@@ -168,7 +169,7 @@ private fun ResourceKey.chooseIcon() = when (this) {
 }
 
 private fun satisfiesAllTagsRelations(
-    tagRelations: Map<TagRelation, List<Tag>>,
+    tagRelations: TagRelations,
     tags: List<Tag>,
 ): Boolean {
     val hasAllRequired = tagRelations[TagRelation.RequiredAll].orEmpty()

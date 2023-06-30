@@ -11,6 +11,7 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 typealias ResourceChanges = Map<ResourceKey, Double>
 typealias RatioChangeForTags = Map<List<Tag>, Double>
 typealias RatioChanges = Map<RatioKey, RatioChangeForTags>
+typealias TagRelations = Map<TagRelation, List<Tag>>
 
 data class Action(
     override val id: Long,
@@ -18,7 +19,7 @@ data class Action(
     override val subtitle: String,
     val resourceChanges: ResourceChanges,
     val ratioChanges: RatioChanges,
-    val tags: Map<TagRelation, List<Tag>>,
+    val tags: TagRelations,
     override val plot: String?,
 ) : Selectable, Flavorable, PlotHolder {
     override fun createDefaultPlot(): String = "You performed action \"$title\""

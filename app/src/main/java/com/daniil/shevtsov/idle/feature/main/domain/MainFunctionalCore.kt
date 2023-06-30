@@ -88,7 +88,6 @@ interface Selectable {
     ): Selectable
 }
 
-//TODO: If there are several same plot entries it should be one with (x50) to the right
 private fun GameState.addPlotEntry(
     plotHolder: PlotHolder
 ): GameState {
@@ -233,6 +232,9 @@ private fun handleUpgradeSelected(
                 tags = state.player.tags,
             )
 
+            //TODO: Need to unify action, upgrade and location modifying tags
+            val newTags =
+                state.player.generalTags + boughtUpgrade.tags[TagRelation.Provides].orEmpty()
             return state.copy(
                 selectables = state.selectables.map { selectable ->
                     updatedUpgrades[selectable.id] ?: selectable
@@ -240,13 +242,19 @@ private fun handleUpgradeSelected(
                 resources = updatedResources,
                 ratios = updatedRatios,
                 player = state.player.copy(
-                    generalTags = state.player.generalTags + boughtUpgrade.tags[TagRelation.Provides].orEmpty()
+                    generalTags = newTags
                 )
             ).addPlotEntry(boughtUpgrade)
         }
 
         else -> state
     }
+}
+
+private fun updateTags(
+    currentTags: List<Tag>,
+): List<Tag> {
+    return currentTags
 }
 
 fun handleSelectableClicked(
