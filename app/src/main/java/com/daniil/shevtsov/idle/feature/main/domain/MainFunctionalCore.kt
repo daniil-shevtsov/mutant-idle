@@ -4,6 +4,7 @@ import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.RatioChanges
 import com.daniil.shevtsov.idle.feature.action.domain.ResourceChanges
+import com.daniil.shevtsov.idle.feature.action.domain.TagRelations
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
 import com.daniil.shevtsov.idle.feature.location.domain.Location
@@ -55,15 +56,12 @@ fun handleLocationSelected(
     state: GameState,
     selectedLocation: Location
 ): GameState {
-    val oldTags = state.locationSelectionState.selectedLocation.tags[TagRelation.Provides].orEmpty()
-    val newTags = selectedLocation.tags[TagRelation.Provides].orEmpty()
-
     val state = state.copy(
         locationSelectionState = state.locationSelectionState.copy(
             selectedLocation = selectedLocation,
         ),
         player = state.player.copy(
-            generalTags = state.player.generalTags - oldTags + newTags
+            generalTags = updateTags(state.player.generalTags, selectedLocation.tags)
         )
     )
     val stateWithPlot = state.addPlotEntry(selectedLocation)
@@ -142,16 +140,12 @@ private fun handleActionClicked(
         tags = state.player.tags,
     )
 
-    val newTags =
-        state.player.generalTags + selectedAction.tags[TagRelation.Provides].orEmpty() - selectedAction.tags[TagRelation.Removes].orEmpty()
-            .toSet()
-
     return if (!hasInvalidChanges) {
         state.copy(
             ratios = updatedRatios,
             resources = updatedResources,
             player = state.player.copy(
-                generalTags = newTags
+                generalTags = updateTags(state.player.generalTags, selectedAction.tags)
             ),
             currentScreen = when {
                 (updatedRatios.find { it.key == RatioKey.Suspicion }?.value
@@ -232,9 +226,6 @@ private fun handleUpgradeSelected(
                 tags = state.player.tags,
             )
 
-            //TODO: Need to unify action, upgrade and location modifying tags
-            val newTags =
-                state.player.generalTags + boughtUpgrade.tags[TagRelation.Provides].orEmpty()
             return state.copy(
                 selectables = state.selectables.map { selectable ->
                     updatedUpgrades[selectable.id] ?: selectable
@@ -242,7 +233,7 @@ private fun handleUpgradeSelected(
                 resources = updatedResources,
                 ratios = updatedRatios,
                 player = state.player.copy(
-                    generalTags = newTags
+                    generalTags = updateTags(state.player.generalTags, boughtUpgrade.tags)
                 )
             ).addPlotEntry(boughtUpgrade)
         }
@@ -253,8 +244,10 @@ private fun handleUpgradeSelected(
 
 private fun updateTags(
     currentTags: List<Tag>,
+    selectedTagRelations: TagRelations,
 ): List<Tag> {
-    return currentTags
+    return currentTags + selectedTagRelations[TagRelation.Provides].orEmpty() - selectedTagRelations[TagRelation.Removes].orEmpty()
+        .toSet()
 }
 
 fun handleSelectableClicked(
