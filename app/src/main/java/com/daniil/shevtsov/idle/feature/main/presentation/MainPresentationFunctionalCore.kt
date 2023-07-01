@@ -173,15 +173,20 @@ private fun satisfiesAllTagsRelations(
     tags: List<Tag>,
 ): Boolean {
     val hasAllRequired = tagRelations[TagRelation.RequiredAll].orEmpty()
+        //.let { it + listOfNotNull(tagRelations[TagRelation.Removes]) }
         .all { requiredTag -> requiredTag in tags }
     val requiredAny = tagRelations[TagRelation.RequiredAny]
     val hasAnyRequired =
         requiredAny == null || requiredAny.any { requiredTag -> requiredTag in tags }
-    val requiredNone = tagRelations[TagRelation.RequiresNone]
-    val hasNone =
-        requiredNone == null || requiredNone.none { forbiddenTag -> forbiddenTag in tags }
+    val forbiddenTags = tagRelations[TagRelation.RequiresNone]
 
-    return hasAllRequired && hasAnyRequired && hasNone
+    val tagsToRemove = tagRelations[TagRelation.Removes].orEmpty().toSet()
+    val presentTagsToRemove = tags.filter { tag -> tag in tagsToRemove }
+
+    val noForbiddenTags =
+        forbiddenTags == null || forbiddenTags.none { forbiddenTag -> forbiddenTag in tags }
+
+    return hasAllRequired && hasAnyRequired && noForbiddenTags && (tagsToRemove.isEmpty() || presentTagsToRemove.isNotEmpty())
 }
 
 private fun createActionState(

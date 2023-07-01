@@ -641,6 +641,60 @@ class MainPresentationTest {
     }
 
     @Test
+    fun `should show remove action if it only removes and tag to remove is present`() =
+        runBlockingTest {
+            val tagToRemove = tag(name = "tag to remove")
+
+            val removeAction = action(
+                id = 1L,
+                tags = mapOf(TagRelation.Removes to listOf(tagToRemove))
+            )
+
+            val state = gameState(
+                actions = listOf(removeAction),
+                player = player(generalTags = listOf(tagToRemove)),
+            )
+
+            val viewState = mapMainViewState(state = state)
+
+            assertThat(viewState)
+                .extractingMainState()
+                .prop(MainViewState.Success::actionState)
+                .prop(ActionsState::actionPanes)
+                .index(0)
+                .prop(ActionPane::actions)
+                .extracting(ActionModel::id)
+                .containsExactly(removeAction.id)
+        }
+
+    @Test
+    fun `should hide remove action if it only removes and tag to remove is not present`() =
+        runBlockingTest {
+            val tagToRemove = tag(name = "tag to remove")
+
+            val removeAction = action(
+                id = 1L,
+                tags = mapOf(TagRelation.Removes to listOf(tagToRemove))
+            )
+
+            val state = gameState(
+                actions = listOf(removeAction),
+                player = player(generalTags = emptyList()),
+            )
+
+            val viewState = mapMainViewState(state = state)
+
+            assertThat(viewState)
+                .extractingMainState()
+                .prop(MainViewState.Success::actionState)
+                .prop(ActionsState::actionPanes)
+                .index(0)
+                .prop(ActionPane::actions)
+                .extracting(ActionModel::id)
+                .isEmpty()
+        }
+
+    @Test
     fun `should show correct icon for human and monster actions`() = runBlockingTest {
         val humanAction = action(
             id = 1L,

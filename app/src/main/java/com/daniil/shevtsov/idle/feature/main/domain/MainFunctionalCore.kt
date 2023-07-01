@@ -56,16 +56,14 @@ fun handleLocationSelected(
     state: GameState,
     selectedLocation: Location
 ): GameState {
-    val state = state.copy(
+    return state.copy(
         locationSelectionState = state.locationSelectionState.copy(
             selectedLocation = selectedLocation,
         ),
         player = state.player.copy(
             generalTags = updateTags(state.player.generalTags, selectedLocation.tags)
         )
-    )
-    val stateWithPlot = state.addPlotEntry(selectedLocation)
-    return stateWithPlot
+    ).addPlotEntry(selectedLocation)
 
 }
 
