@@ -6,8 +6,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.SpaceBetween
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -31,7 +34,7 @@ import com.daniil.shevtsov.idle.feature.main.presentation.actionsState
 import com.daniil.shevtsov.idle.feature.ratio.view.RatioChanges
 import com.daniil.shevtsov.idle.feature.resource.view.ResourceChanges
 
-@Preview
+@Preview(heightDp = 400)
 @Composable
 fun ActionPreview() {
     Column {
@@ -44,7 +47,6 @@ fun ActionPreview() {
     widthDp = 400,
     heightDp = 400,
 )
-
 @Composable
 fun MutantActionPanePreview() {
     ActionSection(
@@ -105,17 +107,20 @@ fun ActionSection(
                         actionPane.actions.chunked(2)
                             .map { it[0] to it.getOrNull(1) }
                     ) { (leftAction, rightAction) ->
-                        Row(horizontalArrangement = spacedBy(4.dp)) {
+                        Row(
+                            horizontalArrangement = spacedBy(4.dp),
+                            modifier = Modifier.height(IntrinsicSize.Min)
+                        ) {
                             Action(
                                 action = leftAction,
                                 onClicked = { onActionClicked(leftAction.id) },
-                                modifier = Modifier.weight(1f),
+                                modifier = Modifier.fillMaxHeight().weight(1f),
                             )
                             if (rightAction != null) {
                                 Action(
                                     action = rightAction,
                                     onClicked = { onActionClicked(rightAction.id) },
-                                    modifier = Modifier.weight(1f),
+                                    modifier = Modifier.fillMaxHeight().weight(1f),
                                 )
                             }
                         }
@@ -141,7 +146,6 @@ fun Action(
     }
     val lightColor = AppTheme.colors.background.copy(alpha = colorAlpha)
     val darkColor = AppTheme.colors.backgroundDark.copy(alpha = colorAlpha)
-
     Column(
         modifier = modifier
             .background(Color.LightGray)
@@ -174,6 +178,7 @@ fun Action(
             color = AppTheme.colors.textDark,
             modifier = Modifier
                 .fillMaxWidth()
+                .weight(1f)
                 .background(AppTheme.colors.backgroundText)
                 .padding(4.dp)
                 .padding(start = 4.dp)
