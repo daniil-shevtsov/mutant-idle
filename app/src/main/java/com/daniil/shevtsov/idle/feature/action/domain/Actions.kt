@@ -172,13 +172,7 @@ fun createAllActions() = listOf(
         title = "Become visible",
         subtitle = "You become visible again",
         tags = mapOf(
-            TagRelation.RequiredAll to listOf(
-                Tags.Abilities.Invisibility,
-                Tags.State.Invisible,
-            ),
-            TagRelation.Removes to listOf( //TODO: I sense inconsistency in this one
-                Tags.State.Invisible
-            )
+            TagRelation.Removes to listOf(Tags.State.Invisible)
         ),
     ),
     action(
