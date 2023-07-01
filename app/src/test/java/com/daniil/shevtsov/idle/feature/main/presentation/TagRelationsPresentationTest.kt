@@ -39,7 +39,7 @@ class TagRelationsPresentationTest {
     @TestFactory
     fun testPlotHolders() = plotHolders
         .map { testData ->
-            DynamicTest.dynamicTest("should show if required all tags are present") {
+            DynamicTest.dynamicTest("should only show ${testData.selectable.title}s if you have all requiredAll or at least one requiredAny tag") {
                 val selectable = testData.selectable
                 val availableTag = tag(name = "available tag")
                 val unavailableTag = tag(name = "unavailable tag")

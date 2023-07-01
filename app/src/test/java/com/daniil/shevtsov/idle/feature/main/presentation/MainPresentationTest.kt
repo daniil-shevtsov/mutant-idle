@@ -177,47 +177,6 @@ class MainPresentationTest {
     }
 
     @Test
-    fun `should only show upgrades if you have all requiredAll or at least one requiredAny tag`() =
-        runBlockingTest {
-            val availableTag = tag(name = "lol")
-            val unavailableTag = tag(name = "kek")
-
-            val requiredAllAvailableUpgrade = upgrade(
-                id = 1L,
-                tagRelations = mapOf(TagRelation.RequiredAll to listOf(availableTag)),
-            )
-            val requiredAnyAvailableUpgrade = upgrade(
-                id = 2L,
-                tagRelations = mapOf(TagRelation.RequiredAny to listOf(availableTag, unavailableTag)),
-            )
-            val expectedAvailableUpgrades = listOf(
-                requiredAllAvailableUpgrade,
-                requiredAnyAvailableUpgrade,
-            )
-            val expectedUnavailableUpgrades = listOf(
-                upgrade(
-                    id = 3L,
-                    tagRelations = mapOf(TagRelation.RequiredAll to listOf(availableTag, unavailableTag)),
-                ),
-                upgrade(
-                    id = 4L, tagRelations = mapOf(TagRelation.RequiredAll to listOf(unavailableTag)),
-                )
-            )
-
-            val state = gameState(
-                upgrades = expectedAvailableUpgrades + expectedUnavailableUpgrades,
-                player = player(generalTags = listOf(availableTag)),
-            )
-
-            val viewState = mapMainViewState(state = state)
-
-            assertThat(viewState)
-                .extractingUpgrades()
-                .extracting(UpgradeModel::id)
-                .containsExactly(requiredAllAvailableUpgrade.id, requiredAnyAvailableUpgrade.id)
-        }
-
-    @Test
     fun `should mark upgrade as affordable if its price less than resource`() = runBlockingTest {
         val state = gameState(
             resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
