@@ -156,16 +156,8 @@ fun createAllActions() = listOf(
         title = "Become invisible",
         subtitle = "You ${Flavors.invisibilityAction.placeholder}, ${Flavors.derogativePeopleName.placeholder} can't see you now",
         tags = mapOf(
-            TagRelation.RequiredAll to listOf(
-                Tags.Abilities.Invisibility,
-            ),
-            TagRelation.Provides to listOf(
-                Tags.State.Invisible
-            ),
-            TagRelation.RequiresNone to listOf(
-                //TODO: Maybe this should be default behavior for providing tags?
-                Tags.State.Invisible,
-            )
+            TagRelation.RequiredAll to listOf(Tags.Abilities.Invisibility,),
+            TagRelation.Provides to listOf(Tags.State.Invisible),
         ),
     ),
     action(
