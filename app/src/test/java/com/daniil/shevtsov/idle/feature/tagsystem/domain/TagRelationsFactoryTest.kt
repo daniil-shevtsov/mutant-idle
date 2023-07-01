@@ -98,4 +98,15 @@ internal class TagRelationsFactoryTest {
             }
     }
 
+    @Test
+    fun `should add relation only once if there are duplicates`() {
+        val tagRelations = tagRelations(
+            TagRelation.Provides to provideTag1,
+            TagRelation.Provides to provideTag1,
+        )
+        assertThat(tagRelations)
+            .prop(TagRelations::provideTags)
+            .containsExactly(provideTag1)
+    }
+
 }

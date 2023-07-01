@@ -11,6 +11,7 @@ fun tagRelations(
     vararg values: Pair<TagRelation, Tag>
 ): TagRelations = createTagRelations(
     values
+        .distinct()
         .groupBy { (tagRelation, _) -> tagRelation }
         .map { (key, value) -> key to value.map { it.second } }
 )
