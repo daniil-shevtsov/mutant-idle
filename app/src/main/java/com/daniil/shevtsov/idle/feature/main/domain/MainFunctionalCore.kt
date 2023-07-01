@@ -15,6 +15,7 @@ import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelations
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.provideTags
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 
@@ -56,12 +57,15 @@ fun handleLocationSelected(
     state: GameState,
     selectedLocation: Location
 ): GameState {
+    val updatedTags = updateTags(state.player.generalTags, selectedLocation.tagRelations)
+    val oldLocationTags = state.locationSelectionState.selectedLocation.tagRelations.provideTags.toSet()
+    val finalTags = updatedTags - oldLocationTags
     return state.copy(
         locationSelectionState = state.locationSelectionState.copy(
             selectedLocation = selectedLocation,
         ),
         player = state.player.copy(
-            generalTags = updateTags(state.player.generalTags, selectedLocation.tagRelations)
+            generalTags = finalTags
         )
     ).addPlotEntry(selectedLocation)
 

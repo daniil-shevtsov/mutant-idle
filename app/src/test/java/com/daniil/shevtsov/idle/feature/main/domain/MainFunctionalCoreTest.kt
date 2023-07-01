@@ -19,6 +19,8 @@ import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.main.presentation.sectionState
+import com.daniil.shevtsov.idle.feature.player.core.domain.Player
+import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
@@ -27,7 +29,9 @@ import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import com.daniil.shevtsov.idle.feature.resource.domain.resourceChange
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.tagRelations
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
@@ -202,6 +206,37 @@ class MainFunctionalCoreTest {
             .prop(GameState::locationSelectionState)
             .prop(LocationSelectionState::selectedLocation)
             .isEqualTo(location)
+    }
+
+    @Test
+    fun `should remove provided by location tag when another location selected`() {
+        val oldTag = tag(name = "old location")
+        val newTag = tag(name = "new location")
+        val otherTag = tag(name = "other tag")
+        val oldLocation = location(
+            id = 1L,
+            title = "old location",
+            tagRelations = tagRelations(TagRelation.Provides to oldTag)
+        )
+        val newLocation = location(
+            id = 2L,
+            title = "new location",
+            tagRelations = tagRelations(TagRelation.Provides to newTag)
+        )
+
+        val state = mainFunctionalCore(
+            state = gameState(
+                locations = listOf(oldLocation, newLocation),
+                player = player(generalTags = listOf(oldTag, otherTag)),
+                locationSelectionState = locationSelectionState(selectedLocation = oldLocation)
+            ),
+            viewAction = MainViewAction.SelectableClicked(id = newLocation.id)
+        )
+
+        assertThat(state)
+            .prop(GameState::player)
+            .prop(Player::generalTags)
+            .containsExactly(otherTag, newTag)
     }
 
     @Test
