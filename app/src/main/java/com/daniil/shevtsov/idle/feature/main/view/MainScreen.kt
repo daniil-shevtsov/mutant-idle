@@ -122,7 +122,7 @@ fun ContentBody(
         scaffoldState = bottomSheetScaffoldState,
         sheetContent = {
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .height(500.dp)
                     .background(AppTheme.colors.backgroundLight)
                     .padding(top = 2.dp)
@@ -131,7 +131,7 @@ fun ContentBody(
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = modifier
+                    modifier = Modifier
                         .fillMaxWidth()
                         .background(AppTheme.colors.background)
                         .padding(vertical = 4.dp)
@@ -139,7 +139,6 @@ fun ContentBody(
                 ) {
                     CollapseButton(
                         isCollapsed = bottomSheetScaffoldState.bottomSheetState.isExpanded,
-                        modifier = modifier,
                         onClick = {
                             scope.launch {
                                 if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) {
@@ -154,12 +153,10 @@ fun ContentBody(
                         text = "Upgrades",
                         style = AppTheme.typography.title,
                         color = AppTheme.colors.textLight,
-                        modifier = modifier
                     )
                 }
                 Cavity(
                     mainColor = AppTheme.colors.background,
-                    modifier = modifier,
                 ) {
                     UpgradeList(
                         upgradeList = state.shop.upgrades,
@@ -172,13 +169,13 @@ fun ContentBody(
         sheetPeekHeight = 56.dp
     ) { paddingValues ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .background(AppTheme.colors.background)
                 .padding(bottom = paddingValues.calculateBottomPadding()),
             verticalArrangement = Arrangement.Top,
         ) {
             Spacer(
-                modifier
+                Modifier
                     .statusBarsHeight()
                     .fillMaxWidth()
             )
@@ -195,14 +192,13 @@ fun ContentBody(
                 onLocationSelected = { id -> onViewAction(MainViewAction.SelectableClicked(id)) },
             )
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 ResourcePane(
                     resources = state.resources,
                     isCollapsed = state.sectionCollapse[SectionKey.Resources] ?: false,
-                    modifier = modifier,
                     onToggleCollapse = {
                         onViewAction(
                             MainViewAction.ToggleSectionCollapse(
@@ -216,7 +212,7 @@ fun ContentBody(
 
             Cavity(
                 mainColor = AppTheme.colors.background,
-                modifier = modifier
+                modifier = Modifier
                     .weight(1f)
                     .background(AppTheme.colors.background)
                     .padding(4.dp),
@@ -224,7 +220,6 @@ fun ContentBody(
                 ActionSection(
                     state = state.actionState,
                     isCollapsed = false,
-                    modifier = modifier,
                     onToggleCollapse = {
                         onViewAction(
                             MainViewAction.ToggleSectionCollapse(

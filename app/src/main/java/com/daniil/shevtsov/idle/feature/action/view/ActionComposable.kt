@@ -95,29 +95,34 @@ fun ActionSection(
         modifier = modifier,
         collapsedContent = { },
         expandedContent = {
-            val actionPane = actionPanes[0]
-            LazyColumn(
-                verticalArrangement = Arrangement.Top,
-            ) {
-                items(
-                    actionPane.actions.chunked(2)
-                        .map { it[0] to it.getOrNull(1) }) { (leftAction, rightAction) ->
-                    Row {
-                        Action(
-                            action = leftAction,
-                            onClicked = { onActionClicked(leftAction.id) },
-                            modifier = Modifier.weight(1f),
-                        )
-                        if (rightAction != null) {
+            val actionPane = actionPanes.firstOrNull()
+            if (actionPane != null) {
+                LazyColumn(
+                    verticalArrangement = Arrangement.Top,
+                    modifier = Modifier.padding(2.dp)
+                ) {
+                    items(
+                        actionPane.actions.chunked(2)
+                            .map { it[0] to it.getOrNull(1) }
+                    ) { (leftAction, rightAction) ->
+                        Row(horizontalArrangement = spacedBy(4.dp)) {
                             Action(
-                                action = rightAction,
-                                onClicked = { onActionClicked(rightAction.id) },
+                                action = leftAction,
+                                onClicked = { onActionClicked(leftAction.id) },
                                 modifier = Modifier.weight(1f),
                             )
+                            if (rightAction != null) {
+                                Action(
+                                    action = rightAction,
+                                    onClicked = { onActionClicked(rightAction.id) },
+                                    modifier = Modifier.weight(1f),
+                                )
+                            }
                         }
                     }
                 }
             }
+
         },
         onToggleCollapse = onToggleCollapse,
     )
