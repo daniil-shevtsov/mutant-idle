@@ -231,14 +231,15 @@ class TagRelationsPresentationTest {
                 .containsExactly(availableSelectable1.id, availableSelectable2.id)
         }
 
-    private fun Assert<MainViewState.Success>.extractingSelectables(example: Selectable): Assert<List<SelectableModel>> =
-        transform {
-            when (example) {
-                is Action -> it.actionState.actionPanes[0].actions
-                is Location -> it.locationSelectionViewState.locations
-                is Upgrade -> it.shop.upgrades
-                else -> null
-            }
-        }
-            .isNotNull()
 }
+
+fun Assert<MainViewState.Success>.extractingSelectables(example: Selectable): Assert<List<SelectableModel>> =
+    transform {
+        when (example) {
+            is Action -> it.actionState.actionPanes[0].actions
+            is Location -> it.locationSelectionViewState.locations
+            is Upgrade -> it.shop.upgrades
+            else -> null
+        }
+    }
+        .isNotNull()

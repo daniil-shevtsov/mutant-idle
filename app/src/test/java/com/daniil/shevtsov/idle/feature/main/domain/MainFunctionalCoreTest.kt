@@ -3,7 +3,6 @@ package com.daniil.shevtsov.idle.feature.main.domain
 import assertk.all
 import assertk.assertThat
 import assertk.assertions.containsExactly
-import assertk.assertions.containsNone
 import assertk.assertions.extracting
 import assertk.assertions.isEqualTo
 import assertk.assertions.prop
@@ -20,8 +19,6 @@ import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.main.presentation.sectionState
-import com.daniil.shevtsov.idle.feature.player.core.domain.Player
-import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
@@ -30,9 +27,7 @@ import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import com.daniil.shevtsov.idle.feature.resource.domain.resourceChange
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.tagRelations
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
@@ -81,36 +76,7 @@ class MainFunctionalCoreTest {
     }
 
     @Test
-    fun `should update tags correctly when upgrade bought`() =
-        runBlockingTest {
-            val providedTag = tag(name = "lol")
-
-            val initialState = gameState(
-                resources = listOf(resource(key = ResourceKey.Blood, value = 1.0)),
-                ratios = listOf(ratio(key = RatioKey.Mutanity, value = 0.2)),
-                upgrades = listOf(
-                    upgrade(
-                        id = 1L,
-                        tagRelations = tagRelations(TagRelation.Provides to providedTag),
-                        resourceChanges = mapOf(ResourceKey.Blood to -0.4),
-                        ratioChanges = ratioChanges(RatioKey.Mutanity to 0.5),
-                    )
-                ),
-            )
-
-            val newState = mainFunctionalCore(
-                state = initialState,
-                viewAction = MainViewAction.SelectableClicked(id = 1L),
-            )
-
-            assertThat(newState)
-                .prop(GameState::player)
-                .prop(Player::tags)
-                .containsExactly(providedTag)
-        }
-
-    @Test
-    fun `should update resources, ratios and tags correctly when action clicked`() =
+    fun `should update resources and ratios when action clicked`() =
         runBlockingTest {
             val providedTag = tag(name = "lol")
             val action = action(
@@ -123,7 +89,6 @@ class MainFunctionalCoreTest {
                     RatioKey.Mutanity to ratioChange(change = 2.0),
                     RatioKey.Suspicion to ratioChange(change = -3.0),
                 ),
-                tagRelations = tagRelations(TagRelation.Provides to providedTag)
             )
 
             val initialState = gameState(
@@ -157,50 +122,8 @@ class MainFunctionalCoreTest {
                             RatioKey.Mutanity to 5.0,
                             RatioKey.Suspicion to 4.0,
                         )
-                    prop(GameState::player)
-                        .prop(Player::tags)
-                        .containsExactly(providedTag)
                 }
         }
-
-    @Test
-    fun `should add tags provided by clicked action`() {
-        val providedTag = tag(name = "lol")
-        val action = action(
-            id = 1L,
-            tagRelations = tagRelations(TagRelation.Provides to providedTag),
-        )
-        val newState = mainFunctionalCore(
-            state = gameState(actions = listOf(action)),
-            viewAction = MainViewAction.SelectableClicked(id = action.id),
-        )
-
-        assertThat(newState)
-            .prop(GameState::player)
-            .prop(Player::tags)
-            .containsExactly(providedTag)
-    }
-
-    @Test
-    fun `should remove tags removed by clicked action`() {
-        val tagToRemove = tag(name = "lol")
-        val action = action(
-            id = 1L,
-            tagRelations = tagRelations(TagRelation.Removes to tagToRemove),
-        )
-        val newState = mainFunctionalCore(
-            state = gameState(
-                player = player(generalTags = listOf(tagToRemove)),
-                actions = listOf(action),
-            ),
-            viewAction = MainViewAction.SelectableClicked(id = action.id),
-        )
-
-        assertThat(newState)
-            .prop(GameState::player)
-            .prop(Player::tags)
-            .containsNone(tagToRemove)
-    }
 
     @Test
     fun `should switch section collapsed state when clicked`() {
@@ -279,35 +202,6 @@ class MainFunctionalCoreTest {
             .prop(GameState::locationSelectionState)
             .prop(LocationSelectionState::selectedLocation)
             .isEqualTo(location)
-    }
-
-    @Test
-    fun `should update current tags with provided by selected location`() {
-        val oldLocation = location(
-            id = 1L, title = "old location", tagRelations = tagRelations(
-                TagRelation.Provides to tag(name = "old tag")
-            )
-        )
-
-        val newTag = tag(name = "new tag")
-        val newLocation = location(
-            id = 2L,
-            title = "new location",
-            tagRelations = tagRelations(TagRelation.Provides to newTag)
-        )
-
-        val state = mainFunctionalCore(
-            state = gameState(
-                locations = listOf(oldLocation, newLocation),
-                locationSelectionState = locationSelectionState()
-            ),
-            viewAction = MainViewAction.SelectableClicked(id = newLocation.id)
-        )
-
-        assertThat(state)
-            .prop(GameState::player)
-            .prop(Player::generalTags)
-            .containsExactly(newTag)
     }
 
     @Test
