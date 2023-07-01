@@ -1,10 +1,10 @@
 package com.daniil.shevtsov.idle.feature.upgrade.domain
 
 import com.daniil.shevtsov.idle.feature.action.domain.RatioChanges
-import com.daniil.shevtsov.idle.feature.action.domain.ResourceChanges
 import com.daniil.shevtsov.idle.feature.main.domain.PlotHolder
 import com.daniil.shevtsov.idle.feature.main.domain.Selectable
 import com.daniil.shevtsov.idle.feature.main.presentation.Flavorable
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceChanges
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelations
 
 data class Upgrade(

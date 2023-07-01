@@ -4,11 +4,10 @@ import com.daniil.shevtsov.idle.feature.main.domain.PlotHolder
 import com.daniil.shevtsov.idle.feature.main.domain.Selectable
 import com.daniil.shevtsov.idle.feature.main.presentation.Flavorable
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
-import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceChanges
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelations
 
-typealias ResourceChanges = Map<ResourceKey, Double>
 typealias RatioChangeForTags = Map<List<Tag>, Double>
 typealias RatioChanges = Map<RatioKey, RatioChangeForTags>
 
