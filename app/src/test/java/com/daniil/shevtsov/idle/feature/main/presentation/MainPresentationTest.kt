@@ -24,6 +24,7 @@ import com.daniil.shevtsov.idle.feature.ratio.presentation.RatioModel
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import com.daniil.shevtsov.idle.feature.resource.domain.resourceChange
+import com.daniil.shevtsov.idle.feature.resource.domain.resourceChanges
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
@@ -51,14 +52,26 @@ class MainPresentationTest {
                 ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
             ),
             upgrades = listOf(
-                upgrade(id = 0L, price = 32.0, resourceChanges = mapOf(ResourceKey.Blood to -32.0)),
-                upgrade(id = 1L, price = 35.0, resourceChanges = mapOf(ResourceKey.Blood to -25.0)),
+                upgrade(
+                    id = 0L,
+                    price = 32.0,
+                    resourceChanges = resourceChanges(ResourceKey.Blood to -32.0)
+                ),
+                upgrade(
+                    id = 1L,
+                    price = 35.0,
+                    resourceChanges = resourceChanges(ResourceKey.Blood to -25.0)
+                ),
                 upgrade(
                     id = 2L,
                     price = 150.0,
-                    resourceChanges = mapOf(ResourceKey.Blood to -150.0)
+                    resourceChanges = resourceChanges(ResourceKey.Blood to -150.0)
                 ),
-                upgrade(id = 3L, price = 30.0, resourceChanges = mapOf(ResourceKey.Blood to -30.0)),
+                upgrade(
+                    id = 3L,
+                    price = 30.0,
+                    resourceChanges = resourceChanges(ResourceKey.Blood to -30.0)
+                ),
             ),
             plotEntries = listOf(
                 plotEntry(text = "lol"),
@@ -185,7 +198,7 @@ class MainPresentationTest {
                 upgrade(
                     id = 0L,
                     price = 5.0,
-                    resourceChanges = mapOf(ResourceKey.Blood to -5.0)
+                    resourceChanges = resourceChanges(ResourceKey.Blood to -5.0)
                 )
             ),
         )
@@ -207,7 +220,7 @@ class MainPresentationTest {
                     upgrade(
                         id = 0L,
                         price = 20.0,
-                        resourceChanges = mapOf(ResourceKey.Blood to -20.0)
+                        resourceChanges = resourceChanges(ResourceKey.Blood to -20.0)
                     )
                 ),
             )
@@ -232,7 +245,7 @@ class MainPresentationTest {
                 upgrade(
                     id = 0L,
                     price = 10.0,
-                    resourceChanges = mapOf(ResourceKey.Blood to -10.0),
+                    resourceChanges = resourceChanges(ResourceKey.Blood to -10.0),
                     status = UpgradeStatus.Bought
                 )
             ),
@@ -261,7 +274,7 @@ class MainPresentationTest {
                     upgrade(
                         id = 0L,
                         price = 10.0,
-                        resourceChanges = mapOf(ResourceKey.Blood to -10.0),
+                        resourceChanges = resourceChanges(ResourceKey.Blood to -10.0),
                         status = UpgradeStatus.Bought,
                         tagRelations = tagRelations(TagRelation.Provides to presentTag)
                     )
@@ -421,13 +434,13 @@ class MainPresentationTest {
             actions = listOf(
                 action(
                     id = 1L,
-                    resourceChanges = mapOf(
+                    resourceChanges = resourceChanges(
                         ResourceKey.Money to -30.0,
                     ),
                 ),
                 action(
                     id = 2L,
-                    resourceChanges = mapOf(
+                    resourceChanges = resourceChanges(
                         ResourceKey.Money to -50.0,
                     ),
                 ),
@@ -453,19 +466,19 @@ class MainPresentationTest {
             actions = listOf(
                 action(
                     id = 1L,
-                    resourceChanges = mapOf(
+                    resourceChanges = resourceChanges(
                         ResourceKey.Money to -60.0,
                     ),
                 ),
                 action(
                     id = 2L,
-                    resourceChanges = mapOf(
+                    resourceChanges = resourceChanges(
                         ResourceKey.Money to -10.0,
                     ),
                 ),
                 action(
                     id = 3L,
-                    resourceChanges = mapOf(
+                    resourceChanges = resourceChanges(
                         ResourceKey.Money to -50.0,
                     ),
                 ),
@@ -515,7 +528,7 @@ class MainPresentationTest {
     fun `should display action resource changes`() = runBlockingTest {
         val action = action(
             id = 1L,
-            resourceChanges = mapOf(
+            resourceChanges = resourceChanges(
                 ResourceKey.Blood to 10.0,
                 ResourceKey.Money to -5.0,
             )
@@ -646,7 +659,7 @@ class MainPresentationTest {
             resources = listOf(blood, money),
             actions = listOf(
                 action(
-                    resourceChanges = mapOf(
+                    resourceChanges = resourceChanges(
                         resourceChange(key = blood.key, change = 5.0),
                         resourceChange(key = money.key, change = -5.0),
                     )

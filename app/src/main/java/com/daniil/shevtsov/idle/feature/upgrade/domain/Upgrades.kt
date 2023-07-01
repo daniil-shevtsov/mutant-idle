@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.feature.upgrade.domain
 import com.daniil.shevtsov.idle.feature.action.domain.makeIdsUnique
 import com.daniil.shevtsov.idle.feature.flavor.Flavors
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
+import com.daniil.shevtsov.idle.feature.resource.domain.resourceChanges
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tagRelations
@@ -12,7 +13,7 @@ fun createUpgrades() = listOf(
         title = "Iron jaws",
         subtitle = "Your bite is stronger than of a shark",
         price = 10.0,
-        resourceChanges = mapOf(ResourceKey.Blood to -10.0),
+        resourceChanges = resourceChanges(ResourceKey.Blood to -10.0),
         status = UpgradeStatus.NotBought,
         tagRelations = tagRelations(
             TagRelation.Provides to Tags.Body.IronJaws,
@@ -23,7 +24,7 @@ fun createUpgrades() = listOf(
         title = "Super Strength",
         subtitle = "Lifting a car or crushing a lock is not a problem anymore",
         price = 25.0,
-        resourceChanges = mapOf(ResourceKey.Blood to -25.0),
+        resourceChanges = resourceChanges(ResourceKey.Blood to -25.0),
         tagRelations = tagRelations(
             TagRelation.Provides to listOf(
                 Tags.Body.SuperStrength,
@@ -42,7 +43,7 @@ fun createUpgrades() = listOf(
         title = "Becoming a bat",
         subtitle = "People don't pay attention to such critters, it is small and it can fly",
         price = 10.0,
-        resourceChanges = mapOf(ResourceKey.Blood to -10.0),
+        resourceChanges = resourceChanges(ResourceKey.Blood to -10.0),
         tagRelations = tagRelations(
             TagRelation.Provides to Tags.Abilities.BatForm,
             TagRelation.RequiredAny to Tags.Species.Vampire,
@@ -52,7 +53,7 @@ fun createUpgrades() = listOf(
         title = "Invisibility",
         subtitle = Flavors.invisibilityGain.placeholder,
         price = 1.0,
-        resourceChanges = mapOf(ResourceKey.Blood to -1.0),
+        resourceChanges = resourceChanges(ResourceKey.Blood to -1.0),
         tagRelations = tagRelations(
             TagRelation.Provides to listOf(Tags.Abilities.Invisibility),
             TagRelation.RequiredAny to listOf(

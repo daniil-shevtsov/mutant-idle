@@ -5,6 +5,7 @@ import com.daniil.shevtsov.idle.feature.location.domain.Location
 import com.daniil.shevtsov.idle.feature.main.domain.Selectable
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
+import com.daniil.shevtsov.idle.feature.resource.domain.resourceChanges
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tagRelations
@@ -15,9 +16,7 @@ fun createAllActions() = listOf(
         title = "Work",
         subtitle = "The sun is high",
         plot = "You worked some more",
-        resourceChanges = mapOf(
-            ResourceKey.Money to 25.0
-        ),
+        resourceChanges = resourceChanges(ResourceKey.Money to 25.0),
         tagRelations = tagRelations(
             TagRelation.RequiredAll to Tags.Form.Human,
             TagRelation.RequiredAll to Tags.Employed,
@@ -27,7 +26,7 @@ fun createAllActions() = listOf(
         title = "Buy Groceries",
         subtitle = "It's a short walk",
         plot = "You've bought some groceries",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.Money to -15.0,
             ResourceKey.HumanFood to 1.0,
         ),
@@ -40,7 +39,7 @@ fun createAllActions() = listOf(
         title = "Capture a ${Flavors.personName.placeholder}",
         subtitle = "I think I can do it if I grow enough",
         plot = "You have captured a ${Flavors.personName.placeholder}. What next?",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.Blood to -10.0,
             ResourceKey.Prisoner to 1.0,
         ),
@@ -58,7 +57,7 @@ fun createAllActions() = listOf(
         title = "Eat captured ${Flavors.personName.placeholder}",
         subtitle = "Finally a good meal",
         plot = "You've eaten. What to do about the mess?",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.Blood to 25.0,
             ResourceKey.Prisoner to -1.0,
             ResourceKey.Remains to 1.0,
@@ -76,7 +75,7 @@ fun createAllActions() = listOf(
         title = "Drink blood of the captured ${Flavors.personName.placeholder}",
         subtitle = "Drink up",
         plot = "You drank the ${Flavors.personName.placeholder} dry. What to do about the mess?",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.Blood to 10.0,
             ResourceKey.Prisoner to -1.0,
             ResourceKey.Remains to 1.0,
@@ -93,7 +92,7 @@ fun createAllActions() = listOf(
     action(
         title = "Eat human food",
         subtitle = "It's not enough",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.Blood to 2.0,
             ResourceKey.HumanFood to -1.0,
         ),
@@ -106,7 +105,7 @@ fun createAllActions() = listOf(
     action(
         title = "Bury remains",
         subtitle = "You better hope there is space",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.Remains to -1.0,
         ),
         ratioChanges = ratioChanges(
@@ -121,7 +120,7 @@ fun createAllActions() = listOf(
     action(
         title = "Steal organs from corpse",
         subtitle = "They won't need it",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.Organs to 1.0,
         ),
         ratioChanges = ratioChanges(
@@ -137,7 +136,7 @@ fun createAllActions() = listOf(
     action(
         title = "Burn remains",
         subtitle = "It won't leave a trace",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.Remains to -1.0,
         ),
         ratioChanges = ratioChanges(
@@ -228,7 +227,7 @@ fun createAllActions() = listOf(
     action(
         title = "Steal money from people",
         subtitle = "For some reason they don't like it",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.Money to 15.0
         ),
         ratioChanges = ratioChanges(
@@ -248,7 +247,7 @@ fun createAllActions() = listOf(
     action(
         title = "Rob people",
         subtitle = "They scare so easily",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.Money to 40.0
         ),
         ratioChanges = ratioChanges(
@@ -264,7 +263,7 @@ fun createAllActions() = listOf(
     action(
         title = "Buy a knife",
         subtitle = "It's useful in a myriad of situations",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.Money to -80.0
         ),
         tagRelations = tagRelations(
@@ -280,7 +279,7 @@ fun createAllActions() = listOf(
     action(
         title = "Beg for money",
         subtitle = "It's not much but they don't seem to mind",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.Money to 0.5
         ),
         tagRelations = tagRelations(
@@ -295,7 +294,7 @@ fun createAllActions() = listOf(
         title = "Steal Food",
         subtitle = "It's just lying there",
         plot = "You've stolen some food, but it's not enough",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.HumanFood to 1.0,
         ),
         ratioChanges = ratioChanges(
@@ -313,7 +312,7 @@ fun createAllActions() = listOf(
         title = "Capture a rat",
         subtitle = "It's small but tasty",
         plot = "You've caught a rat",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.FreshMeat to 1.0
         ),
         tagRelations = tagRelations(
@@ -330,7 +329,7 @@ fun createAllActions() = listOf(
     action(
         title = "Eat fresh meat",
         subtitle = "It's good but I need something bigger",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.FreshMeat to -1.0,
             ResourceKey.Blood to 1.0,
         ),
@@ -346,7 +345,7 @@ fun createAllActions() = listOf(
         title = "Eat the remains",
         subtitle = "They can't find anything if there is nothing",
         plot = "You have devoured the remains",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.Blood to -5.0,
             ResourceKey.Remains to -1.0,
         ),
@@ -364,7 +363,7 @@ fun createAllActions() = listOf(
         title = "Observe ${Flavors.objectifiedPeopleName.placeholder}",
         subtitle = "Living their lives, not knowing what lurks in shadows",
         plot = "You have learned something important about them",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.Information to +1.0,
         ),
         tagRelations = tagRelations(TagRelation.RequiredAny to Tags.Locations.Rooftops),
@@ -373,7 +372,7 @@ fun createAllActions() = listOf(
         title = "Capture ${Flavors.personName.placeholder} when they don't suspect it",
         subtitle = "You've learned enough about them to do this undetected",
         plot = "Everything went smoothly, no one will know they are gone",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.Information to -10.0,
             ResourceKey.Prisoner to 1.0,
         ),
@@ -385,7 +384,7 @@ fun createAllActions() = listOf(
         title = "You can influence this ${Flavors.personName.placeholder}'s thoughts.",
         subtitle = "It works in a subtle ways",
         plot = "Everything went smoothly, no one will know they are gone",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.Blood to -10.0,
             ResourceKey.ControlledMind to 1.0,
         ),
@@ -397,7 +396,7 @@ fun createAllActions() = listOf(
         title = "Make them want to give you a gift",
         subtitle = "It's not really expensive",
         plot = "\"Wow, how thoughtful, what gave you this idea?\"",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.ControlledMind to 0.0, //TODO: I need to be able to require resource without spending it
             ResourceKey.Money to 10.0,
         ),
@@ -409,7 +408,7 @@ fun createAllActions() = listOf(
         title = "Make them think they did your crime",
         subtitle = "They are going to go away for a long time, but you'll get less attention.",
         plot = "Breaking News: seemingly an ordinary person confessed to an unthinkable", //TODO: Random variations would work well here
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.ControlledMind to -1.0,
         ),
         ratioChanges = ratioChanges(
@@ -423,7 +422,7 @@ fun createAllActions() = listOf(
         title = "Hide in the woods for a while",
         subtitle = "Need to stockpile on food for this",
         plot = "Some time has passed, things wound down a little bit",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             //TODO: workaround would be like ratioWithTags but resourceChanges is not refactored to that
             ResourceKey.HumanFood to -5.0, //TODO: Resources should use tags too i.e. <food> does not matter what kind. Or even energy source, like for android it's not food, it's electricity
         ),
@@ -438,7 +437,7 @@ fun createAllActions() = listOf(
         title = "Gather some scrap from your ship",
         subtitle = "This is soul-crushing to tear it apart",
         plot = "You've managed to gather some scrap",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.Scrap to 1.0
         ),
         tagRelations = tagRelations(
@@ -449,7 +448,7 @@ fun createAllActions() = listOf(
         id = 24L,
         title = "Gather Scrap",
         subtitle = "These ${Flavors.peopleName.placeholder} throw away the most useful things",
-        resourceChanges = mapOf(
+        resourceChanges = resourceChanges(
             ResourceKey.Scrap to 1.0,
         ),
         tagRelations = tagRelations(

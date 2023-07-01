@@ -29,6 +29,7 @@ import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import com.daniil.shevtsov.idle.feature.resource.domain.resourceChange
+import com.daniil.shevtsov.idle.feature.resource.domain.resourceChanges
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tagRelations
@@ -52,7 +53,7 @@ class MainFunctionalCoreTest {
                 upgrade(
                     id = 0L,
                     price = 4.0,
-                    resourceChanges = mapOf(ResourceKey.Blood to -4.0),
+                    resourceChanges = resourceChanges(ResourceKey.Blood to -4.0),
                     ratioChanges = ratioChanges(RatioKey.Mutanity to 0.4),
                 )
             ),
@@ -85,7 +86,7 @@ class MainFunctionalCoreTest {
             val providedTag = tag(name = "lol")
             val action = action(
                 id = 1L,
-                resourceChanges = mapOf(
+                resourceChanges = resourceChanges(
                     resourceChange(key = ResourceKey.Blood, change = 2.0),
                     resourceChange(key = ResourceKey.Money, change = -7.0),
                 ),
