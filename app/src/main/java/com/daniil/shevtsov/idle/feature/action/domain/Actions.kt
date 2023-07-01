@@ -7,6 +7,7 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.tagRelations
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 
 fun createAllActions() = listOf(
@@ -17,7 +18,7 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.Money to 25.0
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Form.Human,
                 Tags.Employed,
@@ -32,7 +33,7 @@ fun createAllActions() = listOf(
             ResourceKey.Money to -15.0,
             ResourceKey.HumanFood to 1.0,
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Form.Human,
                 Tags.Locations.SuperMarket,
@@ -50,7 +51,7 @@ fun createAllActions() = listOf(
         ratioChanges = ratioChanges(
             RatioKey.Suspicion to 0.2,
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.PersonCapturer,
                 Tags.Locations.DarkAlley,
@@ -69,7 +70,7 @@ fun createAllActions() = listOf(
         ratioChanges = ratioChanges(
             RatioKey.Suspicion to 0.05,
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Species.Devourer,
             )
@@ -87,7 +88,7 @@ fun createAllActions() = listOf(
         ratioChanges = ratioChanges(
             RatioKey.Suspicion to 0.05,
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Species.Vampire,
             )
@@ -100,7 +101,7 @@ fun createAllActions() = listOf(
             ResourceKey.Blood to 2.0,
             ResourceKey.HumanFood to -1.0,
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Species.Devourer,
             )
@@ -115,7 +116,7 @@ fun createAllActions() = listOf(
         ratioChanges = ratioChanges(
             RatioKey.Suspicion to -0.05,
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Locations.Graveyard,
             )
@@ -130,7 +131,7 @@ fun createAllActions() = listOf(
         ratioChanges = ratioChanges(
             RatioKey.Suspicion to 0.1,
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Species.Devourer,
                 Tags.Access.FreshCorpses,
@@ -146,7 +147,7 @@ fun createAllActions() = listOf(
         ratioChanges = ratioChanges(
             RatioKey.Suspicion to -0.1,
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Access.Incinerator,
             )
@@ -155,7 +156,7 @@ fun createAllActions() = listOf(
     action(
         title = "Become invisible",
         subtitle = "You ${Flavors.invisibilityAction.placeholder}, ${Flavors.derogativePeopleName.placeholder} can't see you now",
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(Tags.Abilities.Invisibility,),
             TagRelation.Provides to listOf(Tags.State.Invisible),
         ),
@@ -163,14 +164,14 @@ fun createAllActions() = listOf(
     action(
         title = "Become visible",
         subtitle = "You become visible again",
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.Removes to listOf(Tags.State.Invisible)
         ),
     ),
     action(
         title = "Become a bat",
         subtitle = "Fly fly away",
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Abilities.BatForm,
             ),
@@ -186,7 +187,7 @@ fun createAllActions() = listOf(
     action(
         title = "Return to human form",
         subtitle = "You become human again",
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Abilities.BatForm,
                 Tags.Form.Animal,
@@ -204,7 +205,7 @@ fun createAllActions() = listOf(
         title = "Fly",
         subtitle = "You can get to high places",
         plot = "You are flying",
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Abilities.Flight,
             ),
@@ -220,7 +221,7 @@ fun createAllActions() = listOf(
         title = "Land",
         subtitle = "Enough of flying",
         plot = "You've landed",
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Abilities.Flight,
                 Tags.State.Flying,
@@ -239,7 +240,7 @@ fun createAllActions() = listOf(
         ratioChanges = ratioChanges(
             RatioKey.Suspicion to 0.005,
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Nimble,
                 Tags.Locations.Streets,
@@ -259,7 +260,7 @@ fun createAllActions() = listOf(
         ratioChanges = ratioChanges(
             RatioKey.Suspicion to 0.015
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Armed,
                 Tags.Locations.DarkAlley,
@@ -272,7 +273,7 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.Money to -80.0
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Form.Human,
                 Tags.Locations.Streets,
@@ -288,7 +289,7 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.Money to 0.5
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Form.Human,
                 Tags.Knowledge.SocialNorms,
@@ -306,7 +307,7 @@ fun createAllActions() = listOf(
         ratioChanges = ratioChanges(
             RatioKey.Suspicion to 0.005,
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Form.Human,
                 Tags.Nimble,
@@ -321,7 +322,7 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.FreshMeat to 1.0
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Locations.DarkAlley,
             ),
@@ -339,7 +340,7 @@ fun createAllActions() = listOf(
             ResourceKey.FreshMeat to -1.0,
             ResourceKey.Blood to 1.0,
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAny to listOf(
                 Tags.Species.Devourer,
                 Tags.Species.Demon,
@@ -355,7 +356,7 @@ fun createAllActions() = listOf(
             ResourceKey.Blood to -5.0,
             ResourceKey.Remains to -1.0,
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Species.Devourer,
                 Tags.Body.IronJaws,
@@ -372,7 +373,7 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.Information to +1.0,
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAny to listOf(
                 Tags.Locations.Rooftops
             )
@@ -386,7 +387,7 @@ fun createAllActions() = listOf(
             ResourceKey.Information to -10.0,
             ResourceKey.Prisoner to 1.0,
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.PersonCapturer
             )
@@ -400,7 +401,7 @@ fun createAllActions() = listOf(
             ResourceKey.Blood to -10.0,
             ResourceKey.ControlledMind to 1.0,
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Abilities.Hypnosis
             )
@@ -414,7 +415,7 @@ fun createAllActions() = listOf(
             ResourceKey.ControlledMind to 0.0, //TODO: I need to be able to require resource without spending it
             ResourceKey.Money to 10.0,
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Abilities.Hypnosis
             )
@@ -430,7 +431,7 @@ fun createAllActions() = listOf(
         ratioChanges = ratioChanges(
             RatioKey.Suspicion to -0.05
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Abilities.Hypnosis
             )
@@ -447,7 +448,7 @@ fun createAllActions() = listOf(
         ratioChanges = ratioChanges(
             RatioKey.Suspicion to -0.05
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Locations.Forest
             )
@@ -460,7 +461,7 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.Scrap to 1.0
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Locations.UfoCrashSite
             )
@@ -473,7 +474,7 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.Scrap to 1.0,
         ),
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Locations.Scrapyard
             )

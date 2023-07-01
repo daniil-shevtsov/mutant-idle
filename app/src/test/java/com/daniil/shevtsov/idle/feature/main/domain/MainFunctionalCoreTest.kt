@@ -33,6 +33,7 @@ import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import com.daniil.shevtsov.idle.feature.resource.domain.resourceChange
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.tagRelations
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
@@ -91,7 +92,7 @@ class MainFunctionalCoreTest {
                 upgrades = listOf(
                     upgrade(
                         id = 1L,
-                        tagRelations = mapOf(TagRelation.Provides to listOf(providedTag)),
+                        tagRelations = tagRelations(TagRelation.Provides to listOf(providedTag)),
                         resourceChanges = mapOf(ResourceKey.Blood to -0.4),
                         ratioChanges = ratioChanges(RatioKey.Mutanity to 0.5),
                     )
@@ -123,7 +124,7 @@ class MainFunctionalCoreTest {
                     RatioKey.Mutanity to ratioChange(change = 2.0),
                     RatioKey.Suspicion to ratioChange(change = -3.0),
                 ),
-                tagRelations = mapOf(
+                tagRelations = tagRelations(
                     TagRelation.Provides to listOf(providedTag)
                 )
             )
@@ -170,7 +171,7 @@ class MainFunctionalCoreTest {
         val providedTag = tag(name = "lol")
         val action = action(
             id = 1L,
-            tagRelations = mapOf(TagRelation.Provides to listOf(providedTag)),
+            tagRelations = tagRelations(TagRelation.Provides to listOf(providedTag)),
         )
         val newState = mainFunctionalCore(
             state = gameState(actions = listOf(action)),
@@ -188,7 +189,7 @@ class MainFunctionalCoreTest {
         val tagToRemove = tag(name = "lol")
         val action = action(
             id = 1L,
-            tagRelations = mapOf(TagRelation.Removes to listOf(tagToRemove)),
+            tagRelations = tagRelations(TagRelation.Removes to listOf(tagToRemove)),
         )
         val newState = mainFunctionalCore(
             state = gameState(
@@ -311,7 +312,7 @@ class MainFunctionalCoreTest {
 
         val state = mainFunctionalCore(
             state = gameState(
-                locations =  listOf(location),
+                locations = listOf(location),
                 locationSelectionState = locationSelectionState()
             ),
             viewAction = MainViewAction.SelectableClicked(id = location.id)
@@ -326,21 +327,21 @@ class MainFunctionalCoreTest {
     @Test
     fun `should update current tags with provided by selected location`() {
         val oldLocation = location(
-            id = 1L, title = "old location", tagRelations = mapOf(
+            id = 1L, title = "old location", tagRelations = tagRelations(
                 TagRelation.Provides to listOf(tag(name = "old tag"))
             )
         )
 
         val newTag = tag(name = "new tag")
         val newLocation = location(
-            id = 2L, title = "new location", tagRelations = mapOf(
+            id = 2L, title = "new location", tagRelations = tagRelations(
                 TagRelation.Provides to listOf(newTag)
             )
         )
 
         val state = mainFunctionalCore(
             state = gameState(
-                locations =  listOf(oldLocation, newLocation),
+                locations = listOf(oldLocation, newLocation),
                 locationSelectionState = locationSelectionState()
             ),
             viewAction = MainViewAction.SelectableClicked(id = newLocation.id)
@@ -358,14 +359,14 @@ class MainFunctionalCoreTest {
             id = 1L,
             title = "old location",
             plot = "test lol test",
-            tagRelations = mapOf(
+            tagRelations = tagRelations(
                 TagRelation.Provides to listOf(tag(name = "old tag"))
             )
         )
 
         val state = mainFunctionalCore(
             state = gameState(
-                locations =  listOf(location),
+                locations = listOf(location),
                 locationSelectionState = locationSelectionState()
             ),
             viewAction = MainViewAction.SelectableClicked(id = location.id)
@@ -383,14 +384,14 @@ class MainFunctionalCoreTest {
             id = 1L,
             title = "Test Location",
             plot = null,
-            tagRelations = mapOf(
+            tagRelations = tagRelations(
                 TagRelation.Provides to listOf(tag(name = "old tag"))
             )
         )
 
         val state = mainFunctionalCore(
             state = gameState(
-                locations =  listOf(location),
+                locations = listOf(location),
                 locationSelectionState = locationSelectionState()
             ),
             viewAction = MainViewAction.SelectableClicked(id = location.id)

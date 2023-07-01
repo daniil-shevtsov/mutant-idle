@@ -14,6 +14,7 @@ import com.daniil.shevtsov.idle.feature.main.domain.Selectable
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.tagRelations
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.SelectableModel
@@ -53,11 +54,11 @@ class TagRelationsPresentationTest {
 
             val availableSelectable = selectable.copy(
                 id = 1L,
-                tagRelations = mapOf(TagRelation.RequiredAll to listOf(availableTag))
+                tagRelations = tagRelations(TagRelation.RequiredAll to listOf(availableTag))
             )
             val unavailableSelectable = selectable.copy(
                 id = 2L,
-                tagRelations = mapOf(
+                tagRelations = tagRelations(
                     TagRelation.RequiredAll to listOf(
                         availableTag,
                         unavailableTag
@@ -90,7 +91,7 @@ class TagRelationsPresentationTest {
 
             val availableSelectable = selectable.copy(
                 id = 1L,
-                tagRelations = mapOf(
+                tagRelations = tagRelations(
                     TagRelation.RequiredAny to listOf(
                         availableTag,
                         unavailableTag
@@ -99,7 +100,7 @@ class TagRelationsPresentationTest {
             )
             val unavailableSelectable = selectable.copy(
                 id = 2L,
-                tagRelations = mapOf(
+                tagRelations = tagRelations(
                     TagRelation.RequiredAny to listOf(
                         unavailableTag2,
                         unavailableTag2
@@ -131,11 +132,11 @@ class TagRelationsPresentationTest {
 
             val availableSelectable = selectable.copy(
                 id = 1L,
-                tagRelations = mapOf(TagRelation.RequiresNone to listOf(missingTag))
+                tagRelations = tagRelations(TagRelation.RequiresNone to listOf(missingTag))
             )
             val unavailableSelectable = selectable.copy(
                 id = 2L,
-                tagRelations = mapOf(
+                tagRelations = tagRelations(
                     TagRelation.RequiresNone to listOf(presentTag)
                 ),
             )
@@ -164,15 +165,15 @@ class TagRelationsPresentationTest {
 
             val availableSelectable1 = selectable.copy(
                 id = 1L,
-                tagRelations = mapOf(TagRelation.Provides to listOf(missingTag))
+                tagRelations = tagRelations(TagRelation.Provides to listOf(missingTag))
             )
             val availableSelectable2 = selectable.copy(
                 id = 1L,
-                tagRelations = mapOf(TagRelation.Provides to listOf(presentTag, missingTag))
+                tagRelations = tagRelations(TagRelation.Provides to listOf(presentTag, missingTag))
             )
             val unavailableSelectable = selectable.copy(
                 id = 2L,
-                tagRelations = mapOf(
+                tagRelations = tagRelations(
                     TagRelation.Provides to listOf(presentTag)
                 ),
             )
@@ -205,15 +206,15 @@ class TagRelationsPresentationTest {
 
             val availableSelectable1 = selectable.copy(
                 id = 1L,
-                tagRelations = mapOf(TagRelation.Removes to listOf(presentTag))
+                tagRelations = tagRelations(TagRelation.Removes to listOf(presentTag))
             )
             val availableSelectable2 = selectable.copy(
                 id = 1L,
-                tagRelations = mapOf(TagRelation.Removes to listOf(presentTag, missingTag))
+                tagRelations = tagRelations(TagRelation.Removes to listOf(presentTag, missingTag))
             )
             val unavailableSelectable = selectable.copy(
                 id = 2L,
-                tagRelations = mapOf(
+                tagRelations = tagRelations(
                     TagRelation.Removes to listOf(missingTag)
                 ),
             )

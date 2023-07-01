@@ -28,6 +28,7 @@ import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.tagRelations
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
@@ -452,7 +453,7 @@ class MainPresentationTest {
     fun `should show correct icon for human and monster actions`() = runBlockingTest {
         val humanAction = action(
             id = 1L,
-            tagRelations = mapOf(TagRelation.RequiredAll to listOf(Tags.Form.Human))
+            tagRelations = tagRelations(TagRelation.RequiredAll to listOf(Tags.Form.Human))
         )
         val monsterAction = action(id = 2L)
 

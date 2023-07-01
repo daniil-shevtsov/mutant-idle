@@ -4,17 +4,18 @@ import com.daniil.shevtsov.idle.feature.action.domain.makeIdsUnique
 import com.daniil.shevtsov.idle.feature.flavor.Flavors
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.tagRelations
 
 fun createLocations() = listOf(
     location(
         title = "Home",
         subtitle = "It's safe space where no one can bother you",
-        tagRelations = mapOf(TagRelation.RequiredAll to listOf(Tags.Access.Home)),
+        tagRelations = tagRelations(TagRelation.RequiredAll to listOf(Tags.Access.Home)),
     ),
     location(
         title = "Graveyard",
         subtitle = "A place where they hide ${Flavors.objectifiedPeopleName.placeholder} in the ground",
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Access.Graveyard
             ),
@@ -26,7 +27,7 @@ fun createLocations() = listOf(
     location(
         title = "Morgue",
         subtitle = "A place where they store ${Flavors.objectifiedPeopleName.placeholder} for a while",
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Access.Morgue
             ),
@@ -40,7 +41,7 @@ fun createLocations() = listOf(
     location(
         title = "Butcher Shop",
         subtitle = "A place where they share pieces of meat",
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Access.ButcherShop,
             ),
@@ -53,7 +54,7 @@ fun createLocations() = listOf(
     location(
         title = "Scrap Yard",
         subtitle = "A place where they pile up metal",
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Access.Scrapyard,
             ),
@@ -65,7 +66,7 @@ fun createLocations() = listOf(
     location(
         title = "Streets",
         subtitle = "A busy place with crowds of ${Flavors.peopleName.placeholder}",
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.Provides to listOf(
                 Tags.Locations.Streets
             )
@@ -74,7 +75,7 @@ fun createLocations() = listOf(
     location(
         title = "Dark Alley",
         subtitle = "Sometimes ${Flavors.peopleName.placeholder} go through here to save time",
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.Provides to listOf(
                 Tags.Locations.DarkAlley
             )
@@ -83,7 +84,7 @@ fun createLocations() = listOf(
     location(
         title = "Super Market",
         subtitle = "The food is everywhere",
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.Provides to listOf(
                 Tags.Locations.SuperMarket
             )
@@ -92,7 +93,7 @@ fun createLocations() = listOf(
     location(
         title = "Rooftops",
         subtitle = "They look like ants from here",
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.State.Flying,
             ),
@@ -104,7 +105,7 @@ fun createLocations() = listOf(
     location(
         title = "Forest",
         subtitle = "It's rare to see ${Flavors.objectifiedPeopleName.placeholder} here",
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.Provides to listOf(
                 Tags.Locations.Forest
             )
@@ -113,7 +114,7 @@ fun createLocations() = listOf(
     location(
         title = "Ship Crash Site",
         subtitle = "It won't fly again, but there are still some useful things inside.",
-        tagRelations = mapOf(
+        tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
                 Tags.Access.UfoCrashSite,
             ),
