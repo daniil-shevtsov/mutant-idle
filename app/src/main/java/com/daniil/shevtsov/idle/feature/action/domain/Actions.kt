@@ -382,7 +382,7 @@ fun createAllActions() = listOf(
     ),
     action(
         title = "You can influence this ${Flavors.personName.placeholder}'s thoughts.",
-        subtitle = "It works in a subtle ways",
+        subtitle = "It works in subtle ways",
         plot = "Everything went smoothly, no one will know they are gone",
         resourceChanges = resourceChanges(
             ResourceKey.Blood to -10.0,
