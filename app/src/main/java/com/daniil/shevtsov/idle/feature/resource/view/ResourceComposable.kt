@@ -139,7 +139,8 @@ fun ResourcePane(
                 verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingSmall)
             ) {
                 Row(
-                    modifier = Modifier.horizontalScroll(rememberScrollState())
+                    modifier = Modifier.horizontalScroll(rememberScrollState()),
+                    horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingMedium),
                 ) {
                     resources.chunked(3)
                         .forEach { columnResources ->

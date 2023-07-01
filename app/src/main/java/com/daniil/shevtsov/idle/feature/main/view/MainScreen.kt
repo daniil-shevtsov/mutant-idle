@@ -209,8 +209,8 @@ fun ContentBody(
             modifier = Modifier
                 .background(AppTheme.colors.background)
                 .padding(
-                    start = AppTheme.dimensions.paddingSmall,
-                    end = AppTheme.dimensions.paddingSmall,
+                    start = AppTheme.dimensions.paddingM,
+                    end = AppTheme.dimensions.paddingM,
                     bottom = paddingValues.calculateBottomPadding()
                 ),
             verticalArrangement = Arrangement.Top,
