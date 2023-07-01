@@ -2,11 +2,14 @@ package com.daniil.shevtsov.idle.feature.action.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.SpaceBetween
 import androidx.compose.foundation.layout.Arrangement.spacedBy
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -27,8 +30,6 @@ import com.daniil.shevtsov.idle.feature.main.presentation.actionPane
 import com.daniil.shevtsov.idle.feature.main.presentation.actionsState
 import com.daniil.shevtsov.idle.feature.ratio.view.RatioChanges
 import com.daniil.shevtsov.idle.feature.resource.view.ResourceChanges
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
 
 @Preview
 @Composable
@@ -43,6 +44,7 @@ fun ActionPreview() {
     widthDp = 400,
     heightDp = 400,
 )
+
 @Composable
 fun MutantActionPanePreview() {
     ActionSection(
@@ -61,7 +63,22 @@ fun MutantActionPanePreview() {
     )
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@Preview
+@Composable
+fun UnevenActionsPanePreview() {
+    ActionSection(
+        state = actionsState(
+            actionPanes = listOf(
+                actionPane(
+                    actions = unevenIconsActionComposeStub() + unevenTitleActionComposeStub() + unevenDescriptionActionComposeStub()
+                )
+            )
+        ),
+        isCollapsed = false,
+        onToggleCollapse = {},
+    )
+}
+
 @Composable
 fun ActionSection(
     state: ActionsState,
@@ -78,32 +95,24 @@ fun ActionSection(
         modifier = modifier,
         collapsedContent = { },
         expandedContent = {
-            HorizontalPager(
-                count = actionPanes.size,
-                verticalAlignment = Alignment.Top,
-                modifier = modifier
-                    .fillMaxSize(),
-            ) { paneIndex ->
-                val actionPane = actionPanes[paneIndex]
-                Column(
-                    verticalArrangement = Arrangement.Top,
-                    modifier = modifier.fillMaxSize(),
-                ) {
-                    LazyVerticalGrid(
-                        cells = GridCells.Fixed(count = 2),
-                        modifier = modifier,
-                        contentPadding = PaddingValues(
-                            start = 2.dp,
-                            top = 2.dp,
-                            end = 2.dp,
-                            bottom = 30.dp
+            val actionPane = actionPanes[0]
+            LazyColumn(
+                verticalArrangement = Arrangement.Top,
+            ) {
+                items(
+                    actionPane.actions.chunked(2)
+                        .map { it[0] to it.getOrNull(1) }) { (leftAction, rightAction) ->
+                    Row {
+                        Action(
+                            action = leftAction,
+                            onClicked = { onActionClicked(leftAction.id) },
+                            modifier = Modifier.weight(1f),
                         )
-                    ) {
-                        items(actionPane.actions) { action ->
+                        if (rightAction != null) {
                             Action(
-                                action = action,
-                                onClicked = { onActionClicked(action.id) },
-                                modifier = modifier.padding(2.dp), //TODO: Add item spacing after comopse update
+                                action = rightAction,
+                                onClicked = { onActionClicked(rightAction.id) },
+                                modifier = Modifier.weight(1f),
                             )
                         }
                     }
@@ -166,16 +175,14 @@ fun Action(
                 .padding(bottom = 4.dp)
         )
         Row(
-            modifier = modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = SpaceBetween
         ) {
             ResourceChanges(
                 resourceChanges = action.resourceChanges,
-                modifier = modifier,
             )
             RatioChanges(
                 ratioChanges = action.ratioChanges,
-                modifier = modifier,
             )
         }
     }
@@ -190,6 +197,65 @@ fun actionComposeStub(
     resourceChanges = resourceChangesComposeStub(),
     ratioChanges = ratioChangesComposeStub(),
     isEnabled = isEnabled,
+)
+
+fun unevenIconsActionComposeStub(
+) = listOf(
+    actionModel(
+        title = "Action Title",
+        subtitle = "Action description",
+        resourceChanges = listOf(
+            resourceChangeModel(icon = Icons.Blood, value = "2.0"),
+        ),
+        ratioChanges = emptyList(),
+        isEnabled = true,
+    ),
+    actionModel(
+        title = "Action Title",
+        subtitle = "Action description",
+        resourceChanges = listOf(
+            resourceChangeModel(icon = Icons.Blood, value = "2.0"),
+            resourceChangeModel(icon = Icons.HumanFood, value = "-1.0"),
+        ),
+        ratioChanges = emptyList(),
+        isEnabled = true,
+    )
+)
+
+fun unevenTitleActionComposeStub(
+) = listOf(
+    actionModel(
+        title = "Action Title\nAction Title\nAction Title",
+        subtitle = "Action description",
+        resourceChanges = emptyList(),
+        ratioChanges = emptyList(),
+        isEnabled = true,
+    ),
+    actionModel(
+        title = "Action Title",
+        subtitle = "Action description",
+        resourceChanges = emptyList(),
+        ratioChanges = emptyList(),
+        isEnabled = true,
+    )
+)
+
+fun unevenDescriptionActionComposeStub(
+) = listOf(
+    actionModel(
+        title = "Action Title",
+        subtitle = "Action description",
+        resourceChanges = emptyList(),
+        ratioChanges = emptyList(),
+        isEnabled = true,
+    ),
+    actionModel(
+        title = "Action Title",
+        subtitle = "Action description\nAction description\nAction description",
+        resourceChanges = emptyList(),
+        ratioChanges = emptyList(),
+        isEnabled = true,
+    )
 )
 
 fun resourceChangesComposeStub() = listOf(
