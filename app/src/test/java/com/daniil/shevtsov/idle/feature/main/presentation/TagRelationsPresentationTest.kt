@@ -80,7 +80,12 @@ class TagRelationsPresentationTest {
 
                     val availableSelectable = selectable.copy(
                         id = 1L,
-                        tagRelations = mapOf(TagRelation.RequiredAny to listOf(availableTag, unavailableTag))
+                        tagRelations = mapOf(
+                            TagRelation.RequiredAny to listOf(
+                                availableTag,
+                                unavailableTag
+                            )
+                        )
                     )
                     val unavailableSelectable = selectable.copy(
                         id = 2L,
@@ -95,6 +100,35 @@ class TagRelationsPresentationTest {
                     val state = gameState(
                         selectables = listOf(availableSelectable, unavailableSelectable),
                         player = player(generalTags = listOf(availableTag)),
+                    )
+
+                    val viewState = mapMainViewState(state = state)
+
+                    assertThat(viewState)
+                        .extractingMainState()
+                        .extractingSelectables(example = selectable)
+                        .extracting(SelectableModel::id)
+                        .containsExactly(availableSelectable.id)
+                },
+                DynamicTest.dynamicTest("should hide ${testData.selectable.title} if requireNone tag present") {
+                    val selectable = testData.selectable
+                    val presentTag = tag(name = "present tag")
+                    val missingTag = tag(name = "missing tag")
+
+                    val availableSelectable = selectable.copy(
+                        id = 1L,
+                        tagRelations = mapOf(TagRelation.RequiresNone to listOf(missingTag))
+                    )
+                    val unavailableSelectable = selectable.copy(
+                        id = 2L,
+                        tagRelations = mapOf(
+                            TagRelation.RequiresNone to listOf(presentTag)
+                        ),
+                    )
+
+                    val state = gameState(
+                        selectables = listOf(availableSelectable, unavailableSelectable),
+                        player = player(generalTags = listOf(presentTag)),
                     )
 
                     val viewState = mapMainViewState(state = state)

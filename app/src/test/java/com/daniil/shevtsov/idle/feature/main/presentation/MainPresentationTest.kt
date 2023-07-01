@@ -450,48 +450,6 @@ class MainPresentationTest {
     }
 
     @Test
-    fun `should handle requiredNone tag relation for actions`() = runBlockingTest {
-        val availableTag = tag(name = "available")
-        val forbiddenTag = tag(name = "forbidden")
-
-        val availableAction = action(
-            id = 1L,
-            tagRelations = mapOf(TagRelation.RequiredAll to listOf(availableTag))
-        )
-        val notAvailableAction = action(
-            id = 2L,
-            tagRelations = mapOf(
-                TagRelation.RequiredAll to listOf(availableTag),
-                TagRelation.RequiresNone to listOf(forbiddenTag),
-            )
-        )
-
-        val state = gameState(
-            actions = listOf(
-                availableAction,
-                notAvailableAction,
-            ),
-            player = player(
-                generalTags = listOf(
-                    availableTag,
-                    forbiddenTag,
-                )
-            ),
-        )
-
-        val viewState = mapMainViewState(state = state)
-
-        assertThat(viewState)
-            .extractingMainState()
-            .prop(MainViewState.Success::actionState)
-            .prop(ActionsState::actionPanes)
-            .index(0)
-            .prop(ActionPane::actions)
-            .extracting(ActionModel::id)
-            .containsExactly(availableAction.id)
-    }
-
-    @Test
     fun `should show remove action if it only removes and tag to remove is present`() =
         runBlockingTest {
             val tagToRemove = tag(name = "tag to remove")
