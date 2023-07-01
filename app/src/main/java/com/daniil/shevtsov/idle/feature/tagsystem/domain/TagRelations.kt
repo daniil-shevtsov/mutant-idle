@@ -16,6 +16,18 @@ fun tagRelations(
 
 fun noTagRelations(): TagRelations = createTagRelations(emptyList())
 
+val TagRelations.requireAllTags: List<Tag>
+    get() = this[TagRelation.RequiredAll].orEmpty()
+val TagRelations.requireAnyTags: List<Tag>
+    get() = this[TagRelation.RequiredAny].orEmpty()
+val TagRelations.requireNoneTags: List<Tag>
+    get() = this[TagRelation.RequiresNone].orEmpty()
+val TagRelations.provideTags: List<Tag>
+    get() = this[TagRelation.Provides].orEmpty()
+val TagRelations.removeTags: List<Tag>
+    get() = this[TagRelation.Removes].orEmpty()
+
+
 private fun createTagRelations(
     values: List<Pair<TagRelation, List<Tag>>>
 ): TagRelations = mapOf(*values.toTypedArray())

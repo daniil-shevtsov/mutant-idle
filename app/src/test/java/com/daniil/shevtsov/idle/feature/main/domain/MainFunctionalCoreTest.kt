@@ -325,13 +325,16 @@ class MainFunctionalCoreTest {
     @Test
     fun `should update current tags with provided by selected location`() {
         val oldLocation = location(
-            id = 1L, title = "old location", tagRelations = tagRelations(TagRelation.Provides to tag(name = "old tag")
+            id = 1L, title = "old location", tagRelations = tagRelations(
+                TagRelation.Provides to tag(name = "old tag")
             )
         )
 
         val newTag = tag(name = "new tag")
         val newLocation = location(
-            id = 2L, title = "new location", tagRelations = tagRelations(TagRelation.Provides to newTag)
+            id = 2L,
+            title = "new location",
+            tagRelations = tagRelations(TagRelation.Provides to newTag)
         )
 
         val state = mainFunctionalCore(
@@ -354,7 +357,8 @@ class MainFunctionalCoreTest {
             id = 1L,
             title = "old location",
             plot = "test lol test",
-            tagRelations = tagRelations(TagRelation.Provides to tag(name = "old tag")
+            tagRelations = tagRelations(
+                TagRelation.Provides to tag(name = "old tag")
             )
         )
 
@@ -378,7 +382,8 @@ class MainFunctionalCoreTest {
             id = 1L,
             title = "Test Location",
             plot = null,
-            tagRelations = tagRelations(TagRelation.Provides to tag(name = "old tag")
+            tagRelations = tagRelations(
+                TagRelation.Provides to tag(name = "old tag")
             )
         )
 
