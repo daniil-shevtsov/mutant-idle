@@ -168,7 +168,7 @@ fun ResourceRow(
             color = AppTheme.colors.textLight,
         )
         Text(
-            text = "resource.value",
+            text = resource.value,
             style = AppTheme.typography.body,
             color = AppTheme.colors.textDark,
             textAlign = TextAlign.Center,
@@ -180,6 +180,7 @@ fun ResourceRow(
                 )
                 .background(AppTheme.colors.backgroundText)
                 .padding(AppTheme.dimensions.paddingSmall)
+                .width(IntrinsicSize.Max)
                 .weight(1f)
         )
     }
