@@ -28,7 +28,6 @@ import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
@@ -450,60 +449,6 @@ class MainPresentationTest {
     }
 
     @Test
-    fun `should show remove action if it only removes and tag to remove is present`() =
-        runBlockingTest {
-            val tagToRemove = tag(name = "tag to remove")
-
-            val removeAction = action(
-                id = 1L,
-                tagRelations = mapOf(TagRelation.Removes to listOf(tagToRemove))
-            )
-
-            val state = gameState(
-                actions = listOf(removeAction),
-                player = player(generalTags = listOf(tagToRemove)),
-            )
-
-            val viewState = mapMainViewState(state = state)
-
-            assertThat(viewState)
-                .extractingMainState()
-                .prop(MainViewState.Success::actionState)
-                .prop(ActionsState::actionPanes)
-                .index(0)
-                .prop(ActionPane::actions)
-                .extracting(ActionModel::id)
-                .containsExactly(removeAction.id)
-        }
-
-    @Test
-    fun `should hide remove action if it only removes and tag to remove is not present`() =
-        runBlockingTest {
-            val tagToRemove = tag(name = "tag to remove")
-
-            val removeAction = action(
-                id = 1L,
-                tagRelations = mapOf(TagRelation.Removes to listOf(tagToRemove))
-            )
-
-            val state = gameState(
-                actions = listOf(removeAction),
-                player = player(generalTags = emptyList()),
-            )
-
-            val viewState = mapMainViewState(state = state)
-
-            assertThat(viewState)
-                .extractingMainState()
-                .prop(MainViewState.Success::actionState)
-                .prop(ActionsState::actionPanes)
-                .index(0)
-                .prop(ActionPane::actions)
-                .extracting(ActionModel::id)
-                .isEmpty()
-        }
-
-    @Test
     fun `should show correct icon for human and monster actions`() = runBlockingTest {
         val humanAction = action(
             id = 1L,
@@ -613,22 +558,18 @@ class MainPresentationTest {
 
     @Test
     fun `should show selected location info`() = runBlockingTest {
-        val availableTag = tag(name = "available tag")
         val otherLocation = location(
             id = 1L,
             title = "other location",
             subtitle = "other location description",
-            tagRelations = mapOf(TagRelation.RequiredAll to listOf(availableTag))
         )
         val selectedLocation = location(
             id = 2,
             title = "selected location",
             subtitle = "selected location description",
-            tagRelations = mapOf(TagRelation.RequiredAll to listOf(availableTag))
         )
 
         val state = gameState(
-            player = player(generalTags = listOf(availableTag)),
             locations = listOf(otherLocation, selectedLocation),
             locationSelectionState = locationSelectionState(
                 selectedLocation = selectedLocation,

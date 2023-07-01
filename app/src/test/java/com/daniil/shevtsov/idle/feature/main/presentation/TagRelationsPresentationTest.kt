@@ -39,6 +39,7 @@ class TagRelationsPresentationTest {
                 requireAnyTest(testData),
                 requireNoneTest(testData),
                 providesTest(testData),
+                removesTest(testData),
             )
         }
 
@@ -173,6 +174,47 @@ class TagRelationsPresentationTest {
                 id = 2L,
                 tagRelations = mapOf(
                     TagRelation.Provides to listOf(presentTag)
+                ),
+            )
+
+            val state = gameState(
+                selectables = listOf(
+                    availableSelectable1,
+                    availableSelectable2,
+                    unavailableSelectable
+                ),
+                player = player(generalTags = listOf(presentTag)),
+            )
+
+            val viewState = mapMainViewState(state = state)
+
+            assertThat(viewState)
+                .extractingMainState()
+                .extractingSelectables(example = selectable)
+                .extracting(SelectableModel::id)
+                .containsExactly(availableSelectable1.id, availableSelectable2.id)
+        }
+
+    private fun removesTest(
+        testData: TestData
+    ): DynamicTest? =
+        DynamicTest.dynamicTest("should hide ${testData.selectable.title} if only removes what is not present") {
+            val selectable = testData.selectable
+            val presentTag = tag(name = "present tag")
+            val missingTag = tag(name = "missing tag")
+
+            val availableSelectable1 = selectable.copy(
+                id = 1L,
+                tagRelations = mapOf(TagRelation.Removes to listOf(presentTag))
+            )
+            val availableSelectable2 = selectable.copy(
+                id = 1L,
+                tagRelations = mapOf(TagRelation.Removes to listOf(presentTag, missingTag))
+            )
+            val unavailableSelectable = selectable.copy(
+                id = 2L,
+                tagRelations = mapOf(
+                    TagRelation.Removes to listOf(missingTag)
                 ),
             )
 
