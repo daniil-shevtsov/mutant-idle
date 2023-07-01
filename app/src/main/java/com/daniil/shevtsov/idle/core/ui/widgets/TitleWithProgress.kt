@@ -1,7 +1,11 @@
 package com.daniil.shevtsov.idle.core.ui.widgets
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -40,22 +44,29 @@ fun TitleWithProgress(
 ) {
     Row(
         modifier = modifier
-            .fillMaxWidth()
             .background(AppTheme.colors.background)
-            .padding(4.dp),
+            .padding(AppTheme.dimensions.paddingSmall),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(text = icon, style = AppTheme.typography.icon, color = AppTheme.colors.textLight)
         Text(
-            modifier = modifier.weight(0.35f),
-            text = title,
-            style = AppTheme.typography.title,
-            color = AppTheme.colors.textLight,
-            textAlign = TextAlign.Start
+            text = icon,
+            style = AppTheme.typography.icon,
+            color = AppTheme.colors.textLight
         )
+        //TODO: Replace with composable lambda
+        if (title.isNotEmpty()) {
+            Text(
+                modifier = Modifier.weight(0.35f),
+                text = title,
+                maxLines = 1,
+                style = AppTheme.typography.title,
+                color = AppTheme.colors.textLight,
+                textAlign = TextAlign.Start
+            )
+        }
         Box(
-            modifier = modifier.weight(0.65f),
+            modifier = Modifier.weight(0.65f),
             contentAlignment = Alignment.Center,
         ) {
             MyProgressBar(
@@ -63,6 +74,7 @@ fun TitleWithProgress(
             )
             Text(
                 text = name,
+                maxLines = 1,
                 style = AppTheme.typography.body,
                 color = when {
                     progress >= 0.65f -> AppTheme.colors.textLight

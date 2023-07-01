@@ -2,8 +2,12 @@ package com.daniil.shevtsov.idle.feature.gamestart.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement.spacedBy
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -95,7 +99,7 @@ fun GameStartScreen(
                         darkColor = AppTheme.colors.backgroundDark,
                     )
                     .background(AppTheme.colors.background)
-                    .padding(4.dp)
+                    .padding(AppTheme.dimensions.paddingSmall)
                     .fillMaxWidth(),
                 text = "Start Game",
                 textAlign = TextAlign.Center,

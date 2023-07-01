@@ -54,10 +54,15 @@ fun MainPreview() {
             resources = listOf(
                 resourceModel(name = "Blood", value = "10 000", icon = Icons.Blood),
                 resourceModel(name = "Money", value = "100", icon = Icons.Money),
+                resourceModel(name = "Prisoners", value = "1", icon = Icons.Prisoner),
+                resourceModel(name = "Information", value = "50", icon = Icons.Information),
+                resourceModel(name = "Fresh Meat", value = "100", icon = Icons.FreshMeat),
+                resourceModel(name = "Familiars", value = "150", icon = Icons.Familiar),
+                resourceModel(name = "Organs", value = "10", icon = Icons.Organs),
             ),
             ratios = listOf(
-                ratioModel(title = "Mutanity", name = "Covert", percent = 0.75),
-                ratioModel(title = "Suspicion", name = "Investigation", percent = 0.35),
+                ratioModel(title = "Suspicion", name = "Investigation", percent = 0.35, icon = Icons.Suspicion),
+                ratioModel(title = "Mutanity", name = "Covert", percent = 0.75, icon = Icons.Mutanity),
             ),
             actionState = actionsState(
                 listOf(
@@ -142,7 +147,7 @@ fun ContentBody(
                     .background(AppTheme.colors.background)
             ) {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingSmall),
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -195,7 +200,6 @@ fun ContentBody(
             PlotComposable(
                 plotEntries = state.plotEntries,
                 modifier = Modifier
-                    .padding(AppTheme.dimensions.paddingSmall)
                     .fillMaxWidth()
                     .height(100.dp)
             )
@@ -221,8 +225,7 @@ fun ContentBody(
                 mainColor = AppTheme.colors.background,
                 modifier = Modifier
                     .weight(1f)
-                    .background(AppTheme.colors.background)
-                    .padding(4.dp),
+                    .background(AppTheme.colors.background),
             ) {
                 ActionSection(
                     state = state.actionState,

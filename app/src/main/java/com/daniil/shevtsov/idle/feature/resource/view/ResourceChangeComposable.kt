@@ -30,7 +30,7 @@ fun ResourceChanges(
 ) {
     Column(
         modifier = modifier.width(IntrinsicSize.Max),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+        verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingSmall),
         horizontalAlignment = Alignment.Start,
     ) {
         resourceChanges.forEach { resourceChange ->

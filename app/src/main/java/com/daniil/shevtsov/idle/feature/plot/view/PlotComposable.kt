@@ -33,7 +33,6 @@ fun PlotComposable(
     val listState = rememberLazyListState()
     LazyColumn(
         modifier = modifier
-            .padding(AppTheme.dimensions.paddingSmall)
             .background(AppTheme.colors.backgroundText)
             .padding(AppTheme.dimensions.paddingSmall),
         state = listState,

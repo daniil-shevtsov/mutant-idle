@@ -101,14 +101,14 @@ fun ActionSection(
             if (actionPane != null) {
                 LazyColumn(
                     verticalArrangement = Arrangement.Top,
-                    modifier = Modifier.padding(2.dp)
+                    modifier = Modifier
                 ) {
                     items(
                         actionPane.actions.chunked(2)
                             .map { it[0] to it.getOrNull(1) }
                     ) { (leftAction, rightAction) ->
                         Row(
-                            horizontalArrangement = spacedBy(4.dp),
+                            horizontalArrangement = spacedBy(AppTheme.dimensions.paddingSmall),
                             modifier = Modifier.height(IntrinsicSize.Min)
                         ) {
                             Action(
@@ -150,11 +150,11 @@ fun Action(
         modifier = modifier
             .background(Color.LightGray)
             .background(lightColor)
-            .padding(4.dp)
+            .padding(AppTheme.dimensions.paddingSmall)
             .background(darkColor)
-            .padding(4.dp)
+            .padding(AppTheme.dimensions.paddingSmall)
             .clickable { onClicked() },
-        verticalArrangement = spacedBy(4.dp)
+        verticalArrangement = spacedBy(AppTheme.dimensions.paddingSmall)
     ) {
         val actionIcon = action.icon.value
 
@@ -180,7 +180,7 @@ fun Action(
                 .fillMaxWidth()
                 .weight(1f)
                 .background(AppTheme.colors.backgroundText)
-                .padding(4.dp)
+                .padding(AppTheme.dimensions.paddingSmall)
                 .padding(start = 4.dp)
                 .padding(bottom = 4.dp)
         )

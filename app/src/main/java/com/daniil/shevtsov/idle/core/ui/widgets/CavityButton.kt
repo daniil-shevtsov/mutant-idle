@@ -42,7 +42,7 @@ fun CavityButton(
                     darkColor = AppTheme.colors.backgroundDark,
                 )
                 .background(AppTheme.colors.background)
-                .padding(4.dp)
+                .padding(AppTheme.dimensions.paddingSmall)
                 .fillMaxWidth(),
             text = text,
             style = AppTheme.typography.button,

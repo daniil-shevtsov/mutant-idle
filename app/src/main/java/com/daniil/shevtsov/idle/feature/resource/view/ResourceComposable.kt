@@ -22,35 +22,18 @@ import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.widgets.Collapsable
+import com.daniil.shevtsov.idle.core.ui.widgets.TitleWithProgress
 import com.daniil.shevtsov.idle.feature.ratio.presentation.RatioModel
 import com.daniil.shevtsov.idle.feature.ratio.presentation.ratioModel
-import com.daniil.shevtsov.idle.feature.ratio.view.RatioPane
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.domain.resourceModel
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 
 @Preview
 @Composable
 fun ResourcePreview() {
-    ResourcePanel(
+    ResourceRow(
         resource = resourceModel(name = "Blood", value = "10 000", icon = Icons.Blood),
-    )
-}
-
-@Preview
-@Composable
-fun ResourcePanePreview() {
-    ResourcePane(
-        resources = listOf(
-            resourceModel(name = "Blood", value = "10 000", icon = Icons.Blood),
-            resourceModel(name = "Money", value = "100", icon = Icons.Money),
-            resourceModel(name = "Prisoners", value = "1", icon = Icons.Prisoner),
-        ),
-        ratios = listOf(
-            ratioModel(name = "Suspicion", percent = 50.0, icon = Icons.Suspicion),
-            ratioModel(name = "Mutanity", percent = 75.0, icon = Icons.Mutanity),
-        ),
-        isCollapsed = false,
-        onToggleCollapse = {},
     )
 }
 
@@ -65,10 +48,31 @@ fun ManyResourcePanePreview() {
             resourceModel(name = "Information", value = "50", icon = Icons.Information),
             resourceModel(name = "Fresh Meat", value = "100", icon = Icons.FreshMeat),
             resourceModel(name = "Familiars", value = "150", icon = Icons.Familiar),
+            resourceModel(name = "Organs", value = "10", icon = Icons.Organs),
         ),
         ratios = listOf(
-            ratioModel(name = "Suspicion", percent = 50.0, icon = Icons.Suspicion),
-            ratioModel(name = "Mutanity", percent = 75.0, icon = Icons.Mutanity),
+            ratioModel(title = "Suspicion", name = "Wanted", percent = 0.5, icon = Icons.Suspicion),
+            ratioModel(title = "Mutanity", name = "Honest", percent = 0.25, icon = Icons.Mutanity),
+        ),
+        isCollapsed = false,
+        onToggleCollapse = {},
+    )
+}
+
+@Preview
+@Composable
+fun Debug() {
+    ResourcePane(
+        resources = listOf(
+            resourceModel(key= ResourceKey.Blood, name="Blood", value="4", icon="🩸"),
+            resourceModel(key=ResourceKey.Money, name="Money", value="100", icon="💰"),
+            resourceModel(key=ResourceKey.FreshMeat, name="Fresh Meat", value="13", icon="🥩"),
+            resourceModel(key=ResourceKey.ControlledMind, name="Controlled Mind", value="3", icon="🙁"),
+            resourceModel(key=ResourceKey.Information, name="Information", value="1", icon="📝")
+        ),
+        ratios = listOf(
+            ratioModel(title = "Suspicion", name = "Wanted", percent = 0.5, icon = Icons.Suspicion),
+            ratioModel(title = "Mutanity", name = "Honest", percent = 0.25, icon = Icons.Mutanity),
         ),
         isCollapsed = false,
         onToggleCollapse = {},
@@ -88,14 +92,14 @@ fun ResourcePane(
         isCollapsed = isCollapsed,
         collapsedContent = {
             Row {
-                ResourcePanel(resource = resources[0])
+                ResourceRow(resource = resources[0])
             }
         },
         expandedContent = {
             Column(
                 modifier = modifier
                     .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingSmall)
             ) {
                 Row(
                     modifier = Modifier.horizontalScroll(rememberScrollState())
@@ -104,7 +108,7 @@ fun ResourcePane(
                         .forEach { columnResources ->
                             Column(modifier = Modifier.width(IntrinsicSize.Min)) {
                                 columnResources.forEach { resource ->
-                                    ResourcePanel(
+                                    ResourceRow(
                                         resource = resource,
                                         modifier = Modifier.fillMaxWidth()
                                     )
@@ -112,7 +116,33 @@ fun ResourcePane(
                             }
                         }
                 }
-                RatioPane(ratios)
+                Column {
+                    Row {
+                        ratios.chunked(2)
+                            .map { it.first() to it.getOrNull(1) }
+                            .forEach { (leftRatio, rightRatio) ->
+                                val ratioModifier = Modifier.weight(1f)
+                                leftRatio.let { model ->
+                                    TitleWithProgress(
+                                        title = "",
+                                        name = model.percentLabel + " " + model.name,
+                                        progress = model.percent.toFloat(),
+                                        icon = model.icon,
+                                        modifier = ratioModifier
+                                    )
+                                }
+                                rightRatio?.let { model ->
+                                    TitleWithProgress(
+                                        title = "",
+                                        name = model.percentLabel + " " + model.name,
+                                        progress = model.percent.toFloat(),
+                                        icon = model.icon,
+                                        modifier = ratioModifier
+                                    )
+                                }
+                            }
+                    }
+                }
             }
         },
         onToggleCollapse = onToggleCollapse,
@@ -120,14 +150,13 @@ fun ResourcePane(
 }
 
 @Composable
-fun ResourcePanel(
+fun ResourceRow(
     resource: ResourceModel,
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
-            .background(AppTheme.colors.background)
-            .padding(4.dp),
+            .background(AppTheme.colors.background),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
@@ -139,7 +168,7 @@ fun ResourcePanel(
             color = AppTheme.colors.textLight,
         )
         Text(
-            text = resource.value,
+            text = "resource.value",
             style = AppTheme.typography.body,
             color = AppTheme.colors.textDark,
             textAlign = TextAlign.Center,
@@ -150,7 +179,7 @@ fun ResourcePanel(
                     darkColor = AppTheme.colors.backgroundDark
                 )
                 .background(AppTheme.colors.backgroundText)
-                .padding(4.dp)
+                .padding(AppTheme.dimensions.paddingSmall)
                 .weight(1f)
         )
     }
