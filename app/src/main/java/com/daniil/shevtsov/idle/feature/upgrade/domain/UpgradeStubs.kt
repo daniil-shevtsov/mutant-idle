@@ -2,7 +2,7 @@ package com.daniil.shevtsov.idle.feature.upgrade.domain
 
 import com.daniil.shevtsov.idle.feature.action.domain.RatioChanges
 import com.daniil.shevtsov.idle.feature.action.domain.ResourceChanges
-import com.daniil.shevtsov.idle.feature.action.domain.TagRelations
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelations
 
 fun upgrade(
     id: Long = 0L,

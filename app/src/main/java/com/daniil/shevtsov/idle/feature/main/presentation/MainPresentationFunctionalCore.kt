@@ -6,7 +6,6 @@ import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.RatioChanges
 import com.daniil.shevtsov.idle.feature.action.domain.ResourceChanges
-import com.daniil.shevtsov.idle.feature.action.domain.TagRelations
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
@@ -30,6 +29,7 @@ import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelations
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
@@ -173,7 +173,6 @@ private fun satisfiesAllTagsRelations(
     tags: List<Tag>,
 ): Boolean {
     val hasAllRequired = tagRelations[TagRelation.RequiredAll].orEmpty()
-        //.let { it + listOfNotNull(tagRelations[TagRelation.Removes]) }
         .all { requiredTag -> requiredTag in tags }
     val requiredAny = tagRelations[TagRelation.RequiredAny]
     val hasAnyRequired =

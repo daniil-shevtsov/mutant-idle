@@ -6,12 +6,11 @@ import com.daniil.shevtsov.idle.feature.main.presentation.Flavorable
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelations
 
 typealias ResourceChanges = Map<ResourceKey, Double>
 typealias RatioChangeForTags = Map<List<Tag>, Double>
 typealias RatioChanges = Map<RatioKey, RatioChangeForTags>
-typealias TagRelations = Map<TagRelation, List<Tag>>
 
 data class Action(
     override val id: Long,

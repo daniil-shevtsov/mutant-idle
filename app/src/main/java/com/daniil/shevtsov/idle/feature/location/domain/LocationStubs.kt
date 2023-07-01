@@ -1,6 +1,6 @@
 package com.daniil.shevtsov.idle.feature.location.domain
 
-import com.daniil.shevtsov.idle.feature.action.domain.TagRelations
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelations
 
 fun location(
     id: Long = 0L,
