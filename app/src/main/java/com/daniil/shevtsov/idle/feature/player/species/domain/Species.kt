@@ -9,7 +9,7 @@ object Species {
     val Devourer = playerSpecies(
         id = 0L,
         title = "Devourer",
-        description = "You are growing uncontrollably and suffer from insatiable hunger",
+        description = "You grow uncontrollably and suffer from insatiable hunger",
         icon = Icons.Devourer,
         tags = listOf(
             Tags.Species.Devourer,
@@ -22,7 +22,7 @@ object Species {
     val Shapeshifter = playerSpecies(
         id = 1L,
         title = "Shapeshifter",
-        description = "You are a mass of microorganism which consumes people and take on their appearance",
+        description = "You are a biomass which consumes people and changes shape",
         icon = Icons.Shapeshifter,
         tags = listOf(
             Tags.Species.ShapeShifter,
@@ -68,6 +68,8 @@ object Species {
         )
     )
 
+    //TODO: What if in order to fix the ship you need to kidnap people to the crash site
+    // and get DNA/blood/something else out of them
     val Alien = playerSpecies(
         id = 5L,
         title = "Alien",
@@ -90,6 +92,7 @@ object Species {
             Tags.Species.Android,
             Tags.Nature.Tech,
         ),
-
-        )
+        mainResource = ResourceKey.Singularity,
+        mainRatio = RatioKey.Suspicion,
+    )
 }

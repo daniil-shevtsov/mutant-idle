@@ -5,7 +5,6 @@ import com.daniil.shevtsov.idle.core.presentation.formatting.formatRound
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.action.domain.Action
 import com.daniil.shevtsov.idle.feature.action.domain.RatioChanges
-import com.daniil.shevtsov.idle.feature.action.domain.ResourceChanges
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionIcon
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionModel
 import com.daniil.shevtsov.idle.feature.action.presentation.ActionPane
@@ -19,15 +18,18 @@ import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
+import com.daniil.shevtsov.idle.feature.plot.domain.PlotEntry
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.presentation.RatioModel
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceChanges
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelations
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
@@ -70,11 +72,20 @@ private fun createMainViewState(state: GameState): MainViewState {
         playerTags = state.player.tags,
         state
     )
-    val plotEntries = state.plotEntries.map { it.copy(text = it.text.withFlavor(state)) }
+    val plotEntries = state.plotEntries
+        .map { it.text }
+        .let { entries -> countSequentialDuplicates(entries) }
+        .map { group ->
+            when {
+                group.count > 1 -> PlotEntry(text = "${group.value} (x${group.count})")
+                else -> PlotEntry(text = group.value)
+            }
+        }
+        .map { it.copy(text = it.text.withFlavor(state)) }
     val shop = state.upgrades
         .filter { upgrade ->
-            satisfiesAllTagsRelations(
-                tagRelations = upgrade.tags,
+            upgrade.status == UpgradeStatus.Bought || satisfiesAllTagsRelations(
+                tagRelations = upgrade.tagRelations,
                 tags = state.player.tags
             )
         }
@@ -118,6 +129,21 @@ private fun createMainViewState(state: GameState): MainViewState {
     )
 }
 
+private fun countSequentialDuplicates(values: List<String>): List<Group> {
+    val groups = mutableListOf<Group>()
+    values.forEach {
+        val last = groups.lastOrNull()
+        if (last?.value == it) {
+            last.count++
+        } else {
+            groups.add(Group(it, 1))
+        }
+    }
+    return groups
+}
+
+data class Group(val value: String, var count: Int)
+
 private fun RatioKey.chooseIcon(): String {
     return when (this) {
         RatioKey.Mutanity -> Icons.Mutanity
@@ -139,10 +165,11 @@ private fun ResourceKey.chooseIcon() = when (this) {
     ResourceKey.ControlledMind -> Icons.Familiar //TODO: Find another icon
     ResourceKey.Scrap -> Icons.Scrap
     ResourceKey.Information -> Icons.Information
+    ResourceKey.Singularity -> Icons.Singularity
 }
 
 private fun satisfiesAllTagsRelations(
-    tagRelations: Map<TagRelation, List<Tag>>,
+    tagRelations: TagRelations,
     tags: List<Tag>,
 ): Boolean {
     val hasAllRequired = tagRelations[TagRelation.RequiredAll].orEmpty()
@@ -150,11 +177,21 @@ private fun satisfiesAllTagsRelations(
     val requiredAny = tagRelations[TagRelation.RequiredAny]
     val hasAnyRequired =
         requiredAny == null || requiredAny.any { requiredTag -> requiredTag in tags }
-    val requiredNone = tagRelations[TagRelation.RequiresNone]
-    val hasNone =
-        requiredNone == null || requiredNone.none { forbiddenTag -> forbiddenTag in tags }
+    val forbiddenTags = tagRelations[TagRelation.RequiresNone]
 
-    return hasAllRequired && hasAnyRequired && hasNone
+    val tagsToRemove = tagRelations[TagRelation.Removes].orEmpty().toSet()
+    val presentTagsToRemove = tags.filter { tag -> tag in tagsToRemove }
+
+    val tagsToProvide = tagRelations[TagRelation.Provides].orEmpty().toSet()
+    val tagsToProvideThatAlreadyPresent = tags.filter { tag -> tag in tagsToProvide }
+
+    val noForbiddenTags =
+        forbiddenTags == null || forbiddenTags.none { forbiddenTag -> forbiddenTag in tags }
+    val removeMakesSense = (tagsToRemove.isEmpty() || presentTagsToRemove.isNotEmpty())
+    val provideMakesSense =
+        (tagsToProvide.isEmpty() || tagsToProvide.any { tag -> tag !in tagsToProvideThatAlreadyPresent })
+
+    return hasAllRequired && hasAnyRequired && noForbiddenTags && removeMakesSense && provideMakesSense
 }
 
 private fun createActionState(
@@ -166,7 +203,7 @@ private fun createActionState(
     val availableActions = actions
         .filter { action ->
             satisfiesAllTagsRelations(
-                tagRelations = action.tags,
+                tagRelations = action.tagRelations,
                 tags = player.tags,
             )
         }
@@ -196,7 +233,7 @@ private fun createActionState(
                 subtitle = subtitle,
                 icon = ActionIcon(
                     value = when {
-                        tags[TagRelation.RequiredAll].orEmpty()
+                        tagRelations[TagRelation.RequiredAll].orEmpty()
                             .contains(Tags.Form.Human) -> Icons.Human
 
                         else -> Icons.Monster
@@ -292,7 +329,7 @@ private fun LocationSelectionState.toViewState(
         locations = locations
             .filter { location ->
                 satisfiesAllTagsRelations(
-                    tagRelations = location.tags,
+                    tagRelations = location.tagRelations,
                     tags = playerTags,
                 )
             }

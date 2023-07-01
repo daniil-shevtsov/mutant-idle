@@ -50,6 +50,7 @@ object Flavors {
         values = mapOf(
             Tags.Immortal to "mortals",
             Tags.Species.Alien to "lifeforms",
+            Tags.Species.Android to "meatbags",
         ),
         default = "people"
     )

@@ -11,10 +11,15 @@ data class UpgradeModel(
     val status: UpgradeStatusModel = UpgradeStatusModel.Affordable,
     val resourceChanges: List<ResourceChangeModel>,
     val ratioChanges: List<RatioChangeModel>,
-) : FlavoredModel
+) : FlavoredModel, SelectableModel
 
 interface FlavoredModel {
     val id: Long
     val title: String
     val subtitle: String
+}
+
+interface SelectableModel {
+    val id: Long
+    val title: String
 }

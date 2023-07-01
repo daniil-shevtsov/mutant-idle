@@ -4,11 +4,10 @@ import com.daniil.shevtsov.idle.feature.main.domain.PlotHolder
 import com.daniil.shevtsov.idle.feature.main.domain.Selectable
 import com.daniil.shevtsov.idle.feature.main.presentation.Flavorable
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
-import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceChanges
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelations
 
-typealias ResourceChanges = Map<ResourceKey, Double>
 typealias RatioChangeForTags = Map<List<Tag>, Double>
 typealias RatioChanges = Map<RatioKey, RatioChangeForTags>
 
@@ -16,9 +15,9 @@ data class Action(
     override val id: Long,
     override val title: String,
     override val subtitle: String,
+    override val tagRelations: TagRelations,
     val resourceChanges: ResourceChanges,
     val ratioChanges: RatioChanges,
-    val tags: Map<TagRelation, List<Tag>>,
     override val plot: String?,
 ) : Selectable, Flavorable, PlotHolder {
     override fun createDefaultPlot(): String = "You performed action \"$title\""
@@ -26,9 +25,11 @@ data class Action(
     override fun copy(
         id: Long?,
         title: String?,
+        tagRelations: TagRelations?,
     ): Selectable = copy(
         id = id ?: this@Action.id,
         title = title ?: this@Action.title,
+        tagRelations = tagRelations ?: this@Action.tagRelations,
     )
 
     override fun copy(

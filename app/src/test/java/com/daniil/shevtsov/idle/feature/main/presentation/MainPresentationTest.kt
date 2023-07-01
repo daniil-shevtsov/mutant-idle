@@ -24,11 +24,13 @@ import com.daniil.shevtsov.idle.feature.ratio.presentation.RatioModel
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import com.daniil.shevtsov.idle.feature.resource.domain.resourceChange
+import com.daniil.shevtsov.idle.feature.resource.domain.resourceChanges
 import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.tagRelations
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
@@ -50,14 +52,26 @@ class MainPresentationTest {
                 ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
             ),
             upgrades = listOf(
-                upgrade(id = 0L, price = 32.0, resourceChanges = mapOf(ResourceKey.Blood to -32.0)),
-                upgrade(id = 1L, price = 35.0, resourceChanges = mapOf(ResourceKey.Blood to -25.0)),
+                upgrade(
+                    id = 0L,
+                    price = 32.0,
+                    resourceChanges = resourceChanges(ResourceKey.Blood to -32.0)
+                ),
+                upgrade(
+                    id = 1L,
+                    price = 35.0,
+                    resourceChanges = resourceChanges(ResourceKey.Blood to -25.0)
+                ),
                 upgrade(
                     id = 2L,
                     price = 150.0,
-                    resourceChanges = mapOf(ResourceKey.Blood to -150.0)
+                    resourceChanges = resourceChanges(ResourceKey.Blood to -150.0)
                 ),
-                upgrade(id = 3L, price = 30.0, resourceChanges = mapOf(ResourceKey.Blood to -30.0)),
+                upgrade(
+                    id = 3L,
+                    price = 30.0,
+                    resourceChanges = resourceChanges(ResourceKey.Blood to -30.0)
+                ),
             ),
             plotEntries = listOf(
                 plotEntry(text = "lol"),
@@ -177,47 +191,6 @@ class MainPresentationTest {
     }
 
     @Test
-    fun `should only show upgrades if you have all requiredAll or at least one requiredAny tag`() =
-        runBlockingTest {
-            val availableTag = tag(name = "lol")
-            val unavailableTag = tag(name = "kek")
-
-            val requiredAllAvailableUpgrade = upgrade(
-                id = 1L,
-                tags = mapOf(TagRelation.RequiredAll to listOf(availableTag)),
-            )
-            val requiredAnyAvailableUpgrade = upgrade(
-                id = 2L,
-                tags = mapOf(TagRelation.RequiredAny to listOf(availableTag, unavailableTag)),
-            )
-            val expectedAvailableUpgrades = listOf(
-                requiredAllAvailableUpgrade,
-                requiredAnyAvailableUpgrade,
-            )
-            val expectedUnavailableUpgrades = listOf(
-                upgrade(
-                    id = 3L,
-                    tags = mapOf(TagRelation.RequiredAll to listOf(availableTag, unavailableTag)),
-                ),
-                upgrade(
-                    id = 4L, tags = mapOf(TagRelation.RequiredAll to listOf(unavailableTag)),
-                )
-            )
-
-            val state = gameState(
-                upgrades = expectedAvailableUpgrades + expectedUnavailableUpgrades,
-                player = player(generalTags = listOf(availableTag)),
-            )
-
-            val viewState = mapMainViewState(state = state)
-
-            assertThat(viewState)
-                .extractingUpgrades()
-                .extracting(UpgradeModel::id)
-                .containsExactly(requiredAllAvailableUpgrade.id, requiredAnyAvailableUpgrade.id)
-        }
-
-    @Test
     fun `should mark upgrade as affordable if its price less than resource`() = runBlockingTest {
         val state = gameState(
             resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
@@ -225,7 +198,7 @@ class MainPresentationTest {
                 upgrade(
                     id = 0L,
                     price = 5.0,
-                    resourceChanges = mapOf(ResourceKey.Blood to -5.0)
+                    resourceChanges = resourceChanges(ResourceKey.Blood to -5.0)
                 )
             ),
         )
@@ -247,7 +220,7 @@ class MainPresentationTest {
                     upgrade(
                         id = 0L,
                         price = 20.0,
-                        resourceChanges = mapOf(ResourceKey.Blood to -20.0)
+                        resourceChanges = resourceChanges(ResourceKey.Blood to -20.0)
                     )
                 ),
             )
@@ -272,7 +245,7 @@ class MainPresentationTest {
                 upgrade(
                     id = 0L,
                     price = 10.0,
-                    resourceChanges = mapOf(ResourceKey.Blood to -10.0),
+                    resourceChanges = resourceChanges(ResourceKey.Blood to -10.0),
                     status = UpgradeStatus.Bought
                 )
             ),
@@ -285,6 +258,36 @@ class MainPresentationTest {
             .extracting(UpgradeModel::id, UpgradeModel::status)
             .containsExactly(0L to UpgradeStatusModel.Bought)
     }
+
+    @Test
+    fun `should show bought upgrades despite them providing tags that are already present`() =
+        runBlockingTest {
+            val presentTag = tag(name = "present tag")
+            val state = gameState(
+                resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
+                ratios = listOf(
+                    ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.0),
+                    ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
+                ),
+                player = player(generalTags = listOf(presentTag)),
+                upgrades = listOf(
+                    upgrade(
+                        id = 0L,
+                        price = 10.0,
+                        resourceChanges = resourceChanges(ResourceKey.Blood to -10.0),
+                        status = UpgradeStatus.Bought,
+                        tagRelations = tagRelations(TagRelation.Provides to presentTag)
+                    )
+                ),
+            )
+
+            val viewState = mapMainViewState(state = state)
+
+            assertThat(viewState)
+                .extractingUpgrades()
+                .extracting(UpgradeModel::id, UpgradeModel::status)
+                .containsExactly(0L to UpgradeStatusModel.Bought)
+        }
 
     @Test
     fun `should show correct ratio icons`() = runBlockingTest {
@@ -431,13 +434,13 @@ class MainPresentationTest {
             actions = listOf(
                 action(
                     id = 1L,
-                    resourceChanges = mapOf(
+                    resourceChanges = resourceChanges(
                         ResourceKey.Money to -30.0,
                     ),
                 ),
                 action(
                     id = 2L,
-                    resourceChanges = mapOf(
+                    resourceChanges = resourceChanges(
                         ResourceKey.Money to -50.0,
                     ),
                 ),
@@ -463,19 +466,19 @@ class MainPresentationTest {
             actions = listOf(
                 action(
                     id = 1L,
-                    resourceChanges = mapOf(
+                    resourceChanges = resourceChanges(
                         ResourceKey.Money to -60.0,
                     ),
                 ),
                 action(
                     id = 2L,
-                    resourceChanges = mapOf(
+                    resourceChanges = resourceChanges(
                         ResourceKey.Money to -10.0,
                     ),
                 ),
                 action(
                     id = 3L,
-                    resourceChanges = mapOf(
+                    resourceChanges = resourceChanges(
                         ResourceKey.Money to -50.0,
                     ),
                 ),
@@ -491,160 +494,10 @@ class MainPresentationTest {
     }
 
     @Test
-    fun `should show only actions that require avialable tags`() = runBlockingTest {
-        val availableTag = tag(name = "lol")
-        val notAvailableTag = tag(name = "kek")
-
-        val availableAction = action(
-            id = 1L,
-            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
-        )
-        val notAvailableAction = action(
-            id = 2L,
-            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag, notAvailableTag))
-        )
-
-        val state = gameState(
-            actions = listOf(
-                availableAction,
-                notAvailableAction,
-            ),
-            player = player(
-                generalTags = listOf(
-                    availableTag
-                )
-            ),
-        )
-
-        val viewState = mapMainViewState(state = state)
-
-        assertThat(viewState)
-            .extractingMainState()
-            .prop(MainViewState.Success::actionState)
-            .prop(ActionsState::actionPanes)
-            .index(0)
-            .prop(ActionPane::actions)
-            .extracting(ActionModel::id)
-            .containsExactly(availableAction.id)
-    }
-
-    @Test
-    fun `should handle requiredAny tag relation for actions`() = runBlockingTest {
-        val availableTag = tag(name = "available")
-        val oneTagOption = tag(name = "required tag option 1")
-        val anotherTagOption = tag(name = "required tag option 2")
-        val notAvailableTag = tag(name = "not available tag")
-
-        val availableAction = action(
-            id = 1L,
-            tags = mapOf(
-                TagRelation.RequiredAll to listOf(availableTag),
-                TagRelation.RequiredAny to listOf(oneTagOption, anotherTagOption)
-            )
-        )
-        val notAvailableAction = action(
-            id = 2L,
-            tags = mapOf(
-                TagRelation.RequiredAll to listOf(notAvailableTag),
-            )
-        )
-
-        val state = gameState(
-            actions = listOf(
-                availableAction,
-                notAvailableAction,
-            ),
-            player = player(
-                generalTags = listOf(
-                    availableTag,
-                    oneTagOption,
-                )
-            ),
-        )
-
-        val viewState = mapMainViewState(state = state)
-
-        assertThat(viewState)
-            .extractingMainState()
-            .prop(MainViewState.Success::actionState)
-            .prop(ActionsState::actionPanes)
-            .index(0)
-            .prop(ActionPane::actions)
-            .extracting(ActionModel::id)
-            .containsExactly(availableAction.id)
-
-        val anotherState = gameState(
-            actions = listOf(
-                availableAction,
-                notAvailableAction,
-            ),
-            player = player(
-                generalTags = listOf(
-                    availableTag,
-                    anotherTagOption,
-                )
-            ),
-        )
-
-        val anotherViewState = mapMainViewState(state = anotherState)
-
-        assertThat(anotherViewState)
-            .extractingMainState()
-            .prop(MainViewState.Success::actionState)
-            .prop(ActionsState::actionPanes)
-            .index(0)
-            .prop(ActionPane::actions)
-            .extracting(ActionModel::id)
-            .containsExactly(availableAction.id)
-    }
-
-    @Test
-    fun `should handle requiredNone tag relation for actions`() = runBlockingTest {
-        val availableTag = tag(name = "available")
-        val forbiddenTag = tag(name = "forbidden")
-
-        val availableAction = action(
-            id = 1L,
-            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
-        )
-        val notAvailableAction = action(
-            id = 2L,
-            tags = mapOf(
-                TagRelation.RequiredAll to listOf(availableTag),
-                TagRelation.RequiresNone to listOf(forbiddenTag),
-            )
-        )
-
-        val state = gameState(
-            actions = listOf(
-                availableAction,
-                notAvailableAction,
-            ),
-            player = player(
-                generalTags = listOf(
-                    availableTag,
-                    forbiddenTag,
-                )
-            ),
-        )
-
-        val viewState = mapMainViewState(state = state)
-
-        assertThat(viewState)
-            .extractingMainState()
-            .prop(MainViewState.Success::actionState)
-            .prop(ActionsState::actionPanes)
-            .index(0)
-            .prop(ActionPane::actions)
-            .extracting(ActionModel::id)
-            .containsExactly(availableAction.id)
-    }
-
-    @Test
     fun `should show correct icon for human and monster actions`() = runBlockingTest {
         val humanAction = action(
             id = 1L,
-            tags = mapOf(TagRelation.RequiredAll to listOf(Tags.Form.Human))
+            tagRelations = tagRelations(TagRelation.RequiredAll to Tags.Form.Human)
         )
         val monsterAction = action(id = 2L)
 
@@ -675,7 +528,7 @@ class MainPresentationTest {
     fun `should display action resource changes`() = runBlockingTest {
         val action = action(
             id = 1L,
-            resourceChanges = mapOf(
+            resourceChanges = resourceChanges(
                 ResourceKey.Blood to 10.0,
                 ResourceKey.Money to -5.0,
             )
@@ -749,52 +602,19 @@ class MainPresentationTest {
     }
 
     @Test
-    fun `should not show locations that require not available tags`() = runBlockingTest {
-        val availableTag = tag(name = "available tag")
-        val unavailableTag = tag(name = "unavailable tag")
-        val availableLocation = location(
-            id = 1L,
-            title = "available location",
-            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
-        )
-        val unavailableLocation = location(
-            id = 2,
-            title = "unavailable location",
-            tags = mapOf(TagRelation.RequiredAll to listOf(unavailableTag))
-        )
-
-        val state = gameState(
-            player = player(generalTags = listOf(availableTag)),
-            locations = listOf(availableLocation, unavailableLocation),
-            locationSelectionState = locationSelectionState(),
-        )
-
-        val viewState = mapMainViewState(state = state)
-
-        assertThat(viewState)
-            .extractingAvailableLocations()
-            .extracting(LocationModel::title)
-            .containsExactly(availableLocation.title)
-    }
-
-    @Test
     fun `should show selected location info`() = runBlockingTest {
-        val availableTag = tag(name = "available tag")
         val otherLocation = location(
             id = 1L,
             title = "other location",
             subtitle = "other location description",
-            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
         )
         val selectedLocation = location(
             id = 2,
             title = "selected location",
             subtitle = "selected location description",
-            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
         )
 
         val state = gameState(
-            player = player(generalTags = listOf(availableTag)),
             locations = listOf(otherLocation, selectedLocation),
             locationSelectionState = locationSelectionState(
                 selectedLocation = selectedLocation,
@@ -839,7 +659,7 @@ class MainPresentationTest {
             resources = listOf(blood, money),
             actions = listOf(
                 action(
-                    resourceChanges = mapOf(
+                    resourceChanges = resourceChanges(
                         resourceChange(key = blood.key, change = 5.0),
                         resourceChange(key = money.key, change = -5.0),
                     )
@@ -908,6 +728,86 @@ class MainPresentationTest {
                 Icons.Suspicion to "+100 %",
             )
     }
+
+    @Test
+    fun `should compact identical plot entries`() {
+        val state = gameState(
+            plotEntries = listOf(
+                plotEntry(text = "kek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "lol"),
+            )
+        )
+        val viewState = mapMainViewState(state)
+
+        assertThat(viewState)
+            .extractingPlot()
+            .extracting(PlotEntry::text)
+            .containsExactly(
+                "kek",
+                "cheburek (x4)",
+                "lol",
+            )
+    }
+
+    @Test
+    fun `should compact two different identical plot entries`() {
+        val state = gameState(
+            plotEntries = listOf(
+                plotEntry(text = "kek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "lol"),
+                plotEntry(text = "cheburek2"),
+                plotEntry(text = "cheburek2"),
+                plotEntry(text = "cheburek2"),
+            )
+        )
+        val viewState = mapMainViewState(state)
+
+        assertThat(viewState)
+            .extractingPlot()
+            .extracting(PlotEntry::text)
+            .containsExactly(
+                "kek",
+                "cheburek (x4)",
+                "lol",
+                "cheburek2 (x3)",
+            )
+    }
+
+    @Test
+    fun `should compact same two identical plot entries in different places`() {
+        val state = gameState(
+            plotEntries = listOf(
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "kek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "cheburek"),
+                plotEntry(text = "lol"),
+            )
+        )
+        val viewState = mapMainViewState(state)
+
+        assertThat(viewState)
+            .extractingPlot()
+            .extracting(PlotEntry::text)
+            .containsExactly(
+                "cheburek (x2)",
+                "kek",
+                "cheburek (x4)",
+                "lol",
+            )
+    }
+
 
     private fun Assert<MainViewState>.extractingPlot() = extractingMainState()
         .prop(MainViewState.Success::plotEntries)

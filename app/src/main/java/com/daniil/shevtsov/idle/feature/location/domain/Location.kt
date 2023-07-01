@@ -3,14 +3,13 @@ package com.daniil.shevtsov.idle.feature.location.domain
 import com.daniil.shevtsov.idle.feature.main.domain.PlotHolder
 import com.daniil.shevtsov.idle.feature.main.domain.Selectable
 import com.daniil.shevtsov.idle.feature.main.presentation.Flavorable
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelations
 
 data class Location(
     override val id: Long,
     override val title: String,
     override val subtitle: String,
-    val tags: Map<TagRelation, List<Tag>>,
+    override val tagRelations: TagRelations,
     override val plot: String?,
 ) : Selectable, Flavorable, PlotHolder {
     override fun createDefaultPlot(): String = "You went to the $title"
@@ -18,9 +17,11 @@ data class Location(
     override fun copy(
         id: Long?,
         title: String?,
+        tagRelations: TagRelations?,
     ): Selectable = copy(
         id = id ?: this@Location.id,
         title = title ?: this@Location.title,
+        tagRelations = tagRelations ?: this@Location.tagRelations
     )
 
     override fun copy(

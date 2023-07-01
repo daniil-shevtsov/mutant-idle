@@ -1,12 +1,11 @@
 package com.daniil.shevtsov.idle.feature.upgrade.domain
 
 import com.daniil.shevtsov.idle.feature.action.domain.RatioChanges
-import com.daniil.shevtsov.idle.feature.action.domain.ResourceChanges
 import com.daniil.shevtsov.idle.feature.main.domain.PlotHolder
 import com.daniil.shevtsov.idle.feature.main.domain.Selectable
 import com.daniil.shevtsov.idle.feature.main.presentation.Flavorable
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceChanges
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelations
 
 data class Upgrade(
     override val id: Long,
@@ -16,7 +15,7 @@ data class Upgrade(
     val resourceChanges: ResourceChanges, //TODO: Need to be able define alternative resources (scrap for android, blood for vampire)
     val ratioChanges: RatioChanges,
     val status: UpgradeStatus,
-    val tags: Map<TagRelation, List<Tag>>,
+    override val tagRelations: TagRelations,
     override val plot: String?,
 ) : Selectable, Flavorable, PlotHolder {
     override fun createDefaultPlot(): String = "You have gained an upgrade \"$title\""
@@ -25,9 +24,11 @@ data class Upgrade(
     override fun copy(
         id: Long?,
         title: String?,
+        tagRelations: TagRelations?,
     ): Selectable = copy(
         id = id ?: this@Upgrade.id,
         title = title ?: this@Upgrade.title,
+        tagRelations = tagRelations ?: this@Upgrade.tagRelations,
     )
 
     override fun copy(
