@@ -77,10 +77,12 @@ interface PlotHolder {
 interface Selectable {
     val id: Long
     val title: String
+    val tagRelations: TagRelations
 
     fun copy(
         id: Long? = null,
         title: String? = null,
+        tagRelations: TagRelations? = null,
     ): Selectable
 }
 

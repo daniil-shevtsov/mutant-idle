@@ -16,9 +16,9 @@ data class Action(
     override val id: Long,
     override val title: String,
     override val subtitle: String,
+    override val tagRelations: TagRelations,
     val resourceChanges: ResourceChanges,
     val ratioChanges: RatioChanges,
-    val tagRelations: TagRelations,
     override val plot: String?,
 ) : Selectable, Flavorable, PlotHolder {
     override fun createDefaultPlot(): String = "You performed action \"$title\""
@@ -26,9 +26,11 @@ data class Action(
     override fun copy(
         id: Long?,
         title: String?,
+        tagRelations: TagRelations?,
     ): Selectable = copy(
         id = id ?: this@Action.id,
         title = title ?: this@Action.title,
+        tagRelations = tagRelations ?: this@Action.tagRelations,
     )
 
     override fun copy(
