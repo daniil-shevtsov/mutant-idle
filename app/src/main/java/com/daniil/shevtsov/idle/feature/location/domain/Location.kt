@@ -9,7 +9,7 @@ data class Location(
     override val id: Long,
     override val title: String,
     override val subtitle: String,
-    val tags: TagRelations,
+    val tagRelations: TagRelations,
     override val plot: String?,
 ) : Selectable, Flavorable, PlotHolder {
     override fun createDefaultPlot(): String = "You went to the $title"

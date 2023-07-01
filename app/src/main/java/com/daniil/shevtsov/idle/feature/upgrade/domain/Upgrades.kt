@@ -13,7 +13,7 @@ fun createUpgrades() = listOf(
         price = 10.0,
         resourceChanges = mapOf(ResourceKey.Blood to -10.0),
         status = UpgradeStatus.NotBought,
-        tags = mapOf(
+        tagRelations = mapOf(
             TagRelation.Provides to listOf(Tags.Body.IronJaws),
             TagRelation.RequiredAny to listOf(Tags.Species.Devourer),
         )
@@ -23,7 +23,7 @@ fun createUpgrades() = listOf(
         subtitle = "Lifting a car or crushing a lock is not a problem anymore",
         price = 25.0,
         resourceChanges = mapOf(ResourceKey.Blood to -25.0),
-        tags = mapOf(
+        tagRelations = mapOf(
             TagRelation.Provides to listOf(
                 Tags.Body.SuperStrength,
                 Tags.PersonCapturer, //TODO: It seems the system should work in other direction. Person Capturer should define that it can be because of super srength, because of weapons, etc
@@ -42,7 +42,7 @@ fun createUpgrades() = listOf(
         subtitle = "People don't pay attention to such critters, it is small and it can fly",
         price = 10.0,
         resourceChanges = mapOf(ResourceKey.Blood to -10.0),
-        tags = mapOf(
+        tagRelations = mapOf(
             TagRelation.Provides to listOf(Tags.Abilities.BatForm),
             TagRelation.RequiredAny to listOf(
                 Tags.Species.Vampire,
@@ -54,7 +54,7 @@ fun createUpgrades() = listOf(
         subtitle = Flavors.invisibilityGain.placeholder,
         price = 1.0,
         resourceChanges = mapOf(ResourceKey.Blood to -1.0),
-        tags = mapOf(
+        tagRelations = mapOf(
             TagRelation.Provides to listOf(Tags.Abilities.Invisibility),
             TagRelation.RequiredAny to listOf(
                 Tags.Species.Vampire,

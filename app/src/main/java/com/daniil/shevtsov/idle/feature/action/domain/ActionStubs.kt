@@ -26,7 +26,7 @@ fun action(
     subtitle: String = "",
     resourceChanges: ResourceChanges = mapOf(),
     ratioChanges: RatioChanges = mapOf(),
-    tags: TagRelations = noTagRelations(),
+    tagRelations: TagRelations = noTagRelations(),
     plot: String? = null,
 ) = Action(
     id = id,
@@ -34,7 +34,7 @@ fun action(
     subtitle = subtitle,
     resourceChanges = resourceChanges,
     ratioChanges = ratioChanges,
-    tags = tags,
+    tagRelations = tagRelations,
     plot = plot,
 )
 

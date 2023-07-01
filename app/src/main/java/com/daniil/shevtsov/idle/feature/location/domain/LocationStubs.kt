@@ -8,11 +8,11 @@ fun location(
     title: String = "",
     subtitle: String = "",
     plot: String? = null,
-    tags: TagRelations = noTagRelations(),
+    tagRelations: TagRelations = noTagRelations(),
 ) = Location(
     id = id,
     title = title,
     subtitle = subtitle,
     plot = plot,
-    tags = tags,
+    tagRelations = tagRelations,
 )

@@ -90,7 +90,7 @@ private fun createInitialSectionState() = listOf(
 )
 
 private fun createLocationSelectionState() = LocationSelectionState(
-    selectedLocation = createLocations().filterIsInstance<Location>().find { it.tags[TagRelation.Provides]?.contains(Tags.Locations.Streets) == true }
+    selectedLocation = createLocations().filterIsInstance<Location>().find { it.tagRelations[TagRelation.Provides]?.contains(Tags.Locations.Streets) == true }
         ?: createLocations().filterIsInstance<Location>().first(),
     isSelectionExpanded = false,
 )

@@ -13,7 +13,7 @@ fun upgrade(
     status: UpgradeStatus = UpgradeStatus.NotBought,
     resourceChanges: ResourceChanges = mapOf(),
     ratioChanges: RatioChanges = mapOf(),
-    tags: TagRelations = noTagRelations(),
+    tagRelations: TagRelations = noTagRelations(),
     plot: String? = null,
 ) = Upgrade(
     id = id,
@@ -23,7 +23,7 @@ fun upgrade(
     resourceChanges = resourceChanges,
     ratioChanges = ratioChanges,
     status = status,
-    tags = tags,
+    tagRelations = tagRelations,
     plot = plot,
 )
 

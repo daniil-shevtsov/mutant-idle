@@ -85,7 +85,7 @@ private fun createMainViewState(state: GameState): MainViewState {
     val shop = state.upgrades
         .filter { upgrade ->
             satisfiesAllTagsRelations(
-                tagRelations = upgrade.tags,
+                tagRelations = upgrade.tagRelations,
                 tags = state.player.tags
             )
         }
@@ -202,7 +202,7 @@ private fun createActionState(
     val availableActions = actions
         .filter { action ->
             satisfiesAllTagsRelations(
-                tagRelations = action.tags,
+                tagRelations = action.tagRelations,
                 tags = player.tags,
             )
         }
@@ -232,7 +232,7 @@ private fun createActionState(
                 subtitle = subtitle,
                 icon = ActionIcon(
                     value = when {
-                        tags[TagRelation.RequiredAll].orEmpty()
+                        tagRelations[TagRelation.RequiredAll].orEmpty()
                             .contains(Tags.Form.Human) -> Icons.Human
 
                         else -> Icons.Monster
@@ -328,7 +328,7 @@ private fun LocationSelectionState.toViewState(
         locations = locations
             .filter { location ->
                 satisfiesAllTagsRelations(
-                    tagRelations = location.tags,
+                    tagRelations = location.tagRelations,
                     tags = playerTags,
                 )
             }

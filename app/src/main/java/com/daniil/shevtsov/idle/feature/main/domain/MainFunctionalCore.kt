@@ -61,7 +61,7 @@ fun handleLocationSelected(
             selectedLocation = selectedLocation,
         ),
         player = state.player.copy(
-            generalTags = updateTags(state.player.generalTags, selectedLocation.tags)
+            generalTags = updateTags(state.player.generalTags, selectedLocation.tagRelations)
         )
     ).addPlotEntry(selectedLocation)
 
@@ -143,7 +143,7 @@ private fun handleActionClicked(
             ratios = updatedRatios,
             resources = updatedResources,
             player = state.player.copy(
-                generalTags = updateTags(state.player.generalTags, selectedAction.tags)
+                generalTags = updateTags(state.player.generalTags, selectedAction.tagRelations)
             ),
             currentScreen = when {
                 (updatedRatios.find { it.key == RatioKey.Suspicion }?.value
@@ -231,7 +231,7 @@ private fun handleUpgradeSelected(
                 resources = updatedResources,
                 ratios = updatedRatios,
                 player = state.player.copy(
-                    generalTags = updateTags(state.player.generalTags, boughtUpgrade.tags)
+                    generalTags = updateTags(state.player.generalTags, boughtUpgrade.tagRelations)
                 )
             ).addPlotEntry(boughtUpgrade)
         }

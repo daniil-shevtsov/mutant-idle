@@ -18,7 +18,7 @@ data class Action(
     override val subtitle: String,
     val resourceChanges: ResourceChanges,
     val ratioChanges: RatioChanges,
-    val tags: TagRelations,
+    val tagRelations: TagRelations,
     override val plot: String?,
 ) : Selectable, Flavorable, PlotHolder {
     override fun createDefaultPlot(): String = "You performed action \"$title\""

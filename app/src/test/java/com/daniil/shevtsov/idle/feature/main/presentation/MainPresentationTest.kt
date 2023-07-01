@@ -184,11 +184,11 @@ class MainPresentationTest {
 
             val requiredAllAvailableUpgrade = upgrade(
                 id = 1L,
-                tags = mapOf(TagRelation.RequiredAll to listOf(availableTag)),
+                tagRelations = mapOf(TagRelation.RequiredAll to listOf(availableTag)),
             )
             val requiredAnyAvailableUpgrade = upgrade(
                 id = 2L,
-                tags = mapOf(TagRelation.RequiredAny to listOf(availableTag, unavailableTag)),
+                tagRelations = mapOf(TagRelation.RequiredAny to listOf(availableTag, unavailableTag)),
             )
             val expectedAvailableUpgrades = listOf(
                 requiredAllAvailableUpgrade,
@@ -197,10 +197,10 @@ class MainPresentationTest {
             val expectedUnavailableUpgrades = listOf(
                 upgrade(
                     id = 3L,
-                    tags = mapOf(TagRelation.RequiredAll to listOf(availableTag, unavailableTag)),
+                    tagRelations = mapOf(TagRelation.RequiredAll to listOf(availableTag, unavailableTag)),
                 ),
                 upgrade(
-                    id = 4L, tags = mapOf(TagRelation.RequiredAll to listOf(unavailableTag)),
+                    id = 4L, tagRelations = mapOf(TagRelation.RequiredAll to listOf(unavailableTag)),
                 )
             )
 
@@ -497,11 +497,11 @@ class MainPresentationTest {
 
         val availableAction = action(
             id = 1L,
-            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
+            tagRelations = mapOf(TagRelation.RequiredAll to listOf(availableTag))
         )
         val notAvailableAction = action(
             id = 2L,
-            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag, notAvailableTag))
+            tagRelations = mapOf(TagRelation.RequiredAll to listOf(availableTag, notAvailableTag))
         )
 
         val state = gameState(
@@ -537,14 +537,14 @@ class MainPresentationTest {
 
         val availableAction = action(
             id = 1L,
-            tags = mapOf(
+            tagRelations = mapOf(
                 TagRelation.RequiredAll to listOf(availableTag),
                 TagRelation.RequiredAny to listOf(oneTagOption, anotherTagOption)
             )
         )
         val notAvailableAction = action(
             id = 2L,
-            tags = mapOf(
+            tagRelations = mapOf(
                 TagRelation.RequiredAll to listOf(notAvailableTag),
             )
         )
@@ -605,11 +605,11 @@ class MainPresentationTest {
 
         val availableAction = action(
             id = 1L,
-            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
+            tagRelations = mapOf(TagRelation.RequiredAll to listOf(availableTag))
         )
         val notAvailableAction = action(
             id = 2L,
-            tags = mapOf(
+            tagRelations = mapOf(
                 TagRelation.RequiredAll to listOf(availableTag),
                 TagRelation.RequiresNone to listOf(forbiddenTag),
             )
@@ -647,7 +647,7 @@ class MainPresentationTest {
 
             val removeAction = action(
                 id = 1L,
-                tags = mapOf(TagRelation.Removes to listOf(tagToRemove))
+                tagRelations = mapOf(TagRelation.Removes to listOf(tagToRemove))
             )
 
             val state = gameState(
@@ -674,7 +674,7 @@ class MainPresentationTest {
 
             val removeAction = action(
                 id = 1L,
-                tags = mapOf(TagRelation.Removes to listOf(tagToRemove))
+                tagRelations = mapOf(TagRelation.Removes to listOf(tagToRemove))
             )
 
             val state = gameState(
@@ -701,7 +701,7 @@ class MainPresentationTest {
 
             val action = action(
                 id = 1L,
-                tags = mapOf(TagRelation.Provides to listOf(tagToProvide))
+                tagRelations = mapOf(TagRelation.Provides to listOf(tagToProvide))
             )
 
             val state = gameState(
@@ -725,7 +725,7 @@ class MainPresentationTest {
     fun `should show correct icon for human and monster actions`() = runBlockingTest {
         val humanAction = action(
             id = 1L,
-            tags = mapOf(TagRelation.RequiredAll to listOf(Tags.Form.Human))
+            tagRelations = mapOf(TagRelation.RequiredAll to listOf(Tags.Form.Human))
         )
         val monsterAction = action(id = 2L)
 
@@ -836,12 +836,12 @@ class MainPresentationTest {
         val availableLocation = location(
             id = 1L,
             title = "available location",
-            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
+            tagRelations = mapOf(TagRelation.RequiredAll to listOf(availableTag))
         )
         val unavailableLocation = location(
             id = 2,
             title = "unavailable location",
-            tags = mapOf(TagRelation.RequiredAll to listOf(unavailableTag))
+            tagRelations = mapOf(TagRelation.RequiredAll to listOf(unavailableTag))
         )
 
         val state = gameState(
@@ -865,13 +865,13 @@ class MainPresentationTest {
             id = 1L,
             title = "other location",
             subtitle = "other location description",
-            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
+            tagRelations = mapOf(TagRelation.RequiredAll to listOf(availableTag))
         )
         val selectedLocation = location(
             id = 2,
             title = "selected location",
             subtitle = "selected location description",
-            tags = mapOf(TagRelation.RequiredAll to listOf(availableTag))
+            tagRelations = mapOf(TagRelation.RequiredAll to listOf(availableTag))
         )
 
         val state = gameState(

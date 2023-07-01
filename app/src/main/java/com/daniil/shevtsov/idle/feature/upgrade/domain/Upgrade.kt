@@ -15,7 +15,7 @@ data class Upgrade(
     val resourceChanges: ResourceChanges, //TODO: Need to be able define alternative resources (scrap for android, blood for vampire)
     val ratioChanges: RatioChanges,
     val status: UpgradeStatus,
-    val tags: TagRelations,
+    val tagRelations: TagRelations,
     override val plot: String?,
 ) : Selectable, Flavorable, PlotHolder {
     override fun createDefaultPlot(): String = "You have gained an upgrade \"$title\""
