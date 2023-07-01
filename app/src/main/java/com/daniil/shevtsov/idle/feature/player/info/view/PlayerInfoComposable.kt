@@ -67,7 +67,7 @@ fun PlayerInfoComposable(
         verticalArrangement = spacedBy(16.dp)
     ) {
         Column(
-            verticalArrangement = spacedBy(4.dp),
+            verticalArrangement = spacedBy(AppTheme.dimensions.paddingSmall),
         ) {
             state.playerTraits.forEach { trait ->
                 Row {
@@ -83,13 +83,13 @@ fun PlayerInfoComposable(
                         text = trait.title,
                         style = AppTheme.typography.body,
                         color = AppTheme.colors.textDark,
-                        modifier = modifier
+                        modifier = Modifier
                             .cavitary(
                                 lightColor = AppTheme.colors.backgroundLight,
                                 darkColor = AppTheme.colors.backgroundDark
                             )
                             .background(AppTheme.colors.backgroundText)
-                            .padding(4.dp)
+                            .padding(AppTheme.dimensions.paddingSmall)
                             .weight(1f),
                     )
                 }
@@ -115,13 +115,13 @@ fun PlayerInfoComposable(
                 },
                 style = AppTheme.typography.body,
                 color = AppTheme.colors.textDark,
-                modifier = modifier
+                modifier = Modifier
                     .cavitary(
                         lightColor = AppTheme.colors.backgroundLight,
                         darkColor = AppTheme.colors.backgroundDark
                     )
                     .background(AppTheme.colors.backgroundText)
-                    .padding(4.dp)
+                    .padding(AppTheme.dimensions.paddingSmall)
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
             )

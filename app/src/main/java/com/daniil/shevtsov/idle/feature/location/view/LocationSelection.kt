@@ -49,30 +49,29 @@ fun LocationSelection(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingSmall),
         modifier = modifier
             .background(AppTheme.colors.background)
-            .padding(4.dp)
     ) {
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .background(AppTheme.colors.background),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text(
-                modifier = modifier.weight(1f),
+                modifier = Modifier.weight(1f),
                 text = "Current location:",
                 style = AppTheme.typography.title,
                 color = AppTheme.colors.textLight
             )
-            Box(modifier = modifier.weight(1f)) {
+            Box(modifier = Modifier.weight(1f)) {
                 Text(
                     text = state.selectedLocation.title,
                     style = AppTheme.typography.body,
                     color = AppTheme.colors.textDark,
-                    modifier = modifier
+                    modifier = Modifier
                         .fillMaxWidth()
                         .cavitary(
                             lightColor = AppTheme.colors.backgroundLight,
@@ -80,15 +79,15 @@ fun LocationSelection(
                         )
                         .background(AppTheme.colors.backgroundText)
                         .clickable(onClick = { onExpandChange() })
-                        .padding(4.dp)
+                        .padding(AppTheme.dimensions.paddingSmall)
                 )
                 DropdownMenu(
                     expanded = state.isExpanded,
-                    modifier = modifier.wrapContentHeight(),
+                    modifier = Modifier.wrapContentHeight(),
                     onDismissRequest = { onExpandChange() }) {
                     state.locations.forEach { location ->
                         DropdownMenuItem(
-                            modifier = modifier.background(AppTheme.colors.backgroundText),
+                            modifier = Modifier.background(AppTheme.colors.backgroundText),
                             onClick = {
                                 onLocationSelected(location.id)
                                 onExpandChange()
@@ -112,7 +111,7 @@ fun LocationSelection(
                 )
                 .background(AppTheme.colors.backgroundText)
                 .clickable(onClick = { onExpandChange() })
-                .padding(4.dp)
+                .padding(AppTheme.dimensions.paddingSmall)
         )
     }
 }

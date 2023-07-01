@@ -16,7 +16,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
-import com.daniil.shevtsov.idle.feature.gamefinish.presentation.*
+import com.daniil.shevtsov.idle.feature.gamefinish.presentation.FinishedGameViewState
+import com.daniil.shevtsov.idle.feature.gamefinish.presentation.UnlockFeatureModel
+import com.daniil.shevtsov.idle.feature.gamefinish.presentation.UnlockModel
+import com.daniil.shevtsov.idle.feature.gamefinish.presentation.endingViewState
+import com.daniil.shevtsov.idle.feature.gamefinish.presentation.finishedGameViewState
 
 @Preview
 @Composable
@@ -106,7 +110,7 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(AppTheme.colors.backgroundText)
-                                .padding(4.dp)
+                                .padding(AppTheme.dimensions.paddingSmall)
                         ) {
                             unlock.unlockFeatures.forEach { feature ->
                                 Column {
@@ -117,7 +121,7 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .background(AppTheme.colors.backgroundText)
-                                            .padding(4.dp)
+                                            .padding(AppTheme.dimensions.paddingSmall)
                                     )
                                     if (feature.subtitle.isNotEmpty()) {
                                         Text(
@@ -127,7 +131,7 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .background(AppTheme.colors.backgroundText)
-                                                .padding(4.dp)
+                                                .padding(AppTheme.dimensions.paddingSmall)
                                         )
                                     }
                                 }

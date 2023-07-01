@@ -382,7 +382,7 @@ fun createAllActions() = listOf(
     ),
     action(
         title = "You can influence this ${Flavors.personName.placeholder}'s thoughts.",
-        subtitle = "It works in a subtle ways",
+        subtitle = "It works in subtle ways",
         plot = "Everything went smoothly, no one will know they are gone",
         resourceChanges = resourceChanges(
             ResourceKey.Blood to -10.0,
@@ -405,9 +405,9 @@ fun createAllActions() = listOf(
         ),
     ),
     action(
-        title = "Make them think they did your crime",
+        title = "Make them think they've done your crime",
         subtitle = "They are going to go away for a long time, but you'll get less attention.",
-        plot = "Breaking News: seemingly an ordinary person confessed to an unthinkable", //TODO: Random variations would work well here
+        plot = "Breaking News: seemingly ordinary person confessed to unthinkable", //TODO: Random variations would work well here
         resourceChanges = resourceChanges(
             ResourceKey.ControlledMind to -1.0,
         ),

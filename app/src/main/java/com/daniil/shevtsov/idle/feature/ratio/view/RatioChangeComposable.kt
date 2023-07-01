@@ -1,6 +1,12 @@
 package com.daniil.shevtsov.idle.feature.ratio.view
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,12 +30,12 @@ fun RatioChanges(
 ) {
     Column(
         modifier = modifier.width(IntrinsicSize.Max),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+        verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingSmall),
         horizontalAlignment = Alignment.End,
     ) {
         ratioChanges.forEach { ratioChange ->
             Row(
-                modifier = modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -38,7 +44,7 @@ fun RatioChanges(
                     style = AppTheme.typography.icon,
                 )
                 Text(
-                    modifier = modifier.padding(start = 4.dp),
+                    modifier = Modifier.padding(start = 4.dp),
                     text = ratioChange.value,
                     style = AppTheme.typography.body,
                     color = AppTheme.colors.textLight,

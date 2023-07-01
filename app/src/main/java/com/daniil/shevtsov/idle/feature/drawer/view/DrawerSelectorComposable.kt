@@ -46,7 +46,7 @@ fun DrawerTabSelector(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        horizontalArrangement = spacedBy(4.dp),
+        horizontalArrangement = spacedBy(AppTheme.dimensions.paddingSmall),
         modifier = modifier
             .background(AppTheme.colors.background)
             .padding(bottom = 4.dp)
@@ -70,12 +70,12 @@ fun DrawerTabSelector(
                         }
                         .background(AppTheme.colors.background)
                         .clickable { onTabSelected(tab.id) }
-                        .padding(4.dp)
+                        .padding(AppTheme.dimensions.paddingSmall)
                         .weight(1f)
                 } else {
                     modifier
                         .background(AppTheme.colors.background)
-                        .padding(4.dp)
+                        .padding(AppTheme.dimensions.paddingSmall)
                         .clickable { onTabSelected(tab.id) }
                         .weight(1f)
                 }

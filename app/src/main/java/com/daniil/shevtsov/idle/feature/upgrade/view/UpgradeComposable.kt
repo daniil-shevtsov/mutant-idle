@@ -2,7 +2,13 @@ package com.daniil.shevtsov.idle.feature.upgrade.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
@@ -42,14 +48,13 @@ fun UpgradeList(
             items(items = upgradeList) { upgrade ->
                 Upgrade(
                     upgrade = upgrade,
-                    modifier = modifier,
                     onClicked = { onUpgradeSelected(upgrade.id) }
                 )
             }
         },
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier,
-        contentPadding = PaddingValues(4.dp)
+        contentPadding = PaddingValues(AppTheme.dimensions.paddingSmall)
     )
 }
 
@@ -72,7 +77,7 @@ fun Upgrade(
         modifier = modifier
             .background(AppTheme.colors.background)
             .clickable { onClicked() }
-            .padding(4.dp)
+            .padding(AppTheme.dimensions.paddingSmall)
             .background(AppTheme.colors.backgroundDark),
     ) {
         Box {
@@ -83,7 +88,7 @@ fun Upgrade(
                 modifier = modifier
                     .fillMaxWidth()
                     .background(AppTheme.colors.backgroundDark)
-                    .padding(4.dp)
+                    .padding(AppTheme.dimensions.paddingSmall)
             )
             Text(
                 text = priceText,
@@ -91,7 +96,7 @@ fun Upgrade(
                 color = priceColor,
                 modifier = modifier
                     .background(AppTheme.colors.backgroundDark)
-                    .padding(4.dp)
+                    .padding(AppTheme.dimensions.paddingSmall)
                     .align(Alignment.CenterEnd)
             )
         }
@@ -103,14 +108,14 @@ fun Upgrade(
             modifier = modifier
                 .fillMaxWidth()
                 .background(AppTheme.colors.backgroundText)
-                .padding(4.dp)
+                .padding(AppTheme.dimensions.paddingSmall)
                 .padding(bottom = 4.dp)
         )
 
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(4.dp),
+                .padding(AppTheme.dimensions.paddingSmall),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             ResourceChanges(

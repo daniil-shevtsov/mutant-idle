@@ -28,7 +28,7 @@ fun ThemeColorsPreview() {
         .filter { it.traitId == TraitId.Species }
     LazyVerticalGrid(
         cells = GridCells.Fixed(2),
-        contentPadding = PaddingValues(4.dp)
+        contentPadding = PaddingValues(AppTheme.dimensions.paddingSmall)
     ) {
         items(species) { trait ->
             val theme = chooseThemeForId(trait.id)

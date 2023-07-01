@@ -24,32 +24,32 @@ data class AppTypography(
     val title: TextStyle = TextStyle(
         fontFamily = default,
         fontWeight = FontWeight.Normal,
-        fontSize = 24.sp
+        fontSize = 16.sp
     ),
     val subtitle: TextStyle = TextStyle(
         fontFamily = default,
         fontWeight = FontWeight.Normal,
-        fontSize = 20.sp
+        fontSize = 14.sp
     ),
     val bodyTitle: TextStyle = TextStyle(
         fontFamily = default,
         fontWeight = FontWeight.Bold,
-        fontSize = 16.sp,
+        fontSize = 14.sp,
     ),
     val body: TextStyle = TextStyle(
         fontFamily = default,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
+        fontSize = 14.sp
     ),
     val button: TextStyle = TextStyle(
         fontFamily = default,
         fontWeight = FontWeight.Normal,
-        fontSize = 24.sp
+        fontSize = 20.sp
     ),
     val icon: TextStyle = TextStyle(
         fontFamily = default,
         fontWeight = FontWeight.Normal,
-        fontSize = 24.sp
+        fontSize = 20.sp
     ),
 )
 

@@ -88,12 +88,12 @@ fun Collapsable(
             .fillMaxWidth()
     ) {
         Row(
-            horizontalArrangement = spacedBy(4.dp),
+            horizontalArrangement = spacedBy(AppTheme.dimensions.paddingSmall),
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
                 .fillMaxWidth()
                 .background(AppTheme.colors.background)
-                .padding(4.dp)
+                .padding(AppTheme.dimensions.paddingSmall)
 
         ) {
             CollapseButton(
