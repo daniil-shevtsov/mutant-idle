@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement.SpaceBetween
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -101,6 +102,7 @@ fun ActionSection(
             if (actionPane != null) {
                 LazyColumn(
                     verticalArrangement = Arrangement.Top,
+                    contentPadding = PaddingValues(AppTheme.dimensions.paddingSmall),
                     modifier = Modifier
                 ) {
                     items(

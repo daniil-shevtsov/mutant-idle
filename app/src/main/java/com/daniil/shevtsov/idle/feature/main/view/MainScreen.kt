@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.Text
@@ -35,6 +36,7 @@ import com.daniil.shevtsov.idle.feature.main.presentation.actionPane
 import com.daniil.shevtsov.idle.feature.main.presentation.actionsState
 import com.daniil.shevtsov.idle.feature.main.presentation.mainViewState
 import com.daniil.shevtsov.idle.feature.main.presentation.upgradeViewState
+import com.daniil.shevtsov.idle.feature.plot.domain.plotEntry
 import com.daniil.shevtsov.idle.feature.plot.view.PlotComposable
 import com.daniil.shevtsov.idle.feature.ratio.presentation.ratioModel
 import com.daniil.shevtsov.idle.feature.resource.domain.resourceModel
@@ -51,6 +53,13 @@ import kotlinx.coroutines.launch
 fun MainPreview() {
     MainScreen(
         state = mainViewState(
+            plotEntries = listOf(
+                plotEntry("lol kek cheburek (x10)"),
+                plotEntry("lol kek cheburek (x10)"),
+                plotEntry("lol kek cheburek (x10)"),
+                plotEntry("lol kek cheburek (x10)"),
+                plotEntry("lol kek cheburek (x10)"),
+            ),
             resources = listOf(
                 resourceModel(name = "Blood", value = "10 000", icon = Icons.Blood),
                 resourceModel(name = "Money", value = "100", icon = Icons.Money),
@@ -61,8 +70,18 @@ fun MainPreview() {
                 resourceModel(name = "Organs", value = "10", icon = Icons.Organs),
             ),
             ratios = listOf(
-                ratioModel(title = "Suspicion", name = "Investigation", percent = 0.35, icon = Icons.Suspicion),
-                ratioModel(title = "Mutanity", name = "Covert", percent = 0.75, icon = Icons.Mutanity),
+                ratioModel(
+                    title = "Suspicion",
+                    name = "Investigation",
+                    percent = 0.35,
+                    icon = Icons.Suspicion
+                ),
+                ratioModel(
+                    title = "Mutanity",
+                    name = "Covert",
+                    percent = 0.75,
+                    icon = Icons.Mutanity
+                ),
             ),
             actionState = actionsState(
                 listOf(
@@ -189,7 +208,11 @@ fun ContentBody(
         Column(
             modifier = Modifier
                 .background(AppTheme.colors.background)
-                .padding(bottom = paddingValues.calculateBottomPadding()),
+                .padding(
+                    start = AppTheme.dimensions.paddingSmall,
+                    end = AppTheme.dimensions.paddingSmall,
+                    bottom = paddingValues.calculateBottomPadding()
+                ),
             verticalArrangement = Arrangement.Top,
         ) {
             Spacer(
@@ -203,11 +226,13 @@ fun ContentBody(
                     .fillMaxWidth()
                     .height(100.dp)
             )
+            Spacer(modifier.height(AppTheme.dimensions.paddingSmall))
             LocationSelection(
                 state = state.locationSelectionViewState,
                 onExpandChange = { onViewAction(MainViewAction.LocationSelectionExpandChange) },
                 onLocationSelected = { id -> onViewAction(MainViewAction.SelectableClicked(id)) },
             )
+            Spacer(modifier.size(AppTheme.dimensions.paddingSmall))
             ResourcePane(
                 ratios = state.ratios,
                 resources = state.resources,
@@ -220,7 +245,7 @@ fun ContentBody(
                     )
                 },
             )
-
+            Spacer(modifier.height(AppTheme.dimensions.paddingSmall))
             Cavity(
                 mainColor = AppTheme.colors.background,
                 modifier = Modifier

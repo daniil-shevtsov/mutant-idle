@@ -39,36 +39,64 @@ fun ResourcePreview() {
 
 @Preview
 @Composable
-fun ManyResourcePanePreview() {
+fun ManyResourceCollapsedPanePreview() {
     ResourcePane(
         resources = listOf(
-            resourceModel(name = "Blood", value = "10 000", icon = Icons.Blood),
-            resourceModel(name = "Money", value = "100", icon = Icons.Money),
-            resourceModel(name = "Prisoners", value = "1", icon = Icons.Prisoner),
-            resourceModel(name = "Information", value = "50", icon = Icons.Information),
-            resourceModel(name = "Fresh Meat", value = "100", icon = Icons.FreshMeat),
-            resourceModel(name = "Familiars", value = "150", icon = Icons.Familiar),
-            resourceModel(name = "Organs", value = "10", icon = Icons.Organs),
+            resourceModel(key = ResourceKey.Blood, name = "Blood", value = "4", icon = "🩸"),
+            resourceModel(key = ResourceKey.Money, name = "Money", value = "100", icon = "💰"),
+            resourceModel(
+                key = ResourceKey.FreshMeat,
+                name = "Fresh Meat",
+                value = "13",
+                icon = "🥩"
+            ),
+            resourceModel(
+                key = ResourceKey.ControlledMind,
+                name = "Controlled Mind",
+                value = "3",
+                icon = "🙁"
+            ),
+            resourceModel(
+                key = ResourceKey.Information,
+                name = "Information",
+                value = "1",
+                icon = "📝"
+            )
         ),
         ratios = listOf(
             ratioModel(title = "Suspicion", name = "Wanted", percent = 0.5, icon = Icons.Suspicion),
             ratioModel(title = "Mutanity", name = "Honest", percent = 0.25, icon = Icons.Mutanity),
         ),
-        isCollapsed = false,
+        isCollapsed = true,
         onToggleCollapse = {},
     )
 }
 
 @Preview
 @Composable
-fun Debug() {
+fun ManyResourcePanePreview() {
     ResourcePane(
         resources = listOf(
-            resourceModel(key= ResourceKey.Blood, name="Blood", value="4", icon="🩸"),
-            resourceModel(key=ResourceKey.Money, name="Money", value="100", icon="💰"),
-            resourceModel(key=ResourceKey.FreshMeat, name="Fresh Meat", value="13", icon="🥩"),
-            resourceModel(key=ResourceKey.ControlledMind, name="Controlled Mind", value="3", icon="🙁"),
-            resourceModel(key=ResourceKey.Information, name="Information", value="1", icon="📝")
+            resourceModel(key = ResourceKey.Blood, name = "Blood", value = "4", icon = "🩸"),
+            resourceModel(key = ResourceKey.Money, name = "Money", value = "100", icon = "💰"),
+            resourceModel(
+                key = ResourceKey.FreshMeat,
+                name = "Fresh Meat",
+                value = "13",
+                icon = "🥩"
+            ),
+            resourceModel(
+                key = ResourceKey.ControlledMind,
+                name = "Controlled Mind",
+                value = "3",
+                icon = "🙁"
+            ),
+            resourceModel(
+                key = ResourceKey.Information,
+                name = "Information",
+                value = "1",
+                icon = "📝"
+            )
         ),
         ratios = listOf(
             ratioModel(title = "Suspicion", name = "Wanted", percent = 0.5, icon = Icons.Suspicion),
@@ -91,8 +119,9 @@ fun ResourcePane(
         title = "Resources and Ratios",
         isCollapsed = isCollapsed,
         collapsedContent = {
-            Row {
+            Column {
                 ResourceRow(resource = resources[0])
+                RatioRow(ratios[0])
             }
         },
         expandedContent = {
@@ -121,24 +150,9 @@ fun ResourcePane(
                         ratios.chunked(2)
                             .map { it.first() to it.getOrNull(1) }
                             .forEach { (leftRatio, rightRatio) ->
-                                val ratioModifier = Modifier.weight(1f)
-                                leftRatio.let { model ->
-                                    TitleWithProgress(
-                                        title = "",
-                                        name = model.percentLabel + " " + model.name,
-                                        progress = model.percent.toFloat(),
-                                        icon = model.icon,
-                                        modifier = ratioModifier
-                                    )
-                                }
-                                rightRatio?.let { model ->
-                                    TitleWithProgress(
-                                        title = "",
-                                        name = model.percentLabel + " " + model.name,
-                                        progress = model.percent.toFloat(),
-                                        icon = model.icon,
-                                        modifier = ratioModifier
-                                    )
+                                RatioRow(leftRatio, Modifier.weight(1f))
+                                if (rightRatio != null) {
+                                    RatioRow(rightRatio, Modifier.weight(1f))
                                 }
                             }
                     }
@@ -146,6 +160,20 @@ fun ResourcePane(
             }
         },
         onToggleCollapse = onToggleCollapse,
+    )
+}
+
+@Composable
+fun RatioRow(
+    model: RatioModel,
+    modifier: Modifier = Modifier
+) {
+    TitleWithProgress(
+        title = "",
+        name = model.percentLabel + " " + model.name,
+        progress = model.percent.toFloat(),
+        icon = model.icon,
+        modifier = modifier
     )
 }
 
@@ -164,6 +192,7 @@ fun ResourceRow(
         Text(
             modifier = Modifier,
             text = resource.name,
+            maxLines = 1,
             style = AppTheme.typography.title,
             color = AppTheme.colors.textLight,
         )

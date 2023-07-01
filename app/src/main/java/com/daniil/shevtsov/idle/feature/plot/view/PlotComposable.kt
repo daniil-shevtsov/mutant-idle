@@ -2,8 +2,8 @@ package com.daniil.shevtsov.idle.feature.plot.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -17,7 +17,7 @@ import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.feature.plot.domain.PlotEntry
 import com.daniil.shevtsov.idle.feature.plot.domain.plotEntry
 
-@Preview
+@Preview(heightDp = 100)
 @Composable
 fun PlotComposablePreview() {
     PlotComposable(
@@ -33,9 +33,9 @@ fun PlotComposable(
     val listState = rememberLazyListState()
     LazyColumn(
         modifier = modifier
-            .background(AppTheme.colors.backgroundText)
-            .padding(AppTheme.dimensions.paddingSmall),
+            .background(AppTheme.colors.backgroundText),
         state = listState,
+        contentPadding = PaddingValues(AppTheme.dimensions.paddingSmall),
         reverseLayout = true,
     ) {
         items(plotEntries) { plotEntry ->

@@ -29,17 +29,17 @@ data class AppTypography(
     val subtitle: TextStyle = TextStyle(
         fontFamily = default,
         fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
+        fontSize = 14.sp
     ),
     val bodyTitle: TextStyle = TextStyle(
         fontFamily = default,
         fontWeight = FontWeight.Bold,
-        fontSize = 12.sp,
+        fontSize = 14.sp,
     ),
     val body: TextStyle = TextStyle(
         fontFamily = default,
         fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
+        fontSize = 14.sp
     ),
     val button: TextStyle = TextStyle(
         fontFamily = default,
