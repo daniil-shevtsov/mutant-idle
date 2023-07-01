@@ -504,33 +504,6 @@ class MainPresentationTest {
         }
 
     @Test
-    fun `should hide provide action if it only provides and tag to provide is already present`() =
-        runBlockingTest {
-            val tagToProvide = tag(name = "tag to provide")
-
-            val action = action(
-                id = 1L,
-                tagRelations = mapOf(TagRelation.Provides to listOf(tagToProvide))
-            )
-
-            val state = gameState(
-                actions = listOf(action),
-                player = player(generalTags = listOf(tagToProvide)),
-            )
-
-            val viewState = mapMainViewState(state = state)
-
-            assertThat(viewState)
-                .extractingMainState()
-                .prop(MainViewState.Success::actionState)
-                .prop(ActionsState::actionPanes)
-                .index(0)
-                .prop(ActionPane::actions)
-                .extracting(ActionModel::id)
-                .isEmpty()
-        }
-
-    @Test
     fun `should show correct icon for human and monster actions`() = runBlockingTest {
         val humanAction = action(
             id = 1L,

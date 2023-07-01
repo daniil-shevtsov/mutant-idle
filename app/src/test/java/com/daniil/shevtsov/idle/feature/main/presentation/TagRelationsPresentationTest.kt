@@ -25,11 +25,6 @@ class TagRelationsPresentationTest {
         val selectable: Selectable,
     )
 
-    private val tagToRemove = tag(name = "tag to remove")
-    private val tagToProvide = tag(name = "tag to provide")
-    private val requiredTag = tag(name = "required tag")
-    private val forbiddenTag = tag(name = "forbidden tag")
-
     private val plotHolders = listOf(
         TestData(selectable = action(id = 1L, title = "action")),
         TestData(selectable = location(id = 2L, title = "location")),
@@ -40,106 +35,163 @@ class TagRelationsPresentationTest {
     fun testPlotHolders() = plotHolders
         .flatMap { testData ->
             listOf(
-                DynamicTest.dynamicTest("should only show ${testData.selectable.title}s if you have all requiredAll tags") {
-                    val selectable = testData.selectable
-                    val availableTag = tag(name = "available tag")
-                    val unavailableTag = tag(name = "unavailable tag")
-
-                    val availableSelectable = selectable.copy(
-                        id = 1L,
-                        tagRelations = mapOf(TagRelation.RequiredAll to listOf(availableTag))
-                    )
-                    val unavailableSelectable = selectable.copy(
-                        id = 2L,
-                        tagRelations = mapOf(
-                            TagRelation.RequiredAll to listOf(
-                                availableTag,
-                                unavailableTag
-                            )
-                        ),
-                    )
-
-                    val state = gameState(
-                        selectables = listOf(availableSelectable, unavailableSelectable),
-                        player = player(generalTags = listOf(availableTag)),
-                    )
-
-                    val viewState = mapMainViewState(state = state)
-
-                    assertThat(viewState)
-                        .extractingMainState()
-                        .extractingSelectables(example = selectable)
-                        .extracting(SelectableModel::id)
-                        .containsExactly(availableSelectable.id)
-                },
-                DynamicTest.dynamicTest("should only show ${testData.selectable.title}s if you have at least one requiredAny tag") {
-                    val selectable = testData.selectable
-                    val availableTag = tag(name = "available tag")
-                    val unavailableTag = tag(name = "unavailable tag")
-                    val unavailableTag2 = tag(name = "unavailable tag2")
-
-                    val availableSelectable = selectable.copy(
-                        id = 1L,
-                        tagRelations = mapOf(
-                            TagRelation.RequiredAny to listOf(
-                                availableTag,
-                                unavailableTag
-                            )
-                        )
-                    )
-                    val unavailableSelectable = selectable.copy(
-                        id = 2L,
-                        tagRelations = mapOf(
-                            TagRelation.RequiredAny to listOf(
-                                unavailableTag2,
-                                unavailableTag2
-                            )
-                        ),
-                    )
-
-                    val state = gameState(
-                        selectables = listOf(availableSelectable, unavailableSelectable),
-                        player = player(generalTags = listOf(availableTag)),
-                    )
-
-                    val viewState = mapMainViewState(state = state)
-
-                    assertThat(viewState)
-                        .extractingMainState()
-                        .extractingSelectables(example = selectable)
-                        .extracting(SelectableModel::id)
-                        .containsExactly(availableSelectable.id)
-                },
-                DynamicTest.dynamicTest("should hide ${testData.selectable.title} if requireNone tag present") {
-                    val selectable = testData.selectable
-                    val presentTag = tag(name = "present tag")
-                    val missingTag = tag(name = "missing tag")
-
-                    val availableSelectable = selectable.copy(
-                        id = 1L,
-                        tagRelations = mapOf(TagRelation.RequiresNone to listOf(missingTag))
-                    )
-                    val unavailableSelectable = selectable.copy(
-                        id = 2L,
-                        tagRelations = mapOf(
-                            TagRelation.RequiresNone to listOf(presentTag)
-                        ),
-                    )
-
-                    val state = gameState(
-                        selectables = listOf(availableSelectable, unavailableSelectable),
-                        player = player(generalTags = listOf(presentTag)),
-                    )
-
-                    val viewState = mapMainViewState(state = state)
-
-                    assertThat(viewState)
-                        .extractingMainState()
-                        .extractingSelectables(example = selectable)
-                        .extracting(SelectableModel::id)
-                        .containsExactly(availableSelectable.id)
-                },
+                requireAllTest(testData),
+                requireAnyTest(testData),
+                requireNoneTest(testData),
+                providesTest(testData),
             )
+        }
+
+    private fun requireAllTest(
+        testData: TestData
+    ): DynamicTest? =
+        DynamicTest.dynamicTest("should only show ${testData.selectable.title}s if you have all requiredAll tags") {
+            val selectable = testData.selectable
+            val availableTag = tag(name = "available tag")
+            val unavailableTag = tag(name = "unavailable tag")
+
+            val availableSelectable = selectable.copy(
+                id = 1L,
+                tagRelations = mapOf(TagRelation.RequiredAll to listOf(availableTag))
+            )
+            val unavailableSelectable = selectable.copy(
+                id = 2L,
+                tagRelations = mapOf(
+                    TagRelation.RequiredAll to listOf(
+                        availableTag,
+                        unavailableTag
+                    )
+                ),
+            )
+
+            val state = gameState(
+                selectables = listOf(availableSelectable, unavailableSelectable),
+                player = player(generalTags = listOf(availableTag)),
+            )
+
+            val viewState = mapMainViewState(state = state)
+
+            assertThat(viewState)
+                .extractingMainState()
+                .extractingSelectables(example = selectable)
+                .extracting(SelectableModel::id)
+                .containsExactly(availableSelectable.id)
+        }
+
+    private fun requireAnyTest(
+        testData: TestData
+    ): DynamicTest? =
+        DynamicTest.dynamicTest("should only show ${testData.selectable.title}s if you have at least one requiredAny tag") {
+            val selectable = testData.selectable
+            val availableTag = tag(name = "available tag")
+            val unavailableTag = tag(name = "unavailable tag")
+            val unavailableTag2 = tag(name = "unavailable tag2")
+
+            val availableSelectable = selectable.copy(
+                id = 1L,
+                tagRelations = mapOf(
+                    TagRelation.RequiredAny to listOf(
+                        availableTag,
+                        unavailableTag
+                    )
+                )
+            )
+            val unavailableSelectable = selectable.copy(
+                id = 2L,
+                tagRelations = mapOf(
+                    TagRelation.RequiredAny to listOf(
+                        unavailableTag2,
+                        unavailableTag2
+                    )
+                ),
+            )
+
+            val state = gameState(
+                selectables = listOf(availableSelectable, unavailableSelectable),
+                player = player(generalTags = listOf(availableTag)),
+            )
+
+            val viewState = mapMainViewState(state = state)
+
+            assertThat(viewState)
+                .extractingMainState()
+                .extractingSelectables(example = selectable)
+                .extracting(SelectableModel::id)
+                .containsExactly(availableSelectable.id)
+        }
+
+    private fun requireNoneTest(
+        testData: TestData
+    ): DynamicTest? =
+        DynamicTest.dynamicTest("should hide ${testData.selectable.title} if requireNone tag present") {
+            val selectable = testData.selectable
+            val presentTag = tag(name = "present tag")
+            val missingTag = tag(name = "missing tag")
+
+            val availableSelectable = selectable.copy(
+                id = 1L,
+                tagRelations = mapOf(TagRelation.RequiresNone to listOf(missingTag))
+            )
+            val unavailableSelectable = selectable.copy(
+                id = 2L,
+                tagRelations = mapOf(
+                    TagRelation.RequiresNone to listOf(presentTag)
+                ),
+            )
+
+            val state = gameState(
+                selectables = listOf(availableSelectable, unavailableSelectable),
+                player = player(generalTags = listOf(presentTag)),
+            )
+
+            val viewState = mapMainViewState(state = state)
+
+            assertThat(viewState)
+                .extractingMainState()
+                .extractingSelectables(example = selectable)
+                .extracting(SelectableModel::id)
+                .containsExactly(availableSelectable.id)
+        }
+
+    private fun providesTest(
+        testData: TestData
+    ): DynamicTest? =
+        DynamicTest.dynamicTest("should hide ${testData.selectable.title} if only provides what already present") {
+            val selectable = testData.selectable
+            val presentTag = tag(name = "present tag")
+            val missingTag = tag(name = "missing tag")
+
+            val availableSelectable1 = selectable.copy(
+                id = 1L,
+                tagRelations = mapOf(TagRelation.Provides to listOf(missingTag))
+            )
+            val availableSelectable2 = selectable.copy(
+                id = 1L,
+                tagRelations = mapOf(TagRelation.Provides to listOf(presentTag, missingTag))
+            )
+            val unavailableSelectable = selectable.copy(
+                id = 2L,
+                tagRelations = mapOf(
+                    TagRelation.Provides to listOf(presentTag)
+                ),
+            )
+
+            val state = gameState(
+                selectables = listOf(
+                    availableSelectable1,
+                    availableSelectable2,
+                    unavailableSelectable
+                ),
+                player = player(generalTags = listOf(presentTag)),
+            )
+
+            val viewState = mapMainViewState(state = state)
+
+            assertThat(viewState)
+                .extractingMainState()
+                .extractingSelectables(example = selectable)
+                .extracting(SelectableModel::id)
+                .containsExactly(availableSelectable1.id, availableSelectable2.id)
         }
 
     private fun Assert<MainViewState.Success>.extractingSelectables(example: Selectable): Assert<List<SelectableModel>> =
