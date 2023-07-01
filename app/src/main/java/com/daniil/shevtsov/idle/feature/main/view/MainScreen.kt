@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.Text
@@ -39,7 +37,6 @@ import com.daniil.shevtsov.idle.feature.main.presentation.mainViewState
 import com.daniil.shevtsov.idle.feature.main.presentation.upgradeViewState
 import com.daniil.shevtsov.idle.feature.plot.view.PlotComposable
 import com.daniil.shevtsov.idle.feature.ratio.presentation.ratioModel
-import com.daniil.shevtsov.idle.feature.ratio.view.RatioPane
 import com.daniil.shevtsov.idle.feature.resource.domain.resourceModel
 import com.daniil.shevtsov.idle.feature.resource.view.ResourcePane
 import com.daniil.shevtsov.idle.feature.upgrade.view.UpgradeList
@@ -207,24 +204,18 @@ fun ContentBody(
                 onExpandChange = { onViewAction(MainViewAction.LocationSelectionExpandChange) },
                 onLocationSelected = { id -> onViewAction(MainViewAction.SelectableClicked(id)) },
             )
-            Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                ResourcePane(
-                    resources = state.resources,
-                    isCollapsed = state.sectionCollapse[SectionKey.Resources] ?: false,
-                    onToggleCollapse = {
-                        onViewAction(
-                            MainViewAction.ToggleSectionCollapse(
-                                SectionKey.Resources
-                            )
+            ResourcePane(
+                ratios = state.ratios,
+                resources = state.resources,
+                isCollapsed = state.sectionCollapse[SectionKey.Resources] ?: false,
+                onToggleCollapse = {
+                    onViewAction(
+                        MainViewAction.ToggleSectionCollapse(
+                            SectionKey.Resources
                         )
-                    },
-                )
-                RatioPane(state.ratios, modifier = modifier)
-            }
+                    )
+                },
+            )
 
             Cavity(
                 mainColor = AppTheme.colors.background,
