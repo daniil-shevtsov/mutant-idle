@@ -183,10 +183,15 @@ private fun satisfiesAllTagsRelations(
     val tagsToRemove = tagRelations[TagRelation.Removes].orEmpty().toSet()
     val presentTagsToRemove = tags.filter { tag -> tag in tagsToRemove }
 
+    val tagsToProvide = tagRelations[TagRelation.Provides].orEmpty().toSet()
+    val tagsToProvideThatAlreadyPresent = tags.filter { tag -> tag in tagsToProvide }
+
     val noForbiddenTags =
         forbiddenTags == null || forbiddenTags.none { forbiddenTag -> forbiddenTag in tags }
+    val removeMakesSense = (tagsToRemove.isEmpty() || presentTagsToRemove.isNotEmpty())
+    val provideMakesSense = (tagsToProvide.isEmpty() || tagsToProvide.any { tag -> tag !in tagsToProvideThatAlreadyPresent })
 
-    return hasAllRequired && hasAnyRequired && noForbiddenTags && (tagsToRemove.isEmpty() || presentTagsToRemove.isNotEmpty())
+    return hasAllRequired && hasAnyRequired && noForbiddenTags && removeMakesSense && provideMakesSense
 }
 
 private fun createActionState(
