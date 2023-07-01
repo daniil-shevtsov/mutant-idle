@@ -61,7 +61,7 @@ fun ManyResourceCollapsedPanePreview() {
                 name = "Information",
                 value = "1",
                 icon = "📝"
-            )
+            ),
         ),
         ratios = listOf(
             ratioModel(title = "Suspicion", name = "Wanted", percent = 0.5, icon = Icons.Suspicion),
@@ -96,7 +96,15 @@ fun ManyResourcePanePreview() {
                 name = "Information",
                 value = "1",
                 icon = "📝"
-            )
+            ),
+            resourceModel(key = ResourceKey.Blood, name = "Blood", value = "4", icon = "🩸"),
+            resourceModel(key = ResourceKey.Money, name = "Money", value = "100", icon = "💰"),
+            resourceModel(
+                key = ResourceKey.FreshMeat,
+                name = "Fresh Meat",
+                value = "13",
+                icon = "🥩"
+            ),
         ),
         ratios = listOf(
             ratioModel(title = "Suspicion", name = "Wanted", percent = 0.5, icon = Icons.Suspicion),
@@ -135,7 +143,7 @@ fun ResourcePane(
                 ) {
                     resources.chunked(3)
                         .forEach { columnResources ->
-                            Column(modifier = Modifier.width(IntrinsicSize.Min)) {
+                            Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                                 columnResources.forEach { resource ->
                                     ResourceRow(
                                         resource = resource,
@@ -186,16 +194,22 @@ fun ResourceRow(
         modifier = modifier
             .background(AppTheme.colors.background),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = resource.icon, style = AppTheme.typography.icon)
-        Text(
-            modifier = Modifier,
-            text = resource.name,
-            maxLines = 1,
-            style = AppTheme.typography.title,
-            color = AppTheme.colors.textLight,
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(text = resource.icon, style = AppTheme.typography.icon)
+            Text(
+                modifier = Modifier,
+                text = resource.name,
+                maxLines = 1,
+                style = AppTheme.typography.title,
+                color = AppTheme.colors.textLight,
+            )
+        }
+
         Text(
             text = resource.value,
             style = AppTheme.typography.body,
@@ -203,6 +217,7 @@ fun ResourceRow(
             textAlign = TextAlign.Center,
             maxLines = 1,
             modifier = Modifier
+                .padding(start = 10.dp)
                 .cavitary(
                     lightColor = AppTheme.colors.backgroundLight,
                     darkColor = AppTheme.colors.backgroundDark
@@ -210,7 +225,6 @@ fun ResourceRow(
                 .background(AppTheme.colors.backgroundText)
                 .padding(AppTheme.dimensions.paddingSmall)
                 .width(IntrinsicSize.Max)
-                .weight(1f)
         )
     }
 }
