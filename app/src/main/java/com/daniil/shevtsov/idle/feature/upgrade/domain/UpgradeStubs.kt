@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.feature.upgrade.domain
 import com.daniil.shevtsov.idle.feature.action.domain.RatioChanges
 import com.daniil.shevtsov.idle.feature.action.domain.ResourceChanges
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelations
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.noTagRelations
 
 fun upgrade(
     id: Long = 0L,
@@ -12,7 +13,7 @@ fun upgrade(
     status: UpgradeStatus = UpgradeStatus.NotBought,
     resourceChanges: ResourceChanges = mapOf(),
     ratioChanges: RatioChanges = mapOf(),
-    tags: TagRelations = mapOf(),
+    tags: TagRelations = noTagRelations(),
     plot: String? = null,
 ) = Upgrade(
     id = id,
