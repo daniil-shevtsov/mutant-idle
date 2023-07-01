@@ -24,13 +24,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
+import com.daniil.shevtsov.idle.core.ui.upgradeListPreviewStub
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.core.ui.widgets.CollapseButton
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
+import com.daniil.shevtsov.idle.feature.action.view.actionComposeStub
 import com.daniil.shevtsov.idle.feature.location.view.LocationSelection
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
+import com.daniil.shevtsov.idle.feature.main.presentation.actionPane
 import com.daniil.shevtsov.idle.feature.main.presentation.actionsState
 import com.daniil.shevtsov.idle.feature.main.presentation.mainViewState
 import com.daniil.shevtsov.idle.feature.main.presentation.upgradeViewState
@@ -45,7 +48,7 @@ import kotlinx.coroutines.launch
 
 @Preview(
     widthDp = 320,
-    heightDp = 534,
+    heightDp = 1034,
 )
 @Composable
 fun MainPreview() {
@@ -59,8 +62,20 @@ fun MainPreview() {
                 ratioModel(title = "Mutanity", name = "Covert", percent = 0.75),
                 ratioModel(title = "Suspicion", name = "Investigation", percent = 0.35),
             ),
-            actionState = actionsState(),
-            upgradeState = upgradeViewState(),
+            actionState = actionsState(
+                listOf(
+                    actionPane(
+                        listOf(
+                            actionComposeStub(),
+                            actionComposeStub(),
+                            actionComposeStub()
+                        )
+                    )
+                )
+            ),
+            upgradeState = upgradeViewState(
+                upgradeListPreviewStub()
+            ),
             sectionCollapse = mapOf(
                 SectionKey.Resources to false,
                 SectionKey.Actions to false,
@@ -118,6 +133,7 @@ fun ContentBody(
         bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
     )
 
+    //TODO: Make this behave based on upgrade collapse state
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
         sheetContent = {
