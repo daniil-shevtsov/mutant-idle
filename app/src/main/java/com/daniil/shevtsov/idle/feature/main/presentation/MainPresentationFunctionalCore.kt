@@ -84,7 +84,7 @@ private fun createMainViewState(state: GameState): MainViewState {
         .map { it.copy(text = it.text.withFlavor(state)) }
     val shop = state.upgrades
         .filter { upgrade ->
-            satisfiesAllTagsRelations(
+            upgrade.status == UpgradeStatus.Bought || satisfiesAllTagsRelations(
                 tagRelations = upgrade.tagRelations,
                 tags = state.player.tags
             )
@@ -188,7 +188,8 @@ private fun satisfiesAllTagsRelations(
     val noForbiddenTags =
         forbiddenTags == null || forbiddenTags.none { forbiddenTag -> forbiddenTag in tags }
     val removeMakesSense = (tagsToRemove.isEmpty() || presentTagsToRemove.isNotEmpty())
-    val provideMakesSense = (tagsToProvide.isEmpty() || tagsToProvide.any { tag -> tag !in tagsToProvideThatAlreadyPresent })
+    val provideMakesSense =
+        (tagsToProvide.isEmpty() || tagsToProvide.any { tag -> tag !in tagsToProvideThatAlreadyPresent })
 
     return hasAllRequired && hasAnyRequired && noForbiddenTags && removeMakesSense && provideMakesSense
 }

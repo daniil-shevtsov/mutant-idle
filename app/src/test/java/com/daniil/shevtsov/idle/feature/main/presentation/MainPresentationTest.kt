@@ -28,6 +28,7 @@ import com.daniil.shevtsov.idle.feature.resource.presentation.ResourceModel
 import com.daniil.shevtsov.idle.feature.shop.presentation.UpgradesViewState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tagRelations
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
@@ -244,6 +245,36 @@ class MainPresentationTest {
             .extracting(UpgradeModel::id, UpgradeModel::status)
             .containsExactly(0L to UpgradeStatusModel.Bought)
     }
+
+    @Test
+    fun `should show bought upgrades despite them providing tags that are already present`() =
+        runBlockingTest {
+            val presentTag = tag(name = "present tag")
+            val state = gameState(
+                resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
+                ratios = listOf(
+                    ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.0),
+                    ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
+                ),
+                player = player(generalTags = listOf(presentTag)),
+                upgrades = listOf(
+                    upgrade(
+                        id = 0L,
+                        price = 10.0,
+                        resourceChanges = mapOf(ResourceKey.Blood to -10.0),
+                        status = UpgradeStatus.Bought,
+                        tagRelations = tagRelations(TagRelation.Provides to presentTag)
+                    )
+                ),
+            )
+
+            val viewState = mapMainViewState(state = state)
+
+            assertThat(viewState)
+                .extractingUpgrades()
+                .extracting(UpgradeModel::id, UpgradeModel::status)
+                .containsExactly(0L to UpgradeStatusModel.Bought)
+        }
 
     @Test
     fun `should show correct ratio icons`() = runBlockingTest {
@@ -763,6 +794,7 @@ class MainPresentationTest {
                 "lol",
             )
     }
+
 
     private fun Assert<MainViewState>.extractingPlot() = extractingMainState()
         .prop(MainViewState.Success::plotEntries)
