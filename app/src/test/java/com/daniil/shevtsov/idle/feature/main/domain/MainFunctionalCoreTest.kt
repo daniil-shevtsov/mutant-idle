@@ -92,7 +92,7 @@ class MainFunctionalCoreTest {
                 upgrades = listOf(
                     upgrade(
                         id = 1L,
-                        tagRelations = tagRelations(TagRelation.Provides to listOf(providedTag)),
+                        tagRelations = tagRelations(TagRelation.Provides to providedTag),
                         resourceChanges = mapOf(ResourceKey.Blood to -0.4),
                         ratioChanges = ratioChanges(RatioKey.Mutanity to 0.5),
                     )
@@ -124,9 +124,7 @@ class MainFunctionalCoreTest {
                     RatioKey.Mutanity to ratioChange(change = 2.0),
                     RatioKey.Suspicion to ratioChange(change = -3.0),
                 ),
-                tagRelations = tagRelations(
-                    TagRelation.Provides to listOf(providedTag)
-                )
+                tagRelations = tagRelations(TagRelation.Provides to providedTag)
             )
 
             val initialState = gameState(
@@ -171,7 +169,7 @@ class MainFunctionalCoreTest {
         val providedTag = tag(name = "lol")
         val action = action(
             id = 1L,
-            tagRelations = tagRelations(TagRelation.Provides to listOf(providedTag)),
+            tagRelations = tagRelations(TagRelation.Provides to providedTag),
         )
         val newState = mainFunctionalCore(
             state = gameState(actions = listOf(action)),
@@ -189,7 +187,7 @@ class MainFunctionalCoreTest {
         val tagToRemove = tag(name = "lol")
         val action = action(
             id = 1L,
-            tagRelations = tagRelations(TagRelation.Removes to listOf(tagToRemove)),
+            tagRelations = tagRelations(TagRelation.Removes to tagToRemove),
         )
         val newState = mainFunctionalCore(
             state = gameState(
@@ -327,16 +325,13 @@ class MainFunctionalCoreTest {
     @Test
     fun `should update current tags with provided by selected location`() {
         val oldLocation = location(
-            id = 1L, title = "old location", tagRelations = tagRelations(
-                TagRelation.Provides to listOf(tag(name = "old tag"))
+            id = 1L, title = "old location", tagRelations = tagRelations(TagRelation.Provides to tag(name = "old tag")
             )
         )
 
         val newTag = tag(name = "new tag")
         val newLocation = location(
-            id = 2L, title = "new location", tagRelations = tagRelations(
-                TagRelation.Provides to listOf(newTag)
-            )
+            id = 2L, title = "new location", tagRelations = tagRelations(TagRelation.Provides to newTag)
         )
 
         val state = mainFunctionalCore(
@@ -359,8 +354,7 @@ class MainFunctionalCoreTest {
             id = 1L,
             title = "old location",
             plot = "test lol test",
-            tagRelations = tagRelations(
-                TagRelation.Provides to listOf(tag(name = "old tag"))
+            tagRelations = tagRelations(TagRelation.Provides to tag(name = "old tag")
             )
         )
 
@@ -384,8 +378,7 @@ class MainFunctionalCoreTest {
             id = 1L,
             title = "Test Location",
             plot = null,
-            tagRelations = tagRelations(
-                TagRelation.Provides to listOf(tag(name = "old tag"))
+            tagRelations = tagRelations(TagRelation.Provides to tag(name = "old tag")
             )
         )
 

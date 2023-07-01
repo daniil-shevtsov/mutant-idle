@@ -453,7 +453,7 @@ class MainPresentationTest {
     fun `should show correct icon for human and monster actions`() = runBlockingTest {
         val humanAction = action(
             id = 1L,
-            tagRelations = tagRelations(TagRelation.RequiredAll to listOf(Tags.Form.Human))
+            tagRelations = tagRelations(TagRelation.RequiredAll to Tags.Form.Human)
         )
         val monsterAction = action(id = 2L)
 

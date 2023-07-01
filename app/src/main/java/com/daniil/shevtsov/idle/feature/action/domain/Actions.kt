@@ -157,16 +157,14 @@ fun createAllActions() = listOf(
         title = "Become invisible",
         subtitle = "You ${Flavors.invisibilityAction.placeholder}, ${Flavors.derogativePeopleName.placeholder} can't see you now",
         tagRelations = tagRelations(
-            TagRelation.RequiredAll to listOf(Tags.Abilities.Invisibility,),
+            TagRelation.RequiredAll to listOf(Tags.Abilities.Invisibility),
             TagRelation.Provides to listOf(Tags.State.Invisible),
         ),
     ),
     action(
         title = "Become visible",
         subtitle = "You become visible again",
-        tagRelations = tagRelations(
-            TagRelation.Removes to listOf(Tags.State.Invisible)
-        ),
+        tagRelations = tagRelations(TagRelation.Removes to Tags.State.Invisible),
     ),
     action(
         title = "Become a bat",
@@ -373,11 +371,7 @@ fun createAllActions() = listOf(
         resourceChanges = mapOf(
             ResourceKey.Information to +1.0,
         ),
-        tagRelations = tagRelations(
-            TagRelation.RequiredAny to listOf(
-                Tags.Locations.Rooftops
-            )
-        ),
+        tagRelations = tagRelations(TagRelation.RequiredAny to Tags.Locations.Rooftops),
     ),
     action(
         title = "Capture ${Flavors.personName.placeholder} when they don't suspect it",
@@ -388,9 +382,7 @@ fun createAllActions() = listOf(
             ResourceKey.Prisoner to 1.0,
         ),
         tagRelations = tagRelations(
-            TagRelation.RequiredAll to listOf(
-                Tags.PersonCapturer
-            )
+            TagRelation.RequiredAll to Tags.PersonCapturer
         ),
     ),
     action(
@@ -402,9 +394,7 @@ fun createAllActions() = listOf(
             ResourceKey.ControlledMind to 1.0,
         ),
         tagRelations = tagRelations(
-            TagRelation.RequiredAll to listOf(
-                Tags.Abilities.Hypnosis
-            )
+            TagRelation.RequiredAll to Tags.Abilities.Hypnosis
         ),
     ),
     action(
@@ -416,9 +406,7 @@ fun createAllActions() = listOf(
             ResourceKey.Money to 10.0,
         ),
         tagRelations = tagRelations(
-            TagRelation.RequiredAll to listOf(
-                Tags.Abilities.Hypnosis
-            )
+            TagRelation.RequiredAll to Tags.Abilities.Hypnosis
         ),
     ),
     action(
@@ -432,9 +420,7 @@ fun createAllActions() = listOf(
             RatioKey.Suspicion to -0.05
         ),
         tagRelations = tagRelations(
-            TagRelation.RequiredAll to listOf(
-                Tags.Abilities.Hypnosis
-            )
+            TagRelation.RequiredAll to Tags.Abilities.Hypnosis
         ),
     ),
     action(
@@ -449,9 +435,7 @@ fun createAllActions() = listOf(
             RatioKey.Suspicion to -0.05
         ),
         tagRelations = tagRelations(
-            TagRelation.RequiredAll to listOf(
-                Tags.Locations.Forest
-            )
+            TagRelation.RequiredAll to Tags.Locations.Forest
         ),
     ),
     action(
@@ -462,9 +446,7 @@ fun createAllActions() = listOf(
             ResourceKey.Scrap to 1.0
         ),
         tagRelations = tagRelations(
-            TagRelation.RequiredAll to listOf(
-                Tags.Locations.UfoCrashSite
-            )
+            TagRelation.RequiredAll to Tags.Locations.UfoCrashSite
         ),
     ),
     action(
@@ -475,9 +457,7 @@ fun createAllActions() = listOf(
             ResourceKey.Scrap to 1.0,
         ),
         tagRelations = tagRelations(
-            TagRelation.RequiredAll to listOf(
-                Tags.Locations.Scrapyard
-            )
+            TagRelation.RequiredAll to Tags.Locations.Scrapyard
         )
     ),
 ).makeIdsUnique()

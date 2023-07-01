@@ -54,7 +54,7 @@ class TagRelationsPresentationTest {
 
             val availableSelectable = selectable.copy(
                 id = 1L,
-                tagRelations = tagRelations(TagRelation.RequiredAll to listOf(availableTag))
+                tagRelations = tagRelations(TagRelation.RequiredAll to availableTag)
             )
             val unavailableSelectable = selectable.copy(
                 id = 2L,
@@ -132,13 +132,11 @@ class TagRelationsPresentationTest {
 
             val availableSelectable = selectable.copy(
                 id = 1L,
-                tagRelations = tagRelations(TagRelation.RequiresNone to listOf(missingTag))
+                tagRelations = tagRelations(TagRelation.RequiresNone to missingTag)
             )
             val unavailableSelectable = selectable.copy(
                 id = 2L,
-                tagRelations = tagRelations(
-                    TagRelation.RequiresNone to listOf(presentTag)
-                ),
+                tagRelations = tagRelations(TagRelation.RequiresNone to presentTag),
             )
 
             val state = gameState(
@@ -165,7 +163,7 @@ class TagRelationsPresentationTest {
 
             val availableSelectable1 = selectable.copy(
                 id = 1L,
-                tagRelations = tagRelations(TagRelation.Provides to listOf(missingTag))
+                tagRelations = tagRelations(TagRelation.Provides to missingTag)
             )
             val availableSelectable2 = selectable.copy(
                 id = 1L,
@@ -173,9 +171,7 @@ class TagRelationsPresentationTest {
             )
             val unavailableSelectable = selectable.copy(
                 id = 2L,
-                tagRelations = tagRelations(
-                    TagRelation.Provides to listOf(presentTag)
-                ),
+                tagRelations = tagRelations(TagRelation.Provides to presentTag),
             )
 
             val state = gameState(
@@ -206,7 +202,7 @@ class TagRelationsPresentationTest {
 
             val availableSelectable1 = selectable.copy(
                 id = 1L,
-                tagRelations = tagRelations(TagRelation.Removes to listOf(presentTag))
+                tagRelations = tagRelations(TagRelation.Removes to presentTag)
             )
             val availableSelectable2 = selectable.copy(
                 id = 1L,
@@ -214,9 +210,7 @@ class TagRelationsPresentationTest {
             )
             val unavailableSelectable = selectable.copy(
                 id = 2L,
-                tagRelations = tagRelations(
-                    TagRelation.Removes to listOf(missingTag)
-                ),
+                tagRelations = tagRelations(TagRelation.Removes to missingTag),
             )
 
             val state = gameState(

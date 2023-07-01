@@ -10,7 +10,7 @@ fun createLocations() = listOf(
     location(
         title = "Home",
         subtitle = "It's safe space where no one can bother you",
-        tagRelations = tagRelations(TagRelation.RequiredAll to listOf(Tags.Access.Home)),
+        tagRelations = tagRelations(TagRelation.RequiredAll to Tags.Access.Home),
     ),
     location(
         title = "Graveyard",
@@ -66,29 +66,17 @@ fun createLocations() = listOf(
     location(
         title = "Streets",
         subtitle = "A busy place with crowds of ${Flavors.peopleName.placeholder}",
-        tagRelations = tagRelations(
-            TagRelation.Provides to listOf(
-                Tags.Locations.Streets
-            )
-        )
+        tagRelations = tagRelations(TagRelation.Provides to Tags.Locations.Streets)
     ),
     location(
         title = "Dark Alley",
         subtitle = "Sometimes ${Flavors.peopleName.placeholder} go through here to save time",
-        tagRelations = tagRelations(
-            TagRelation.Provides to listOf(
-                Tags.Locations.DarkAlley
-            )
-        )
+        tagRelations = tagRelations(TagRelation.Provides to Tags.Locations.DarkAlley)
     ),
     location(
         title = "Super Market",
         subtitle = "The food is everywhere",
-        tagRelations = tagRelations(
-            TagRelation.Provides to listOf(
-                Tags.Locations.SuperMarket
-            )
-        )
+        tagRelations = tagRelations(TagRelation.Provides to Tags.Locations.SuperMarket)
     ),
     location(
         title = "Rooftops",
@@ -105,11 +93,7 @@ fun createLocations() = listOf(
     location(
         title = "Forest",
         subtitle = "It's rare to see ${Flavors.objectifiedPeopleName.placeholder} here",
-        tagRelations = tagRelations(
-            TagRelation.Provides to listOf(
-                Tags.Locations.Forest
-            )
-        )
+        tagRelations = tagRelations(TagRelation.Provides to Tags.Locations.Forest)
     ),
     location(
         title = "Ship Crash Site",
