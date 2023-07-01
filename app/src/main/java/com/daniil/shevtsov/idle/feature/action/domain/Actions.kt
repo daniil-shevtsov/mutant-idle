@@ -19,10 +19,8 @@ fun createAllActions() = listOf(
             ResourceKey.Money to 25.0
         ),
         tagRelations = tagRelations(
-            TagRelation.RequiredAll to listOf(
-                Tags.Form.Human,
-                Tags.Employed,
-            )
+            TagRelation.RequiredAll to Tags.Form.Human,
+            TagRelation.RequiredAll to Tags.Employed,
         ),
     ),
     action(
@@ -34,10 +32,8 @@ fun createAllActions() = listOf(
             ResourceKey.HumanFood to 1.0,
         ),
         tagRelations = tagRelations(
-            TagRelation.RequiredAll to listOf(
-                Tags.Form.Human,
-                Tags.Locations.SuperMarket,
-            )
+            TagRelation.RequiredAll to Tags.Form.Human,
+            TagRelation.RequiredAll to Tags.Locations.SuperMarket,
         ),
     ),
     action(

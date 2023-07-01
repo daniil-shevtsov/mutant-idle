@@ -15,8 +15,8 @@ fun createUpgrades() = listOf(
         resourceChanges = mapOf(ResourceKey.Blood to -10.0),
         status = UpgradeStatus.NotBought,
         tagRelations = tagRelations(
-            TagRelation.Provides to listOf(Tags.Body.IronJaws),
-            TagRelation.RequiredAny to listOf(Tags.Species.Devourer),
+            TagRelation.Provides to Tags.Body.IronJaws,
+            TagRelation.RequiredAny to Tags.Species.Devourer,
         )
     ),
     upgrade(
@@ -44,10 +44,8 @@ fun createUpgrades() = listOf(
         price = 10.0,
         resourceChanges = mapOf(ResourceKey.Blood to -10.0),
         tagRelations = tagRelations(
-            TagRelation.Provides to listOf(Tags.Abilities.BatForm),
-            TagRelation.RequiredAny to listOf(
-                Tags.Species.Vampire,
-            ),
+            TagRelation.Provides to Tags.Abilities.BatForm,
+            TagRelation.RequiredAny to Tags.Species.Vampire,
         )
     ),
     upgrade(
