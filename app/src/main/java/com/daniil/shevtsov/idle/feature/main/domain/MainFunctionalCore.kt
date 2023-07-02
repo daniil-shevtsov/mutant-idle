@@ -39,8 +39,13 @@ fun mainFunctionalCore(
         )
 
         MainViewAction.Init -> state
+        MainViewAction.StartNewGameClicked -> handleStartNewGameClicked(state)
     }
     return newState
+}
+
+fun handleStartNewGameClicked(state: GameState): GameState {
+    return state.copy(currentScreen = Screen.GameStart)
 }
 
 fun handleLocationSelectionExpandChange(
@@ -146,18 +151,23 @@ private fun handleActionClicked(
     )
 
     return if (!hasInvalidChanges) {
-        val gameEndingRatios = setOf(RatioKey.Suspicion, RatioKey.Mutanity)
         state.copy(
             ratios = updatedRatios,
             resources = updatedResources,
             player = state.player.copy(
                 generalTags = updateTags(state.player.generalTags, selectedAction.tagRelations)
             ),
-            currentScreen = when {
-                updatedRatios.any { it.key in gameEndingRatios && it.value >= 1.0 } -> Screen.FinishedGame
-                else -> state.currentScreen
+        ).let { state ->
+            val gameEndingRatios = setOf(RatioKey.Suspicion, RatioKey.Mutanity)
+            when {
+                updatedRatios.any { it.key in gameEndingRatios && it.value >= 1.0 } -> state.copy(
+                    currentScreen = Screen.FinishedGame,
+                    screenStack = emptyList(),
+                )
+                else -> state
             }
-        ).addPlotEntry(selectedAction)
+        }
+            .addPlotEntry(selectedAction)
     } else {
         state
     }

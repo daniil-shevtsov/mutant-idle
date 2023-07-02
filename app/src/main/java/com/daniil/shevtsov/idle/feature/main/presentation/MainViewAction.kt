@@ -6,4 +6,6 @@ sealed class MainViewAction {
 
     object LocationSelectionExpandChange : MainViewAction()
     data class SelectableClicked(val id: Long) : MainViewAction()
+
+    object StartNewGameClicked : MainViewAction()
 }
