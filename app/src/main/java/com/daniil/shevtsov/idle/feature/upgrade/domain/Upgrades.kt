@@ -8,6 +8,23 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tagRelations
 
+object Upgrades {
+    val Invisibility = upgrade(
+        title = "Invisibility",
+        subtitle = Flavors.invisibilityGain.placeholder,
+        price = 1.0,
+        resourceChanges = resourceChanges(ResourceKey.Blood to -1.0),
+        tagRelations = tagRelations(
+            TagRelation.Provides to listOf(Tags.Abilities.Invisibility),
+            TagRelation.RequiredAny to listOf(
+                Tags.Species.Vampire,
+                Tags.Species.Android,
+                Tags.Species.Alien,
+            ),
+        )
+    )
+}
+
 fun createUpgrades() = listOf(
     upgrade(
         title = "Iron jaws",
@@ -49,18 +66,5 @@ fun createUpgrades() = listOf(
             TagRelation.RequiredAny to Tags.Species.Vampire,
         )
     ),
-    upgrade(
-        title = "Invisibility",
-        subtitle = Flavors.invisibilityGain.placeholder,
-        price = 1.0,
-        resourceChanges = resourceChanges(ResourceKey.Blood to -1.0),
-        tagRelations = tagRelations(
-            TagRelation.Provides to listOf(Tags.Abilities.Invisibility),
-            TagRelation.RequiredAny to listOf(
-                Tags.Species.Vampire,
-                Tags.Species.Android,
-                Tags.Species.Alien,
-            ),
-        )
-    ),
+    Upgrades.Invisibility,
 ).makeIdsUnique()

@@ -38,6 +38,7 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tagRelations
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
+import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrades
 import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test
@@ -325,6 +326,25 @@ class MainFunctionalCoreTest {
                 prop(GameState::currentScreen).isEqualTo(Screen.FinishedGame)
                 prop(GameState::screenStack).isEmpty()
             }
+    }
+
+    @Test
+    fun `should use blood for invisibilty upgrade when you are vampire`() {
+        val state = mainFunctionalCore(
+            state = gameState(
+                player = player(
+                    traits = mapOf(TraitId.Species to Species.Vampire)
+                ),
+                upgrades = listOf(Upgrades.Invisibility.copy(id = 1L)),
+                resources = listOf(resource(key = ResourceKey.Blood, value = 10.0))
+            ),
+            viewAction = MainViewAction.SelectableClicked(id = 1L)
+        )
+
+        assertThat(state)
+            .prop(GameState::upgrades)
+            .extracting(Upgrade::id, Upgrade::status)
+            .containsExactly(1L to UpgradeStatus.Bought)
     }
 
 }
