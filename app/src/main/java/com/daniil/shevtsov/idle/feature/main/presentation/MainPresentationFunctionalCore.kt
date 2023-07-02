@@ -50,7 +50,7 @@ private fun createMainViewState(state: GameState): MainViewState {
                 key = key,
                 name = name,
                 value = value.formatRound(),
-                icon = key.chooseIcon(),
+                icon = key.chooseIcon(state.player.mainResourceKey),
             )
         }
     }
@@ -99,7 +99,10 @@ private fun createMainViewState(state: GameState): MainViewState {
                     status = mapStatus(
                         state.resources.find { it.key == ResourceKey.Blood }?.value ?: 0.0
                     ),
-                    resourceChanges = mapResourceChanges(resourceChanges),
+                    resourceChanges = mapResourceChanges(
+                        resourceChanges,
+                        state.player.mainResourceKey
+                    ),
                     ratioChanges = mapRatioChanges(ratioChanges, state.player.tags),
                 )
             }
@@ -153,7 +156,7 @@ private fun RatioKey.chooseIcon(): String {
     }
 }
 
-private fun ResourceKey.chooseIcon() = when (this) {
+private fun ResourceKey.chooseIcon(mainResource: ResourceKey): String = when (this) {
     ResourceKey.Blood -> Icons.Blood
     ResourceKey.Money -> Icons.Money
     ResourceKey.HumanFood -> Icons.HumanFood
@@ -166,7 +169,7 @@ private fun ResourceKey.chooseIcon() = when (this) {
     ResourceKey.Scrap -> Icons.Scrap
     ResourceKey.Information -> Icons.Information
     ResourceKey.Singularity -> Icons.Singularity
-    ResourceKey.MainResource -> ""
+    ResourceKey.MainResource -> mainResource.chooseIcon(mainResource)
 }
 
 private fun satisfiesAllTagsRelations(
@@ -240,7 +243,7 @@ private fun createActionState(
                         else -> Icons.Monster
                     }
                 ),
-                resourceChanges = mapResourceChanges(resourceChanges),
+                resourceChanges = mapResourceChanges(resourceChanges, state.player.mainResourceKey),
                 ratioChanges = mapRatioChanges(ratioChanges, state.player.tags),
                 isEnabled = isActive,
             )
@@ -257,12 +260,12 @@ private fun createActionState(
     )
 }
 
-private fun mapResourceChanges(resourceChanges: ResourceChanges) =
+private fun mapResourceChanges(resourceChanges: ResourceChanges, mainResource: ResourceKey) =
     resourceChanges.map { (resourceKey, changeValue) ->
         val formattedValue =
             ("+".takeIf { changeValue > 0 } ?: "") + changeValue.formatRound(digits = 2)
         ResourceChangeModel(
-            icon = resourceKey.chooseIcon(),
+            icon = resourceKey.chooseIcon(mainResource),
             value = formattedValue,
         )
     }

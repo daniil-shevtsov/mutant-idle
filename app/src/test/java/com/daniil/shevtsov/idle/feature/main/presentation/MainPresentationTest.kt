@@ -14,6 +14,7 @@ import com.daniil.shevtsov.idle.feature.location.domain.locationSelectionState
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
+import com.daniil.shevtsov.idle.feature.player.species.domain.Species
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
 import com.daniil.shevtsov.idle.feature.plot.domain.PlotEntry
@@ -32,6 +33,7 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tagRelations
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
+import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrades
 import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeModel
 import com.daniil.shevtsov.idle.feature.upgrade.presentation.UpgradeStatusModel
@@ -806,6 +808,44 @@ class MainPresentationTest {
                 "cheburek (x4)",
                 "lol",
             )
+    }
+
+    @Test
+    fun `should display main resource as blood for vampire`() {
+        val viewState = mapMainViewState(
+            gameState(
+                player = player(
+                    traits = mapOf(TraitId.Species to Species.Vampire)
+                ),
+                upgrades = listOf(Upgrades.Invisibility.copy(id = 1L))
+            )
+        )
+
+        assertThat(viewState)
+            .extractingUpgrades()
+            .index(0)
+            .prop(UpgradeModel::resourceChanges)
+            .extracting(ResourceChangeModel::icon)
+            .containsExactly(Icons.Blood)
+    }
+
+    @Test
+    fun `should display main resource as scrap for alien`() {
+        val viewState = mapMainViewState(
+            gameState(
+                player = player(
+                    traits = mapOf(TraitId.Species to Species.Alien)
+                ),
+                upgrades = listOf(Upgrades.Invisibility.copy(id = 1L))
+            )
+        )
+
+        assertThat(viewState)
+            .extractingUpgrades()
+            .index(0)
+            .prop(UpgradeModel::resourceChanges)
+            .extracting(ResourceChangeModel::icon)
+            .containsExactly(Icons.Scrap)
     }
 
 

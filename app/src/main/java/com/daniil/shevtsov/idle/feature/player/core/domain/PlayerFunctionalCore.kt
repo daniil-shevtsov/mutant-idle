@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.feature.player.core.domain
 
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 
 fun playerFunctionalCore(
     state: GameState,
@@ -24,5 +25,16 @@ fun changeTrait(
             }
                 .toMap()
         )
-    )
+    ).let { state ->
+        state.copy(resources = state.resources.map { resource ->
+            resource.copy(
+                value = when (resource.key) {
+                    state.player.mainResourceKey -> 100.0
+                    ResourceKey.Information -> 1.0
+                    else -> 0.0
+                }
+            )
+
+        })
+    }
 }
