@@ -38,6 +38,8 @@ data class GameState(
     val currentScreen: Screen,
     val screenStack: List<Screen>,
     val unlockState: UnlockState,
+    val allEndings: List<Ending>,
+    val currentEndingId: Long?,
 ) {
     val locations: List<Location>
         get() = selectables.filterIsInstance<Location>()
@@ -66,6 +68,8 @@ fun gameState(
     currentScreen: Screen = Screen.Main,
     screenStack: List<Screen> = emptyList(),
     unlockState: UnlockState = unlockState(),
+    allEndings: List<Ending> = emptyList(),
+    currentEndingId: Long? = null,
 ) = GameState(
     balanceConfig = balanceConfig,
     selectables = (selectables + locations + upgrades + actions).distinct(),
@@ -82,4 +86,6 @@ fun gameState(
     currentScreen = currentScreen,
     screenStack = screenStack,
     unlockState = unlockState,
+    allEndings = allEndings,
+    currentEndingId = currentEndingId,
 )

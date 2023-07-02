@@ -64,6 +64,8 @@ fun createInitialGameState(): GameState {
                 }
             }
         ),
+        allEndings = createEndings(),
+        currentEndingId = null,
     )
 }
 
@@ -73,7 +75,8 @@ fun createBalanceConfig() = BalanceConfig(
     resourceSpentForFullMutant = 100.0,
 )
 
-private fun createSelectables(): List<Selectable> = createLocations() + createUpgrades() + createAllActions()
+private fun createSelectables(): List<Selectable> =
+    createLocations() + createUpgrades() + createAllActions()
 
 private fun createInitialRatios() = RatioKey.values().map { ratioKey ->
     Ratio(
@@ -90,7 +93,8 @@ private fun createInitialSectionState() = listOf(
 )
 
 private fun createLocationSelectionState() = LocationSelectionState(
-    selectedLocation = createLocations().filterIsInstance<Location>().find { it.tagRelations[TagRelation.Provides]?.contains(Tags.Locations.Streets) == true }
+    selectedLocation = createLocations().filterIsInstance<Location>()
+        .find { it.tagRelations[TagRelation.Provides]?.contains(Tags.Locations.Streets) == true }
         ?: createLocations().filterIsInstance<Location>().first(),
     isSelectionExpanded = false,
 )

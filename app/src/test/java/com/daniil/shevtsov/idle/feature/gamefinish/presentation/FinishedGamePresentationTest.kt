@@ -6,8 +6,8 @@ import assertk.assertThat
 import assertk.assertions.index
 import assertk.assertions.isEqualTo
 import assertk.assertions.prop
+import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.gamefinish.domain.ending
-import com.daniil.shevtsov.idle.feature.gamefinish.domain.finishedGameState
 import com.daniil.shevtsov.idle.feature.gamefinish.domain.unlock
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import org.junit.jupiter.api.Test
@@ -19,8 +19,9 @@ internal class FinishedGamePresentationTest {
             title = "EPIC FAIL",
             description = "YOU GET REKT M8"
         )
-        val state = finishedGameState(
-            endings = listOf(ending),
+        val state = gameState(
+            allEndings = listOf(ending),
+            currentEndingId = ending.id,
         )
 
         val viewState = mapFinishedGameViewState(state = state)
@@ -43,8 +44,9 @@ internal class FinishedGamePresentationTest {
         val ending = ending(
             unlocks = listOf(unlock)
         )
-        val state = finishedGameState(
-            endings = listOf(ending),
+        val state = gameState(
+            allEndings = listOf(ending),
+            currentEndingId = ending.id
         )
 
         val viewState = mapFinishedGameViewState(state = state)

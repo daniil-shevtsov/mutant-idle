@@ -165,16 +165,13 @@ fun createAllActions() = listOf(
         title = "Become a bat",
         subtitle = "Fly fly away",
         tagRelations = tagRelations(
-            TagRelation.RequiredAll to listOf(
-                Tags.Abilities.BatForm,
-            ),
+            TagRelation.RequiredAll to listOf(Tags.Abilities.BatForm),
             TagRelation.Provides to listOf(
                 Tags.Form.Animal,
                 Tags.Abilities.Flight
             ),
-            TagRelation.RequiresNone to listOf(
-                Tags.Form.Animal
-            ),
+            TagRelation.Removes to listOf(Tags.Form.Human),
+            TagRelation.RequiresNone to listOf(Tags.Form.Animal),
         ),
     ),
     action(
@@ -185,9 +182,7 @@ fun createAllActions() = listOf(
                 Tags.Abilities.BatForm,
                 Tags.Form.Animal,
             ),
-            TagRelation.Provides to listOf(
-                Tags.Form.Human,
-            ),
+            TagRelation.Provides to listOf(Tags.Form.Human),
             TagRelation.Removes to listOf(
                 Tags.Form.Animal,
                 Tags.Abilities.Flight
@@ -231,7 +226,7 @@ fun createAllActions() = listOf(
             ResourceKey.Money to 15.0
         ),
         ratioChanges = ratioChanges(
-            RatioKey.Suspicion to 0.005,
+            RatioKey.Suspicion to 0.005, //TODO:  Need easy scalable way to say that when invisible you do it with less suspicion
         ),
         tagRelations = tagRelations(
             TagRelation.RequiredAll to listOf(
@@ -445,7 +440,6 @@ fun createAllActions() = listOf(
         ),
     ),
     action(
-        id = 24L,
         title = "Gather Scrap",
         subtitle = "These ${Flavors.peopleName.placeholder} throw away the most useful things",
         resourceChanges = resourceChanges(
@@ -454,6 +448,18 @@ fun createAllActions() = listOf(
         tagRelations = tagRelations(
             TagRelation.RequiredAll to Tags.Locations.Scrapyard
         )
+    ),
+    action(
+        title = "Loose the game",
+        subtitle = "Instantly loose for debugging purposes",
+        tagRelations = tagRelations(TagRelation.RequiredAll to Tags.Species.Devourer),
+        ratioChanges = ratioChanges(RatioKey.Suspicion to 1.0),
+    ),
+    action(
+        title = "Win the game",
+        subtitle = "Instantly win for debugging purposes",
+        tagRelations = tagRelations(TagRelation.RequiredAll to Tags.Species.Devourer),
+        ratioChanges = ratioChanges(RatioKey.Mutanity to 1.0)
     ),
 ).makeIdsUnique()
 

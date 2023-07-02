@@ -7,8 +7,7 @@ fun createEndings() = listOf(
     ending(
         id = 1L,
         title = "Captured by the government",
-        description = "Captured by the government",
-//        description = "They won't let you see sunlight again",
+        description = "They won't let you see sunlight again",
         unlocks = listOf(
             unlock(
                 title = "New class: Vampire",
