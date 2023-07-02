@@ -32,7 +32,7 @@ private fun PlayerTrait.toUnlock(): Unlock = unlock(
             TraitId.Species -> "species"
             TraitId.Job -> "job"
         }
-    }:",
+    }: $title",
     description = description,
     newTags = tags,
 )
