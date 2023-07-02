@@ -461,6 +461,11 @@ fun createAllActions() = listOf(
         tagRelations = tagRelations(TagRelation.RequiredAll to Tags.Species.Devourer),
         ratioChanges = ratioChanges(RatioKey.Mutanity to 1.0)
     ),
+    action(
+        title = Flavors.appearanceChangeAction.placeholder,
+        subtitle = "This will make your enemies loose track",
+        tagRelations = tagRelations(TagRelation.RequiredAll to Tags.Abilities.AppearanceChange)
+    ),
 ).makeIdsUnique()
 
 fun List<Selectable>.makeIdsUnique(): List<Selectable> {

@@ -67,4 +67,8 @@ fun createUpgrades() = listOf(
         )
     ),
     Upgrades.Invisibility,
+    upgrade(
+        title = Flavors.appearanceChange.placeholder,
+        subtitle = "You are able to ${Flavors.appearanceChangeAction.placeholder}",
+    ),
 ).makeIdsUnique()

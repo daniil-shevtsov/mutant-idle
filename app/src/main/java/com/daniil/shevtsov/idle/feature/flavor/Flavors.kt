@@ -17,7 +17,7 @@ fun createFlavors() = listOf(
 object Flavors {
     val invisibilityAction = flavor(
         id = FlavorId.InvisibilityAction,
-        placeholder = Flavors.placeholder("INVISIBILITY_ACTION"),
+        placeholder = placeholder("INVISIBILITY_ACTION"),
         values = mapOf(
             Tags.Nature.Magic to "become ethereal",
             Tags.Nature.Tech to "activate the cloaking device",
@@ -27,7 +27,7 @@ object Flavors {
 
     val invisibilityGain = flavor(
         id = FlavorId.InvisibilityGain,
-        placeholder = Flavors.placeholder("INVISIBILITY_GAIN"),
+        placeholder = placeholder("INVISIBILITY_GAIN"),
         values = mapOf(
             Tags.Nature.Magic to "Learn dark arts of invisibility",
             Tags.Nature.Tech to "Build a cloaking device from scrap",
@@ -36,7 +36,7 @@ object Flavors {
 
     val personName = flavor(
         id = FlavorId.PersonName,
-        placeholder = Flavors.placeholder("PERSON_NAME"),
+        placeholder = placeholder("PERSON_NAME"),
         values = mapOf(
             Tags.Immortal to "mortal",
             Tags.Species.Alien to "lifeform",
@@ -46,7 +46,7 @@ object Flavors {
 
     val peopleName = flavor(
         id = FlavorId.PeopleName,
-        placeholder = Flavors.placeholder("PEOPLE_NAME"),
+        placeholder = placeholder("PEOPLE_NAME"),
         values = mapOf(
             Tags.Immortal to "mortals",
             Tags.Species.Alien to "lifeforms",
@@ -57,7 +57,7 @@ object Flavors {
 
     val derogativePeopleName = flavor(
         id = FlavorId.DerogativePeopleName,
-        placeholder = Flavors.placeholder("DEROGATIVE_PEOPLE_NAME"),
+        placeholder = placeholder("DEROGATIVE_PEOPLE_NAME"),
         values = mapOf(
             Tags.Immortal to "mere mortals",
             Tags.Species.Alien to "primitive lifeforms",
@@ -66,7 +66,7 @@ object Flavors {
     )
 
     val objectifiedPeopleName = flavor(
-        placeholder = Flavors.placeholder("OBJECTIFIED-PEOPLE-NAME"),
+        placeholder = placeholder("OBJECTIFIED-PEOPLE-NAME"),
         values = mapOf(
             Tags.Species.Devourer to "food",
             Tags.Species.ShapeShifter to "clothes",
@@ -78,8 +78,25 @@ object Flavors {
         default = peopleName.placeholder
     )
 
+    val appearanceChangeAction = flavor(
+        placeholder = placeholder("APPEARANCE-CHANGE-ACTION"),
+        values = mapOf(
+            Tags.Species.Alien to "Change your skin to another ${Flavors.personName.placeholder}",
+            Tags.Species.ShapeShifter to "Shapeshift into another ${Flavors.personName.placeholder}",
+        ),
+        default = "Change your appearance"
+    )
+    val appearanceChange = flavor(
+        placeholder = placeholder("APPEARANCE-CHANGE"),
+        values = mapOf(
+            Tags.Species.Alien to "${Flavors.personName.placeholder}'s skin",
+            Tags.Species.ShapeShifter to "${objectifiedPeopleName.placeholder} change",
+        ),
+        default = "Appearance Change"
+    )
+
     val GraveyardInterpretation = flavor(
-        placeholder = Flavors.placeholder("GRAVEYARD-INTERPRETATION"),
+        placeholder = placeholder("GRAVEYARD-INTERPRETATION"),
         default = "where they hide people in the ground"
     )
 

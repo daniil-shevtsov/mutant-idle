@@ -74,6 +74,7 @@ object Tags {
         val Flight = Tag(name = "Flight Ability")
         val TransferHost = Tag(name = "Transfer Host Ability")
         val Hypnosis = Tag(name = "Hypnosis", description = "Can control people")
+        val AppearanceChange = Tag(name = "Appearance Change Ability")
     }
 
     object State {
