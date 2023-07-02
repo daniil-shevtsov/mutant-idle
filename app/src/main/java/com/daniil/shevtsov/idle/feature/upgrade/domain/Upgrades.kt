@@ -13,7 +13,7 @@ object Upgrades {
         title = "Invisibility",
         subtitle = Flavors.invisibilityGain.placeholder,
         price = 1.0,
-        resourceChanges = resourceChanges(ResourceKey.Blood to -1.0),
+        resourceChanges = resourceChanges(ResourceKey.MainResource to -1.0),
         tagRelations = tagRelations(
             TagRelation.Provides to listOf(Tags.Abilities.Invisibility),
             TagRelation.RequiredAny to listOf(

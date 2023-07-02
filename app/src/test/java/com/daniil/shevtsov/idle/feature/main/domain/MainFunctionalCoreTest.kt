@@ -329,7 +329,7 @@ class MainFunctionalCoreTest {
     }
 
     @Test
-    fun `should use blood for invisibilty upgrade when you are vampire`() {
+    fun `should use blood for invisibilty upgrade when you are a vampire`() {
         val state = mainFunctionalCore(
             state = gameState(
                 player = player(
@@ -347,4 +347,22 @@ class MainFunctionalCoreTest {
             .containsExactly(1L to UpgradeStatus.Bought)
     }
 
+    @Test
+    fun `should use scrap for invisibilty upgrade when you are an alien`() {
+        val state = mainFunctionalCore(
+            state = gameState(
+                player = player(
+                    traits = mapOf(TraitId.Species to Species.Alien)
+                ),
+                upgrades = listOf(Upgrades.Invisibility.copy(id = 1L)),
+                resources = listOf(resource(key = ResourceKey.Scrap, value = 10.0))
+            ),
+            viewAction = MainViewAction.SelectableClicked(id = 1L)
+        )
+
+        assertThat(state)
+            .prop(GameState::upgrades)
+            .extracting(Upgrade::id, Upgrade::status)
+            .containsExactly(1L to UpgradeStatus.Bought)
+    }
 }

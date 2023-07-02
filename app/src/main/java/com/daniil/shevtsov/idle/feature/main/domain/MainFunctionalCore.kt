@@ -12,6 +12,7 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceChanges
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelations
@@ -220,9 +221,15 @@ private fun handleUpgradeSelected(
     state: GameState,
     upgradeToBuy: Upgrade,
 ): GameState {
+    val resourceChanges = upgradeToBuy.resourceChanges.mapKeys { (key, _) ->
+        when(key) {
+            ResourceKey.MainResource -> state.player.mainResourceKey
+            else -> key
+        }
+    }
     val hasInvalidChanges = hasInvalidChanges(
         currentResources = state.resources,
-        resourceChanges = upgradeToBuy.resourceChanges,
+        resourceChanges = resourceChanges,
     )
 
     return when {
@@ -239,7 +246,7 @@ private fun handleUpgradeSelected(
 
             val updatedResources = applyResourceChanges(
                 currentResources = state.resources,
-                resourceChanges = upgradeToBuy.resourceChanges
+                resourceChanges = resourceChanges
             )
 
             val updatedRatios = applyRatioChanges(

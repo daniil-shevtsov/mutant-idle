@@ -166,6 +166,7 @@ private fun ResourceKey.chooseIcon() = when (this) {
     ResourceKey.Scrap -> Icons.Scrap
     ResourceKey.Information -> Icons.Information
     ResourceKey.Singularity -> Icons.Singularity
+    ResourceKey.MainResource -> ""
 }
 
 private fun satisfiesAllTagsRelations(

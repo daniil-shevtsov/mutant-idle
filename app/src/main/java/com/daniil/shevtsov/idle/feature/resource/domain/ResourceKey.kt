@@ -13,4 +13,5 @@ enum class ResourceKey {
     Scrap,
     Information,
     Singularity,
+    MainResource, //TODO: Hack to use different resources for different species
 }
