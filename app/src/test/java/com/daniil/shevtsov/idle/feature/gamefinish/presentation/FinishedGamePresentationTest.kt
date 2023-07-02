@@ -27,8 +27,11 @@ internal class FinishedGamePresentationTest {
         val viewState = mapFinishedGameViewState(state = state)
 
         assertThat(viewState)
-            .extractingEndingDescription()
-            .isEqualTo(ending.description)
+            .extractingEndingState()
+            .all {
+                prop(EndingViewState::title).isEqualTo(ending.title)
+                prop(EndingViewState::description).isEqualTo(ending.description)
+            }
     }
 
     @Test
@@ -68,10 +71,6 @@ internal class FinishedGamePresentationTest {
 
     private fun Assert<FinishedGameViewState>.extractingEndingState() =
         prop(FinishedGameViewState::endingState)
-
-    private fun Assert<FinishedGameViewState>.extractingEndingDescription() =
-        extractingEndingState()
-            .prop(EndingViewState::description)
 
     private fun Assert<FinishedGameViewState>.extractingEndingUnlocks() =
         prop(FinishedGameViewState::unlocks)

@@ -45,7 +45,7 @@ fun mainFunctionalCore(
 }
 
 fun handleStartNewGameClicked(state: GameState): GameState {
-    return state.copy(currentScreen = Screen.GameStart)
+    return state.copy(currentScreen = Screen.GameStart, screenStack = emptyList())
 }
 
 fun handleLocationSelectionExpandChange(

@@ -16,18 +16,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
+import com.daniil.shevtsov.idle.core.ui.widgets.CavityButton
 import com.daniil.shevtsov.idle.feature.gamefinish.presentation.FinishedGameViewState
 import com.daniil.shevtsov.idle.feature.gamefinish.presentation.UnlockFeatureModel
 import com.daniil.shevtsov.idle.feature.gamefinish.presentation.UnlockModel
 import com.daniil.shevtsov.idle.feature.gamefinish.presentation.endingViewState
-import com.daniil.shevtsov.idle.feature.gamefinish.presentation.finishedGameViewState
+import com.daniil.shevtsov.idle.feature.gamefinish.presentation.previewFinishedGameViewState
 
 @Preview
 @Composable
 fun FinishedGameScreenPreview() {
     FinishedGameScreen(
-        state = finishedGameViewState(
-            endingState = endingViewState(description = "You have been captured by the government"),
+        state = previewFinishedGameViewState(
+            endingState = endingViewState(
+                title = "You have been captured by the government",
+                description = "They won't let you see sunlight again"
+            ),
             unlocks = listOf(
                 UnlockModel(
                     title = "New class: Vampire",
@@ -64,16 +68,35 @@ fun FinishedGameScreenPreview() {
 
 @Composable
 fun FinishedGameScreen(state: FinishedGameViewState) {
-    Column(modifier = Modifier.background(AppTheme.colors.background)) {
-        Text(
+    Column(
+        verticalArrangement = spacedBy(AppTheme.dimensions.paddingMedium),
+        modifier = Modifier
+            .background(AppTheme.colors.background)
+            .padding(horizontal = AppTheme.dimensions.paddingM)
+            .padding(top = AppTheme.dimensions.paddingMedium),
+    ) {
+        Column(
+            verticalArrangement = spacedBy(AppTheme.dimensions.paddingSmall),
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(25.dp),
-            text = state.endingState.description,
-            style = AppTheme.typography.title,
-            color = AppTheme.colors.textLight,
-            textAlign = TextAlign.Center,
-        )
+        ) {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = state.endingState.title,
+                style = AppTheme.typography.headerS,
+                color = AppTheme.colors.textLight,
+                textAlign = TextAlign.Center,
+            )
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = state.endingState.description,
+                style = AppTheme.typography.title,
+                color = AppTheme.colors.textLight,
+                textAlign = TextAlign.Center,
+            )
+        }
+
         Cavity(mainColor = AppTheme.colors.background, modifier = Modifier.fillMaxWidth()) {
             LazyColumn(
                 modifier = Modifier
@@ -141,5 +164,11 @@ fun FinishedGameScreen(state: FinishedGameViewState) {
                 }
             }
         }
+
+        CavityButton(
+            text = "Start new game",
+            onClick = {},
+            modifier = Modifier.padding(bottom = AppTheme.dimensions.paddingMedium)
+        )
     }
 }

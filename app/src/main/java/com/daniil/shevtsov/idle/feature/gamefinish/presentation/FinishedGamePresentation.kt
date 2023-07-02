@@ -7,8 +7,9 @@ fun mapFinishedGameViewState(
 ): FinishedGameViewState {
     val ending = state.allEndings.find { it.id == state.currentEndingId }!!
 
-    return finishedGameViewState(
+    return FinishedGameViewState(
         endingState = EndingViewState(
+            title = ending.title,
             description = ending.description,
         ),
         unlocks = ending.unlocks.map { unlock ->

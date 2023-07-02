@@ -16,7 +16,7 @@ class FinishedGameFunctionalCoreTest {
     @Test
     fun `should open game start screen when start new game clicked`() {
         val state = mainFunctionalCore(
-            state = gameState(currentScreen = Screen.FinishedGame),
+            state = gameState(currentScreen = Screen.FinishedGame, screenStack = listOf(Screen.FinishedGame)),
             viewAction = MainViewAction.StartNewGameClicked
         )
 
