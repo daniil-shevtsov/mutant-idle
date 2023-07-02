@@ -259,6 +259,7 @@ class MainFunctionalCoreTest {
 
         assertThat(newState)
             .all {
+                prop(GameState::currentEndingId).isEqualTo(0L)
                 prop(GameState::currentScreen).isEqualTo(Screen.FinishedGame)
                 prop(GameState::screenStack).isEmpty()
             }
@@ -282,6 +283,7 @@ class MainFunctionalCoreTest {
 
         assertThat(newState)
             .all {
+                prop(GameState::currentEndingId).isEqualTo(1L)
                 prop(GameState::currentScreen).isEqualTo(Screen.FinishedGame)
                 prop(GameState::screenStack).isEmpty()
             }

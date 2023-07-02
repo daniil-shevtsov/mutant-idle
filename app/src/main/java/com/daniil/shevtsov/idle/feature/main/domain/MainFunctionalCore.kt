@@ -159,11 +159,19 @@ private fun handleActionClicked(
             ),
         ).let { state ->
             val gameEndingRatios = setOf(RatioKey.Suspicion, RatioKey.Mutanity)
+            val completedRatioKey =
+                updatedRatios.find { it.key in gameEndingRatios && it.value >= 1.0 }?.key
             when {
-                updatedRatios.any { it.key in gameEndingRatios && it.value >= 1.0 } -> state.copy(
+                completedRatioKey != null -> state.copy(
+                    currentEndingId = when (completedRatioKey) {
+                        RatioKey.Suspicion -> 0L
+                        RatioKey.Mutanity -> 1L
+                        else -> null
+                    },
                     currentScreen = Screen.FinishedGame,
                     screenStack = emptyList(),
                 )
+
                 else -> state
             }
         }

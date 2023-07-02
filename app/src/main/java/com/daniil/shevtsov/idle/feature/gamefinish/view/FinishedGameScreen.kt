@@ -22,6 +22,7 @@ import com.daniil.shevtsov.idle.feature.gamefinish.presentation.UnlockFeatureMod
 import com.daniil.shevtsov.idle.feature.gamefinish.presentation.UnlockModel
 import com.daniil.shevtsov.idle.feature.gamefinish.presentation.endingViewState
 import com.daniil.shevtsov.idle.feature.gamefinish.presentation.previewFinishedGameViewState
+import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 
 @Preview
 @Composable
@@ -62,15 +63,20 @@ fun FinishedGameScreenPreview() {
                     )
                 ),
             )
-        )
+        ),
+        onAction = {},
     )
 }
 
 @Composable
-fun FinishedGameScreen(state: FinishedGameViewState) {
+fun FinishedGameScreen(
+    state: FinishedGameViewState,
+    modifier: Modifier = Modifier,
+    onAction: (action: MainViewAction) -> Unit,
+) {
     Column(
         verticalArrangement = spacedBy(AppTheme.dimensions.paddingMedium),
-        modifier = Modifier
+        modifier = modifier
             .background(AppTheme.colors.background)
             .padding(horizontal = AppTheme.dimensions.paddingM)
             .padding(top = AppTheme.dimensions.paddingMedium),
