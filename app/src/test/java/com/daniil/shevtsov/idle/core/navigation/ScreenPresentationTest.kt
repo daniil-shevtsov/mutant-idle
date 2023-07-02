@@ -4,6 +4,7 @@ import assertk.assertThat
 import assertk.assertions.isInstanceOf
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
+import com.daniil.shevtsov.idle.feature.gamefinish.domain.ending
 import org.junit.jupiter.api.Test
 
 internal class ScreenPresentationTest {
@@ -20,7 +21,11 @@ internal class ScreenPresentationTest {
 
     @Test
     fun `should form finished game view state when finished game screen selected`() {
-        val state = gameState(currentScreen = Screen.FinishedGame)
+        val state = gameState(
+            currentScreen = Screen.FinishedGame,
+            allEndings = listOf(ending(id = 1L)),
+            currentEndingId = 1L,
+        )
 
         val viewState = screenPresentationFunctionalCore(state = state)
 

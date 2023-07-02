@@ -261,4 +261,25 @@ class MainFunctionalCoreTest {
             .isEqualTo(Screen.FinishedGame)
     }
 
+    @Test
+    fun `should open finished screen if mutanity gained maximum value`() {
+        val state = gameState(
+            ratios = listOf(
+                ratio(key = RatioKey.Mutanity, value = 0.95),
+            ),
+            actions = listOf(
+                action(id = 1L, ratioChanges = ratioChanges(RatioKey.Mutanity to 0.05))
+            )
+        )
+
+        val newState = mainFunctionalCore(
+            state = state,
+            viewAction = MainViewAction.SelectableClicked(id = 1L)
+        )
+
+        assertThat(newState)
+            .prop(GameState::currentScreen)
+            .isEqualTo(Screen.FinishedGame)
+    }
+
 }

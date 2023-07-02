@@ -58,7 +58,8 @@ fun handleLocationSelected(
     selectedLocation: Location
 ): GameState {
     val updatedTags = updateTags(state.player.generalTags, selectedLocation.tagRelations)
-    val oldLocationTags = state.locationSelectionState.selectedLocation.tagRelations.provideTags.toSet()
+    val oldLocationTags =
+        state.locationSelectionState.selectedLocation.tagRelations.provideTags.toSet()
     val finalTags = updatedTags - oldLocationTags
     return state.copy(
         locationSelectionState = state.locationSelectionState.copy(
@@ -145,6 +146,7 @@ private fun handleActionClicked(
     )
 
     return if (!hasInvalidChanges) {
+        val gameEndingRatios = setOf(RatioKey.Suspicion, RatioKey.Mutanity)
         state.copy(
             ratios = updatedRatios,
             resources = updatedResources,
@@ -152,9 +154,7 @@ private fun handleActionClicked(
                 generalTags = updateTags(state.player.generalTags, selectedAction.tagRelations)
             ),
             currentScreen = when {
-                (updatedRatios.find { it.key == RatioKey.Suspicion }?.value
-                    ?: 0.0) >= 1.0 -> Screen.FinishedGame
-
+                updatedRatios.any { it.key in gameEndingRatios && it.value >= 1.0 } -> Screen.FinishedGame
                 else -> state.currentScreen
             }
         ).addPlotEntry(selectedAction)
