@@ -22,6 +22,8 @@ import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.main.presentation.sectionState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
+import com.daniil.shevtsov.idle.feature.player.species.domain.Species
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.ratio.domain.ratio
@@ -266,14 +268,50 @@ class MainFunctionalCoreTest {
     }
 
     @Test
-    fun `should open finished screen if mutanity gained maximum value`() {
+    fun `should open finished screen if mutanity gained maximum value when devourer`() {
         val newState = mainFunctionalCore(
             state = gameState(
+                player = player(
+                    traits = mapOf(
+                        TraitId.Species to Species.Devourer
+                    )
+                ),
                 ratios = listOf(
                     ratio(key = RatioKey.Mutanity, value = 0.95),
                 ),
+
                 actions = listOf(
                     action(id = 1L, ratioChanges = ratioChanges(RatioKey.Mutanity to 0.05))
+                ),
+                currentScreen = Screen.Main,
+                screenStack = listOf(Screen.GameStart),
+            ),
+            viewAction = MainViewAction.SelectableClicked(id = 1L)
+        )
+
+        assertThat(newState)
+            .all {
+                prop(GameState::currentEndingId).isEqualTo(1L)
+                prop(GameState::currentScreen).isEqualTo(Screen.FinishedGame)
+                prop(GameState::screenStack).isEmpty()
+            }
+    }
+
+    @Test
+    fun `should open finished screen if power gained maximum value when vampire`() {
+        val newState = mainFunctionalCore(
+            state = gameState(
+                player = player(
+                    traits = mapOf(
+                        TraitId.Species to Species.Vampire
+                    )
+                ),
+                ratios = listOf(
+                    ratio(key = RatioKey.Power, value = 0.95),
+                ),
+
+                actions = listOf(
+                    action(id = 1L, ratioChanges = ratioChanges(RatioKey.Power to 0.05))
                 ),
                 currentScreen = Screen.Main,
                 screenStack = listOf(Screen.GameStart),

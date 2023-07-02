@@ -158,14 +158,14 @@ private fun handleActionClicked(
                 generalTags = updateTags(state.player.generalTags, selectedAction.tagRelations)
             ),
         ).let { state ->
-            val gameEndingRatios = setOf(RatioKey.Suspicion, RatioKey.Mutanity)
-            val completedRatioKey =
-                updatedRatios.find { it.key in gameEndingRatios && it.value >= 1.0 }?.key
+            val loseRatio = RatioKey.Suspicion
+            val winRatio = state.player.mainRatioKey
+            val completedRatios = updatedRatios.filter { it.value >= 1.0 }.map(Ratio::key)
             when {
-                completedRatioKey != null -> state.copy(
-                    currentEndingId = when (completedRatioKey) {
-                        RatioKey.Suspicion -> 0L
-                        RatioKey.Mutanity -> 1L
+                completedRatios.isNotEmpty() -> state.copy(
+                    currentEndingId = when {
+                        completedRatios.contains(winRatio) -> 1L
+                        completedRatios.contains(loseRatio) -> 0L
                         else -> null
                     },
                     currentScreen = Screen.FinishedGame,
