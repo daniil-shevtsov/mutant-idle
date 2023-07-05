@@ -149,6 +149,7 @@ private fun handleActionClicked(
         currentRatios = state.ratios,
         ratioChanges = selectedAction.ratioChanges,
         tags = state.player.tags,
+        mainRatiokey = state.player.mainRatioKey,
     )
 
     return if (!hasInvalidChanges) {
@@ -186,17 +187,27 @@ private fun applyRatioChanges(
     currentRatios: List<Ratio>,
     ratioChanges: RatioChanges,
     tags: List<Tag>,
-): List<Ratio> = currentRatios.map { ratio ->
-    val ratioChange = ratioChanges[ratio.key]
-        ?.minByOrNull { (matchedTags, _) ->
-            (tags - matchedTags.toSet()).size
-        }?.value
-    when (ratioChange) {
-        null -> ratio
-        else -> ratio.copy(value = ratio.value + ratioChange).let { ratio ->
-            when {
-                ratio.value < 0.0 -> ratio.copy(value = 0.0)
-                else -> ratio
+    mainRatiokey: RatioKey,
+): List<Ratio> {
+    val ratioChanges = ratioChanges.mapKeys { (key, _) ->
+        when (key) {
+            RatioKey.MainRatio -> mainRatiokey
+            else -> key
+        }
+    }
+    return currentRatios.map { ratio ->
+
+        val ratioChange = ratioChanges[ratio.key]
+            ?.minByOrNull { (matchedTags, _) ->
+                (tags - matchedTags.toSet()).size
+            }?.value
+        when (ratioChange) {
+            null -> ratio
+            else -> ratio.copy(value = ratio.value + ratioChange).let { ratio ->
+                when {
+                    ratio.value < 0.0 -> ratio.copy(value = 0.0)
+                    else -> ratio
+                }
             }
         }
     }
@@ -258,6 +269,7 @@ private fun handleUpgradeSelected(
                 currentRatios = state.ratios,
                 ratioChanges = boughtUpgrade.ratioChanges,
                 tags = state.player.tags,
+                mainRatiokey = state.player.mainRatioKey,
             )
 
             return state.copy(

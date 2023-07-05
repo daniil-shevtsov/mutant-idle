@@ -5,4 +5,5 @@ enum class RatioKey {
     Suspicion, //TODO: It would be interesting if different species had different enemies instead of general police: area 51 agents, demon hunters, etc.
     Power,
     ShipRepair,
+    MainRatio, //TODO: Hack, get rid of this
 }

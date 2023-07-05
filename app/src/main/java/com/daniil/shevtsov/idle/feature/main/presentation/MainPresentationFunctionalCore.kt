@@ -153,6 +153,7 @@ private fun RatioKey.chooseIcon(): String {
         RatioKey.Suspicion -> Icons.Suspicion
         RatioKey.Power -> Icons.Power
         RatioKey.ShipRepair -> Icons.ShipRepair
+        RatioKey.MainRatio -> Icons.Mutanity
     }
 }
 
@@ -298,6 +299,7 @@ private fun getNameForRatio(ratio: Ratio) = when (ratio.key) {
     RatioKey.Suspicion -> getSuspicionNameForRatio(ratio.value)
     RatioKey.Power -> ""
     RatioKey.ShipRepair -> ""
+    RatioKey.MainRatio -> ""
 }
 
 private fun getSuspicionNameForRatio(

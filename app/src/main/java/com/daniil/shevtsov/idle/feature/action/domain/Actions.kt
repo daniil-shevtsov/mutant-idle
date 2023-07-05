@@ -19,6 +19,11 @@ object Actions {
         resourceChanges = resourceChanges(ResourceKey.MainResource to -1.0),
         ratioChanges = ratioChanges(RatioKey.Suspicion to -1.0),
     )
+    val Win = action(
+        title = "Win the game",
+        subtitle = "Instantly win for debugging purposes",
+        ratioChanges = ratioChanges(RatioKey.MainRatio to 1.0)
+    )
 }
 
 fun createAllActions() = listOf(
@@ -462,15 +467,9 @@ fun createAllActions() = listOf(
     action(
         title = "Loose the game",
         subtitle = "Instantly loose for debugging purposes",
-        tagRelations = tagRelations(TagRelation.RequiredAll to Tags.Species.Devourer),
         ratioChanges = ratioChanges(RatioKey.Suspicion to 1.0),
     ),
-    action(
-        title = "Win the game",
-        subtitle = "Instantly win for debugging purposes",
-        tagRelations = tagRelations(TagRelation.RequiredAll to Tags.Species.Devourer),
-        ratioChanges = ratioChanges(RatioKey.Mutanity to 1.0)
-    ),
+    Actions.Win,
     Actions.AppearanceChange,
 ).makeIdsUnique()
 

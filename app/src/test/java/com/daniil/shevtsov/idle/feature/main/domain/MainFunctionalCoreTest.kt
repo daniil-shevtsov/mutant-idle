@@ -8,6 +8,7 @@ import assertk.assertions.isEmpty
 import assertk.assertions.isEqualTo
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.core.navigation.Screen
+import com.daniil.shevtsov.idle.feature.action.domain.Actions
 import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.action.domain.ratioChanges
 import com.daniil.shevtsov.idle.feature.action.domain.ratioChangesWithTags
@@ -339,6 +340,34 @@ class MainFunctionalCoreTest {
                 actions = listOf(
                     action(id = 1L, ratioChanges = ratioChanges(RatioKey.Power to 0.05))
                 ),
+                currentScreen = Screen.Main,
+                screenStack = listOf(Screen.GameStart),
+            ),
+            viewAction = MainViewAction.SelectableClicked(id = 1L)
+        )
+
+        assertThat(newState)
+            .all {
+                prop(GameState::currentEndingId).isEqualTo(1L)
+                prop(GameState::currentScreen).isEqualTo(Screen.FinishedGame)
+                prop(GameState::screenStack).isEmpty()
+            }
+    }
+
+    @Test
+    fun `should open finished screen if vampire clicked debug win action`() {
+        val newState = mainFunctionalCore(
+            state = gameState(
+                player = player(
+                    traits = mapOf(
+                        TraitId.Species to Species.Vampire
+                    )
+                ),
+                ratios = listOf(
+                    ratio(key = RatioKey.Power, value = 0.0),
+                ),
+
+                actions = listOf(Actions.Win.copy(id = 1L)),
                 currentScreen = Screen.Main,
                 screenStack = listOf(Screen.GameStart),
             ),
