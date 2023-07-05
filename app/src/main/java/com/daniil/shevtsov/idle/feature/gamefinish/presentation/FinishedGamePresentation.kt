@@ -1,14 +1,15 @@
 package com.daniil.shevtsov.idle.feature.gamefinish.presentation
 
-import com.daniil.shevtsov.idle.feature.gamefinish.domain.FinishedGameState
+import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 
 fun mapFinishedGameViewState(
-    state: FinishedGameState
+    state: GameState
 ): FinishedGameViewState {
-    val ending = state.endings.firstOrNull() ?: return finishedGameViewState()
+    val ending = state.allEndings.find { it.id == state.currentEndingId }!!
 
-    return finishedGameViewState(
+    return FinishedGameViewState(
         endingState = EndingViewState(
+            title = ending.title,
             description = ending.description,
         ),
         unlocks = ending.unlocks.map { unlock ->

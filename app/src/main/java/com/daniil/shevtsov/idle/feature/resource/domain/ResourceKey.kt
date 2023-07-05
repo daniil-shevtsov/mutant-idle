@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.feature.resource.domain
 
 enum class ResourceKey {
     Blood,
+    DNA,
     Money,
     HumanFood,
     Prisoner,
@@ -13,4 +14,5 @@ enum class ResourceKey {
     Scrap,
     Information,
     Singularity,
+    MainResource, //TODO: Hack to use different resources for different species
 }

@@ -1,6 +1,6 @@
 package com.daniil.shevtsov.idle.feature.gamefinish.presentation
 
-fun finishedGameViewState(
+fun previewFinishedGameViewState(
     endingState: EndingViewState = endingViewState(),
     unlocks: List<UnlockModel> = emptyList(),
 ) = FinishedGameViewState(
@@ -9,7 +9,9 @@ fun finishedGameViewState(
 )
 
 fun endingViewState(
+    title: String = "",
     description: String = "",
 ) = EndingViewState(
+    title = title,
     description = description,
 )

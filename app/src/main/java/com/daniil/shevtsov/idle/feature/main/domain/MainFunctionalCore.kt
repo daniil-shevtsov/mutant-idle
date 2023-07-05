@@ -12,6 +12,7 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceChanges
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelations
@@ -39,8 +40,13 @@ fun mainFunctionalCore(
         )
 
         MainViewAction.Init -> state
+        MainViewAction.StartNewGameClicked -> handleStartNewGameClicked(state)
     }
     return newState
+}
+
+fun handleStartNewGameClicked(state: GameState): GameState {
+    return state.copy(currentScreen = Screen.GameStart, screenStack = emptyList())
 }
 
 fun handleLocationSelectionExpandChange(
@@ -58,7 +64,8 @@ fun handleLocationSelected(
     selectedLocation: Location
 ): GameState {
     val updatedTags = updateTags(state.player.generalTags, selectedLocation.tagRelations)
-    val oldLocationTags = state.locationSelectionState.selectedLocation.tagRelations.provideTags.toSet()
+    val oldLocationTags =
+        state.locationSelectionState.selectedLocation.tagRelations.provideTags.toSet()
     val finalTags = updatedTags - oldLocationTags
     return state.copy(
         locationSelectionState = state.locationSelectionState.copy(
@@ -142,6 +149,7 @@ private fun handleActionClicked(
         currentRatios = state.ratios,
         ratioChanges = selectedAction.ratioChanges,
         tags = state.player.tags,
+        mainRatiokey = state.player.mainRatioKey,
     )
 
     return if (!hasInvalidChanges) {
@@ -151,13 +159,25 @@ private fun handleActionClicked(
             player = state.player.copy(
                 generalTags = updateTags(state.player.generalTags, selectedAction.tagRelations)
             ),
-            currentScreen = when {
-                (updatedRatios.find { it.key == RatioKey.Suspicion }?.value
-                    ?: 0.0) >= 1.0 -> Screen.FinishedGame
+        ).let { state ->
+            val loseRatio = RatioKey.Suspicion
+            val winRatio = state.player.mainRatioKey
+            val completedRatios = updatedRatios.filter { it.value >= 1.0 }.map(Ratio::key)
+            when {
+                completedRatios.isNotEmpty() -> state.copy(
+                    currentEndingId = when {
+                        completedRatios.contains(winRatio) -> 1L
+                        completedRatios.contains(loseRatio) -> 0L
+                        else -> null
+                    },
+                    currentScreen = Screen.FinishedGame,
+                    screenStack = emptyList(),
+                )
 
-                else -> state.currentScreen
+                else -> state
             }
-        ).addPlotEntry(selectedAction)
+        }
+            .addPlotEntry(selectedAction)
     } else {
         state
     }
@@ -167,14 +187,29 @@ private fun applyRatioChanges(
     currentRatios: List<Ratio>,
     ratioChanges: RatioChanges,
     tags: List<Tag>,
-): List<Ratio> = currentRatios.map { ratio ->
-    val ratioChange = ratioChanges[ratio.key]
-        ?.minByOrNull { (matchedTags, _) ->
-            (tags - matchedTags.toSet()).size
-        }?.value
-    when (ratioChange) {
-        null -> ratio
-        else -> ratio.copy(value = ratio.value + ratioChange)
+    mainRatiokey: RatioKey,
+): List<Ratio> {
+    val ratioChanges = ratioChanges.mapKeys { (key, _) ->
+        when (key) {
+            RatioKey.MainRatio -> mainRatiokey
+            else -> key
+        }
+    }
+    return currentRatios.map { ratio ->
+
+        val ratioChange = ratioChanges[ratio.key]
+            ?.minByOrNull { (matchedTags, _) ->
+                (tags - matchedTags.toSet()).size
+            }?.value
+        when (ratioChange) {
+            null -> ratio
+            else -> ratio.copy(value = ratio.value + ratioChange).let { ratio ->
+                when {
+                    ratio.value < 0.0 -> ratio.copy(value = 0.0)
+                    else -> ratio
+                }
+            }
+        }
     }
 }
 
@@ -202,9 +237,15 @@ private fun handleUpgradeSelected(
     state: GameState,
     upgradeToBuy: Upgrade,
 ): GameState {
+    val resourceChanges = upgradeToBuy.resourceChanges.mapKeys { (key, _) ->
+        when (key) {
+            ResourceKey.MainResource -> state.player.mainResourceKey
+            else -> key
+        }
+    }
     val hasInvalidChanges = hasInvalidChanges(
         currentResources = state.resources,
-        resourceChanges = upgradeToBuy.resourceChanges,
+        resourceChanges = resourceChanges,
     )
 
     return when {
@@ -221,13 +262,14 @@ private fun handleUpgradeSelected(
 
             val updatedResources = applyResourceChanges(
                 currentResources = state.resources,
-                resourceChanges = upgradeToBuy.resourceChanges
+                resourceChanges = resourceChanges
             )
 
             val updatedRatios = applyRatioChanges(
                 currentRatios = state.ratios,
                 ratioChanges = boughtUpgrade.ratioChanges,
                 tags = state.player.tags,
+                mainRatiokey = state.player.mainRatioKey,
             )
 
             return state.copy(

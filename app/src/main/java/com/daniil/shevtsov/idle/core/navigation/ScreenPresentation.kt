@@ -2,7 +2,6 @@ package com.daniil.shevtsov.idle.core.navigation
 
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerPresentation
-import com.daniil.shevtsov.idle.feature.gamefinish.domain.toFinishedGameState
 import com.daniil.shevtsov.idle.feature.gamefinish.presentation.mapFinishedGameViewState
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.mapGameStartViewState
 import com.daniil.shevtsov.idle.feature.main.presentation.mapMainViewState
@@ -16,7 +15,7 @@ fun screenPresentationFunctionalCore(
     val contentState = when (state.currentScreen) {
         Screen.GameStart -> ScreenContentViewState.GameStart(mapGameStartViewState(state))
         Screen.Main -> ScreenContentViewState.Main(mapMainViewState(state))
-        Screen.FinishedGame -> ScreenContentViewState.FinishedGame(mapFinishedGameViewState(state.toFinishedGameState()))
+        Screen.FinishedGame -> ScreenContentViewState.FinishedGame(mapFinishedGameViewState(state))
     }
 
     return ScreenHostViewState(

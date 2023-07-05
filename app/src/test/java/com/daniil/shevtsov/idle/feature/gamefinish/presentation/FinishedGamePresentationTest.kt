@@ -6,8 +6,8 @@ import assertk.assertThat
 import assertk.assertions.index
 import assertk.assertions.isEqualTo
 import assertk.assertions.prop
+import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.gamefinish.domain.ending
-import com.daniil.shevtsov.idle.feature.gamefinish.domain.finishedGameState
 import com.daniil.shevtsov.idle.feature.gamefinish.domain.unlock
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import org.junit.jupiter.api.Test
@@ -19,15 +19,19 @@ internal class FinishedGamePresentationTest {
             title = "EPIC FAIL",
             description = "YOU GET REKT M8"
         )
-        val state = finishedGameState(
-            endings = listOf(ending),
+        val state = gameState(
+            allEndings = listOf(ending),
+            currentEndingId = ending.id,
         )
 
         val viewState = mapFinishedGameViewState(state = state)
 
         assertThat(viewState)
-            .extractingEndingDescription()
-            .isEqualTo(ending.description)
+            .extractingEndingState()
+            .all {
+                prop(EndingViewState::title).isEqualTo(ending.title)
+                prop(EndingViewState::description).isEqualTo(ending.description)
+            }
     }
 
     @Test
@@ -43,8 +47,9 @@ internal class FinishedGamePresentationTest {
         val ending = ending(
             unlocks = listOf(unlock)
         )
-        val state = finishedGameState(
-            endings = listOf(ending),
+        val state = gameState(
+            allEndings = listOf(ending),
+            currentEndingId = ending.id
         )
 
         val viewState = mapFinishedGameViewState(state = state)
@@ -66,10 +71,6 @@ internal class FinishedGamePresentationTest {
 
     private fun Assert<FinishedGameViewState>.extractingEndingState() =
         prop(FinishedGameViewState::endingState)
-
-    private fun Assert<FinishedGameViewState>.extractingEndingDescription() =
-        extractingEndingState()
-            .prop(EndingViewState::description)
 
     private fun Assert<FinishedGameViewState>.extractingEndingUnlocks() =
         prop(FinishedGameViewState::unlocks)

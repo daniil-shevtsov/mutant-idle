@@ -24,6 +24,7 @@ object Species {
         title = "Shapeshifter",
         description = "You are a biomass which consumes people and changes shape",
         icon = Icons.Shapeshifter,
+        mainResource = ResourceKey.DNA,
         tags = listOf(
             Tags.Species.ShapeShifter,
         )

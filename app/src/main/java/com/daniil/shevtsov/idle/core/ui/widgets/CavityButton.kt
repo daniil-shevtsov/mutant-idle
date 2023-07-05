@@ -32,7 +32,7 @@ fun CavityButton(
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            modifier = modifier
+            modifier = Modifier
                 .clickable {
                     onClick()
                 }

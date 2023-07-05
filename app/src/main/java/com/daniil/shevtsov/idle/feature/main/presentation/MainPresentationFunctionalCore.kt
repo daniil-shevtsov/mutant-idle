@@ -50,7 +50,7 @@ private fun createMainViewState(state: GameState): MainViewState {
                 key = key,
                 name = name,
                 value = value.formatRound(),
-                icon = key.chooseIcon(),
+                icon = key.chooseIcon(state.player.mainResourceKey),
             )
         }
     }
@@ -63,7 +63,7 @@ private fun createMainViewState(state: GameState): MainViewState {
                 name = getNameForRatio(ratio),
                 percent = ratio.value,
                 percentLabel = (ratio.value * 100).formatRound(digits = 2) + " %",
-                icon = ratio.key.chooseIcon(),
+                icon = ratio.key.chooseIcon(state.player.mainRatioKey),
             )
         }
     val actionState = createActionState(state.actions, state.resources, state.player, state)
@@ -97,10 +97,14 @@ private fun createMainViewState(state: GameState): MainViewState {
                     subtitle = upgrade.subtitle.withFlavor(state),
                     price = PriceModel(value = price.value.toString()),
                     status = mapStatus(
-                        state.resources.find { it.key == ResourceKey.Blood }?.value ?: 0.0
+                        state.resources.withKey(ResourceKey.Blood, state)?.value
+                            ?: 0.0 //TODO: Why only blood?
                     ),
-                    resourceChanges = mapResourceChanges(resourceChanges),
-                    ratioChanges = mapRatioChanges(ratioChanges, state.player.tags),
+                    resourceChanges = mapResourceChanges(
+                        resourceChanges,
+                        state.player.mainResourceKey
+                    ),
+                    ratioChanges = mapRatioChanges(ratioChanges, state.player.mainRatioKey),
                 )
             }
         }
@@ -144,17 +148,19 @@ private fun countSequentialDuplicates(values: List<String>): List<Group> {
 
 data class Group(val value: String, var count: Int)
 
-private fun RatioKey.chooseIcon(): String {
+private fun RatioKey.chooseIcon(mainRatio: RatioKey): String {
     return when (this) {
         RatioKey.Mutanity -> Icons.Mutanity
         RatioKey.Suspicion -> Icons.Suspicion
         RatioKey.Power -> Icons.Power
         RatioKey.ShipRepair -> Icons.ShipRepair
+        RatioKey.MainRatio -> mainRatio.chooseIcon(mainRatio)
     }
 }
 
-private fun ResourceKey.chooseIcon() = when (this) {
+private fun ResourceKey.chooseIcon(mainResource: ResourceKey): String = when (this) {
     ResourceKey.Blood -> Icons.Blood
+    ResourceKey.DNA -> Icons.Mutanity
     ResourceKey.Money -> Icons.Money
     ResourceKey.HumanFood -> Icons.HumanFood
     ResourceKey.Prisoner -> Icons.Prisoner
@@ -166,6 +172,7 @@ private fun ResourceKey.chooseIcon() = when (this) {
     ResourceKey.Scrap -> Icons.Scrap
     ResourceKey.Information -> Icons.Information
     ResourceKey.Singularity -> Icons.Singularity
+    ResourceKey.MainResource -> mainResource.chooseIcon(mainResource)
 }
 
 private fun satisfiesAllTagsRelations(
@@ -209,7 +216,7 @@ private fun createActionState(
         }
         .filter { action ->
             action.resourceChanges.all { (resourceKey, resourceChange) ->
-                val currentResource = resources.find { it.key == resourceKey }?.value
+                val currentResource = resources.withKey(resourceKey, state)?.value
                 currentResource != null && currentResource + resourceChange >= 0
             }
         }
@@ -223,7 +230,7 @@ private fun createActionState(
     val models = availableActions.map { action ->
         with(action) {
             val isActive = resourceChanges.all { (resourceKey, resourceChange) ->
-                val currentResource = resources.find { it.key == resourceKey }!!.value
+                val currentResource = resources.withKey(resourceKey, state)!!.value
                 currentResource + resourceChange >= 0
             }
 
@@ -239,8 +246,8 @@ private fun createActionState(
                         else -> Icons.Monster
                     }
                 ),
-                resourceChanges = mapResourceChanges(resourceChanges),
-                ratioChanges = mapRatioChanges(ratioChanges, state.player.tags),
+                resourceChanges = mapResourceChanges(resourceChanges, state.player.mainResourceKey),
+                ratioChanges = mapRatioChanges(ratioChanges, state.player.mainRatioKey),
                 isEnabled = isActive,
             )
         }
@@ -256,19 +263,26 @@ private fun createActionState(
     )
 }
 
-private fun mapResourceChanges(resourceChanges: ResourceChanges) =
+private fun List<Resource>.withKey(key: ResourceKey, state: GameState) = find {
+    it.key == when (key) {
+        ResourceKey.MainResource -> state.player.mainResourceKey
+        else -> key
+    }
+}
+
+private fun mapResourceChanges(resourceChanges: ResourceChanges, mainResource: ResourceKey) =
     resourceChanges.map { (resourceKey, changeValue) ->
         val formattedValue =
             ("+".takeIf { changeValue > 0 } ?: "") + changeValue.formatRound(digits = 2)
         ResourceChangeModel(
-            icon = resourceKey.chooseIcon(),
+            icon = resourceKey.chooseIcon(mainResource),
             value = formattedValue,
         )
     }
 
 private fun mapRatioChanges(
     ratioChanges: RatioChanges,
-    tags: List<Tag>
+    mainRatioKey: RatioKey,
 ) =
     ratioChanges.map { (ratioKey, tagChanges) ->
         val changeValue = tagChanges[emptyList()] ?: 0.0
@@ -276,7 +290,7 @@ private fun mapRatioChanges(
             ("+".takeIf { changeValue > 0 } ?: "") + (changeValue * 100)
                 .formatRound(digits = 2) + " %"
         RatioChangeModel(
-            icon = ratioKey.chooseIcon(),
+            icon = ratioKey.chooseIcon(mainRatioKey),
             value = formattedValue,
         )
     }
@@ -286,6 +300,7 @@ private fun getNameForRatio(ratio: Ratio) = when (ratio.key) {
     RatioKey.Suspicion -> getSuspicionNameForRatio(ratio.value)
     RatioKey.Power -> ""
     RatioKey.ShipRepair -> ""
+    RatioKey.MainRatio -> ""
 }
 
 private fun getSuspicionNameForRatio(

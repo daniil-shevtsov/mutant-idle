@@ -65,6 +65,7 @@ fun ScreenHostComposable(
                             }
                         )
                     }
+
                     is ScreenContentViewState.Main -> {
                         MainScreen(
                             state = contentViewState.state,
@@ -78,9 +79,14 @@ fun ScreenHostComposable(
                             },
                         )
                     }
+
                     is ScreenContentViewState.FinishedGame -> {
                         FinishedGameScreen(
                             state = contentViewState.state,
+                            modifier = modifier,
+                            onAction = { action ->
+                                viewModel.handleAction(ScreenViewAction.Main(action))
+                            }
                         )
                     }
                 }
