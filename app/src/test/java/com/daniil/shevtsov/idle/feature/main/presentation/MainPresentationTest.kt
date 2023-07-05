@@ -5,6 +5,7 @@ import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
 import com.daniil.shevtsov.idle.core.ui.Icons
+import com.daniil.shevtsov.idle.feature.action.domain.Actions
 import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.action.domain.ratioChanges
 import com.daniil.shevtsov.idle.feature.action.presentation.*
@@ -827,6 +828,26 @@ class MainPresentationTest {
             .prop(UpgradeModel::resourceChanges)
             .extracting(ResourceChangeModel::icon)
             .containsExactly(Icons.Blood)
+    }
+
+    @Test
+    fun `should display appearance change action when has required tags`() {
+        val viewState = mapMainViewState(
+            gameState(
+                player = player(
+                    traits = mapOf(TraitId.Species to Species.Shapeshifter),
+                    generalTags = listOf(Tags.Abilities.AppearanceChange)
+                ),
+                resources = listOf(resource(key = ResourceKey.DNA, value = 100.0)),
+                actions = listOf(Actions.AppearanceChange.copy(id = 1L))
+            )
+        )
+
+        assertThat(viewState)
+            .extractingHumanActions()
+            .index(0)
+            .prop(ActionModel::id)
+            .isEqualTo(1L)
     }
 
     @Test

@@ -70,5 +70,7 @@ fun createUpgrades() = listOf(
     upgrade(
         title = Flavors.appearanceChange.placeholder,
         subtitle = "You are able to ${Flavors.appearanceChangeAction.placeholder}",
+        tagRelations = tagRelations(TagRelation.Provides to Tags.Abilities.AppearanceChange),
+        resourceChanges = resourceChanges(ResourceKey.MainResource to -10.0),
     ),
 ).makeIdsUnique()

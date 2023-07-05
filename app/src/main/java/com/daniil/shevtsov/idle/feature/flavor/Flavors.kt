@@ -5,6 +5,8 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 
 //TODO: Do the same as with actions and upgrades
 fun createFlavors() = listOf(
+    Flavors.appearanceChange,
+    Flavors.appearanceChangeAction,
     Flavors.invisibilityAction,
     Flavors.invisibilityGain,
     Flavors.personName,

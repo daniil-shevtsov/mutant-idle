@@ -11,6 +11,16 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tagRelations
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 
+object Actions {
+    val AppearanceChange = action(
+        title = Flavors.appearanceChangeAction.placeholder,
+        subtitle = "This will make your enemies loose track",
+        tagRelations = tagRelations(TagRelation.RequiredAll to Tags.Abilities.AppearanceChange),
+        resourceChanges = resourceChanges(ResourceKey.MainResource to -1.0),
+        ratioChanges = ratioChanges(RatioKey.Suspicion to -1.0),
+    )
+}
+
 fun createAllActions() = listOf(
     action(
         title = "Work",
@@ -461,12 +471,7 @@ fun createAllActions() = listOf(
         tagRelations = tagRelations(TagRelation.RequiredAll to Tags.Species.Devourer),
         ratioChanges = ratioChanges(RatioKey.Mutanity to 1.0)
     ),
-    action(
-        title = Flavors.appearanceChangeAction.placeholder,
-        subtitle = "This will make your enemies loose track",
-        tagRelations = tagRelations(TagRelation.RequiredAll to Tags.Abilities.AppearanceChange),
-        ratioChanges = ratioChanges(RatioKey.Suspicion to -1.0),
-    ),
+    Actions.AppearanceChange,
 ).makeIdsUnique()
 
 fun List<Selectable>.makeIdsUnique(): List<Selectable> {

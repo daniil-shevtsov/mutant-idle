@@ -97,7 +97,7 @@ private fun createMainViewState(state: GameState): MainViewState {
                     subtitle = upgrade.subtitle.withFlavor(state),
                     price = PriceModel(value = price.value.toString()),
                     status = mapStatus(
-                        state.resources.find { it.key == ResourceKey.Blood }?.value ?: 0.0
+                        state.resources.withKey(ResourceKey.Blood, state)?.value ?: 0.0 //TODO: Why only blood?
                     ),
                     resourceChanges = mapResourceChanges(
                         resourceChanges,
@@ -158,6 +158,7 @@ private fun RatioKey.chooseIcon(): String {
 
 private fun ResourceKey.chooseIcon(mainResource: ResourceKey): String = when (this) {
     ResourceKey.Blood -> Icons.Blood
+    ResourceKey.DNA -> Icons.Mutanity
     ResourceKey.Money -> Icons.Money
     ResourceKey.HumanFood -> Icons.HumanFood
     ResourceKey.Prisoner -> Icons.Prisoner
@@ -213,7 +214,7 @@ private fun createActionState(
         }
         .filter { action ->
             action.resourceChanges.all { (resourceKey, resourceChange) ->
-                val currentResource = resources.find { it.key == resourceKey }?.value
+                val currentResource = resources.withKey(resourceKey, state)?.value
                 currentResource != null && currentResource + resourceChange >= 0
             }
         }
@@ -227,7 +228,7 @@ private fun createActionState(
     val models = availableActions.map { action ->
         with(action) {
             val isActive = resourceChanges.all { (resourceKey, resourceChange) ->
-                val currentResource = resources.find { it.key == resourceKey }!!.value
+                val currentResource = resources.withKey(resourceKey, state)!!.value
                 currentResource + resourceChange >= 0
             }
 
@@ -258,6 +259,13 @@ private fun createActionState(
             ),
         ),
     )
+}
+
+private fun List<Resource>.withKey(key: ResourceKey, state: GameState) = find {
+    it.key == when (key) {
+        ResourceKey.MainResource -> state.player.mainResourceKey
+        else -> key
+    }
 }
 
 private fun mapResourceChanges(resourceChanges: ResourceChanges, mainResource: ResourceKey) =
