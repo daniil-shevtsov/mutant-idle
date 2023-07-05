@@ -193,7 +193,12 @@ private fun applyRatioChanges(
         }?.value
     when (ratioChange) {
         null -> ratio
-        else -> ratio.copy(value = ratio.value + ratioChange)
+        else -> ratio.copy(value = ratio.value + ratioChange).let { ratio ->
+            when {
+                ratio.value < 0.0 -> ratio.copy(value = 0.0)
+                else -> ratio
+            }
+        }
     }
 }
 
@@ -222,7 +227,7 @@ private fun handleUpgradeSelected(
     upgradeToBuy: Upgrade,
 ): GameState {
     val resourceChanges = upgradeToBuy.resourceChanges.mapKeys { (key, _) ->
-        when(key) {
+        when (key) {
             ResourceKey.MainResource -> state.player.mainResourceKey
             else -> key
         }

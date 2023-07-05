@@ -135,6 +135,31 @@ class MainFunctionalCoreTest {
         }
 
     @Test
+    fun `should change ratio to zero if it gets negative after action clicked`() =
+        runBlockingTest {
+            val providedTag = tag(name = "lol")
+            val action = action(
+                id = 1L,
+                ratioChanges = ratioChangesWithTags(RatioKey.Suspicion to ratioChange(change = -3.0)),
+            )
+
+            val initialState = gameState(
+                ratios = listOf(ratio(key = RatioKey.Suspicion, value = 1.0)),
+                actions = listOf(action),
+            )
+
+            val newState = mainFunctionalCore(
+                state = initialState,
+                viewAction = MainViewAction.SelectableClicked(id = action.id),
+            )
+
+            assertThat(newState)
+                .prop(GameState::ratios)
+                .extracting(Ratio::key, Ratio::value)
+                .containsExactly(RatioKey.Suspicion to 0.0)
+        }
+
+    @Test
     fun `should switch section collapsed state when clicked`() {
         val initialState = gameState(
             sections = listOf(
