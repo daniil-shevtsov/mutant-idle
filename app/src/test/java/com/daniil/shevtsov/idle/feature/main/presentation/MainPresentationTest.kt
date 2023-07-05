@@ -869,6 +869,44 @@ class MainPresentationTest {
             .containsExactly(Icons.Scrap)
     }
 
+    @Test
+    fun `should display main ratio as Power for vampire`() {
+        val viewState = mapMainViewState(
+            gameState(
+                player = player(
+                    traits = mapOf(TraitId.Species to Species.Vampire)
+                ),
+                actions = listOf(Actions.Win.copy(id = 1L))
+            )
+        )
+
+        assertThat(viewState)
+            .extractingHumanActions()
+            .index(0)
+            .prop(ActionModel::ratioChanges)
+            .extracting(RatioChangeModel::icon)
+            .containsExactly(Icons.Power)
+    }
+
+    @Test
+    fun `should display main ratio as Ship Repair for alien`() {
+        val viewState = mapMainViewState(
+            gameState(
+                player = player(
+                    traits = mapOf(TraitId.Species to Species.Alien)
+                ),
+                actions = listOf(Actions.Win.copy(id = 1L))
+            )
+        )
+
+        assertThat(viewState)
+            .extractingHumanActions()
+            .index(0)
+            .prop(ActionModel::ratioChanges)
+            .extracting(RatioChangeModel::icon)
+            .containsExactly(Icons.ShipRepair)
+    }
+
 
     private fun Assert<MainViewState>.extractingPlot() = extractingMainState()
         .prop(MainViewState.Success::plotEntries)

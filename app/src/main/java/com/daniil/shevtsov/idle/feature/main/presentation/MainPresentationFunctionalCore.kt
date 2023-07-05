@@ -63,7 +63,7 @@ private fun createMainViewState(state: GameState): MainViewState {
                 name = getNameForRatio(ratio),
                 percent = ratio.value,
                 percentLabel = (ratio.value * 100).formatRound(digits = 2) + " %",
-                icon = ratio.key.chooseIcon(),
+                icon = ratio.key.chooseIcon(state.player.mainRatioKey),
             )
         }
     val actionState = createActionState(state.actions, state.resources, state.player, state)
@@ -97,13 +97,14 @@ private fun createMainViewState(state: GameState): MainViewState {
                     subtitle = upgrade.subtitle.withFlavor(state),
                     price = PriceModel(value = price.value.toString()),
                     status = mapStatus(
-                        state.resources.withKey(ResourceKey.Blood, state)?.value ?: 0.0 //TODO: Why only blood?
+                        state.resources.withKey(ResourceKey.Blood, state)?.value
+                            ?: 0.0 //TODO: Why only blood?
                     ),
                     resourceChanges = mapResourceChanges(
                         resourceChanges,
                         state.player.mainResourceKey
                     ),
-                    ratioChanges = mapRatioChanges(ratioChanges, state.player.tags),
+                    ratioChanges = mapRatioChanges(ratioChanges, state.player.mainRatioKey),
                 )
             }
         }
@@ -147,13 +148,13 @@ private fun countSequentialDuplicates(values: List<String>): List<Group> {
 
 data class Group(val value: String, var count: Int)
 
-private fun RatioKey.chooseIcon(): String {
+private fun RatioKey.chooseIcon(mainRatio: RatioKey): String {
     return when (this) {
         RatioKey.Mutanity -> Icons.Mutanity
         RatioKey.Suspicion -> Icons.Suspicion
         RatioKey.Power -> Icons.Power
         RatioKey.ShipRepair -> Icons.ShipRepair
-        RatioKey.MainRatio -> Icons.Mutanity
+        RatioKey.MainRatio -> mainRatio.chooseIcon(mainRatio)
     }
 }
 
@@ -246,7 +247,7 @@ private fun createActionState(
                     }
                 ),
                 resourceChanges = mapResourceChanges(resourceChanges, state.player.mainResourceKey),
-                ratioChanges = mapRatioChanges(ratioChanges, state.player.tags),
+                ratioChanges = mapRatioChanges(ratioChanges, state.player.mainRatioKey),
                 isEnabled = isActive,
             )
         }
@@ -281,7 +282,7 @@ private fun mapResourceChanges(resourceChanges: ResourceChanges, mainResource: R
 
 private fun mapRatioChanges(
     ratioChanges: RatioChanges,
-    tags: List<Tag>
+    mainRatioKey: RatioKey,
 ) =
     ratioChanges.map { (ratioKey, tagChanges) ->
         val changeValue = tagChanges[emptyList()] ?: 0.0
@@ -289,7 +290,7 @@ private fun mapRatioChanges(
             ("+".takeIf { changeValue > 0 } ?: "") + (changeValue * 100)
                 .formatRound(digits = 2) + " %"
         RatioChangeModel(
-            icon = ratioKey.chooseIcon(),
+            icon = ratioKey.chooseIcon(mainRatioKey),
             value = formattedValue,
         )
     }
