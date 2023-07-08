@@ -44,17 +44,17 @@ fun settingsViewStateComposeStub(): SettingsViewState {
         ),
         settingsPanel = SettingsPanelModel(
             items = persistentListOf(
-                SettingsItem.Switch(id = 0L, title = "lol", isSelected = true),
-                SettingsItem.Switch(id = 1L, title = "kek", isSelected = false),
-                SettingsItem.Switch(id = 2L, title = "cheburek", isSelected = true),
-                SettingsItem.ColorSelector(
+                SettingsItemModel.Switch(id = 0L, title = "lol", isSelected = true),
+                SettingsItemModel.Switch(id = 1L, title = "kek", isSelected = false),
+                SettingsItemModel.Switch(id = 2L, title = "cheburek", isSelected = true),
+                SettingsItemModel.ColorSelector(
                     id = 3L,
                     title = "lol color",
                     currentColor = SettingsColor("#FF0000")
                 ),
-                SettingsItem.Switch(id = 4L, title = "lol2", isSelected = true),
-                SettingsItem.Switch(id = 5L, title = "kek2", isSelected = false),
-                SettingsItem.ColorSelector(
+                SettingsItemModel.Switch(id = 4L, title = "lol2", isSelected = true),
+                SettingsItemModel.Switch(id = 5L, title = "kek2", isSelected = false),
+                SettingsItemModel.ColorSelector(
                     id = 6L,
                     title = "cheburek color",
                     currentColor = SettingsColor("#00FF00")
@@ -174,18 +174,18 @@ fun SettingsPanel(
 
 @Composable
 fun SettingsItemControl(
-    item: SettingsItem,
+    item: SettingsItemModel,
     modifier: Modifier = Modifier,
 ) {
     when (item) {
-        is SettingsItem.ColorSelector -> ColorSelector(item, modifier)
-        is SettingsItem.Switch -> SettingsSwitch(item, modifier)
+        is SettingsItemModel.ColorSelector -> ColorSelector(item, modifier)
+        is SettingsItemModel.Switch -> SettingsSwitch(item, modifier)
     }
 }
 
 @Composable
 fun ColorSelector(
-    model: SettingsItem.ColorSelector,
+    model: SettingsItemModel.ColorSelector,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -221,7 +221,7 @@ fun ColorSelector(
 
 @Composable
 fun SettingsSwitch(
-    model: SettingsItem.Switch,
+    model: SettingsItemModel.Switch,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
@@ -254,23 +254,23 @@ data class SettingsCategoryModel(
 )
 
 data class SettingsPanelModel(
-    val items: ImmutableList<SettingsItem>
+    val items: ImmutableList<SettingsItemModel>
 )
 
-sealed interface SettingsItem {
+sealed interface SettingsItemModel {
     val title: String
 
     data class Switch(
         val id: Long,
         override val title: String,
         val isSelected: Boolean,
-    ) : SettingsItem
+    ) : SettingsItemModel
 
     data class ColorSelector(
         val id: Long,
         override val title: String,
         val currentColor: SettingsColor,
-    ) : SettingsItem
+    ) : SettingsItemModel
 }
 
 data class SettingsColor(

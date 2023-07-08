@@ -24,6 +24,9 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.createResources
 import com.daniil.shevtsov.idle.feature.settings.domain.Settings
 import com.daniil.shevtsov.idle.feature.settings.domain.SettingsCategory
+import com.daniil.shevtsov.idle.feature.settings.domain.SettingsControl
+import com.daniil.shevtsov.idle.feature.settings.domain.SettingsItem
+import com.daniil.shevtsov.idle.feature.settings.domain.SettingsKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.unlocks.domain.UnlockState
@@ -72,6 +75,14 @@ fun createInitialGameState(): GameState {
             categories = persistentListOf(
                 SettingsCategory(id = 0L, title = "General"),
                 SettingsCategory(id = 1L, title = "Accessibility"),
+            ),
+            settingsItems = persistentListOf(
+                SettingsItem(
+                    key = SettingsKey.DebugEnabled,
+                    title = "Debug",
+                    hint = "Enables debug menu",
+                    value = SettingsControl.BooleanValue(true),
+                )
             ),
             selectedCategoryId = 0L,
         )
