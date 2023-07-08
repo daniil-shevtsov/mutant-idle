@@ -32,7 +32,7 @@ fun ScreenHostComposable(
     BackHandler {
         viewModel.handleAction(ScreenViewAction.General(GeneralViewAction.Back))
     }
-    val theme = chooseThemeForId(delegatedViewState.speciesId)
+    val theme = chooseThemeForId(delegatedViewState.speciesId, delegatedViewState.colors)
     AppTheme(
         colors = theme.colors,
         shapes = theme.shapes,

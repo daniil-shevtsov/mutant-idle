@@ -3,7 +3,6 @@ package com.daniil.shevtsov.idle.application
 import android.app.Application
 import com.daniil.shevtsov.idle.core.di.DaggerAppComponent
 import com.daniil.shevtsov.idle.feature.initial.domain.createBalanceConfig
-import com.daniil.shevtsov.idle.feature.initial.domain.createInitialGameState
 import org.koin.core.Koin
 import timber.log.Timber
 import javax.inject.Inject
@@ -16,7 +15,6 @@ class IdleGameApplication : Application() {
             .create(
                 appContext = applicationContext,
                 balanceConfig = createBalanceConfig(),
-                initialGameState = createInitialGameState(),
             )
     }
 

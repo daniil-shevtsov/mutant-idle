@@ -1,5 +1,7 @@
 package com.daniil.shevtsov.idle.feature.player.species.domain
 
+import com.daniil.shevtsov.idle.feature.colors.presentation.SpeciesColors
+import com.daniil.shevtsov.idle.feature.colors.presentation.speciesColors
 import com.daniil.shevtsov.idle.feature.player.species.presentation.PlayerSpeciesModel
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
@@ -12,6 +14,7 @@ fun playerSpecies(
     title: String = "",
     icon: String = "",
     description: String = "",
+    colors: SpeciesColors = speciesColors(),
     tags: List<Tag> = emptyList(),
     mainRatio: RatioKey? = null,
     mainResource: ResourceKey? = null,
@@ -22,8 +25,9 @@ fun playerSpecies(
     icon = icon,
     description = description,
     tags = tags,
-    mainRatio =  mainRatio,
+    mainRatio = mainRatio,
     mainResource = mainResource,
+    colors = colors,
 )
 
 fun playerSpeciesModel(

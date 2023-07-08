@@ -24,6 +24,7 @@ fun screenPresentationFunctionalCore(
 
     return ScreenHostViewState(
         speciesId = state.player.traits[TraitId.Species]?.id ?: Devourer.id,
+        colors = (state.player.traits[TraitId.Species]?.colors ?: Devourer.colors)!!,
         drawerState = drawerState,
         contentState = contentState,
     )
