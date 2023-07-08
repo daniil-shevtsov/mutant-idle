@@ -4,16 +4,22 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.daniil.shevtsov.idle.core.ui.protrusive
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
+import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -65,23 +71,55 @@ fun SettingsScreen(
     modifier: Modifier = Modifier
 ) {
     Row(
+        horizontalArrangement = spacedBy(AppTheme.dimensions.paddingM),
         modifier = modifier
             .background(AppTheme.colors.background),
     ) {
-        Column {
-            state.categories.forEach { category ->
-                SettingsCategory(category)
+        SettingsCategories(state.categories)
+        SettingsPanel(state.settingsPanel)
+    }
+}
+
+@Composable
+fun SettingsCategories(
+    categories: ImmutableList<SettingsCategoryModel>,
+) {
+    Cavity(mainColor = AppTheme.colors.background) {
+        Column(
+            verticalArrangement = spacedBy(AppTheme.dimensions.paddingSmall),
+            modifier = Modifier
+                .padding(AppTheme.dimensions.paddingSmall)
+                .width(IntrinsicSize.Min),
+        ) {
+            categories.forEach { category ->
+                SettingsCategory(
+                    category,
+                    Modifier.fillMaxWidth()
+                )
             }
-        }
-        Column {
-            SettingsPanel(state.settingsPanel)
         }
     }
 }
 
 @Composable
-fun SettingsCategory(model: SettingsCategoryModel) {
-    Text(text = model.title)
+fun SettingsCategory(
+    model: SettingsCategoryModel,
+    modifier: Modifier = Modifier,
+) {
+    Text(
+        modifier = modifier
+            .background(AppTheme.colors.background)
+            .protrusive(
+                lightColor = AppTheme.colors.backgroundLight,
+                darkColor = AppTheme.colors.backgroundDark,
+            )
+            .background(AppTheme.colors.background)
+            .padding(AppTheme.dimensions.paddingSmall),
+        text = model.title,
+        style = AppTheme.typography.button,
+        color = AppTheme.colors.backgroundText,
+        textAlign = TextAlign.Center,
+    )
 }
 
 @Composable
