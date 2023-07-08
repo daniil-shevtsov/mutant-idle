@@ -11,10 +11,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -185,7 +187,21 @@ fun ColorSelector(
     model: SettingsItem.ColorSelector,
     modifier: Modifier = Modifier,
 ) {
-    Text(text = "${model.currentColor.hex}", modifier = modifier)
+    Cavity(
+        mainColor = AppTheme.colors.background,
+        modifier = modifier
+    ) {
+        BasicTextField(
+            value = TextFieldValue(model.currentColor.hex),
+            onValueChange = { newFieldValue ->
+
+            },
+            modifier = Modifier
+                .background(AppTheme.colors.backgroundText)
+                .padding(AppTheme.dimensions.paddingSmall)
+                .width(IntrinsicSize.Min)
+        )
+    }
 }
 
 @Composable
