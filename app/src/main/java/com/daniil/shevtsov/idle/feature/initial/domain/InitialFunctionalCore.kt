@@ -40,8 +40,8 @@ fun createInitialGameState(): GameState {
         locationSelectionState = createLocationSelectionState(),
         flavors = createFlavors(),
         player = createInitialPlayer(),
-        currentScreen = Screen.GameStart,
-        screenStack = listOf(Screen.GameStart),
+        currentScreen = Screen.Menu,
+        screenStack = listOf(Screen.Menu),
         unlockState = UnlockState(
             traits = TraitId.values().associate { traitId ->
                 val traits = createInitialTraits().filter { trait -> trait.traitId == traitId }

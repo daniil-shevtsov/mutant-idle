@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.core.navigation
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.ModalDrawer
 import androidx.compose.material.rememberDrawerState
@@ -14,7 +15,9 @@ import com.daniil.shevtsov.idle.core.ui.theme.chooseThemeForId
 import com.daniil.shevtsov.idle.feature.gamefinish.view.FinishedGameScreen
 import com.daniil.shevtsov.idle.feature.gamestart.view.GameStartScreen
 import com.daniil.shevtsov.idle.feature.main.MainDrawer
+import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.main.view.MainScreen
+import com.daniil.shevtsov.idle.feature.menu.view.MenuScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
@@ -52,6 +55,20 @@ fun ScreenHostComposable(
             },
             content = {
                 when (val contentViewState = delegatedViewState.contentState) {
+                    is ScreenContentViewState.Menu -> {
+                        MenuScreen(
+                            state = contentViewState.state,
+                            onClick = { menuId ->
+                                viewModel.handleAction(
+                                    ScreenViewAction.Main(
+                                        MainViewAction.MenuButtonClicked(menuId)
+                                    )
+                                )
+                            },
+                            modifier = modifier.fillMaxHeight(),
+                        )
+                    }
+
                     is ScreenContentViewState.GameStart -> {
                         GameStartScreen(
                             state = contentViewState.state,
@@ -89,6 +106,8 @@ fun ScreenHostComposable(
                             }
                         )
                     }
+
+                    ScreenContentViewState.Loading -> Unit
                 }
             }
         )

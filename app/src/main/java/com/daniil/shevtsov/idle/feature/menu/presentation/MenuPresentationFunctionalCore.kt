@@ -9,9 +9,9 @@ fun mapMenuViewState(
     return MenuViewState(
         title = "Mutant Idle",
         buttons = persistentListOf(
-            MenuButtonModel(id = 0L, title = "Start Game"),
-            MenuButtonModel(id = 1L, title = "Settings"),
-            MenuButtonModel(id = 2L, title = "Quit"),
+            MenuButtonModel(id = MenuId.StartGame, title = "Start Game"),
+            MenuButtonModel(id = MenuId.Settings, title = "Settings"),
+            MenuButtonModel(id = MenuId.Quit, title = "Quit"),
         )
     )
 }

@@ -41,8 +41,22 @@ fun mainFunctionalCore(
 
         MainViewAction.Init -> state
         MainViewAction.StartNewGameClicked -> handleStartNewGameClicked(state)
+        is MainViewAction.MenuButtonClicked -> handleMenuButtonClicked(state, viewAction)
     }
     return newState
+}
+
+fun handleMenuButtonClicked(
+    state: GameState,
+    viewAction: MainViewAction.MenuButtonClicked
+): GameState {
+    val newScreen = when (viewAction.id) {
+        else -> Screen.GameStart
+    }
+    return state.copy(
+        currentScreen = newScreen,
+        screenStack = state.screenStack + newScreen
+    )
 }
 
 fun handleStartNewGameClicked(state: GameState): GameState {

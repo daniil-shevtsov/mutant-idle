@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.feature.menu.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement.Center
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -12,13 +13,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.widgets.CavityButton
 import com.daniil.shevtsov.idle.feature.menu.presentation.MenuButtonModel
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuId
 import com.daniil.shevtsov.idle.feature.menu.presentation.MenuViewState
+import com.daniil.shevtsov.idle.feature.menu.presentation.menuButtonModel
 import kotlinx.collections.immutable.persistentListOf
 
-@Preview
+@Preview(heightDp = 500)
 @Composable
 fun MenuScreenPreview() {
     MenuScreen(
+        onClick = {},
         state = menuViewStateComposeStub()
     )
 }
@@ -26,26 +30,35 @@ fun MenuScreenPreview() {
 @Composable
 fun MenuScreen(
     state: MenuViewState,
+    onClick: (menuId: MenuId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = spacedBy(AppTheme.dimensions.paddingL),
+        verticalArrangement = Center,
         modifier = modifier
             .background(AppTheme.colors.background)
             .padding(AppTheme.dimensions.paddingL),
     ) {
-        Text(
-            text = state.title,
-            style = AppTheme.typography.header,
-            color = AppTheme.colors.textLight,
-        )
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = spacedBy(AppTheme.dimensions.paddingM),
+            verticalArrangement = spacedBy(AppTheme.dimensions.paddingL),
         ) {
-            state.buttons.forEach { buttonModel ->
-                MenuButton(model = buttonModel)
+            Text(
+                text = state.title,
+                style = AppTheme.typography.header,
+                color = AppTheme.colors.textLight,
+            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = spacedBy(AppTheme.dimensions.paddingM),
+            ) {
+                state.buttons.forEach { buttonModel ->
+                    MenuButton(
+                        model = buttonModel,
+                        onClick = { onClick(buttonModel.id) }
+                    )
+                }
             }
         }
     }
@@ -54,11 +67,12 @@ fun MenuScreen(
 @Composable
 private fun MenuButton(
     model: MenuButtonModel,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     CavityButton(
         text = model.title,
-        onClick = {},
+        onClick = onClick,
         modifier = modifier,
     )
 }
@@ -66,8 +80,8 @@ private fun MenuButton(
 private fun menuViewStateComposeStub() = MenuViewState(
     title = "Mutant Idle",
     buttons = persistentListOf(
-        MenuButtonModel(id = 0L, title = "Start Game"),
-        MenuButtonModel(id = 1L, title = "Settings"),
-        MenuButtonModel(id = 2L, title = "Quit"),
+        menuButtonModel(title = "Start Game"),
+        menuButtonModel(title = "Settings"),
+        menuButtonModel(title = "Quit"),
     )
 )
