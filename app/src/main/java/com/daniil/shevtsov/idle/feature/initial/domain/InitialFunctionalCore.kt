@@ -72,7 +72,8 @@ fun createInitialGameState(): GameState {
             categories = persistentListOf(
                 SettingsCategory(id = 0L, title = "General"),
                 SettingsCategory(id = 1L, title = "Accessibility"),
-            )
+            ),
+            selectedCategoryId = 0L,
         )
     )
 }
