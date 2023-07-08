@@ -18,6 +18,8 @@ import com.daniil.shevtsov.idle.feature.player.trait.domain.PlayerTrait
 import com.daniil.shevtsov.idle.feature.plot.domain.PlotEntry
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
+import com.daniil.shevtsov.idle.feature.settings.domain.Settings
+import com.daniil.shevtsov.idle.feature.settings.domain.settings
 import com.daniil.shevtsov.idle.feature.unlocks.domain.UnlockState
 import com.daniil.shevtsov.idle.feature.unlocks.domain.unlockState
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
@@ -39,6 +41,7 @@ data class GameState(
     val unlockState: UnlockState,
     val allEndings: List<Ending>,
     val currentEndingId: Long?,
+    val settings: Settings,
 ) {
     val locations: List<Location>
         get() = selectables.filterIsInstance<Location>()
@@ -68,6 +71,7 @@ fun gameState(
     unlockState: UnlockState = unlockState(),
     allEndings: List<Ending> = emptyList(),
     currentEndingId: Long? = null,
+    settings: Settings = settings(),
 ) = GameState(
     balanceConfig = balanceConfig,
     selectables = (selectables + locations + upgrades + actions).distinct(),
@@ -85,4 +89,5 @@ fun gameState(
     unlockState = unlockState,
     allEndings = allEndings,
     currentEndingId = currentEndingId,
+    settings = settings,
 )

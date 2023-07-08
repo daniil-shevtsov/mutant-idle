@@ -22,10 +22,16 @@ import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.createResources
+import com.daniil.shevtsov.idle.feature.settings.domain.Settings
+import com.daniil.shevtsov.idle.feature.settings.domain.SettingsCategory
+import com.daniil.shevtsov.idle.feature.settings.domain.SettingsControl
+import com.daniil.shevtsov.idle.feature.settings.domain.SettingsItem
+import com.daniil.shevtsov.idle.feature.settings.domain.SettingsKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.unlocks.domain.UnlockState
 import com.daniil.shevtsov.idle.feature.upgrade.domain.createUpgrades
+import kotlinx.collections.immutable.persistentListOf
 
 fun createInitialGameState(): GameState {
     return GameState(
@@ -40,8 +46,8 @@ fun createInitialGameState(): GameState {
         locationSelectionState = createLocationSelectionState(),
         flavors = createFlavors(),
         player = createInitialPlayer(),
-        currentScreen = Screen.GameStart,
-        screenStack = listOf(Screen.GameStart),
+        currentScreen = Screen.Menu,
+        screenStack = listOf(Screen.Menu),
         unlockState = UnlockState(
             traits = TraitId.values().associate { traitId ->
                 val traits = createInitialTraits().filter { trait -> trait.traitId == traitId }
@@ -65,6 +71,33 @@ fun createInitialGameState(): GameState {
         ),
         allEndings = createEndings(),
         currentEndingId = null,
+        settings = Settings(
+            categories = persistentListOf(
+                SettingsCategory(id = 0L, title = "General"),
+                SettingsCategory(id = 1L, title = "Accessibility"),
+            ),
+            settingsItems = persistentListOf(
+                SettingsItem(
+                    key = SettingsKey.DebugEnabled,
+                    title = "Debug",
+                    hint = "Enables debug menu",
+                    value = SettingsControl.BooleanValue(true),
+                ),
+                SettingsItem(
+                    key = SettingsKey.ColorOverrideEnabled,
+                    title = "Custom Colors",
+                    hint = "Overrides colors with the colors from settings",
+                    value = SettingsControl.BooleanValue(false),
+                ),
+                SettingsItem(
+                    key = SettingsKey.BackgroundColor,
+                    title = "Background Color",
+                    hint = "Overrides this color with selected value",
+                    value = SettingsControl.StringValue("#FF0000"),
+                )
+            ),
+            selectedCategoryId = 0L,
+        )
     )
 }
 

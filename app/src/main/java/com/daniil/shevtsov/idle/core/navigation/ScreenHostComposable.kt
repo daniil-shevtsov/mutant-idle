@@ -14,7 +14,10 @@ import com.daniil.shevtsov.idle.core.ui.theme.chooseThemeForId
 import com.daniil.shevtsov.idle.feature.gamefinish.view.FinishedGameScreen
 import com.daniil.shevtsov.idle.feature.gamestart.view.GameStartScreen
 import com.daniil.shevtsov.idle.feature.main.MainDrawer
+import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.main.view.MainScreen
+import com.daniil.shevtsov.idle.feature.menu.view.MenuScreen
+import com.daniil.shevtsov.idle.feature.settings.view.SettingsScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
@@ -29,7 +32,7 @@ fun ScreenHostComposable(
     BackHandler {
         viewModel.handleAction(ScreenViewAction.General(GeneralViewAction.Back))
     }
-    val theme = chooseThemeForId(delegatedViewState.speciesId)
+    val theme = chooseThemeForId(delegatedViewState.speciesId, delegatedViewState.colors)
     AppTheme(
         colors = theme.colors,
         shapes = theme.shapes,
@@ -52,6 +55,20 @@ fun ScreenHostComposable(
             },
             content = {
                 when (val contentViewState = delegatedViewState.contentState) {
+                    is ScreenContentViewState.Menu -> {
+                        MenuScreen(
+                            state = contentViewState.state,
+                            onClick = { menuId ->
+                                viewModel.handleAction(
+                                    ScreenViewAction.Main(
+                                        MainViewAction.MenuButtonClicked(menuId)
+                                    )
+                                )
+                            },
+                            modifier = modifier,
+                        )
+                    }
+
                     is ScreenContentViewState.GameStart -> {
                         GameStartScreen(
                             state = contentViewState.state,
@@ -89,6 +106,15 @@ fun ScreenHostComposable(
                             }
                         )
                     }
+
+                    is ScreenContentViewState.Settings -> SettingsScreen(
+                        state = contentViewState.state,
+                        onAction = { action ->
+                            viewModel.handleAction(ScreenViewAction.Main(action))
+                        },
+                        modifier = modifier,
+                    )
+                    ScreenContentViewState.Loading -> Unit
                 }
             }
         )

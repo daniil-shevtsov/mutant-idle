@@ -7,18 +7,21 @@ import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
 import com.daniil.shevtsov.idle.feature.location.domain.Location
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuId
 import com.daniil.shevtsov.idle.feature.plot.domain.PlotEntry
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceChanges
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
+import com.daniil.shevtsov.idle.feature.settings.domain.SettingsControl
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelations
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.provideTags
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
+import kotlinx.collections.immutable.toImmutableList
 
 fun mainFunctionalCore(
     state: GameState,
@@ -41,6 +44,9 @@ fun mainFunctionalCore(
 
         MainViewAction.Init -> state
         MainViewAction.StartNewGameClicked -> handleStartNewGameClicked(state)
+        is MainViewAction.MenuButtonClicked -> handleMenuButtonClicked(state, viewAction)
+        is MainViewAction.SettingsSwitchUpdate -> handleSettingsSwitchUpdate(state, viewAction)
+        is MainViewAction.SettingsTextSaved -> handleSettingsTextUpdate(state, viewAction)
     }
     return newState
 }
@@ -57,6 +63,82 @@ fun handleLocationSelectionExpandChange(
             isSelectionExpanded = !state.locationSelectionState.isSelectionExpanded
         ),
     )
+}
+
+fun handleMenuButtonClicked(
+    state: GameState,
+    viewAction: MainViewAction.MenuButtonClicked
+): GameState {
+    val newScreen = when (viewAction.id) {
+        MenuId.StartGame -> Screen.GameStart
+        MenuId.Settings -> Screen.Settings
+    }
+    return state.copy(
+        currentScreen = newScreen,
+        screenStack = state.screenStack + newScreen
+    )
+}
+
+fun handleSettingsSwitchUpdate(
+    state: GameState,
+    viewAction: MainViewAction.SettingsSwitchUpdate
+): GameState {
+    val itemToUpdate = state.settings.settingsItems.find { it.key == viewAction.key }
+    val switchToUpdate = itemToUpdate?.value as? SettingsControl.BooleanValue
+
+    val newState = when {
+        itemToUpdate != null && switchToUpdate != null -> {
+            state.copy(
+                settings = state.settings.copy(
+                    settingsItems = state.settings.settingsItems.map { settingsItem ->
+                        val newItem = when (settingsItem.key) {
+                            itemToUpdate.key -> settingsItem.copy(
+                                value = switchToUpdate.copy(isEnabled = !switchToUpdate.isEnabled)
+                            )
+
+                            else -> settingsItem
+                        }
+                        newItem
+                    }.toImmutableList()
+                )
+            )
+        }
+
+        else -> state
+    }
+
+    return newState
+}
+
+fun handleSettingsTextUpdate(
+    state: GameState,
+    viewAction: MainViewAction.SettingsTextSaved
+): GameState {
+    val itemToUpdate = state.settings.settingsItems.find { it.key == viewAction.key }
+    val textToUpdate = itemToUpdate?.value as? SettingsControl.StringValue
+
+    val newState = when {
+        itemToUpdate != null && textToUpdate != null -> {
+            state.copy(
+                settings = state.settings.copy(
+                    settingsItems = state.settings.settingsItems.map { settingsItem ->
+                        val newItem = when (settingsItem.key) {
+                            itemToUpdate.key -> settingsItem.copy(
+                                value = textToUpdate.copy(text = viewAction.newText)
+                            )
+
+                            else -> settingsItem
+                        }
+                        newItem
+                    }.toImmutableList()
+                )
+            )
+        }
+
+        else -> state
+    }
+
+    return newState
 }
 
 fun handleLocationSelected(

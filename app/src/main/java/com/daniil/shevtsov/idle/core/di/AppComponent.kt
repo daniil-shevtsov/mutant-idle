@@ -4,7 +4,6 @@ import android.content.Context
 import com.daniil.shevtsov.idle.application.IdleGameApplication
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.core.navigation.ScreenHostFragment
-import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import dagger.BindsInstance
 import dagger.Component
 
@@ -21,7 +20,7 @@ interface AppComponent {
         fun create(
             @BindsInstance appContext: Context,
             @BindsInstance balanceConfig: BalanceConfig,
-            @BindsInstance initialGameState: GameState,
+//            @BindsInstance initialGameState: GameState,
         ): AppComponent
     }
 

@@ -162,7 +162,9 @@ fun FinishedGameScreen(
         CavityButton(
             text = "Start new game",
             onClick = { onAction(MainViewAction.StartNewGameClicked) },
-            modifier = Modifier.padding(bottom = AppTheme.dimensions.paddingMedium)
+            modifier = Modifier
+                .padding(bottom = AppTheme.dimensions.paddingMedium)
+                .fillMaxWidth()
         )
     }
 }
