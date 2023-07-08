@@ -109,6 +109,8 @@ dependencies {
         implementation(compose)
     }
 
+    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
+
     with(Deps.KorLibs) {
         implementation(kBigNumAndroid)
     }
