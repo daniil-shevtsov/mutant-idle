@@ -22,13 +22,13 @@ fun mapSettingsViewState(state: GameState): SettingsViewState {
             items = state.settings.settingsItems.map { settingsItem ->
                 when (val control = settingsItem.value) {
                     is SettingsControl.BooleanValue -> SettingsItemModel.Switch(
-                        id = 0L,
+                        key = settingsItem.key,
                         title = settingsItem.title,
                         isSelected = control.isEnabled
                     )
 
                     is SettingsControl.StringValue -> SettingsItemModel.ColorSelector(
-                        id = 0L,
+                        key = settingsItem.key,
                         title = settingsItem.title,
                         currentColor = SettingsColor(control.text)
                     )

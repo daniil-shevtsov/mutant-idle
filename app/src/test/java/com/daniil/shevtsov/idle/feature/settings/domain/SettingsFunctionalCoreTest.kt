@@ -4,10 +4,7 @@ import assertk.all
 import assertk.assertThat
 import assertk.assertions.containsExactly
 import assertk.assertions.extracting
-import assertk.assertions.index
 import assertk.assertions.isEqualTo
-import assertk.assertions.isInstanceOf
-import assertk.assertions.isTrue
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
@@ -52,7 +49,15 @@ class SettingsFunctionalCoreTest {
                         settingsItem(
                             key = SettingsKey.DebugEnabled,
                             value = settingsControlBoolean(isEnabled = false)
-                        )
+                        ),
+                        settingsItem(
+                            key = SettingsKey.BackgroundColor,
+                            value = settingsControlString(text = "#FF0000")
+                        ),
+                        settingsItem(
+                            key = SettingsKey.ColorOverrideEnabled,
+                            value = settingsControlBoolean(isEnabled = false)
+                        ),
                     )
                 )
             ),
@@ -62,14 +67,12 @@ class SettingsFunctionalCoreTest {
         assertThat(state)
             .prop(GameState::settings)
             .prop(Settings::settingsItems)
-            .index(0)
-            .all {
-                prop(SettingsItem::key).isEqualTo(SettingsKey.DebugEnabled)
-                prop(SettingsItem::value)
-                    .isInstanceOf(SettingsControl.BooleanValue::class)
-                    .prop(SettingsControl.BooleanValue::isEnabled)
-                    .isTrue()
-            }
+            .extracting(SettingsItem::key, SettingsItem::value)
+            .containsExactly(
+                SettingsKey.DebugEnabled to SettingsControl.BooleanValue(isEnabled = true),
+                SettingsKey.BackgroundColor to SettingsControl.StringValue(text = "#FF0000"),
+                SettingsKey.ColorOverrideEnabled to SettingsControl.BooleanValue(isEnabled = false),
+            )
     }
 
 }

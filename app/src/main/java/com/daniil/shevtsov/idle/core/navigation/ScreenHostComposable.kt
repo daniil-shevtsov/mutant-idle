@@ -109,6 +109,9 @@ fun ScreenHostComposable(
 
                     is ScreenContentViewState.Settings -> SettingsScreen(
                         state = contentViewState.state,
+                        onAction = { action ->
+                            viewModel.handleAction(ScreenViewAction.Main(action))
+                        },
                         modifier = modifier,
                     )
                     ScreenContentViewState.Loading -> Unit

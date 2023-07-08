@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.feature.settings.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
@@ -25,6 +26,8 @@ import com.daniil.shevtsov.idle.core.ui.protrusive
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.core.ui.widgets.CavityButton
+import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
+import com.daniil.shevtsov.idle.feature.settings.domain.SettingsKey
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -32,7 +35,8 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun SettingsScreenPreview() {
     SettingsScreen(
-        state = settingsViewStateComposeStub()
+        state = settingsViewStateComposeStub(),
+        onAction = {},
     )
 }
 
@@ -45,25 +49,39 @@ fun settingsViewStateComposeStub(): SettingsViewState {
         ),
         settingsPanel = SettingsPanelModel(
             items = persistentListOf(
-                SettingsItemModel.Switch(id = 0L, title = "lol", isSelected = true),
-                SettingsItemModel.Switch(id = 1L, title = "kek", isSelected = false),
-                SettingsItemModel.Switch(id = 2L, title = "cheburek", isSelected = true),
-                SettingsItemModel.ColorSelector(
-                    id = 3L,
+                settingsItemSwitchComposeStub(title = "lol", isSelected = true),
+                settingsItemSwitchComposeStub(title = "kek", isSelected = false),
+                settingsItemSwitchComposeStub(title = "cheburek", isSelected = true),
+                settingsItemTextInputComposeStub(
                     title = "lol color",
-                    currentColor = SettingsColor("#FF0000")
+                    text = "#FF0000",
                 ),
-                SettingsItemModel.Switch(id = 4L, title = "lol2", isSelected = true),
-                SettingsItemModel.Switch(id = 5L, title = "kek2", isSelected = false),
-                SettingsItemModel.ColorSelector(
-                    id = 6L,
+                settingsItemSwitchComposeStub(title = "lol2", isSelected = true),
+                settingsItemSwitchComposeStub(title = "kek2", isSelected = false),
+                settingsItemTextInputComposeStub(
                     title = "cheburek color",
-                    currentColor = SettingsColor("#00FF00")
+                    text = "#00FF00",
                 ),
             )
         )
     )
 }
+
+fun settingsItemSwitchComposeStub(
+    key: SettingsKey = SettingsKey.DebugEnabled,
+    title: String = "",
+    isSelected: Boolean = false,
+) = SettingsItemModel.Switch(key = key, title = title, isSelected = isSelected)
+
+fun settingsItemTextInputComposeStub(
+    key: SettingsKey = SettingsKey.DebugEnabled,
+    title: String = "",
+    text: String = "",
+) = SettingsItemModel.ColorSelector(
+    key = key,
+    title = title,
+    currentColor = SettingsColor(text)
+)
 
 data class SettingsViewState(
     val categories: ImmutableList<SettingsCategoryModel>,
@@ -73,6 +91,7 @@ data class SettingsViewState(
 @Composable
 fun SettingsScreen(
     state: SettingsViewState,
+    onAction: (action: MainViewAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -83,8 +102,9 @@ fun SettingsScreen(
     ) {
         SettingsCategories(state.categories)
         SettingsPanel(
-            state.settingsPanel,
-            Modifier.padding(AppTheme.dimensions.paddingSmall)
+            model = state.settingsPanel,
+            onSwitch = { key -> onAction(MainViewAction.SettingsSwitchUpdate(key)) },
+            modifier = Modifier.padding(AppTheme.dimensions.paddingSmall)
         )
     }
 }
@@ -148,6 +168,7 @@ fun Protrusive(
 @Composable
 fun SettingsPanel(
     model: SettingsPanelModel,
+    onSwitch: (key: SettingsKey) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -167,6 +188,7 @@ fun SettingsPanel(
                 )
                 SettingsItemControl(
                     item,
+                    onSwitch = { onSwitch(item.key) },
                     modifier = Modifier.padding(start = AppTheme.dimensions.paddingMedium)
                 )
             }
@@ -177,11 +199,12 @@ fun SettingsPanel(
 @Composable
 fun SettingsItemControl(
     item: SettingsItemModel,
+    onSwitch: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (item) {
         is SettingsItemModel.ColorSelector -> ColorSelector(item, modifier)
-        is SettingsItemModel.Switch -> SettingsSwitch(item, modifier)
+        is SettingsItemModel.Switch -> SettingsSwitch(item, modifier, onSwitch)
     }
 }
 
@@ -225,8 +248,11 @@ fun ColorSelector(
 fun SettingsSwitch(
     model: SettingsItemModel.Switch,
     modifier: Modifier = Modifier,
+    onSwitch: () -> Unit,
 ) {
-    Box(modifier = modifier) {
+    Box(modifier = modifier.clickable {
+        onSwitch()
+    }) {
         Cavity(
             mainColor = AppTheme.colors.background,
             modifier = Modifier
@@ -261,16 +287,17 @@ data class SettingsPanelModel(
 )
 
 sealed interface SettingsItemModel {
+    val key: SettingsKey
     val title: String
 
     data class Switch(
-        val id: Long,
+        override val key: SettingsKey,
         override val title: String,
         val isSelected: Boolean,
     ) : SettingsItemModel
 
     data class ColorSelector(
-        val id: Long,
+        override val key: SettingsKey,
         override val title: String,
         val currentColor: SettingsColor,
     ) : SettingsItemModel

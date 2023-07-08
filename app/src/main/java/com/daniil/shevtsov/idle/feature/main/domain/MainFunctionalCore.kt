@@ -84,18 +84,19 @@ fun handleSettingsSwitchUpdate(
 ): GameState {
     val itemToUpdate = state.settings.settingsItems.find { it.key == viewAction.key }
     val switchToUpdate = itemToUpdate?.value as? SettingsControl.BooleanValue
-    return when {
+
+    val newState = when {
         itemToUpdate != null && switchToUpdate != null -> {
             state.copy(
                 settings = state.settings.copy(
                     settingsItems = state.settings.settingsItems.map { settingsItem ->
-                        when (settingsItem.key) {
+                        val newItem = when (settingsItem.key) {
                             itemToUpdate.key -> settingsItem.copy(
                                 value = switchToUpdate.copy(isEnabled = !switchToUpdate.isEnabled)
                             )
-
-                            else -> itemToUpdate
+                            else -> settingsItem
                         }
+                        newItem
                     }.toImmutableList()
                 )
             )
@@ -103,6 +104,8 @@ fun handleSettingsSwitchUpdate(
 
         else -> state
     }
+
+    return newState
 }
 
 fun handleLocationSelected(
