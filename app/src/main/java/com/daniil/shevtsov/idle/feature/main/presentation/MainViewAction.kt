@@ -14,4 +14,5 @@ sealed class MainViewAction {
 
     data class MenuButtonClicked(val id: MenuId) : MainViewAction()
     data class SettingsSwitchUpdate(val key: SettingsKey) : MainViewAction()
+    data class SettingsTextSaved(val key: SettingsKey, val newText: String) : MainViewAction()
 }

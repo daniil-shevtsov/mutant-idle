@@ -109,6 +109,7 @@ fun SettingsScreen(
         SettingsPanel(
             model = state.settingsPanel,
             onSwitch = { key -> onAction(MainViewAction.SettingsSwitchUpdate(key)) },
+            onSave = { key, newText -> onAction(MainViewAction.SettingsTextSaved(key, newText)) },
             modifier = Modifier.padding(AppTheme.dimensions.paddingSmall)
         )
     }
@@ -174,6 +175,7 @@ fun Protrusive(
 fun SettingsPanel(
     model: SettingsPanelModel,
     onSwitch: (key: SettingsKey) -> Unit,
+    onSave: (key: SettingsKey, newText: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -194,6 +196,7 @@ fun SettingsPanel(
                 SettingsItemControl(
                     item,
                     onSwitch = { onSwitch(item.key) },
+                    onSave = { newText -> onSave(item.key, newText) },
                     modifier = Modifier.padding(start = AppTheme.dimensions.paddingMedium)
                 )
             }
@@ -205,10 +208,11 @@ fun SettingsPanel(
 fun SettingsItemControl(
     item: SettingsItemModel,
     onSwitch: () -> Unit,
+    onSave: (newText: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (item) {
-        is SettingsItemModel.ColorSelector -> ColorSelector(item, modifier)
+        is SettingsItemModel.ColorSelector -> ColorSelector(item, onSave, modifier)
         is SettingsItemModel.Switch -> SettingsSwitch(item, modifier, onSwitch)
     }
 }
@@ -216,6 +220,7 @@ fun SettingsItemControl(
 @Composable
 fun ColorSelector(
     model: SettingsItemModel.ColorSelector,
+    onSave: (newText: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -230,6 +235,7 @@ fun ColorSelector(
                 onValueChange = { newFieldValue ->
                     if (newFieldValue.text.length <= 7) {
                         currentInput = newFieldValue
+                        onSave(currentInput.text)
                     }
                 },
                 singleLine = true,

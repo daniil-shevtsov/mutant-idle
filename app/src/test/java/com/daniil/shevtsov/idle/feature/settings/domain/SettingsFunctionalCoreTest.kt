@@ -41,7 +41,7 @@ class SettingsFunctionalCoreTest {
     }
 
     @Test
-    fun `should update settings when settings switch switched`() {
+    fun `should update settings item when settings switch switched`() {
         val state = mainFunctionalCore(
             state = gameState(
                 settings = settings(
@@ -71,6 +71,44 @@ class SettingsFunctionalCoreTest {
             .containsExactly(
                 SettingsKey.DebugEnabled to SettingsControl.BooleanValue(isEnabled = true),
                 SettingsKey.BackgroundColor to SettingsControl.StringValue(text = "#FF0000"),
+                SettingsKey.ColorOverrideEnabled to SettingsControl.BooleanValue(isEnabled = false),
+            )
+    }
+
+    @Test
+    fun `should update settings item when settings text saved`() {
+        val state = mainFunctionalCore(
+            state = gameState(
+                settings = settings(
+                    settingsItems = persistentListOf(
+                        settingsItem(
+                            key = SettingsKey.DebugEnabled,
+                            value = settingsControlBoolean(isEnabled = false)
+                        ),
+                        settingsItem(
+                            key = SettingsKey.BackgroundColor,
+                            value = settingsControlString(text = "#FF0000")
+                        ),
+                        settingsItem(
+                            key = SettingsKey.ColorOverrideEnabled,
+                            value = settingsControlBoolean(isEnabled = false)
+                        ),
+                    )
+                )
+            ),
+            viewAction = MainViewAction.SettingsTextSaved(
+                key = SettingsKey.BackgroundColor,
+                newText = "#00FF00",
+            )
+        )
+
+        assertThat(state)
+            .prop(GameState::settings)
+            .prop(Settings::settingsItems)
+            .extracting(SettingsItem::key, SettingsItem::value)
+            .containsExactly(
+                SettingsKey.DebugEnabled to SettingsControl.BooleanValue(isEnabled = false),
+                SettingsKey.BackgroundColor to SettingsControl.StringValue(text = "#00FF00"),
                 SettingsKey.ColorOverrideEnabled to SettingsControl.BooleanValue(isEnabled = false),
             )
     }

@@ -46,6 +46,7 @@ fun mainFunctionalCore(
         MainViewAction.StartNewGameClicked -> handleStartNewGameClicked(state)
         is MainViewAction.MenuButtonClicked -> handleMenuButtonClicked(state, viewAction)
         is MainViewAction.SettingsSwitchUpdate -> handleSettingsSwitchUpdate(state, viewAction)
+        is MainViewAction.SettingsTextSaved -> handleSettingsTextUpdate(state, viewAction)
     }
     return newState
 }
@@ -94,6 +95,38 @@ fun handleSettingsSwitchUpdate(
                             itemToUpdate.key -> settingsItem.copy(
                                 value = switchToUpdate.copy(isEnabled = !switchToUpdate.isEnabled)
                             )
+
+                            else -> settingsItem
+                        }
+                        newItem
+                    }.toImmutableList()
+                )
+            )
+        }
+
+        else -> state
+    }
+
+    return newState
+}
+
+fun handleSettingsTextUpdate(
+    state: GameState,
+    viewAction: MainViewAction.SettingsTextSaved
+): GameState {
+    val itemToUpdate = state.settings.settingsItems.find { it.key == viewAction.key }
+    val textToUpdate = itemToUpdate?.value as? SettingsControl.StringValue
+
+    val newState = when {
+        itemToUpdate != null && textToUpdate != null -> {
+            state.copy(
+                settings = state.settings.copy(
+                    settingsItems = state.settings.settingsItems.map { settingsItem ->
+                        val newItem = when (settingsItem.key) {
+                            itemToUpdate.key -> settingsItem.copy(
+                                value = textToUpdate.copy(text = viewAction.newText)
+                            )
+
                             else -> settingsItem
                         }
                         newItem
