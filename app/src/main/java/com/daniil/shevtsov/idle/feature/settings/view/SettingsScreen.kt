@@ -187,20 +187,29 @@ fun ColorSelector(
     model: SettingsItem.ColorSelector,
     modifier: Modifier = Modifier,
 ) {
-    Cavity(
-        mainColor = AppTheme.colors.background,
-        modifier = modifier
-    ) {
-        BasicTextField(
-            value = TextFieldValue(model.currentColor.hex),
-            onValueChange = { newFieldValue ->
+    Row(modifier = modifier) {
+        Cavity(mainColor = AppTheme.colors.background) {
+            BasicTextField(
+                value = TextFieldValue(model.currentColor.hex),
+                onValueChange = { newFieldValue ->
 
-            },
-            modifier = Modifier
-                .background(AppTheme.colors.backgroundText)
-                .padding(AppTheme.dimensions.paddingSmall)
-                .width(IntrinsicSize.Min)
-        )
+                },
+                modifier = Modifier
+                    .background(AppTheme.colors.backgroundText)
+                    .padding(AppTheme.dimensions.paddingSmall)
+                    .width(IntrinsicSize.Min)
+            )
+        }
+        Protrusive {
+            Text(
+                modifier = modifier
+                    .padding(AppTheme.dimensions.paddingSmall),
+                text = "Save",
+                style = AppTheme.typography.title,
+                color = AppTheme.colors.backgroundText,
+                textAlign = TextAlign.Center,
+            )
+        }
     }
 }
 

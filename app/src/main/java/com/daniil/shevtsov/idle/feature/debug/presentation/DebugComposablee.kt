@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
@@ -63,9 +62,11 @@ fun DebugComposable(
         modifier = modifier
             .background(AppTheme.colors.background)
             .fillMaxSize()
-            .wrapContentSize(Alignment.TopStart)
+        //.wrapContentSize(Alignment.TopStart)
     ) {
-        Column(verticalArrangement = spacedBy(AppTheme.dimensions.paddingSmall)) {
+        Column(
+            verticalArrangement = spacedBy(AppTheme.dimensions.paddingMedium)
+        ) {
             SpeciesRow(
                 state = state,
                 expanded2 = expanded2,
@@ -81,6 +82,7 @@ fun DebugComposable(
             CavityButton(
                 onClick = { onAction(DebugViewAction.UnlockEverything) },
                 text = "Unlock everything",
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
