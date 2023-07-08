@@ -20,5 +20,7 @@ fun settingsItem(
 )
 
 enum class SettingsKey {
-    DebugEnabled
+    DebugEnabled,
+    ColorOverrideEnabled,
+    BackgroundColor,
 }

@@ -82,6 +82,18 @@ fun createInitialGameState(): GameState {
                     title = "Debug",
                     hint = "Enables debug menu",
                     value = SettingsControl.BooleanValue(true),
+                ),
+                SettingsItem(
+                    key = SettingsKey.ColorOverrideEnabled,
+                    title = "Custom Colors",
+                    hint = "Overrides colors with the colors from settings",
+                    value = SettingsControl.BooleanValue(false),
+                ),
+                SettingsItem(
+                    key = SettingsKey.BackgroundColor,
+                    title = "Background Color",
+                    hint = "Overrides this color with selected value",
+                    value = SettingsControl.StringValue("#FF0000"),
                 )
             ),
             selectedCategoryId = 0L,

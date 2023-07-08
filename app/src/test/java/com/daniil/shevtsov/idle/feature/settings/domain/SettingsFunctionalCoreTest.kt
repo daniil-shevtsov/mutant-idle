@@ -30,6 +30,8 @@ class SettingsFunctionalCoreTest {
                     .extracting(SettingsItem::key, SettingsItem::title)
                     .containsExactly(
                         SettingsKey.DebugEnabled to "Debug",
+                        SettingsKey.ColorOverrideEnabled to "Custom Colors",
+                        SettingsKey.BackgroundColor to "Background Color",
                     )
             }
     }
