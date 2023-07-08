@@ -11,7 +11,6 @@ fun mapMenuViewState(
         buttons = persistentListOf(
             MenuButtonModel(id = MenuId.StartGame, title = "Start Game"),
             MenuButtonModel(id = MenuId.Settings, title = "Settings"),
-            MenuButtonModel(id = MenuId.Quit, title = "Quit"),
         )
     )
 }

@@ -82,6 +82,5 @@ private fun menuViewStateComposeStub() = MenuViewState(
     buttons = persistentListOf(
         menuButtonModel(title = "Start Game"),
         menuButtonModel(title = "Settings"),
-        menuButtonModel(title = "Quit"),
     )
 )

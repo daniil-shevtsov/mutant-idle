@@ -23,7 +23,6 @@ internal class MenuPresentationFunctionalCoreTest {
                     .containsExactly(
                         "Start Game",
                         "Settings",
-                        "Quit",
                     )
             }
     }

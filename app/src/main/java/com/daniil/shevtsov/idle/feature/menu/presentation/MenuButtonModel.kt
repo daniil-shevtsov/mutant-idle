@@ -6,7 +6,7 @@ data class MenuButtonModel(
 )
 
 fun menuButtonModel(
-    id: MenuId = MenuId.Quit,
+    id: MenuId = MenuId.StartGame,
     title: String = "",
 ) = MenuButtonModel(
     id = id,
@@ -16,5 +16,4 @@ fun menuButtonModel(
 enum class MenuId {
     StartGame,
     Settings,
-    Quit,
 }
