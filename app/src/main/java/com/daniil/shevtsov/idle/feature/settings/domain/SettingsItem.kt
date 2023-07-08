@@ -7,6 +7,18 @@ data class SettingsItem(
     val value: SettingsControl,
 )
 
+fun settingsItem(
+    key: SettingsKey = SettingsKey.DebugEnabled,
+    title: String = "",
+    hint: String = "",
+    value: SettingsControl = settingsControlBoolean(),
+) = SettingsItem(
+    key = key,
+    title = title,
+    hint = hint,
+    value = value,
+)
+
 enum class SettingsKey {
     DebugEnabled
 }

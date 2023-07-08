@@ -38,9 +38,9 @@ fun SettingsScreenPreview() {
 fun settingsViewStateComposeStub(): SettingsViewState {
     return SettingsViewState(
         categories = persistentListOf(
-            SettingsCategoryModel(title = "General", isSelected = true),
-            SettingsCategoryModel(title = "Accessibility", isSelected = false),
-            SettingsCategoryModel(title = "Misc", isSelected = false),
+            SettingsCategoryModel(id = 0L, title = "General", isSelected = true),
+            SettingsCategoryModel(id = 0L, title = "Accessibility", isSelected = false),
+            SettingsCategoryModel(id = 0L, title = "Misc", isSelected = false),
         ),
         settingsPanel = SettingsPanelModel(
             items = persistentListOf(
@@ -249,6 +249,7 @@ fun SettingsSwitch(
 }
 
 data class SettingsCategoryModel(
+    val id: Long,
     val title: String,
     val isSelected: Boolean,
 )

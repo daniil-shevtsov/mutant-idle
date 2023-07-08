@@ -26,6 +26,11 @@ class SettingsFunctionalCoreTest {
                         1L to "Accessibility",
                     )
                 prop(Settings::selectedCategoryId).isEqualTo(0L)
+                prop(Settings::settingsItems)
+                    .extracting(SettingsItem::key, SettingsItem::title)
+                    .containsExactly(
+                        SettingsKey.DebugEnabled to "Debug",
+                    )
             }
     }
 
