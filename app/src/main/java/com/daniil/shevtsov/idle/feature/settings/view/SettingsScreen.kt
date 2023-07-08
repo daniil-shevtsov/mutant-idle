@@ -106,7 +106,24 @@ fun SettingsCategory(
     model: SettingsCategoryModel,
     modifier: Modifier = Modifier,
 ) {
-    Text(
+    Protrusive {
+        Text(
+            modifier = modifier
+                .padding(AppTheme.dimensions.paddingSmall),
+            text = model.title,
+            style = AppTheme.typography.button,
+            color = AppTheme.colors.backgroundText,
+            textAlign = TextAlign.Center,
+        )
+    }
+}
+
+@Composable
+fun Protrusive(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
+    Box(
         modifier = modifier
             .background(AppTheme.colors.background)
             .protrusive(
@@ -114,12 +131,9 @@ fun SettingsCategory(
                 darkColor = AppTheme.colors.backgroundDark,
             )
             .background(AppTheme.colors.background)
-            .padding(AppTheme.dimensions.paddingSmall),
-        text = model.title,
-        style = AppTheme.typography.button,
-        color = AppTheme.colors.backgroundText,
-        textAlign = TextAlign.Center,
-    )
+    ) {
+        content()
+    }
 }
 
 @Composable
