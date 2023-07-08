@@ -4,11 +4,17 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
 import assertk.assertions.prop
+import com.daniil.shevtsov.idle.feature.colors.presentation.SpeciesColors
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.gamefinish.domain.ending
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.species.domain.Species
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
+import com.daniil.shevtsov.idle.feature.settings.domain.SettingsControl
+import com.daniil.shevtsov.idle.feature.settings.domain.SettingsKey
+import com.daniil.shevtsov.idle.feature.settings.domain.settings
+import com.daniil.shevtsov.idle.feature.settings.domain.settingsItem
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.Test
 
 internal class ScreenPresentationTest {
@@ -58,5 +64,31 @@ internal class ScreenPresentationTest {
         assertThat(viewState)
             .prop(ScreenHostViewState::colors)
             .isEqualTo(Species.Vampire.colors)
+    }
+
+    @Test
+    fun `should use species colors when override colors settings disabled`() {
+        val viewState = screenPresentationFunctionalCore(
+            gameState(
+                player = player(traits = mapOf(TraitId.Species to Species.Devourer)),
+                settings = settings(
+                    settingsItems = persistentListOf(
+                        settingsItem(
+                            key = SettingsKey.ColorOverrideEnabled,
+                            value = SettingsControl.BooleanValue(false)
+                        ),
+                        settingsItem(
+                            key = SettingsKey.BackgroundColor,
+                            value = SettingsControl.StringValue("#FF0000")
+                        )
+                    )
+                )
+            )
+        )
+
+        assertThat(viewState)
+            .prop(ScreenHostViewState::colors)
+            .prop(SpeciesColors::background)
+            .isEqualTo(Species.Devourer.colors?.background)
     }
 }
