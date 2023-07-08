@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.protrusive
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
+import com.daniil.shevtsov.idle.core.ui.widgets.CavityButton
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -187,7 +188,11 @@ fun ColorSelector(
     model: SettingsItem.ColorSelector,
     modifier: Modifier = Modifier,
 ) {
-    Row(modifier = modifier) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = spacedBy(AppTheme.dimensions.paddingXS),
+        modifier = modifier,
+    ) {
         Cavity(mainColor = AppTheme.colors.background) {
             BasicTextField(
                 value = TextFieldValue(model.currentColor.hex),
@@ -200,14 +205,15 @@ fun ColorSelector(
                     .width(IntrinsicSize.Min)
             )
         }
-        Protrusive {
+        CavityButton(text = "", onClick = {}) {
             Text(
-                modifier = modifier
-                    .padding(AppTheme.dimensions.paddingSmall),
                 text = "Save",
-                style = AppTheme.typography.title,
+                style = AppTheme.typography.body,
                 color = AppTheme.colors.backgroundText,
                 textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(AppTheme.dimensions.paddingXS)
             )
         }
     }

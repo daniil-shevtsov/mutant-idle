@@ -3,6 +3,7 @@ package com.daniil.shevtsov.idle.core.ui.widgets
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,9 +41,10 @@ fun CavityButtonBigSizePreview() {
 @Preview
 @Composable
 fun CavityButtonInBigContainerPreview() {
-    Box(modifier = Modifier
-        .height(100.dp)
-        .width(200.dp)
+    Box(
+        modifier = Modifier
+            .height(100.dp)
+            .width(200.dp)
     ) {
         CavityButton(
             text = "Button Title",
@@ -57,6 +59,17 @@ fun CavityButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    content: @Composable BoxScope.() -> Unit = {
+        Text(
+            text = text,
+            style = AppTheme.typography.button,
+            color = AppTheme.colors.backgroundText,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(AppTheme.dimensions.paddingSmall)
+                .align(Alignment.Center)
+        )
+    }
 ) {
     Box(
         modifier = modifier
@@ -65,7 +78,7 @@ fun CavityButton(
                 darkColor = AppTheme.colors.backgroundDark,
             )
             .background(AppTheme.colors.backgroundDarkest)
-            .padding(2.dp)
+            .padding(1.dp)
             .width(IntrinsicSize.Max)
             .height(IntrinsicSize.Max),
         contentAlignment = Alignment.Center,
@@ -77,15 +90,7 @@ fun CavityButton(
                     onClick()
                 }
         ) {
-            Text(
-                text = text,
-                style = AppTheme.typography.button,
-                color = AppTheme.colors.backgroundText,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .padding(AppTheme.dimensions.paddingSmall)
-                    .align(Alignment.Center)
-            )
+            content()
         }
     }
 }
