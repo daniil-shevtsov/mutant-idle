@@ -13,9 +13,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
@@ -54,7 +59,7 @@ fun settingsViewStateComposeStub(): SettingsViewState {
                 settingsItemSwitchComposeStub(title = "cheburek", isSelected = true),
                 settingsItemTextInputComposeStub(
                     title = "lol color",
-                    text = "#FF0000",
+                    text = "#",
                 ),
                 settingsItemSwitchComposeStub(title = "lol2", isSelected = true),
                 settingsItemSwitchComposeStub(title = "kek2", isSelected = false),
@@ -219,15 +224,20 @@ fun ColorSelector(
         modifier = modifier,
     ) {
         Cavity(mainColor = AppTheme.colors.background) {
+            var currentInput by remember { mutableStateOf(TextFieldValue(model.currentColor.hex)) }
             BasicTextField(
-                value = TextFieldValue(model.currentColor.hex),
+                value = currentInput,
                 onValueChange = { newFieldValue ->
-
+                    if (newFieldValue.text.length <= 7) {
+                        currentInput = newFieldValue
+                    }
                 },
+                singleLine = true,
                 modifier = Modifier
                     .background(AppTheme.colors.backgroundText)
                     .padding(AppTheme.dimensions.paddingSmall)
                     .width(IntrinsicSize.Min)
+                    .widthIn(min = 60.dp) //TODO: Define this in characters (i.e. 7 chars)
             )
         }
         CavityButton(text = "", onClick = {}) {
