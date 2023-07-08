@@ -32,4 +32,21 @@ class MenuFunctionalCoreTest {
             }
     }
 
+    @Test
+    fun `should open settings when settings button clicked`() {
+        val state = mainFunctionalCore(
+            state = createInitialGameState(),
+            viewAction = MainViewAction.MenuButtonClicked(MenuId.Settings)
+        )
+
+        assertThat(state)
+            .all {
+                prop(GameState::screenStack).containsExactly(
+                    Screen.Menu,
+                    Screen.Settings
+                )
+                prop(GameState::currentScreen).isEqualTo(Screen.Settings)
+            }
+    }
+
 }

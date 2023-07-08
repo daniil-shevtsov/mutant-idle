@@ -7,6 +7,7 @@ import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
 import com.daniil.shevtsov.idle.feature.location.domain.Location
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuId
 import com.daniil.shevtsov.idle.feature.plot.domain.PlotEntry
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
@@ -51,7 +52,8 @@ fun handleMenuButtonClicked(
     viewAction: MainViewAction.MenuButtonClicked
 ): GameState {
     val newScreen = when (viewAction.id) {
-        else -> Screen.GameStart
+        MenuId.StartGame -> Screen.GameStart
+        MenuId.Settings -> Screen.Settings
     }
     return state.copy(
         currentScreen = newScreen,

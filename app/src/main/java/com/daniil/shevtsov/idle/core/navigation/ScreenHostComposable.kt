@@ -1,7 +1,7 @@
 package com.daniil.shevtsov.idle.core.navigation
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.ModalDrawer
 import androidx.compose.material.rememberDrawerState
@@ -18,6 +18,7 @@ import com.daniil.shevtsov.idle.feature.main.MainDrawer
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.main.view.MainScreen
 import com.daniil.shevtsov.idle.feature.menu.view.MenuScreen
+import com.daniil.shevtsov.idle.feature.settings.view.SettingsScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
@@ -65,7 +66,7 @@ fun ScreenHostComposable(
                                     )
                                 )
                             },
-                            modifier = modifier.fillMaxHeight(),
+                            modifier = modifier.fillMaxWidth(),
                         )
                     }
 
@@ -107,6 +108,10 @@ fun ScreenHostComposable(
                         )
                     }
 
+                    is ScreenContentViewState.Settings -> SettingsScreen(
+                        state = contentViewState.state,
+                        modifier = modifier,
+                    )
                     ScreenContentViewState.Loading -> Unit
                 }
             }

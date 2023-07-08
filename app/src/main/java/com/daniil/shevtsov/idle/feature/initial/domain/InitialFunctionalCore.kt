@@ -22,10 +22,13 @@ import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.createResources
+import com.daniil.shevtsov.idle.feature.settings.domain.Settings
+import com.daniil.shevtsov.idle.feature.settings.domain.SettingsCategory
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tags
 import com.daniil.shevtsov.idle.feature.unlocks.domain.UnlockState
 import com.daniil.shevtsov.idle.feature.upgrade.domain.createUpgrades
+import kotlinx.collections.immutable.persistentListOf
 
 fun createInitialGameState(): GameState {
     return GameState(
@@ -65,6 +68,12 @@ fun createInitialGameState(): GameState {
         ),
         allEndings = createEndings(),
         currentEndingId = null,
+        settings = Settings(
+            categories = persistentListOf(
+                SettingsCategory(id = 0L, title = "General"),
+                SettingsCategory(id = 1L, title = "Accessibility"),
+            )
+        )
     )
 }
 

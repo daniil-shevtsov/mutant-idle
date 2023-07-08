@@ -8,6 +8,7 @@ import com.daniil.shevtsov.idle.feature.main.presentation.mapMainViewState
 import com.daniil.shevtsov.idle.feature.menu.presentation.mapMenuViewState
 import com.daniil.shevtsov.idle.feature.player.species.domain.Species.Devourer
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
+import com.daniil.shevtsov.idle.feature.settings.presentation.mapSettingsViewState
 
 fun screenPresentationFunctionalCore(
     state: GameState
@@ -15,6 +16,7 @@ fun screenPresentationFunctionalCore(
     val drawerState = drawerPresentation(state)
     val contentState = when (state.currentScreen) {
         Screen.Menu -> ScreenContentViewState.Menu(mapMenuViewState(state))
+        Screen.Settings -> ScreenContentViewState.Settings(mapSettingsViewState(state))
         Screen.GameStart -> ScreenContentViewState.GameStart(mapGameStartViewState(state))
         Screen.Main -> ScreenContentViewState.Main(mapMainViewState(state))
         Screen.FinishedGame -> ScreenContentViewState.FinishedGame(mapFinishedGameViewState(state))
