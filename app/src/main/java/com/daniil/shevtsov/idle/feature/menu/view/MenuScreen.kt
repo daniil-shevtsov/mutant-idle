@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement.Center
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -40,6 +41,7 @@ fun MenuScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Center,
         modifier = modifier
+            .fillMaxSize()
             .background(AppTheme.colors.background)
             .padding(AppTheme.dimensions.paddingL),
     ) {

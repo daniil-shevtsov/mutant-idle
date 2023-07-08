@@ -1,7 +1,6 @@
 package com.daniil.shevtsov.idle.core.navigation
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.ModalDrawer
 import androidx.compose.material.rememberDrawerState
@@ -66,7 +65,7 @@ fun ScreenHostComposable(
                                     )
                                 )
                             },
-                            modifier = modifier.fillMaxWidth(),
+                            modifier = modifier,
                         )
                     }
 
