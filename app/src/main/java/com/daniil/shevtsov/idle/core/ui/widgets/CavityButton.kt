@@ -10,16 +10,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.protrusive
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 
+@Preview
+@Composable
+fun CavityButtonPreview() {
+    CavityButton(text = "Button Title", onClick = {})
+}
+
 @Composable
 fun CavityButton(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
     text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
