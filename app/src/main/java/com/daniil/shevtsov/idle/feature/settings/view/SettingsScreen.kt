@@ -76,7 +76,10 @@ fun SettingsScreen(
             .background(AppTheme.colors.background),
     ) {
         SettingsCategories(state.categories)
-        SettingsPanel(state.settingsPanel)
+        SettingsPanel(
+            state.settingsPanel,
+            Modifier.padding(AppTheme.dimensions.paddingSmall)
+        )
     }
 }
 
@@ -137,29 +140,45 @@ fun Protrusive(
 }
 
 @Composable
-fun SettingsPanel(model: SettingsPanelModel) {
-    Column {
+fun SettingsPanel(
+    model: SettingsPanelModel,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        verticalArrangement = spacedBy(AppTheme.dimensions.paddingSmall),
+        modifier = modifier
+    ) {
         model.items.forEach { item ->
-            when (item) {
-                is SettingsItem.ColorSelector -> ColorSelector(item)
-                is SettingsItem.Switch -> SettingsSwitch(item)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = spacedBy(AppTheme.dimensions.paddingM)
+            ) {
+                Text(
+                    text = item.title,
+                    style = AppTheme.typography.title,
+                    color = AppTheme.colors.textLight
+                )
+                SettingsItemControl(item)
             }
         }
     }
 }
 
 @Composable
+fun SettingsItemControl(item: SettingsItem) {
+    when (item) {
+        is SettingsItem.ColorSelector -> ColorSelector(item)
+        is SettingsItem.Switch -> SettingsSwitch(item)
+    }
+}
+
+@Composable
 fun ColorSelector(model: SettingsItem.ColorSelector) {
-    Text(text = "Color Selector ${model.id}: ${model.currentColor.hex}")
+    Text(text = "${model.currentColor.hex}")
 }
 
 @Composable
 fun SettingsSwitch(model: SettingsItem.Switch) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = spacedBy(AppTheme.dimensions.paddingM)
-    ) {
-        Text(text = model.title)
         Box {
             Box(
                 modifier = Modifier
@@ -181,7 +200,6 @@ fun SettingsSwitch(model: SettingsItem.Switch) {
                     )
             )
         }
-    }
 }
 
 data class SettingsCategoryModel(
