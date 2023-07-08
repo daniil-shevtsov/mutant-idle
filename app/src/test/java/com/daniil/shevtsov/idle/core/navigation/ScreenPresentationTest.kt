@@ -1,10 +1,14 @@
 package com.daniil.shevtsov.idle.core.navigation
 
 import assertk.assertThat
+import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.gamefinish.domain.ending
+import com.daniil.shevtsov.idle.feature.player.core.domain.player
+import com.daniil.shevtsov.idle.feature.player.species.domain.Species
+import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import org.junit.jupiter.api.Test
 
 internal class ScreenPresentationTest {
@@ -32,5 +36,27 @@ internal class ScreenPresentationTest {
         assertThat(viewState)
             .prop(ScreenHostViewState::contentState)
             .isInstanceOf(ScreenContentViewState.FinishedGame::class)
+    }
+
+    @Test
+    fun `should use colors of devourer when it is selected`() {
+        val viewState = screenPresentationFunctionalCore(
+            gameState(player = player(traits = mapOf(TraitId.Species to Species.Devourer)))
+        )
+
+        assertThat(viewState)
+            .prop(ScreenHostViewState::colors)
+            .isEqualTo(Species.Devourer.colors)
+    }
+
+    @Test
+    fun `should use colors of vampire when it is selected`() {
+        val viewState = screenPresentationFunctionalCore(
+            gameState(player = player(traits = mapOf(TraitId.Species to Species.Vampire)))
+        )
+
+        assertThat(viewState)
+            .prop(ScreenHostViewState::colors)
+            .isEqualTo(Species.Vampire.colors)
     }
 }
