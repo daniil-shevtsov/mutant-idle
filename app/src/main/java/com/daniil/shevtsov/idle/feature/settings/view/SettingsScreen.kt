@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.feature.settings.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -146,60 +147,74 @@ fun SettingsPanel(
 ) {
     Column(
         verticalArrangement = spacedBy(AppTheme.dimensions.paddingSmall),
-        modifier = modifier
+        modifier = modifier.width(IntrinsicSize.Max)
     ) {
         model.items.forEach { item ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = spacedBy(AppTheme.dimensions.paddingM)
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     text = item.title,
                     style = AppTheme.typography.title,
                     color = AppTheme.colors.textLight
                 )
-                SettingsItemControl(item)
+                SettingsItemControl(
+                    item,
+                    modifier = Modifier.padding(start = AppTheme.dimensions.paddingMedium)
+                )
             }
         }
     }
 }
 
 @Composable
-fun SettingsItemControl(item: SettingsItem) {
+fun SettingsItemControl(
+    item: SettingsItem,
+    modifier: Modifier = Modifier,
+) {
     when (item) {
-        is SettingsItem.ColorSelector -> ColorSelector(item)
-        is SettingsItem.Switch -> SettingsSwitch(item)
+        is SettingsItem.ColorSelector -> ColorSelector(item, modifier)
+        is SettingsItem.Switch -> SettingsSwitch(item, modifier)
     }
 }
 
 @Composable
-fun ColorSelector(model: SettingsItem.ColorSelector) {
-    Text(text = "${model.currentColor.hex}")
+fun ColorSelector(
+    model: SettingsItem.ColorSelector,
+    modifier: Modifier = Modifier,
+) {
+    Text(text = "${model.currentColor.hex}", modifier = modifier)
 }
 
 @Composable
-fun SettingsSwitch(model: SettingsItem.Switch) {
-        Box {
-            Box(
-                modifier = Modifier
-                    .width(40.dp)
-                    .height(20.dp)
-                    .background(AppTheme.colors.backgroundDark)
-                    .align(Alignment.Center)
-            )
-            Box(
+fun SettingsSwitch(
+    model: SettingsItem.Switch,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier) {
+        Cavity(
+            mainColor = AppTheme.colors.background,
+            modifier = Modifier
+                .width(45.dp)
+                .align(Alignment.Center)
+        ) {
+            Protrusive(
                 modifier = Modifier
                     .width(20.dp)
                     .height(20.dp)
-                    .background(AppTheme.colors.backgroundLight)
+                    .padding(1.dp)
                     .align(
                         when (model.isSelected) {
                             true -> Alignment.CenterEnd
                             false -> Alignment.CenterStart
                         }
                     )
-            )
+            ) {
+            }
         }
+    }
 }
 
 data class SettingsCategoryModel(
