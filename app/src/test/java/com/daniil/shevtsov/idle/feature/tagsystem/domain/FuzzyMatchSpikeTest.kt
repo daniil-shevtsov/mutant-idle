@@ -195,14 +195,17 @@ class FuzzyMatchSpikeTest {
     private fun Assert<PerformResult>.tags() = prop(PerformResult::tags)
 
     private fun tags(vararg entries: Tag): Tags = entries.toList().toMap()
-    private fun entry(plot: String, tagChange: Tags = mapOf()): LineEntry = LineEntry(
-        tags = tagChange,
-        plot = plot,
-    )
+    private fun entry(plot: String, tagChange: Tags = mapOf(), weight: Float = 1.0f): LineEntry =
+        LineEntry(
+            tags = tagChange,
+            plot = plot,
+            weight = weight,
+        )
 
     data class LineEntry(
         val tags: Tags,
         val plot: Plot,
+        val weight: Float,
     )
 
     data class PerformResult(
@@ -250,7 +253,10 @@ class FuzzyMatchSpikeTest {
             ),
             line(
                 requiredTags = tags("position" to "low-air"),
-                entry = entry("You fall to the ground")
+                entry = entry(
+                    "You fall to the ground",
+                    tagChange = tags("position" to "ground", "posture" to "lying")
+                ),
             ),
             line(
                 requiredTags = tags("current action" to "fly"),
@@ -260,21 +266,36 @@ class FuzzyMatchSpikeTest {
                 )
             ),
             line(requiredTags = tags("" to ""), entry = entry("You do nothing")),
-        )
+        ).map { line ->
+            when (line.requiredTags.containsKey("current action")) {
+                true -> line.copy(
+                    entry = line.entry.copy(
+                        weight = line.entry.weight + 100f
+                    )
+                )
+
+                false -> line
+            }
+        }
 
         val sortedEntries = lines
             .filter { line ->
                 line.requiredTags == listOf("" to "") || line.requiredTags.all { (key, value) -> tags[key] == value }
             }
-            .sortedByDescending { (lineTags, _) ->
-                lineTags.count { (key, value) -> tags[key] == value }
-            }
+            .sortedWith(
+                compareBy(
+                    { (_, entry) -> entry.weight },
+                    { (lineTags, _) ->
+                        lineTags.count { (key, value) -> tags[key] == value }
+                    }
+                )
+            ).reversed()
 
         val mostSuitableEntry = sortedEntries.first().entry
         val mostSuitableLine = mostSuitableEntry.plot
 
         return PerformResult(
-            tags = tags + mostSuitableEntry.tags,
+            tags = tags.toMutableMap().apply { remove("current action") } + mostSuitableEntry.tags,
             plot = mostSuitableLine,
         )
     }
