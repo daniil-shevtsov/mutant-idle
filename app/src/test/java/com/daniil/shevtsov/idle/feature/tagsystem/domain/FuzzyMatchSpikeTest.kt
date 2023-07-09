@@ -77,13 +77,36 @@ class FuzzyMatchSpikeTest {
     }
 
     private fun match(tags: Map<String, String>): String {
-        return when {
-            tags["trespassing"] == "true" && tags["time_of_day"] == "night" && tags["appearance"] == "demon" -> "In the name of the lord, I say be gone!"
-            tags["trespassing"] == "true" && tags["time_of_day"] == "night" && tags["appearance"] == "alien" -> "This is my shop and this is my planet! Get out!"
-            tags["trespassing"] == "true" && tags["time_of_day"] == "night" -> "Who is there?! I am armed, get out while you can!"
-            tags["trespassing"] == "true" -> "Hey, you are not supposed to be here. Get out!"
-            else -> "Morning, what can I do for you?"
-        }
+        val lines = listOf(
+            listOf(
+                "trespassing" to "true",
+                "time_of_day" to "night",
+                "appearance" to "demon",
+            ) to "In the name of the lord, I say be gone!",
+            listOf(
+                "trespassing" to "true",
+                "time_of_day" to "night",
+                "appearance" to "alien",
+            ) to "This is my shop and this is my planet! Get out!",
+            listOf(
+                "trespassing" to "true",
+                "time_of_day" to "night",
+            ) to "Who is there?! I am armed, get out while you can!",
+            listOf(
+                "trespassing" to "true",
+            ) to "Hey, you are not supposed to be here. Get out!",
+            listOf("" to "") to "Morning, what can I do for you?"
+        )
+
+        val mostSuitableLine = lines
+            .filter { (lineTags, _) ->
+               lineTags == listOf("" to "") || lineTags.all { (key, value) -> tags[key] == value }
+            }
+            .maxByOrNull { (lineTags, _) ->
+                lineTags.count { (key, value) -> tags[key] == value }
+            }?.second.orEmpty()
+
+        return mostSuitableLine
     }
 
 }
