@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test
 private typealias Tags = Map<String, String>
 private typealias Tag = Pair<String, String>
 private typealias Plot = String
-private typealias PerformResult = Pair<Tags, Plot>
 
 class FuzzyMatchSpikeTest {
 
@@ -168,40 +167,116 @@ class FuzzyMatchSpikeTest {
             )
     }
 
-    private fun Assert<PerformResult>.plot() = prop(PerformResult::second)
+    @Test
+    fun `kek12`() {
+        val tags = mapOf(
+            "position" to "ground",
+            "appearance" to "human",
+            "ability" to "flight",
+            "current action" to "fly"
+        )
 
-    private fun Assert<PerformResult>.tags() = prop(PerformResult::first)
+        val flying = perform(tags)
+
+        val withoutFlying =
+            perform(flying.tags.toMutableMap().apply { put("current action", "stop flying") })
+        val finalResult = perform(withoutFlying.tags)
+
+        assertThat(finalResult).plot().isEqualTo("You fall to the ground")
+        assertThat(finalResult).tags()
+            .containsAll(
+                "posture" to "lying",
+                "position" to "ground",
+            )
+    }
+
+    private fun Assert<PerformResult>.plot() = prop(PerformResult::plot)
+
+    private fun Assert<PerformResult>.tags() = prop(PerformResult::tags)
 
     private fun tags(vararg entries: Tag): Tags = entries.toList().toMap()
-    private fun entry(plot: String, tagChange: Tags = mapOf()): PerformResult = tagChange to plot
+    private fun entry(plot: String, tagChange: Tags = mapOf()): LineEntry = LineEntry(
+        tags = tagChange,
+        plot = plot,
+    )
+
+    data class LineEntry(
+        val tags: Tags,
+        val plot: Plot,
+    )
+
+    data class PerformResult(
+        val tags: Tags,
+        val plot: Plot,
+    )
+
+    data class Line(
+        val requiredTags: Tags,
+        val entry: LineEntry,
+    )
+
+    private fun line(
+        requiredTags: Tags,
+        entry: LineEntry,
+    ) = Line(requiredTags, entry)
 
     private fun perform(tags: Tags): PerformResult {
         val lines = listOf(
-            tags("posture" to "standing") to entry("You stand, doing nothing"),
-            tags(
-                "posture" to "lying",
-                "position" to "ground"
-            ) to entry("You lie on the ground, doing nothing"),
-            tags("posture" to "lying") to entry("You lie, doing nothing"),
-            tags("position" to "low-air", "posture" to "flying") to entry("You fly in low-air"),
-            tags("position" to "low-air") to entry("You fall to the ground"),
-            tags("current action" to "fly") to entry(
-                "You start flying",
-                tags("posture" to "flying", "position" to "low-air")
+            line(
+                requiredTags = tags("current action" to "stop flying"),
+                entry = entry(
+                    "You stop flying",
+                    tags("posture" to "standing")
+                )
             ),
-            tags("" to "") to entry("You do nothing"),
+            line(
+                requiredTags = tags("posture" to "standing"),
+                entry = entry("You stand, doing nothing")
+            ),
+            line(
+                requiredTags = tags(
+                    "posture" to "lying",
+                    "position" to "ground"
+                ),
+                entry = entry("You lie on the ground, doing nothing")
+            ),
+            line(
+                requiredTags = tags("posture" to "lying"),
+                entry = entry("You lie, doing nothing")
+            ),
+            line(
+                requiredTags = tags("position" to "low-air", "posture" to "flying"),
+                entry = entry("You fly in low-air")
+            ),
+            line(
+                requiredTags = tags("position" to "low-air"),
+                entry = entry("You fall to the ground")
+            ),
+            line(
+                requiredTags = tags("current action" to "fly"),
+                entry = entry(
+                    "You start flying",
+                    tags("posture" to "flying", "position" to "low-air")
+                )
+            ),
+            line(requiredTags = tags("" to ""), entry = entry("You do nothing")),
         )
 
-        val mostSuitableEntry = lines
-            .filter { (lineTags, _) ->
-                lineTags == listOf("" to "") || lineTags.all { (key, value) -> tags[key] == value }
+        val sortedEntries = lines
+            .filter { line ->
+                line.requiredTags == listOf("" to "") || line.requiredTags.all { (key, value) -> tags[key] == value }
             }
-            .maxByOrNull { (lineTags, _) ->
+            .sortedByDescending { (lineTags, _) ->
                 lineTags.count { (key, value) -> tags[key] == value }
-            }?.second
-        val mostSuitableLine = mostSuitableEntry?.second.orEmpty()
+            }
 
-        return (tags + mostSuitableEntry?.first.orEmpty()) to mostSuitableLine
+        val mostSuitableEntry = sortedEntries.first().entry
+        val mostSuitableLine = mostSuitableEntry.plot
+
+        return PerformResult(
+            tags = tags + mostSuitableEntry.tags,
+            plot = mostSuitableLine,
+        )
     }
 
     private fun say(tags: Tags): PerformResult {
@@ -235,7 +310,7 @@ class FuzzyMatchSpikeTest {
                 lineTags.count { (key, value) -> tags[key] == value }
             }?.second.orEmpty()
 
-        return tags to mostSuitableLine
+        return PerformResult(tags, mostSuitableLine)
     }
 
 }
