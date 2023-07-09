@@ -132,7 +132,7 @@ class FuzzyMatchSpikeTest {
 
         val line = perform(tags)
 
-        assertThat(line).plot().isEqualTo("You fall to the ground")
+        assertThat(line).plot().isEqualTo("You fall to the ground, breaking every bone in your body")
     }
 
     @Test
@@ -173,7 +173,8 @@ class FuzzyMatchSpikeTest {
             "position" to "ground",
             "appearance" to "human",
             "ability" to "flight",
-            "current action" to "fly"
+            "current action" to "fly",
+            "indestructible" to "true",
         )
 
         val flying = perform(tags)
@@ -183,6 +184,29 @@ class FuzzyMatchSpikeTest {
         val finalResult = perform(withoutFlying.tags)
 
         assertThat(finalResult).plot().isEqualTo("You fall to the ground")
+        assertThat(finalResult).tags()
+            .containsAll(
+                "posture" to "lying",
+                "position" to "ground",
+            )
+    }
+
+    @Test
+    fun `kek13`() {
+        val tags = mapOf(
+            "position" to "ground",
+            "appearance" to "human",
+            "ability" to "flight",
+            "current action" to "fly",
+        )
+
+        val flying = perform(tags)
+
+        val withoutFlying =
+            perform(flying.tags.toMutableMap().apply { put("current action", "stop flying") })
+        val finalResult = perform(withoutFlying.tags)
+
+        assertThat(finalResult).plot().isEqualTo("You fall to the ground, breaking every bone in your body")
         assertThat(finalResult).tags()
             .containsAll(
                 "posture" to "lying",
@@ -252,9 +276,16 @@ class FuzzyMatchSpikeTest {
                 entry = entry("You fly in low-air")
             ),
             line(
-                requiredTags = tags("position" to "low-air"),
+                requiredTags = tags("position" to "low-air", "indestructible" to "true"),
                 entry = entry(
                     "You fall to the ground",
+                    tagChange = tags("position" to "ground", "posture" to "lying")
+                ),
+            ),
+            line(
+                requiredTags = tags("position" to "low-air"),
+                entry = entry(
+                    "You fall to the ground, breaking every bone in your body",
                     tagChange = tags("position" to "ground", "posture" to "lying")
                 ),
             ),
