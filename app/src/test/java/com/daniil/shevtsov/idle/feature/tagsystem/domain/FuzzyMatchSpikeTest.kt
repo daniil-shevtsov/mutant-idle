@@ -1,8 +1,14 @@
 package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
+import assertk.Assert
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import assertk.assertions.prop
 import org.junit.jupiter.api.Test
+
+typealias Tags = Map<String, String>
+typealias Plot = String
+typealias PerformResult = Pair<Tags, Plot>
 
 class FuzzyMatchSpikeTest {
 
@@ -17,7 +23,7 @@ class FuzzyMatchSpikeTest {
 
         val line = say(tags)
 
-        assertThat(line).isEqualTo("Hello, what can I do for you?")
+        assertThat(line).plot().isEqualTo("Hello, what can I do for you?")
     }
 
     @Test
@@ -31,7 +37,7 @@ class FuzzyMatchSpikeTest {
 
         val line = say(tags)
 
-        assertThat(line).isEqualTo("Hey, you are not supposed to be here. Get out!")
+        assertThat(line).plot().isEqualTo("Hey, you are not supposed to be here. Get out!")
     }
 
     @Test
@@ -45,7 +51,7 @@ class FuzzyMatchSpikeTest {
 
         val line = say(tags)
 
-        assertThat(line).isEqualTo("Who is there?! I am armed, get out while you can!")
+        assertThat(line).plot().isEqualTo("Who is there?! I am armed, get out while you can!")
     }
 
     @Test
@@ -59,7 +65,7 @@ class FuzzyMatchSpikeTest {
 
         val line = say(tags)
 
-        assertThat(line).isEqualTo("This is my shop and this is my planet! Get out!")
+        assertThat(line).plot().isEqualTo("This is my shop and this is my planet! Get out!")
     }
 
     @Test
@@ -73,7 +79,7 @@ class FuzzyMatchSpikeTest {
 
         val line = say(tags)
 
-        assertThat(line).isEqualTo("In the name of the lord, I say be gone!")
+        assertThat(line).plot().isEqualTo("In the name of the lord, I say be gone!")
     }
 
     @Test
@@ -87,7 +93,7 @@ class FuzzyMatchSpikeTest {
 
         val line = say(tags)
 
-        assertThat(line).isEqualTo("Morning, what can I do for you?")
+        assertThat(line).plot().isEqualTo("Morning, what can I do for you?")
     }
 
     @Test
@@ -100,7 +106,7 @@ class FuzzyMatchSpikeTest {
 
         val line = perform(tags)
 
-        assertThat(line).isEqualTo("You stand, doing nothing")
+        assertThat(line).plot().isEqualTo("You stand, doing nothing")
     }
 
     @Test
@@ -113,7 +119,7 @@ class FuzzyMatchSpikeTest {
 
         val line = perform(tags)
 
-        assertThat(line).isEqualTo("You lie on the ground, doing nothing")
+        assertThat(line).plot().isEqualTo("You lie on the ground, doing nothing")
     }
 
     @Test
@@ -125,7 +131,7 @@ class FuzzyMatchSpikeTest {
 
         val line = perform(tags)
 
-        assertThat(line).isEqualTo("You fall to the ground")
+        assertThat(line).plot().isEqualTo("You fall to the ground")
     }
 
     @Test
@@ -138,7 +144,7 @@ class FuzzyMatchSpikeTest {
 
         val line = perform(tags)
 
-        assertThat(line).isEqualTo("You fly in low-air")
+        assertThat(line).plot().isEqualTo("You fly in low-air")
     }
 
     @Test
@@ -152,14 +158,18 @@ class FuzzyMatchSpikeTest {
 
         val line = perform(tags)
 
-        assertThat(line).isEqualTo("You fly in low-air")
+        assertThat(line).plot().isEqualTo("You fly in low-air")
     }
 
-    private fun perform(tags: Map<String, String>): String {
-        return performm(tags).second
-    }
+    private fun Assert<PerformResult>.plot() = prop(PerformResult::second)
 
-    private fun performm(tags: Map<String, String>): Pair<Map<String, String>, String> {
+    private fun Assert<PerformResult>.tags() = prop(PerformResult::first)
+
+//    private fun performm(tags: Tags): String {
+//        return performm(tags).second
+//    }
+
+    private fun perform(tags: Tags): PerformResult {
         val lines = listOf(
             listOf("posture" to "standing") to "You stand, doing nothing",
             listOf(
@@ -183,7 +193,7 @@ class FuzzyMatchSpikeTest {
         return tags to mostSuitableLine
     }
 
-    private fun say(tags: Map<String, String>): String {
+    private fun say(tags: Tags): PerformResult {
         val lines = listOf(
             listOf(
                 "trespassing" to "true",
@@ -214,7 +224,7 @@ class FuzzyMatchSpikeTest {
                 lineTags.count { (key, value) -> tags[key] == value }
             }?.second.orEmpty()
 
-        return mostSuitableLine
+        return tags to mostSuitableLine
     }
 
 }
