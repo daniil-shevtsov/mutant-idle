@@ -189,6 +189,7 @@ class FuzzyMatchSpikeTest {
             .containsAll(
                 "posture" to "lying",
                 "position" to "ground",
+                "health" to "100"
             )
     }
 
@@ -214,6 +215,27 @@ class FuzzyMatchSpikeTest {
                 "posture" to "lying",
                 "position" to "ground",
                 "bones" to "broken",
+                "health" to "0",
+            )
+    }
+
+    @Test
+    fun `kek13_2`() {
+        val tags = defaultTagsWithAdditional(
+            "position" to "ground",
+            "appearance" to "human",
+            "ability" to "flight",
+            "health" to "0",
+        )
+
+        val dead = perform(tags)
+
+        assertThat(dead).plot()
+            .isEqualTo("You have died")
+        assertThat(dead).tags()
+            .containsAll(
+                "health" to "0",
+                "life" to "dead",
             )
     }
 
@@ -223,6 +245,7 @@ class FuzzyMatchSpikeTest {
             "position" to "ground",
             "appearance" to "human",
             "ability" to "flight",
+            "immortality" to "true",
             "current action" to "fly",
         )
 
@@ -254,6 +277,7 @@ class FuzzyMatchSpikeTest {
         val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "appearance" to "human",
+            "immortality" to "true",
             "ability" to "regeneration",
             "current action" to "fly",
         )
@@ -325,6 +349,18 @@ class FuzzyMatchSpikeTest {
                 entry = entry(
                     "Now you can't move",
                     tagChange = tags("mobile" to "false"),
+                    weight = 1000f,
+                ),
+            ),
+            line(
+                requiredTags = tags(
+                    "immortality" to "!true",
+                    "life" to "alive",
+                    "health" to "0"
+                ),
+                entry = entry(
+                    "You have died",
+                    tagChange = tags("life" to "dead"),
                     weight = 1000f,
                 ),
             ),
@@ -406,6 +442,7 @@ class FuzzyMatchSpikeTest {
                         "position" to "ground",
                         "posture" to "lying",
                         "bones" to "broken",
+                        "health" to "0",
                     )
                 ),
             ),
@@ -431,7 +468,15 @@ class FuzzyMatchSpikeTest {
 
         val sortedEntries = lines
             .filter { line ->
-                line.requiredTags == listOf("" to "") || line.requiredTags.all { (key, value) -> tags[key] == value }
+                line.requiredTags == listOf("" to "") || line.requiredTags.all { (requiredTag, requiredTagValue) ->
+                    val currentTags = tags
+                    val currentValue = currentTags[requiredTag]
+
+                    when {
+                        requiredTagValue.contains('!') -> currentValue != requiredTagValue.drop(1)
+                        else -> currentValue == requiredTagValue
+                    }
+                }
             }
             .sortedWith(
                 compareBy(
@@ -486,7 +531,12 @@ class FuzzyMatchSpikeTest {
     }
 
 
-    private fun createDefaultTags() = mapOf("mobile" to "true")
+    private fun createDefaultTags() = mapOf(
+        "mobile" to "true",
+        "health" to "100",
+        "life" to "alive",
+    )
+
     private fun defaultTagsWithAdditional(vararg tags: Tag): Tags =
         createDefaultTags().withAdditional(*tags)
 
