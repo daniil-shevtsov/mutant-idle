@@ -137,7 +137,11 @@ val lines = listOf(
         entry = entry("You fly in low-air")
     ),
     line(
-        requiredTags = tags("position" to "low-air", "indestructible" to "true"),
+        requiredTags = tags(
+            "posture" to "!flying",
+            "position" to "low-air",
+            "indestructible" to "true"
+        ),
         entry = entry(
             "You fall to the ground",
             tagChange = tags("position" to "ground", "posture" to "lying")
@@ -156,7 +160,7 @@ val lines = listOf(
         ),
     ),
     line(
-        requiredTags = tags("current action" to "fly"),
+        requiredTags = tags("ability" to "flight", "current action" to "fly"),
         entry = entry(
             "You start flying",
             tags("posture" to "flying", "position" to "low-air")
@@ -166,7 +170,7 @@ val lines = listOf(
 )
 
 fun perform(tags: SpikeTags): PerformResult {
-    lines.map { line ->
+    val lines = lines.map { line ->
         when (line.requiredTags.containsKey("current action")) {
             true -> line.copy(
                 entry = line.entry.copy(
@@ -199,7 +203,7 @@ fun perform(tags: SpikeTags): PerformResult {
             )
         ).reversed()
 
-    val mostSuitableEntry = sortedEntries.first().entry
+    val mostSuitableEntry = sortedEntries.firstOrNull()?.entry ?: entry("no suitable entry")
     val mostSuitableLine = mostSuitableEntry.plot
 
     return PerformResult(
