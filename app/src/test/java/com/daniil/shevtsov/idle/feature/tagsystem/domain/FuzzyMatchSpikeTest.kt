@@ -15,9 +15,9 @@ class FuzzyMatchSpikeTest {
             "location" to "shop",
         )
 
-        val expected = match(tags)
+        val expected = say(tags)
 
-        assertThat(expected).isEqualTo("Morning, what can I do for you?")
+        assertThat(expected).isEqualTo("Hello, what can I do for you?")
     }
 
     @Test
@@ -29,7 +29,7 @@ class FuzzyMatchSpikeTest {
             "location" to "shop",
         )
 
-        val expected = match(tags)
+        val expected = say(tags)
 
         assertThat(expected).isEqualTo("Hey, you are not supposed to be here. Get out!")
     }
@@ -43,7 +43,7 @@ class FuzzyMatchSpikeTest {
             "location" to "shop",
         )
 
-        val expected = match(tags)
+        val expected = say(tags)
 
         assertThat(expected).isEqualTo("Who is there?! I am armed, get out while you can!")
     }
@@ -57,7 +57,7 @@ class FuzzyMatchSpikeTest {
             "location" to "shop",
         )
 
-        val expected = match(tags)
+        val expected = say(tags)
 
         assertThat(expected).isEqualTo("This is my shop and this is my planet! Get out!")
     }
@@ -71,12 +71,26 @@ class FuzzyMatchSpikeTest {
             "location" to "shop",
         )
 
-        val expected = match(tags)
+        val expected = say(tags)
 
         assertThat(expected).isEqualTo("In the name of the lord, I say be gone!")
     }
 
-    private fun match(tags: Map<String, String>): String {
+    @Test
+    fun `kek6`() {
+        val tags = mapOf(
+            "time_of_day" to "morning",
+            "trespassing" to "false",
+            "appearance" to "human",
+            "location" to "shop",
+        )
+
+        val expected = say(tags)
+
+        assertThat(expected).isEqualTo("Morning, what can I do for you?")
+    }
+
+    private fun say(tags: Map<String, String>): String {
         val lines = listOf(
             listOf(
                 "trespassing" to "true",
@@ -95,7 +109,8 @@ class FuzzyMatchSpikeTest {
             listOf(
                 "trespassing" to "true",
             ) to "Hey, you are not supposed to be here. Get out!",
-            listOf("" to "") to "Morning, what can I do for you?"
+            listOf("time_of_day" to "morning") to "Morning, what can I do for you?",
+            listOf("" to "") to "Hello, what can I do for you?"
         )
 
         val mostSuitableLine = lines
