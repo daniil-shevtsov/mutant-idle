@@ -249,6 +249,42 @@ class FuzzyMatchSpikeTest {
             )
     }
 
+    @Test
+    fun `kek15`() {
+        val tags = defaultTagsWithAdditional(
+            "position" to "ground",
+            "appearance" to "human",
+            "ability" to "regeneration",
+            "current action" to "fly",
+        )
+
+        val flying = perform(tags)
+
+        val withoutFlying =
+            perform(flying.tags.toMutableMap().apply { put("current action", "stop flying") })
+        val brokenBones = perform(withoutFlying.tags)
+        val cantMove = perform(brokenBones.tags)
+        val regenerated = perform(cantMove.tags.withAdditional("current action" to "regenerate"))
+        assertThat(regenerated).plot().isEqualTo("You regenerate to full health")
+        assertThat(regenerated).tags()
+            .containsAll(
+                "posture" to "lying",
+                "position" to "ground",
+                "bones" to "okay",
+                "mobile" to "true", //TODO: What if you were not mobile because you were tied? With current system regeneration would free you
+            )
+        val finalResult = perform(regenerated.tags.withAdditional("current action" to "stand"))
+
+        assertThat(finalResult).plot().isEqualTo("You get up")
+        assertThat(finalResult).tags()
+            .containsAll(
+                "posture" to "standing",
+                "position" to "ground",
+                "bones" to "okay",
+                "mobile" to "true",
+            )
+    }
+
     private fun Assert<PerformResult>.plot() = prop(PerformResult::plot)
 
     private fun Assert<PerformResult>.tags() = prop(PerformResult::tags)
@@ -307,6 +343,19 @@ class FuzzyMatchSpikeTest {
                 entry = entry(
                     "You get up",
                     tags("posture" to "standing")
+                )
+            ),
+            line(
+                requiredTags = tags(
+                    "current action" to "regenerate",
+                    "ability" to "regeneration",
+                ),
+                entry = entry(
+                    "You regenerate to full health",
+                    tags(
+                        "bones" to "okay",
+                        "mobile" to "true"//TODO: this should happen separately because the bones are healed
+                    )
                 )
             ),
             line(
@@ -437,5 +486,9 @@ class FuzzyMatchSpikeTest {
     }
 
 
-    private fun defaultTagsWithAdditional(vararg tags: Tag): Tags = mapOf("mobile" to "true") + tags.toMap()
+    private fun createDefaultTags() = mapOf("mobile" to "true")
+    private fun defaultTagsWithAdditional(vararg tags: Tag): Tags =
+        createDefaultTags().withAdditional(*tags)
+
+    private fun Tags.withAdditional(vararg tags: Tag): Tags = this + tags.toMap()
 }
