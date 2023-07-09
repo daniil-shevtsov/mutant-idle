@@ -2,13 +2,15 @@ package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
 import assertk.Assert
 import assertk.assertThat
+import assertk.assertions.containsAll
 import assertk.assertions.isEqualTo
 import assertk.assertions.prop
 import org.junit.jupiter.api.Test
 
-typealias Tags = Map<String, String>
-typealias Plot = String
-typealias PerformResult = Pair<Tags, Plot>
+private typealias Tags = Map<String, String>
+private typealias Tag = Pair<String, String>
+private typealias Plot = String
+private typealias PerformResult = Pair<Tags, Plot>
 
 class FuzzyMatchSpikeTest {
 
@@ -158,37 +160,43 @@ class FuzzyMatchSpikeTest {
 
         val line = perform(tags)
 
-        assertThat(line).plot().isEqualTo("You fly in low-air")
+        assertThat(line).plot().isEqualTo("You start flying")
+        assertThat(line).tags()
+            .containsAll(
+                "posture" to "flying",
+                "position" to "low-air",
+            )
     }
 
     private fun Assert<PerformResult>.plot() = prop(PerformResult::second)
 
     private fun Assert<PerformResult>.tags() = prop(PerformResult::first)
 
-//    private fun performm(tags: Tags): String {
-//        return performm(tags).second
-//    }
+    private fun tags(vararg entries: Tag): List<Tag> = entries.toList()
+    private fun entry(plot: String): Plot = plot
 
     private fun perform(tags: Tags): PerformResult {
         val lines = listOf(
-            listOf("posture" to "standing") to "You stand, doing nothing",
-            listOf(
+            tags("posture" to "standing") to entry("You stand, doing nothing"),
+            tags(
                 "posture" to "lying",
                 "position" to "ground"
-            ) to "You lie on the ground, doing nothing",
-            listOf("posture" to "lying") to "You lie, doing nothing",
-            listOf("position" to "low-air", "posture" to "flying") to "You fly in low-air",
-            listOf("position" to "low-air") to "You fall to the ground",
-            listOf("" to "") to "You do nothing",
+            ) to entry("You lie on the ground, doing nothing"),
+            tags("posture" to "lying") to entry("You lie, doing nothing"),
+            tags("position" to "low-air", "posture" to "flying") to entry("You fly in low-air"),
+            tags("position" to "low-air") to entry("You fall to the ground"),
+            tags("current action" to "fly") to entry("You start flying"),
+            tags("" to "") to entry("You do nothing"),
         )
 
-        val mostSuitableLine = lines
+        val mostSuitableEntry = lines
             .filter { (lineTags, _) ->
                 lineTags == listOf("" to "") || lineTags.all { (key, value) -> tags[key] == value }
             }
             .maxByOrNull { (lineTags, _) ->
                 lineTags.count { (key, value) -> tags[key] == value }
-            }?.second.orEmpty()
+            }
+        val mostSuitableLine = mostSuitableEntry?.second.orEmpty()
 
         return tags to mostSuitableLine
     }
