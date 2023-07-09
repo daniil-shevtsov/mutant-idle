@@ -15,7 +15,7 @@ class FuzzyMatchSpikeTest {
 
     @Test
     fun `test`() {
-        val tags = mapOf(
+        val tags = defaultTagsWithAdditional(
             "time_of_day" to "day",
             "trespassing" to "false",
             "appearance" to "human",
@@ -29,7 +29,7 @@ class FuzzyMatchSpikeTest {
 
     @Test
     fun `kek2`() {
-        val tags = mapOf(
+        val tags = defaultTagsWithAdditional(
             "time_of_day" to "day",
             "trespassing" to "true",
             "appearance" to "human",
@@ -43,7 +43,7 @@ class FuzzyMatchSpikeTest {
 
     @Test
     fun `kek3`() {
-        val tags = mapOf(
+        val tags = defaultTagsWithAdditional(
             "time_of_day" to "night",
             "trespassing" to "true",
             "appearance" to "human",
@@ -57,7 +57,7 @@ class FuzzyMatchSpikeTest {
 
     @Test
     fun `kek4`() {
-        val tags = mapOf(
+        val tags = defaultTagsWithAdditional(
             "time_of_day" to "night",
             "trespassing" to "true",
             "appearance" to "alien",
@@ -71,7 +71,7 @@ class FuzzyMatchSpikeTest {
 
     @Test
     fun `kek5`() {
-        val tags = mapOf(
+        val tags = defaultTagsWithAdditional(
             "time_of_day" to "night",
             "trespassing" to "true",
             "appearance" to "demon",
@@ -85,7 +85,7 @@ class FuzzyMatchSpikeTest {
 
     @Test
     fun `kek6`() {
-        val tags = mapOf(
+        val tags = defaultTagsWithAdditional(
             "time_of_day" to "morning",
             "trespassing" to "false",
             "appearance" to "human",
@@ -99,7 +99,7 @@ class FuzzyMatchSpikeTest {
 
     @Test
     fun `kek7`() {
-        val tags = mapOf(
+        val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "posture" to "standing",
             "appearance" to "human",
@@ -112,7 +112,7 @@ class FuzzyMatchSpikeTest {
 
     @Test
     fun `kek8`() {
-        val tags = mapOf(
+        val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "posture" to "lying",
             "appearance" to "human",
@@ -125,19 +125,20 @@ class FuzzyMatchSpikeTest {
 
     @Test
     fun `kek9`() {
-        val tags = mapOf(
+        val tags = defaultTagsWithAdditional(
             "position" to "low-air",
             "appearance" to "human",
         )
 
         val line = perform(tags)
 
-        assertThat(line).plot().isEqualTo("You fall to the ground, breaking every bone in your body")
+        assertThat(line).plot()
+            .isEqualTo("You fall to the ground, breaking every bone in your body")
     }
 
     @Test
     fun `kek10`() {
-        val tags = mapOf(
+        val tags = defaultTagsWithAdditional(
             "position" to "low-air",
             "posture" to "flying",
             "appearance" to "human",
@@ -150,7 +151,7 @@ class FuzzyMatchSpikeTest {
 
     @Test
     fun `kek11`() {
-        val tags = mapOf(
+        val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "appearance" to "human",
             "ability" to "flight",
@@ -169,7 +170,7 @@ class FuzzyMatchSpikeTest {
 
     @Test
     fun `kek12`() {
-        val tags = mapOf(
+        val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "appearance" to "human",
             "ability" to "flight",
@@ -193,7 +194,7 @@ class FuzzyMatchSpikeTest {
 
     @Test
     fun `kek13`() {
-        val tags = mapOf(
+        val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "appearance" to "human",
             "ability" to "flight",
@@ -206,11 +207,45 @@ class FuzzyMatchSpikeTest {
             perform(flying.tags.toMutableMap().apply { put("current action", "stop flying") })
         val finalResult = perform(withoutFlying.tags)
 
-        assertThat(finalResult).plot().isEqualTo("You fall to the ground, breaking every bone in your body")
+        assertThat(finalResult).plot()
+            .isEqualTo("You fall to the ground, breaking every bone in your body")
         assertThat(finalResult).tags()
             .containsAll(
                 "posture" to "lying",
                 "position" to "ground",
+                "bones" to "broken",
+            )
+    }
+
+    @Test
+    fun `kek14`() {
+        val tags = defaultTagsWithAdditional(
+            "position" to "ground",
+            "appearance" to "human",
+            "ability" to "flight",
+            "current action" to "fly",
+        )
+
+        val flying = perform(tags)
+
+        val withoutFlying =
+            perform(flying.tags.toMutableMap().apply { put("current action", "stop flying") })
+        val brokenBones = perform(withoutFlying.tags)
+        val cantMove = perform(brokenBones.tags)
+        assertThat(cantMove).plot().isEqualTo("Now you can't move")
+        assertThat(cantMove).tags()
+            .containsAll(
+                "mobile" to "false",
+            )
+        val finalResult =
+            perform(cantMove.tags.toMutableMap().apply { put("current action", "stand") })
+
+        assertThat(finalResult).plot().isEqualTo("You can't get up")
+        assertThat(finalResult).tags()
+            .containsAll(
+                "posture" to "lying",
+                "position" to "ground",
+                "bones" to "broken",
             )
     }
 
@@ -250,6 +285,38 @@ class FuzzyMatchSpikeTest {
     private fun perform(tags: Tags): PerformResult {
         val lines = listOf(
             line(
+                requiredTags = tags("mobile" to "true", "bones" to "broken"),
+                entry = entry(
+                    "Now you can't move",
+                    tagChange = tags("mobile" to "false"),
+                    weight = 1000f,
+                ),
+            ),
+            line(
+                requiredTags = tags("current action" to "stand", "mobile" to "false"),
+                entry = entry(
+                    "You can't get up",
+                )
+            ),
+            line(
+                requiredTags = tags(
+                    "current action" to "stand",
+                    "posture" to "lying",
+                    "mobile" to "true",
+                ),
+                entry = entry(
+                    "You get up",
+                    tags("posture" to "standing")
+                )
+            ),
+            line(
+                requiredTags = tags("current action" to "stand", "mobile" to "true"),
+                entry = entry(
+                    "You are now standing",
+                    tags("posture" to "standing")
+                )
+            ),
+            line(
                 requiredTags = tags("current action" to "stop flying"),
                 entry = entry(
                     "You stop flying",
@@ -286,7 +353,11 @@ class FuzzyMatchSpikeTest {
                 requiredTags = tags("position" to "low-air"),
                 entry = entry(
                     "You fall to the ground, breaking every bone in your body",
-                    tagChange = tags("position" to "ground", "posture" to "lying")
+                    tagChange = tags(
+                        "position" to "ground",
+                        "posture" to "lying",
+                        "bones" to "broken",
+                    )
                 ),
             ),
             line(
@@ -365,4 +436,6 @@ class FuzzyMatchSpikeTest {
         return PerformResult(tags, mostSuitableLine)
     }
 
+
+    private fun defaultTagsWithAdditional(vararg tags: Tag): Tags = mapOf("mobile" to "true") + tags.toMap()
 }
