@@ -15,9 +15,9 @@ class FuzzyMatchSpikeTest {
             "location" to "shop",
         )
 
-        val expected = say(tags)
+        val line = say(tags)
 
-        assertThat(expected).isEqualTo("Hello, what can I do for you?")
+        assertThat(line).isEqualTo("Hello, what can I do for you?")
     }
 
     @Test
@@ -29,9 +29,9 @@ class FuzzyMatchSpikeTest {
             "location" to "shop",
         )
 
-        val expected = say(tags)
+        val line = say(tags)
 
-        assertThat(expected).isEqualTo("Hey, you are not supposed to be here. Get out!")
+        assertThat(line).isEqualTo("Hey, you are not supposed to be here. Get out!")
     }
 
     @Test
@@ -43,9 +43,9 @@ class FuzzyMatchSpikeTest {
             "location" to "shop",
         )
 
-        val expected = say(tags)
+        val line = say(tags)
 
-        assertThat(expected).isEqualTo("Who is there?! I am armed, get out while you can!")
+        assertThat(line).isEqualTo("Who is there?! I am armed, get out while you can!")
     }
 
     @Test
@@ -57,9 +57,9 @@ class FuzzyMatchSpikeTest {
             "location" to "shop",
         )
 
-        val expected = say(tags)
+        val line = say(tags)
 
-        assertThat(expected).isEqualTo("This is my shop and this is my planet! Get out!")
+        assertThat(line).isEqualTo("This is my shop and this is my planet! Get out!")
     }
 
     @Test
@@ -71,9 +71,9 @@ class FuzzyMatchSpikeTest {
             "location" to "shop",
         )
 
-        val expected = say(tags)
+        val line = say(tags)
 
-        assertThat(expected).isEqualTo("In the name of the lord, I say be gone!")
+        assertThat(line).isEqualTo("In the name of the lord, I say be gone!")
     }
 
     @Test
@@ -85,9 +85,54 @@ class FuzzyMatchSpikeTest {
             "location" to "shop",
         )
 
-        val expected = say(tags)
+        val line = say(tags)
 
-        assertThat(expected).isEqualTo("Morning, what can I do for you?")
+        assertThat(line).isEqualTo("Morning, what can I do for you?")
+    }
+
+    @Test
+    fun `kek7`() {
+        val tags = mapOf(
+            "position" to "ground",
+            "posture" to "standing",
+            "appearance" to "human",
+        )
+
+        val line = perform(tags)
+
+        assertThat(line).isEqualTo("You stand, doing nothing")
+    }
+
+    @Test
+    fun `kek8`() {
+        val tags = mapOf(
+            "position" to "ground",
+            "posture" to "lying",
+            "appearance" to "human",
+        )
+
+        val line = perform(tags)
+
+        assertThat(line).isEqualTo("You lie on the ground, doing nothing")
+    }
+
+    private fun perform(tags: Map<String, String>): String {
+        val lines = listOf(
+            listOf("posture" to "standing") to "You stand, doing nothing",
+            listOf("posture" to "lying", "position" to "ground") to "You lie on the ground, doing nothing",
+            listOf("posture" to "lying") to "You lie, doing nothing",
+            listOf("" to "") to "You do nothing",
+        )
+
+        val mostSuitableLine = lines
+            .filter { (lineTags, _) ->
+                lineTags == listOf("" to "") || lineTags.all { (key, value) -> tags[key] == value }
+            }
+            .maxByOrNull { (lineTags, _) ->
+                lineTags.count { (key, value) -> tags[key] == value }
+            }?.second.orEmpty()
+
+        return mostSuitableLine
     }
 
     private fun say(tags: Map<String, String>): String {
@@ -115,7 +160,7 @@ class FuzzyMatchSpikeTest {
 
         val mostSuitableLine = lines
             .filter { (lineTags, _) ->
-               lineTags == listOf("" to "") || lineTags.all { (key, value) -> tags[key] == value }
+                lineTags == listOf("" to "") || lineTags.all { (key, value) -> tags[key] == value }
             }
             .maxByOrNull { (lineTags, _) ->
                 lineTags.count { (key, value) -> tags[key] == value }
