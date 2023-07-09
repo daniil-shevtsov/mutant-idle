@@ -172,8 +172,8 @@ class FuzzyMatchSpikeTest {
 
     private fun Assert<PerformResult>.tags() = prop(PerformResult::first)
 
-    private fun tags(vararg entries: Tag): List<Tag> = entries.toList()
-    private fun entry(plot: String): Plot = plot
+    private fun tags(vararg entries: Tag): Tags = entries.toList().toMap()
+    private fun entry(plot: String, tagChange: Tags = mapOf()): PerformResult = tagChange to plot
 
     private fun perform(tags: Tags): PerformResult {
         val lines = listOf(
@@ -185,7 +185,10 @@ class FuzzyMatchSpikeTest {
             tags("posture" to "lying") to entry("You lie, doing nothing"),
             tags("position" to "low-air", "posture" to "flying") to entry("You fly in low-air"),
             tags("position" to "low-air") to entry("You fall to the ground"),
-            tags("current action" to "fly") to entry("You start flying"),
+            tags("current action" to "fly") to entry(
+                "You start flying",
+                tags("posture" to "flying", "position" to "low-air")
+            ),
             tags("" to "") to entry("You do nothing"),
         )
 
@@ -195,10 +198,10 @@ class FuzzyMatchSpikeTest {
             }
             .maxByOrNull { (lineTags, _) ->
                 lineTags.count { (key, value) -> tags[key] == value }
-            }
+            }?.second
         val mostSuitableLine = mostSuitableEntry?.second.orEmpty()
 
-        return tags to mostSuitableLine
+        return (tags + mostSuitableEntry?.first.orEmpty()) to mostSuitableLine
     }
 
     private fun say(tags: Tags): PerformResult {
