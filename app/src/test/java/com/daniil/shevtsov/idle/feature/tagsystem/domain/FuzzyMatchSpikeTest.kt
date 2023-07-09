@@ -116,11 +116,59 @@ class FuzzyMatchSpikeTest {
         assertThat(line).isEqualTo("You lie on the ground, doing nothing")
     }
 
+    @Test
+    fun `kek9`() {
+        val tags = mapOf(
+            "position" to "low-air",
+            "appearance" to "human",
+        )
+
+        val line = perform(tags)
+
+        assertThat(line).isEqualTo("You fall to the ground")
+    }
+
+    @Test
+    fun `kek10`() {
+        val tags = mapOf(
+            "position" to "low-air",
+            "posture" to "flying",
+            "appearance" to "human",
+        )
+
+        val line = perform(tags)
+
+        assertThat(line).isEqualTo("You fly in low-air")
+    }
+
+    @Test
+    fun `kek11`() {
+        val tags = mapOf(
+            "position" to "ground",
+            "appearance" to "human",
+            "ability" to "flight",
+            "current action" to "fly"
+        )
+
+        val line = perform(tags)
+
+        assertThat(line).isEqualTo("You fly in low-air")
+    }
+
     private fun perform(tags: Map<String, String>): String {
+        return performm(tags).second
+    }
+
+    private fun performm(tags: Map<String, String>): Pair<Map<String, String>, String> {
         val lines = listOf(
             listOf("posture" to "standing") to "You stand, doing nothing",
-            listOf("posture" to "lying", "position" to "ground") to "You lie on the ground, doing nothing",
+            listOf(
+                "posture" to "lying",
+                "position" to "ground"
+            ) to "You lie on the ground, doing nothing",
             listOf("posture" to "lying") to "You lie, doing nothing",
+            listOf("position" to "low-air", "posture" to "flying") to "You fly in low-air",
+            listOf("position" to "low-air") to "You fall to the ground",
             listOf("" to "") to "You do nothing",
         )
 
@@ -132,7 +180,7 @@ class FuzzyMatchSpikeTest {
                 lineTags.count { (key, value) -> tags[key] == value }
             }?.second.orEmpty()
 
-        return mostSuitableLine
+        return tags to mostSuitableLine
     }
 
     private fun say(tags: Map<String, String>): String {
