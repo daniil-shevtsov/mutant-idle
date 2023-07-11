@@ -168,7 +168,15 @@ data class Game(
 ) : TagHolder
 
 fun update(game: Game, action: String): Game {
-    return game
+    return game.copy(
+        tags = game.locations.find { it.id == game.locationId }?.let { location ->
+            location.tags.orEmpty().map { locationTag ->
+                "location:${location.id}:${locationTag.key}" to locationTag.value
+            }.toMap()
+        }.orEmpty() + game.player.tags.map {
+            "player:${it.key}" to it.value
+        }.toMap()
+    )
 }
 
 fun game(

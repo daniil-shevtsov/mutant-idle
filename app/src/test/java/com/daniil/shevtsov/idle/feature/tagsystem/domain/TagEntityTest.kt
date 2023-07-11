@@ -12,7 +12,8 @@ class TagEntityTest {
     fun `should add player and location tags`() {
         val game = game(
             player = player(tags = tags("name" to "bob")),
-            locations = listOf(location(id = "saloon", tags = tags("SpaceType" to "indoors")))
+            locations = listOf(location(id = "saloon", tags = tags("SpaceType" to "indoors"))),
+            locationId = "saloon",
         )
         val updated = update(game, "init")
         assertThat(updated)
