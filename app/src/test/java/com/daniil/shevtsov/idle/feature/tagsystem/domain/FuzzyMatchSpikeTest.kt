@@ -275,8 +275,7 @@ class FuzzyMatchSpikeTest {
             "position" to "ground",
             "appearance" to "human",
             "immortality" to "true",
-            "ability" to "flight",
-            "regeneration" to "true",
+            "ability" to "[flight,regeneration]",
             "current action" to "fly",
         )
 
@@ -332,8 +331,7 @@ class FuzzyMatchSpikeTest {
             "position" to "ground",
             "appearance" to "human",
             "immortality" to "true",
-            "ability" to "[flight, regeneration]",
-            "current action" to "fly",
+            "ability" to "[flight,regeneration]",
         )
         val regenerated = perform(tags.withAdditional("current action" to "regenerate"))
         assertThat(regenerated).plot().isEqualTo("You regenerate to full health")

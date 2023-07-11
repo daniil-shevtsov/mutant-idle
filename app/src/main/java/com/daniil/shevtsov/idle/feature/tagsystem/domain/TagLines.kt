@@ -68,7 +68,7 @@ val lines = listOf(
     line(
         requiredTags = tags(
             "current action" to "regenerate",
-            "regeneration" to "true",
+            "ability" to "regeneration",
         ),
         entry = entry(
             "You regenerate to full health",
