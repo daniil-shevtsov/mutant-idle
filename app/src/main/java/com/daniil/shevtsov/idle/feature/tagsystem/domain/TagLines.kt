@@ -124,16 +124,17 @@ val lines = listOf(
     line(
         requiredTags = tags(
             "posture" to "lying",
-            "position" to "ground"
+            "position" to "ground",
+            "current action" to "wait",
         ),
         entry = entry("You lie on the ground, doing nothing")
     ),
     line(
-        requiredTags = tags("posture" to "lying"),
+        requiredTags = tags("posture" to "lying", "current action" to "wait"),
         entry = entry("You lie, doing nothing")
     ),
     line(
-        requiredTags = tags("position" to "low-air", "posture" to "flying"),
+        requiredTags = tags("position" to "low-air", "posture" to "flying", "current action" to "wait"),
         entry = entry("You fly in low-air")
     ),
     line(
@@ -148,7 +149,7 @@ val lines = listOf(
         ),
     ),
     line(
-        requiredTags = tags("position" to "low-air"),
+        requiredTags = tags("position" to "low-air", "posture" to "!flying"),
         entry = entry(
             "You fall to the ground, breaking every bone in your body",
             tagChange = tags(

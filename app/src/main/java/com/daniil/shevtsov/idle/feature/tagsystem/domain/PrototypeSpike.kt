@@ -48,6 +48,20 @@ data class Line(
 )
 
 
+fun newPerform(tags: SpikeTags): PerformResult {
+    var kek = perform(tags)
+    var count = 0
+    while (!kek.plot.contains("no suitable entry") && count < 20) {
+        val lol = perform(kek.tags)
+        kek = lol.copy(
+            plot = kek.plot + lol.plot
+        )
+        count++
+    }
+    return kek.copy(
+        plot = kek.plot.filter { it != "no suitable entry" }
+    )
+}
 
 fun perform(tags: SpikeTags): PerformResult {
     val lines = lines.map { line ->
@@ -74,10 +88,16 @@ fun perform(tags: SpikeTags): PerformResult {
                         .substringAfter('[')
                         .substringBefore(']')
                         .split(',')
+
                     else -> listOf(currentValue)
                 }
                 when {
-                    requiredTagValue.contains('!') -> !currentValues.contains(requiredTagValue.drop(1))
+                    requiredTagValue.contains('!') -> !currentValues.contains(
+                        requiredTagValue.drop(
+                            1
+                        )
+                    )
+
                     else -> currentValues.contains(requiredTagValue)
                 }
             }
@@ -102,9 +122,11 @@ fun perform(tags: SpikeTags): PerformResult {
             val newValue = when {
                 valueToAdd.contains('+') && oldValue != null -> {
                     val oldValueWithoutBrackets = oldValue.substringAfter('[').substringBefore(']')
-                    val valueToAddWithoutBrackets = valueToAdd.substringAfter('[').substringBefore(']')
+                    val valueToAddWithoutBrackets =
+                        valueToAdd.substringAfter('[').substringBefore(']')
                     "[$oldValueWithoutBrackets,$valueToAddWithoutBrackets]"
                 }
+
                 else -> valueToAdd
             }
             put(tag, newValue)

@@ -4,6 +4,7 @@ import assertk.Assert
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.containsAll
+import assertk.assertions.containsExactly
 import assertk.assertions.index
 import assertk.assertions.isEqualTo
 import assertk.assertions.prop
@@ -116,7 +117,7 @@ class FuzzyMatchSpikeTest {
             "appearance" to "human",
         )
 
-        val line = perform(tags)
+        val line = perform(tags.withAdditional("current action" to "wait"))
 
         assertThat(line).lastPlot().isEqualTo("You lie on the ground, doing nothing")
     }
@@ -142,7 +143,7 @@ class FuzzyMatchSpikeTest {
             "appearance" to "human",
         )
 
-        val line = perform(tags)
+        val line = perform(tags.withAdditional("current action" to "wait"))
 
         assertThat(line).lastPlot().isEqualTo("You fly in low-air")
     }
@@ -440,7 +441,42 @@ class FuzzyMatchSpikeTest {
             )
     }
 
-    private fun Assert<PerformResult>.lastPlot() = prop(PerformResult::plot).index(0)
+    @Test
+    fun kek22() {
+        val tags = defaultTagsWithAdditional(
+            "position" to "ground",
+            "appearance" to "human",
+            "ability" to "flight",
+        )
+
+        val kek = newPerform(tags.withAdditional("current action" to "fly"))
+
+        assertThat(kek).plot()
+            .containsExactly("You start flying")
+    }
+
+    @Test
+    fun kek23() {
+        val tags = defaultTagsWithAdditional(
+            "position" to "low-air",
+            "appearance" to "human",
+            "ability" to "flight",
+            "posture" to "flying",
+        )
+
+        val kek = newPerform(tags.withAdditional("current action" to "stop flying"))
+
+        assertThat(kek).plot()
+            .containsExactly(
+                "You stop flying",
+                "You fall to the ground, breaking every bone in your body",
+                "You have died",
+                "Now you can't move",
+            )
+    }
+
+    private fun Assert<PerformResult>.plot() = prop(PerformResult::plot)
+    private fun Assert<PerformResult>.lastPlot() = plot().index(0)
 
     private fun Assert<PerformResult>.tags() = prop(PerformResult::tags)
 
