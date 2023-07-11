@@ -39,7 +39,7 @@ data class LineEntry(
 
 data class PerformResult(
     val tags: SpikeTags,
-    val plot: Plot,
+    val plot: List<Plot>,
 )
 
 data class Line(
@@ -113,6 +113,6 @@ fun perform(tags: SpikeTags): PerformResult {
 
     return PerformResult(
         tags = modifiedTags,
-        plot = mostSuitableLine,
+        plot = listOf(mostSuitableLine),
     )
 }

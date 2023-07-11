@@ -72,7 +72,7 @@ fun SpikeTagScreen(modifier: Modifier = Modifier) {
                     Tag(action, modifier = Modifier.clickable {
                         val result = perform(currentTags.withAdditional("current action" to action))
                         currentTags = result.tags
-                        currentPlot = result.plot + "\n" + currentPlot
+                        currentPlot = result.plot[0] + "\n" + currentPlot
                     })
                 }
             }
