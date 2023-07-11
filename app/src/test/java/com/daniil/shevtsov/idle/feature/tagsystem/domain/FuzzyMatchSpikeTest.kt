@@ -292,9 +292,14 @@ class FuzzyMatchSpikeTest {
                 "posture" to "lying",
                 "position" to "ground",
                 "bones" to "okay",
-                "mobile" to "true", //TODO: What if you were not mobile because you were tied? With current system regeneration would free you
             )
-        val finalResult = perform(regenerated.tags.withAdditional("current action" to "stand"))
+        val mobile = perform(regenerated.tags)
+        assertThat(mobile).plot().isEqualTo("You can move again")
+        assertThat(mobile).tags()
+            .containsAll(
+                "mobile" to "true",
+            )
+        val finalResult = perform(mobile.tags.withAdditional("current action" to "stand"))
 
         assertThat(finalResult).plot().isEqualTo("You get up")
         assertThat(finalResult).tags()
@@ -337,10 +342,100 @@ class FuzzyMatchSpikeTest {
         assertThat(regenerated).plot().isEqualTo("You regenerate to full health")
         assertThat(regenerated).tags()
             .containsAll(
-                "posture" to "lying",
-                "position" to "ground",
                 "bones" to "okay",
-                "mobile" to "true", //TODO: What if you were not mobile because you were tied? With current system regeneration would free you
+            )
+    }
+
+    @Test
+    fun `kek18`() {
+        val tags = defaultTagsWithAdditional(
+            "position" to "ground",
+            "appearance" to "human",
+            "immortality" to "true",
+            "ability" to "[flight,regeneration]",
+        )
+        val regenerated = perform(tags.withAdditional("current action" to "regenerate"))
+        assertThat(regenerated).plot().isEqualTo("You regenerate to full health")
+        assertThat(regenerated).tags()
+            .containsAll(
+                "bones" to "okay",
+                "mobile" to "true",
+            )
+    }
+
+    @Test
+    fun `kek19`() {
+        val tags = defaultTagsWithAdditional(
+            "position" to "ground",
+            "appearance" to "human",
+            "tied" to "true",
+        )
+        val regenerated = perform(tags)
+        assertThat(regenerated).plot().isEqualTo("Now you can't move")
+        assertThat(regenerated).tags()
+            .containsAll(
+                "tied" to "true",
+                "mobile" to "false",
+            )
+    }
+
+    @Test
+    fun `kek20`() {
+        val tags = defaultTagsWithAdditional(
+            "position" to "ground",
+            "appearance" to "human",
+            "tied" to "true",
+        )
+        val regenerated = perform(tags)
+        val tied = perform(regenerated.tags.withAdditional("current action" to "untie"))
+        assertThat(tied).plot().isEqualTo("You free yourself")
+        assertThat(tied).tags()
+            .containsAll(
+                "tied" to "false",
+            )
+    }
+
+    @Test
+    fun `kek21`() {
+        val tags = defaultTagsWithAdditional(
+            "position" to "ground",
+            "appearance" to "human",
+            "tied" to "true",
+            "bones" to "broken",
+            "ability" to "regeneration"
+        )
+        val notMobile = perform(tags)
+        val regenerated = perform(notMobile.tags.withAdditional("current action" to "regenerate"))
+        assertThat(regenerated).plot().isEqualTo("You regenerate to full health")
+        assertThat(regenerated).tags()
+            .containsAll(
+                "bones" to "okay",
+                "tied" to "true",
+                "mobile" to "false",
+            )
+        val tied = perform(regenerated.tags.withAdditional("current action" to "stand"))
+        assertThat(tied).plot().isEqualTo("You can't get up")
+        assertThat(tied).tags()
+            .containsAll(
+                "bones" to "okay",
+                "tied" to "true",
+                "mobile" to "false",
+            )
+        val untied = perform(tied.tags.withAdditional("current action" to "untie"))
+        assertThat(untied).plot().isEqualTo("You free yourself")
+        assertThat(untied).tags()
+            .containsAll(
+                "bones" to "okay",
+                "tied" to "false",
+                "mobile" to "false",
+            )
+        val mobile = perform(untied.tags.withAdditional("current action" to "untie"))
+        assertThat(mobile).plot().isEqualTo("You can move again")
+        assertThat(mobile).tags()
+            .containsAll(
+                "bones" to "okay",
+                "tied" to "false",
+                "mobile" to "true",
             )
     }
 

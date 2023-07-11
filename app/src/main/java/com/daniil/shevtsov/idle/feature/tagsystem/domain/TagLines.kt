@@ -10,6 +10,22 @@ val lines = listOf(
         ),
     ),
     line(
+        requiredTags = tags("mobile" to "true", "tied" to "true"),
+        entry = entry(
+            "Now you can't move",
+            tagChange = tags("mobile" to "false"),
+            weight = 1000f,
+        ),
+    ),
+    line(
+        requiredTags = tags("mobile" to "false", "tied" to "!true", "bones" to "okay"),
+        entry = entry(
+            "You can move again",
+            tagChange = tags("mobile" to "true"),
+            weight = 1000f,
+        ),
+    ),
+    line(
         requiredTags = tags(
             "immortality" to "!true",
             "life" to "alive",
@@ -36,6 +52,16 @@ val lines = listOf(
         entry = entry(
             "You get up",
             tags("posture" to "standing")
+        )
+    ),
+    line(
+        requiredTags = tags(
+            "current action" to "untie",
+            "tied" to "true",
+        ),
+        entry = entry(
+            "You free yourself",
+            tags("tied" to "false")
         )
     ),
     line(
@@ -74,7 +100,6 @@ val lines = listOf(
             "You regenerate to full health",
             tags(
                 "bones" to "okay",
-                "mobile" to "true"//TODO: this should happen separately because the bones are healed
             )
         )
     ),
