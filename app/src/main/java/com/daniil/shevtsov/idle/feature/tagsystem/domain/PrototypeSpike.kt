@@ -126,6 +126,11 @@ fun perform(tags: SpikeTags): PerformResult {
                         valueToAdd.substringAfter('[').substringBefore(']')
                     "[$oldValueWithoutBrackets,$valueToAddWithoutBrackets]"
                 }
+                valueToAdd.contains("\${-") && oldValue != null -> {
+                    val oldValueNumber = oldValue.toInt()
+                    val valueToAddNumber = valueToAdd.substringAfter('{').substringBefore('}').toInt()
+                    (oldValueNumber + valueToAddNumber).toString()
+                }
 
                 else -> valueToAdd
             }

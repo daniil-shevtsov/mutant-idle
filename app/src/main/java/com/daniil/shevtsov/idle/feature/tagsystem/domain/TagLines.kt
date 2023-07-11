@@ -172,10 +172,10 @@ val lines = listOf(
      * Maybe it should be outside of tag system itself, like everything is jjust added to the tags pile
      */
     line(
-        requiredTags = tags("sharp weapon" to "true"),
+        requiredTags = tags("sharp weapon" to "true", "current action" to "cut your hand"),
         entry = entry(
             "You cut your hand",
-            tags("bleeding" to "true", "health" to "85")
+            tags("bleeding" to "true", "health" to "\${-15}")
         )
     ),
     line(requiredTags = tags("" to ""), entry = entry("You do nothing")),

@@ -506,6 +506,24 @@ class FuzzyMatchSpikeTest {
         }
     }
 
+    @Test
+    fun kek26() {
+        val tags = defaultTagsWithAdditional(
+            "holding" to "knife",
+            "sharp weapon" to "true",
+        )
+
+        val cut1 = newPerform(tags.withAdditional("current action" to "cut your hand"))
+        val cut2 = newPerform(cut1.tags.withAdditional("current action" to "cut your hand"))
+
+        assertThat(cut2).all {
+            tags().containsAll(
+                "health" to "70",
+                "bleeding" to "true",
+            )
+        }
+    }
+
     private fun Assert<PerformResult>.plot() = prop(PerformResult::plot)
     private fun Assert<PerformResult>.lastPlot() = plot().index(0)
 
