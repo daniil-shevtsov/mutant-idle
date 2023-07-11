@@ -164,17 +164,23 @@ data class Game(
     val locations: List<Location>,
     val locationId: String,
     val player: Player,
+    val npcs: List<Npc>,
     override val tags: SpikeTags,
+    val plot: List<String>,
 ) : TagHolder
 
 fun update(game: Game, action: String): Game {
     return game.copy(
         tags = game.locations.find { it.id == game.locationId }?.let { location ->
-            location.tags.orEmpty().map { locationTag ->
+            location.tags.map { locationTag ->
                 "location:${location.id}:${locationTag.key}" to locationTag.value
             }.toMap()
         }.orEmpty() + game.player.tags.map {
             "player:${it.key}" to it.value
+        }.toMap() + game.npcs.flatMap { npc ->
+            npc.tags.map { tag ->
+                "npc:${npc.id}:${tag.key}" to tag.value
+            }
         }.toMap()
     )
 }
@@ -184,13 +190,17 @@ fun game(
     locations: List<Location> = emptyList(),
     locationId: String = "",
     player: Player = player(),
-    tags: SpikeTags = tags()
+    npcs: List<Npc> = emptyList(),
+    tags: SpikeTags = tags(),
+    plot: List<String> = emptyList(),
 ) = Game(
     id = id,
     locationId = locationId,
     locations = locations,
     player = player,
+    npcs = npcs,
     tags = tags,
+    plot = plot,
 )
 
 fun location(id: String = "location", title: String = "", tags: SpikeTags = tags()) = Location(
