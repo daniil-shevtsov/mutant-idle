@@ -274,7 +274,8 @@ class FuzzyMatchSpikeTest {
             "position" to "ground",
             "appearance" to "human",
             "immortality" to "true",
-            "ability" to "regeneration",
+            "ability" to "flight",
+            "regeneration" to "true",
             "current action" to "fly",
         )
 
