@@ -326,6 +326,26 @@ class FuzzyMatchSpikeTest {
             .contains("ability" to "[flight,immortality,regeneration]")
     }
 
+    @Test
+    fun `kek17`() {
+        val tags = defaultTagsWithAdditional(
+            "position" to "ground",
+            "appearance" to "human",
+            "immortality" to "true",
+            "ability" to "[flight, regeneration]",
+            "current action" to "fly",
+        )
+        val regenerated = perform(tags.withAdditional("current action" to "regenerate"))
+        assertThat(regenerated).plot().isEqualTo("You regenerate to full health")
+        assertThat(regenerated).tags()
+            .containsAll(
+                "posture" to "lying",
+                "position" to "ground",
+                "bones" to "okay",
+                "mobile" to "true", //TODO: What if you were not mobile because you were tied? With current system regeneration would free you
+            )
+    }
+
     private fun Assert<PerformResult>.plot() = prop(PerformResult::plot)
 
     private fun Assert<PerformResult>.tags() = prop(PerformResult::tags)

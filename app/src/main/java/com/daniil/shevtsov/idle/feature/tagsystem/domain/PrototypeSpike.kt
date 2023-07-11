@@ -68,9 +68,17 @@ fun perform(tags: SpikeTags): PerformResult {
                 val currentTags = tags
                 val currentValue = currentTags[requiredTag]
 
+                val currentValues = when {
+                    currentValue == null -> emptyList()
+                    currentValue.contains('[') -> currentValue
+                        .substringAfter('[')
+                        .substringBefore(']')
+                        .split(',')
+                    else -> listOf(currentValue)
+                }
                 when {
-                    requiredTagValue.contains('!') -> currentValue != requiredTagValue.drop(1)
-                    else -> currentValue == requiredTagValue
+                    requiredTagValue.contains('!') -> !currentValues.contains(requiredTagValue.drop(1))
+                    else -> currentValues.contains(requiredTagValue)
                 }
             }
         }
