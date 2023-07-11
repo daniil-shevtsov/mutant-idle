@@ -167,6 +167,17 @@ val lines = listOf(
             tags("posture" to "flying", "position" to "low-air")
         )
     ),
+    /**
+     * TODO: Holding : knife and knife has its own tags somehow. Like edged weapon, etc.
+     * Maybe it should be outside of tag system itself, like everything is jjust added to the tags pile
+     */
+    line(
+        requiredTags = tags("sharp weapon" to "true"),
+        entry = entry(
+            "You cut your hand",
+            tags("bleeding" to "true", "health" to "85")
+        )
+    ),
     line(requiredTags = tags("" to ""), entry = entry("You do nothing")),
 )
 

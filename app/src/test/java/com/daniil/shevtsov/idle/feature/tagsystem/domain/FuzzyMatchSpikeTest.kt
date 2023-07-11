@@ -1,11 +1,13 @@
 package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
 import assertk.Assert
+import assertk.all
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.containsAll
 import assertk.assertions.containsExactly
 import assertk.assertions.index
+import assertk.assertions.isEmpty
 import assertk.assertions.isEqualTo
 import assertk.assertions.prop
 import org.junit.jupiter.api.Test
@@ -323,10 +325,12 @@ class FuzzyMatchSpikeTest {
         val flight = perform(tags.toMutableMap().apply { put("current action", "learn flight") })
         assertThat(flight).tags()
             .contains("ability" to "flight")
-        val immortality = perform(flight.tags.toMutableMap().apply { put("current action", "learn immortality") })
+        val immortality =
+            perform(flight.tags.toMutableMap().apply { put("current action", "learn immortality") })
         assertThat(immortality).tags()
             .contains("ability" to "[flight,immortality]")
-        val regeneration = perform(immortality.tags.toMutableMap().apply { put("current action", "learn regeneration") })
+        val regeneration = perform(
+            immortality.tags.toMutableMap().apply { put("current action", "learn regeneration") })
 
         assertThat(regeneration).tags()
             .contains("ability" to "[flight,immortality,regeneration]")
@@ -473,6 +477,33 @@ class FuzzyMatchSpikeTest {
                 "You have died",
                 "Now you can't move",
             )
+    }
+
+    @Test
+    fun kek24() {
+        val tags = defaultTagsWithAdditional()
+
+        val kek = newPerform(tags)
+
+        assertThat(kek).plot()
+            .isEmpty()
+    }
+
+    @Test
+    fun kek25() {
+        val tags = defaultTagsWithAdditional(
+            "holding" to "knife",
+            "sharp weapon" to "true",
+        )
+
+        val kek = newPerform(tags.withAdditional("current action" to "cut your hand"))
+
+        assertThat(kek).all {
+            tags().containsAll(
+                "health" to "85",
+                "bleeding" to "true",
+            )
+        }
     }
 
     private fun Assert<PerformResult>.plot() = prop(PerformResult::plot)
