@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
 import assertk.Assert
 import assertk.assertThat
+import assertk.assertions.contains
 import assertk.assertions.containsAll
 import assertk.assertions.isEqualTo
 import assertk.assertions.prop
@@ -304,6 +305,25 @@ class FuzzyMatchSpikeTest {
                 "bones" to "okay",
                 "mobile" to "true",
             )
+    }
+
+    @Test
+    fun `kek16`() {
+        val tags = defaultTagsWithAdditional(
+            "position" to "ground",
+            "appearance" to "human",
+        )
+
+        val flight = perform(tags.toMutableMap().apply { put("current action", "learn flight") })
+        assertThat(flight).tags()
+            .contains("ability" to "flight")
+        val immortality = perform(flight.tags.toMutableMap().apply { put("current action", "learn immortality") })
+        assertThat(immortality).tags()
+            .contains("ability" to "[flight,immortality]")
+        val regeneration = perform(immortality.tags.toMutableMap().apply { put("current action", "learn regeneration") })
+
+        assertThat(regeneration).tags()
+            .contains("ability" to "[flight,immortality,regeneration]")
     }
 
     private fun Assert<PerformResult>.plot() = prop(PerformResult::plot)
