@@ -126,9 +126,11 @@ fun perform(tags: SpikeTags): PerformResult {
                         valueToAdd.substringAfter('[').substringBefore(']')
                     "[$oldValueWithoutBrackets,$valueToAddWithoutBrackets]"
                 }
+
                 valueToAdd.contains("\${-") && oldValue != null -> {
                     val oldValueNumber = oldValue.toInt()
-                    val valueToAddNumber = valueToAdd.substringAfter('{').substringBefore('}').toInt()
+                    val valueToAddNumber =
+                        valueToAdd.substringAfter('{').substringBefore('}').toInt()
                     (oldValueNumber + valueToAddNumber).toString()
                 }
 
@@ -142,4 +144,78 @@ fun perform(tags: SpikeTags): PerformResult {
         tags = modifiedTags,
         plot = listOf(mostSuitableLine),
     )
+}
+
+data class Location(override val id: String, val title: String, override val tags: SpikeTags) :
+    TagHolder
+
+data class Container(override val id: String, val title: String, override val tags: SpikeTags) :
+    TagHolder
+
+data class Player(override val id: String, val title: String, override val tags: SpikeTags) :
+    TagHolder
+
+data class Weapon(override val id: String, val title: String, override val tags: SpikeTags) :
+    TagHolder
+
+data class Npc(override val id: String, val title: String, override val tags: SpikeTags) : TagHolder
+data class Game(
+    override val id: String,
+    val locations: List<Location>,
+    val locationId: String,
+    val player: Player,
+    override val tags: SpikeTags,
+) : TagHolder
+
+fun update(game: Game, action: String): Game {
+    return game
+}
+
+fun game(
+    id: String = "game",
+    locations: List<Location> = emptyList(),
+    locationId: String = "",
+    player: Player = player(),
+    tags: SpikeTags = tags()
+) = Game(
+    id = id,
+    locationId = locationId,
+    locations = locations,
+    player = player,
+    tags = tags,
+)
+
+fun location(id: String = "location", title: String = "", tags: SpikeTags = tags()) = Location(
+    id = id,
+    title = title,
+    tags = tags,
+)
+
+fun container(id: String = "container", title: String = "", tags: SpikeTags = tags()) = Container(
+    id = id,
+    title = title,
+    tags = tags,
+)
+
+fun player(id: String = "player", title: String = "", tags: SpikeTags = tags()) = Player(
+    id = id,
+    title = title,
+    tags = tags,
+)
+
+fun weapon(id: String = "weapon", title: String = "", tags: SpikeTags = tags()) = Weapon(
+    id = id,
+    title = title,
+    tags = tags,
+)
+
+fun npc(id: String = "npc", title: String = "", tags: SpikeTags = tags()) = Npc(
+    id = id,
+    title = title,
+    tags = tags,
+)
+
+interface TagHolder {
+    val id: String
+    val tags: SpikeTags
 }

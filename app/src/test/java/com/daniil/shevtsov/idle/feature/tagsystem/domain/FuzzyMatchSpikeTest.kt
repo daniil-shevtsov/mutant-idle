@@ -542,6 +542,8 @@ class FuzzyMatchSpikeTest {
         }
     }
 
+    //TODO: Basically next refactoring is to teach different entities to have tags
+
     private fun Assert<PerformResult>.plot() = prop(PerformResult::plot)
     private fun Assert<PerformResult>.lastPlot() = plot().index(0)
 
