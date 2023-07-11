@@ -134,7 +134,11 @@ val lines = listOf(
         entry = entry("You lie, doing nothing")
     ),
     line(
-        requiredTags = tags("position" to "low-air", "posture" to "flying", "current action" to "wait"),
+        requiredTags = tags(
+            "position" to "low-air",
+            "posture" to "flying",
+            "current action" to "wait"
+        ),
         entry = entry("You fly in low-air")
     ),
     line(
@@ -176,6 +180,18 @@ val lines = listOf(
         entry = entry(
             "You cut your hand",
             tags("bleeding" to "true", "health" to "\${-15}")
+        )
+    ),
+    line(
+        requiredTags = tags("objects" to "knife", "current action" to "pick up knife"),
+        entry = entry(
+            "You pick up the knife",
+            tags(
+                "holding" to "knife",
+                "sharp weapon" to "true",
+                "short weapon" to "true",
+                "throwable weapon" to "true"
+            )
         )
     ),
     line(requiredTags = tags("" to ""), entry = entry("You do nothing")),
