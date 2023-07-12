@@ -159,8 +159,24 @@ data class Weapon(override val id: String, val title: String, override val tags:
     TagHolder
 
 data class Npc(override val id: String, val title: String, override val tags: SpikeTags) : TagHolder
+data class DialogLine(
+    override val id: String,
+    val text: String,
+    override val requiredTags: SpikeTags,
+    override val tagChanges: SpikeTags,
+) : TagRequirer, TagChanger
+
+fun dialogLine(
+    id: String = "",
+    text: String = "",
+    requiredTags: SpikeTags = tags(),
+    tagChanges: SpikeTags = tags(),
+) =
+    DialogLine(id = id, text = text, requiredTags = requiredTags, tagChanges = tagChanges)
+
 data class Game(
     override val id: String,
+    val dialogLines: List<DialogLine>,
     val locations: List<Location>,
     val locationId: String,
     val player: Player,
@@ -170,18 +186,27 @@ data class Game(
 ) : TagHolder
 
 fun update(game: Game, action: String): Game {
-    return game.copy(
-        tags = game.locations.find { it.id == game.locationId }?.let { location ->
-            location.tags.map { locationTag ->
-                "location:${location.id}:${locationTag.key}" to locationTag.value
-            }.toMap()
-        }.orEmpty() + game.player.tags.map {
-            "player:${it.key}" to it.value
-        }.toMap() + game.npcs.flatMap { npc ->
-            npc.tags.map { tag ->
-                "npc:${npc.id}:${tag.key}" to tag.value
-            }
+
+    val newTags = game.locations.find { it.id == game.locationId }?.let { location ->
+        location.tags.map { locationTag ->
+            "location:${location.id}:${locationTag.key}" to locationTag.value
         }.toMap()
+    }.orEmpty() + game.player.tags.map {
+        "player:${it.key}" to it.value
+    }.toMap() + game.npcs.flatMap { npc ->
+        npc.tags.map { tag ->
+            "npc:${npc.id}:${tag.key}" to tag.value
+        }
+    }.toMap()
+
+    val newPlot = when (action) {
+        "speak" -> listOf("Bill (barkeep): Howdy!")
+        else -> emptyList()
+    }
+
+    return game.copy(
+        tags = newTags,
+        plot = newPlot,
     )
 }
 
@@ -190,6 +215,7 @@ fun game(
     locations: List<Location> = emptyList(),
     locationId: String = "",
     player: Player = player(),
+    dialogLines: List<DialogLine> = emptyList(),
     npcs: List<Npc> = emptyList(),
     tags: SpikeTags = tags(),
     plot: List<String> = emptyList(),
@@ -197,6 +223,7 @@ fun game(
     id = id,
     locationId = locationId,
     locations = locations,
+    dialogLines = dialogLines,
     player = player,
     npcs = npcs,
     tags = tags,
@@ -236,4 +263,14 @@ fun npc(id: String = "npc", title: String = "", tags: SpikeTags = tags()) = Npc(
 interface TagHolder {
     val id: String
     val tags: SpikeTags
+}
+
+interface TagRequirer {
+    val id: String
+    val requiredTags: SpikeTags
+}
+
+interface TagChanger {
+    val id: String
+    val tagChanges: SpikeTags
 }

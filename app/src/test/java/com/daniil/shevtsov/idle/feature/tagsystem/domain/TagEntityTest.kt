@@ -1,8 +1,10 @@
 package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
 import assertk.Assert
+import assertk.all
 import assertk.assertThat
 import assertk.assertions.containsAll
+import assertk.assertions.containsExactly
 import assertk.assertions.prop
 import org.junit.jupiter.api.Test
 
@@ -29,6 +31,10 @@ class TagEntityTest {
     fun `should say howdy when inside saloon`() {
         val game = game(
             player = player(tags = tags("name" to "bob", "location" to "saloon")),
+            dialogLines = listOf(
+                dialogLine(id = "1234", text = "Howdy!", requiredTags = tags("location" to "saloon")),
+                dialogLine(id = "456", text = "Hello!"),
+            ),
             npcs = listOf(
                 npc(
                     id = "Bill",
@@ -43,17 +49,22 @@ class TagEntityTest {
             ),
             locationId = "saloon",
         )
-        val updated = update(game, "init")
+        val updated = update(game, "speak")
         assertThat(updated)
-            .tags()
-            .containsAll(
-                "player:name" to "bob",
-                "npc:Bill:name" to "Bill",
-                "npc:Bill:occupation" to "barkeep",
-                "location:saloon:SpaceType" to "indoors",
-            )
+            .all {
+                tags()
+                    .containsAll(
+                        "player:name" to "bob",
+                        "npc:Bill:name" to "Bill",
+                        "npc:Bill:occupation" to "barkeep",
+                        "location:saloon:SpaceType" to "indoors",
+                    )
+                plot()
+                    .containsExactly("Bill (barkeep): Howdy!")
+            }
     }
 
     private fun Assert<TagHolder>.tags() = prop(TagHolder::tags)
+    private fun Assert<Game>.plot() = prop(Game::plot)
 
 }
