@@ -32,7 +32,11 @@ class TagEntityTest {
         val game = game(
             player = player(tags = tags("name" to "bob", "location" to "saloon")),
             dialogLines = listOf(
-                dialogLine(id = "1234", text = "Howdy!", requiredTags = tags("location" to "saloon")),
+                dialogLine(
+                    id = "1234",
+                    text = "Howdy!",
+                    requiredTags = tags("location" to "saloon")
+                ),
                 dialogLine(id = "456", text = "Hello!"),
             ),
             npcs = listOf(
@@ -61,6 +65,48 @@ class TagEntityTest {
                     )
                 plot()
                     .containsExactly("Bill (barkeep): Howdy!")
+            }
+    }
+
+    @Test
+    fun `should offer drink after greeting when barkeep inside saloon`() {
+        val game = game(
+            player = player(tags = tags("name" to "bob", "location" to "saloon")),
+            dialogLines = listOf(
+                dialogLine(
+                    id = "1234",
+                    text = "Howdy!",
+                    requiredTags = tags("location" to "saloon")
+                ),
+                dialogLine(id = "456", text = "Hello!"),
+            ),
+            npcs = listOf(
+                npc(
+                    id = "Bill",
+                    tags = tags("occupation" to "barkeep", "name" to "Bill", "location" to "saloon")
+                )
+            ),
+            locations = listOf(
+                location(
+                    id = "saloon",
+                    tags = tags("SpaceType" to "indoors")
+                )
+            ),
+            locationId = "saloon",
+            tags = tags("dialog:greetings" to "true"),
+        )
+        val updated = update(game, "speak")
+        assertThat(updated)
+            .all {
+                tags()
+                    .containsAll(
+                        "player:name" to "bob",
+                        "npc:Bill:name" to "Bill",
+                        "npc:Bill:occupation" to "barkeep",
+                        "location:saloon:SpaceType" to "indoors",
+                    )
+                plot()
+                    .containsExactly("Bill (barkeep): Would you like a drink?")
             }
     }
 

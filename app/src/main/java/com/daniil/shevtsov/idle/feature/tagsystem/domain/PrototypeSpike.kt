@@ -197,10 +197,19 @@ fun update(game: Game, action: String): Game {
         npc.tags.map { tag ->
             "npc:${npc.id}:${tag.key}" to tag.value
         }
-    }.toMap()
+    }.toMap() + game.tags
 
     val newPlot = when (action) {
-        "speak" -> listOf("Bill (barkeep): Howdy!")
+        "speak" -> when {
+            newTags.containsTagKeys(
+                "location:saloon",
+                "dialog:greetings"
+            ) -> listOf("Bill (barkeep): Would you like a drink?")
+
+            newTags.containsTagKey("location:saloon") -> listOf("Bill (barkeep): Howdy!")
+            else -> emptyList()
+        }
+
         else -> emptyList()
     }
 
@@ -209,6 +218,12 @@ fun update(game: Game, action: String): Game {
         plot = newPlot,
     )
 }
+
+private fun SpikeTags.containsTagKeys(vararg keys: String) = keys.all { key ->
+    any { tagEntry -> tagEntry.key.contains(key) }
+}
+
+private fun SpikeTags.containsTagKey(key: String) = any { tagEntry -> tagEntry.key.contains(key) }
 
 fun game(
     id: String = "game",
