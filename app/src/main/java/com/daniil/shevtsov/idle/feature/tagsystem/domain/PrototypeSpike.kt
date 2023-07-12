@@ -204,15 +204,19 @@ fun update(game: Game, action: String): Game {
             val npcToSpeak = game.npcs.first()
             val npcName = npcToSpeak.tags.getTagValue("name")
             val npcOccupation = npcToSpeak.tags.getTagValue("occupation")
-            when {
+            val speakerIndication = "$npcName ($npcOccupation):"
+
+            val selectedLine = when {
                 newTags.containsTagKeys(
                     "location:saloon",
                     "dialog:greetings"
-                ) -> listOf("$npcName ($npcOccupation): Would you like a drink?")
+                ) -> "$speakerIndication Would you like a drink?"
 
-                newTags.containsTagKey("location:saloon") -> listOf("$npcName ($npcOccupation): Howdy!")
-                else -> emptyList()
+                newTags.containsTagKey("location:saloon") -> "$speakerIndication Howdy!"
+                else -> null
             }
+
+            selectedLine?.let { listOf(selectedLine) }.orEmpty()
         }
 
         else -> emptyList()
