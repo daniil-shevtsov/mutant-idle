@@ -188,9 +188,9 @@ data class Game(
 fun update(game: Game, action: String): Game {
 
     val newTags = game.locations.find { it.id == game.locationId }?.let { location ->
-        location.tags.map { locationTag ->
+        (location.tags.map { locationTag ->
             "location:${location.id}:${locationTag.key}" to locationTag.value
-        }.toMap()
+        } + listOf("location" to location.id)).toMap()
     }.orEmpty() + game.player.tags.map {
         "player:${it.key}" to it.value
     }.toMap() + game.npcs.flatMap { npc ->
@@ -206,13 +206,33 @@ fun update(game: Game, action: String): Game {
             val npcOccupation = npcToSpeak.tags.getTagValue("occupation")
             val speakerIndication = "$npcName ($npcOccupation):"
 
+            val filteredDialogLines = game.dialogLines.filter { dialogLine ->
+                dialogLine.requiredTags.all { requiredTag ->
+                    val hasKey = newTags.containsTagKey(requiredTag.key)
+                    val tagValue = newTags.getTagValue(requiredTag.key)
+                    val hasValue = tagValue == requiredTag.value
+
+                    hasKey && hasValue
+                }
+            }
+            val sortedDialogLines = filteredDialogLines.sortedWith(compareBy {
+                it.requiredTags.count { requiredTag ->
+                    val hasKey = newTags.containsTagKey(requiredTag.key)
+                    val tagValue = newTags.getTagValue(requiredTag.key)
+                    val hasValue = tagValue == requiredTag.value
+
+                    hasKey && hasValue
+                }
+            })
+            val dialogLine = sortedDialogLines.lastOrNull()
+
             val selectedLine = when {
                 newTags.containsTagKeys(
                     "location:saloon",
                     "dialog:greetings"
-                ) -> "$speakerIndication Would you like a drink?"
+                ) -> "$speakerIndication ${dialogLine?.text}"
 
-                newTags.containsTagKey("location:saloon") -> "$speakerIndication Howdy!"
+                newTags.containsTagKey("location:saloon") -> "$speakerIndication ${dialogLine?.text}"
                 else -> null
             }
 
@@ -228,9 +248,11 @@ fun update(game: Game, action: String): Game {
     )
 }
 
-private fun SpikeTags.getTagValue(key: String) = entries.find { tagEntry ->
+private fun SpikeTags.getTagValue(key: String) = (entries.find { tagEntry ->
+    tagEntry.key == key
+} ?: entries.find { tagEntry ->
     tagEntry.key.contains(key)
-}?.value
+})?.value
 
 private fun SpikeTags.containsTagKeys(vararg keys: String) = keys.all { key ->
     any { tagEntry -> tagEntry.key.contains(key) }
