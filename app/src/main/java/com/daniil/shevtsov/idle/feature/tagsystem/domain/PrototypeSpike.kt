@@ -222,17 +222,17 @@ fun update(game: Game, action: String): Game {
         game.locations.find { it.id == game.locationId }?.let { location ->
             location.tags.map { (_, tag) ->
                 tagKey(
-                    key = "location:${location.id}:${tag.key.tagKey}",
+                    key = tag.key.tagKey,
                     entityId = location.id
                 ) to tag
             } + listOf(tagKey("location") to spikeTag(tagKey("location"), tagValue(location.id)))
         }.orEmpty().toMap()
     val newPlayerTags: SpikeTags = game.player.tags.map { (_, tag) ->
-        tagKey(key = "player:${tag.key.tagKey}", entityId = "player") to tag
+        tagKey(key = tag.key.tagKey, entityId = "player") to tag
     }.toMap()
     val newNpcTags: SpikeTags = game.npcs.flatMap { npc ->
         npc.tags.map { (_, tag) ->
-            tagKey(key = "npc:${npc.id}:${tag.key.tagKey}", entityId = npc.id) to tag
+            tagKey(key = tag.key.tagKey, entityId = npc.id) to tag
         }
     }.toMap()
     val newGameTags = game.tags
@@ -272,7 +272,7 @@ fun update(game: Game, action: String): Game {
                     tagKey("dialog:greetings"),
                 ) -> "$speakerIndication ${dialogLine?.text}"
 
-                newTags.containsTagKey(tagKey("location:saloon")) -> "$speakerIndication ${dialogLine?.text}"
+                newTags.getTagValue(tagKey("location"))?.value == tagValue("saloon") -> "$speakerIndication ${dialogLine?.text}"
                 else -> null
             }
 

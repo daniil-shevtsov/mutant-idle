@@ -22,10 +22,10 @@ class TagEntityTest {
         assertThat(updated)
             .tags()
             .containsAll(
-                tagKey(entityId = "player", key = "player:name") to tagValue("bob"),
+                tagKey(entityId = "player", key = "name") to tagValue("bob"),
                 tagKey(
                     entityId = "saloon",
-                    key = "location:saloon:SpaceType"
+                    key = "SpaceType"
                 ) to tagValue("indoors"),
             )
     }
@@ -62,15 +62,15 @@ class TagEntityTest {
             .all {
                 tags()
                     .containsAll(
-                        tagKey(entityId = "player", key = "player:name") to tagValue("bob"),
-                        tagKey(entityId = "Bill", key = "npc:Bill:name") to tagValue("Bill"),
+                        tagKey(entityId = "player", key = "name") to tagValue("bob"),
+                        tagKey(entityId = "Bill", key = "name") to tagValue("Bill"),
                         tagKey(
                             entityId = "Bill",
-                            key = "npc:Bill:occupation"
+                            key = "occupation"
                         ) to tagValue("barkeep"),
                         tagKey(
                             entityId = "saloon",
-                            key = "location:saloon:SpaceType"
+                            key = "SpaceType"
                         ) to tagValue("indoors"),
                     )
                 plot()
@@ -116,15 +116,15 @@ class TagEntityTest {
             .all {
                 tags()
                     .containsAll(
-                        tagKey(entityId = "player", key = "player:name") to tagValue("bob"),
-                        tagKey(entityId = "Bill", key = "npc:Bill:name") to tagValue("Bill"),
+                        tagKey(entityId = "player", key = "name") to tagValue("bob"),
+                        tagKey(entityId = "Bill", key = "name") to tagValue("Bill"),
                         tagKey(
                             entityId = "Bill",
-                            key = "npc:Bill:occupation"
+                            key = "occupation"
                         ) to tagValue("barkeep"),
                         tagKey(
                             entityId = "saloon",
-                            key = "location:saloon:SpaceType"
+                            key = "SpaceType"
                         ) to tagValue("indoors"),
                     )
                 plot()
@@ -177,17 +177,17 @@ class TagEntityTest {
             .all {
                 tags()
                     .containsAll(
-                        tagKey(entityId = "player", key = "player:name") to tagValue("bob"),
-                        tagKey(entityId = "player", key = "player:money") to tagValue("90"),
-                        tagKey(entityId = "player", key = "player:holding") to tagValue("beer"),
-                        tagKey(entityId = "Bill", key = "npc:Bill:name") to tagValue("Bill"),
+                        tagKey(entityId = "player", key = "name") to tagValue("bob"),
+                        tagKey(entityId = "player", key = "money") to tagValue("90"),
+                        tagKey(entityId = "player", key = "holding") to tagValue("beer"),
+                        tagKey(entityId = "Bill", key = "name") to tagValue("Bill"),
                         tagKey(
                             entityId = "Bill",
-                            key = "npc:Bill:occupation"
+                            key = "occupation"
                         ) to tagValue("barkeep"),
                         tagKey(
                             entityId = "saloon",
-                            key = "location:saloon:SpaceType"
+                            key = "SpaceType"
                         ) to tagValue("indoors"),
                     )
                 plot()
