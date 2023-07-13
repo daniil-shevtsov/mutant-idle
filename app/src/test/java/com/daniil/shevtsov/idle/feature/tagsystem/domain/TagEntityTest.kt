@@ -84,6 +84,7 @@ class TagEntityTest {
                     id = "789",
                     text = "Would you like a drink?",
                     requiredTags = tags("location" to "saloon", "dialog:greetings" to "true"),
+                    tagChanges = tags("dialog:drink_offered" to "true"),
                 ),
             ),
             npcs = listOf(
@@ -137,6 +138,7 @@ class TagEntityTest {
                 dialogLine(
                     id = "789",
                     text = "Here is your drink.",
+                    requiredTags = tags("dialog:drink_offered" to "true"),
                     tagChanges = tags("player:money" to "-10", "player:holding" to "beer")
                 ),
             ),
