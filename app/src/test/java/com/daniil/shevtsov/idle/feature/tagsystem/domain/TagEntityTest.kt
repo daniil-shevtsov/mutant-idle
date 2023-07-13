@@ -22,8 +22,11 @@ class TagEntityTest {
         assertThat(updated)
             .tags()
             .containsAll(
-                "player:name" to "bob",
-                "location:saloon:SpaceType" to "indoors",
+                tagKey(entityId = "player", key = "player:name") to tagValue("bob"),
+                tagKey(
+                    entityId = "saloon",
+                    key = "location:saloon:SpaceType"
+                ) to tagValue("indoors"),
             )
     }
     //TODO: Need general filtering behavior and general update behavior
@@ -59,10 +62,16 @@ class TagEntityTest {
             .all {
                 tags()
                     .containsAll(
-                        "player:name" to "bob",
-                        "npc:Bill:name" to "Bill",
-                        "npc:Bill:occupation" to "barkeep",
-                        "location:saloon:SpaceType" to "indoors",
+                        tagKey(entityId = "player", key = "player:name") to tagValue("bob"),
+                        tagKey(entityId = "Bill", key = "npc:Bill:name") to tagValue("Bill"),
+                        tagKey(
+                            entityId = "Bill",
+                            key = "npc:Bill:occupation"
+                        ) to tagValue("barkeep"),
+                        tagKey(
+                            entityId = "saloon",
+                            key = "location:saloon:SpaceType"
+                        ) to tagValue("indoors"),
                     )
                 plot()
                     .containsExactly("Bill (barkeep): Howdy!")
@@ -107,10 +116,16 @@ class TagEntityTest {
             .all {
                 tags()
                     .containsAll(
-                        "player:name" to "bob",
-                        "npc:Bill:name" to "Bill",
-                        "npc:Bill:occupation" to "barkeep",
-                        "location:saloon:SpaceType" to "indoors",
+                        tagKey(entityId = "player", key = "player:name") to tagValue("bob"),
+                        tagKey(entityId = "Bill", key = "npc:Bill:name") to tagValue("Bill"),
+                        tagKey(
+                            entityId = "Bill",
+                            key = "npc:Bill:occupation"
+                        ) to tagValue("barkeep"),
+                        tagKey(
+                            entityId = "saloon",
+                            key = "location:saloon:SpaceType"
+                        ) to tagValue("indoors"),
                     )
                 plot()
                     .containsExactly("Bill (barkeep): Would you like a drink?")
@@ -162,20 +177,30 @@ class TagEntityTest {
             .all {
                 tags()
                     .containsAll(
-                        "player:name" to "bob",
-                        "player:money" to "90",
-                        "player:holding" to "beer",
-                        "npc:Bill:name" to "Bill",
-                        "npc:Bill:occupation" to "barkeep",
-                        "location:saloon:SpaceType" to "indoors",
+                        tagKey(entityId = "player", key = "player:name") to tagValue("bob"),
+                        tagKey(entityId = "player", key = "player:money") to tagValue("90"),
+                        tagKey(entityId = "player", key = "player:holding") to tagValue("beer"),
+                        tagKey(entityId = "Bill", key = "npc:Bill:name") to tagValue("Bill"),
+                        tagKey(
+                            entityId = "Bill",
+                            key = "npc:Bill:occupation"
+                        ) to tagValue("barkeep"),
+                        tagKey(
+                            entityId = "saloon",
+                            key = "location:saloon:SpaceType"
+                        ) to tagValue("indoors"),
                     )
                 plot()
                     .containsExactly("Bill (barkeep): Here is your drink.")
             }
     }
 
-    private fun Assert<TagHolder>.tags() =
-        prop(TagHolder::tags).transform { it.toList().map { it.first.tagKey to it.second.value } }
+    private fun Assert<TagHolder>.tags(): Assert<List<Pair<SpikeTagKey, SpikeTagValue>>> =
+        prop(TagHolder::tags)
+            .transform { it.map { it.key to it.value.value } }
+
+    private fun Assert<TagHolder>.tagStrings(): Assert<List<Pair<String, String>>> =
+        tags().transform { it.map { it.first.tagKey to it.second } }
 
     private fun Assert<Game>.plot() = prop(Game::plot)
 

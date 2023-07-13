@@ -1,16 +1,17 @@
 package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
 typealias SpikeTags = Map<SpikeTagKey, SpikeTag>
+typealias SpikeTagValue = String
 private typealias Plot = String
 
 data class SpikeTag(
     val key: SpikeTagKey,
-    val value: String,
+    val value: SpikeTagValue,
 )
 
 fun spikeTag(
     key: SpikeTagKey = tagKey(key = ""),
-    value: String = "",
+    value: SpikeTagValue = "",
 ) = SpikeTag(
     key = key,
     value = value,
@@ -25,6 +26,8 @@ fun tagKey(key: String, entityId: String? = null) = SpikeTagKey(
     tagKey = key,
     entityId = entityId,
 )
+
+fun tagValue(raw: String = ""): SpikeTagValue = raw
 
 fun createDefaultTags(): Map<SpikeTagKey, SpikeTag> = tags(
     "mobile" to "true",
@@ -215,17 +218,26 @@ data class Game(
 
 fun update(game: Game, action: String): Game {
 
-    val newTags = (game.locations.find { it.id == game.locationId }?.let { location ->
-        (location.tags.map { (_, tag) ->
-            "location:${location.id}:${tag.key.tagKey}" to tag.value
-        } + listOf("location" to location.id)).toMap()
-    }.orEmpty() + game.player.tags.map { (_, tag) ->
-        "player:${tag.key.tagKey}" to tag.value
-    }.toMap() + game.npcs.flatMap { npc ->
+    val newLocationTags: SpikeTags =
+        game.locations.find { it.id == game.locationId }?.let { location ->
+            location.tags.map { (_, tag) ->
+                tagKey(
+                    key = "location:${location.id}:${tag.key.tagKey}",
+                    entityId = location.id
+                ) to tag
+            } + listOf(tagKey("location") to spikeTag(tagKey("location"), tagValue(location.id)))
+        }.orEmpty().toMap()
+    val newPlayerTags: SpikeTags = game.player.tags.map { (_, tag) ->
+        tagKey(key = "player:${tag.key.tagKey}", entityId = "player") to tag
+    }.toMap()
+    val newNpcTags: SpikeTags = game.npcs.flatMap { npc ->
         npc.tags.map { (_, tag) ->
-            "npc:${npc.id}:${tag.key.tagKey}" to tag.value
+            tagKey(key = "npc:${npc.id}:${tag.key.tagKey}", entityId = npc.id) to tag
         }
-    }).toList().toSpikeTags() + game.tags
+    }.toMap()
+    val newGameTags = game.tags
+
+    val newTags: SpikeTags = (newLocationTags + newPlayerTags + newNpcTags) + newGameTags
 
     val newPlot = when (action) {
         "speak" -> {
