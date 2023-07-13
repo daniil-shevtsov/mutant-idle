@@ -23,6 +23,7 @@ import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.createDefaultTags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.lines
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.perform
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.spikeTag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.withAdditional
 
 @Preview
@@ -38,11 +39,11 @@ fun SpikeTagScreen(modifier: Modifier = Modifier) {
     var selectedTag by remember { mutableStateOf<String?>("mobile") }
 
     val possibleActions = lines.flatMap {
-        it.requiredTags.entries.filter { it.key == "current action" }.map { it.value }
+        it.requiredTags.entries.filter { it.key.tagKey == "current action" }.map { it.value.value}
     }.distinct() + "wait"
     val possibleTags = lines.flatMap {
         it.requiredTags.keys
-    }.distinct().filter { it != "current action" }
+    }.distinct().filter { it.tagKey != "current action" }
     val possibleValues = lines.flatMap { it.requiredTags.map { it.value } }.distinct()
 
     Column(modifier = modifier.background(AppTheme.colors.background)) {
@@ -58,10 +59,10 @@ fun SpikeTagScreen(modifier: Modifier = Modifier) {
                 Title("Current Tags:")
                 currentTags.forEach { tag ->
                     Tag(
-                        text = tag.key + ": " + tag.value,
-                        isSelected = tag.key == selectedTag,
+                        text = tag.key.tagKey + ": " + tag.value,
+                        isSelected = tag.key.tagKey == selectedTag,
                         modifier = Modifier.clickable {
-                            selectedTag = tag.key
+                            selectedTag = tag.key.tagKey
                         }
                     )
                 }
@@ -79,9 +80,9 @@ fun SpikeTagScreen(modifier: Modifier = Modifier) {
             Column {
                 Title("Debug tags:")
                 possibleTags.forEach { tag ->
-                    Tag(tag, modifier = Modifier.clickable {
+                    Tag(tag.tagKey, modifier = Modifier.clickable {
                         if (!currentTags.containsKey(tag)) {
-                            currentTags += tag to "null"
+                            currentTags += tag to spikeTag(key = tag, value = "null")
                         }
                     })
                 }
@@ -89,9 +90,9 @@ fun SpikeTagScreen(modifier: Modifier = Modifier) {
             Column {
                 Title("Debug tag values:")
                 possibleValues.forEach { tag ->
-                    Tag(tag, modifier = Modifier.clickable {
+                    Tag(tag.value, modifier = Modifier.clickable {
                         currentTags = currentTags.map { entry ->
-                            when (entry.key) {
+                            when (entry.key.tagKey) {
                                 selectedTag -> entry.key to tag
                                 else -> entry.key to entry.value
                             }

@@ -174,7 +174,9 @@ class TagEntityTest {
             }
     }
 
-    private fun Assert<TagHolder>.tags() = prop(TagHolder::tags)
+    private fun Assert<TagHolder>.tags() =
+        prop(TagHolder::tags).transform { it.toList().map { it.first.tagKey to it.second.value } }
+
     private fun Assert<Game>.plot() = prop(Game::plot)
 
 }

@@ -1,24 +1,51 @@
 package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
-typealias SpikeTags = Map<String, String>
-typealias SpikeTag = Pair<String, String>
+typealias SpikeTags = Map<SpikeTagKey, SpikeTag>
 private typealias Plot = String
 
+data class SpikeTag(
+    val key: SpikeTagKey,
+    val value: String,
+)
 
-fun createDefaultTags() = mapOf(
+fun spikeTag(
+    key: SpikeTagKey = tagKey(key = ""),
+    value: String = "",
+) = SpikeTag(
+    key = key,
+    value = value,
+)
+
+data class SpikeTagKey(
+    val tagKey: String,
+    val entityId: String? = null,
+)
+
+fun tagKey(key: String, entityId: String? = null) = SpikeTagKey(
+    tagKey = key,
+    entityId = entityId,
+)
+
+fun createDefaultTags(): Map<SpikeTagKey, SpikeTag> = tags(
     "mobile" to "true",
     "health" to "100",
     "life" to "alive",
 )
 
-fun defaultTagsWithAdditional(vararg tags: SpikeTag): SpikeTags =
+fun List<Pair<String, String>>.toSpikeTags() = associate { (key, value) ->
+    val tagKey = tagKey(key = key)
+    tagKey to spikeTag(key = tagKey, value = value)
+}
+
+fun defaultTagsWithAdditional(vararg tags: Pair<String, String>): SpikeTags =
     createDefaultTags().withAdditional(*tags)
 
-fun SpikeTags.withAdditional(vararg tags: SpikeTag): SpikeTags =
-    this + tags.toMap()
+fun SpikeTags.withAdditional(vararg tags: Pair<String, String>): SpikeTags =
+    this + tags.toList().toSpikeTags()
 
-fun tags(vararg entries: SpikeTag): SpikeTags =
-    entries.toList().toMap()
+fun tags(
+    vararg entries: Pair<String, String>
+): SpikeTags = entries.toList().toSpikeTags()
 
 fun entry(
     plot: String,
@@ -63,6 +90,8 @@ fun newPerform(tags: SpikeTags): PerformResult {
     )
 }
 
+fun SpikeTags.containsKey(key: String) = any { (tagKey, _) -> tagKey.tagKey == key }
+
 fun perform(tags: SpikeTags): PerformResult {
     val lines = lines.map { line ->
         when (line.requiredTags.containsKey("current action")) {
@@ -84,21 +113,19 @@ fun perform(tags: SpikeTags): PerformResult {
 
                 val currentValues = when {
                     currentValue == null -> emptyList()
-                    currentValue.contains('[') -> currentValue
+                    currentValue.value.contains('[') -> currentValue.value
                         .substringAfter('[')
                         .substringBefore(']')
                         .split(',')
 
-                    else -> listOf(currentValue)
+                    else -> listOf(currentValue.value)
                 }
                 when {
-                    requiredTagValue.contains('!') -> !currentValues.contains(
-                        requiredTagValue.drop(
-                            1
-                        )
+                    requiredTagValue.value.contains('!') -> !currentValues.contains(
+                        requiredTagValue.value.drop(1)
                     )
 
-                    else -> currentValues.contains(requiredTagValue)
+                    else -> currentValues.contains(requiredTagValue.value)
                 }
             }
         }
@@ -115,28 +142,29 @@ fun perform(tags: SpikeTags): PerformResult {
     val mostSuitableLine = mostSuitableEntry.plot
 
     val modifiedTags = tags.toMutableMap().apply {
-        remove("current action")
+        remove(tagKey(key = "current action"))
 
         mostSuitableEntry.tags.forEach { (tag, valueToAdd) ->
             val oldValue = get(tag)
             val newValue = when {
-                valueToAdd.contains('+') && oldValue != null -> {
-                    val oldValueWithoutBrackets = oldValue.substringAfter('[').substringBefore(']')
+                valueToAdd.value.contains('+') && oldValue != null -> {
+                    val oldValueWithoutBrackets =
+                        oldValue.value.substringAfter('[').substringBefore(']')
                     val valueToAddWithoutBrackets =
-                        valueToAdd.substringAfter('[').substringBefore(']')
+                        valueToAdd.value.substringAfter('[').substringBefore(']')
                     "[$oldValueWithoutBrackets,$valueToAddWithoutBrackets]"
                 }
 
-                valueToAdd.contains("\${-") && oldValue != null -> {
-                    val oldValueNumber = oldValue.toInt()
+                valueToAdd.value.contains("\${-") && oldValue != null -> {
+                    val oldValueNumber = oldValue.value.toInt()
                     val valueToAddNumber =
-                        valueToAdd.substringAfter('{').substringBefore('}').toInt()
+                        valueToAdd.value.substringAfter('{').substringBefore('}').toInt()
                     (oldValueNumber + valueToAddNumber).toString()
                 }
 
-                else -> valueToAdd
+                else -> valueToAdd.value
             }
-            put(tag, newValue)
+            put(tag, valueToAdd.copy(value = newValue))
         }
     }
 
@@ -187,23 +215,23 @@ data class Game(
 
 fun update(game: Game, action: String): Game {
 
-    val newTags = game.locations.find { it.id == game.locationId }?.let { location ->
-        (location.tags.map { locationTag ->
-            "location:${location.id}:${locationTag.key}" to locationTag.value
+    val newTags = (game.locations.find { it.id == game.locationId }?.let { location ->
+        (location.tags.map { (_, tag) ->
+            "location:${location.id}:${tag.key.tagKey}" to tag.value
         } + listOf("location" to location.id)).toMap()
-    }.orEmpty() + game.player.tags.map {
-        "player:${it.key}" to it.value
+    }.orEmpty() + game.player.tags.map { (_, tag) ->
+        "player:${tag.key.tagKey}" to tag.value
     }.toMap() + game.npcs.flatMap { npc ->
-        npc.tags.map { tag ->
-            "npc:${npc.id}:${tag.key}" to tag.value
+        npc.tags.map { (_, tag) ->
+            "npc:${npc.id}:${tag.key.tagKey}" to tag.value
         }
-    }.toMap() + game.tags
+    }).toList().toSpikeTags() + game.tags
 
     val newPlot = when (action) {
         "speak" -> {
             val npcToSpeak = game.npcs.first()
-            val npcName = npcToSpeak.tags.getTagValue("name")
-            val npcOccupation = npcToSpeak.tags.getTagValue("occupation")
+            val npcName = npcToSpeak.tags.getTagValue(tagKey("name"))?.value
+            val npcOccupation = npcToSpeak.tags.getTagValue(tagKey("occupation"))?.value
             val speakerIndication = "$npcName ($npcOccupation):"
 
             val filteredDialogLines = game.dialogLines.filter { dialogLine ->
@@ -228,11 +256,11 @@ fun update(game: Game, action: String): Game {
 
             val selectedLine = when {
                 newTags.containsTagKeys(
-                    "location:saloon",
-                    "dialog:greetings"
+                    tagKey("location:saloon"),
+                    tagKey("dialog:greetings"),
                 ) -> "$speakerIndication ${dialogLine?.text}"
 
-                newTags.containsTagKey("location:saloon") -> "$speakerIndication ${dialogLine?.text}"
+                newTags.containsTagKey(tagKey("location:saloon")) -> "$speakerIndication ${dialogLine?.text}"
                 else -> null
             }
 
@@ -248,17 +276,18 @@ fun update(game: Game, action: String): Game {
     )
 }
 
-private fun SpikeTags.getTagValue(key: String) = (entries.find { tagEntry ->
-    tagEntry.key == key
-} ?: entries.find { tagEntry ->
-    tagEntry.key.contains(key)
+private fun SpikeTags.getTagValue(key: SpikeTagKey) = (entries.find { (tagKey, tag) ->
+    tagKey == key
+} ?: entries.find { (tagKey, tag) ->
+    tagKey.tagKey.contains(key.tagKey)
 })?.value
 
-private fun SpikeTags.containsTagKeys(vararg keys: String) = keys.all { key ->
-    any { tagEntry -> tagEntry.key.contains(key) }
+private fun SpikeTags.containsTagKeys(vararg keys: SpikeTagKey) = keys.all { key ->
+    any { (tagKey, tag) -> tagKey.tagKey.contains(key.tagKey) }
 }
 
-private fun SpikeTags.containsTagKey(key: String) = any { tagEntry -> tagEntry.key.contains(key) }
+private fun SpikeTags.containsTagKey(key: SpikeTagKey) =
+    any { (tagKey, tag) -> tagKey.tagKey.contains(key.tagKey) }
 
 fun game(
     id: String = "game",
