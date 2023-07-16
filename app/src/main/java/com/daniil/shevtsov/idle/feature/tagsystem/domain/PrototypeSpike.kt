@@ -139,13 +139,13 @@ private fun perform(game: Game): PerformResult {
             )
         ).reversed()
 
-    val mostSuitableEntry = sortedEntries.firstOrNull()?.entry ?: entry("no suitable entry")
+    val mostSuitableEntry = sortedEntries.firstOrNull()?.entry ?: entry(plot = "no suitable entry")
     val mostSuitableLine = mostSuitableEntry.plot
 
     val modifiedTags = presentTags.toMutableMap().apply {
         remove(tagKey(key = "current action"))
 
-        mostSuitableEntry.tags.forEach { (tag, valueToAdd) ->
+        mostSuitableEntry.tagChanges.forEach { (tag, valueToAdd) ->
             val oldValue = get(tag)
             val newValue = when {
                 valueToAdd.value.contains('+') && oldValue != null -> {
@@ -201,21 +201,23 @@ fun line(
 ) = Line(id, requiredTags, entry)
 
 data class LineEntry(
-    val tags: SpikeTags,
+    override val id: String,
+    override val tagChanges: SpikeTags,
     val plot: Plot,
     val weight: Float,
-)
+) : TagChanger
 
 fun entry(
     plot: String,
-    tagChange: SpikeTags = mapOf(),
+    id: String = "",
+    tagChanges: SpikeTags = mapOf(),
     weight: Float = 1.0f
-): LineEntry =
-    LineEntry(
-        tags = tagChange,
-        plot = plot,
-        weight = weight,
-    )
+): LineEntry = LineEntry(
+    id = id,
+    tagChanges = tagChanges,
+    plot = plot,
+    weight = weight,
+)
 
 data class DialogLine(
     override val id: String,
