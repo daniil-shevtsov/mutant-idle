@@ -21,8 +21,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.createDefaultTags
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.lines
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.newPerform
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.plotLines
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.spikeTag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.withAdditional
 
@@ -38,13 +38,13 @@ fun SpikeTagScreen(modifier: Modifier = Modifier) {
     var currentPlot by remember { mutableStateOf("") }
     var selectedTag by remember { mutableStateOf<String?>("mobile") }
 
-    val possibleActions = lines.flatMap {
+    val possibleActions = plotLines.flatMap {
         it.requiredTags.entries.filter { it.key.tagKey == "current action" }.map { it.value.value}
     }.distinct() + "wait"
-    val possibleTags = lines.flatMap {
+    val possibleTags = plotLines.flatMap {
         it.requiredTags.keys
     }.distinct().filter { it.tagKey != "current action" }
-    val possibleValues = lines.flatMap { it.requiredTags.map { it.value } }.distinct()
+    val possibleValues = plotLines.flatMap { it.requiredTags.map { it.value } }.distinct()
 
     Column(modifier = modifier.background(AppTheme.colors.background)) {
         Text(

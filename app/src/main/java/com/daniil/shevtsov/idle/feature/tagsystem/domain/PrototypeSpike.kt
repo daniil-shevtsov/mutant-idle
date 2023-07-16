@@ -113,8 +113,10 @@ fun newPerform(tags: SpikeTags): Game {
 
 fun SpikeTags.containsKey(key: String) = any { (tagKey, _) -> tagKey.tagKey == key }
 
-private fun perform(tags: SpikeTags): PerformResult {
-    val lines = lines.map { line ->
+private fun perform(game: Game): PerformResult {
+    val tags = game.tags
+
+    val lines = plotLines.map { line ->
         when (line.requiredTags.containsKey("current action")) {
             true -> line.copy(
                 entry = line.entry.copy(
@@ -235,7 +237,6 @@ data class Game(
 ) : TagHolder
 
 fun update(game: Game, action: String): Game {
-
     val newLocationTags: SpikeTags =
         game.locations.find { it.id == game.locationId }?.let { location ->
             location.tags.map { (_, tag) ->
@@ -302,7 +303,7 @@ fun update(game: Game, action: String): Game {
             )
         }
 
-        else -> perform(newTags)
+        else -> perform(game.copy(tags = newTags))
     }
 
     return game.copy(

@@ -1,6 +1,6 @@
 package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
-val lines = listOf(
+val plotLines = listOf(
     line(
         requiredTags = tags("mobile" to "true", "bones" to "broken"),
         entry = entry(
