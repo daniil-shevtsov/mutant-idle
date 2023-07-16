@@ -548,20 +548,11 @@ class FuzzyMatchSpikeTest {
 
     //TODO: Basically next refactoring is to teach different entities to have tags
 
-    private fun Assert<PerformResult>.plot() = prop(PerformResult::plot)
     private fun Assert<Game>.plott() = prop(Game::plot)
-
-    private fun Assert<PerformResult>.tags() = prop(PerformResult::tags).strings()
 
     private fun Assert<SpikeTags>.strings() = transform {
         it.map { it.key.tagKey to it.value.value }
     }
-
-
-    private fun defaultTagsWithAdditionall(vararg tags: Pair<String, String>): Game = game(
-        tags = createDefaultTags().withAdditional(*tags)
-    )
-
 
     private fun Assert<Game>.lastPlott(): Assert<String> = prop(Game::plot).index(0)
 

@@ -82,23 +82,6 @@ data class Line(
     val entry: LineEntry,
 )
 
-
-fun newPerform(tags: SpikeTags): PerformResult {
-    var kek = perform(tags)
-    var count = 0
-    while (!kek.plot.contains("no suitable entry") && count < 20) {
-        val lol = perform(kek.tags)
-        //TODO: Why only plot? Seems like a bug
-        kek = lol.copy(
-            plot = kek.plot + lol.plot
-        )
-        count++
-    }
-    return kek.copy(
-        plot = kek.plot.filter { it != "no suitable entry" }
-    )
-}
-
 fun performm(tags: SpikeTags): Game {
     val game = game(
         tags = tags
@@ -160,7 +143,7 @@ fun performGameIntegration(game: Game, action: String = "default"): Game {
     )
 }
 
-fun perform(tags: SpikeTags): PerformResult {
+private fun perform(tags: SpikeTags): PerformResult {
     val lines = lines.map { line ->
         when (line.requiredTags.containsKey("current action")) {
             true -> line.copy(
