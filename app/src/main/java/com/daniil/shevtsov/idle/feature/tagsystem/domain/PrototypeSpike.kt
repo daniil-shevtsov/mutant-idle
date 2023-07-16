@@ -108,14 +108,8 @@ private fun perform(game: Game): PerformResult {
 
     val sortedEntries = lines
         .filter { line -> line.suitableFor(presentTags) }
-        .sortedWith(
-            compareBy(
-                { line -> line.entry.weight },
-                { line ->
-                    line.requiredTags.count { (key, value) -> presentTags[key] == value }
-                }
-            )
-        ).reversed()
+        .sortedWith(compareBySuitability(presentTags))
+        .reversed()
 
     val mostSuitableEntry = sortedEntries.firstOrNull()?.entry ?: entry(plot = "no suitable entry")
     val mostSuitableLine = mostSuitableEntry.plot
@@ -152,6 +146,14 @@ private fun perform(game: Game): PerformResult {
         plot = listOf(mostSuitableLine),
     )
 }
+
+fun compareBySuitability(presentTags: SpikeTags): Comparator<TagEntry> = compareBy(
+    { entry -> entry.weight },
+    { entry ->
+        entry.requiredTags
+            .count { (key, value) -> presentTags[key] == value }
+    }
+)
 
 fun TagRequirer.suitableFor(
     presentTags: SpikeTags
