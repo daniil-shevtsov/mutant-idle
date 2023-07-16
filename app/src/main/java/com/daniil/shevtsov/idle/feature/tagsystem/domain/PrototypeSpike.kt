@@ -107,29 +107,7 @@ private fun perform(game: Game): PerformResult {
     }
 
     val sortedEntries = lines
-        .filter { line ->
-            line.requiredTags == listOf("" to "") || line.requiredTags.all { (requiredTag, requiredTagValue) ->
-                val currentTags = presentTags
-                val currentValue = currentTags[requiredTag]
-
-                val currentValues = when {
-                    currentValue == null -> emptyList()
-                    currentValue.value.contains('[') -> currentValue.value
-                        .substringAfter('[')
-                        .substringBefore(']')
-                        .split(',')
-
-                    else -> listOf(currentValue.value)
-                }
-                when {
-                    requiredTagValue.value.contains('!') -> !currentValues.contains(
-                        requiredTagValue.value.drop(1)
-                    )
-
-                    else -> currentValues.contains(requiredTagValue.value)
-                }
-            }
-        }
+        .filter { line -> line.suitableFor(presentTags) }
         .sortedWith(
             compareBy(
                 { line -> line.entry.weight },
@@ -175,6 +153,31 @@ private fun perform(game: Game): PerformResult {
     )
 }
 
+fun TagRequirer.suitableFor(
+    presentTags: SpikeTags
+): Boolean =
+    requiredTags == listOf("" to "") || requiredTags.all { (requiredTag, requiredTagValue) ->
+        val currentTags = presentTags
+        val currentValue = currentTags[requiredTag]
+
+        val currentValues = when {
+            currentValue == null -> emptyList()
+            currentValue.value.contains('[') -> currentValue.value
+                .substringAfter('[')
+                .substringBefore(']')
+                .split(',')
+
+            else -> listOf(currentValue.value)
+        }
+        when {
+            requiredTagValue.value.contains('!') -> !currentValues.contains(
+                requiredTagValue.value.drop(1)
+            )
+
+            else -> currentValues.contains(requiredTagValue.value)
+        }
+    }
+
 data class Location(override val id: String, val title: String, override val tags: SpikeTags) :
     TagHolder
 
@@ -192,7 +195,12 @@ data class Line(
     override val id: String,
     override val requiredTags: SpikeTags,
     val entry: LineEntry,
-) : TagRequirer
+) : TagEntry {
+    override val tagChanges: SpikeTags
+        get() = entry.tagChanges
+    override val weight: Float
+        get() = entry.weight
+}
 
 fun line(
     id: String = "",
@@ -302,6 +310,7 @@ fun update(game: Game, action: String): Game {
                 plot = game.plot + finalLine?.let { listOf(finalLine) }.orEmpty()
             )
         }
+
         else -> perform(game.copy(tags = newTags))
     }
 
@@ -380,4 +389,11 @@ interface TagRequirer {
 interface TagChanger {
     val id: String
     val tagChanges: SpikeTags
+}
+
+interface TagEntry : TagRequirer, TagChanger {
+    override val id: String
+    override val requiredTags: SpikeTags
+    override val tagChanges: SpikeTags
+    val weight: Float
 }
