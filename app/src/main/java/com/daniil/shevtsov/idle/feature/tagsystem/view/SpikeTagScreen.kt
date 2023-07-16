@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.createDefaultTags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.lines
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.newPerformm
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.newPerform
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.spikeTag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.withAdditional
 
@@ -71,7 +71,7 @@ fun SpikeTagScreen(modifier: Modifier = Modifier) {
                 Title("Actions:")
                 possibleActions.forEach { action ->
                     Tag(action, modifier = Modifier.clickable {
-                        val result = newPerformm(currentTags.withAdditional("current action" to action))
+                        val result = newPerform(currentTags.withAdditional("current action" to action))
                         currentTags = result.tags
                         currentPlot = result.plot[0] + "\n" + currentPlot
                     })

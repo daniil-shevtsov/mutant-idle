@@ -96,7 +96,7 @@ fun performm(game: Game): Game {
     )
 }
 
-fun newPerformm(tags: SpikeTags): Game {
+fun newPerform(tags: SpikeTags): Game {
     var kek = performm(tags)
     var count = 0
     while (!kek.plot.contains("no suitable entry") && count < 20) {
