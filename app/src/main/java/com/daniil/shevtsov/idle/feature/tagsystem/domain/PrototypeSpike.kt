@@ -55,31 +55,9 @@ fun tags(
     vararg entries: Pair<String, String>
 ): SpikeTags = entries.toList().toSpikeTags()
 
-fun entry(
-    plot: String,
-    tagChange: SpikeTags = mapOf(),
-    weight: Float = 1.0f
-): LineEntry =
-    LineEntry(
-        tags = tagChange,
-        plot = plot,
-        weight = weight,
-    )
-
-data class LineEntry(
-    val tags: SpikeTags,
-    val plot: Plot,
-    val weight: Float,
-)
-
 data class PerformResult(
     val tags: SpikeTags,
     val plot: List<Plot>,
-)
-
-data class Line(
-    val requiredTags: SpikeTags,
-    val entry: LineEntry,
 )
 
 fun performm(tags: SpikeTags): Game {
@@ -210,6 +188,29 @@ data class Item(override val id: String, val title: String, override val tags: S
     TagHolder
 
 data class Npc(override val id: String, val title: String, override val tags: SpikeTags) : TagHolder
+data class Line(
+    val requiredTags: SpikeTags,
+    val entry: LineEntry,
+)
+fun line(
+    requiredTags: SpikeTags,
+    entry: LineEntry,
+) = Line(requiredTags, entry)
+data class LineEntry(
+    val tags: SpikeTags,
+    val plot: Plot,
+    val weight: Float,
+)
+fun entry(
+    plot: String,
+    tagChange: SpikeTags = mapOf(),
+    weight: Float = 1.0f
+): LineEntry =
+    LineEntry(
+        tags = tagChange,
+        plot = plot,
+        weight = weight,
+    )
 data class DialogLine(
     override val id: String,
     val text: String,

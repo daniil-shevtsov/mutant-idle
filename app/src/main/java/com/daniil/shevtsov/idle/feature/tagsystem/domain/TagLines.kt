@@ -196,8 +196,3 @@ val plotLines = listOf(
     ),
     line(requiredTags = tags("" to ""), entry = entry("You do nothing")),
 )
-
-private fun line(
-    requiredTags: SpikeTags,
-    entry: LineEntry,
-) = Line(requiredTags, entry)
