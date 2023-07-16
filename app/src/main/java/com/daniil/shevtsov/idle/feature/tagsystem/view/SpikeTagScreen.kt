@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.createDefaultTags
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.game
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.newPerform
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.plotLines
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.spikeTag
@@ -34,12 +35,17 @@ fun SpikeTagScreenPreview() {
 
 @Composable
 fun SpikeTagScreen(modifier: Modifier = Modifier) {
-    var currentTags by remember { mutableStateOf(createDefaultTags().withAdditional("ability" to "flight")) }
-    var currentPlot by remember { mutableStateOf("") }
+    var currentGame by remember {
+        mutableStateOf(
+            game(
+                tags = createDefaultTags().withAdditional("ability" to "flight")
+            )
+        )
+    }
     var selectedTag by remember { mutableStateOf<String?>("mobile") }
 
     val possibleActions = plotLines.flatMap {
-        it.requiredTags.entries.filter { it.key.tagKey == "current action" }.map { it.value.value}
+        it.requiredTags.entries.filter { it.key.tagKey == "current action" }.map { it.value.value }
     }.distinct() + "wait"
     val possibleTags = plotLines.flatMap {
         it.requiredTags.keys
@@ -48,7 +54,7 @@ fun SpikeTagScreen(modifier: Modifier = Modifier) {
 
     Column(modifier = modifier.background(AppTheme.colors.background)) {
         Text(
-            text = currentPlot,
+            text = currentGame.plot.joinToString(separator = "\n"),
             modifier = Modifier.background(Color.White).padding(4.dp)
                 .fillMaxWidth()
                 .height(100.dp)
@@ -57,7 +63,7 @@ fun SpikeTagScreen(modifier: Modifier = Modifier) {
         Row {
             Column {
                 Title("Current Tags:")
-                currentTags.forEach { tag ->
+                currentGame.tags.forEach { tag ->
                     Tag(
                         text = tag.key.tagKey + ": " + tag.value,
                         isSelected = tag.key.tagKey == selectedTag,
@@ -71,9 +77,8 @@ fun SpikeTagScreen(modifier: Modifier = Modifier) {
                 Title("Actions:")
                 possibleActions.forEach { action ->
                     Tag(action, modifier = Modifier.clickable {
-                        val result = newPerform(currentTags.withAdditional("current action" to action))
-                        currentTags = result.tags
-                        currentPlot = result.plot[0] + "\n" + currentPlot
+                        val newGame = newPerform(currentGame, action)
+                        currentGame = newGame
                     })
                 }
             }
@@ -81,8 +86,16 @@ fun SpikeTagScreen(modifier: Modifier = Modifier) {
                 Title("Debug tags:")
                 possibleTags.forEach { tag ->
                     Tag(tag.tagKey, modifier = Modifier.clickable {
-                        if (!currentTags.containsKey(tag)) {
-                            currentTags += tag to spikeTag(key = tag, value = "null")
+                        if (!currentGame.tags.containsKey(tag)) {
+                            currentGame = currentGame.copy(
+                                tags = currentGame.tags + mapOf(
+                                    tag to spikeTag(
+                                        key = tag,
+                                        value = "null"
+                                    )
+                                )
+                            )
+
                         }
                     })
                 }
@@ -91,12 +104,14 @@ fun SpikeTagScreen(modifier: Modifier = Modifier) {
                 Title("Debug tag values:")
                 possibleValues.forEach { tag ->
                     Tag(tag.value, modifier = Modifier.clickable {
-                        currentTags = currentTags.map { entry ->
-                            when (entry.key.tagKey) {
-                                selectedTag -> entry.key to tag
-                                else -> entry.key to entry.value
-                            }
-                        }.toMap()
+                        currentGame = currentGame.copy(
+                            tags = currentGame.tags.map { entry ->
+                                when (entry.key.tagKey) {
+                                    selectedTag -> entry.key to tag
+                                    else -> entry.key to entry.value
+                                }
+                            }.toMap()
+                        )
                     })
                 }
             }
