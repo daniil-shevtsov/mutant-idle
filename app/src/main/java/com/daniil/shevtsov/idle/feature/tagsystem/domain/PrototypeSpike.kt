@@ -100,7 +100,7 @@ fun newPerform(tags: SpikeTags): PerformResult {
 
 fun SpikeTags.containsKey(key: String) = any { (tagKey, _) -> tagKey.tagKey == key }
 
-fun performGameIntegration(game: Game, action: String): Game {
+fun performGameIntegration(game: Game, action: String = "default"): Game {
     val newLocationTags: SpikeTags =
         game.locations.find { it.id == game.locationId }?.let { location ->
             location.tags.map { (_, tag) ->

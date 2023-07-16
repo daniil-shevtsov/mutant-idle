@@ -100,16 +100,23 @@ class FuzzyMatchSpikeTest {
 
     @Test
     fun `kek7`() {
-        val tags = defaultTagsWithAdditional(
+        val tags = defaultTagsWithAdditionall(
             "position" to "ground",
             "posture" to "standing",
             "appearance" to "human",
         )
 
-        val line = perform(tags)
+        val line = performGameIntegration(tags)
 
-        assertThat(line).lastPlot().isEqualTo("You stand, doing nothing")
+        assertThat(line).lastPlott().isEqualTo("You stand, doing nothing")
     }
+
+    private fun defaultTagsWithAdditionall(vararg tags: Pair<String, String>): Game = game(
+        tags = createDefaultTags().withAdditional(*tags)
+    )
+
+
+    private fun Assert<Game>.lastPlott(): Assert<String> = prop(Game::plot).index(0)
 
     @Test
     fun `kek8`() {
@@ -330,7 +337,8 @@ class FuzzyMatchSpikeTest {
         assertThat(immortality).tags()
             .contains("ability" to "[flight,immortality]")
         val regeneration = perform(
-            immortality.tags.withAdditional("current action" to "learn regeneration"))
+            immortality.tags.withAdditional("current action" to "learn regeneration")
+        )
 
         assertThat(regeneration).tags()
             .contains("ability" to "[flight,immortality,regeneration]")
