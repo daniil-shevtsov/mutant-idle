@@ -124,16 +124,6 @@ class FuzzyMatchSpikeTest {
         assertThat(line).lastPlott().isEqualTo("You lie on the ground, doing nothing")
     }
 
-    fun performm(tags: SpikeTags): Game {
-        val game = game(
-            tags = tags
-        )
-        return performGameIntegration(
-            game,
-            action = tags[tagKey("current action")]?.value ?: "default"
-        )
-    }
-
     @Test
     fun `kek9`() {
         val tags = defaultTagsWithAdditional(
@@ -466,10 +456,9 @@ class FuzzyMatchSpikeTest {
             "ability" to "flight",
         )
 
-        val kek = newPerform(tags.withAdditional("current action" to "fly"))
+        val kek = newPerformm(tags.withAdditional("current action" to "fly"))
 
-        assertThat(kek).plot()
-            .containsExactly("You start flying")
+        assertThat(kek).lastPlott().isEqualTo("You start flying")
     }
 
     @Test

@@ -88,6 +88,36 @@ fun newPerform(tags: SpikeTags): PerformResult {
     var count = 0
     while (!kek.plot.contains("no suitable entry") && count < 20) {
         val lol = perform(kek.tags)
+        //TODO: Why only plot? Seems like a bug
+        kek = lol.copy(
+            plot = kek.plot + lol.plot
+        )
+        count++
+    }
+    return kek.copy(
+        plot = kek.plot.filter { it != "no suitable entry" }
+    )
+}
+
+fun performm(tags: SpikeTags): Game {
+    val game = game(
+        tags = tags
+    )
+    return performm(game)
+}
+
+fun performm(game: Game): Game {
+    return performGameIntegration(
+        game,
+        action = game.tags[tagKey("current action")]?.value ?: "default"
+    )
+}
+
+fun newPerformm(tags: SpikeTags): Game {
+    var kek = performm(tags)
+    var count = 0
+    while (!kek.plot.contains("no suitable entry") && count < 20) {
+        val lol = performm(kek.tags)
         kek = lol.copy(
             plot = kek.plot + lol.plot
         )
