@@ -285,17 +285,7 @@ fun update(game: Game, action: String): Game {
     )
 
     val performResult = when (action) {
-        "speak123123213123" -> {
-//            val selectedLine = when {
-//                newTags.containsTagKeys(
-//                    tagKey(key = "location:saloon", entityId = "location"),
-//                    tagKey(key = "dialog:greetings", entityId = "dialog"),
-//                ) -> mostSuitableLine?.entry?.plot
-//
-//                newTags.getTagValue(tagKey("location"))?.value == tagValue("saloon") -> mostSuitableLine?.entry?.plot
-//                else -> null
-//            }
-
+        "speak" -> {
             val performResult = perform(game.copy(tags = newTags))
 
             val npcToSpeak = game.npcs.first()
@@ -312,52 +302,6 @@ fun update(game: Game, action: String): Game {
                 plot = game.plot + finalLine?.let { listOf(finalLine) }.orEmpty()
             )
         }
-
-        "speak" -> {
-            val filteredLines = game.lines.filter { line ->
-                line.requiredTags.all { requiredTag ->
-                    val hasKey = newTags.containsTagKey(requiredTag.key)
-                    val tagValue = newTags.getTagValue(requiredTag.key)
-                    val hasValue = tagValue == requiredTag.value
-
-                    hasKey && hasValue
-                }
-            }
-            val sortedLines = filteredLines.sortedWith(compareBy {
-                it.requiredTags.count { requiredTag ->
-                    val hasKey = newTags.containsTagKey(requiredTag.key)
-                    val tagValue = newTags.getTagValue(requiredTag.key)
-                    val hasValue = tagValue == requiredTag.value
-
-                    hasKey && hasValue
-                }
-            })
-
-            val mostSuitableLine = sortedLines.lastOrNull()
-
-            val selectedLine = when {
-                newTags.containsTagKeys(
-                    tagKey(key = "location:saloon", entityId = "location"),
-                    tagKey(key = "dialog:greetings", entityId = "dialog"),
-                ) -> mostSuitableLine?.entry?.plot
-
-                newTags.getTagValue(tagKey("location"))?.value == tagValue("saloon") -> mostSuitableLine?.entry?.plot
-                else -> null
-            }
-
-            val npcToSpeak = game.npcs.first()
-            val npcName = npcToSpeak.tags.getTagValue(tagKey("name"))?.value
-            val npcOccupation = npcToSpeak.tags.getTagValue(tagKey("occupation"))?.value
-            val speakerIndication = "$npcName ($npcOccupation):"
-
-            val finalLine = selectedLine?.let { line -> "$speakerIndication $line" }
-
-            PerformResult(
-                tags = newTags,
-                plot = game.plot + finalLine?.let { listOf(finalLine) }.orEmpty()
-            )
-        }
-
         else -> perform(game.copy(tags = newTags))
     }
 
@@ -372,13 +316,6 @@ private fun SpikeTags.getTagValue(key: SpikeTagKey) = (entries.find { (tagKey, t
 } ?: entries.find { (tagKey, tag) ->
     tagKey.tagKey.contains(key.tagKey)
 })?.value
-
-private fun SpikeTags.containsTagKeys(vararg keys: SpikeTagKey) = keys.all { key ->
-    any { (tagKey, tag) -> tagKey.tagKey.contains(key.tagKey) }
-}
-
-private fun SpikeTags.containsTagKey(key: SpikeTagKey) =
-    any { (tagKey, tag) -> tagKey.tagKey.contains(key.tagKey) }
 
 fun game(
     id: String = "game",
