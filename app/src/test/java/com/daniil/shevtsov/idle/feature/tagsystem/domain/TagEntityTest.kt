@@ -34,7 +34,7 @@ class TagEntityTest {
     fun `should say howdy when inside saloon`() {
         val game = game(
             player = player(tags = tags("name" to "bob", "location" to "saloon")),
-            dialogLines = listOf(
+            lines = listOf(
                 dialogLine(
                     id = "1234",
                     text = "Howdy!",
@@ -81,7 +81,7 @@ class TagEntityTest {
     fun `should offer drink after greeting when barkeep inside saloon`() {
         val game = game(
             player = player(tags = tags("name" to "bob", "location" to "saloon")),
-            dialogLines = listOf(
+            lines = listOf(
                 dialogLine(
                     id = "1234",
                     text = "Howdy!",
@@ -150,7 +150,7 @@ class TagEntityTest {
                     "money" to "100",
                 )
             ),
-            dialogLines = listOf(
+            lines = listOf(
                 dialogLine(
                     id = "1234",
                     text = "Howdy!",

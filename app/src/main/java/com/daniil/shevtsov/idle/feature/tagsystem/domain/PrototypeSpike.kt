@@ -246,7 +246,6 @@ fun dialogLine(
 
 data class Game(
     override val id: String,
-    val dialogLines: List<DialogLine>,
     val lines: List<Line>,
     val locations: List<Location>,
     val locationId: String,
@@ -351,8 +350,7 @@ fun game(
     locations: List<Location> = emptyList(),
     locationId: String = "",
     player: Player = player(),
-    dialogLines: List<Line> = emptyList(),
-    lines: List<Line> = plotLines,
+    lines: List<Line> = emptyList(),
     npcs: List<Npc> = emptyList(),
     tags: SpikeTags = tags(),
     plot: List<String> = emptyList(),
@@ -360,8 +358,7 @@ fun game(
     id = id,
     locationId = locationId,
     locations = locations,
-    dialogLines = emptyList(),
-    lines = lines + dialogLines,
+    lines = plotLines + lines,
     player = player,
     npcs = npcs,
     tags = tags,
