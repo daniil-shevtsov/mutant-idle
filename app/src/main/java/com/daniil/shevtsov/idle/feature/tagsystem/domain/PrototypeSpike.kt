@@ -231,7 +231,12 @@ fun dialogLine(
     text: String = "",
     requiredTags: SpikeTags = tags(),
     tagChanges: SpikeTags = tags(),
-) = DialogLine(id = id, text = text, requiredTags = requiredTags, tagChanges = tagChanges).let { dialogLine ->
+) = DialogLine(
+    id = id,
+    text = text,
+    requiredTags = requiredTags,
+    tagChanges = tagChanges
+).let { dialogLine ->
     line(
         id = dialogLine.id,
         requiredTags = dialogLine.requiredTags,
@@ -280,12 +285,8 @@ fun update(game: Game, action: String): Game {
     )
 
     val performResult = when (action) {
-        "speak" -> {
-            val npcToSpeak = game.npcs.first()
-            val npcName = npcToSpeak.tags.getTagValue(tagKey("name"))?.value
-            val npcOccupation = npcToSpeak.tags.getTagValue(tagKey("occupation"))?.value
-            val speakerIndication = "$npcName ($npcOccupation):"
 
+        "speak" -> {
             val filteredLines = game.lines.filter { line ->
                 line.requiredTags.all { requiredTag ->
                     val hasKey = newTags.containsTagKey(requiredTag.key)
@@ -305,21 +306,28 @@ fun update(game: Game, action: String): Game {
                 }
             })
 
-            val line = sortedLines.lastOrNull()
+            val mostSuitableLine = sortedLines.lastOrNull()
 
             val selectedLine = when {
                 newTags.containsTagKeys(
                     tagKey(key = "location:saloon", entityId = "location"),
                     tagKey(key = "dialog:greetings", entityId = "dialog"),
-                ) -> "$speakerIndication ${line?.entry?.plot}"
+                ) -> mostSuitableLine?.entry?.plot
 
-                newTags.getTagValue(tagKey("location"))?.value == tagValue("saloon") -> "$speakerIndication ${line?.entry?.plot}"
+                newTags.getTagValue(tagKey("location"))?.value == tagValue("saloon") -> mostSuitableLine?.entry?.plot
                 else -> null
             }
 
+            val npcToSpeak = game.npcs.first()
+            val npcName = npcToSpeak.tags.getTagValue(tagKey("name"))?.value
+            val npcOccupation = npcToSpeak.tags.getTagValue(tagKey("occupation"))?.value
+            val speakerIndication = "$npcName ($npcOccupation):"
+
+            val finalLine = selectedLine?.let { line -> "$speakerIndication $line" }
+
             PerformResult(
                 tags = newTags,
-                plot = game.plot + selectedLine?.let { listOf(selectedLine) }.orEmpty()
+                plot = game.plot + finalLine?.let { listOf(finalLine) }.orEmpty()
             )
         }
 
