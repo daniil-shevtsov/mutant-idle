@@ -90,7 +90,7 @@ fun performm(tags: SpikeTags): Game {
 }
 
 fun performm(game: Game, action: String? = null): Game {
-    return performGameIntegration(
+    return update(
         game,
         action = action ?: game.tags[tagKey("current action")]?.value ?: "default"
     )
@@ -332,7 +332,7 @@ fun update(game: Game, action: String): Game {
             )
         }
 
-        else -> PerformResult(tags = newTags, plot = game.plot)
+        else -> perform(newTags)
     }
 
     return game.copy(
