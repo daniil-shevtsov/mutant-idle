@@ -50,7 +50,7 @@ fun SpikeTagScreen(modifier: Modifier = Modifier) {
     val possibleTags = plotLines.flatMap {
         it.requiredTags.keys
     }.distinct().filter { it.tagKey != "current action" }
-    val possibleValues = plotLines.flatMap { it.requiredTags.map { it.value } }.distinct()
+    val possibleValues = plotLines.flatMap { it.requiredTags.map { it.value.value } }.distinct()
 
     Column(modifier = modifier.background(AppTheme.colors.background)) {
         Text(
@@ -63,7 +63,7 @@ fun SpikeTagScreen(modifier: Modifier = Modifier) {
         Row {
             Column {
                 Title("Current Tags:")
-                currentGame.tags.forEach { tag ->
+                currentGame.tags.values.forEach { tag ->
                     Tag(
                         text = tag.key.tagKey + ": " + tag.value,
                         isSelected = tag.key.tagKey == selectedTag,
@@ -102,13 +102,16 @@ fun SpikeTagScreen(modifier: Modifier = Modifier) {
             }
             Column {
                 Title("Debug tag values:")
-                possibleValues.forEach { tag ->
-                    Tag(tag.value, modifier = Modifier.clickable {
+                possibleValues.forEach { tagValue ->
+                    Tag(tagValue, modifier = Modifier.clickable {
                         currentGame = currentGame.copy(
-                            tags = currentGame.tags.map { entry ->
-                                when (entry.key.tagKey) {
-                                    selectedTag -> entry.key to tag
-                                    else -> entry.key to entry.value
+                            tags = currentGame.tags.values.map { tag ->
+                                when (tag.key.tagKey) {
+                                    selectedTag -> tag.key to tag.copy(
+                                        value = tagValue
+                                    )
+
+                                    else -> tag.key to tag
                                 }
                             }.toMap()
                         )
