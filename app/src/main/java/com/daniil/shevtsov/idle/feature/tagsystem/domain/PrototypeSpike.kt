@@ -92,7 +92,7 @@ fun newPerform(tags: SpikeTags): Game {
 fun SpikeTags.containsKey(key: String) = any { (tagKey, _) -> tagKey.tagKey == key }
 
 private fun perform(game: Game): PerformResult {
-    val tags = game.tags
+    val presentTags = game.tags
 
     val lines = plotLines.map { line ->
         when (line.requiredTags.containsKey("current action")) {
@@ -109,7 +109,7 @@ private fun perform(game: Game): PerformResult {
     val sortedEntries = lines
         .filter { line ->
             line.requiredTags == listOf("" to "") || line.requiredTags.all { (requiredTag, requiredTagValue) ->
-                val currentTags = tags
+                val currentTags = presentTags
                 val currentValue = currentTags[requiredTag]
 
                 val currentValues = when {
@@ -134,7 +134,7 @@ private fun perform(game: Game): PerformResult {
             compareBy(
                 { line -> line.entry.weight },
                 { line ->
-                    line.requiredTags.count { (key, value) -> tags[key] == value }
+                    line.requiredTags.count { (key, value) -> presentTags[key] == value }
                 }
             )
         ).reversed()
@@ -142,7 +142,7 @@ private fun perform(game: Game): PerformResult {
     val mostSuitableEntry = sortedEntries.firstOrNull()?.entry ?: entry("no suitable entry")
     val mostSuitableLine = mostSuitableEntry.plot
 
-    val modifiedTags = tags.toMutableMap().apply {
+    val modifiedTags = presentTags.toMutableMap().apply {
         remove(tagKey(key = "current action"))
 
         mostSuitableEntry.tags.forEach { (tag, valueToAdd) ->
