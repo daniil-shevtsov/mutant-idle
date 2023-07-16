@@ -35,6 +35,10 @@ fun createDefaultTags(): Map<SpikeTagKey, SpikeTag> = tags(
     "life" to "alive",
 )
 
+fun spikeTags(vararg entries: Pair<SpikeTagKey, SpikeTagValue>): SpikeTags = entries.associate { (key, value) ->
+    key to spikeTag(key = key, value = value)
+}
+
 fun List<Pair<String, String>>.toSpikeTags() = associate { (key, value) ->
     val tagKey = tagKey(key = key)
     tagKey to spikeTag(key = tagKey, value = value)

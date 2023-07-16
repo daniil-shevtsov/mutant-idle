@@ -91,8 +91,16 @@ class TagEntityTest {
                 dialogLine(
                     id = "789",
                     text = "Would you like a drink?",
-                    requiredTags = tags("location" to "saloon", "dialog:greetings" to "true"),
-                    tagChanges = tags("dialog:drink_offered" to "true"),
+                    requiredTags = spikeTags(
+                        tagKey("location") to tagValue("saloon"),
+                        tagKey(entityId = "dialog", key = "greetings") to tagValue("true"),
+                    ),
+                    tagChanges = spikeTags(
+                        tagKey(
+                            entityId = "dialog",
+                            key = "drink_offered"
+                        ) to tagValue("true")
+                    ),
                 ),
             ),
             npcs = listOf(
@@ -108,7 +116,7 @@ class TagEntityTest {
                 )
             ),
             locationId = "saloon",
-            tags = tags("dialog:greetings" to "true"),
+            tags = spikeTags(tagKey(entityId = "dialog", key = "greetings") to tagValue("true")),
         )
         val updated = update(game, "speak")
         assertThat(updated)
