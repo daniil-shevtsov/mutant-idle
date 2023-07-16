@@ -286,25 +286,7 @@ fun update(game: Game, action: String): Game {
                     hasKey && hasValue
                 }
             }
-            val filteredDialogLines = game.dialogLines.filter { dialogLine ->
-                dialogLine.requiredTags.all { requiredTag ->
-                    val hasKey = newTags.containsTagKey(requiredTag.key)
-                    val tagValue = newTags.getTagValue(requiredTag.key)
-                    val hasValue = tagValue == requiredTag.value
-
-                    hasKey && hasValue
-                }
-            }
             val sortedLines = filteredLines.sortedWith(compareBy {
-                it.requiredTags.count { requiredTag ->
-                    val hasKey = newTags.containsTagKey(requiredTag.key)
-                    val tagValue = newTags.getTagValue(requiredTag.key)
-                    val hasValue = tagValue == requiredTag.value
-
-                    hasKey && hasValue
-                }
-            })
-            val sortedDialogLines = filteredDialogLines.sortedWith(compareBy {
                 it.requiredTags.count { requiredTag ->
                     val hasKey = newTags.containsTagKey(requiredTag.key)
                     val tagValue = newTags.getTagValue(requiredTag.key)
@@ -315,7 +297,6 @@ fun update(game: Game, action: String): Game {
             })
 
             val line = sortedLines.lastOrNull()
-            val dialogLine = sortedDialogLines.lastOrNull()
 
             val selectedLine = when {
                 newTags.containsTagKeys(
@@ -324,15 +305,6 @@ fun update(game: Game, action: String): Game {
                 ) -> "$speakerIndication ${line?.entry?.plot}"
 
                 newTags.getTagValue(tagKey("location"))?.value == tagValue("saloon") -> "$speakerIndication ${line?.entry?.plot}"
-                else -> null
-            }
-            val selectedDialogLine = when {
-                newTags.containsTagKeys(
-                    tagKey(key = "location:saloon", entityId = "location"),
-                    tagKey(key = "dialog:greetings", entityId = "dialog"),
-                ) -> "$speakerIndication ${dialogLine?.text}"
-
-                newTags.getTagValue(tagKey("location"))?.value == tagValue("saloon") -> "$speakerIndication ${dialogLine?.text}"
                 else -> null
             }
 
