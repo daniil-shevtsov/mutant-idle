@@ -176,15 +176,17 @@ class FuzzyMatchSpikeTest {
             "current action" to "fly"
         )
 
-        val line = perform(tags)
+        val line = performm(tags)
 
-        assertThat(line).lastPlot().isEqualTo("You start flying")
-        assertThat(line).tags()
+        assertThat(line).lastPlott().isEqualTo("You start flying")
+        assertThat(line).tagss()
             .containsAll(
                 "posture" to "flying",
                 "position" to "low-air",
             )
     }
+
+    private fun Assert<Game>.tagss() = prop(Game::tags).strings()
 
     @Test
     fun `kek12`() {
@@ -565,7 +567,9 @@ class FuzzyMatchSpikeTest {
     private fun Assert<PerformResult>.plot() = prop(PerformResult::plot)
     private fun Assert<PerformResult>.lastPlot() = plot().index(0)
 
-    private fun Assert<PerformResult>.tags() = prop(PerformResult::tags).transform {
+    private fun Assert<PerformResult>.tags() = prop(PerformResult::tags).strings()
+
+    private fun Assert<SpikeTags>.strings() = transform {
         it.map { it.key.tagKey to it.value.value }
     }
 

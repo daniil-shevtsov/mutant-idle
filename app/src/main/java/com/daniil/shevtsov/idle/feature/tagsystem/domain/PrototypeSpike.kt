@@ -126,7 +126,7 @@ fun performGameIntegration(game: Game, action: String = "default"): Game {
 
     return game.copy(
         plot = performResult.plot,
-        tags = newTags,
+        tags = performResult.tags,
     )
 }
 
