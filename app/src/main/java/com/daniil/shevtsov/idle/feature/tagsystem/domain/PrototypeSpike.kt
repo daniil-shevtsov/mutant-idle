@@ -113,36 +113,6 @@ fun newPerform(tags: SpikeTags): Game {
 
 fun SpikeTags.containsKey(key: String) = any { (tagKey, _) -> tagKey.tagKey == key }
 
-private fun performGameIntegration(game: Game, action: String = "default"): Game {
-    val newLocationTags: SpikeTags =
-        game.locations.find { it.id == game.locationId }?.let { location ->
-            location.tags.map { (_, tag) ->
-                tagKey(
-                    key = tag.key.tagKey,
-                    entityId = location.id
-                ) to tag
-            } + listOf(tagKey("location") to spikeTag(tagKey("location"), tagValue(location.id)))
-        }.orEmpty().toMap()
-    val newPlayerTags: SpikeTags = game.player.tags.map { (_, tag) ->
-        tagKey(key = tag.key.tagKey, entityId = "player") to tag
-    }.toMap()
-    val newNpcTags: SpikeTags = game.npcs.flatMap { npc ->
-        npc.tags.map { (_, tag) ->
-            tagKey(key = tag.key.tagKey, entityId = npc.id) to tag
-        }
-    }.toMap()
-    val newGameTags = game.tags
-
-    val newTags: SpikeTags = (newLocationTags + newPlayerTags + newNpcTags) + newGameTags
-
-    val performResult = perform(newTags)
-
-    return game.copy(
-        plot = performResult.plot,
-        tags = performResult.tags,
-    )
-}
-
 private fun perform(tags: SpikeTags): PerformResult {
     val lines = lines.map { line ->
         when (line.requiredTags.containsKey("current action")) {
