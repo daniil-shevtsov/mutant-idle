@@ -298,7 +298,7 @@ fun update(game: Game, action: String): Game {
             }
 
             PerformResult(
-                tags = newTags,
+                tags = performResult.tags,
                 plot = game.plot + finalLine?.let { listOf(finalLine) }.orEmpty()
             )
         }

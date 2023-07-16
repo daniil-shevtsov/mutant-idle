@@ -6,7 +6,6 @@ import assertk.assertThat
 import assertk.assertions.containsAll
 import assertk.assertions.containsExactly
 import assertk.assertions.prop
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class TagEntityTest {
@@ -140,7 +139,6 @@ class TagEntityTest {
     }
 
     @Test
-    @Disabled
     fun `should accept the drink after being offered when barkeep inside saloon`() {
         val game = game(
             player = player(
@@ -160,8 +158,21 @@ class TagEntityTest {
                 dialogLine(
                     id = "789",
                     text = "Here is your drink.",
-                    requiredTags = tags("drink_offered" to "true"),
-                    tagChanges = tags("player:money" to "-10", "player:holding" to "beer")
+                    requiredTags = spikeTags(
+                        tagKey(
+                            entityId = "dialog",
+                            key = "drink_offered"
+                        ) to tagValue("true")
+                    ),
+                    tagChanges = spikeTags(
+                        tagKey(
+                            entityId = "player",
+                            key = "money"
+                        ) to tagValue("\${-10}"), tagKey(
+                            entityId = "player",
+                            key = "holding"
+                        ) to tagValue("beer")
+                    )
                 ),
             ),
             npcs = listOf(
@@ -177,7 +188,12 @@ class TagEntityTest {
                 )
             ),
             locationId = "saloon",
-            tags = tags("drink_offered" to "true"),
+            tags = spikeTags(
+                tagKey(
+                    entityId = "dialog",
+                    key = "drink_offered"
+                ) to tagValue("true")
+            ),
         )
         val updated = update(game, "speak")
         assertThat(updated)
