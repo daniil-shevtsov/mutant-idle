@@ -132,9 +132,9 @@ private fun perform(game: Game): PerformResult {
         }
         .sortedWith(
             compareBy(
-                { (_, entry) -> entry.weight },
-                { (lineTags, _) ->
-                    lineTags.count { (key, value) -> tags[key] == value }
+                { line -> line.entry.weight },
+                { line ->
+                    line.requiredTags.count { (key, value) -> tags[key] == value }
                 }
             )
         ).reversed()
@@ -189,18 +189,23 @@ data class Item(override val id: String, val title: String, override val tags: S
 
 data class Npc(override val id: String, val title: String, override val tags: SpikeTags) : TagHolder
 data class Line(
-    val requiredTags: SpikeTags,
+    override val id: String,
+    override val requiredTags: SpikeTags,
     val entry: LineEntry,
-)
+) : TagRequirer
+
 fun line(
+    id: String = "",
     requiredTags: SpikeTags,
     entry: LineEntry,
-) = Line(requiredTags, entry)
+) = Line(id, requiredTags, entry)
+
 data class LineEntry(
     val tags: SpikeTags,
     val plot: Plot,
     val weight: Float,
 )
+
 fun entry(
     plot: String,
     tagChange: SpikeTags = mapOf(),
@@ -211,6 +216,7 @@ fun entry(
         plot = plot,
         weight = weight,
     )
+
 data class DialogLine(
     override val id: String,
     val text: String,
