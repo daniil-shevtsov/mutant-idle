@@ -97,12 +97,9 @@ private fun perform(game: Game): PerformResult {
         }
     }
 
-    val sortedEntries = lines
-        .filter { line -> line.suitableFor(presentTags) }
-        .sortedWith(compareBySuitability(presentTags))
-        .reversed()
+    val sortedEntries = lines.mostSuitableFor(presentTags)
 
-    val mostSuitableEntry = sortedEntries.firstOrNull()?.entry ?: entry(plot = "no suitable entry")
+    val mostSuitableEntry = (sortedEntries.firstOrNull() as? Line)?.entry ?: entry( "no suitable entry")
     val mostSuitableLine = mostSuitableEntry.plot
 
     val modifiedTags = presentTags.apply(mostSuitableEntry)
@@ -112,6 +109,11 @@ private fun perform(game: Game): PerformResult {
         plot = game.plot + mostSuitableLine,
     )
 }
+
+fun List<TagEntry>.mostSuitableFor(presentTags: SpikeTags) =
+    filter { line -> line.suitableFor(presentTags) }
+        .sortedWith(compareBySuitability(presentTags))
+        .reversed()
 
 fun SpikeTags.apply(entry: TagChanger): SpikeTags = toMutableMap().apply {
     remove(tagKey(key = "current action"))

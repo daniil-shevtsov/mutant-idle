@@ -569,7 +569,7 @@ class FuzzyMatchSpikeTest {
 }
 
 private fun say(tags: SpikeTags): Game {
-    val lines = listOf(
+    val lineStrings = listOf(
         listOf(
             "trespassing" to "true",
             "time_of_day" to "night",
@@ -590,8 +590,21 @@ private fun say(tags: SpikeTags): Game {
         listOf("time_of_day" to "morning") to "Morning, what can I do for you?",
         listOf("" to "") to "Hello, what can I do for you?"
     )
+    val lines = lineStrings.map { (tags, plot) ->
+        dialogLine(
+            text = plot,
+            requiredTags = tags.map { (key, value) ->
+                tagKey(key) to spikeTag(
+                    key = tagKey(key),
+                    value = tagValue(value)
+                )
+            }.toMap()
+        )
+    }
 
-    val mostSuitableLine = lines
+    //val mostSuitableLine = lines.
+
+    val mostSuitableLineByString = lineStrings
         .filter { (lineTags, _) ->
             lineTags == listOf("" to "") || lineTags.all { (key, value) -> tags[tagKey(key)]?.value == value }
         }
@@ -601,6 +614,6 @@ private fun say(tags: SpikeTags): Game {
 
     return game(
         tags = tags,
-        plot = listOf(mostSuitableLine)
+        plot = listOf(mostSuitableLineByString)
     )
 }
