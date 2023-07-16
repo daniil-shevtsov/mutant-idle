@@ -29,7 +29,6 @@ class TagEntityTest {
                 ) to tagValue("indoors"),
             )
     }
-    //TODO: Need general filtering behavior and general update behavior
 
     @Test
     fun `should say howdy when inside saloon`() {
@@ -153,7 +152,7 @@ class TagEntityTest {
                 dialogLine(
                     id = "789",
                     text = "Here is your drink.",
-                    requiredTags = tags("dialog:drink_offered" to "true"),
+                    requiredTags = tags("drink_offered" to "true"),
                     tagChanges = tags("player:money" to "-10", "player:holding" to "beer")
                 ),
             ),
@@ -170,11 +169,13 @@ class TagEntityTest {
                 )
             ),
             locationId = "saloon",
-            tags = tags("dialog:drink_offered" to "true"),
+            tags = tags("drink_offered" to "true"),
         )
         val updated = update(game, "speak")
         assertThat(updated)
             .all {
+                plot()
+                    .containsExactly("Bill (barkeep): Here is your drink.")
                 tags()
                     .containsAll(
                         tagKey(entityId = "player", key = "name") to tagValue("bob"),
@@ -190,10 +191,11 @@ class TagEntityTest {
                             key = "SpaceType"
                         ) to tagValue("indoors"),
                     )
-                plot()
-                    .containsExactly("Bill (barkeep): Here is your drink.")
             }
     }
+
+    //TODO: Need general filtering behavior and general update behavior
+
 
     private fun Assert<TagHolder>.tags(): Assert<List<Pair<SpikeTagKey, SpikeTagValue>>> =
         prop(TagHolder::tags)

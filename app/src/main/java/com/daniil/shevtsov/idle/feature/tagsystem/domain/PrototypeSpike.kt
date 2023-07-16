@@ -186,7 +186,7 @@ data class Container(override val id: String, val title: String, override val ta
 data class Player(override val id: String, val title: String, override val tags: SpikeTags) :
     TagHolder
 
-data class Weapon(override val id: String, val title: String, override val tags: SpikeTags) :
+data class Item(override val id: String, val title: String, override val tags: SpikeTags) :
     TagHolder
 
 data class Npc(override val id: String, val title: String, override val tags: SpikeTags) : TagHolder
@@ -268,8 +268,8 @@ fun update(game: Game, action: String): Game {
 
             val selectedLine = when {
                 newTags.containsTagKeys(
-                    tagKey("location:saloon"),
-                    tagKey("dialog:greetings"),
+                    tagKey(key = "location:saloon", entityId = "location"),
+                    tagKey(key = "dialog:greetings", entityId = "dialog"),
                 ) -> "$speakerIndication ${dialogLine?.text}"
 
                 newTags.getTagValue(tagKey("location"))?.value == tagValue("saloon") -> "$speakerIndication ${dialogLine?.text}"
@@ -339,7 +339,7 @@ fun player(id: String = "player", title: String = "", tags: SpikeTags = tags()) 
     tags = tags,
 )
 
-fun weapon(id: String = "weapon", title: String = "", tags: SpikeTags = tags()) = Weapon(
+fun item(id: String = "item", title: String = "", tags: SpikeTags = tags()) = Item(
     id = id,
     title = title,
     tags = tags,
