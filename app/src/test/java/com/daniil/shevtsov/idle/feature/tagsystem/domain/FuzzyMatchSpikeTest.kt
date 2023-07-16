@@ -27,76 +27,76 @@ class FuzzyMatchSpikeTest {
 
         assertThat(line).lastPlot().isEqualTo("Hello, what can I do for you?")
     }
-//
-//    @Test
-//    fun `kek2`() {
-//        val tags = defaultTagsWithAdditional(
-//            "time_of_day" to "day",
-//            "trespassing" to "true",
-//            "appearance" to "human",
-//            "location" to "shop",
-//        )
-//
-//        val line = say(tags)
-//
-//        assertThat(line).lastPlot().isEqualTo("Hey, you are not supposed to be here. Get out!")
-//    }
-//
-//    @Test
-//    fun `kek3`() {
-//        val tags = defaultTagsWithAdditional(
-//            "time_of_day" to "night",
-//            "trespassing" to "true",
-//            "appearance" to "human",
-//            "location" to "shop",
-//        )
-//
-//        val line = say(tags)
-//
-//        assertThat(line).lastPlot().isEqualTo("Who is there?! I am armed, get out while you can!")
-//    }
-//
-//    @Test
-//    fun `kek4`() {
-//        val tags = defaultTagsWithAdditional(
-//            "time_of_day" to "night",
-//            "trespassing" to "true",
-//            "appearance" to "alien",
-//            "location" to "shop",
-//        )
-//
-//        val line = say(tags)
-//
-//        assertThat(line).lastPlot().isEqualTo("This is my shop and this is my planet! Get out!")
-//    }
-//
-//    @Test
-//    fun `kek5`() {
-//        val tags = defaultTagsWithAdditional(
-//            "time_of_day" to "night",
-//            "trespassing" to "true",
-//            "appearance" to "demon",
-//            "location" to "shop",
-//        )
-//
-//        val line = say(tags)
-//
-//        assertThat(line).lastPlot().isEqualTo("In the name of the lord, I say be gone!")
-//    }
-//
-//    @Test
-//    fun `kek6`() {
-//        val tags = defaultTagsWithAdditional(
-//            "time_of_day" to "morning",
-//            "trespassing" to "false",
-//            "appearance" to "human",
-//            "location" to "shop",
-//        )
-//
-//        val line = say(tags)
-//
-//        assertThat(line).lastPlot().isEqualTo("Morning, what can I do for you?")
-//    }
+
+    @Test
+    fun `kek2`() {
+        val tags = defaultTagsWithAdditional(
+            "time_of_day" to "day",
+            "trespassing" to "true",
+            "appearance" to "human",
+            "location" to "shop",
+        )
+
+        val line = say(tags)
+
+        assertThat(line).lastPlot().isEqualTo("Hey, you are not supposed to be here. Get out!")
+    }
+
+    @Test
+    fun `kek3`() {
+        val tags = defaultTagsWithAdditional(
+            "time_of_day" to "night",
+            "trespassing" to "true",
+            "appearance" to "human",
+            "location" to "shop",
+        )
+
+        val line = say(tags)
+
+        assertThat(line).lastPlot().isEqualTo("Who is there?! I am armed, get out while you can!")
+    }
+
+    @Test
+    fun `kek4`() {
+        val tags = defaultTagsWithAdditional(
+            "time_of_day" to "night",
+            "trespassing" to "true",
+            "appearance" to "alien",
+            "location" to "shop",
+        )
+
+        val line = say(tags)
+
+        assertThat(line).lastPlot().isEqualTo("This is my shop and this is my planet! Get out!")
+    }
+
+    @Test
+    fun `kek5`() {
+        val tags = defaultTagsWithAdditional(
+            "time_of_day" to "night",
+            "trespassing" to "true",
+            "appearance" to "demon",
+            "location" to "shop",
+        )
+
+        val line = say(tags)
+
+        assertThat(line).lastPlot().isEqualTo("In the name of the lord, I say be gone!")
+    }
+
+    @Test
+    fun `kek6`() {
+        val tags = defaultTagsWithAdditional(
+            "time_of_day" to "morning",
+            "trespassing" to "false",
+            "appearance" to "human",
+            "location" to "shop",
+        )
+
+        val line = say(tags)
+
+        assertThat(line).lastPlot().isEqualTo("Morning, what can I do for you?")
+    }
 
     @Test
     fun `kek7`() {
