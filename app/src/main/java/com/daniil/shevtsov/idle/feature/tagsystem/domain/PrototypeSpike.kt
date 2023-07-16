@@ -35,9 +35,10 @@ fun createDefaultTags(): Map<SpikeTagKey, SpikeTag> = tags(
     "life" to "alive",
 )
 
-fun spikeTags(vararg entries: Pair<SpikeTagKey, SpikeTagValue>): SpikeTags = entries.associate { (key, value) ->
-    key to spikeTag(key = key, value = value)
-}
+fun spikeTags(vararg entries: Pair<SpikeTagKey, SpikeTagValue>): SpikeTags =
+    entries.associate { (key, value) ->
+        key to spikeTag(key = key, value = value)
+    }
 
 fun List<Pair<String, String>>.toSpikeTags() = associate { (key, value) ->
     val tagKey = tagKey(key = key)
@@ -98,6 +99,36 @@ fun newPerform(tags: SpikeTags): PerformResult {
 }
 
 fun SpikeTags.containsKey(key: String) = any { (tagKey, _) -> tagKey.tagKey == key }
+
+fun performGameIntegration(game: Game, action: String): Game {
+    val newLocationTags: SpikeTags =
+        game.locations.find { it.id == game.locationId }?.let { location ->
+            location.tags.map { (_, tag) ->
+                tagKey(
+                    key = tag.key.tagKey,
+                    entityId = location.id
+                ) to tag
+            } + listOf(tagKey("location") to spikeTag(tagKey("location"), tagValue(location.id)))
+        }.orEmpty().toMap()
+    val newPlayerTags: SpikeTags = game.player.tags.map { (_, tag) ->
+        tagKey(key = tag.key.tagKey, entityId = "player") to tag
+    }.toMap()
+    val newNpcTags: SpikeTags = game.npcs.flatMap { npc ->
+        npc.tags.map { (_, tag) ->
+            tagKey(key = tag.key.tagKey, entityId = npc.id) to tag
+        }
+    }.toMap()
+    val newGameTags = game.tags
+
+    val newTags: SpikeTags = (newLocationTags + newPlayerTags + newNpcTags) + newGameTags
+
+    val performResult = perform(newTags)
+
+    return game.copy(
+        plot = performResult.plot,
+        tags = newTags,
+    )
+}
 
 fun perform(tags: SpikeTags): PerformResult {
     val lines = lines.map { line ->
