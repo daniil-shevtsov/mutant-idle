@@ -231,8 +231,18 @@ fun dialogLine(
     text: String = "",
     requiredTags: SpikeTags = tags(),
     tagChanges: SpikeTags = tags(),
-) =
-    DialogLine(id = id, text = text, requiredTags = requiredTags, tagChanges = tagChanges)
+) = DialogLine(id = id, text = text, requiredTags = requiredTags, tagChanges = tagChanges).let { dialogLine ->
+    line(
+        id = dialogLine.id,
+        requiredTags = dialogLine.requiredTags,
+        entry = entry(
+            plot = dialogLine.text,
+            id = dialogLine.id,
+            tagChanges = dialogLine.tagChanges,
+            weight = 1.0f,
+        )
+    )
+}
 
 data class Game(
     override val id: String,
@@ -341,7 +351,7 @@ fun game(
     locations: List<Location> = emptyList(),
     locationId: String = "",
     player: Player = player(),
-    dialogLines: List<DialogLine> = emptyList(),
+    dialogLines: List<Line> = emptyList(),
     lines: List<Line> = plotLines,
     npcs: List<Npc> = emptyList(),
     tags: SpikeTags = tags(),
@@ -350,19 +360,8 @@ fun game(
     id = id,
     locationId = locationId,
     locations = locations,
-    dialogLines = dialogLines,
-    lines = lines + dialogLines.map { dialogLine ->
-        line(
-            id = dialogLine.id,
-            requiredTags = dialogLine.requiredTags,
-            entry = entry(
-                plot = dialogLine.text,
-                id = dialogLine.id,
-                tagChanges = dialogLine.tagChanges,
-                weight = 1.0f,
-            )
-        )
-    },
+    dialogLines = emptyList(),
+    lines = lines + dialogLines,
     player = player,
     npcs = npcs,
     tags = tags,
