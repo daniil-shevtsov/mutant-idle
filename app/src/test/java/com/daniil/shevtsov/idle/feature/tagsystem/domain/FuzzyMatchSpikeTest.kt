@@ -470,9 +470,9 @@ class FuzzyMatchSpikeTest {
             "posture" to "flying",
         )
 
-        val kek = newPerform(tags.withAdditional("current action" to "stop flying"))
+        val kek = newPerformm(tags.withAdditional("current action" to "stop flying"))
 
-        assertThat(kek).plot()
+        assertThat(kek).plott()
             .containsExactly(
                 "You stop flying",
                 "You fall to the ground, breaking every bone in your body",
@@ -485,9 +485,9 @@ class FuzzyMatchSpikeTest {
     fun kek24() {
         val tags = defaultTagsWithAdditional()
 
-        val kek = newPerform(tags)
+        val kek = newPerformm(tags)
 
-        assertThat(kek).plot()
+        assertThat(kek).plott()
             .isEmpty()
     }
 
@@ -498,10 +498,10 @@ class FuzzyMatchSpikeTest {
             "sharp weapon" to "true",
         )
 
-        val kek = newPerform(tags.withAdditional("current action" to "cut your hand"))
+        val kek = newPerformm(tags.withAdditional("current action" to "cut your hand"))
 
         assertThat(kek).all {
-            tags().containsAll(
+            tagss().containsAll(
                 "health" to "85",
                 "bleeding" to "true",
             )
@@ -515,11 +515,11 @@ class FuzzyMatchSpikeTest {
             "sharp weapon" to "true",
         )
 
-        val cut1 = newPerform(tags.withAdditional("current action" to "cut your hand"))
-        val cut2 = newPerform(cut1.tags.withAdditional("current action" to "cut your hand"))
+        val cut1 = newPerformm(tags.withAdditional("current action" to "cut your hand"))
+        val cut2 = newPerformm(cut1.tags.withAdditional("current action" to "cut your hand"))
 
         assertThat(cut2).all {
-            tags().containsAll(
+            tagss().containsAll(
                 "health" to "70",
                 "bleeding" to "true",
             )
@@ -532,10 +532,10 @@ class FuzzyMatchSpikeTest {
             "objects" to "knife",
         )
 
-        val kek = newPerform(tags.withAdditional("current action" to "pick up knife"))
+        val kek = newPerformm(tags.withAdditional("current action" to "pick up knife"))
 
         assertThat(kek).all {
-            tags().containsAll(
+            tagss().containsAll(
                 "holding" to "knife",
                 "sharp weapon" to "true",
                 "short weapon" to "true",
@@ -549,6 +549,7 @@ class FuzzyMatchSpikeTest {
     //TODO: Basically next refactoring is to teach different entities to have tags
 
     private fun Assert<PerformResult>.plot() = prop(PerformResult::plot)
+    private fun Assert<Game>.plott() = prop(Game::plot)
 
     private fun Assert<PerformResult>.tags() = prop(PerformResult::tags).strings()
 
