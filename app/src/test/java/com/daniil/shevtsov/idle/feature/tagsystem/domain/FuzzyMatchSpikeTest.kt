@@ -126,9 +126,19 @@ class FuzzyMatchSpikeTest {
             "appearance" to "human",
         )
 
-        val line = perform(tags.withAdditional("current action" to "wait"))
+        val line = performm(tags.withAdditional("current action" to "wait"))
 
-        assertThat(line).lastPlot().isEqualTo("You lie on the ground, doing nothing")
+        assertThat(line).lastPlott().isEqualTo("You lie on the ground, doing nothing")
+    }
+
+    fun performm(tags: SpikeTags): Game {
+        val game = game(
+            tags = tags
+        )
+        return performGameIntegration(
+            game,
+            action = tags[tagKey("current action")]?.value ?: "default"
+        )
     }
 
     @Test
