@@ -94,7 +94,7 @@ fun SpikeTags.containsKey(key: String) = any { (tagKey, _) -> tagKey.tagKey == k
 private fun perform(game: Game): PerformResult {
     val presentTags = game.tags
 
-    val lines = plotLines.map { line ->
+    val lines = game.lines.map { line ->
         when (line.requiredTags.containsKey("current action")) {
             true -> line.copy(
                 entry = line.entry.copy(
@@ -285,6 +285,33 @@ fun update(game: Game, action: String): Game {
     )
 
     val performResult = when (action) {
+        "speak123123213123" -> {
+//            val selectedLine = when {
+//                newTags.containsTagKeys(
+//                    tagKey(key = "location:saloon", entityId = "location"),
+//                    tagKey(key = "dialog:greetings", entityId = "dialog"),
+//                ) -> mostSuitableLine?.entry?.plot
+//
+//                newTags.getTagValue(tagKey("location"))?.value == tagValue("saloon") -> mostSuitableLine?.entry?.plot
+//                else -> null
+//            }
+
+            val performResult = perform(game.copy(tags = newTags))
+
+            val npcToSpeak = game.npcs.first()
+            val npcName = npcToSpeak.tags.getTagValue(tagKey("name"))?.value
+            val npcOccupation = npcToSpeak.tags.getTagValue(tagKey("occupation"))?.value
+            val speakerIndication = "$npcName ($npcOccupation):"
+
+            val finalLine = performResult.plot.lastOrNull()?.let { line ->
+                "$speakerIndication $line"
+            }
+
+            PerformResult(
+                tags = newTags,
+                plot = game.plot + finalLine?.let { listOf(finalLine) }.orEmpty()
+            )
+        }
 
         "speak" -> {
             val filteredLines = game.lines.filter { line ->
