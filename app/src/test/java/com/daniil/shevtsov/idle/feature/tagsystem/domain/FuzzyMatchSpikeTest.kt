@@ -588,32 +588,24 @@ private fun say(tags: SpikeTags): Game {
             "trespassing" to "true",
         ) to "Hey, you are not supposed to be here. Get out!",
         listOf("time_of_day" to "morning") to "Morning, what can I do for you?",
-        listOf("" to "") to "Hello, what can I do for you?"
+        emptyList<Pair<String, String>>() to "Hello, what can I do for you?"
     )
     val lines = lineStrings.map { (tags, plot) ->
         dialogLine(
             text = plot,
-            requiredTags = tags.map { (key, value) ->
+            requiredTags = tags.associate { (key, value) ->
                 tagKey(key) to spikeTag(
                     key = tagKey(key),
                     value = tagValue(value)
                 )
-            }.toMap()
+            }
         )
     }
 
-    //val mostSuitableLine = lines.
-
-    val mostSuitableLineByString = lineStrings
-        .filter { (lineTags, _) ->
-            lineTags == listOf("" to "") || lineTags.all { (key, value) -> tags[tagKey(key)]?.value == value }
-        }
-        .maxByOrNull { (lineTags, _) ->
-            lineTags.count { (key, value) -> tags[tagKey(key)]?.value == value }
-        }?.second.orEmpty()
+    val mostSuitableLine = lines.mostSuitableFor(tags)?.entry?.plot
 
     return game(
         tags = tags,
-        plot = listOf(mostSuitableLineByString)
+        plot = mostSuitableLine?.let(::listOf).orEmpty()
     )
 }
