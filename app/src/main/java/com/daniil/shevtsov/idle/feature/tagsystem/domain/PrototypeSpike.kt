@@ -1,7 +1,5 @@
 package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
-import org.jetbrains.annotations.TestOnly
-
 typealias SpikeTags = Map<SpikeTagKey, SpikeTag>
 typealias SpikeTagValue = String
 private typealias Plot = String
@@ -62,14 +60,6 @@ data class PerformResult(
     val plot: List<Plot>,
 )
 
-@TestOnly
-fun performm(tags: SpikeTags): Game {
-    val game = game(
-        tags = tags
-    )
-    return performm(game)
-}
-
 fun performm(game: Game, action: String? = null): Game {
     return update(
         game,
@@ -88,11 +78,6 @@ fun newPerform(game: Game, action: String? = null): Game {
     return kek.copy(
         plot = kek.plot.filter { it != "no suitable entry" }
     )
-}
-
-@TestOnly
-fun newPerform(tags: SpikeTags): Game {
-    return newPerform(game(tags = tags))
 }
 
 fun SpikeTags.containsKey(key: String) = any { (tagKey, _) -> tagKey.tagKey == key }

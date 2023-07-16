@@ -106,7 +106,7 @@ class FuzzyMatchSpikeTest {
             "appearance" to "human",
         )
 
-        val line = performm(tags)
+        val line = perform(tags)
 
         assertThat(line).lastPlot().isEqualTo("You stand, doing nothing")
     }
@@ -119,7 +119,7 @@ class FuzzyMatchSpikeTest {
             "appearance" to "human",
         )
 
-        val line = performm(tags.withAdditional("current action" to "wait"))
+        val line = perform(tags.withAdditional("current action" to "wait"))
 
         assertThat(line).lastPlot().isEqualTo("You lie on the ground, doing nothing")
     }
@@ -131,7 +131,7 @@ class FuzzyMatchSpikeTest {
             "appearance" to "human",
         )
 
-        val line = performm(tags)
+        val line = perform(tags)
 
         assertThat(line).lastPlot()
             .isEqualTo("You fall to the ground, breaking every bone in your body")
@@ -145,7 +145,7 @@ class FuzzyMatchSpikeTest {
             "appearance" to "human",
         )
 
-        val line = performm(tags.withAdditional("current action" to "wait"))
+        val line = perform(tags.withAdditional("current action" to "wait"))
 
         assertThat(line).lastPlot().isEqualTo("You fly in low-air")
     }
@@ -159,7 +159,7 @@ class FuzzyMatchSpikeTest {
             "current action" to "fly"
         )
 
-        val line = performm(tags)
+        val line = perform(tags)
 
         assertThat(line).lastPlot().isEqualTo("You start flying")
         assertThat(line).tags()
@@ -168,7 +168,6 @@ class FuzzyMatchSpikeTest {
                 "position" to "low-air",
             )
     }
-
 
 
     @Test
@@ -181,11 +180,11 @@ class FuzzyMatchSpikeTest {
             "indestructible" to "true",
         )
 
-        val flying = performm(tags)
+        val flying = perform(tags)
 
         val withoutFlying =
-            performm(flying.tags.withAdditional("current action" to "stop flying"))
-        val finalResult = performm(withoutFlying.tags)
+            perform(flying.tags.withAdditional("current action" to "stop flying"))
+        val finalResult = perform(withoutFlying.tags)
 
         assertThat(finalResult).lastPlot().isEqualTo("You fall to the ground")
         assertThat(finalResult).tags()
@@ -205,11 +204,11 @@ class FuzzyMatchSpikeTest {
             "current action" to "fly",
         )
 
-        val flying = performm(tags)
+        val flying = perform(tags)
 
         val withoutFlying =
-            performm(flying.tags.withAdditional("current action" to "stop flying"))
-        val finalResult = performm(withoutFlying.tags)
+            perform(flying.tags.withAdditional("current action" to "stop flying"))
+        val finalResult = perform(withoutFlying.tags)
 
         assertThat(finalResult).lastPlot()
             .isEqualTo("You fall to the ground, breaking every bone in your body")
@@ -231,7 +230,7 @@ class FuzzyMatchSpikeTest {
             "health" to "0",
         )
 
-        val dead = performm(tags)
+        val dead = perform(tags)
 
         assertThat(dead).lastPlot()
             .isEqualTo("You have died")
@@ -252,19 +251,19 @@ class FuzzyMatchSpikeTest {
             "current action" to "fly",
         )
 
-        val flying = performm(tags)
+        val flying = perform(tags)
 
         val withoutFlying =
-            performm(flying.tags.withAdditional("current action" to "stop flying"))
-        val brokenBones = performm(withoutFlying.tags)
-        val cantMove = performm(brokenBones.tags)
+            perform(flying.tags.withAdditional("current action" to "stop flying"))
+        val brokenBones = perform(withoutFlying.tags)
+        val cantMove = perform(brokenBones.tags)
         assertThat(cantMove).lastPlot().isEqualTo("Now you can't move")
         assertThat(cantMove).tags()
             .containsAll(
                 "mobile" to "false",
             )
         val finalResult =
-            performm(cantMove.tags.withAdditional("current action" to "stand"))
+            perform(cantMove.tags.withAdditional("current action" to "stand"))
 
         assertThat(finalResult).lastPlot().isEqualTo("You can't get up")
         assertThat(finalResult).tags()
@@ -285,13 +284,13 @@ class FuzzyMatchSpikeTest {
             "current action" to "fly",
         )
 
-        val flying = performm(tags)
+        val flying = perform(tags)
 
         val withoutFlying =
-            performm(flying.tags.withAdditional("current action" to "stop flying"))
-        val brokenBones = performm(withoutFlying.tags)
-        val cantMove = performm(brokenBones.tags)
-        val regenerated = performm(cantMove.tags.withAdditional("current action" to "regenerate"))
+            perform(flying.tags.withAdditional("current action" to "stop flying"))
+        val brokenBones = perform(withoutFlying.tags)
+        val cantMove = perform(brokenBones.tags)
+        val regenerated = perform(cantMove.tags.withAdditional("current action" to "regenerate"))
         assertThat(regenerated).lastPlot().isEqualTo("You regenerate to full health")
         assertThat(regenerated).tags()
             .containsAll(
@@ -299,13 +298,13 @@ class FuzzyMatchSpikeTest {
                 "position" to "ground",
                 "bones" to "okay",
             )
-        val mobile = performm(regenerated.tags)
+        val mobile = perform(regenerated.tags)
         assertThat(mobile).lastPlot().isEqualTo("You can move again")
         assertThat(mobile).tags()
             .containsAll(
                 "mobile" to "true",
             )
-        val finalResult = performm(mobile.tags.withAdditional("current action" to "stand"))
+        val finalResult = perform(mobile.tags.withAdditional("current action" to "stand"))
 
         assertThat(finalResult).lastPlot().isEqualTo("You get up")
         assertThat(finalResult).tags()
@@ -324,14 +323,14 @@ class FuzzyMatchSpikeTest {
             "appearance" to "human",
         )
 
-        val flight = performm(tags.withAdditional("current action" to "learn flight"))
+        val flight = perform(tags.withAdditional("current action" to "learn flight"))
         assertThat(flight).tags()
             .contains("ability" to "flight")
         val immortality =
-            performm(flight.tags.withAdditional("current action" to "learn immortality"))
+            perform(flight.tags.withAdditional("current action" to "learn immortality"))
         assertThat(immortality).tags()
             .contains("ability" to "[flight,immortality]")
-        val regeneration = performm(
+        val regeneration = perform(
             immortality.tags.withAdditional("current action" to "learn regeneration")
         )
 
@@ -347,7 +346,7 @@ class FuzzyMatchSpikeTest {
             "immortality" to "true",
             "ability" to "[flight,regeneration]",
         )
-        val regenerated = performm(tags.withAdditional("current action" to "regenerate"))
+        val regenerated = perform(tags.withAdditional("current action" to "regenerate"))
         assertThat(regenerated).lastPlot().isEqualTo("You regenerate to full health")
         assertThat(regenerated).tags()
             .containsAll(
@@ -363,7 +362,7 @@ class FuzzyMatchSpikeTest {
             "immortality" to "true",
             "ability" to "[flight,regeneration]",
         )
-        val regenerated = performm(tags.withAdditional("current action" to "regenerate"))
+        val regenerated = perform(tags.withAdditional("current action" to "regenerate"))
         assertThat(regenerated).lastPlot().isEqualTo("You regenerate to full health")
         assertThat(regenerated).tags()
             .containsAll(
@@ -379,7 +378,7 @@ class FuzzyMatchSpikeTest {
             "appearance" to "human",
             "tied" to "true",
         )
-        val regenerated = performm(tags)
+        val regenerated = perform(tags)
         assertThat(regenerated).lastPlot().isEqualTo("Now you can't move")
         assertThat(regenerated).tags()
             .containsAll(
@@ -395,8 +394,8 @@ class FuzzyMatchSpikeTest {
             "appearance" to "human",
             "tied" to "true",
         )
-        val regenerated = performm(tags)
-        val tied = performm(regenerated.tags.withAdditional("current action" to "untie"))
+        val regenerated = perform(tags)
+        val tied = perform(regenerated.tags.withAdditional("current action" to "untie"))
         assertThat(tied).lastPlot().isEqualTo("You free yourself")
         assertThat(tied).tags()
             .containsAll(
@@ -413,8 +412,8 @@ class FuzzyMatchSpikeTest {
             "bones" to "broken",
             "ability" to "regeneration"
         )
-        val notMobile = performm(tags)
-        val regenerated = performm(notMobile.tags.withAdditional("current action" to "regenerate"))
+        val notMobile = perform(tags)
+        val regenerated = perform(notMobile.tags.withAdditional("current action" to "regenerate"))
         assertThat(regenerated).lastPlot().isEqualTo("You regenerate to full health")
         assertThat(regenerated).tags()
             .containsAll(
@@ -422,7 +421,7 @@ class FuzzyMatchSpikeTest {
                 "tied" to "true",
                 "mobile" to "false",
             )
-        val tied = performm(regenerated.tags.withAdditional("current action" to "stand"))
+        val tied = perform(regenerated.tags.withAdditional("current action" to "stand"))
         assertThat(tied).lastPlot().isEqualTo("You can't get up")
         assertThat(tied).tags()
             .containsAll(
@@ -430,7 +429,7 @@ class FuzzyMatchSpikeTest {
                 "tied" to "true",
                 "mobile" to "false",
             )
-        val untied = performm(tied.tags.withAdditional("current action" to "untie"))
+        val untied = perform(tied.tags.withAdditional("current action" to "untie"))
         assertThat(untied).lastPlot().isEqualTo("You free yourself")
         assertThat(untied).tags()
             .containsAll(
@@ -438,7 +437,7 @@ class FuzzyMatchSpikeTest {
                 "tied" to "false",
                 "mobile" to "false",
             )
-        val mobile = performm(untied.tags.withAdditional("current action" to "untie"))
+        val mobile = perform(untied.tags.withAdditional("current action" to "untie"))
         assertThat(mobile).lastPlot().isEqualTo("You can move again")
         assertThat(mobile).tags()
             .containsAll(
@@ -555,6 +554,17 @@ class FuzzyMatchSpikeTest {
     }
 
     private fun Assert<Game>.lastPlot(): Assert<String> = plot().index(0)
+
+    private fun perform(tags: SpikeTags): Game {
+        val game = game(
+            tags = tags
+        )
+        return performm(game)
+    }
+
+    private fun newPerform(tags: SpikeTags): Game {
+        return newPerform(game(tags = tags))
+    }
 
 }
 
