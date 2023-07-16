@@ -89,10 +89,10 @@ fun performm(tags: SpikeTags): Game {
     return performm(game)
 }
 
-fun performm(game: Game): Game {
+fun performm(game: Game, action: String? = null): Game {
     return performGameIntegration(
         game,
-        action = game.tags[tagKey("current action")]?.value ?: "default"
+        action = action ?: game.tags[tagKey("current action")]?.value ?: "default"
     )
 }
 
@@ -113,7 +113,7 @@ fun newPerform(tags: SpikeTags): Game {
 
 fun SpikeTags.containsKey(key: String) = any { (tagKey, _) -> tagKey.tagKey == key }
 
-fun performGameIntegration(game: Game, action: String = "default"): Game {
+private fun performGameIntegration(game: Game, action: String = "default"): Game {
     val newLocationTags: SpikeTags =
         game.locations.find { it.id == game.locationId }?.let { location ->
             location.tags.map { (_, tag) ->
@@ -285,9 +285,11 @@ fun update(game: Game, action: String): Game {
     }.toMap()
     val newGameTags = game.tags
 
-    val newTags: SpikeTags = (newLocationTags + newPlayerTags + newNpcTags) + newGameTags
+    val newTags: SpikeTags = (newLocationTags + newPlayerTags + newNpcTags) + newGameTags + mapOf(
+        tagKey("current action") to spikeTag(tagKey("current action"), tagValue(action))
+    )
 
-    val newPlot = when (action) {
+    val performResult = when (action) {
         "speak" -> {
             val npcToSpeak = game.npcs.first()
             val npcName = npcToSpeak.tags.getTagValue(tagKey("name"))?.value
@@ -324,15 +326,18 @@ fun update(game: Game, action: String): Game {
                 else -> null
             }
 
-            selectedLine?.let { listOf(selectedLine) }.orEmpty()
+            PerformResult(
+                tags = newTags,
+                plot = game.plot + selectedLine?.let { listOf(selectedLine) }.orEmpty()
+            )
         }
 
-        else -> emptyList()
+        else -> PerformResult(tags = newTags, plot = game.plot)
     }
 
     return game.copy(
-        tags = newTags,
-        plot = newPlot,
+        tags = performResult.tags,
+        plot = performResult.plot,
     )
 }
 
