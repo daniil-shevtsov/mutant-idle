@@ -350,7 +350,18 @@ fun game(
     locationId = locationId,
     locations = locations,
     dialogLines = dialogLines,
-    lines = lines,
+    lines = lines + dialogLines.map { dialogLine ->
+        line(
+            id = dialogLine.id,
+            requiredTags = dialogLine.requiredTags,
+            entry = entry(
+                plot = dialogLine.text,
+                id = dialogLine.id,
+                tagChanges = dialogLine.tagChanges,
+                weight = 1.0f,
+            )
+        )
+    },
     player = player,
     npcs = npcs,
     tags = tags,
