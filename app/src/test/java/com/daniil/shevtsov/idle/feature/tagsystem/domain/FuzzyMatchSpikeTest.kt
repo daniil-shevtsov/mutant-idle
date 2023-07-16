@@ -569,7 +569,7 @@ class FuzzyMatchSpikeTest {
 }
 
 private fun say(tags: SpikeTags): Game {
-    val lineStrings = listOf(
+    val lines = listOf(
         listOf(
             "trespassing" to "true",
             "time_of_day" to "night",
@@ -589,8 +589,7 @@ private fun say(tags: SpikeTags): Game {
         ) to "Hey, you are not supposed to be here. Get out!",
         listOf("time_of_day" to "morning") to "Morning, what can I do for you?",
         emptyList<Pair<String, String>>() to "Hello, what can I do for you?"
-    )
-    val lines = lineStrings.map { (tags, plot) ->
+    ).map { (tags, plot) ->
         dialogLine(
             text = plot,
             requiredTags = tags.associate { (key, value) ->
