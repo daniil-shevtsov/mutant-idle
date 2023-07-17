@@ -1,5 +1,7 @@
 package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTags
+
 interface TagEntry : TagRequirer, TagChanger {
     override val id: String
     override val requiredTags: SpikeTags

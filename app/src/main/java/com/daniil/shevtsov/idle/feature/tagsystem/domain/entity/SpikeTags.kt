@@ -1,4 +1,4 @@
-package com.daniil.shevtsov.idle.feature.tagsystem.domain
+package com.daniil.shevtsov.idle.feature.tagsystem.domain.entity
 
 fun createDefaultTags(): Map<SpikeTagKey, SpikeTag> = tags(
     "mobile" to "true",

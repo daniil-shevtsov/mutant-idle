@@ -20,12 +20,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.createDefaultTags
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.createDefaultTags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.game
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.spikeTag
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.withAdditional
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.newPerform
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.plotLines
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.spikeTag
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.withAdditional
 
 @Preview
 @Composable

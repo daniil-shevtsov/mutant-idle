@@ -1,4 +1,4 @@
-package com.daniil.shevtsov.idle.feature.tagsystem.domain
+package com.daniil.shevtsov.idle.feature.tagsystem.domain.entity
 
 data class SpikeTag(
     val key: SpikeTagKey,

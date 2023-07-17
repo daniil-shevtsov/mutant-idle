@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.entry
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.line
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tags
 
 val plotLines = listOf(
     line(

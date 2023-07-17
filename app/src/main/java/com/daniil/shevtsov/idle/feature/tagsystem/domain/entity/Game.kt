@@ -3,11 +3,9 @@ package com.daniil.shevtsov.idle.feature.tagsystem.domain.entity
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Location
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Npc
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Player
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.SpikeTags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagHolder
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.player
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.plotLines
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.tags
 
 data class Game(
     override val id: String,

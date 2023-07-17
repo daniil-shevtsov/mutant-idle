@@ -11,8 +11,14 @@ import assertk.assertions.isEmpty
 import assertk.assertions.isEqualTo
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.Game
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTags
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.defaultTagsWithAdditional
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.dialogLine
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.game
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.spikeTag
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagKey
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagValue
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.withAdditional
 import org.junit.jupiter.api.Test
 
 class FuzzyMatchSpikeTest {

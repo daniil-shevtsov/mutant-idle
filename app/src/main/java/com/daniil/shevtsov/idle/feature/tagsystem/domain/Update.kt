@@ -3,7 +3,12 @@ package com.daniil.shevtsov.idle.feature.tagsystem.domain
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.Game
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.Line
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.Plot
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTagKey
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.entry
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.spikeTag
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagKey
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagValue
 
 fun update(game: Game, action: String): Game {
     val newLocationTags: SpikeTags =

@@ -7,8 +7,14 @@ import assertk.assertions.containsAll
 import assertk.assertions.containsExactly
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.Game
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTagKey
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTagValue
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.dialogLine
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.game
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.spikeTags
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagKey
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagValue
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tags
 import org.junit.jupiter.api.Test
 
 class TagEntityTest {

@@ -1,5 +1,8 @@
 package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTags
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tags
+
 data class Location(override val id: String, val title: String, override val tags: SpikeTags) :
     TagHolder
 

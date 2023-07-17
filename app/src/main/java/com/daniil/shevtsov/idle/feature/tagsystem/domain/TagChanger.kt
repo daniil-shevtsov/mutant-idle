@@ -1,5 +1,8 @@
 package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTags
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagKey
+
 interface TagChanger {
     val id: String
     val tagChanges: SpikeTags
