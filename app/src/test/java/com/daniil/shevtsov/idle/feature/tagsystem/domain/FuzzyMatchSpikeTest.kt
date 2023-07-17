@@ -10,6 +10,9 @@ import assertk.assertions.index
 import assertk.assertions.isEmpty
 import assertk.assertions.isEqualTo
 import assertk.assertions.prop
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.Game
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.dialogLine
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.game
 import org.junit.jupiter.api.Test
 
 class FuzzyMatchSpikeTest {

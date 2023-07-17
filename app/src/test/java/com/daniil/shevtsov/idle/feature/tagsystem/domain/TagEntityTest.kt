@@ -6,6 +6,9 @@ import assertk.assertThat
 import assertk.assertions.containsAll
 import assertk.assertions.containsExactly
 import assertk.assertions.prop
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.Game
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.dialogLine
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.game
 import org.junit.jupiter.api.Test
 
 class TagEntityTest {
@@ -217,9 +220,6 @@ class TagEntityTest {
                     )
             }
     }
-
-    //TODO: Need general filtering behavior and general update behavior
-
 
     private fun Assert<TagHolder>.tags(): Assert<List<Pair<SpikeTagKey, SpikeTagValue>>> =
         prop(TagHolder::tags)

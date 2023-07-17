@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.createDefaultTags
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.game
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.game
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.newPerform
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.plotLines
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.spikeTag

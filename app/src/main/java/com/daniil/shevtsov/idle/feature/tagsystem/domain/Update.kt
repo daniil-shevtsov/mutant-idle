@@ -1,5 +1,10 @@
 package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.Game
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.Line
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.Plot
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.entry
+
 fun update(game: Game, action: String): Game {
     val newLocationTags: SpikeTags =
         game.locations.find { it.id == game.locationId }?.let { location ->

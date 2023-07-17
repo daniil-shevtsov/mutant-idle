@@ -1,5 +1,8 @@
 package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.entry
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.line
+
 val plotLines = listOf(
     line(
         requiredTags = tags("mobile" to "true", "bones" to "broken"),

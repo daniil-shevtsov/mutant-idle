@@ -1,4 +1,10 @@
-package com.daniil.shevtsov.idle.feature.tagsystem.domain
+package com.daniil.shevtsov.idle.feature.tagsystem.domain.entity
+
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.SpikeTags
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagChanger
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagEntry
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRequirer
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.tags
 
 typealias Plot = String
 
