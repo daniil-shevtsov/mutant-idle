@@ -241,10 +241,9 @@ fun update(game: Game, action: String): Game {
         tagKey("current action") to spikeTag(tagKey("current action"), tagValue(action))
     )
 
-    val performResult = when (action) {
+    val performResult = perform(game.copy(tags = newTags))
+    val finalPlot = when (action) {
         "speak" -> {
-            val performResult = perform(game.copy(tags = newTags))
-
             val npcToSpeak = game.npcs.first()
             val npcName = npcToSpeak.tags.getTagValue(tagKey("name"))?.value
             val npcOccupation = npcToSpeak.tags.getTagValue(tagKey("occupation"))?.value
@@ -254,18 +253,15 @@ fun update(game: Game, action: String): Game {
                 "$speakerIndication $line"
             }
 
-            PerformResult(
-                tags = performResult.tags,
-                plot = game.plot + finalLine?.let { listOf(finalLine) }.orEmpty()
-            )
+            game.plot + finalLine?.let { listOf(finalLine) }.orEmpty()
         }
 
-        else -> perform(game.copy(tags = newTags))
+        else -> performResult.plot
     }
 
     return game.copy(
         tags = performResult.tags,
-        plot = performResult.plot,
+        plot = finalPlot,
     )
 }
 
