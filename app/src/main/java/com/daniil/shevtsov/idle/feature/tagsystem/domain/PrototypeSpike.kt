@@ -1,59 +1,6 @@
 package com.daniil.shevtsov.idle.feature.tagsystem.domain
 
-typealias SpikeTags = Map<SpikeTagKey, SpikeTag>
-typealias SpikeTagValue = String
 private typealias Plot = String
-
-data class SpikeTag(
-    val key: SpikeTagKey,
-    val value: SpikeTagValue,
-)
-
-fun spikeTag(
-    key: SpikeTagKey = tagKey(key = ""),
-    value: SpikeTagValue = "",
-) = SpikeTag(
-    key = key,
-    value = value,
-)
-
-data class SpikeTagKey(
-    val tagKey: String,
-    val entityId: String? = null,
-)
-
-fun tagKey(key: String, entityId: String? = null) = SpikeTagKey(
-    tagKey = key,
-    entityId = entityId,
-)
-
-fun tagValue(raw: String = ""): SpikeTagValue = raw
-
-fun createDefaultTags(): Map<SpikeTagKey, SpikeTag> = tags(
-    "mobile" to "true",
-    "health" to "100",
-    "life" to "alive",
-)
-
-fun spikeTags(vararg entries: Pair<SpikeTagKey, SpikeTagValue>): SpikeTags =
-    entries.associate { (key, value) ->
-        key to spikeTag(key = key, value = value)
-    }
-
-fun List<Pair<String, String>>.toSpikeTags() = associate { (key, value) ->
-    val tagKey = tagKey(key = key)
-    tagKey to spikeTag(key = tagKey, value = value)
-}
-
-fun defaultTagsWithAdditional(vararg tags: Pair<String, String>): SpikeTags =
-    createDefaultTags().withAdditional(*tags)
-
-fun SpikeTags.withAdditional(vararg tags: Pair<String, String>): SpikeTags =
-    this + tags.toList().toSpikeTags()
-
-fun tags(
-    vararg entries: Pair<String, String>
-): SpikeTags = entries.toList().toSpikeTags()
 
 data class PerformResult(
     val tags: SpikeTags,
