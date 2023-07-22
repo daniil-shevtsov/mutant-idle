@@ -14,7 +14,7 @@ fun SpikeTags.apply(entry: TagChanger): SpikeTags = toMutableMap().apply {
     entry.tagChanges.forEach { (tag, valueToAdd) ->
         val oldValue = get(tag)
         val newValue = when {
-            valueToAdd.value.contains('+') -> {
+            valueToAdd.value.contains("+[") -> {
                 val oldValueWithoutBrackets = oldValue?.value
                     ?.substringAfter('[')
                     ?.substringBefore(']')
@@ -29,6 +29,12 @@ fun SpikeTags.apply(entry: TagChanger): SpikeTags = toMutableMap().apply {
             }
 
             valueToAdd.value.contains("\${-") && oldValue != null -> {
+                val oldValueNumber = oldValue.value.toInt()
+                val valueToAddNumber =
+                    valueToAdd.value.substringAfter('{').substringBefore('}').toInt()
+                (oldValueNumber + valueToAddNumber).toString()
+            }
+            valueToAdd.value.contains("\${+") && oldValue != null -> {
                 val oldValueNumber = oldValue.value.toInt()
                 val valueToAddNumber =
                     valueToAdd.value.substringAfter('{').substringBefore('}').toInt()
