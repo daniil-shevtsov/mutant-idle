@@ -593,10 +593,6 @@ class FuzzyMatchSpikeTest {
 
     private fun Assert<Game>.plot() = prop(Game::plot)
 
-    private fun Assert<SpikeTags>.strings() = transform {
-        it.map { it.key.tagKey to it.value.value }
-    }
-
     private fun Assert<Game>.lastPlot(): Assert<String> = plot().index(0)
     private fun Assert<Game>.lastPlotsNotReversed(n: Int): Assert<List<String>> =
         plot().transform { it.takeLast(n) }
@@ -655,4 +651,8 @@ private fun say(tags: SpikeTags): Game {
         tags = tags,
         plot = mostSuitableLine?.let(::listOf).orEmpty()
     )
+}
+
+fun Assert<SpikeTags>.strings() = transform {
+    it.map { it.key.tagKey to it.value.value }
 }
