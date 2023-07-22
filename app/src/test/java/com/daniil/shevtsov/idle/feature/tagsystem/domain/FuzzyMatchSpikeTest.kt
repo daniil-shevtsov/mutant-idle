@@ -381,7 +381,7 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun `kek19`() {
+    fun `should not be able to move when tied`() {
         val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "appearance" to "human",
@@ -397,7 +397,7 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun `kek20`() {
+    fun `should stop being tied when untie`() {
         val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "appearance" to "human",
@@ -413,7 +413,7 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun `kek21`() {
+    fun `should still be not mobile when regenerated while tied`() {
         val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "appearance" to "human",
@@ -438,17 +438,23 @@ class FuzzyMatchSpikeTest {
                 "tied" to "true",
                 "mobile" to "false",
             )
-        val untied = perform(tied.tags.withAdditional("current action" to "untie"))
-        assertThat(untied).lastPlot().isEqualTo("You free yourself")
+    }
+
+    @Test
+    fun `should become mobile when regenerated while tied and then untied`() {
+        val tags = defaultTagsWithAdditional(
+            "position" to "ground",
+            "appearance" to "human",
+            "tied" to "true",
+            "bones" to "broken",
+            "ability" to "regeneration"
+        )
+        val notMobile = perform(tags)
+        val regenerated = perform(notMobile.tags.withAdditional("current action" to "regenerate"))
+        val tied = perform(regenerated.tags.withAdditional("current action" to "stand"))
+        val untied = newPerform(tied, action = "untie")
+        assertThat(untied).lastPlotsNotReversed(2).containsExactly("You free yourself", "You can move again")
         assertThat(untied).tags()
-            .containsAll(
-                "bones" to "okay",
-                "tied" to "false",
-                "mobile" to "false",
-            )
-        val mobile = perform(untied.tags.withAdditional("current action" to "untie"))
-        assertThat(mobile).lastPlot().isEqualTo("You can move again")
-        assertThat(mobile).tags()
             .containsAll(
                 "bones" to "okay",
                 "tied" to "false",
@@ -592,6 +598,10 @@ class FuzzyMatchSpikeTest {
     }
 
     private fun Assert<Game>.lastPlot(): Assert<String> = plot().index(0)
+    private fun Assert<Game>.lastPlotsNotReversed(n: Int): Assert<List<String>> =
+        plot().transform { it.takeLast(n) }
+
+    private fun Assert<Game>.lastPlotNotReversed(): Assert<String> = plot().transform { it.last() }
 
     private fun perform(tags: SpikeTags): Game {
         val game = game(

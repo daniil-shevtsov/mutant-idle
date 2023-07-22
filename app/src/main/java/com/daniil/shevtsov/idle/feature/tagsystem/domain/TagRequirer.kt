@@ -9,7 +9,8 @@ interface TagRequirer {
 
 fun TagRequirer.suitableFor(
     presentTags: SpikeTags
-): Boolean = requiredTags == listOf("" to "") || requiredTags.all { (requiredTag, requiredTagValue) ->
+): Boolean =
+    requiredTags == listOf("" to "") || requiredTags.all { (requiredTag, requiredTagValue) ->
         val currentTags = presentTags
         val currentValue = currentTags[requiredTag]
 
