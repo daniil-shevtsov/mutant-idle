@@ -8,6 +8,9 @@ interface TagChanger {
     val tagChanges: SpikeTags
 }
 
+private fun String.extractListValue() = substringAfter("[").substringBefore(']')
+private fun String.extractListInsert() = substringAfter("+[").substringBefore(']')
+
 fun SpikeTags.apply(entry: TagChanger): SpikeTags = toMutableMap().apply {
     remove(tagKey(key = "current action"))
 
@@ -15,16 +18,11 @@ fun SpikeTags.apply(entry: TagChanger): SpikeTags = toMutableMap().apply {
         val oldValue = get(tag)
         val newValue = when {
             valueToAdd.value.contains("+[") -> {
-                val oldValueWithoutBrackets = oldValue?.value
-                    ?.substringAfter('[')
-                    ?.substringBefore(']')
-                val valueToAddWithoutBrackets =
-                    valueToAdd.value
-                        .substringAfter('[')
-                        .substringBefore(']')
-                when (oldValueWithoutBrackets) {
+                val currentListValues = oldValue?.value?.extractListValues()
+                val valueToAddWithoutBrackets = valueToAdd.value.extractListInsert()
+                when (currentListValues) {
                     null -> "[$valueToAddWithoutBrackets]"
-                    else -> "[$oldValueWithoutBrackets,$valueToAddWithoutBrackets]"
+                    else -> (currentListValues + valueToAddWithoutBrackets).joinToString(separator = ",", prefix = "[", postfix = "]")
                 }
             }
 
@@ -34,8 +32,9 @@ fun SpikeTags.apply(entry: TagChanger): SpikeTags = toMutableMap().apply {
                     valueToAdd.value.substringAfter('{').substringBefore('}').toInt()
                 (oldValueNumber + valueToAddNumber).toString()
             }
-            valueToAdd.value.contains("\${+") && oldValue != null -> {
-                val oldValueNumber = oldValue.value.toInt()
+
+            valueToAdd.value.contains("\${+") -> {
+                val oldValueNumber = oldValue?.value?.toInt() ?: 0
                 val valueToAddNumber =
                     valueToAdd.value.substringAfter('{').substringBefore('}').toInt()
                 (oldValueNumber + valueToAddNumber).toString()

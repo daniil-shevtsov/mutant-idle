@@ -7,6 +7,9 @@ interface TagRequirer {
     val requiredTags: SpikeTags
 }
 
+fun String.extractListValues() = substringAfter('[')
+    .substringBefore(']')
+    .split(',')
 fun TagRequirer.suitableFor(
     presentTags: SpikeTags
 ): Boolean =
@@ -16,10 +19,7 @@ fun TagRequirer.suitableFor(
 
         val currentValues = when {
             currentValue == null -> emptyList()
-            currentValue.value.contains('[') -> currentValue.value
-                .substringAfter('[')
-                .substringBefore(']')
-                .split(',')
+            currentValue.value.contains('[') -> currentValue.value.extractListValues()
 
             else -> listOf(currentValue.value)
         }
