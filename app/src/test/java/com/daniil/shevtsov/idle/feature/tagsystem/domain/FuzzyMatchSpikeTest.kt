@@ -108,14 +108,14 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun `kek7`() {
+    fun `should stand doing nothing when wait while standing`() {
         val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "posture" to "standing",
             "appearance" to "human",
         )
 
-        val line = perform(tags)
+        val line = perform(tags.withAdditional("current action" to "wait"))
 
         assertThat(line).lastPlot().isEqualTo("You stand, doing nothing")
     }
@@ -560,11 +560,7 @@ class FuzzyMatchSpikeTest {
 
         val kek = newPerform(tags.withAdditional("current action" to "stand"))
 
-        assertThat(kek).plot()
-            .containsExactly(
-                "You are now standing",
-                "You stand, doing nothing",
-            )
+        assertThat(kek).plot().containsExactly("You are now standing")
     }
 
     @Test
@@ -580,7 +576,6 @@ class FuzzyMatchSpikeTest {
         assertThat(kek3).plot()
             .containsExactly(
                 "You are now standing",
-                "You stand, doing nothing",
                 "You stand, doing nothing",
                 "You stand, doing nothing",
             )

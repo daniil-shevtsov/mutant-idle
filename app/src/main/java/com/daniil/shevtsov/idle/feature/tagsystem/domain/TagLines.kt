@@ -122,7 +122,7 @@ val plotLines = listOf(
         )
     ),
     line(
-        requiredTags = tags("posture" to "standing"),
+        requiredTags = tags("posture" to "standing", "current action" to "wait"),
         entry = entry("You stand, doing nothing")
     ),
     line(
