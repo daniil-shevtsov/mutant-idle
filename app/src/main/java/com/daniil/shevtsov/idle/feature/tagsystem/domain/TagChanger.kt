@@ -22,21 +22,23 @@ fun SpikeTags.apply(entry: TagChanger): SpikeTags = toMutableMap().apply {
                 val valueToAddWithoutBrackets = valueToAdd.value.extractListInsert()
                 when (currentListValues) {
                     null -> "[$valueToAddWithoutBrackets]"
-                    else -> (currentListValues + valueToAddWithoutBrackets).joinToString(separator = ",", prefix = "[", postfix = "]")
+                    else -> (currentListValues + valueToAddWithoutBrackets).joinToString(
+                        separator = ",",
+                        prefix = "[",
+                        postfix = "]"
+                    )
                 }
             }
 
             valueToAdd.value.contains("\${-") && oldValue != null -> {
-                val oldValueNumber = oldValue.value.toInt()
-                val valueToAddNumber =
-                    valueToAdd.value.substringAfter('{').substringBefore('}').toInt()
+                val oldValueNumber = oldValue.value.extractNumberValue()
+                val valueToAddNumber = valueToAdd.value.extractNumberValue()
                 (oldValueNumber + valueToAddNumber).toString()
             }
 
             valueToAdd.value.contains("\${+") -> {
-                val oldValueNumber = oldValue?.value?.toInt() ?: 0
-                val valueToAddNumber =
-                    valueToAdd.value.substringAfter('{').substringBefore('}').toInt()
+                val oldValueNumber = oldValue?.value?.extractNumberValue() ?: 0
+                val valueToAddNumber = valueToAdd.value.extractNumberValue()
                 (oldValueNumber + valueToAddNumber).toString()
             }
 
@@ -45,3 +47,5 @@ fun SpikeTags.apply(entry: TagChanger): SpikeTags = toMutableMap().apply {
         put(tag, valueToAdd.copy(value = newValue))
     }
 }
+
+fun String.extractNumberValue() = substringAfter('{').substringBefore('}').toInt()

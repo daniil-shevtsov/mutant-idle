@@ -10,6 +10,7 @@ interface TagRequirer {
 fun String.extractListValues() = substringAfter('[')
     .substringBefore(']')
     .split(',')
+
 fun TagRequirer.suitableFor(
     presentTags: SpikeTags
 ): Boolean =
@@ -31,3 +32,15 @@ fun TagRequirer.suitableFor(
             else -> currentValues.contains(requiredTagValue.value)
         }
     }
+
+fun TagEntry.suitableFor(
+    presentTags: SpikeTags
+): Boolean {
+    val subtractionChanges = tagChanges.filter { it.value.value.contains("\${-") }
+    val hasRequiredTagValues = subtractionChanges.all { subtractionChange ->
+        val presentTag = presentTags[subtractionChange.key]
+
+        presentTag != null && (presentTag.value.extractNumberValue() + subtractionChange.value.value.extractNumberValue()) >= 0
+    }
+    return hasRequiredTagValues && (this as TagRequirer).suitableFor(presentTags)
+}
