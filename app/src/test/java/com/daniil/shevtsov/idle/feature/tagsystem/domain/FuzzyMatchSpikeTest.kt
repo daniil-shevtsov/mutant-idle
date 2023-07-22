@@ -552,6 +552,21 @@ class FuzzyMatchSpikeTest {
         }
     }
 
+    @Test
+    fun `should stop if the only acceptable plot is the repeat of the previous one`() {
+        val tags = defaultTagsWithAdditional(
+            "posture" to "standing",
+        )
+
+        val kek = newPerform(tags.withAdditional("current action" to "stand"))
+
+        assertThat(kek).plot()
+            .containsExactly(
+                "You are now standing",
+                "You stand, doing nothing",
+            )
+    }
+
     private fun Assert<Game>.tags() = prop(Game::tags).strings()
 
     //TODO: Basically next refactoring is to teach different entities to have tags

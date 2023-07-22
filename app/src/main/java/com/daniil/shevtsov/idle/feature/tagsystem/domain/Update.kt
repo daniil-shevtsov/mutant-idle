@@ -71,15 +71,18 @@ fun performm(game: Game, action: String? = null): Game {
 }
 
 fun newPerform(game: Game, action: String? = null): Game {
-    var kek = performm(game, action)
+    var lastState = performm(game, action)
     var count = 0
-    while (!kek.plot.contains("no suitable entry") && count < 20) {
-        val lol = performm(kek)
-        kek = lol
+    while (!lastState.plot.contains("no suitable entry") && count < 20) {
+        val newState = performm(lastState)
+        if (newState.plot.lastOrNull() == lastState.plot.lastOrNull()) {
+            break
+        }
+        lastState = newState
         count++
     }
-    return kek.copy(
-        plot = kek.plot.filter { it != "no suitable entry" }
+    return lastState.copy(
+        plot = lastState.plot.filter { it != "no suitable entry" }
     )
 }
 
