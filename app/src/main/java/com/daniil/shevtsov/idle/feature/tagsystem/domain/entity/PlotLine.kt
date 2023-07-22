@@ -6,6 +6,8 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRequirer
 
 typealias Plot = String
 
+fun plot(text: String): Plot = text
+
 data class Line(
     override val id: String,
     override val requiredTags: SpikeTags,

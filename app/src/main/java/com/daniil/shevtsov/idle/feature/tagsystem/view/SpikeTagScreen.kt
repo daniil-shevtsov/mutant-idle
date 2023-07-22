@@ -26,6 +26,7 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.spikeTag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.withAdditional
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.newPerform
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.plotLines
+import com.daniil.shevtsov.idle.feature.tagsystem.presentation.presentPlot
 
 @Preview
 @Composable
@@ -54,7 +55,7 @@ fun SpikeTagScreen(modifier: Modifier = Modifier) {
 
     Column(modifier = modifier.background(AppTheme.colors.background)) {
         Text(
-            text = currentGame.plot.joinToString(separator = "\n"),
+            text = presentPlot(currentGame.plot).joinToString(separator = "\n"),
             modifier = Modifier.background(Color.White).padding(4.dp)
                 .fillMaxWidth()
                 .height(100.dp)
