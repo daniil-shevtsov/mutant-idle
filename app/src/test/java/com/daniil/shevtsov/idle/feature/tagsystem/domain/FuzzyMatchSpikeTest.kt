@@ -593,39 +593,6 @@ class FuzzyMatchSpikeTest {
             )
     }
 
-    //TODO: I need to make this work somehow for both devourer and android without specifing tags
-    @Test
-    fun `when devourer hides in the forest they need meat`() {
-        val lineEntry = line(
-            requiredTags = spikeTags(),
-            entry = entry(
-                plot = "You hide in the forest for some time",
-                tagChanges = spikeTags(tagKey("meat") to "\${-10}"),
-            )
-        )
-        val tagsWithoutSupplies = spikeTags(tagKey("species") to tagValue("devourer"))
-        val tagsWithSupplies = tagsWithoutSupplies.withAdditional("meat" to "10")
-
-        assertThat(lineEntry.suitableFor(tagsWithoutSupplies)).isFalse()
-        assertThat(lineEntry.suitableFor(tagsWithSupplies)).isTrue()
-    }
-
-    @Test
-    fun `when android hides in the forest they need charge`() {
-        val lineEntry = line(
-            requiredTags = spikeTags(),
-            entry = entry(
-                plot = "You hide in the forest for some time",
-                tagChanges = spikeTags(tagKey("charge") to "\${-100}"),
-            )
-        )
-        val tagsWithoutSupplies = spikeTags(tagKey("species") to tagValue("android"))
-        val tagsWithSupplies = tagsWithoutSupplies.withAdditional("charge" to "100")
-
-        assertThat(lineEntry.suitableFor(tagsWithoutSupplies)).isFalse()
-        assertThat(lineEntry.suitableFor(tagsWithSupplies)).isTrue()
-    }
-
     private fun Assert<Game>.tags() = prop(Game::tags).strings()
 
     //TODO: Basically next refactoring is to teach different entities to have tags

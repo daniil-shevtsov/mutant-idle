@@ -5,16 +5,22 @@ import assertk.all
 import assertk.assertThat
 import assertk.assertions.containsAll
 import assertk.assertions.containsExactly
+import assertk.assertions.isFalse
+import assertk.assertions.isTrue
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.Game
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTagKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTagValue
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.defaultTagsWithAdditional
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.dialogLine
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.entry
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.game
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.line
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.spikeTags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagValue
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tags
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.withAdditional
 import org.junit.jupiter.api.Test
 
 class TagEntityTest {
@@ -225,6 +231,80 @@ class TagEntityTest {
                         ) to tagValue("indoors"),
                     )
             }
+    }
+
+    @Test
+    fun `should get knife tags when picked up knife`() {
+        val game = game(
+            player = player(
+                tags = tags(
+                    "name" to "bob",
+                    "location" to "saloon",
+                )
+            ),
+            lines = listOf(),
+            locations = listOf(
+                location(
+                    id = "saloon",
+                    tags = tags("SpaceType" to "indoors")
+                )
+            ),
+            locationId = "saloon",
+            items = listOf(
+                item(
+                    id = "knife", title = "knife", tags = spikeTags(
+                        tagKey("weapon type") to tagValue("sharp"),
+                        tagKey("weapon length") to tagValue("short"),
+                        tagKey("weapon throwable") to tagValue("true"),
+                    )
+                ),
+            ),
+            tags = spikeTags(),
+        )
+
+        val kek = update(game, "pick up knife")
+
+        assertThat(kek).all {
+            tags().containsAll(
+                "holding" to "knife",
+                "sharp weapon" to "true",
+                "short weapon" to "true",
+                "throwable weapon" to "true"
+            )
+        }
+    }
+
+    //TODO: I need to make this work somehow for both devourer and android without specifing tags
+    @Test
+    fun `when devourer hides in the forest they need meat`() {
+        val lineEntry = line(
+            requiredTags = spikeTags(),
+            entry = entry(
+                plot = "You hide in the forest for some time",
+                tagChanges = spikeTags(tagKey("meat") to "\${-10}"),
+            )
+        )
+        val tagsWithoutSupplies = spikeTags(tagKey("species") to tagValue("devourer"))
+        val tagsWithSupplies = tagsWithoutSupplies.withAdditional("meat" to "10")
+
+        assertThat(lineEntry.suitableFor(tagsWithoutSupplies)).isFalse()
+        assertThat(lineEntry.suitableFor(tagsWithSupplies)).isTrue()
+    }
+
+    @Test
+    fun `when android hides in the forest they need charge`() {
+        val lineEntry = line(
+            requiredTags = spikeTags(),
+            entry = entry(
+                plot = "You hide in the forest for some time",
+                tagChanges = spikeTags(tagKey("charge") to "\${-100}"),
+            )
+        )
+        val tagsWithoutSupplies = spikeTags(tagKey("species") to tagValue("android"))
+        val tagsWithSupplies = tagsWithoutSupplies.withAdditional("charge" to "100")
+
+        assertThat(lineEntry.suitableFor(tagsWithoutSupplies)).isFalse()
+        assertThat(lineEntry.suitableFor(tagsWithSupplies)).isTrue()
     }
 
     private fun Assert<TagHolder>.tags(): Assert<List<Pair<SpikeTagKey, SpikeTagValue>>> =

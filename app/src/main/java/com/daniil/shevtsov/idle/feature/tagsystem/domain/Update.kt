@@ -34,27 +34,33 @@ fun update(game: Game, action: String): Game {
         tagKey("current action") to spikeTag(tagKey("current action"), tagValue(action))
     )
 
-    val performResult = perform(game.copy(tags = newTags))
-    val finalPlot = when (action) {
-        "speak" -> {
-            val npcToSpeak = game.npcs.first()
-            val npcName = npcToSpeak.tags.getTagValue(tagKey("name"))?.value
-            val npcOccupation = npcToSpeak.tags.getTagValue(tagKey("occupation"))?.value
-            val speakerIndication = "$npcName ($npcOccupation):"
+    val performResult = when {
+        action == "speak" -> {
+            val performResult = perform(game.copy(tags = newTags))
+            performResult.copy(plot = when (action) {
+                "speak" -> {
+                    val npcToSpeak = game.npcs.first()
+                    val npcName = npcToSpeak.tags.getTagValue(tagKey("name"))?.value
+                    val npcOccupation = npcToSpeak.tags.getTagValue(tagKey("occupation"))?.value
+                    val speakerIndication = "$npcName ($npcOccupation):"
 
-            val finalLine = performResult.plot.lastOrNull()?.let { line ->
-                "$speakerIndication $line"
+                    val finalLine = performResult.plot.lastOrNull()?.let { line ->
+                        "$speakerIndication $line"
+                    }
+
+                    game.plot + finalLine?.let { listOf(finalLine) }.orEmpty()
+                }
+
+                else -> performResult.plot
             }
-
-            game.plot + finalLine?.let { listOf(finalLine) }.orEmpty()
+            )
         }
-
-        else -> performResult.plot
+        else -> perform(game.copy(tags = newTags))
     }
 
     return game.copy(
         tags = performResult.tags,
-        plot = finalPlot,
+        plot = performResult.plot,
     )
 }
 
