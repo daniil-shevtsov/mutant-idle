@@ -18,6 +18,7 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.dialogLine
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.entry
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.game
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.line
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.spikeTag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.spikeTags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagValue
@@ -277,32 +278,15 @@ class TagEntityTest {
     private fun Assert<SpikeTags>.containsTags(
         vararg tags: Pair<SpikeTagKey, SpikeTagValue>
     ) = given { actual ->
-        val expectedMap = tags.toList().toMap()
-        val notFoundPairs = expectedMap.filter { expectedEntry ->
-            actual[expectedEntry.key]?.value != expectedEntry.value
-        }
-        if (notFoundPairs.isEmpty()) {
-            return@given
-        }
-        val message = "expected tags:\n${
-            tags.joinToString(separator = "\n") { (expectedKey, expectedValue) ->
-                "(key=${expectedKey.tagKey}, " + expectedKey.entityId?.let { "entity=${expectedKey.entityId}, " }
-                    .orEmpty() + "value=$expectedValue)"
-            }
-        }\n" +
-                "but\n" + notFoundPairs.toList()
-            .joinToString(separator = "\n") { (expectedKey, expectedValue) ->
-                when {
-                    !actual.containsKey(expectedKey) -> "no tag with (key=${expectedKey.tagKey}" + expectedKey.entityId?.let { ", entity=${expectedKey.entityId}" }
-                        .orEmpty() + ")"
-                    actual[expectedKey]?.value != expectedValue -> "(key=${expectedKey.tagKey}" + expectedKey.entityId?.let { ", entity=${expectedKey.entityId}" }
-                        .orEmpty() + ") tag's value is ${actual[expectedKey]?.value} instead of $expectedValue"
-                    else -> "(key=${expectedKey.tagKey}, " + expectedKey.entityId?.let { "entity=${expectedKey.entityId}, " }
-                        .orEmpty() + "value=$expectedValue)"
-                }
+        val tagAssertResult = tagAssertMessage(
+            expected = tags.toMap(),
+            actual = actual.map { it.key to it.value.value }.toMap(),
+        )
 
-            }
-        expected(message)
+        when (tagAssertResult) {
+            is TagAssertResult.Pass -> return@given
+            is TagAssertResult.Fail -> expected(tagAssertResult.message)
+        }
     }
 
     //TODO: I need to make this work somehow for both devourer and android without specifing tags
@@ -347,4 +331,47 @@ class TagEntityTest {
 
     private fun Assert<Game>.plot() = prop(Game::plot)
 
+}
+
+sealed interface TagAssertResult {
+    object Pass : TagAssertResult
+    data class Fail(val message: String) : TagAssertResult
+}
+
+fun tagAssertMessage(
+    expected: Map<SpikeTagKey, SpikeTagValue>,
+    actual: Map<SpikeTagKey, SpikeTagValue>,
+): TagAssertResult {
+    val notFoundPairs = expected.filter { expectedEntry ->
+        actual[expectedEntry.key] != expectedEntry.value
+    }
+    if (notFoundPairs.isEmpty()) {
+        return TagAssertResult.Pass
+    }
+    return TagAssertResult.Fail(
+        message = "to contain:\n${
+            expected.toList().joinToString(separator = "\n") { (expectedKey, expectedValue) ->
+                "(key=${expectedKey.tagKey}, " + expectedKey.entityId?.let { "entity=${expectedKey.entityId}, " }
+                    .orEmpty() + "value=$expectedValue)"
+            }
+        }\n" +
+                "but\n" + notFoundPairs.toList()
+            .joinToString(separator = "\n") { (expectedKey, expectedValue) ->
+                when {
+                    !actual.containsKey(expectedKey) -> "no tag with (key=${expectedKey.tagKey}" + expectedKey.entityId?.let { ", entity=${expectedKey.entityId}" }
+                        .orEmpty() + ")"
+
+                    actual[expectedKey] != expectedValue -> "(key=${expectedKey.tagKey}" + expectedKey.entityId?.let { ", entity=${expectedKey.entityId}" }
+                        .orEmpty() + ") tag's value is ${actual[expectedKey]} instead of $expectedValue"
+
+                    else -> "(key=${expectedKey.tagKey}, " + expectedKey.entityId?.let { "entity=${expectedKey.entityId}, " }
+                        .orEmpty() + "value=$expectedValue)"
+                }
+
+            } + "\nactual:\n" + actual.toList()
+            .joinToString(separator = "\n") { (expectedKey, expectedValue) ->
+                "(key=${expectedKey.tagKey}, " + expectedKey.entityId?.let { "entity=${expectedKey.entityId}, " }
+                    .orEmpty() + "value=${expectedValue})"
+            } + "\n\n"
+    )
 }
