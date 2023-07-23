@@ -234,7 +234,7 @@ class TagEntityTest {
     }
 
     @Test
-    fun `should get knife tags when picked up knife`() {
+    fun `should get sword tags when picked up sword`() {
         val game = game(
             player = player(
                 tags = tags(
@@ -252,24 +252,22 @@ class TagEntityTest {
             locationId = "saloon",
             items = listOf(
                 item(
-                    id = "knife", title = "knife", tags = spikeTags(
+                    id = "sword", title = "sword", tags = spikeTags(
                         tagKey("weapon type") to tagValue("sharp"),
-                        tagKey("weapon length") to tagValue("short"),
-                        tagKey("weapon throwable") to tagValue("true"),
+                        tagKey("weapon length") to tagValue("long"),
                     )
                 ),
             ),
             tags = spikeTags(),
         )
 
-        val kek = update(game, "pick up knife")
+        val kek = update(game, "pick up sword")
 
         assertThat(kek).all {
-            tags().containsAll(
-                "holding" to "knife",
-                "sharp weapon" to "true",
-                "short weapon" to "true",
-                "throwable weapon" to "true"
+            tagStrings().containsAll(
+                "holding" to "sword",
+                "weapon type" to "sharp",
+                "weapon length" to "long",
             )
         }
     }

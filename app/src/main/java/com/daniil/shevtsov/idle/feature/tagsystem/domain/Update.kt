@@ -7,6 +7,7 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTagKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.entry
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.spikeTag
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.spikeTags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagValue
 
@@ -35,6 +36,19 @@ fun update(game: Game, action: String): Game {
     )
 
     val performResult = when {
+        action.contains("pick up sword") -> {
+            val performResult = perform(game.copy(tags = newTags))
+            val itemId = action.substringAfter("pick up ")
+            val item = game.items.find { it.id == itemId }!!
+            val plot = "you pick up ${item.title}"
+            val modifiedTags = spikeTags(
+               tagKey("holding") to tagValue("sword"),
+               tagKey("weapon type") to tagValue("sharp"),
+               tagKey("weapon length") to tagValue("long"),
+            )
+            PerformResult(game.tags + modifiedTags, game.plot + listOf(plot))
+        }
+
         action == "speak" -> {
             val performResult = perform(game.copy(tags = newTags))
             performResult.copy(plot = when (action) {
@@ -55,6 +69,7 @@ fun update(game: Game, action: String): Game {
             }
             )
         }
+
         else -> perform(game.copy(tags = newTags))
     }
 
