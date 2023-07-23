@@ -42,10 +42,10 @@ fun update(game: Game, action: String): Game {
             val item = game.items.find { it.id == itemId }!!
             val plot = "you pick up ${item.title}"
             val modifiedTags = spikeTags(
-                tagKey("holding") to tagValue("spear"),
-                tagKey("weapon type", entityId = "spear") to tagValue("piercing"),
-                tagKey("weapon length", entityId = "spear") to tagValue("long"),
-                tagKey("throwable", entityId = "spear") to tagValue("true"),
+                tagKey("holding") to tagValue(item.id),
+                tagKey("weapon type", entityId = item.id) to tagValue("piercing"),
+                tagKey("weapon length", entityId = item.id) to tagValue("long"),
+                tagKey("throwable", entityId = item.id) to tagValue("true"),
             )
             PerformResult(game.tags + modifiedTags, game.plot + listOf(plot))
         }
@@ -55,9 +55,9 @@ fun update(game: Game, action: String): Game {
             val item = game.items.find { it.id == itemId }!!
             val plot = "you pick up ${item.title}"
             val modifiedTags = spikeTags(
-               tagKey("holding") to tagValue("sword"),
-               tagKey("weapon type", entityId = "sword") to tagValue("sharp"),
-               tagKey("weapon length", entityId = "sword") to tagValue("long"),
+               tagKey("holding") to tagValue(item.id),
+               tagKey("weapon type", entityId = item.id) to tagValue("sharp"),
+               tagKey("weapon length", entityId = item.id) to tagValue("long"),
             )
             PerformResult(game.tags + modifiedTags, game.plot + listOf(plot))
         }
