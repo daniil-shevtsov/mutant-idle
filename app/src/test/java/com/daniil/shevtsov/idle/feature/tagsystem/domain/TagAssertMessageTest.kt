@@ -35,6 +35,60 @@ class TagAssertMessageTest {
     }
 
     @Test
+    fun `should fail when tag with key does not exist because tags are empty`() {
+        val assertResult = tagAssertMessage(
+            expected = spikeTags(tagKey("lol") to tagValue("cheburek")),
+            actual = spikeTags(),
+        )
+        assertThat(assertResult).isFail(
+            """to contain:
+                |(key=lol, value=cheburek)
+                |but
+                |no tag with (key=lol)
+                |actual:
+                |tags are empty
+                |
+                |""".trimMargin()
+        )
+    }
+
+    @Test
+    fun `should fail when tag with key does not exist`() {
+        val assertResult = tagAssertMessage(
+            expected = spikeTags(tagKey("lol") to tagValue("cheburek")),
+            actual = spikeTags(tagKey("kek") to tagValue("keburek")),
+        )
+        assertThat(assertResult).isFail(
+            """to contain:
+                |(key=lol, value=cheburek)
+                |but
+                |no tag with (key=lol)
+                |actual:
+                |(key=kek, value=keburek)
+                |
+                |""".trimMargin()
+        )
+    }
+
+    @Test
+    fun `should fail when tag with key with entity does not exist`() {
+        val assertResult = tagAssertMessage(
+            expected = spikeTags(tagKey("lol", entityId="lol-entity") to tagValue("cheburek")),
+            actual = spikeTags(tagKey("kek", entityId="kek-entity") to tagValue("keburek")),
+        )
+        assertThat(assertResult).isFail(
+            """to contain:
+                |(key=lol, entity=lol-entity, value=cheburek)
+                |but
+                |no tag with (key=lol, entity=lol-entity)
+                |actual:
+                |(key=kek, entity=kek-entity, value=keburek)
+                |
+                |""".trimMargin()
+        )
+    }
+
+    @Test
     fun `should fail when value differs`() {
         val assertResult = tagAssertMessage(
             expected = spikeTags(tagKey("lol") to tagValue("cheburek")),

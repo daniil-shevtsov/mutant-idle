@@ -350,28 +350,44 @@ fun tagAssertMessage(
     }
     return TagAssertResult.Fail(
         message = "to contain:\n${
-            expected.toList().joinToString(separator = "\n") { (expectedKey, expectedValue) ->
-                "(key=${expectedKey.tagKey}, " + expectedKey.entityId?.let { "entity=${expectedKey.entityId}, " }
-                    .orEmpty() + "value=$expectedValue)"
-            }
+            expected.toMessage()
         }\n" +
                 "but\n" + notFoundPairs.toList()
-            .joinToString(separator = "\n") { (expectedKey, expectedValue) ->
+            .joinToString(separator = "\n") { tagPair ->
+                val (expectedKey, expectedValue) = tagPair
                 when {
-                    !actual.containsKey(expectedKey) -> "no tag with (key=${expectedKey.tagKey}" + expectedKey.entityId?.let { ", entity=${expectedKey.entityId}" }
-                        .orEmpty() + ")"
+                    !actual.containsKey(expectedKey) -> "no tag with ${expectedKey.toMessage()}"
 
-                    actual[expectedKey] != expectedValue -> "(key=${expectedKey.tagKey}" + expectedKey.entityId?.let { ", entity=${expectedKey.entityId}" }
-                        .orEmpty() + ") tag's value is ${actual[expectedKey]} instead of $expectedValue"
+                    actual[expectedKey] != expectedValue ->  "${expectedKey.toMessage()} tag's value is ${actual[expectedKey]} instead of $expectedValue"
 
-                    else -> "(key=${expectedKey.tagKey}, " + expectedKey.entityId?.let { "entity=${expectedKey.entityId}, " }
-                        .orEmpty() + "value=$expectedValue)"
+                    else -> tagPair.toMessage()
                 }
 
-            } + "\nactual:\n" + actual.toList()
-            .joinToString(separator = "\n") { (expectedKey, expectedValue) ->
-                "(key=${expectedKey.tagKey}, " + expectedKey.entityId?.let { "entity=${expectedKey.entityId}, " }
-                    .orEmpty() + "value=${expectedValue})"
-            } + "\n\n"
+            } + "\nactual:\n" + when {
+            actual.isNotEmpty() -> actual.toMessage2()
+
+            else -> "tags are empty"
+        }
+                + "\n\n"
     )
 }
+
+private fun Map<SpikeTagKey, SpikeTagValue>.toMessage() = toList()
+    .joinToString(separator = "\n") { (expectedKey, expectedValue) ->
+        "(key=${expectedKey.tagKey}, " + expectedKey.entityId?.let { "entity=${expectedKey.entityId}, " }
+            .orEmpty() + "value=$expectedValue)"
+    }
+
+private fun Map<SpikeTagKey, SpikeTagValue>.toMessage2() = toList()
+    .joinToString(separator = "\n") { tagPair ->
+        tagPair.toMessage()
+    }
+
+private fun Pair<SpikeTagKey, SpikeTagValue>.toMessage(): String {
+    val (expectedKey, expectedValue) = this
+    return "(key=${expectedKey.tagKey}, " + expectedKey.entityId?.let { "entity=${expectedKey.entityId}, " }
+        .orEmpty() + "value=${expectedValue})"
+}
+
+private fun SpikeTagKey.toMessage() =
+    "(key=${tagKey}" + entityId?.let { ", entity=${entityId}" }.orEmpty() + ")"
