@@ -358,7 +358,7 @@ fun tagAssertMessage(
                 when {
                     !actual.containsKey(expectedKey) -> "no tag with ${expectedKey.toMessage()}"
 
-                    actual[expectedKey] != expectedValue ->  "${expectedKey.toMessage()} tag's value is ${actual[expectedKey]} instead of $expectedValue"
+                    actual[expectedKey] != expectedValue -> "${expectedKey.toMessage()} tag's value is ${actual[expectedKey]} instead of $expectedValue"
 
                     else -> tagPair.toMessage()
                 }
@@ -385,9 +385,11 @@ private fun Map<SpikeTagKey, SpikeTagValue>.toMessage2() = toList()
 
 private fun Pair<SpikeTagKey, SpikeTagValue>.toMessage(): String {
     val (expectedKey, expectedValue) = this
-    return "(key=${expectedKey.tagKey}, " + expectedKey.entityId?.let { "entity=${expectedKey.entityId}, " }
-        .orEmpty() + "value=${expectedValue})"
+    return "(${tagKeyMessage(expectedKey)}, value=${expectedValue})"
 }
 
 private fun SpikeTagKey.toMessage() =
-    "(key=${tagKey}" + entityId?.let { ", entity=${entityId}" }.orEmpty() + ")"
+    "(${tagKeyMessage(this)})"
+
+private fun tagKeyMessage(tagKey: SpikeTagKey) =
+    "key=${tagKey.tagKey}" + tagKey.entityId?.let { ", entity=${tagKey.entityId}" }.orEmpty()
