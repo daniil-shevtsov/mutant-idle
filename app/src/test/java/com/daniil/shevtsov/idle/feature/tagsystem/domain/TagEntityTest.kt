@@ -364,7 +364,7 @@ fun tagAssertMessage(
                 }
 
             } + "\nactual:\n" + when {
-            actual.isNotEmpty() -> actual.toMessage2()
+            actual.isNotEmpty() -> actual.toMessage()
 
             else -> "tags are empty"
         }
@@ -373,12 +373,6 @@ fun tagAssertMessage(
 }
 
 private fun Map<SpikeTagKey, SpikeTagValue>.toMessage() = toList()
-    .joinToString(separator = "\n") { (expectedKey, expectedValue) ->
-        "(key=${expectedKey.tagKey}, " + expectedKey.entityId?.let { "entity=${expectedKey.entityId}, " }
-            .orEmpty() + "value=$expectedValue)"
-    }
-
-private fun Map<SpikeTagKey, SpikeTagValue>.toMessage2() = toList()
     .joinToString(separator = "\n") { tagPair ->
         tagPair.toMessage()
     }
