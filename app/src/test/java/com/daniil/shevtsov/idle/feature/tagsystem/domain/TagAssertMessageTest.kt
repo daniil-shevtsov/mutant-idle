@@ -78,11 +78,11 @@ class TagAssertMessageTest {
         )
         assertThat(assertResult).isFail(
             """to contain:
-                |(key=lol, entity=lol-entity, value=cheburek)
+                |(entity=lol-entity, key=lol, value=cheburek)
                 |but
-                |no tag with (key=lol, entity=lol-entity)
+                |no tag with (entity=lol-entity, key=lol)
                 |actual:
-                |(key=kek, entity=kek-entity, value=keburek)
+                |(entity=kek-entity, key=kek, value=keburek)
                 |
                 |""".trimMargin()
         )

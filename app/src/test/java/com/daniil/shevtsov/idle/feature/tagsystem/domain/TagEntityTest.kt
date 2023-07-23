@@ -275,6 +275,47 @@ class TagEntityTest {
         }
     }
 
+    @Test
+    fun `should get spear tags when picked up spear`() {
+        val game = game(
+            player = player(
+                tags = tags(
+                    "name" to "bob",
+                    "location" to "saloon",
+                )
+            ),
+            lines = listOf(),
+            locations = listOf(
+                location(
+                    id = "saloon",
+                    tags = tags("SpaceType" to "indoors")
+                )
+            ),
+            locationId = "saloon",
+            items = listOf(
+                item(
+                    id = "spear", title = "spear", tags = spikeTags(
+                        tagKey("weapon type", entityId = "spear") to tagValue("piercing"),
+                        tagKey("weapon length", entityId = "spear") to tagValue("long"),
+                        tagKey("throwable", entityId = "spear") to tagValue("true"),
+                    )
+                ),
+            ),
+            tags = spikeTags(),
+        )
+
+        val kek = update(game, "pick up spear")
+
+        assertThat(kek).all {
+            prop(TagHolder::tags).containsTags(
+                tagKey("holding") to tagValue("spear"),
+                tagKey("weapon type", entityId = "spear") to tagValue("piercing"),
+                tagKey("weapon length", entityId = "spear") to tagValue("long"),
+                tagKey("throwable", entityId = "spear") to tagValue("true"),
+            )
+        }
+    }
+
     private fun Assert<SpikeTags>.containsTags(
         vararg tags: Pair<SpikeTagKey, SpikeTagValue>
     ) = given { actual ->
@@ -386,4 +427,4 @@ private fun SpikeTagKey.toMessage() =
     "(${tagKeyMessage(this)})"
 
 private fun tagKeyMessage(tagKey: SpikeTagKey) =
-    "key=${tagKey.tagKey}" + tagKey.entityId?.let { ", entity=${tagKey.entityId}" }.orEmpty()
+    tagKey.entityId?.let { "entity=${tagKey.entityId}, " }.orEmpty() + "key=${tagKey.tagKey}"

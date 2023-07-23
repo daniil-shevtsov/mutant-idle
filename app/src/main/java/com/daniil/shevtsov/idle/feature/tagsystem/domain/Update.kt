@@ -36,6 +36,19 @@ fun update(game: Game, action: String): Game {
     )
 
     val performResult = when {
+        action.contains("pick up spear") -> {
+            val performResult = perform(game.copy(tags = newTags))
+            val itemId = action.substringAfter("pick up ")
+            val item = game.items.find { it.id == itemId }!!
+            val plot = "you pick up ${item.title}"
+            val modifiedTags = spikeTags(
+                tagKey("holding") to tagValue("spear"),
+                tagKey("weapon type", entityId = "spear") to tagValue("piercing"),
+                tagKey("weapon length", entityId = "spear") to tagValue("long"),
+                tagKey("throwable", entityId = "spear") to tagValue("true"),
+            )
+            PerformResult(game.tags + modifiedTags, game.plot + listOf(plot))
+        }
         action.contains("pick up sword") -> {
             val performResult = perform(game.copy(tags = newTags))
             val itemId = action.substringAfter("pick up ")
