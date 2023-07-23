@@ -43,8 +43,8 @@ fun update(game: Game, action: String): Game {
             val plot = "you pick up ${item.title}"
             val modifiedTags = spikeTags(
                tagKey("holding") to tagValue("sword"),
-               tagKey("weapon type") to tagValue("sharp"),
-               tagKey("weapon length") to tagValue("long"),
+               tagKey("weapon type", entityId = "sword") to tagValue("sharp"),
+               tagKey("weapon length", entityId = "sword") to tagValue("long"),
             )
             PerformResult(game.tags + modifiedTags, game.plot + listOf(plot))
         }
@@ -137,6 +137,7 @@ private fun perform(game: Game): PerformResult {
 }
 
 fun SpikeTags.containsKey(key: String) = any { (tagKey, _) -> tagKey.tagKey == key }
+fun SpikeTags.containsEntity(entityId: String) = any { (tagKey, _) -> tagKey.entityId == entityId }
 
 private fun SpikeTags.getTagValue(key: SpikeTagKey) = (entries.find { (tagKey, tag) ->
     tagKey == key

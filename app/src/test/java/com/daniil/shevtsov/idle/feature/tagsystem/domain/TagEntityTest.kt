@@ -8,9 +8,11 @@ import assertk.assertions.containsExactly
 import assertk.assertions.isFalse
 import assertk.assertions.isTrue
 import assertk.assertions.prop
+import assertk.assertions.support.expected
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.Game
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTagKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTagValue
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.defaultTagsWithAdditional
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.dialogLine
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.entry
@@ -264,12 +266,43 @@ class TagEntityTest {
         val kek = update(game, "pick up sword")
 
         assertThat(kek).all {
-            tagStrings().containsAll(
-                "holding" to "sword",
-                "weapon type" to "sharp",
-                "weapon length" to "long",
+            prop(TagHolder::tags).containsTags(
+                tagKey("holding") to tagValue("sword"),
+                tagKey("weapon type", entityId = "sword") to tagValue("sharp"),
+                tagKey("weapon length", entityId = "sword") to tagValue("long"),
             )
         }
+    }
+
+    private fun Assert<SpikeTags>.containsTags(
+        vararg tags: Pair<SpikeTagKey, SpikeTagValue>
+    ) = given { actual ->
+        val expectedMap = tags.toList().toMap()
+        val notFoundPairs = expectedMap.filter { expectedEntry ->
+            actual[expectedEntry.key]?.value != expectedEntry.value
+        }
+        if (notFoundPairs.isEmpty()) {
+            return@given
+        }
+        val message = "expected tags:\n${
+            tags.joinToString(separator = "\n") { (expectedKey, expectedValue) ->
+                "(key=${expectedKey.tagKey}, " + expectedKey.entityId?.let { "entity=${expectedKey.entityId}, " }
+                    .orEmpty() + "value=$expectedValue)"
+            }
+        }\n" +
+                "but\n" + notFoundPairs.toList()
+            .joinToString(separator = "\n") { (expectedKey, expectedValue) ->
+                when {
+                    !actual.containsKey(expectedKey) -> "no tag with (key=${expectedKey.tagKey}" + expectedKey.entityId?.let { ", entity=${expectedKey.entityId}" }
+                        .orEmpty() + ")"
+                    actual[expectedKey]?.value != expectedValue -> "(key=${expectedKey.tagKey}" + expectedKey.entityId?.let { ", entity=${expectedKey.entityId}" }
+                        .orEmpty() + ") tag's value is ${actual[expectedKey]?.value} instead of $expectedValue"
+                    else -> "(key=${expectedKey.tagKey}, " + expectedKey.entityId?.let { "entity=${expectedKey.entityId}, " }
+                        .orEmpty() + "value=$expectedValue)"
+                }
+
+            }
+        expected(message)
     }
 
     //TODO: I need to make this work somehow for both devourer and android without specifing tags
