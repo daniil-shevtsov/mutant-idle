@@ -36,29 +36,15 @@ fun update(game: Game, action: String): Game {
     )
 
     val performResult = when {
-        action.contains("pick up spear") -> {
-            val performResult = perform(game.copy(tags = newTags))
+        action.contains("pick up spear") || action.contains("pick up sword") -> {
             val itemId = action.substringAfter("pick up ")
             val item = game.items.find { it.id == itemId }!!
             val plot = "you pick up ${item.title}"
-            val modifiedTags = spikeTags(
-                tagKey("holding") to tagValue(item.id),
-                tagKey("weapon type", entityId = item.id) to tagValue("piercing"),
-                tagKey("weapon length", entityId = item.id) to tagValue("long"),
-                tagKey("throwable", entityId = item.id) to tagValue("true"),
-            )
-            PerformResult(game.tags + modifiedTags, game.plot + listOf(plot))
-        }
-        action.contains("pick up sword") -> {
-            val performResult = perform(game.copy(tags = newTags))
-            val itemId = action.substringAfter("pick up ")
-            val item = game.items.find { it.id == itemId }!!
-            val plot = "you pick up ${item.title}"
-            val modifiedTags = spikeTags(
-               tagKey("holding") to tagValue(item.id),
-               tagKey("weapon type", entityId = item.id) to tagValue("sharp"),
-               tagKey("weapon length", entityId = item.id) to tagValue("long"),
-            )
+            val holdingTag = spikeTag(key = tagKey("holding"), value = tagValue(item.id))
+            val modifiedTags = (item.tags.map {
+                val newKey = it.key.copy(entityId = item.id)
+                newKey to it.value
+            } + listOf(holdingTag.key to holdingTag)).toMap()
             PerformResult(game.tags + modifiedTags, game.plot + listOf(plot))
         }
 
