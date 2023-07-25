@@ -486,7 +486,16 @@ fun verifyContainsNoTags(
     if (presentTags.isEmpty()) {
         return TagAssertResult.Pass
     }
-    return TagAssertResult.Fail(message = "")
+    return TagAssertResult.Fail(
+        """to not contain:
+                |(key=lol, value=cheburek)
+                |but present:
+                |(key=lol, value=cheburek)
+                |actual:
+                |(key=lol, value=cheburek)
+                |
+                |""".trimMargin()
+    )
 //    return TagAssertResult.Fail(
 //        message = "to contain:\n${
 //            expected.toMessage()
