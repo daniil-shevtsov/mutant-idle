@@ -5,25 +5,24 @@ import assertk.all
 import assertk.assertThat
 import assertk.assertions.containsAll
 import assertk.assertions.containsExactly
+import assertk.assertions.isEqualTo
 import assertk.assertions.isFalse
 import assertk.assertions.isTrue
 import assertk.assertions.prop
 import assertk.assertions.support.expected
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.Game
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTagKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTagValue
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTags
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.defaultTagsWithAdditional
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.dialogLine
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.entry
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.game
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.line
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.spikeTag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.spikeTags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagValue
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.withAdditional
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class TagEntityTest {
@@ -313,13 +312,79 @@ class TagEntityTest {
                 tagKey("weapon length", entityId = "spear") to tagValue("long"),
                 tagKey("throwable", entityId = "spear") to tagValue("true"),
             )
+            lastPlot().isEqualTo("You pick up spear")
+        }
+    }
+
+    @Test
+    @Disabled
+    fun `should throw held item at target when throwable`() {
+        val game = game(
+            player = player(
+                tags = tags(
+                    "name" to "bob",
+                    "location" to "saloon",
+                )
+            ),
+            lines = listOf(),
+            locations = listOf(
+                location(
+                    id = "saloon",
+                    tags = tags("SpaceType" to "indoors")
+                )
+            ),
+            locationId = "saloon",
+            items = listOf(
+                item(
+                    id = "spear", title = "spear", tags = spikeTags(
+                        tagKey("weapon type", entityId = "spear") to tagValue("piercing"),
+                        tagKey("weapon length", entityId = "spear") to tagValue("long"),
+                        tagKey("throwable", entityId = "spear") to tagValue("true"),
+                    )
+                ),
+            ),
+            tags = spikeTags(
+                tagKey("holding") to tagValue("spear"),
+                tagKey("weapon type", entityId = "spear") to tagValue("piercing"),
+                tagKey("weapon length", entityId = "spear") to tagValue("long"),
+                tagKey("throwable", entityId = "spear") to tagValue("true"),
+            ),
+        )
+
+        val kek = update(game, "throw")
+
+        assertThat(kek).all {
+            prop(TagHolder::tags)
+                .all {
+                    containsTags(
+                        tagKey("holding") to tagValue("null"),
+                        tagKey("weapon type", entityId = "spear") to tagValue("piercing"),
+                        tagKey("weapon length", entityId = "spear") to tagValue("long"),
+                        tagKey("throwable", entityId = "spear") to tagValue("true"),
+                    )
+                }
+            //lastPlot().isEqualTo("you throw ")
         }
     }
 
     private fun Assert<SpikeTags>.containsTags(
         vararg tags: Pair<SpikeTagKey, SpikeTagValue>
     ) = given { actual ->
-        val tagAssertResult = tagAssertMessage(
+        val tagAssertResult = verifyContainsTags(
+            expected = tags.toMap(),
+            actual = actual.map { it.key to it.value.value }.toMap(),
+        )
+
+        when (tagAssertResult) {
+            is TagAssertResult.Pass -> return@given
+            is TagAssertResult.Fail -> expected(tagAssertResult.message)
+        }
+    }
+
+    private fun Assert<SpikeTags>.containsNoTags(
+        vararg tags: Pair<SpikeTagKey, SpikeTagValue>
+    ) = given { actual ->
+        val tagAssertResult = verifyContainsTags(
             expected = tags.toMap(),
             actual = actual.map { it.key to it.value.value }.toMap(),
         )
@@ -370,8 +435,6 @@ class TagEntityTest {
     private fun Assert<TagHolder>.tagStrings(): Assert<List<Pair<String, String>>> =
         tags().transform { it.map { it.first.tagKey to it.second } }
 
-    private fun Assert<Game>.plot() = prop(Game::plot)
-
 }
 
 sealed interface TagAssertResult {
@@ -379,7 +442,7 @@ sealed interface TagAssertResult {
     data class Fail(val message: String) : TagAssertResult
 }
 
-fun tagAssertMessage(
+fun verifyContainsTags(
     expected: Map<SpikeTagKey, SpikeTagValue>,
     actual: Map<SpikeTagKey, SpikeTagValue>,
 ): TagAssertResult {
@@ -411,6 +474,41 @@ fun tagAssertMessage(
         }
                 + "\n\n"
     )
+}
+
+fun verifyContainsNoTags(
+    expected: Map<SpikeTagKey, SpikeTagValue>,
+    actual: Map<SpikeTagKey, SpikeTagValue>,
+): TagAssertResult {
+    val presentTags = expected.filter { expectedEntry ->
+        actual[expectedEntry.key] == expectedEntry.value
+    }
+    if (presentTags.isEmpty()) {
+        return TagAssertResult.Pass
+    }
+    return TagAssertResult.Fail(message = "")
+//    return TagAssertResult.Fail(
+//        message = "to contain:\n${
+//            expected.toMessage()
+//        }\n" +
+//                "but\n" + notFoundPairs.toList()
+//            .joinToString(separator = "\n") { tagPair ->
+//                val (expectedKey, expectedValue) = tagPair
+//                when {
+//                    !actual.containsKey(expectedKey) -> "no tag with ${expectedKey.toMessage()}"
+//
+//                    actual[expectedKey] != expectedValue -> "${expectedKey.toMessage()} tag's value is ${actual[expectedKey]} instead of $expectedValue"
+//
+//                    else -> tagPair.toMessage()
+//                }
+//
+//            } + "\nactual:\n" + when {
+//            actual.isNotEmpty() -> actual.toMessage()
+//
+//            else -> "tags are empty"
+//        }
+//                + "\n\n"
+//    )
 }
 
 private fun Map<SpikeTagKey, SpikeTagValue>.toMessage() = toList()

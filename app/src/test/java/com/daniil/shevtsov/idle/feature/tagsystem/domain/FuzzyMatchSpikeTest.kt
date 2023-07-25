@@ -597,9 +597,7 @@ class FuzzyMatchSpikeTest {
 
     //TODO: Basically next refactoring is to teach different entities to have tags
 
-    private fun Assert<Game>.plot() = prop(Game::plot)
 
-    private fun Assert<Game>.lastPlot(): Assert<String> = plot().index(0)
     private fun Assert<Game>.lastPlotsNotReversed(n: Int): Assert<List<String>> =
         plot().transform { it.takeLast(n) }
 
@@ -662,3 +660,7 @@ private fun say(tags: SpikeTags): Game {
 fun Assert<SpikeTags>.strings() = transform {
     it.map { it.key.tagKey to it.value.value }
 }
+
+fun Assert<Game>.plot() = prop(Game::plot)
+
+fun Assert<Game>.lastPlot(): Assert<String> = plot().index(0)

@@ -39,7 +39,7 @@ fun update(game: Game, action: String): Game {
         action.contains("pick up spear") || action.contains("pick up sword") -> {
             val itemId = action.substringAfter("pick up ")
             val item = game.items.find { it.id == itemId }!!
-            val plot = "you pick up ${item.title}"
+            val plot = "You pick up ${item.title}"
             val holdingTag = spikeTag(key = tagKey("holding"), value = tagValue(item.id))
             val modifiedTags = (item.tags.map {
                 val newKey = it.key.copy(entityId = item.id)
