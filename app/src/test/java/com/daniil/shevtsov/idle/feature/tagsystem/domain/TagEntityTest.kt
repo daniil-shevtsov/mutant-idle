@@ -488,36 +488,14 @@ fun verifyContainsNoTags(
     }
     return TagAssertResult.Fail(
         """to not contain:
-                |(key=lol, value=cheburek)
+                |${expected.toMessage()}
                 |but present:
-                |(key=lol, value=cheburek)
+                |${presentTags.toMessage()}
                 |actual:
-                |(key=lol, value=cheburek)
+                |${actual.toMessage()}
                 |
                 |""".trimMargin()
     )
-//    return TagAssertResult.Fail(
-//        message = "to contain:\n${
-//            expected.toMessage()
-//        }\n" +
-//                "but\n" + notFoundPairs.toList()
-//            .joinToString(separator = "\n") { tagPair ->
-//                val (expectedKey, expectedValue) = tagPair
-//                when {
-//                    !actual.containsKey(expectedKey) -> "no tag with ${expectedKey.toMessage()}"
-//
-//                    actual[expectedKey] != expectedValue -> "${expectedKey.toMessage()} tag's value is ${actual[expectedKey]} instead of $expectedValue"
-//
-//                    else -> tagPair.toMessage()
-//                }
-//
-//            } + "\nactual:\n" + when {
-//            actual.isNotEmpty() -> actual.toMessage()
-//
-//            else -> "tags are empty"
-//        }
-//                + "\n\n"
-//    )
 }
 
 private fun Map<SpikeTagKey, SpikeTagValue>.toMessage() = toList()
