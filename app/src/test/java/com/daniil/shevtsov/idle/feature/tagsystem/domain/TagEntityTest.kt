@@ -363,7 +363,59 @@ class TagEntityTest {
                         tagKey("throwable", entityId = "spear") to tagValue("true"),
                     )
                 }
-            //lastPlot().isEqualTo("you throw ")
+            lastPlot().isEqualTo("You throw spear in general direction")
+        }
+    }
+
+    @Test
+    fun `should aim at target`() {
+        val game = game(
+            player = player(
+                tags = tags(
+                    "name" to "bob",
+                    "location" to "saloon",
+                )
+            ),
+            lines = listOf(),
+            locations = listOf(
+                location(
+                    id = "saloon",
+                    tags = tags("SpaceType" to "indoors")
+                )
+            ),
+            locationId = "saloon",
+            npcs = listOf(
+                npc(
+                    id = "bill",
+                    title = "Bill",
+                    tags = tags("occupation" to "barkeep", "name" to "Bill", "location" to "saloon")
+                )
+            ),
+            items = listOf(
+                item(
+                    id = "spear", title = "spear", tags = spikeTags(
+                        tagKey("weapon type", entityId = "spear") to tagValue("piercing"),
+                        tagKey("weapon length", entityId = "spear") to tagValue("long"),
+                        tagKey("throwable", entityId = "spear") to tagValue("true"),
+                    )
+                ),
+            ),
+            tags = spikeTags(
+                tagKey("holding") to tagValue("spear"),
+                tagKey("weapon type", entityId = "spear") to tagValue("piercing"),
+                tagKey("weapon length", entityId = "spear") to tagValue("long"),
+                tagKey("throwable", entityId = "spear") to tagValue("true"),
+            ),
+        )
+
+        val kek = update(game, "target bill")
+
+        assertThat(kek).all {
+            prop(TagHolder::tags)
+                .containsTags(
+                    tagKey("targeting") to tagValue("bill"),
+                )
+            lastPlot().isEqualTo("You aim at Bill with spear")
         }
     }
 
