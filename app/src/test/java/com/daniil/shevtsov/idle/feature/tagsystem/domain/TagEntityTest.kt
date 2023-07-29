@@ -5,11 +5,13 @@ import assertk.all
 import assertk.assertThat
 import assertk.assertions.containsAll
 import assertk.assertions.containsExactly
+import assertk.assertions.index
 import assertk.assertions.isEqualTo
 import assertk.assertions.isFalse
 import assertk.assertions.isTrue
 import assertk.assertions.prop
 import assertk.assertions.support.expected
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.Game
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTagKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTagValue
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTags
@@ -316,7 +318,7 @@ class TagEntityTest {
     }
 
     @Test
-    fun `should throw held item at target when throwable`() {
+    fun `should throw held item in general direction when throwing without target`() {
         val game = game(
             player = player(
                 tags = tags(
@@ -416,6 +418,77 @@ class TagEntityTest {
                     tagKey("targeting") to tagValue("bill"),
                 )
             lastPlot().isEqualTo("You aim at Bill with spear")
+        }
+    }
+
+    @Test
+    fun `should throw held item at target when throwing with target`() {
+        val game = game(
+            player = player(
+                tags = tags(
+                    "name" to "bob",
+                    "location" to "saloon",
+                )
+            ),
+            lines = listOf(),
+            locations = listOf(
+                location(
+                    id = "saloon",
+                    tags = tags("SpaceType" to "indoors")
+                )
+            ),
+            locationId = "saloon",
+            npcs = listOf(
+                npc(
+                    id = "bill",
+                    title = "Bill",
+                    tags = tags(
+                        "health" to "100",
+                        "occupation" to "barkeep",
+                        "name" to "Bill",
+                        "location" to "saloon",
+                    )
+                )
+            ),
+            items = listOf(
+                item(
+                    id = "spear", title = "spear", tags = spikeTags(
+                        tagKey("weapon type", entityId = "spear") to tagValue("piercing"),
+                        tagKey("weapon length", entityId = "spear") to tagValue("long"),
+                        tagKey("throwable", entityId = "spear") to tagValue("true"),
+                    )
+                ),
+            ),
+            tags = spikeTags(
+                tagKey("holding") to tagValue("spear"),
+                tagKey("targeting") to tagValue("bill"),
+                tagKey("weapon type", entityId = "spear") to tagValue("piercing"),
+                tagKey("weapon length", entityId = "spear") to tagValue("long"),
+                tagKey("throwable", entityId = "spear") to tagValue("true"),
+            ),
+        )
+
+        val kek = update(game, "throw")
+
+        assertThat(kek).all {
+            prop(TagHolder::tags)
+                .all {
+                    containsTags(
+                        tagKey("holding") to tagValue("null"),
+                    )
+                    containsNoTags(
+                        tagKey("weapon type", entityId = "spear") to tagValue("piercing"),
+                        tagKey("weapon length", entityId = "spear") to tagValue("long"),
+                        tagKey("throwable", entityId = "spear") to tagValue("true"),
+                    )
+                }
+            prop(Game::npcs)
+                .index(0)
+                .prop(TagHolder::tags)
+                .containsTags(
+                    tagKey("health") to tagValue("10"),
+                )
+            lastPlot().isEqualTo("You throw spear in general direction")
         }
     }
 
