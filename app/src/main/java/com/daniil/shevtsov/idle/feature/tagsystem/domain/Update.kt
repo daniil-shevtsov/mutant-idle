@@ -65,8 +65,15 @@ fun update(game: Game, action: String): Game {
 
         action == "throw" -> {
             val itemId = game.tags[tagKey("holding")]?.value
+            val targetId = game.tags[tagKey("targeting")]?.value
+            val targetNpc = game.npcs.find { it.id == targetId }
             val item = game.items.find { it.id == itemId }!!
-            val plot = "You throw ${item.title} in general direction"
+            val plot = "You throw ${item.title} ${
+                when (targetNpc) {
+                    null -> "in general direction"
+                    else -> "at ${targetNpc.title}"
+                }
+            }"
             val holdingTag = spikeTag(key = tagKey("holding"), value = tagValue("null"))
             val modifiedTags: SpikeTags = listOf(holdingTag.key to holdingTag).toMap()
             val tagsToRemove: SpikeTags = game.tags.filter { it.key.entityId == itemId }

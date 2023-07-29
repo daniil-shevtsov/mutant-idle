@@ -471,6 +471,7 @@ class TagEntityTest {
         val kek = update(game, "throw")
 
         assertThat(kek).all {
+            lastPlot().isEqualTo("You throw spear at Bill")
             prop(TagHolder::tags)
                 .all {
                     containsTags(
@@ -488,7 +489,6 @@ class TagEntityTest {
                 .containsTags(
                     tagKey("health") to tagValue("10"),
                 )
-            lastPlot().isEqualTo("You throw spear in general direction")
         }
     }
 
