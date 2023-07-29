@@ -7,6 +7,7 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTagKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.entry
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.spikeTag
+import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.spikeTags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagValue
 
@@ -33,6 +34,8 @@ fun update(game: Game, action: String): Game {
     val newTags: SpikeTags = (newLocationTags + newPlayerTags + newNpcTags) + newGameTags + mapOf(
         tagKey("current action") to spikeTag(tagKey("current action"), tagValue(action))
     )
+
+    var finalModifiedNpc: Npc? = null
 
     val performResult = when {
         action.contains("pick up spear") || action.contains("pick up sword") -> {
@@ -74,11 +77,27 @@ fun update(game: Game, action: String): Game {
                     else -> "at ${targetNpc.title}"
                 }
             }"
+
+            val tagChanger = object : TagChanger {
+                override val id: String
+                    get() = item.id
+                override val tagChanges: SpikeTags
+                    get() = spikeTags(
+                        tagKey("health") to tagValue("\${-90}")
+                    )
+            }
+
             val holdingTag = spikeTag(key = tagKey("holding"), value = tagValue("null"))
             val modifiedTags: SpikeTags = listOf(holdingTag.key to holdingTag).toMap()
             val tagsToRemove: SpikeTags = game.tags.filter { it.key.entityId == itemId }
             val kek = game.tags + modifiedTags
             val lol = kek.filter { it.key !in tagsToRemove.keys }
+            val modifiedTarget = targetNpc?.let {
+                it.copy(
+                    tags = it.tags.apply(tagChanger)
+                )
+            }
+            finalModifiedNpc = modifiedTarget
             PerformResult(lol, game.plot + listOf(plot))
         }
 
@@ -109,6 +128,15 @@ fun update(game: Game, action: String): Game {
     return game.copy(
         tags = performResult.tags,
         plot = performResult.plot,
+        npcs = when (finalModifiedNpc) {
+            null -> game.npcs
+            else -> game.npcs.map { npc ->
+                when (npc.id) {
+                    finalModifiedNpc.id -> finalModifiedNpc
+                    else -> npc
+                }
+            }
+        }
     )
 }
 
