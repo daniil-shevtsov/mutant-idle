@@ -7,7 +7,6 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTagKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.entry
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.spikeTag
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.spikeTags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagValue
 
@@ -46,6 +45,18 @@ fun update(game: Game, action: String): Game {
                 newKey to it.value
             } + listOf(holdingTag.key to holdingTag)).toMap()
             PerformResult(game.tags + modifiedTags, game.plot + listOf(plot))
+        }
+
+        action == "throw" -> {
+            val itemId = game.tags[tagKey("holding")]?.value
+            val item = game.items.find { it.id == itemId }!!
+            val plot = "You throw ${item.title}"
+            val holdingTag = spikeTag(key = tagKey("holding"), value = tagValue("null"))
+            val modifiedTags: SpikeTags = listOf(holdingTag.key to holdingTag).toMap()
+            val tagsToRemove: SpikeTags = game.tags.filter { it.key.entityId == itemId }
+            val kek = game.tags + modifiedTags
+            val lol = kek.filter { it.key !in tagsToRemove.keys }
+            PerformResult(lol, game.plot + listOf(plot))
         }
 
         action == "speak" -> {

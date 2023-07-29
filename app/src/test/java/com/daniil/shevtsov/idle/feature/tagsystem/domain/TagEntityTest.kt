@@ -22,7 +22,6 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagValue
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.withAdditional
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class TagEntityTest {
@@ -317,7 +316,6 @@ class TagEntityTest {
     }
 
     @Test
-    @Disabled
     fun `should throw held item at target when throwable`() {
         val game = game(
             player = player(
@@ -358,6 +356,8 @@ class TagEntityTest {
                 .all {
                     containsTags(
                         tagKey("holding") to tagValue("null"),
+                    )
+                    containsNoTags(
                         tagKey("weapon type", entityId = "spear") to tagValue("piercing"),
                         tagKey("weapon length", entityId = "spear") to tagValue("long"),
                         tagKey("throwable", entityId = "spear") to tagValue("true"),
@@ -384,7 +384,7 @@ class TagEntityTest {
     private fun Assert<SpikeTags>.containsNoTags(
         vararg tags: Pair<SpikeTagKey, SpikeTagValue>
     ) = given { actual ->
-        val tagAssertResult = verifyContainsTags(
+        val tagAssertResult = verifyContainsNoTags(
             expected = tags.toMap(),
             actual = actual.map { it.key to it.value.value }.toMap(),
         )
