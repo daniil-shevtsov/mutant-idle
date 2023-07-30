@@ -42,12 +42,19 @@ fun update(game: Game, action: String): Game {
             val itemId = action.substringAfter("pick up ")
             val item = game.items.find { it.id == itemId }!!
             val plot = "You pick up ${item.title}"
-            val holdingTag = spikeTag(key = tagKey("holding"), value = tagValue(item.id))
-            val modifiedTags = (item.tags.map {
-                val newKey = it.key.copy(entityId = item.id)
-                newKey to it.value
-            } + listOf(holdingTag.key to holdingTag)).toMap()
-            PerformResult(game.tags + modifiedTags, game.plot + listOf(plot))
+            val tagChanger = object : TagChanger {
+                override val id: String
+                    get() = "lol"
+                override val tagChanges: SpikeTags
+                    get() = spikeTags(
+                        tagKey("holding") to tagValue(item.id),
+                        *item.tags.map {
+                            val newKey = it.key.copy(entityId = item.id)
+                            newKey to it.value.value
+                        }.toTypedArray()
+                    )
+            }
+            PerformResult(game.tags.apply(tagChanger), game.plot + listOf(plot))
         }
 
         action.contains("target") -> {
@@ -80,6 +87,15 @@ fun update(game: Game, action: String): Game {
 
             val tagChanger = object : TagChanger {
                 override val id: String
+                    get() = "lol"
+                override val tagChanges: SpikeTags
+                    get() = spikeTags(
+                        tagKey("holding") to tagValue("null")
+                    )
+            }
+
+            val npcTagChanger = object : TagChanger {
+                override val id: String
                     get() = item.id
                 override val tagChanges: SpikeTags
                     get() = spikeTags(
@@ -87,18 +103,17 @@ fun update(game: Game, action: String): Game {
                     )
             }
 
-            val holdingTag = spikeTag(key = tagKey("holding"), value = tagValue("null"))
-            val modifiedTags: SpikeTags = listOf(holdingTag.key to holdingTag).toMap()
             val tagsToRemove: SpikeTags = game.tags.filter { it.key.entityId == itemId }
-            val kek = game.tags + modifiedTags
-            val lol = kek.filter { it.key !in tagsToRemove.keys }
+            val modifiedTags = game.tags
+                .apply(tagChanger)
+                .filter { it.key !in tagsToRemove.keys }
             val modifiedTarget = targetNpc?.let {
                 it.copy(
-                    tags = it.tags.apply(tagChanger)
+                    tags = it.tags.apply(npcTagChanger)
                 )
             }
             finalModifiedNpc = modifiedTarget
-            PerformResult(lol, game.plot + listOf(plot))
+            PerformResult(modifiedTags, game.plot + listOf(plot))
         }
 
         action == "speak" -> {
