@@ -62,15 +62,16 @@ fun update(game: Game, action: String): Game {
             val npc = game.npcs.find { it.id == entityId }
             val heldItem = game.items.find { it.id == game.tags[tagKey("holding")]?.value }
             val plot = "You aim at ${npc?.title} with ${heldItem?.title}"
-            val targetingTag = spikeTag(key = tagKey("targeting"), value = tagValue(entityId))
-            val tagToAdd = listOf(targetingTag.key to targetingTag).toMap()
-            val modifiedTags = game.tags.map {
-                when (it.key) {
-                    tagKey("holding") -> it.key to it.value.copy(value = tagValue("null"))
-                    else -> it.key to it.value
-                }
-            }.toMap() + tagToAdd
-            PerformResult(modifiedTags, game.plot + listOf(plot))
+            val tagChanger = object : TagChanger {
+                override val id: String
+                    get() = "lol"
+                override val tagChanges: SpikeTags
+                    get() = spikeTags(
+                        tagKey("targeting") to tagValue(entityId),
+                        tagKey("holding") to tagValue("null"),
+                    )
+            }
+            PerformResult(game.tags.apply(tagChanger), game.plot + listOf(plot))
         }
 
         action == "throw" -> {
@@ -103,6 +104,7 @@ fun update(game: Game, action: String): Game {
                     )
             }
 
+            //TODO: Need mechanism to remove all tags of particular entity by tag changer
             val tagsToRemove: SpikeTags = game.tags.filter { it.key.entityId == itemId }
             val modifiedTags = game.tags
                 .apply(tagChanger)
