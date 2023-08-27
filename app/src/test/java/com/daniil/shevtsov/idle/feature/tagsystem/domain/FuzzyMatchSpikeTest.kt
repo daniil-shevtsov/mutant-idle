@@ -9,18 +9,13 @@ import assertk.assertions.containsExactly
 import assertk.assertions.index
 import assertk.assertions.isEmpty
 import assertk.assertions.isEqualTo
-import assertk.assertions.isFalse
-import assertk.assertions.isTrue
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.Game
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.SpikeTags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.defaultTagsWithAdditional
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.dialogLine
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.entry
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.game
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.line
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.spikeTag
-import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.spikeTags
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagKey
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.tagValue
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.withAdditional
@@ -29,7 +24,7 @@ import org.junit.jupiter.api.Test
 class FuzzyMatchSpikeTest {
 
     @Test
-    fun `test`() {
+    fun `should greet you when you arrive to the shop during the day`() {
         val tags = defaultTagsWithAdditional(
             "time_of_day" to "day",
             "trespassing" to "false",
@@ -43,7 +38,7 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun `kek2`() {
+    fun `should scold you when you trespass during the day`() {
         val tags = defaultTagsWithAdditional(
             "time_of_day" to "day",
             "trespassing" to "true",
@@ -57,7 +52,7 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun `kek3`() {
+    fun `should warn you when you are trespassing at night`() {
         val tags = defaultTagsWithAdditional(
             "time_of_day" to "night",
             "trespassing" to "true",
@@ -71,7 +66,7 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun `kek4`() {
+    fun `should scold alien when alien trespassing`() {
         val tags = defaultTagsWithAdditional(
             "time_of_day" to "night",
             "trespassing" to "true",
@@ -85,7 +80,7 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun `kek5`() {
+    fun `should scold demon when demon trespassing`() {
         val tags = defaultTagsWithAdditional(
             "time_of_day" to "night",
             "trespassing" to "true",
@@ -99,7 +94,7 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun `kek6`() {
+    fun `should say good morning in the morning`() {
         val tags = defaultTagsWithAdditional(
             "time_of_day" to "morning",
             "trespassing" to "false",
@@ -126,7 +121,7 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun `kek8`() {
+    fun `should lie on the ground`() {
         val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "posture" to "lying",
@@ -139,7 +134,7 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun `kek9`() {
+    fun `should fall to the ground when in the air`() {
         val tags = defaultTagsWithAdditional(
             "position" to "low-air",
             "appearance" to "human",
@@ -152,7 +147,7 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun `kek10`() {
+    fun `should fly when in the air while flying`() {
         val tags = defaultTagsWithAdditional(
             "position" to "low-air",
             "posture" to "flying",
@@ -165,7 +160,7 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun `kek11`() {
+    fun `should start flying when fly on the ground`() {
         val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "appearance" to "human",
@@ -185,7 +180,7 @@ class FuzzyMatchSpikeTest {
 
 
     @Test
-    fun `kek12`() {
+    fun `should keep all health when fell to the ground while indestructible`() {
         val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "appearance" to "human",
@@ -210,7 +205,7 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun `kek13`() {
+    fun `should loose health when fell to the ground`() {
         val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "appearance" to "human",
@@ -236,7 +231,7 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun `kek13_2`() {
+    fun `should die when no health`() {
         val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "appearance" to "human",
@@ -256,7 +251,7 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun `kek14`() {
+    fun `should be immobile when all bones are broken`() {
         val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "appearance" to "human",
@@ -289,7 +284,7 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun `kek15`() {
+    fun `should get full health and mobility when regenerated`() {
         val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "appearance" to "human",
@@ -331,7 +326,7 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun `kek16`() {
+    fun `should learn abilities`() {
         val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "appearance" to "human",
@@ -353,7 +348,7 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun `kek17`() {
+    fun `should heal bones when regenerating`() {
         val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "appearance" to "human",
@@ -369,7 +364,7 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun `kek18`() {
+    fun `should become mobile when regenerated`() {
         val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "appearance" to "human",
@@ -469,20 +464,20 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun kek22() {
+    fun `should start flying`() {
         val tags = defaultTagsWithAdditional(
             "position" to "ground",
             "appearance" to "human",
             "ability" to "flight",
         )
 
-        val kek = newPerform(tags.withAdditional("current action" to "fly"))
+        val game = newPerform(tags.withAdditional("current action" to "fly"))
 
-        assertThat(kek).lastPlot().isEqualTo("You start flying")
+        assertThat(game).lastPlot().isEqualTo("You start flying")
     }
 
     @Test
-    fun kek23() {
+    fun `should add all plots when stopped flying`() {
         val tags = defaultTagsWithAdditional(
             "position" to "low-air",
             "appearance" to "human",
@@ -490,9 +485,9 @@ class FuzzyMatchSpikeTest {
             "posture" to "flying",
         )
 
-        val kek = newPerform(tags.withAdditional("current action" to "stop flying"))
+        val game = newPerform(tags.withAdditional("current action" to "stop flying"))
 
-        assertThat(kek).plot()
+        assertThat(game).plot()
             .containsExactly(
                 "You stop flying",
                 "You fall to the ground, breaking every bone in your body",
@@ -502,25 +497,25 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun kek24() {
+    fun `should have no plot initially`() {
         val tags = defaultTagsWithAdditional()
 
-        val kek = newPerform(tags)
+        val game = newPerform(tags)
 
-        assertThat(kek).plot()
+        assertThat(game).plot()
             .isEmpty()
     }
 
     @Test
-    fun kek25() {
+    fun `should lower health and start bleeding when cutting your hand`() {
         val tags = defaultTagsWithAdditional(
             "holding" to "knife",
             "sharp weapon" to "true",
         )
 
-        val kek = newPerform(tags.withAdditional("current action" to "cut your hand"))
+        val game = newPerform(tags.withAdditional("current action" to "cut your hand"))
 
-        assertThat(kek).all {
+        assertThat(game).all {
             tags().containsAll(
                 "health" to "85",
                 "bleeding" to "true",
@@ -529,7 +524,7 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun kek26() {
+    fun `should lower health further when cutting hand twice`() {
         val tags = defaultTagsWithAdditional(
             "holding" to "knife",
             "sharp weapon" to "true",
@@ -547,14 +542,14 @@ class FuzzyMatchSpikeTest {
     }
 
     @Test
-    fun kek27() {
+    fun `should hold knife and get its tags when picking up knife`() {
         val tags = defaultTagsWithAdditional(
             "objects" to "knife",
         )
 
-        val kek = newPerform(tags.withAdditional("current action" to "pick up knife"))
+        val game = newPerform(tags.withAdditional("current action" to "pick up knife"))
 
-        assertThat(kek).all {
+        assertThat(game).all {
             tags().containsAll(
                 "holding" to "knife",
                 "sharp weapon" to "true",
@@ -570,9 +565,9 @@ class FuzzyMatchSpikeTest {
             "posture" to "standing",
         )
 
-        val kek = newPerform(tags.withAdditional("current action" to "stand"))
+        val game = newPerform(tags.withAdditional("current action" to "stand"))
 
-        assertThat(kek).plot().containsExactly("You are now standing")
+        assertThat(game).plot().containsExactly("You are now standing")
     }
 
     @Test
@@ -581,27 +576,17 @@ class FuzzyMatchSpikeTest {
             "posture" to "standing",
         )
 
-        val kek = newPerform(tags.withAdditional("current action" to "stand"))
-        val kek2 = newPerform(kek, action = "wait")
-        val kek3 = newPerform(kek2, action = "wait")
+        val game = newPerform(tags.withAdditional("current action" to "stand"))
+        val game2 = newPerform(game, action = "wait")
+        val game3 = newPerform(game2, action = "wait")
 
-        assertThat(kek3).plot()
+        assertThat(game3).plot()
             .containsExactly(
                 "You are now standing",
                 "You stand, doing nothing",
                 "You stand, doing nothing",
             )
     }
-
-    private fun Assert<Game>.tags() = prop(Game::tags).strings()
-
-    //TODO: Basically next refactoring is to teach different entities to have tags
-
-
-    private fun Assert<Game>.lastPlotsNotReversed(n: Int): Assert<List<String>> =
-        plot().transform { it.takeLast(n) }
-
-    private fun Assert<Game>.lastPlotNotReversed(): Assert<String> = plot().transform { it.last() }
 
     private fun perform(tags: SpikeTags): Game {
         val game = game(
@@ -656,6 +641,11 @@ private fun say(tags: SpikeTags): Game {
         plot = mostSuitableLine?.let(::listOf).orEmpty()
     )
 }
+
+private fun Assert<Game>.tags() = prop(Game::tags).strings()
+
+private fun Assert<Game>.lastPlotsNotReversed(n: Int): Assert<List<String>> =
+    plot().transform { it.takeLast(n) }
 
 fun Assert<SpikeTags>.strings() = transform {
     it.map { it.key.tagKey to it.value.value }
