@@ -16,7 +16,7 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.game
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.entity.withAdditional
 import org.junit.jupiter.api.Test
 
-class FuzzyMatchSpikeTest {
+class TagSystemNewPerformTest {
 
     @Test
     fun `should start flying`() {
