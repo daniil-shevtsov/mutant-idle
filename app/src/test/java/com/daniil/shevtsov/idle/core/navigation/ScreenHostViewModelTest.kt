@@ -29,8 +29,11 @@ import org.junit.jupiter.api.extension.ExtendWith
 private class FakeGameTitleRepository() : GameTitleRepository {
     private val result = MutableStateFlow<String?>(null)
 
+    var completedRequestCount = 0
+
     fun sendResult(title: String) {
         result.value = title
+        completedRequestCount++
     }
 
     override suspend fun get(): String {
@@ -81,6 +84,7 @@ class ScreenHostViewModelTest {
                 .prop(ScreenContentViewState.Menu::state)
                 .title()
                 .isEqualTo("Server Title")
+            assertThat(repository.completedRequestCount).isEqualTo(1)
         }
     }
 
@@ -101,6 +105,21 @@ class ScreenHostViewModelTest {
                         SectionKey.Upgrades to false,
                     )
                 }
+        }
+    }
+
+    @Test
+    fun `should cancel request when cancel action`() = runBlockingTest {
+        viewModel.state.test {
+            assertThat(awaitItem())
+                .prop(ScreenHostViewState::contentState)
+                .isInstanceOf(ScreenContentViewState.Menu::class)
+                .prop(ScreenContentViewState.Menu::state)
+                .titleIsLoading()
+
+            viewModel.handleAction(ScreenViewAction.Start(GameStartViewAction.CancelClicked))
+            repository.sendResult("Server Title")
+            assertThat(repository.completedRequestCount).isEqualTo(0)
         }
     }
 }

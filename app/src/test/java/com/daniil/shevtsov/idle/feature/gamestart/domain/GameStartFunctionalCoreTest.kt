@@ -153,6 +153,19 @@ internal class GameStartFunctionalCoreTest {
             .isEqualTo(MenuTitleState.Result("Lol Kek"))
     }
 
+    @Test
+    fun `should cancel title request when cancel clicked`() {
+        val newState = gameStartFunctionalCore(
+            state = gameState(),
+            viewAction = GameStartViewAction.CancelClicked,
+        )
+
+        assertThat(newState)
+            .effects()
+            .containsExactly(MishaEffect.CancelRequestingTitle)
+    }
+
+
     private fun Assert<FunctionalCoreResult>.state() = transform { (state, effects) -> state }
 
     private fun Assert<FunctionalCoreResult>.effects() = transform { (state, effects) -> effects }

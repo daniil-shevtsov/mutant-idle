@@ -8,6 +8,7 @@ import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
 
 sealed interface MishaEffect {
     object RequestTitleFromServer : MishaEffect
+    object CancelRequestingTitle : MishaEffect
 }
 
 fun screenFunctionalCore(

@@ -40,7 +40,19 @@ fun gameStartFunctionalCore(
             state = state,
             viewAction = viewAction,
         )
+
+        GameStartViewAction.CancelClicked -> handleCancelClicked(
+            state = state,
+            viewAction = viewAction,
+        )
     }
+}
+
+fun handleCancelClicked(
+    state: GameState,
+    viewAction: GameStartViewAction
+): FunctionalCoreResult {
+    return functionalCoreResult(state, effects = listOf(MishaEffect.CancelRequestingTitle))
 }
 
 fun handleResultReceived(
