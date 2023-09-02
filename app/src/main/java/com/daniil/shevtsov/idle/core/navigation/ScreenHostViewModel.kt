@@ -5,14 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.menu.domain.GetGameTitleUseCase
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+typealias ViewActionListener = (viewAction: ScreenViewAction) -> Unit
+
 
 class ScreenHostViewModel @Inject constructor(
     private val imperativeShell: MainImperativeShell,
@@ -23,33 +22,29 @@ class ScreenHostViewModel @Inject constructor(
         MutableStateFlow(screenPresentationFunctionalCore(state = imperativeShell.getState()))
     val state = _state.asStateFlow()
 
-    private val viewActionFlow = MutableSharedFlow<ScreenViewAction>()
+    private var viewActionListener: ViewActionListener? = null
+
+    private fun listenViewActions(listener: ViewActionListener) {
+        viewActionListener = listener
+    }
 
     init {
-        viewActionFlow
-            .onStart { emit(ScreenViewAction.Start(GameStartViewAction.Init)) }
-            .onEach { viewAction ->
-                val (newState, effects) = screenFunctionalCore(
-                    state = imperativeShell.getState(),
-                    viewAction = viewAction,
-                )
-                println("action=$viewAction effects=$effects")
+        listenViewActions(listener = { viewAction ->
+            val (newState, effects) = screenFunctionalCore(
+                state = imperativeShell.getState(),
+                viewAction = viewAction,
+            )
+            println("action=$viewAction effects=$effects")
 
-                imperativeShell.updateState(newState)
+            imperativeShell.updateState(newState)
 
-                handleEffects(effects)
-            }
-            .launchIn(viewModelScope)
+            handleEffects(effects)
+        })
+        viewActionListener?.invoke(ScreenViewAction.Start(GameStartViewAction.Init))
 
         imperativeShell.listen(listener = { newState ->
             _state.value = screenPresentationFunctionalCore(state = newState)
         })
-//
-//        imperativeShell.observeState()
-//            .onEach { state ->
-//                _state.value = screenPresentationFunctionalCore(state = state)
-//            }
-//            .launchIn(viewModelScope)
     }
 
     private fun handleEffects(effects: List<MishaEffect>) {
@@ -72,9 +67,7 @@ class ScreenHostViewModel @Inject constructor(
     private fun gameStartAction(action: GameStartViewAction) = ScreenViewAction.Start(action)
 
     fun handleAction(action: ScreenViewAction) {
-        viewModelScope.launch {
-            viewActionFlow.emit(action)
-        }
+        viewActionListener?.invoke(action)
     }
 
 }
