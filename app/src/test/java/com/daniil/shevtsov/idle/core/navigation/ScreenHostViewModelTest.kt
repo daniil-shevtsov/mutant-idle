@@ -18,14 +18,23 @@ import com.daniil.shevtsov.idle.feature.menu.domain.GetGameTitleUseCase
 import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleViewState
 import com.daniil.shevtsov.idle.feature.menu.presentation.MenuViewState
 import com.daniil.shevtsov.idle.feature.player.species.domain.Species
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 private class FakeGameTitleRepository() : GameTitleRepository {
+    private val result = MutableStateFlow<String?>(null)
+
+    fun sendResult(title: String) {
+        result.value = title
+    }
+
     override suspend fun get(): String {
-        return ""
+        return result.filterNotNull().firstOrNull()!!
     }
 }
 
@@ -53,6 +62,25 @@ class ScreenHostViewModelTest {
                             titleIsLoading()
                         }
                 }
+        }
+    }
+
+    @Test
+    fun `should show loading of title and then title when got it successfully`() = runBlockingTest {
+        viewModel.state.test {
+            assertThat(awaitItem())
+                .prop(ScreenHostViewState::contentState)
+                .isInstanceOf(ScreenContentViewState.Menu::class)
+                .prop(ScreenContentViewState.Menu::state)
+                .titleIsLoading()
+
+            repository.sendResult("Server Title")
+            assertThat(awaitItem())
+                .prop(ScreenHostViewState::contentState)
+                .isInstanceOf(ScreenContentViewState.Menu::class)
+                .prop(ScreenContentViewState.Menu::state)
+                .title()
+                .isEqualTo("Server Title")
         }
     }
 
