@@ -12,6 +12,7 @@ import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
 import com.daniil.shevtsov.idle.feature.location.domain.locationSelectionState
 import com.daniil.shevtsov.idle.feature.main.domain.Selectable
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.trait.domain.PlayerTrait
@@ -42,6 +43,7 @@ data class GameState(
     val allEndings: List<Ending>,
     val currentEndingId: Long?,
     val settings: Settings,
+    val gameTitle: MenuTitleState,
 ) {
     val locations: List<Location>
         get() = selectables.filterIsInstance<Location>()
@@ -72,6 +74,7 @@ fun gameState(
     allEndings: List<Ending> = emptyList(),
     currentEndingId: Long? = null,
     settings: Settings = settings(),
+    gameTitle: MenuTitleState = MenuTitleState.Loading,
 ) = GameState(
     balanceConfig = balanceConfig,
     selectables = (selectables + locations + upgrades + actions).distinct(),
@@ -90,4 +93,5 @@ fun gameState(
     allEndings = allEndings,
     currentEndingId = currentEndingId,
     settings = settings,
+    gameTitle = gameTitle,
 )

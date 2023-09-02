@@ -21,6 +21,7 @@ import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
 import com.daniil.shevtsov.idle.feature.main.presentation.sectionState
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.species.domain.Species
@@ -48,12 +49,6 @@ class MainFunctionalCoreTest {
     @Test
     fun `should buy upgrade when clicked and affordable`() = runBlockingTest {
         val initialState = gameState(
-            resources = listOf(
-                resource(key = ResourceKey.Blood, value = 10.0),
-            ),
-            ratios = listOf(
-                ratio(key = RatioKey.Mutanity, value = 0.0)
-            ),
             upgrades = listOf(
                 upgrade(
                     id = 0L,
@@ -62,6 +57,13 @@ class MainFunctionalCoreTest {
                     ratioChanges = ratioChanges(RatioKey.Mutanity to 0.4),
                 )
             ),
+            resources = listOf(
+                resource(key = ResourceKey.Blood, value = 10.0),
+            ),
+            ratios = listOf(
+                ratio(key = RatioKey.Mutanity, value = 0.0)
+            ),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
         val newState = mainFunctionalCore(
@@ -102,6 +104,7 @@ class MainFunctionalCoreTest {
             )
 
             val initialState = gameState(
+                actions = listOf(action),
                 resources = listOf(
                     resource(key = ResourceKey.Blood, value = 4.0),
                     resource(key = ResourceKey.Money, value = 8.0),
@@ -110,7 +113,7 @@ class MainFunctionalCoreTest {
                     ratio(key = RatioKey.Mutanity, value = 3.0),
                     ratio(key = RatioKey.Suspicion, value = 7.0),
                 ),
-                actions = listOf(action),
+                gameTitle = MenuTitleState.Result("Mutant Idle"),
             )
 
             val newState = mainFunctionalCore(
@@ -145,8 +148,9 @@ class MainFunctionalCoreTest {
             )
 
             val initialState = gameState(
-                ratios = listOf(ratio(key = RatioKey.Suspicion, value = 1.0)),
                 actions = listOf(action),
+                ratios = listOf(ratio(key = RatioKey.Suspicion, value = 1.0)),
+                gameTitle = MenuTitleState.Result("Mutant Idle"),
             )
 
             val newState = mainFunctionalCore(
@@ -167,6 +171,7 @@ class MainFunctionalCoreTest {
                 sectionState(key = SectionKey.Resources, isCollapsed = false),
                 sectionState(key = SectionKey.Actions, isCollapsed = false),
             ),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
         val firstState = mainFunctionalCore(
@@ -202,7 +207,8 @@ class MainFunctionalCoreTest {
             state = gameState(
                 locationSelectionState = locationSelectionState(
                     isSelectionExpanded = false,
-                )
+                ),
+                gameTitle = MenuTitleState.Result("Mutant Idle")
             ),
             viewAction = MainViewAction.LocationSelectionExpandChange,
         )
@@ -228,7 +234,8 @@ class MainFunctionalCoreTest {
         val state = mainFunctionalCore(
             state = gameState(
                 locations = listOf(location),
-                locationSelectionState = locationSelectionState()
+                locationSelectionState = locationSelectionState(),
+                gameTitle = MenuTitleState.Result("Mutant Idle")
             ),
             viewAction = MainViewAction.SelectableClicked(id = location.id)
         )
@@ -258,8 +265,9 @@ class MainFunctionalCoreTest {
         val state = mainFunctionalCore(
             state = gameState(
                 locations = listOf(oldLocation, newLocation),
+                locationSelectionState = locationSelectionState(selectedLocation = oldLocation),
                 player = player(generalTags = listOf(oldTag, otherTag)),
-                locationSelectionState = locationSelectionState(selectedLocation = oldLocation)
+                gameTitle = MenuTitleState.Result("Mutant Idle")
             ),
             viewAction = MainViewAction.SelectableClicked(id = newLocation.id)
         )
@@ -274,14 +282,15 @@ class MainFunctionalCoreTest {
     fun `should open finished screen if suspicion gained maximum value`() {
         val newState = mainFunctionalCore(
             state = gameState(
-                ratios = listOf(
-                    ratio(key = RatioKey.Suspicion, value = 0.95),
-                ),
                 actions = listOf(
                     action(id = 1L, ratioChanges = ratioChanges(RatioKey.Suspicion to 0.05))
                 ),
+                ratios = listOf(
+                    ratio(key = RatioKey.Suspicion, value = 0.95),
+                ),
                 currentScreen = Screen.Main,
                 screenStack = listOf(Screen.GameStart),
+                gameTitle = MenuTitleState.Result("Mutant Idle"),
             ),
             viewAction = MainViewAction.SelectableClicked(id = 1L)
         )
@@ -298,20 +307,21 @@ class MainFunctionalCoreTest {
     fun `should open finished screen if mutanity gained maximum value when devourer`() {
         val newState = mainFunctionalCore(
             state = gameState(
-                player = player(
-                    traits = mapOf(
-                        TraitId.Species to Species.Devourer
-                    )
+                actions = listOf(
+                    action(id = 1L, ratioChanges = ratioChanges(RatioKey.Mutanity to 0.05))
                 ),
                 ratios = listOf(
                     ratio(key = RatioKey.Mutanity, value = 0.95),
                 ),
 
-                actions = listOf(
-                    action(id = 1L, ratioChanges = ratioChanges(RatioKey.Mutanity to 0.05))
+                player = player(
+                    traits = mapOf(
+                        TraitId.Species to Species.Devourer
+                    )
                 ),
                 currentScreen = Screen.Main,
                 screenStack = listOf(Screen.GameStart),
+                gameTitle = MenuTitleState.Result("Mutant Idle"),
             ),
             viewAction = MainViewAction.SelectableClicked(id = 1L)
         )
@@ -328,20 +338,21 @@ class MainFunctionalCoreTest {
     fun `should open finished screen if power gained maximum value when vampire`() {
         val newState = mainFunctionalCore(
             state = gameState(
-                player = player(
-                    traits = mapOf(
-                        TraitId.Species to Species.Vampire
-                    )
+                actions = listOf(
+                    action(id = 1L, ratioChanges = ratioChanges(RatioKey.Power to 0.05))
                 ),
                 ratios = listOf(
                     ratio(key = RatioKey.Power, value = 0.95),
                 ),
 
-                actions = listOf(
-                    action(id = 1L, ratioChanges = ratioChanges(RatioKey.Power to 0.05))
+                player = player(
+                    traits = mapOf(
+                        TraitId.Species to Species.Vampire
+                    )
                 ),
                 currentScreen = Screen.Main,
                 screenStack = listOf(Screen.GameStart),
+                gameTitle = MenuTitleState.Result("Mutant Idle"),
             ),
             viewAction = MainViewAction.SelectableClicked(id = 1L)
         )
@@ -358,18 +369,19 @@ class MainFunctionalCoreTest {
     fun `should open finished screen if vampire clicked debug win action`() {
         val newState = mainFunctionalCore(
             state = gameState(
+                actions = listOf(Actions.Win.copy(id = 1L)),
+                ratios = listOf(
+                    ratio(key = RatioKey.Power, value = 0.0),
+                ),
+
                 player = player(
                     traits = mapOf(
                         TraitId.Species to Species.Vampire
                     )
                 ),
-                ratios = listOf(
-                    ratio(key = RatioKey.Power, value = 0.0),
-                ),
-
-                actions = listOf(Actions.Win.copy(id = 1L)),
                 currentScreen = Screen.Main,
                 screenStack = listOf(Screen.GameStart),
+                gameTitle = MenuTitleState.Result("Mutant Idle"),
             ),
             viewAction = MainViewAction.SelectableClicked(id = 1L)
         )
@@ -386,11 +398,12 @@ class MainFunctionalCoreTest {
     fun `should use blood for invisibilty upgrade when you are a vampire`() {
         val state = mainFunctionalCore(
             state = gameState(
+                upgrades = listOf(Upgrades.Invisibility.copy(id = 1L)),
+                resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
                 player = player(
                     traits = mapOf(TraitId.Species to Species.Vampire)
                 ),
-                upgrades = listOf(Upgrades.Invisibility.copy(id = 1L)),
-                resources = listOf(resource(key = ResourceKey.Blood, value = 10.0))
+                gameTitle = MenuTitleState.Result("Mutant Idle")
             ),
             viewAction = MainViewAction.SelectableClicked(id = 1L)
         )
@@ -405,11 +418,12 @@ class MainFunctionalCoreTest {
     fun `should use scrap for invisibilty upgrade when you are an alien`() {
         val state = mainFunctionalCore(
             state = gameState(
+                upgrades = listOf(Upgrades.Invisibility.copy(id = 1L)),
+                resources = listOf(resource(key = ResourceKey.Scrap, value = 10.0)),
                 player = player(
                     traits = mapOf(TraitId.Species to Species.Alien)
                 ),
-                upgrades = listOf(Upgrades.Invisibility.copy(id = 1L)),
-                resources = listOf(resource(key = ResourceKey.Scrap, value = 10.0))
+                gameTitle = MenuTitleState.Result("Mutant Idle")
             ),
             viewAction = MainViewAction.SelectableClicked(id = 1L)
         )

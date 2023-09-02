@@ -15,6 +15,7 @@ import com.daniil.shevtsov.idle.feature.flavor.flavor
 import com.daniil.shevtsov.idle.feature.location.domain.Location
 import com.daniil.shevtsov.idle.feature.location.domain.location
 import com.daniil.shevtsov.idle.feature.main.domain.Selectable
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.plot.domain.PlotEntry
 import com.daniil.shevtsov.idle.feature.plot.domain.plotEntry
@@ -70,6 +71,7 @@ class FlavorViewStateTest {
                     player = player(
                         generalTags = listOf(tag)
                     ),
+                    gameTitle = MenuTitleState.Result("Mutant Idle"),
                 )
 
                 val viewState = mapMainViewState(state = state)
@@ -100,6 +102,7 @@ class FlavorViewStateTest {
             player = player(
                 generalTags = listOf(tag)
             ),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
         val viewState = mapMainViewState(state = state)

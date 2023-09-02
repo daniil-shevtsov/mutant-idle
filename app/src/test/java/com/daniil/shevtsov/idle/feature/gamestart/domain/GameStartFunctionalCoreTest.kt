@@ -1,21 +1,15 @@
 package com.daniil.shevtsov.idle.feature.gamestart.domain
 
-import assertk.all
 import assertk.assertThat
-import assertk.assertions.containsNone
-import assertk.assertions.containsSubList
 import assertk.assertions.isEqualTo
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
-import com.daniil.shevtsov.idle.feature.player.core.domain.Player
-import com.daniil.shevtsov.idle.feature.player.core.domain.assertJobSelected
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import com.daniil.shevtsov.idle.feature.player.core.domain.assertSpeciesSelected
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
-import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
-import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
@@ -35,13 +29,14 @@ internal class GameStartFunctionalCoreTest {
         val initialPlayer = player()
 
         val initialState = gameState(
-            player = initialPlayer,
             availableTraits = listOf(
                 newTrait
             ),
+            player = initialPlayer,
             unlockState = unlockState(
                 traits = mapOf(newTrait.traitId to mapOf(newTrait.id to false))
-            )
+            ),
+            gameTitle = MenuTitleState.Result("Mutant Idle")
         )
 
         val newState = gameStartFunctionalCore(
@@ -91,14 +86,15 @@ internal class GameStartFunctionalCoreTest {
         )
 
         val initialState = gameState(
-            player = previousPlayerState,
             availableTraits = listOf(
                 previousSpecies,
                 newSpecies,
             ),
+            player = previousPlayerState,
             unlockState = unlockState(
                 traits = mapOf(newSpecies.traitId to mapOf(newSpecies.id to true))
             ),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
         val newState = gameStartFunctionalCore(
@@ -117,7 +113,7 @@ internal class GameStartFunctionalCoreTest {
     @Test
     fun `should open main screen when start game clicked`() {
         val newState = gameStartFunctionalCore(
-            state = gameState(),
+            state = gameState(gameTitle = MenuTitleState.Result("Mutant Idle")),
             viewAction = GameStartViewAction.StartGame,
         )
 

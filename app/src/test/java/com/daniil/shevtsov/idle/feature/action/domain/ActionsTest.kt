@@ -7,6 +7,7 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
@@ -66,6 +67,7 @@ internal class ActionsTest {
     private val initialState = gameState(
         actions = listOf(stealAction, humanAction),
         ratios = listOf(ratio(key = RatioKey.Suspicion, value = 10.0)),
+        gameTitle = MenuTitleState.Result("Mutant Idle"),
     )
 
     @Test

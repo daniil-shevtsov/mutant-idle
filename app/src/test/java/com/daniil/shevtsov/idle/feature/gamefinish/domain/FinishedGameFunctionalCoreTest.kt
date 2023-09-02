@@ -10,13 +10,18 @@ import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import org.junit.jupiter.api.Test
 
 class FinishedGameFunctionalCoreTest {
     @Test
     fun `should open game start screen when start new game clicked`() {
         val state = mainFunctionalCore(
-            state = gameState(currentScreen = Screen.FinishedGame, screenStack = listOf(Screen.FinishedGame)),
+            state = gameState(
+                currentScreen = Screen.FinishedGame,
+                screenStack = listOf(Screen.FinishedGame),
+                gameTitle = MenuTitleState.Result("Mutant Idle")
+            ),
             viewAction = MainViewAction.StartNewGameClicked
         )
 

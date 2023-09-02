@@ -9,6 +9,7 @@ import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.gamefinish.domain.ending
 import com.daniil.shevtsov.idle.feature.gamefinish.domain.unlock
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import org.junit.jupiter.api.Test
 
@@ -22,6 +23,7 @@ internal class FinishedGamePresentationTest {
         val state = gameState(
             allEndings = listOf(ending),
             currentEndingId = ending.id,
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
         val viewState = mapFinishedGameViewState(state = state)
@@ -49,7 +51,8 @@ internal class FinishedGamePresentationTest {
         )
         val state = gameState(
             allEndings = listOf(ending),
-            currentEndingId = ending.id
+            currentEndingId = ending.id,
+            gameTitle = MenuTitleState.Result("Mutant Idle")
         )
 
         val viewState = mapFinishedGameViewState(state = state)

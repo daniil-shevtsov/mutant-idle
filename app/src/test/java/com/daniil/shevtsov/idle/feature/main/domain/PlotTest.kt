@@ -9,6 +9,7 @@ import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.location.domain.location
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import com.daniil.shevtsov.idle.feature.plot.domain.PlotEntry
 import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
 import org.junit.jupiter.api.DynamicTest
@@ -62,7 +63,10 @@ class PlotTest() {
                 }
                 DynamicTest.dynamicTest(testName) {
                     val newState = mainFunctionalCore(
-                        state = gameState(selectables = listOf(selectable)),
+                        state = gameState(
+                            selectables = listOf(selectable),
+                            gameTitle = MenuTitleState.Result("Mutant Idle")
+                        ),
                         viewAction = MainViewAction.SelectableClicked(selectable.id),
                     )
 

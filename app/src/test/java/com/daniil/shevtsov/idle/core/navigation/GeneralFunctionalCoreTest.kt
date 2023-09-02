@@ -7,13 +7,17 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import org.junit.jupiter.api.Test
 
 internal class GeneralFunctionalCoreTest {
     @Test
     fun `should replace current screen when opening another`() {
         val state = generalFunctionalCore(
-            state = gameState(currentScreen = Screen.Main),
+            state = gameState(
+                currentScreen = Screen.Main,
+                gameTitle = MenuTitleState.Result("Mutant Idle")
+            ),
             viewAction = GeneralViewAction.Open(screen = Screen.FinishedGame)
         )
 
@@ -25,7 +29,11 @@ internal class GeneralFunctionalCoreTest {
     @Test
     fun `should add screen to stack when opening it`() {
         val state = generalFunctionalCore(
-            state = gameState(currentScreen = Screen.Main, screenStack = listOf(Screen.Main)),
+            state = gameState(
+                currentScreen = Screen.Main,
+                screenStack = listOf(Screen.Main),
+                gameTitle = MenuTitleState.Result("Mutant Idle")
+            ),
             viewAction = GeneralViewAction.Open(screen = Screen.FinishedGame)
         )
 
@@ -37,7 +45,11 @@ internal class GeneralFunctionalCoreTest {
     @Test
     fun `should replace screen in stack if replace flag`() {
         val state = generalFunctionalCore(
-            state = gameState(currentScreen = Screen.Main, screenStack = listOf(Screen.Main)),
+            state = gameState(
+                currentScreen = Screen.Main,
+                screenStack = listOf(Screen.Main),
+                gameTitle = MenuTitleState.Result("Mutant Idle")
+            ),
             viewAction = GeneralViewAction.Open(screen = Screen.FinishedGame, shouldReplace = true)
         )
 
@@ -51,7 +63,8 @@ internal class GeneralFunctionalCoreTest {
         val state = generalFunctionalCore(
             state = gameState(
                 currentScreen = Screen.FinishedGame,
-                screenStack = listOf(Screen.Main, Screen.FinishedGame)
+                screenStack = listOf(Screen.Main, Screen.FinishedGame),
+                gameTitle = MenuTitleState.Result("Mutant Idle")
             ),
             viewAction = GeneralViewAction.Back
         )
@@ -66,7 +79,8 @@ internal class GeneralFunctionalCoreTest {
         val state = generalFunctionalCore(
             state = gameState(
                 currentScreen = Screen.FinishedGame,
-                screenStack = listOf(Screen.Main, Screen.FinishedGame)
+                screenStack = listOf(Screen.Main, Screen.FinishedGame),
+                gameTitle = MenuTitleState.Result("Mutant Idle")
             ),
             viewAction = GeneralViewAction.Back
         )
@@ -81,7 +95,8 @@ internal class GeneralFunctionalCoreTest {
         val state = generalFunctionalCore(
             state = gameState(
                 currentScreen = Screen.Main,
-                screenStack = listOf(Screen.Main)
+                screenStack = listOf(Screen.Main),
+                gameTitle = MenuTitleState.Result("Mutant Idle")
             ),
             viewAction = GeneralViewAction.Back
         )

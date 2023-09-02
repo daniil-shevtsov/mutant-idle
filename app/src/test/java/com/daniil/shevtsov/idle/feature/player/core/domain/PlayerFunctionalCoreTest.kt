@@ -2,13 +2,17 @@ package com.daniil.shevtsov.idle.feature.player.core.domain
 
 import assertk.all
 import assertk.assertThat
-import assertk.assertions.*
+import assertk.assertions.containsAll
+import assertk.assertions.containsNone
+import assertk.assertions.containsOnly
+import assertk.assertions.containsSubList
+import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 internal class PlayerFunctionalCoreTest {
@@ -39,11 +43,12 @@ internal class PlayerFunctionalCoreTest {
             )
         )
         val initialState = gameState(
-            player = initialPlayer,
             availableTraits = listOf(
                 initialPlayerTrait,
                 newPlayerTrait,
-            )
+            ),
+            player = initialPlayer,
+            gameTitle = MenuTitleState.Result("Mutant Idle")
         )
 
         val newState = playerFunctionalCore(
@@ -75,11 +80,12 @@ internal class PlayerFunctionalCoreTest {
             )
         )
         val initialState = gameState(
-            player = initialPlayer,
             availableTraits = listOf(
                 initialPlayerTrait,
                 newPlayerTrait,
-            )
+            ),
+            player = initialPlayer,
+            gameTitle = MenuTitleState.Result("Mutant Idle")
         )
 
         val newState = playerFunctionalCore(

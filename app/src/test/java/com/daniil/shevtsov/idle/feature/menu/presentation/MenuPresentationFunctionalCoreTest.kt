@@ -14,11 +14,31 @@ internal class MenuPresentationFunctionalCoreTest {
 
     @Test
     fun `should create initial view state`() {
-        val state = mapMenuViewState(state = gameState())
+        val state = mapMenuViewState(
+            state = gameState(gameTitle = MenuTitleState.Result("Mutant Idle"))
+        )
 
         assertThat(state)
             .all {
                 title().isEqualTo("Mutant Idle")
+                prop(MenuViewState::buttons)
+                    .extracting(MenuButtonModel::title)
+                    .containsExactly(
+                        "Start Game",
+                        "Settings",
+                    )
+            }
+    }
+
+    @Test
+    fun `should use another title`() {
+        val state = mapMenuViewState(
+            state = gameState(gameTitle = MenuTitleState.Result("Misha Idle"))
+        )
+
+        assertThat(state)
+            .all {
+                title().isEqualTo("Misha Idle")
                 prop(MenuViewState::buttons)
                     .extracting(MenuButtonModel::title)
                     .containsExactly(

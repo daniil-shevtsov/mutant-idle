@@ -10,6 +10,7 @@ import com.daniil.shevtsov.idle.feature.location.domain.location
 import com.daniil.shevtsov.idle.feature.main.domain.Selectable
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
@@ -53,6 +54,7 @@ class TagUpdateTest {
                 state = gameState(
                     selectables = listOf(selectable),
                     player = player(generalTags = listOf(presentTag, otherTag)),
+                    gameTitle = MenuTitleState.Result("Mutant Idle"),
                 ),
                 viewAction = MainViewAction.SelectableClicked(id = selectable.id)
             )
@@ -82,6 +84,7 @@ class TagUpdateTest {
             state = gameState(
                 selectables = listOf(selectable),
                 player = player(generalTags = listOf(presentTag, otherTag)),
+                gameTitle = MenuTitleState.Result("Mutant Idle"),
             ),
             viewAction = MainViewAction.SelectableClicked(id = selectable.id)
         )

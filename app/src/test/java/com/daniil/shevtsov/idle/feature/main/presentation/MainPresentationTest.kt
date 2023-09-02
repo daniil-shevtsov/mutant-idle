@@ -14,6 +14,7 @@ import com.daniil.shevtsov.idle.feature.location.domain.location
 import com.daniil.shevtsov.idle.feature.location.domain.locationSelectionState
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationSelectionViewState
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.species.domain.Species
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
@@ -46,13 +47,9 @@ class MainPresentationTest {
     @Test
     fun `should form correct initial state`() = runBlockingTest {
         val state = gameState(
-            resources = listOf(
-                resource(key = ResourceKey.Blood, name = "Blood", value = 10.0),
-                resource(key = ResourceKey.Money, name = "Money", value = 20.0),
-            ),
-            ratios = listOf(
-                ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.0),
-                ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
+            actions = listOf(
+                action(id = 0L, title = "human action"),
+                action(id = 1L, title = "mutant action"),
             ),
             upgrades = listOf(
                 upgrade(
@@ -76,19 +73,24 @@ class MainPresentationTest {
                     resourceChanges = resourceChanges(ResourceKey.Blood to -30.0)
                 ),
             ),
+            resources = listOf(
+                resource(key = ResourceKey.Blood, name = "Blood", value = 10.0),
+                resource(key = ResourceKey.Money, name = "Money", value = 20.0),
+            ),
+            ratios = listOf(
+                ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.0),
+                ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
+            ),
             plotEntries = listOf(
                 plotEntry(text = "lol"),
                 plotEntry(text = "kek"),
-            ),
-            actions = listOf(
-                action(id = 0L, title = "human action"),
-                action(id = 1L, title = "mutant action"),
             ),
             sections = listOf(
                 sectionState(key = SectionKey.Resources, isCollapsed = false),
                 sectionState(key = SectionKey.Actions, isCollapsed = false),
                 sectionState(key = SectionKey.Upgrades, isCollapsed = false),
             ),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
         val viewState = mapMainViewState(state = state)
@@ -131,6 +133,7 @@ class MainPresentationTest {
             ratios = listOf(
                 ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.105),
             ),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
         val viewState = mapMainViewState(state = state)
@@ -153,6 +156,7 @@ class MainPresentationTest {
                 resource(key = ResourceKey.Money, name = "Money", value = 20.0),
                 resource(key = ResourceKey.Prisoner, name = "Prisoners", value = 0.0),
             ),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
         val viewState = mapMainViewState(state = state)
@@ -175,6 +179,7 @@ class MainPresentationTest {
                 resource(key = ResourceKey.FreshMeat, value = 1.0),
                 resource(key = ResourceKey.Organs, value = 1.0),
             ),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
         val viewState = mapMainViewState(state = state)
@@ -196,7 +201,6 @@ class MainPresentationTest {
     @Test
     fun `should mark upgrade as affordable if its price less than resource`() = runBlockingTest {
         val state = gameState(
-            resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
             upgrades = listOf(
                 upgrade(
                     id = 0L,
@@ -204,6 +208,8 @@ class MainPresentationTest {
                     resourceChanges = resourceChanges(ResourceKey.Blood to -5.0)
                 )
             ),
+            resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
         val viewState = mapMainViewState(state = state)
@@ -218,7 +224,6 @@ class MainPresentationTest {
     fun `should mark upgrade as not affordable if its price higher than resource`() =
         runBlockingTest {
             val state = gameState(
-                resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
                 upgrades = listOf(
                     upgrade(
                         id = 0L,
@@ -226,6 +231,8 @@ class MainPresentationTest {
                         resourceChanges = resourceChanges(ResourceKey.Blood to -20.0)
                     )
                 ),
+                resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
+                gameTitle = MenuTitleState.Result("Mutant Idle"),
             )
 
             val viewState = mapMainViewState(state = state)
@@ -239,11 +246,6 @@ class MainPresentationTest {
     @Test
     fun `should mark upgrade as bought if it is bought`() = runBlockingTest {
         val state = gameState(
-            resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
-            ratios = listOf(
-                ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.0),
-                ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
-            ),
             upgrades = listOf(
                 upgrade(
                     id = 0L,
@@ -252,6 +254,12 @@ class MainPresentationTest {
                     status = UpgradeStatus.Bought
                 )
             ),
+            resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
+            ratios = listOf(
+                ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.0),
+                ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
+            ),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
         val viewState = mapMainViewState(state = state)
@@ -267,12 +275,6 @@ class MainPresentationTest {
         runBlockingTest {
             val presentTag = tag(name = "present tag")
             val state = gameState(
-                resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
-                ratios = listOf(
-                    ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.0),
-                    ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
-                ),
-                player = player(generalTags = listOf(presentTag)),
                 upgrades = listOf(
                     upgrade(
                         id = 0L,
@@ -282,6 +284,13 @@ class MainPresentationTest {
                         tagRelations = tagRelations(TagRelation.Provides to presentTag)
                     )
                 ),
+                resources = listOf(resource(key = ResourceKey.Blood, value = 10.0)),
+                ratios = listOf(
+                    ratio(key = RatioKey.Mutanity, title = "Mutanity", value = 0.0),
+                    ratio(key = RatioKey.Suspicion, title = "Suspicion", value = 0.0),
+                ),
+                player = player(generalTags = listOf(presentTag)),
+                gameTitle = MenuTitleState.Result("Mutant Idle"),
             )
 
             val viewState = mapMainViewState(state = state)
@@ -298,7 +307,8 @@ class MainPresentationTest {
             ratios = listOf(
                 ratio(key = RatioKey.Mutanity),
                 ratio(key = RatioKey.Suspicion),
-            )
+            ),
+            gameTitle = MenuTitleState.Result("Mutant Idle")
         )
         val viewState = mapMainViewState(state = state)
 
@@ -318,7 +328,8 @@ class MainPresentationTest {
                 state = gameState(
                     ratios = listOf(
                         ratio(key = RatioKey.Mutanity, value = 0.14)
-                    )
+                    ),
+                    gameTitle = MenuTitleState.Result("Mutant Idle")
                 )
             )
         )
@@ -329,7 +340,8 @@ class MainPresentationTest {
                 state = gameState(
                     ratios = listOf(
                         ratio(key = RatioKey.Mutanity, value = 0.16)
-                    )
+                    ),
+                    gameTitle = MenuTitleState.Result("Mutant Idle")
                 )
             )
         )
@@ -340,7 +352,8 @@ class MainPresentationTest {
                 state = gameState(
                     ratios = listOf(
                         ratio(key = RatioKey.Mutanity, value = 0.26)
-                    )
+                    ),
+                    gameTitle = MenuTitleState.Result("Mutant Idle")
                 )
             )
         )
@@ -351,7 +364,8 @@ class MainPresentationTest {
                 state = gameState(
                     ratios = listOf(
                         ratio(key = RatioKey.Mutanity, value = 0.51)
-                    )
+                    ),
+                    gameTitle = MenuTitleState.Result("Mutant Idle")
                 )
             )
         )
@@ -362,7 +376,8 @@ class MainPresentationTest {
                 state = gameState(
                     ratios = listOf(
                         ratio(key = RatioKey.Mutanity, value = 0.81)
-                    )
+                    ),
+                    gameTitle = MenuTitleState.Result("Mutant Idle")
                 )
             )
         )
@@ -376,7 +391,8 @@ class MainPresentationTest {
                 state = gameState(
                     ratios = listOf(
                         ratio(key = RatioKey.Suspicion, value = 0.14)
-                    )
+                    ),
+                    gameTitle = MenuTitleState.Result("Mutant Idle")
                 )
             )
         )
@@ -387,7 +403,8 @@ class MainPresentationTest {
                 state = gameState(
                     ratios = listOf(
                         ratio(key = RatioKey.Suspicion, value = 0.16)
-                    )
+                    ),
+                    gameTitle = MenuTitleState.Result("Mutant Idle")
                 )
             )
         )
@@ -398,7 +415,8 @@ class MainPresentationTest {
                 state = gameState(
                     ratios = listOf(
                         ratio(key = RatioKey.Suspicion, value = 0.26)
-                    )
+                    ),
+                    gameTitle = MenuTitleState.Result("Mutant Idle")
                 )
             )
         )
@@ -409,7 +427,8 @@ class MainPresentationTest {
                 state = gameState(
                     ratios = listOf(
                         ratio(key = RatioKey.Suspicion, value = 0.51)
-                    )
+                    ),
+                    gameTitle = MenuTitleState.Result("Mutant Idle")
                 )
             )
         )
@@ -420,7 +439,8 @@ class MainPresentationTest {
                 state = gameState(
                     ratios = listOf(
                         ratio(key = RatioKey.Suspicion, value = 0.81)
-                    )
+                    ),
+                    gameTitle = MenuTitleState.Result("Mutant Idle")
                 )
             )
         )
@@ -431,9 +451,6 @@ class MainPresentationTest {
     @Test
     fun `should hide actions if it requires not available resources`() = runBlockingTest {
         val state = gameState(
-            resources = listOf(
-                resource(key = ResourceKey.Money, value = 35.0),
-            ),
             actions = listOf(
                 action(
                     id = 1L,
@@ -448,6 +465,10 @@ class MainPresentationTest {
                     ),
                 ),
             ),
+            resources = listOf(
+                resource(key = ResourceKey.Money, value = 35.0),
+            ),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
         val viewState = mapMainViewState(state = state)
 
@@ -463,9 +484,6 @@ class MainPresentationTest {
     @Test
     fun `show enabled actions before disabled if got both`() = runBlockingTest {
         val state = gameState(
-            resources = listOf(
-                resource(key = ResourceKey.Money, value = 35.0),
-            ),
             actions = listOf(
                 action(
                     id = 1L,
@@ -486,6 +504,10 @@ class MainPresentationTest {
                     ),
                 ),
             ),
+            resources = listOf(
+                resource(key = ResourceKey.Money, value = 35.0),
+            ),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
         val viewState = mapMainViewState(state = state)
@@ -510,6 +532,7 @@ class MainPresentationTest {
                 monsterAction,
             ),
             player = player(generalTags = listOf(Tags.Form.Human)),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
         val viewState = mapMainViewState(state = state)
@@ -537,11 +560,12 @@ class MainPresentationTest {
             )
         )
         val state = gameState(
+            actions = listOf(action),
             resources = listOf(
                 resource(key = ResourceKey.Blood, value = 1.0),
                 resource(key = ResourceKey.Money, value = 5.0),
             ),
-            actions = listOf(action),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
         val viewState = mapMainViewState(state = state)
@@ -567,11 +591,12 @@ class MainPresentationTest {
             )
         )
         val state = gameState(
+            actions = listOf(action),
             ratios = listOf(
                 ratio(key = RatioKey.Mutanity, value = 0.3),
                 ratio(key = RatioKey.Suspicion, value = 0.5),
             ),
-            actions = listOf(action),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
         val viewState = mapMainViewState(state = state)
@@ -594,6 +619,7 @@ class MainPresentationTest {
         val state = gameState(
             locations = listOf(availableLocation),
             locationSelectionState = locationSelectionState(),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
         val viewState = mapMainViewState(state = state)
@@ -622,6 +648,7 @@ class MainPresentationTest {
             locationSelectionState = locationSelectionState(
                 selectedLocation = selectedLocation,
             ),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
         val viewState = mapMainViewState(state = state)
@@ -638,12 +665,13 @@ class MainPresentationTest {
     fun `should only show main ratio beside suspicion`() {
         val mainRatio = RatioKey.ShipRepair
         val state = gameState(
-            player = player(traits = mapOf(TraitId.Species to playerTrait(mainRatio = mainRatio))),
             ratios = listOf(
                 ratio(key = RatioKey.Mutanity),
                 ratio(key = RatioKey.ShipRepair),
                 ratio(key = RatioKey.Suspicion),
-            )
+            ),
+            player = player(traits = mapOf(TraitId.Species to playerTrait(mainRatio = mainRatio))),
+            gameTitle = MenuTitleState.Result("Mutant Idle")
         )
 
         val viewState = mapMainViewState(state = state)
@@ -659,7 +687,6 @@ class MainPresentationTest {
         val blood = resource(key = ResourceKey.Blood, value = 10.0)
         val money = resource(key = ResourceKey.Money, value = 10.0)
         val state = gameState(
-            resources = listOf(blood, money),
             actions = listOf(
                 action(
                     resourceChanges = resourceChanges(
@@ -667,7 +694,9 @@ class MainPresentationTest {
                         resourceChange(key = money.key, change = -5.0),
                     )
                 )
-            )
+            ),
+            resources = listOf(blood, money),
+            gameTitle = MenuTitleState.Result("Mutant Idle")
         )
         val viewState = mapMainViewState(state)
 
@@ -692,7 +721,8 @@ class MainPresentationTest {
                         RatioKey.Suspicion to 1.0,
                     )
                 )
-            )
+            ),
+            gameTitle = MenuTitleState.Result("Mutant Idle")
         )
         val viewState = mapMainViewState(state)
 
@@ -717,7 +747,8 @@ class MainPresentationTest {
                         RatioKey.Suspicion to 1.0,
                     )
                 )
-            )
+            ),
+            gameTitle = MenuTitleState.Result("Mutant Idle")
         )
         val viewState = mapMainViewState(state)
 
@@ -742,7 +773,8 @@ class MainPresentationTest {
                 plotEntry(text = "cheburek"),
                 plotEntry(text = "cheburek"),
                 plotEntry(text = "lol"),
-            )
+            ),
+            gameTitle = MenuTitleState.Result("Mutant Idle")
         )
         val viewState = mapMainViewState(state)
 
@@ -769,7 +801,8 @@ class MainPresentationTest {
                 plotEntry(text = "cheburek2"),
                 plotEntry(text = "cheburek2"),
                 plotEntry(text = "cheburek2"),
-            )
+            ),
+            gameTitle = MenuTitleState.Result("Mutant Idle")
         )
         val viewState = mapMainViewState(state)
 
@@ -796,7 +829,8 @@ class MainPresentationTest {
                 plotEntry(text = "cheburek"),
                 plotEntry(text = "cheburek"),
                 plotEntry(text = "lol"),
-            )
+            ),
+            gameTitle = MenuTitleState.Result("Mutant Idle")
         )
         val viewState = mapMainViewState(state)
 
@@ -815,10 +849,11 @@ class MainPresentationTest {
     fun `should display main resource as blood for vampire`() {
         val viewState = mapMainViewState(
             gameState(
+                upgrades = listOf(Upgrades.Invisibility.copy(id = 1L)),
                 player = player(
                     traits = mapOf(TraitId.Species to Species.Vampire)
                 ),
-                upgrades = listOf(Upgrades.Invisibility.copy(id = 1L))
+                gameTitle = MenuTitleState.Result("Mutant Idle")
             )
         )
 
@@ -834,12 +869,13 @@ class MainPresentationTest {
     fun `should display appearance change action when has required tags`() {
         val viewState = mapMainViewState(
             gameState(
+                actions = listOf(Actions.AppearanceChange.copy(id = 1L)),
+                resources = listOf(resource(key = ResourceKey.DNA, value = 100.0)),
                 player = player(
                     traits = mapOf(TraitId.Species to Species.Shapeshifter),
                     generalTags = listOf(Tags.Abilities.AppearanceChange)
                 ),
-                resources = listOf(resource(key = ResourceKey.DNA, value = 100.0)),
-                actions = listOf(Actions.AppearanceChange.copy(id = 1L))
+                gameTitle = MenuTitleState.Result("Mutant Idle")
             )
         )
 
@@ -854,10 +890,11 @@ class MainPresentationTest {
     fun `should display main resource as scrap for alien`() {
         val viewState = mapMainViewState(
             gameState(
+                upgrades = listOf(Upgrades.Invisibility.copy(id = 1L)),
                 player = player(
                     traits = mapOf(TraitId.Species to Species.Alien)
                 ),
-                upgrades = listOf(Upgrades.Invisibility.copy(id = 1L))
+                gameTitle = MenuTitleState.Result("Mutant Idle")
             )
         )
 
@@ -873,10 +910,11 @@ class MainPresentationTest {
     fun `should display main ratio as Power for vampire`() {
         val viewState = mapMainViewState(
             gameState(
+                actions = listOf(Actions.Win.copy(id = 1L)),
                 player = player(
                     traits = mapOf(TraitId.Species to Species.Vampire)
                 ),
-                actions = listOf(Actions.Win.copy(id = 1L))
+                gameTitle = MenuTitleState.Result("Mutant Idle")
             )
         )
 
@@ -892,10 +930,11 @@ class MainPresentationTest {
     fun `should display main ratio as Ship Repair for alien`() {
         val viewState = mapMainViewState(
             gameState(
+                actions = listOf(Actions.Win.copy(id = 1L)),
                 player = player(
                     traits = mapOf(TraitId.Species to Species.Alien)
                 ),
-                actions = listOf(Actions.Win.copy(id = 1L))
+                gameTitle = MenuTitleState.Result("Mutant Idle")
             )
         )
 

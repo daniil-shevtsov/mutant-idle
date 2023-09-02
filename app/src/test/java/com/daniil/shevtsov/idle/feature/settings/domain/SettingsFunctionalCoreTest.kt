@@ -11,6 +11,7 @@ import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.initial.domain.createInitialGameState
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.Test
 
@@ -59,7 +60,8 @@ class SettingsFunctionalCoreTest {
                             value = settingsControlBoolean(isEnabled = false)
                         ),
                     )
-                )
+                ),
+                gameTitle = MenuTitleState.Result("Mutant Idle")
             ),
             viewAction = MainViewAction.SettingsSwitchUpdate(key = SettingsKey.DebugEnabled)
         )
@@ -94,7 +96,8 @@ class SettingsFunctionalCoreTest {
                             value = settingsControlBoolean(isEnabled = false)
                         ),
                     )
-                )
+                ),
+                gameTitle = MenuTitleState.Result("Mutant Idle")
             ),
             viewAction = MainViewAction.SettingsTextSaved(
                 key = SettingsKey.BackgroundColor,

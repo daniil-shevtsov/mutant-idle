@@ -11,6 +11,7 @@ import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.location.domain.Location
 import com.daniil.shevtsov.idle.feature.location.domain.location
 import com.daniil.shevtsov.idle.feature.main.domain.Selectable
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
@@ -69,6 +70,7 @@ class TagRelationsPresentationTest {
             val state = gameState(
                 selectables = listOf(availableSelectable, unavailableSelectable),
                 player = player(generalTags = listOf(availableTag)),
+                gameTitle = MenuTitleState.Result("Mutant Idle"),
             )
 
             val viewState = mapMainViewState(state = state)
@@ -111,6 +113,7 @@ class TagRelationsPresentationTest {
             val state = gameState(
                 selectables = listOf(availableSelectable, unavailableSelectable),
                 player = player(generalTags = listOf(availableTag)),
+                gameTitle = MenuTitleState.Result("Mutant Idle"),
             )
 
             val viewState = mapMainViewState(state = state)
@@ -142,6 +145,7 @@ class TagRelationsPresentationTest {
             val state = gameState(
                 selectables = listOf(availableSelectable, unavailableSelectable),
                 player = player(generalTags = listOf(presentTag)),
+                gameTitle = MenuTitleState.Result("Mutant Idle"),
             )
 
             val viewState = mapMainViewState(state = state)
@@ -181,6 +185,7 @@ class TagRelationsPresentationTest {
                     unavailableSelectable
                 ),
                 player = player(generalTags = listOf(presentTag)),
+                gameTitle = MenuTitleState.Result("Mutant Idle"),
             )
 
             val viewState = mapMainViewState(state = state)
@@ -220,6 +225,7 @@ class TagRelationsPresentationTest {
                     unavailableSelectable
                 ),
                 player = player(generalTags = listOf(presentTag)),
+                gameTitle = MenuTitleState.Result("Mutant Idle"),
             )
 
             val viewState = mapMainViewState(state = state)

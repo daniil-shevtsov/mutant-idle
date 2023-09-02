@@ -2,8 +2,14 @@ package com.daniil.shevtsov.idle.feature.gamestart.presentation
 
 import assertk.all
 import assertk.assertThat
-import assertk.assertions.*
+import assertk.assertions.containsExactly
+import assertk.assertions.extracting
+import assertk.assertions.index
+import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
+import assertk.assertions.prop
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
@@ -16,7 +22,7 @@ internal class GameStartPresentationTest {
 
     @Test
     fun `should show title initially`() {
-        val state = gameState()
+        val state = gameState(gameTitle = MenuTitleState.Result("Mutant Idle"))
 
         val viewState = mapGameStartViewState(state = state)
 
@@ -32,7 +38,8 @@ internal class GameStartPresentationTest {
             availableTraits = listOf(
                 species1,
                 species2,
-            )
+            ),
+            gameTitle = MenuTitleState.Result("Mutant Idle")
         )
 
         val viewState = mapGameStartViewState(state = state)
@@ -70,7 +77,8 @@ internal class GameStartPresentationTest {
                         lockedSpecies.id to false,
                     )
                 )
-            )
+            ),
+            gameTitle = MenuTitleState.Result("Mutant Idle")
         )
         val viewState = mapGameStartViewState(state)
 
@@ -99,6 +107,7 @@ internal class GameStartPresentationTest {
                     TraitId.Species to selectedSpecies
                 ),
             ),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
         val viewState = mapGameStartViewState(state = state)
@@ -120,7 +129,8 @@ internal class GameStartPresentationTest {
             availableTraits = listOf(
                 job1,
                 job2,
-            )
+            ),
+            gameTitle = MenuTitleState.Result("Mutant Idle")
         )
 
         val viewState = mapGameStartViewState(state = state)
@@ -156,7 +166,8 @@ internal class GameStartPresentationTest {
                         lockedJob.id to false,
                     )
                 )
-            )
+            ),
+            gameTitle = MenuTitleState.Result("Mutant Idle")
         )
         val viewState = mapGameStartViewState(state)
 
@@ -182,7 +193,8 @@ internal class GameStartPresentationTest {
                 traits = mapOf(
                     TraitId.Job to selectedJob
                 )
-            )
+            ),
+            gameTitle = MenuTitleState.Result("Mutant Idle")
         )
 
         val viewState = mapGameStartViewState(state = state)

@@ -35,7 +35,7 @@ class ScreenHostViewModelTest {
                         .isInstanceOf(ScreenContentViewState.Menu::class)
                         .prop(ScreenContentViewState.Menu::state)
                         .all {
-                            title().isEqualTo("Mutant Idle")
+                            titleIsLoading()
                         }
                 }
         }
@@ -61,6 +61,9 @@ class ScreenHostViewModelTest {
         }
     }
 }
+
+fun Assert<MenuViewState>.titleIsLoading() =
+    prop(MenuViewState::title).isEqualTo(MenuTitleViewState.Loading)
 
 fun Assert<MenuViewState>.title(): Assert<String> = prop(MenuViewState::title)
     .isInstanceOf(MenuTitleViewState.Result::class)

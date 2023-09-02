@@ -8,6 +8,7 @@ import com.daniil.shevtsov.idle.feature.colors.presentation.DomainColor
 import com.daniil.shevtsov.idle.feature.colors.presentation.SpeciesColors
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import com.daniil.shevtsov.idle.feature.gamefinish.domain.ending
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.species.domain.Species
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
@@ -21,7 +22,10 @@ import org.junit.jupiter.api.Test
 internal class ScreenPresentationTest {
     @Test
     fun `should form main view state when main screen selected`() {
-        val state = gameState(currentScreen = Screen.Main)
+        val state = gameState(
+            currentScreen = Screen.Main,
+            gameTitle = MenuTitleState.Result("Mutant Idle")
+        )
 
         val viewState = screenPresentationFunctionalCore(state = state)
 
@@ -36,6 +40,7 @@ internal class ScreenPresentationTest {
             currentScreen = Screen.FinishedGame,
             allEndings = listOf(ending(id = 1L)),
             currentEndingId = 1L,
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
         val viewState = screenPresentationFunctionalCore(state = state)
@@ -48,7 +53,10 @@ internal class ScreenPresentationTest {
     @Test
     fun `should use colors of devourer when it is selected`() {
         val viewState = screenPresentationFunctionalCore(
-            gameState(player = player(traits = mapOf(TraitId.Species to Species.Devourer)))
+            gameState(
+                player = player(traits = mapOf(TraitId.Species to Species.Devourer)),
+                gameTitle = MenuTitleState.Result("Mutant Idle")
+            )
         )
 
         assertThat(viewState)
@@ -59,7 +67,10 @@ internal class ScreenPresentationTest {
     @Test
     fun `should use colors of vampire when it is selected`() {
         val viewState = screenPresentationFunctionalCore(
-            gameState(player = player(traits = mapOf(TraitId.Species to Species.Vampire)))
+            gameState(
+                player = player(traits = mapOf(TraitId.Species to Species.Vampire)),
+                gameTitle = MenuTitleState.Result("Mutant Idle")
+            )
         )
 
         assertThat(viewState)
@@ -83,7 +94,8 @@ internal class ScreenPresentationTest {
                             value = SettingsControl.StringValue("#FF0000")
                         )
                     )
-                )
+                ),
+                gameTitle = MenuTitleState.Result("Mutant Idle")
             )
         )
 
@@ -109,7 +121,8 @@ internal class ScreenPresentationTest {
                             value = SettingsControl.StringValue("#FFFFFF")
                         )
                     )
-                )
+                ),
+                gameTitle = MenuTitleState.Result("Mutant Idle")
             )
         )
 

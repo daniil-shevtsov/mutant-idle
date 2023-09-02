@@ -15,6 +15,7 @@ import com.daniil.shevtsov.idle.feature.location.domain.createLocations
 import com.daniil.shevtsov.idle.feature.main.domain.Selectable
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionState
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
 import com.daniil.shevtsov.idle.feature.player.job.domain.Jobs
 import com.daniil.shevtsov.idle.feature.player.species.domain.Species
@@ -97,7 +98,8 @@ fun createInitialGameState(): GameState {
                 )
             ),
             selectedCategoryId = 0L,
-        )
+        ),
+        gameTitle = MenuTitleState.Loading,
     )
 }
 

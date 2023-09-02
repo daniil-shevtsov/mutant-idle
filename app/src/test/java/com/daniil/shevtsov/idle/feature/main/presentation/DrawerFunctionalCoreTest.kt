@@ -14,6 +14,7 @@ import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewAction
 import com.daniil.shevtsov.idle.feature.drawer.presentation.drawerTab
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import com.daniil.shevtsov.idle.feature.player.core.domain.assertSpeciesSelected
 import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
@@ -29,7 +30,10 @@ internal class DrawerFunctionalCoreTest {
     @Test
     fun `should change player trait when trait selected`() = runBlockingTest {
         val newSpecies = playerTrait(traitId = TraitId.Species)
-        val initialState = gameState(availableTraits = listOf(newSpecies))
+        val initialState = gameState(
+            availableTraits = listOf(newSpecies),
+            gameTitle = MenuTitleState.Result("Mutant Idle")
+        )
 
         val newState = drawerFunctionalCore(
             state = initialState,
@@ -53,6 +57,7 @@ internal class DrawerFunctionalCoreTest {
                 drawerTab(id = DrawerTabId.PlayerInfo, isSelected = true),
                 drawerTab(id = DrawerTabId.Debug, isSelected = false),
             ),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
         val newState = drawerFunctionalCore(
@@ -89,7 +94,8 @@ internal class DrawerFunctionalCoreTest {
                     TraitId.Species to mapOf(lockedJob.id to false, unlockedJob.id to true),
                     TraitId.Job to mapOf(lockedSpecies.id to false, unlockedSpecies.id to true),
                 )
-            )
+            ),
+            gameTitle = MenuTitleState.Result("Mutant Idle")
         )
 
         val newState = drawerFunctionalCore(
