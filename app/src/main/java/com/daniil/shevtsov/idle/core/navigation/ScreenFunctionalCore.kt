@@ -6,7 +6,7 @@ import com.daniil.shevtsov.idle.feature.gamestart.domain.gameStartFunctionalCore
 import com.daniil.shevtsov.idle.feature.main.domain.mainFunctionalCore
 
 sealed interface MishaEffect {
-    object Kek : MishaEffect
+    object RequestTitleFromServer : MishaEffect
 }
 
 fun screenFunctionalCore(
@@ -17,7 +17,7 @@ fun screenFunctionalCore(
         is ScreenViewAction.Start -> gameStartFunctionalCore(
             state = state,
             viewAction = viewAction.action,
-        )
+        ).first
 
         is ScreenViewAction.Main -> mainFunctionalCore(
             state = state,

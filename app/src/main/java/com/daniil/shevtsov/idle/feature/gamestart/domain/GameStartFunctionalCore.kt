@@ -1,5 +1,6 @@
 package com.daniil.shevtsov.idle.feature.gamestart.domain
 
+import com.daniil.shevtsov.idle.core.navigation.MishaEffect
 import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
@@ -7,20 +8,35 @@ import com.daniil.shevtsov.idle.feature.player.core.domain.PlayerViewAction
 import com.daniil.shevtsov.idle.feature.player.core.domain.playerFunctionalCore
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 
+typealias FunctionalCoreResult = Pair<GameState, List<MishaEffect>>
+
 fun gameStartFunctionalCore(
     state: GameState,
     viewAction: GameStartViewAction,
-): GameState {
+): FunctionalCoreResult {
     return when (viewAction) {
+        is GameStartViewAction.RequestTitle -> handleTitleRequested(
+            state = state,
+            viewAction = viewAction,
+        )
+
         is GameStartViewAction.StartGame -> handleStartGame(
             state = state,
             viewAction = viewAction,
-        )
+        ) to emptyList()
+
         is GameStartViewAction.TraitSelected -> handleTraitSelected(
             state = state,
             viewAction = viewAction,
-        )
+        ) to emptyList()
     }
+}
+
+fun handleTitleRequested(
+    state: GameState,
+    viewAction: GameStartViewAction.RequestTitle
+): FunctionalCoreResult {
+    return state to listOf(MishaEffect.RequestTitleFromServer)
 }
 
 private fun handleTraitSelected(
@@ -40,6 +56,7 @@ private fun handleTraitSelected(
             state = state,
             action = PlayerViewAction.ChangeTrait(traitId = newTrait.traitId, id = viewAction.id),
         )
+
         else -> state
     }
 }

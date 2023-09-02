@@ -1,8 +1,11 @@
 package com.daniil.shevtsov.idle.feature.gamestart.domain
 
+import assertk.Assert
 import assertk.assertThat
+import assertk.assertions.containsExactly
 import assertk.assertions.isEqualTo
 import assertk.assertions.prop
+import com.daniil.shevtsov.idle.core.navigation.MishaEffect
 import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
@@ -48,6 +51,7 @@ internal class GameStartFunctionalCoreTest {
         )
 
         assertThat(newState)
+            .state()
             .prop(GameState::player)
             .isEqualTo(initialPlayer)
     }
@@ -106,6 +110,7 @@ internal class GameStartFunctionalCoreTest {
         )
 
         assertThat(newState)
+            .state()
             .prop(GameState::player)
             .assertSpeciesSelected(id = newSpecies.id)
     }
@@ -118,8 +123,25 @@ internal class GameStartFunctionalCoreTest {
         )
 
         assertThat(newState)
+            .state()
             .prop(GameState::currentScreen)
             .isEqualTo(Screen.Main)
     }
+
+    @Test
+    fun `should create request effect when requested title`() {
+        val newState = gameStartFunctionalCore(
+            state = gameState(gameTitle = MenuTitleState.Loading),
+            viewAction = GameStartViewAction.RequestTitle,
+        )
+
+        assertThat(newState)
+            .effects()
+            .containsExactly(MishaEffect.RequestTitleFromServer)
+    }
+
+    private fun Assert<FunctionalCoreResult>.state() = transform { (state, effects) -> state }
+
+    private fun Assert<FunctionalCoreResult>.effects() = transform { (state, effects) -> effects }
 
 }
