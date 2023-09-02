@@ -27,7 +27,7 @@ class ScreenHostViewModel @Inject constructor(
         viewActionFlow
             .onStart { emit(ScreenViewAction.Main(MainViewAction.Init)) }
             .onEach { viewAction ->
-                val newState = screenFunctionalCore(
+                val (newState, _) = screenFunctionalCore(
                     state = imperativeShell.getState(),
                     viewAction = viewAction,
                 )
