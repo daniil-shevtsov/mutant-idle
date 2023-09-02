@@ -52,7 +52,10 @@ fun handleCancelClicked(
     state: GameState,
     viewAction: GameStartViewAction
 ): FunctionalCoreResult {
-    return functionalCoreResult(state, effects = listOf(MishaEffect.CancelRequestingTitle))
+    return functionalCoreResult(
+        state.copy(gameTitle = MenuTitleState.Result("CANCEL CULTURE GOT OUT OF HAND")),
+        effects = listOf(MishaEffect.CancelRequestingTitle)
+    )
 }
 
 fun handleResultReceived(

@@ -30,14 +30,19 @@ private class FakeGameTitleRepository() : GameTitleRepository {
     private val result = MutableStateFlow<String?>(null)
 
     var completedRequestCount = 0
+    var requestInProgress = false
 
     fun sendResult(title: String) {
         result.value = title
-        completedRequestCount++
+        //completedRequestCount++
     }
 
     override suspend fun get(): String {
-        return result.filterNotNull().firstOrNull()!!
+        requestInProgress = true
+        val received = result.filterNotNull().firstOrNull()!!
+        requestInProgress = false
+        completedRequestCount++
+        return received
     }
 }
 
@@ -118,8 +123,11 @@ class ScreenHostViewModelTest {
                 .titleIsLoading()
 
             viewModel.handleAction(ScreenViewAction.Start(GameStartViewAction.CancelClicked))
+            println("KEK before sendResult")
             repository.sendResult("Server Title")
+            println("KEK after sendResult")
             assertThat(repository.completedRequestCount).isEqualTo(0)
+            cancelAndConsumeRemainingEvents()
         }
     }
 }

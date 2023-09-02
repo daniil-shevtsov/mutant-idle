@@ -17,6 +17,7 @@ import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerContentViewState
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewState
 import com.daniil.shevtsov.idle.feature.gamefinish.view.FinishedGameScreen
+import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
 import com.daniil.shevtsov.idle.feature.gamestart.view.GameStartScreen
 import com.daniil.shevtsov.idle.feature.main.MainDrawer
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
@@ -87,6 +88,13 @@ fun ScreenHostComposable(
 //                        SpikeTagScreen(modifier = modifier.fillMaxSize())
                         MenuScreen(
                             state = contentViewState.state,
+                            onTitleClick = {
+                                viewModel.handleAction(
+                                    ScreenViewAction.Start(
+                                        GameStartViewAction.CancelClicked
+                                    )
+                                )
+                            },
                             onClick = { menuId ->
                                 viewModel.handleAction(
                                     ScreenViewAction.Main(

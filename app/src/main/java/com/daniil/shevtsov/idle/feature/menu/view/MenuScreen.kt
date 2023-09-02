@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.feature.menu.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement.Center
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
@@ -64,6 +65,7 @@ fun GameTitle(
 fun MenuScreen(
     state: MenuViewState,
     onClick: (menuId: MenuId) -> Unit,
+    onTitleClick: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -78,7 +80,9 @@ fun MenuScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = spacedBy(AppTheme.dimensions.paddingL),
         ) {
-            GameTitle(state.title)
+            GameTitle(state.title, modifier = Modifier.clickable {
+                onTitleClick()
+            })
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = spacedBy(AppTheme.dimensions.paddingM),
