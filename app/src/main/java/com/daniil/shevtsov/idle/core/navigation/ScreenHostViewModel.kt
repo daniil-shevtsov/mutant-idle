@@ -41,11 +41,15 @@ class ScreenHostViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
 
-        imperativeShell.observeState()
-            .onEach { state ->
-                _state.value = screenPresentationFunctionalCore(state = state)
-            }
-            .launchIn(viewModelScope)
+        imperativeShell.listen(listener = { newState ->
+            _state.value = screenPresentationFunctionalCore(state = newState)
+        })
+//
+//        imperativeShell.observeState()
+//            .onEach { state ->
+//                _state.value = screenPresentationFunctionalCore(state = state)
+//            }
+//            .launchIn(viewModelScope)
     }
 
     private fun handleEffects(effects: List<MishaEffect>) {

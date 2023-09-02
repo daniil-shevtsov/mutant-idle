@@ -3,22 +3,27 @@ package com.daniil.shevtsov.idle.feature.main.data
 import com.daniil.shevtsov.idle.core.di.AppScope
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.initial.domain.createInitialGameState
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
+
+typealias GameStateListener = (state: GameState) -> Unit
 
 @AppScope
 class MainImperativeShell @Inject constructor() {
 
-    private val state = MutableStateFlow(createInitialGameState())
+    private var listener: GameStateListener? = null
+    private var lastState: GameState = createInitialGameState()
 
-    fun getState(): GameState = state.value
-
-    fun updateState(newState: GameState) {
-        state.value = newState
+    fun listen(listener: GameStateListener) {
+        this.listener = listener
     }
 
-    fun observeState(): Flow<GameState> = state.asStateFlow()
+    fun getState(): GameState {
+        return lastState
+    }
+
+    fun updateState(newState: GameState) {
+        listener?.invoke(newState)
+        lastState = newState
+    }
 
 }

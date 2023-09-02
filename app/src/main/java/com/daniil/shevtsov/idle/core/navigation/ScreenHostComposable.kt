@@ -11,6 +11,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.theme.chooseThemeForId
+import com.daniil.shevtsov.idle.feature.colors.presentation.DomainColor
+import com.daniil.shevtsov.idle.feature.colors.presentation.SpeciesColors
+import com.daniil.shevtsov.idle.feature.debug.presentation.DebugViewState
+import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerContentViewState
+import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerViewState
 import com.daniil.shevtsov.idle.feature.gamefinish.view.FinishedGameScreen
 import com.daniil.shevtsov.idle.feature.gamestart.view.GameStartScreen
 import com.daniil.shevtsov.idle.feature.main.MainDrawer
@@ -25,7 +30,30 @@ fun ScreenHostComposable(
     viewModel: ScreenHostViewModel,
     modifier: Modifier = Modifier,
 ) {
-    val delegatedViewState by viewModel.state.collectAsState()
+    val emptyValue = ScreenHostViewState(
+        speciesId = 3241, colors = SpeciesColors(
+            backgroundLight = DomainColor(argb = 4610),
+            background = DomainColor(argb = 2255),
+            backgroundDark = DomainColor(argb = 5868),
+            backgroundDarkest = DomainColor(
+                argb = 5139
+            ),
+            backgroundText = DomainColor(argb = 6685),
+            textDark = DomainColor(argb = 6056),
+            textLight = DomainColor(argb = 5943),
+            iconLight = DomainColor(argb = 7747)
+        ), drawerState = DrawerViewState(
+            tabSelectorState = listOf(),
+            drawerContent = DrawerContentViewState.Debug(
+                DebugViewState(
+                    jobSelection = listOf(),
+                    speciesSelection = listOf(),
+                    traitSelections = listOf()
+                )
+            )
+        ), contentState = ScreenContentViewState.Loading
+    )
+    val delegatedViewState by viewModel.state.collectAsState(emptyValue)
 
     val systemUiController = rememberSystemUiController()
 
@@ -115,6 +143,7 @@ fun ScreenHostComposable(
                         },
                         modifier = modifier,
                     )
+
                     ScreenContentViewState.Loading -> Unit
                 }
             }

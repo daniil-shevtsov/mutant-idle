@@ -2,15 +2,13 @@ package com.daniil.shevtsov.idle.application
 
 import com.daniil.shevtsov.idle.core.BalanceConfig
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
-import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
 import com.daniil.shevtsov.idle.feature.time.data.TimeStorage
-import com.daniil.shevtsov.idle.feature.time.domain.Time
 import com.daniil.shevtsov.idle.feature.time.domain.TimeBehavior
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.scan
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -38,36 +36,36 @@ class IdleGameViewModel @Inject constructor(
     }
 
     private fun doEverythingElse() {
-        scope.launch {
-            timeStorage.observeChange()
-                .map { it.inWholeMilliseconds }
-                .scan(0L to 0L) { previousPair, newTime -> previousPair.second to newTime }
-                .map { (previous, new) ->
-                    val difference = new - previous
-                    Time(difference)
-                }
-                .onEach { time ->
-                    val currentState = imperativeShell.getState()
-
-                    val oldResourceValue =
-                        currentState.resources.find { it.key == ResourceKey.Blood }!!.value
-                    val resourceChange =
-                        oldResourceValue + time.value * balanceConfig.resourcePerMillisecond
-                    imperativeShell.updateState(
-                        newState = currentState.copy(
-                            resources = currentState.resources.map { resource ->
-                                when (resource.key) {
-//                                    ResourceKey.Blood -> resource.copy(
-//                                        value = resourceChange
-//                                    )
-                                    else -> resource
-                                }
-                            }
-                        )
-                    )
-                }
-                .collect()
-        }
+//        scope.launch {
+//            timeStorage.observeChange()
+//                .map { it.inWholeMilliseconds }
+//                .scan(0L to 0L) { previousPair, newTime -> previousPair.second to newTime }
+//                .map { (previous, new) ->
+//                    val difference = new - previous
+//                    Time(difference)
+//                }
+//                .onEach { time ->
+//                    val currentState = imperativeShell.getState()
+//
+//                    val oldResourceValue =
+//                        currentState.resources.find { it.key == ResourceKey.Blood }!!.value
+//                    val resourceChange =
+//                        oldResourceValue + time.value * balanceConfig.resourcePerMillisecond
+//                    imperativeShell.updateState(
+//                        newState = currentState.copy(
+//                            resources = currentState.resources.map { resource ->
+//                                when (resource.key) {
+////                                    ResourceKey.Blood -> resource.copy(
+////                                        value = resourceChange
+////                                    )
+//                                    else -> resource
+//                                }
+//                            }
+//                        )
+//                    )
+//                }
+//                .collect()
+//        }
     }
 
     fun onCleared() {
