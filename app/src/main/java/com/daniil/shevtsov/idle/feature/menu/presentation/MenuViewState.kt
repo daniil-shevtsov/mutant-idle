@@ -6,3 +6,9 @@ data class MenuViewState(
     val title: String,
     val buttons: ImmutableList<MenuButtonModel>,
 )
+
+sealed interface MenuTitleViewState {
+    object Loading : MenuTitleViewState
+    data class Result(val text: String) : MenuTitleViewState
+    object Error : MenuTitleViewState
+}
