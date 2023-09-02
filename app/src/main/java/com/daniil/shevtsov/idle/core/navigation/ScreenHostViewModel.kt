@@ -2,8 +2,8 @@ package com.daniil.shevtsov.idle.core.navigation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
-import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.menu.domain.GetGameTitleUseCase
 import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -28,14 +28,17 @@ class ScreenHostViewModel @Inject constructor(
 
     init {
         viewActionFlow
-            .onStart { emit(ScreenViewAction.Main(MainViewAction.Init)) }
+            .onStart { emit(ScreenViewAction.Start(GameStartViewAction.Init)) }
             .onEach { viewAction ->
-                val (newState, _) = screenFunctionalCore(
+                val (newState, effects) = screenFunctionalCore(
                     state = imperativeShell.getState(),
                     viewAction = viewAction,
                 )
+                println("action=$viewAction effects=$effects")
 
                 imperativeShell.updateState(newState)
+
+                handleEffects(effects)
             }
             .launchIn(viewModelScope)
 
@@ -44,16 +47,26 @@ class ScreenHostViewModel @Inject constructor(
                 _state.value = screenPresentationFunctionalCore(state = state)
             }
             .launchIn(viewModelScope)
+    }
 
+    private fun handleEffects(effects: List<MishaEffect>) {
         viewModelScope.launch {
-            val titleFromServer = getGameTitle()
-            val currentState = imperativeShell.getState()
-            imperativeShell.updateState(
-                currentState.copy(
-                    gameTitle = MenuTitleState.Result(titleFromServer)
-                )
-            )
+            effects.forEach { effect ->
+                when (effect) {
+                    MishaEffect.RequestTitleFromServer -> requestTitleFromServer()
+                }
+            }
         }
+    }
+
+    private suspend fun requestTitleFromServer() {
+        val titleFromServer = getGameTitle()
+        val currentState = imperativeShell.getState()
+        imperativeShell.updateState(
+            currentState.copy(
+                gameTitle = MenuTitleState.Result(titleFromServer)
+            )
+        )
     }
 
     fun handleAction(action: ScreenViewAction) {

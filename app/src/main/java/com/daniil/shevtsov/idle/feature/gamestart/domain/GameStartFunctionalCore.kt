@@ -15,7 +15,7 @@ fun gameStartFunctionalCore(
     viewAction: GameStartViewAction,
 ): FunctionalCoreResult {
     return when (viewAction) {
-        is GameStartViewAction.RequestTitle -> handleTitleRequested(
+        is GameStartViewAction.Init -> handleTitleRequested(
             state = state,
             viewAction = viewAction,
         )
@@ -34,7 +34,7 @@ fun gameStartFunctionalCore(
 
 fun handleTitleRequested(
     state: GameState,
-    viewAction: GameStartViewAction.RequestTitle
+    viewAction: GameStartViewAction.Init
 ): FunctionalCoreResult {
     return state to listOf(MishaEffect.RequestTitleFromServer)
 }

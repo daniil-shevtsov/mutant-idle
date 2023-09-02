@@ -132,7 +132,7 @@ internal class GameStartFunctionalCoreTest {
     fun `should create request effect when requested title`() {
         val newState = gameStartFunctionalCore(
             state = gameState(gameTitle = MenuTitleState.Loading),
-            viewAction = GameStartViewAction.RequestTitle,
+            viewAction = GameStartViewAction.Init,
         )
 
         assertThat(newState)
