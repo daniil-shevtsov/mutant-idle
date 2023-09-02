@@ -13,6 +13,8 @@ import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewActi
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
+import com.daniil.shevtsov.idle.feature.menu.domain.GameTitleRepository
+import com.daniil.shevtsov.idle.feature.menu.domain.GetGameTitleUseCase
 import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleViewState
 import com.daniil.shevtsov.idle.feature.menu.presentation.MenuViewState
 import com.daniil.shevtsov.idle.feature.player.species.domain.Species
@@ -21,9 +23,22 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
+private class FakeGameTitleRepository() : GameTitleRepository {
+    override suspend fun get(): String {
+        return ""
+    }
+}
+
 @ExtendWith(MainCoroutineExtension::class)
 class ScreenHostViewModelTest {
-    private val viewModel = ScreenHostViewModel(imperativeShell = MainImperativeShell())
+    private val repository = FakeGameTitleRepository()
+    private val getGameTitle = GetGameTitleUseCase(
+        repository = repository,
+    )
+    private val viewModel = ScreenHostViewModel(
+        imperativeShell = MainImperativeShell(),
+        getGameTitle = getGameTitle,
+    )
 
     @Test
     fun `should show menu screen initially`() = runBlockingTest {

@@ -1,7 +1,9 @@
 package com.daniil.shevtsov.idle.core.di
 
 import com.daniil.shevtsov.idle.core.di.viewmodel.ViewModelModule
-
+import com.daniil.shevtsov.idle.feature.menu.domain.GameTitleRepository
+import com.daniil.shevtsov.idle.feature.menu.domain.GameTitleRepositoryImpl
+import dagger.Binds
 import dagger.Module
 
 @Module(
@@ -9,4 +11,8 @@ import dagger.Module
         ViewModelModule::class,
     ]
 )
-interface AppModule
+interface AppModule {
+    @Binds
+    @AppScope
+    fun gameTitleRepository(impl: GameTitleRepositoryImpl): GameTitleRepository
+}
