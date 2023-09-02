@@ -4,6 +4,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class MenuViewState(
     val title: String,
+    val newTitle: MenuTitleViewState,
     val buttons: ImmutableList<MenuButtonModel>,
 )
 

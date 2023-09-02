@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.idle.core.navigation
 
 import app.cash.turbine.test
+import assertk.Assert
 import assertk.all
 import assertk.assertThat
 import assertk.assertions.containsAll
@@ -12,6 +13,7 @@ import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewActi
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleViewState
 import com.daniil.shevtsov.idle.feature.menu.presentation.MenuViewState
 import com.daniil.shevtsov.idle.feature.player.species.domain.Species
 import kotlinx.coroutines.test.runBlockingTest
@@ -33,7 +35,7 @@ class ScreenHostViewModelTest {
                         .isInstanceOf(ScreenContentViewState.Menu::class)
                         .prop(ScreenContentViewState.Menu::state)
                         .all {
-                            prop(MenuViewState::title).isEqualTo("Mutant Idle")
+                            title().isEqualTo("Mutant Idle")
                         }
                 }
         }
@@ -59,3 +61,8 @@ class ScreenHostViewModelTest {
         }
     }
 }
+
+fun Assert<MenuViewState>.title(): Assert<String> = prop(MenuViewState::newTitle)
+    .isInstanceOf(MenuTitleViewState.Result::class)
+    .prop(MenuTitleViewState.Result::text)
+

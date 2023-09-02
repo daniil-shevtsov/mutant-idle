@@ -18,6 +18,7 @@ import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.widgets.CavityButton
 import com.daniil.shevtsov.idle.feature.menu.presentation.MenuButtonModel
 import com.daniil.shevtsov.idle.feature.menu.presentation.MenuId
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleViewState
 import com.daniil.shevtsov.idle.feature.menu.presentation.MenuViewState
 import com.daniil.shevtsov.idle.feature.menu.presentation.menuButtonModel
 import kotlinx.collections.immutable.persistentListOf
@@ -25,10 +26,38 @@ import kotlinx.collections.immutable.persistentListOf
 @Preview(heightDp = 500)
 @Composable
 fun MenuScreenPreview() {
-    MenuScreen(
-        onClick = {},
-        state = menuViewStateComposeStub()
+    listOf(
+        MenuTitleViewState.Loading,
+        MenuTitleViewState.Result("Mutant Idle"),
+        MenuTitleViewState.Error,
+    ).forEach { titleState ->
+        Column {
+            MenuScreen(
+                onClick = {},
+                state = menuViewStateComposeStub().copy(newTitle = titleState)
+            )
+        }
+    }
+}
+
+@Composable
+fun GameTitle(
+    newTitle: MenuTitleViewState,
+    modifier: Modifier = Modifier,
+) {
+    val text = when (newTitle) {
+        is MenuTitleViewState.Error -> "ERROR"
+        is MenuTitleViewState.Loading -> "Getting the title..."
+        is MenuTitleViewState.Result -> newTitle.text
+    }
+
+    Text(
+        text = text,
+        style = AppTheme.typography.header,
+        color = AppTheme.colors.textLight,
+        modifier = modifier,
     )
+
 }
 
 @Composable
@@ -49,11 +78,7 @@ fun MenuScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = spacedBy(AppTheme.dimensions.paddingL),
         ) {
-            Text(
-                text = state.title,
-                style = AppTheme.typography.header,
-                color = AppTheme.colors.textLight,
-            )
+            GameTitle(state.newTitle)
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = spacedBy(AppTheme.dimensions.paddingM),
@@ -85,7 +110,8 @@ private fun MenuButton(
 }
 
 private fun menuViewStateComposeStub() = MenuViewState(
-    title = "Mutant Idle",
+    title = "sdfsdfdsf",
+    newTitle = MenuTitleViewState.Result("Mutant Idle"),
     buttons = persistentListOf(
         menuButtonModel(title = "Start Game"),
         menuButtonModel(title = "Settings"),
