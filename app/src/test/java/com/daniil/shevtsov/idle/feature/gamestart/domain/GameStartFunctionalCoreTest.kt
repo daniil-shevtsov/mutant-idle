@@ -140,6 +140,19 @@ internal class GameStartFunctionalCoreTest {
             .containsExactly(MishaEffect.RequestTitleFromServer)
     }
 
+    @Test
+    fun `should update menu title when received title from server`() {
+        val newState = gameStartFunctionalCore(
+            state = gameState(),
+            viewAction = GameStartViewAction.TitleReceived(title = "Lol Kek"),
+        )
+
+        assertThat(newState)
+            .state()
+            .prop(GameState::gameTitle)
+            .isEqualTo(MenuTitleState.Result("Lol Kek"))
+    }
+
     private fun Assert<FunctionalCoreResult>.state() = transform { (state, effects) -> state }
 
     private fun Assert<FunctionalCoreResult>.effects() = transform { (state, effects) -> effects }

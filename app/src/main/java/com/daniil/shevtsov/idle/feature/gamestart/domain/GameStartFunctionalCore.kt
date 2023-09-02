@@ -4,11 +4,17 @@ import com.daniil.shevtsov.idle.core.navigation.MishaEffect
 import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
+import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import com.daniil.shevtsov.idle.feature.player.core.domain.PlayerViewAction
 import com.daniil.shevtsov.idle.feature.player.core.domain.playerFunctionalCore
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 
 typealias FunctionalCoreResult = Pair<GameState, List<MishaEffect>>
+
+fun functionalCoreResult(
+    state: GameState,
+    effects: List<MishaEffect> = emptyList()
+): FunctionalCoreResult = state to effects
 
 fun gameStartFunctionalCore(
     state: GameState,
@@ -29,7 +35,23 @@ fun gameStartFunctionalCore(
             state = state,
             viewAction = viewAction,
         ) to emptyList()
+
+        is GameStartViewAction.TitleReceived -> handleResultReceived(
+            state = state,
+            viewAction = viewAction,
+        )
     }
+}
+
+fun handleResultReceived(
+    state: GameState,
+    viewAction: GameStartViewAction.TitleReceived
+): FunctionalCoreResult {
+    return functionalCoreResult(
+        state = state.copy(
+            gameTitle = MenuTitleState.Result(text = viewAction.title)
+        )
+    )
 }
 
 fun handleTitleRequested(
