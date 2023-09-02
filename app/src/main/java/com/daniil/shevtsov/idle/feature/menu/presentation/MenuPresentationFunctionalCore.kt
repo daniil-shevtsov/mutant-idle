@@ -7,8 +7,7 @@ fun mapMenuViewState(
     state: GameState
 ): MenuViewState {
     return MenuViewState(
-        title = "zxs",
-        newTitle = MenuTitleViewState.Result("Mutant Idle"),
+        title = MenuTitleViewState.Result("Mutant Idle"),
         buttons = persistentListOf(
             MenuButtonModel(id = MenuId.StartGame, title = "Start Game"),
             MenuButtonModel(id = MenuId.Settings, title = "Settings"),

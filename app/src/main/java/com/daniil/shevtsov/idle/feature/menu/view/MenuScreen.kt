@@ -34,7 +34,7 @@ fun MenuScreenPreview() {
         Column {
             MenuScreen(
                 onClick = {},
-                state = menuViewStateComposeStub().copy(newTitle = titleState)
+                state = menuViewStateComposeStub().copy(title = titleState)
             )
         }
     }
@@ -78,7 +78,7 @@ fun MenuScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = spacedBy(AppTheme.dimensions.paddingL),
         ) {
-            GameTitle(state.newTitle)
+            GameTitle(state.title)
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = spacedBy(AppTheme.dimensions.paddingM),
@@ -110,8 +110,7 @@ private fun MenuButton(
 }
 
 private fun menuViewStateComposeStub() = MenuViewState(
-    title = "sdfsdfdsf",
-    newTitle = MenuTitleViewState.Result("Mutant Idle"),
+    title = MenuTitleViewState.Result("Mutant Idle"),
     buttons = persistentListOf(
         menuButtonModel(title = "Start Game"),
         menuButtonModel(title = "Settings"),

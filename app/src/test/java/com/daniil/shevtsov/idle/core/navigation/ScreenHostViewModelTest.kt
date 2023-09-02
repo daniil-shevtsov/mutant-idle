@@ -62,7 +62,7 @@ class ScreenHostViewModelTest {
     }
 }
 
-fun Assert<MenuViewState>.title(): Assert<String> = prop(MenuViewState::newTitle)
+fun Assert<MenuViewState>.title(): Assert<String> = prop(MenuViewState::title)
     .isInstanceOf(MenuTitleViewState.Result::class)
     .prop(MenuTitleViewState.Result::text)
 
