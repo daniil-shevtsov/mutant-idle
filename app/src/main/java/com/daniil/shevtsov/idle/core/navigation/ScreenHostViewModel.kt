@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.menu.domain.GetGameTitleUseCase
-import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -61,13 +60,12 @@ class ScreenHostViewModel @Inject constructor(
 
     private suspend fun requestTitleFromServer() {
         val titleFromServer = getGameTitle()
-        val currentState = imperativeShell.getState()
-        imperativeShell.updateState(
-            currentState.copy(
-                gameTitle = MenuTitleState.Result(titleFromServer)
-            )
-        )
+
+        val action = GameStartViewAction.TitleReceived(title = titleFromServer)
+        handleAction(gameStartAction(action))
     }
+
+    private fun gameStartAction(action: GameStartViewAction) = ScreenViewAction.Start(action)
 
     fun handleAction(action: ScreenViewAction) {
         viewModelScope.launch {
