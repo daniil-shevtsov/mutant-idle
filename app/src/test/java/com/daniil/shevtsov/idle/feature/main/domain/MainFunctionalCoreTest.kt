@@ -54,10 +54,13 @@ class MainFunctionalCoreTest {
                 resource(key = ResourceKey.Blood, value = 10.0),
             ),
             actions = listOf(
-                action(id = 0L, title = "Litter", ratioChanges = ratioChanges(RatioKey.Suspicion to 0.13))
+                action(
+                    id = 0L,
+                    title = "Litter",
+                    ratioChanges = ratioChanges(RatioKey.Suspicion to 0.13)
+                )
             ),
             ratios = listOf(
-               // ratio(key = RatioKey.Mutanity, value = 0.0),
                 ratio(key = RatioKey.Suspicion, value = 0.49),
             ),
             gameTitle = MenuTitleState.Result("Mutant Idle"),
@@ -79,6 +82,48 @@ class MainFunctionalCoreTest {
                 prop(GameState::ratios)
                     .extracting(Ratio::key, Ratio::value)
                     .containsExactly(RatioKey.Suspicion to 0.62)
+            }
+    }
+
+    @Test
+    fun `should add only one detective after investigation reached`() = runBlockingTest {
+        val initialState = gameState(
+            resources = listOf(
+                resource(key = ResourceKey.Blood, value = 10.0),
+            ),
+            actions = listOf(
+                action(
+                    id = 0L,
+                    title = "Litter",
+                    ratioChanges = ratioChanges(RatioKey.Suspicion to 0.13)
+                )
+            ),
+            ratios = listOf(
+                ratio(key = RatioKey.Suspicion, value = 0.49),
+            ),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
+        )
+
+        val newState = mainFunctionalCore(
+            state = initialState,
+            viewAction = MainViewAction.SelectableClicked(id = 0L),
+        )
+        val newState2 = mainFunctionalCore(
+            state = newState,
+            viewAction = MainViewAction.SelectableClicked(id = 0L),
+        )
+
+        assertThat(newState2)
+            .all {
+                prop(GameState::resources)
+                    .extracting(Resource::key, Resource::value)
+                    .containsExactly(
+                        ResourceKey.Blood to 10.0,
+                        ResourceKey.Detective to 1.0,
+                    )
+                prop(GameState::ratios)
+                    .extracting(Ratio::key, Ratio::value)
+                    .containsExactly(RatioKey.Suspicion to 0.75)
             }
     }
 

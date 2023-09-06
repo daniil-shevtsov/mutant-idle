@@ -236,7 +236,9 @@ private fun handleActionClicked(
     )
 
     if ((updatedRatios.find { it.key == RatioKey.Suspicion }?.value ?: 0.0) > 0.54) {
-        updatedResources = updatedResources + resource(ResourceKey.Detective, "Detective", 1.0)
+        if (!updatedResources.map { it.key }.contains(ResourceKey.Detective)) {
+            updatedResources = updatedResources + resource(ResourceKey.Detective, "Detective", 1.0)
+        }
     }
 
     return if (!hasInvalidChanges) {
