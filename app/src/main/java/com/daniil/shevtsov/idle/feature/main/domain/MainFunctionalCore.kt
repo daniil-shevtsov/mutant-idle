@@ -14,7 +14,6 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceChanges
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
-import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import com.daniil.shevtsov.idle.feature.settings.domain.SettingsControl
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
@@ -215,6 +214,8 @@ fun handleSectionCollapsed(
     )
 }
 
+private fun List<Ratio>.suspicion() = find { it.key == RatioKey.Suspicion }?.value ?: 0.0
+
 private fun handleActionClicked(
     state: GameState,
     selectedAction: Action,
@@ -228,16 +229,31 @@ private fun handleActionClicked(
         resourceChanges = selectedAction.resourceChanges
     )
 
-    val updatedRatios = applyRatioChanges(
+    var updatedRatios = applyRatioChanges(
         currentRatios = state.ratios,
         ratioChanges = selectedAction.ratioChanges,
         tags = state.player.tags,
         mainRatiokey = state.player.mainRatioKey,
     )
 
-    if ((updatedRatios.find { it.key == RatioKey.Suspicion }?.value ?: 0.0) > 0.54) {
-        if (!updatedResources.map { it.key }.contains(ResourceKey.Detective)) {
-            updatedResources = updatedResources + resource(ResourceKey.Detective, "Detective", 1.0)
+    if (updatedRatios.suspicion() > 0.54) {
+        if (updatedResources.none { it.key == ResourceKey.Detective && it.value > 0.0 }) {
+            updatedResources = updatedResources.map { resource ->
+                when (resource.key) {
+                    ResourceKey.Detective -> resource.copy(value = resource.value + 1.0)
+                    else -> resource
+                }
+            }
+        }
+    }
+
+    val detectives = state.resources.find { it.key == ResourceKey.Detective && it.value > 0.0 }
+    if (detectives != null) {
+        updatedRatios = updatedRatios.map { ratio ->
+            when (ratio.key) {
+                RatioKey.Suspicion -> ratio.copy(value = ratio.value + 0.01 * detectives.value)
+                else -> ratio
+            }
         }
     }
 

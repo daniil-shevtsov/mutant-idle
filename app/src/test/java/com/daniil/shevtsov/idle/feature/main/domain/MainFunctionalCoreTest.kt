@@ -52,6 +52,7 @@ class MainFunctionalCoreTest {
         val initialState = gameState(
             resources = listOf(
                 resource(key = ResourceKey.Blood, value = 10.0),
+                resource(key = ResourceKey.Detective, value = 0.0),
             ),
             actions = listOf(
                 action(
@@ -90,6 +91,7 @@ class MainFunctionalCoreTest {
         val initialState = gameState(
             resources = listOf(
                 resource(key = ResourceKey.Blood, value = 10.0),
+                resource(key = ResourceKey.Detective, value = 0.0),
             ),
             actions = listOf(
                 action(
@@ -121,11 +123,70 @@ class MainFunctionalCoreTest {
                         ResourceKey.Blood to 10.0,
                         ResourceKey.Detective to 1.0,
                     )
-                prop(GameState::ratios)
-                    .extracting(Ratio::key, Ratio::value)
-                    .containsExactly(RatioKey.Suspicion to 0.75)
             }
     }
+
+    @Test
+    fun `should add 1 % suspicion every action when has 1 detective investigating`() =
+        runBlockingTest {
+            val initialState = gameState(
+                resources = listOf(
+                    resource(key = ResourceKey.Blood, value = 10.0),
+                    resource(key = ResourceKey.Detective, value = 1.0),
+                ),
+                actions = listOf(
+                    action(
+                        id = 0L,
+                        title = "Wait a bit",
+                    )
+                ),
+                ratios = listOf(
+                    ratio(key = RatioKey.Suspicion, value = 0.60),
+                ),
+                gameTitle = MenuTitleState.Result("Mutant Idle"),
+            )
+
+            val newState = mainFunctionalCore(
+                state = initialState,
+                viewAction = MainViewAction.SelectableClicked(id = 0L),
+            )
+
+            assertThat(newState)
+                .prop(GameState::ratios)
+                .extracting(Ratio::key, Ratio::value)
+                .containsExactly(RatioKey.Suspicion to 0.61)
+        }
+
+    @Test
+    fun `should add 5 % suspicion every action when has 5 detective investigating`() =
+        runBlockingTest {
+            val initialState = gameState(
+                resources = listOf(
+                    resource(key = ResourceKey.Blood, value = 10.0),
+                    resource(key = ResourceKey.Detective, value = 5.0),
+                ),
+                actions = listOf(
+                    action(
+                        id = 0L,
+                        title = "Wait a bit",
+                    )
+                ),
+                ratios = listOf(
+                    ratio(key = RatioKey.Suspicion, value = 0.60),
+                ),
+                gameTitle = MenuTitleState.Result("Mutant Idle"),
+            )
+
+            val newState = mainFunctionalCore(
+                state = initialState,
+                viewAction = MainViewAction.SelectableClicked(id = 0L),
+            )
+
+            assertThat(newState)
+                .prop(GameState::ratios)
+                .extracting(Ratio::key, Ratio::value)
+                .containsExactly(RatioKey.Suspicion to 0.65)
+        }
 
     @Test
     fun `should buy upgrade when clicked and affordable`() = runBlockingTest {
