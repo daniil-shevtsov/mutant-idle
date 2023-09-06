@@ -5,6 +5,7 @@ enum class ResourceKey {
     DNA,
     Money,
     HumanFood,
+    Detective,
     Prisoner,
     Remains,
     FreshMeat,

@@ -14,6 +14,7 @@ import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
 import com.daniil.shevtsov.idle.feature.resource.domain.Resource
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceChanges
 import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
+import com.daniil.shevtsov.idle.feature.resource.domain.resource
 import com.daniil.shevtsov.idle.feature.settings.domain.SettingsControl
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.Tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
@@ -222,7 +223,7 @@ private fun handleActionClicked(
         currentResources = state.resources,
         resourceChanges = selectedAction.resourceChanges,
     )
-    val updatedResources = applyResourceChanges(
+    var updatedResources = applyResourceChanges(
         currentResources = state.resources,
         resourceChanges = selectedAction.resourceChanges
     )
@@ -233,6 +234,10 @@ private fun handleActionClicked(
         tags = state.player.tags,
         mainRatiokey = state.player.mainRatioKey,
     )
+
+    if ((updatedRatios.find { it.key == RatioKey.Suspicion }?.value ?: 0.0) > 0.54) {
+        updatedResources = updatedResources + resource(ResourceKey.Detective, "Detective", 1.0)
+    }
 
     return if (!hasInvalidChanges) {
         state.copy(

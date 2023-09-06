@@ -173,6 +173,7 @@ private fun ResourceKey.chooseIcon(mainResource: ResourceKey): String = when (th
     ResourceKey.Information -> Icons.Information
     ResourceKey.Singularity -> Icons.Singularity
     ResourceKey.MainResource -> mainResource.chooseIcon(mainResource)
+    ResourceKey.Detective -> Icons.Suspicion
 }
 
 private fun satisfiesAllTagsRelations(

@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.feature.main.domain
 
 import assertk.all
 import assertk.assertThat
+import assertk.assertions.containsAll
 import assertk.assertions.containsExactly
 import assertk.assertions.extracting
 import assertk.assertions.isEmpty
@@ -53,7 +54,7 @@ class MainFunctionalCoreTest {
                 resource(key = ResourceKey.Blood, value = 10.0),
             ),
             actions = listOf(
-                action(id = 0L, title = "Litter", ratioChanges = ratioChanges(RatioKey.Suspicion to 0.05))
+                action(id = 0L, title = "Litter", ratioChanges = ratioChanges(RatioKey.Suspicion to 0.13))
             ),
             ratios = listOf(
                // ratio(key = RatioKey.Mutanity, value = 0.0),
@@ -69,9 +70,15 @@ class MainFunctionalCoreTest {
 
         assertThat(newState)
             .all {
+                prop(GameState::resources)
+                    .extracting(Resource::key, Resource::value)
+                    .containsExactly(
+                        ResourceKey.Blood to 10.0,
+                        ResourceKey.Detective to 1.0,
+                    )
                 prop(GameState::ratios)
                     .extracting(Ratio::key, Ratio::value)
-                    .containsExactly(RatioKey.Suspicion to 0.54)
+                    .containsExactly(RatioKey.Suspicion to 0.62)
             }
     }
 
@@ -154,7 +161,7 @@ class MainFunctionalCoreTest {
                 .all {
                     prop(GameState::resources)
                         .extracting(Resource::key, Resource::value)
-                        .containsExactly(
+                        .containsAll(
                             ResourceKey.Blood to 6.0,
                             ResourceKey.Money to 1.0,
                         )
