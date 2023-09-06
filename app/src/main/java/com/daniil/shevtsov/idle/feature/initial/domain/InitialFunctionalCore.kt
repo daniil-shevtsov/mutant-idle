@@ -107,6 +107,7 @@ fun createBalanceConfig() = BalanceConfig(
     tickRateMillis = 1L,
     resourcePerMillisecond = 0.0002,
     resourceSpentForFullMutant = 100.0,
+    detectiveSuspicionMultiplier = 0.01,
 )
 
 private fun createSelectables(): List<Selectable> =

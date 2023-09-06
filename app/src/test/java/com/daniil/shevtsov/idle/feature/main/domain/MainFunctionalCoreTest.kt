@@ -8,6 +8,7 @@ import assertk.assertions.extracting
 import assertk.assertions.isEmpty
 import assertk.assertions.isEqualTo
 import assertk.assertions.prop
+import com.daniil.shevtsov.idle.core.domain.balanceConfig
 import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.action.domain.Actions
 import com.daniil.shevtsov.idle.feature.action.domain.action
@@ -50,6 +51,7 @@ class MainFunctionalCoreTest {
     @Test
     fun `should add detective when investigation suspicion level reached`() = runBlockingTest {
         val initialState = gameState(
+            balanceConfig = balanceConfig(detectiveSuspicionMultiplier = 0.01),
             resources = listOf(
                 resource(key = ResourceKey.Blood, value = 10.0),
                 resource(key = ResourceKey.Detective, value = 0.0),
@@ -89,6 +91,7 @@ class MainFunctionalCoreTest {
     @Test
     fun `should add only one detective after investigation reached`() = runBlockingTest {
         val initialState = gameState(
+            balanceConfig = balanceConfig(detectiveSuspicionMultiplier = 0.01),
             resources = listOf(
                 resource(key = ResourceKey.Blood, value = 10.0),
                 resource(key = ResourceKey.Detective, value = 0.0),
@@ -130,6 +133,7 @@ class MainFunctionalCoreTest {
     fun `should add 1 % suspicion every action when has 1 detective investigating`() =
         runBlockingTest {
             val initialState = gameState(
+                balanceConfig = balanceConfig(detectiveSuspicionMultiplier = 0.01),
                 resources = listOf(
                     resource(key = ResourceKey.Blood, value = 10.0),
                     resource(key = ResourceKey.Detective, value = 1.0),
@@ -161,6 +165,7 @@ class MainFunctionalCoreTest {
     fun `should add 5 % suspicion every action when has 5 detective investigating`() =
         runBlockingTest {
             val initialState = gameState(
+                balanceConfig = balanceConfig(detectiveSuspicionMultiplier = 0.01),
                 resources = listOf(
                     resource(key = ResourceKey.Blood, value = 10.0),
                     resource(key = ResourceKey.Detective, value = 5.0),
@@ -187,6 +192,39 @@ class MainFunctionalCoreTest {
                 .extracting(Ratio::key, Ratio::value)
                 .containsExactly(RatioKey.Suspicion to 0.65)
         }
+
+    @Test
+    fun `should use detective multipler from config when detective investigate`() =
+        runBlockingTest {
+            val initialState = gameState(
+                balanceConfig = balanceConfig(detectiveSuspicionMultiplier = 0.05),
+                resources = listOf(
+                    resource(key = ResourceKey.Blood, value = 10.0),
+                    resource(key = ResourceKey.Detective, value = 5.0),
+                ),
+                actions = listOf(
+                    action(
+                        id = 0L,
+                        title = "Wait a bit",
+                    )
+                ),
+                ratios = listOf(
+                    ratio(key = RatioKey.Suspicion, value = 0.60),
+                ),
+                gameTitle = MenuTitleState.Result("Mutant Idle"),
+            )
+
+            val newState = mainFunctionalCore(
+                state = initialState,
+                viewAction = MainViewAction.SelectableClicked(id = 0L),
+            )
+
+            assertThat(newState)
+                .prop(GameState::ratios)
+                .extracting(Ratio::key, Ratio::value)
+                .containsExactly(RatioKey.Suspicion to 0.85)
+        }
+
 
     @Test
     fun `should buy upgrade when clicked and affordable`() = runBlockingTest {

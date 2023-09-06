@@ -251,7 +251,7 @@ private fun handleActionClicked(
     if (detectives != null) {
         updatedRatios = updatedRatios.map { ratio ->
             when (ratio.key) {
-                RatioKey.Suspicion -> ratio.copy(value = ratio.value + 0.01 * detectives.value)
+                RatioKey.Suspicion -> ratio.copy(value = ratio.value + state.balanceConfig.detectiveSuspicionMultiplier * detectives.value)
                 else -> ratio
             }
         }

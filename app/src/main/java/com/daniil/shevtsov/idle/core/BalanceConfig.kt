@@ -4,4 +4,5 @@ data class BalanceConfig(
     val tickRateMillis: Long,
     val resourcePerMillisecond: Double,
     val resourceSpentForFullMutant: Double,
+    val detectiveSuspicionMultiplier: Double,
 )
