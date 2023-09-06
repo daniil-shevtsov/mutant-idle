@@ -384,8 +384,8 @@ fun handleSelectableClicked(
 ): GameState {
     val clickedSelectable = state.selectables.find { it.id == viewAction.id }
     return when (clickedSelectable) {
-        is Action -> handleActionClicked(state, clickedSelectable)
         is Upgrade -> handleUpgradeSelected(state, clickedSelectable)
+        is Action -> handleActionClicked(state, clickedSelectable)
         is Location -> handleLocationSelected(state, clickedSelectable)
         else -> state
     }

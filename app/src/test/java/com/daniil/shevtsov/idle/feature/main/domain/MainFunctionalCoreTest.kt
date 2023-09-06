@@ -47,6 +47,35 @@ import org.junit.jupiter.api.Test
 
 class MainFunctionalCoreTest {
     @Test
+    fun `should add detective when investigation suspicion level reached`() = runBlockingTest {
+        val initialState = gameState(
+            resources = listOf(
+                resource(key = ResourceKey.Blood, value = 10.0),
+            ),
+            actions = listOf(
+                action(id = 0L, title = "Litter", ratioChanges = ratioChanges(RatioKey.Suspicion to 0.05))
+            ),
+            ratios = listOf(
+               // ratio(key = RatioKey.Mutanity, value = 0.0),
+                ratio(key = RatioKey.Suspicion, value = 0.49),
+            ),
+            gameTitle = MenuTitleState.Result("Mutant Idle"),
+        )
+
+        val newState = mainFunctionalCore(
+            state = initialState,
+            viewAction = MainViewAction.SelectableClicked(id = 0L),
+        )
+
+        assertThat(newState)
+            .all {
+                prop(GameState::ratios)
+                    .extracting(Ratio::key, Ratio::value)
+                    .containsExactly(RatioKey.Suspicion to 0.54)
+            }
+    }
+
+    @Test
     fun `should buy upgrade when clicked and affordable`() = runBlockingTest {
         val initialState = gameState(
             upgrades = listOf(
