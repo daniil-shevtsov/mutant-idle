@@ -24,6 +24,7 @@ import com.daniil.shevtsov.idle.feature.settings.domain.settings
 import com.daniil.shevtsov.idle.feature.unlocks.domain.UnlockState
 import com.daniil.shevtsov.idle.feature.unlocks.domain.unlockState
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
+import org.jetbrains.annotations.TestOnly
 
 data class GameState(
     val balanceConfig: BalanceConfig,
@@ -44,6 +45,7 @@ data class GameState(
     val currentEndingId: Long?,
     val settings: Settings,
     val gameTitle: MenuTitleState,
+    val currentTurn: TurnInfo,
 ) {
     val locations: List<Location>
         get() = selectables.filterIsInstance<Location>()
@@ -52,6 +54,13 @@ data class GameState(
     val actions: List<Action>
         get() = selectables.filterIsInstance<Action>()
 }
+
+data class TurnInfo(
+    val count: Int,
+)
+
+@TestOnly
+fun turnInfo(count: Int = 1) = TurnInfo(count = count)
 
 fun gameState(
     balanceConfig: BalanceConfig = balanceConfig(),
@@ -75,6 +84,7 @@ fun gameState(
     currentEndingId: Long? = null,
     settings: Settings = settings(),
     gameTitle: MenuTitleState = MenuTitleState.Loading,
+    currentTurn: TurnInfo = turnInfo(),
 ) = GameState(
     balanceConfig = balanceConfig,
     selectables = (selectables + locations + upgrades + actions).distinct(),
@@ -94,4 +104,5 @@ fun gameState(
     currentEndingId = currentEndingId,
     settings = settings,
     gameTitle = gameTitle,
+    currentTurn = currentTurn,
 )

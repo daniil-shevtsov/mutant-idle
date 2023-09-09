@@ -405,10 +405,13 @@ fun handleSelectableClicked(
     state: GameState,
     viewAction: MainViewAction.SelectableClicked
 ): GameState {
-    val clickedSelectable = state.selectables.find { it.id == viewAction.id }
-    return when (clickedSelectable) {
+    return when (val clickedSelectable = state.selectables.find { it.id == viewAction.id }) {
         is Upgrade -> handleUpgradeSelected(state, clickedSelectable)
-        is Action -> handleActionClicked(state, clickedSelectable)
+        is Action -> {
+            val newState = handleActionClicked(state, clickedSelectable)
+            newState.copy(currentTurn = newState.currentTurn.copy(count = newState.currentTurn.count + 1))
+        }
+
         is Location -> handleLocationSelected(state, clickedSelectable)
         else -> state
     }

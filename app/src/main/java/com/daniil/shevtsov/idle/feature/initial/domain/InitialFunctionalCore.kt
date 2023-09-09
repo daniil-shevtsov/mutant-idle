@@ -5,6 +5,7 @@ import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.core.presentation.formatting.formatEnumName
 import com.daniil.shevtsov.idle.feature.action.domain.createAllActions
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
+import com.daniil.shevtsov.idle.feature.coreshell.domain.TurnInfo
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTab
 import com.daniil.shevtsov.idle.feature.drawer.presentation.DrawerTabId
 import com.daniil.shevtsov.idle.feature.flavor.createFlavors
@@ -100,6 +101,7 @@ fun createInitialGameState(): GameState {
             selectedCategoryId = 0L,
         ),
         gameTitle = MenuTitleState.Loading,
+        currentTurn = TurnInfo(count = 1),
     )
 }
 
