@@ -262,6 +262,7 @@ private fun handleActionClicked(
             }
         }
             .addPlotEntry(selectedAction)
+            .let { newState -> finishTurn(oldState = state, newState = newState) }
     } else {
         state
     }
@@ -386,11 +387,7 @@ fun handleSelectableClicked(
 ): GameState {
     return when (val clickedSelectable = state.selectables.find { it.id == viewAction.id }) {
         is Upgrade -> handleUpgradeSelected(state, clickedSelectable)
-        is Action -> {
-            val newState = handleActionClicked(state, clickedSelectable)
-            finishTurn(oldState = state, newState = newState)
-        }
-
+        is Action -> handleActionClicked(state, clickedSelectable)
         is Location -> handleLocationSelected(state, clickedSelectable)
         else -> state
     }

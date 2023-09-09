@@ -11,6 +11,9 @@ import com.daniil.shevtsov.idle.feature.coreshell.domain.turnInfo
 import com.daniil.shevtsov.idle.feature.initial.domain.createInitialGameState
 import com.daniil.shevtsov.idle.feature.location.domain.location
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
+import com.daniil.shevtsov.idle.feature.resource.domain.ResourceKey
+import com.daniil.shevtsov.idle.feature.resource.domain.resource
+import com.daniil.shevtsov.idle.feature.resource.domain.resourceChanges
 import com.daniil.shevtsov.idle.feature.upgrade.domain.upgrade
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test
@@ -41,6 +44,28 @@ class TurnTest {
             .prop(GameState::currentTurn)
             .prop(TurnInfo::count)
             .isEqualTo(2)
+    }
+
+    @Test
+    fun `should not finish turn when selected unavailable action`() = runBlockingTest {
+        val newState = mainFunctionalCore(
+            state = gameState(
+                currentTurn = turnInfo(count = 1),
+                actions = listOf(
+                    action(
+                        id = 0L,
+                        resourceChanges = resourceChanges(ResourceKey.Blood to -10.0)
+                    )
+                ),
+                resources = listOf(resource(key = ResourceKey.Blood, value = 0.0))
+            ),
+            viewAction = MainViewAction.SelectableClicked(id = 0L),
+        )
+
+        assertThat(newState)
+            .prop(GameState::currentTurn)
+            .prop(TurnInfo::count)
+            .isEqualTo(1)
     }
 
     @Test
