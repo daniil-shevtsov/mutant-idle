@@ -236,17 +236,6 @@ private fun handleActionClicked(
         mainRatiokey = state.player.mainRatioKey,
     )
 
-    if (updatedRatios.suspicion() > 0.54) {
-        if (updatedResources.none { it.key == ResourceKey.Detective && it.value > 0.0 }) {
-            updatedResources = updatedResources.map { resource ->
-                when (resource.key) {
-                    ResourceKey.Detective -> resource.copy(value = resource.value + 1.0)
-                    else -> resource
-                }
-            }
-        }
-    }
-
     val detectives = state.resources.find { it.key == ResourceKey.Detective && it.value > 0.0 }
     if (detectives != null) {
         updatedRatios = updatedRatios.map { ratio ->
@@ -409,10 +398,30 @@ fun handleSelectableClicked(
         is Upgrade -> handleUpgradeSelected(state, clickedSelectable)
         is Action -> {
             val newState = handleActionClicked(state, clickedSelectable)
-            newState.copy(currentTurn = newState.currentTurn.copy(count = newState.currentTurn.count + 1))
+            finishTurn(newState)
         }
 
         is Location -> handleLocationSelected(state, clickedSelectable)
         else -> state
     }
+}
+
+private fun finishTurn(state: GameState): GameState {
+    val updatedRatios = state.ratios
+    var updatedResources = state.resources
+    if (updatedRatios.suspicion() > 0.54) {
+        if (updatedResources.none { it.key == ResourceKey.Detective && it.value > 0.0 }) {
+            updatedResources = updatedResources.map { resource ->
+                when (resource.key) {
+                    ResourceKey.Detective -> resource.copy(value = resource.value + 1.0)
+                    else -> resource
+                }
+            }
+        }
+    }
+
+    return state.copy(
+        currentTurn = state.currentTurn.copy(count = state.currentTurn.count + 1),
+        resources = updatedResources,
+    )
 }
