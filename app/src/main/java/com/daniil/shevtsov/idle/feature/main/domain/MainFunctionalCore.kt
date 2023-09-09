@@ -224,7 +224,7 @@ private fun handleActionClicked(
         currentResources = state.resources,
         resourceChanges = selectedAction.resourceChanges,
     )
-    var updatedResources = applyResourceChanges(
+    val updatedResources = applyResourceChanges(
         currentResources = state.resources,
         resourceChanges = selectedAction.resourceChanges
     )
@@ -398,7 +398,7 @@ fun handleSelectableClicked(
         is Upgrade -> handleUpgradeSelected(state, clickedSelectable)
         is Action -> {
             val newState = handleActionClicked(state, clickedSelectable)
-            finishTurn(newState)
+            finishTurn(oldState = state, newState = newState)
         }
 
         is Location -> handleLocationSelected(state, clickedSelectable)
@@ -406,9 +406,12 @@ fun handleSelectableClicked(
     }
 }
 
-private fun finishTurn(state: GameState): GameState {
-    val updatedRatios = state.ratios
-    var updatedResources = state.resources
+private fun finishTurn(
+    oldState: GameState,
+    newState: GameState,
+): GameState {
+    val updatedRatios = newState.ratios
+    var updatedResources = newState.resources
     if (updatedRatios.suspicion() > 0.54) {
         if (updatedResources.none { it.key == ResourceKey.Detective && it.value > 0.0 }) {
             updatedResources = updatedResources.map { resource ->
@@ -420,8 +423,8 @@ private fun finishTurn(state: GameState): GameState {
         }
     }
 
-    return state.copy(
-        currentTurn = state.currentTurn.copy(count = state.currentTurn.count + 1),
+    return newState.copy(
+        currentTurn = newState.currentTurn.copy(count = newState.currentTurn.count + 1),
         resources = updatedResources,
     )
 }
