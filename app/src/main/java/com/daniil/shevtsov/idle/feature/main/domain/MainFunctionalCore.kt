@@ -236,16 +236,6 @@ private fun handleActionClicked(
         mainRatiokey = state.player.mainRatioKey,
     )
 
-    val detectives = state.resources.find { it.key == ResourceKey.Detective && it.value > 0.0 }
-    if (detectives != null) {
-        updatedRatios = updatedRatios.map { ratio ->
-            when (ratio.key) {
-                RatioKey.Suspicion -> ratio.copy(value = ratio.value + state.balanceConfig.detectiveSuspicionMultiplier * detectives.value)
-                else -> ratio
-            }
-        }
-    }
-
     return if (!hasInvalidChanges) {
         state.copy(
             ratios = updatedRatios,
@@ -410,7 +400,7 @@ private fun finishTurn(
     oldState: GameState,
     newState: GameState,
 ): GameState {
-    val updatedRatios = newState.ratios
+    var updatedRatios = newState.ratios
     var updatedResources = newState.resources
     if (updatedRatios.suspicion() > 0.54) {
         if (updatedResources.none { it.key == ResourceKey.Detective && it.value > 0.0 }) {
@@ -423,8 +413,19 @@ private fun finishTurn(
         }
     }
 
+    val detectives = oldState.resources.find { it.key == ResourceKey.Detective && it.value > 0.0 }
+    if (detectives != null) {
+        updatedRatios = updatedRatios.map { ratio ->
+            when (ratio.key) {
+                RatioKey.Suspicion -> ratio.copy(value = ratio.value + oldState.balanceConfig.detectiveSuspicionMultiplier * detectives.value)
+                else -> ratio
+            }
+        }
+    }
+
     return newState.copy(
         currentTurn = newState.currentTurn.copy(count = newState.currentTurn.count + 1),
         resources = updatedResources,
+        ratios = updatedRatios,
     )
 }
