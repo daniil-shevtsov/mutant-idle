@@ -4,10 +4,10 @@ import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 
-fun mapGameStartViewState(
+fun mapCharacterSelectionViewState(
     state: GameState
-): GameStartViewState {
-    return GameStartViewState(
+): CharacterSelectionViewState {
+    return CharacterSelectionViewState(
         title = "Mutant Idle",
         description = "Choose species and job",
         speciesSelection = state.availableTraits

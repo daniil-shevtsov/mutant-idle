@@ -10,18 +10,18 @@ import com.daniil.shevtsov.idle.core.navigation.title
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
 import org.junit.jupiter.api.Test
 
-internal class MenuPresentationFunctionalCoreTest {
+internal class MainMenuPresentationFunctionalCoreTest {
 
     @Test
     fun `should create initial view state`() {
-        val state = mapMenuViewState(
+        val state = mapMainMenuViewState(
             state = gameState(gameTitle = MenuTitleState.Result("Mutant Idle"))
         )
 
         assertThat(state)
             .all {
                 title().isEqualTo("Mutant Idle")
-                prop(MenuViewState::buttons)
+                prop(MainMenuViewState::buttons)
                     .extracting(MenuButtonModel::title)
                     .containsExactly(
                         "Start Game",
@@ -32,14 +32,14 @@ internal class MenuPresentationFunctionalCoreTest {
 
     @Test
     fun `should use another title`() {
-        val state = mapMenuViewState(
+        val state = mapMainMenuViewState(
             state = gameState(gameTitle = MenuTitleState.Result("Misha Idle"))
         )
 
         assertThat(state)
             .all {
                 title().isEqualTo("Misha Idle")
-                prop(MenuViewState::buttons)
+                prop(MainMenuViewState::buttons)
                     .extracting(MenuButtonModel::title)
                     .containsExactly(
                         "Start Game",

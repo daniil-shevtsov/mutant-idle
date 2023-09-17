@@ -18,9 +18,9 @@ import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.protrusive
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
-import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
-import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewState
-import com.daniil.shevtsov.idle.feature.gamestart.presentation.gameStartViewState
+import com.daniil.shevtsov.idle.feature.gamestart.presentation.CharacterSelectionViewAction
+import com.daniil.shevtsov.idle.feature.gamestart.presentation.CharacterSelectionViewState
+import com.daniil.shevtsov.idle.feature.gamestart.presentation.characterSelectionViewState
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 
 @Preview(
@@ -28,9 +28,9 @@ import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
     heightDp = 534,
 )
 @Composable
-fun GameStartScreenPreview() {
-    GameStartScreen(
-        state = gameStartViewState(
+fun CharacterSelectionScreenPreview() {
+    CharacterSelectionScreen(
+        state = characterSelectionViewState(
             title = "MUTANT IDLE",
             description = "Choose Species",
             speciesSelection = speciesSelectionComposeStub(),
@@ -40,9 +40,9 @@ fun GameStartScreenPreview() {
 }
 
 @Composable
-fun GameStartScreen(
-    state: GameStartViewState,
-    onAction: (GameStartViewAction) -> Unit,
+fun CharacterSelectionScreen(
+    state: CharacterSelectionViewState,
+    onAction: (CharacterSelectionViewAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -67,7 +67,7 @@ fun GameStartScreen(
             selection = state.speciesSelection,
             onItemClicked = { id ->
                 onAction(
-                    GameStartViewAction.TraitSelected(
+                    CharacterSelectionViewAction.TraitSelected(
                         traitId = TraitId.Species,
                         id = id,
                     )
@@ -76,7 +76,7 @@ fun GameStartScreen(
         )
         SpeciesSelection(
             selection = state.jobSelection,
-            onItemClicked = { id -> onAction(GameStartViewAction.TraitSelected(TraitId.Job, id)) }
+            onItemClicked = { id -> onAction(CharacterSelectionViewAction.TraitSelected(TraitId.Job, id)) }
         )
         Box(
             modifier = modifier
@@ -91,7 +91,7 @@ fun GameStartScreen(
             Text(
                 modifier = modifier
                     .clickable {
-                        onAction(GameStartViewAction.StartGame)
+                        onAction(CharacterSelectionViewAction.StartGame)
                     }
                     .background(AppTheme.colors.background)
                     .protrusive(

@@ -9,7 +9,7 @@ import com.daniil.shevtsov.idle.core.navigation.MishaEffect
 import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
-import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
+import com.daniil.shevtsov.idle.feature.gamestart.presentation.CharacterSelectionViewAction
 import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import com.daniil.shevtsov.idle.feature.player.core.domain.assertSpeciesSelected
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
@@ -19,7 +19,7 @@ import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.unlocks.domain.unlockState
 import org.junit.jupiter.api.Test
 
-internal class GameStartFunctionalCoreTest {
+internal class CharacterSelectionFunctionalCoreTest {
 
     @Test
     fun `should not do anything when locked trait clicked`() {
@@ -42,9 +42,9 @@ internal class GameStartFunctionalCoreTest {
             gameTitle = MenuTitleState.Result("Mutant Idle")
         )
 
-        val newState = gameStartFunctionalCore(
+        val newState = characterSelectionFunctionalCore(
             state = initialState,
-            viewAction = GameStartViewAction.TraitSelected(
+            viewAction = CharacterSelectionViewAction.TraitSelected(
                 traitId = TraitId.Species,
                 id = newTrait.id
             )
@@ -101,9 +101,9 @@ internal class GameStartFunctionalCoreTest {
             gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
-        val newState = gameStartFunctionalCore(
+        val newState = characterSelectionFunctionalCore(
             state = initialState,
-            viewAction = GameStartViewAction.TraitSelected(
+            viewAction = CharacterSelectionViewAction.TraitSelected(
                 traitId = TraitId.Species,
                 id = newSpecies.id
             )
@@ -117,9 +117,9 @@ internal class GameStartFunctionalCoreTest {
 
     @Test
     fun `should open main screen when start game clicked`() {
-        val newState = gameStartFunctionalCore(
+        val newState = characterSelectionFunctionalCore(
             state = gameState(gameTitle = MenuTitleState.Result("Mutant Idle")),
-            viewAction = GameStartViewAction.StartGame,
+            viewAction = CharacterSelectionViewAction.StartGame,
         )
 
         assertThat(newState)
@@ -130,9 +130,9 @@ internal class GameStartFunctionalCoreTest {
 
     @Test
     fun `should create request effect when requested title`() {
-        val newState = gameStartFunctionalCore(
+        val newState = characterSelectionFunctionalCore(
             state = gameState(gameTitle = MenuTitleState.Loading),
-            viewAction = GameStartViewAction.Init,
+            viewAction = CharacterSelectionViewAction.Init,
         )
 
         assertThat(newState)
@@ -142,9 +142,9 @@ internal class GameStartFunctionalCoreTest {
 
     @Test
     fun `should update menu title when received title from server`() {
-        val newState = gameStartFunctionalCore(
+        val newState = characterSelectionFunctionalCore(
             state = gameState(),
-            viewAction = GameStartViewAction.TitleReceived(title = "Lol Kek"),
+            viewAction = CharacterSelectionViewAction.TitleReceived(title = "Lol Kek"),
         )
 
         assertThat(newState)

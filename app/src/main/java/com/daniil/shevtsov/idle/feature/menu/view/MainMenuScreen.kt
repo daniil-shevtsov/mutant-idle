@@ -16,23 +16,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.widgets.CavityButton
+import com.daniil.shevtsov.idle.feature.menu.presentation.MainMenuViewState
 import com.daniil.shevtsov.idle.feature.menu.presentation.MenuButtonModel
 import com.daniil.shevtsov.idle.feature.menu.presentation.MenuId
 import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleViewState
-import com.daniil.shevtsov.idle.feature.menu.presentation.MenuViewState
 import com.daniil.shevtsov.idle.feature.menu.presentation.menuButtonModel
 import kotlinx.collections.immutable.persistentListOf
 
 @Preview(heightDp = 500)
 @Composable
-fun MenuScreenPreview() {
+fun MainMenuPreview() {
     listOf(
         MenuTitleViewState.Loading,
         MenuTitleViewState.Result("Mutant Idle"),
         MenuTitleViewState.Error,
     ).forEach { titleState ->
         Column {
-            MenuScreen(
+            MainMenuScreen(
                 onClick = {},
                 state = menuViewStateComposeStub().copy(title = titleState)
             )
@@ -61,8 +61,8 @@ fun GameTitle(
 }
 
 @Composable
-fun MenuScreen(
-    state: MenuViewState,
+fun MainMenuScreen(
+    state: MainMenuViewState,
     onClick: (menuId: MenuId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -109,7 +109,7 @@ private fun MenuButton(
     )
 }
 
-private fun menuViewStateComposeStub() = MenuViewState(
+private fun menuViewStateComposeStub() = MainMenuViewState(
     title = MenuTitleViewState.Result("Mutant Idle"),
     buttons = persistentListOf(
         menuButtonModel(title = "Start Game"),

@@ -18,13 +18,13 @@ import com.daniil.shevtsov.idle.feature.player.trait.domain.playerTrait
 import com.daniil.shevtsov.idle.feature.unlocks.domain.unlockState
 import org.junit.jupiter.api.Test
 
-internal class GameStartPresentationTest {
+internal class GameCharacterSelectionPresentationTest {
 
     @Test
     fun `should show title initially`() {
         val state = gameState(gameTitle = MenuTitleState.Result("Mutant Idle"))
 
-        val viewState = mapGameStartViewState(state = state)
+        val viewState = mapCharacterSelectionViewState(state = state)
 
         assertThat(viewState)
             .isNotNull()
@@ -42,10 +42,10 @@ internal class GameStartPresentationTest {
             gameTitle = MenuTitleState.Result("Mutant Idle")
         )
 
-        val viewState = mapGameStartViewState(state = state)
+        val viewState = mapCharacterSelectionViewState(state = state)
 
         assertThat(viewState)
-            .prop(GameStartViewState::speciesSelection)
+            .prop(CharacterSelectionViewState::speciesSelection)
             .all {
                 index(0).all {
                     prop(TraitSelectionItem::title).isEqualTo(species1.title)
@@ -80,10 +80,10 @@ internal class GameStartPresentationTest {
             ),
             gameTitle = MenuTitleState.Result("Mutant Idle")
         )
-        val viewState = mapGameStartViewState(state)
+        val viewState = mapCharacterSelectionViewState(state)
 
         assertThat(viewState)
-            .prop(GameStartViewState::speciesSelection)
+            .prop(CharacterSelectionViewState::speciesSelection)
             .extracting(TraitSelectionItem::title, TraitSelectionItem::isUnlocked)
             .containsExactly(
                 unlockedSpecies.title to true,
@@ -110,10 +110,10 @@ internal class GameStartPresentationTest {
             gameTitle = MenuTitleState.Result("Mutant Idle"),
         )
 
-        val viewState = mapGameStartViewState(state = state)
+        val viewState = mapCharacterSelectionViewState(state = state)
 
         assertThat(viewState)
-            .prop(GameStartViewState::speciesSelection)
+            .prop(CharacterSelectionViewState::speciesSelection)
             .extracting(TraitSelectionItem::title, TraitSelectionItem::isSelected)
             .containsExactly(
                 notSelectedSpecies.title to false,
@@ -133,10 +133,10 @@ internal class GameStartPresentationTest {
             gameTitle = MenuTitleState.Result("Mutant Idle")
         )
 
-        val viewState = mapGameStartViewState(state = state)
+        val viewState = mapCharacterSelectionViewState(state = state)
 
         assertThat(viewState)
-            .prop(GameStartViewState::jobSelection)
+            .prop(CharacterSelectionViewState::jobSelection)
             .all {
                 index(0).all {
                     prop(TraitSelectionItem::title).isEqualTo(job1.title)
@@ -169,10 +169,10 @@ internal class GameStartPresentationTest {
             ),
             gameTitle = MenuTitleState.Result("Mutant Idle")
         )
-        val viewState = mapGameStartViewState(state)
+        val viewState = mapCharacterSelectionViewState(state)
 
         assertThat(viewState)
-            .prop(GameStartViewState::jobSelection)
+            .prop(CharacterSelectionViewState::jobSelection)
             .extracting(TraitSelectionItem::title, TraitSelectionItem::isUnlocked)
             .containsExactly(
                 unlockedJob.title to true,
@@ -197,10 +197,10 @@ internal class GameStartPresentationTest {
             gameTitle = MenuTitleState.Result("Mutant Idle")
         )
 
-        val viewState = mapGameStartViewState(state = state)
+        val viewState = mapCharacterSelectionViewState(state = state)
 
         assertThat(viewState)
-            .prop(GameStartViewState::jobSelection)
+            .prop(CharacterSelectionViewState::jobSelection)
             .extracting(TraitSelectionItem::title, TraitSelectionItem::isSelected)
             .containsExactly(
                 notSelectedJob.title to false,

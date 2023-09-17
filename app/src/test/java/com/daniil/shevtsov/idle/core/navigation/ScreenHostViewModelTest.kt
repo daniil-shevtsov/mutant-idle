@@ -9,14 +9,14 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
 import assertk.assertions.prop
 import com.daniil.shevtsov.idle.MainCoroutineExtension
-import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
+import com.daniil.shevtsov.idle.feature.gamestart.presentation.CharacterSelectionViewAction
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
 import com.daniil.shevtsov.idle.feature.menu.domain.GameTitleRepository
 import com.daniil.shevtsov.idle.feature.menu.domain.GetGameTitleUseCase
+import com.daniil.shevtsov.idle.feature.menu.presentation.MainMenuViewState
 import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleViewState
-import com.daniil.shevtsov.idle.feature.menu.presentation.MenuViewState
 import com.daniil.shevtsov.idle.feature.player.species.domain.Species
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -56,8 +56,8 @@ class ScreenHostViewModelTest {
                 .all {
                     prop(ScreenHostViewState::speciesId).isEqualTo(Species.Devourer.id)
                     prop(ScreenHostViewState::contentState)
-                        .isInstanceOf(ScreenContentViewState.Menu::class)
-                        .prop(ScreenContentViewState.Menu::state)
+                        .isInstanceOf(ScreenContentViewState.MainMenu::class)
+                        .prop(ScreenContentViewState.MainMenu::state)
                         .all {
                             titleIsLoading()
                         }
@@ -70,15 +70,15 @@ class ScreenHostViewModelTest {
         viewModel.state.test {
             assertThat(awaitItem())
                 .prop(ScreenHostViewState::contentState)
-                .isInstanceOf(ScreenContentViewState.Menu::class)
-                .prop(ScreenContentViewState.Menu::state)
+                .isInstanceOf(ScreenContentViewState.MainMenu::class)
+                .prop(ScreenContentViewState.MainMenu::state)
                 .titleIsLoading()
 
             repository.sendResult("Server Title")
             assertThat(awaitItem())
                 .prop(ScreenHostViewState::contentState)
-                .isInstanceOf(ScreenContentViewState.Menu::class)
-                .prop(ScreenContentViewState.Menu::state)
+                .isInstanceOf(ScreenContentViewState.MainMenu::class)
+                .prop(ScreenContentViewState.MainMenu::state)
                 .title()
                 .isEqualTo("Server Title")
         }
@@ -87,7 +87,7 @@ class ScreenHostViewModelTest {
     @Test
     fun `should open main screen when start game clicked`() = runBlockingTest {
         viewModel.state.test {
-            viewModel.handleAction(ScreenViewAction.Start(GameStartViewAction.StartGame))
+            viewModel.handleAction(ScreenViewAction.CharacterSelection(CharacterSelectionViewAction.StartGame))
 
             assertThat(expectMostRecentItem())
                 .prop(ScreenHostViewState::contentState)
@@ -105,10 +105,10 @@ class ScreenHostViewModelTest {
     }
 }
 
-fun Assert<MenuViewState>.titleIsLoading() =
-    prop(MenuViewState::title).isEqualTo(MenuTitleViewState.Loading)
+fun Assert<MainMenuViewState>.titleIsLoading() =
+    prop(MainMenuViewState::title).isEqualTo(MenuTitleViewState.Loading)
 
-fun Assert<MenuViewState>.title(): Assert<String> = prop(MenuViewState::title)
+fun Assert<MainMenuViewState>.title(): Assert<String> = prop(MainMenuViewState::title)
     .isInstanceOf(MenuTitleViewState.Result::class)
     .prop(MenuTitleViewState.Result::text)
 

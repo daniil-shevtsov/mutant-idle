@@ -13,7 +13,7 @@ import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.menu.presentation.MenuId
 import org.junit.jupiter.api.Test
 
-class MenuFunctionalCoreTest {
+class MainMenuFunctionalCoreTest {
 
     @Test
     fun `should start game when start game button clicked`() {

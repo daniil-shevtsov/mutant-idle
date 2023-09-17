@@ -3,7 +3,7 @@ package com.daniil.shevtsov.idle.feature.gamestart.domain
 import com.daniil.shevtsov.idle.core.navigation.MishaEffect
 import com.daniil.shevtsov.idle.core.navigation.Screen
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
-import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
+import com.daniil.shevtsov.idle.feature.gamestart.presentation.CharacterSelectionViewAction
 import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import com.daniil.shevtsov.idle.feature.player.core.domain.PlayerViewAction
 import com.daniil.shevtsov.idle.feature.player.core.domain.playerFunctionalCore
@@ -16,27 +16,27 @@ fun functionalCoreResult(
     effects: List<MishaEffect> = emptyList()
 ): FunctionalCoreResult = state to effects
 
-fun gameStartFunctionalCore(
+fun characterSelectionFunctionalCore(
     state: GameState,
-    viewAction: GameStartViewAction,
+    viewAction: CharacterSelectionViewAction,
 ): FunctionalCoreResult {
     return when (viewAction) {
-        is GameStartViewAction.Init -> handleTitleRequested(
+        is CharacterSelectionViewAction.Init -> handleTitleRequested(
             state = state,
             viewAction = viewAction,
         )
 
-        is GameStartViewAction.StartGame -> handleStartGame(
+        is CharacterSelectionViewAction.StartGame -> handleStartGame(
             state = state,
             viewAction = viewAction,
         ) to emptyList()
 
-        is GameStartViewAction.TraitSelected -> handleTraitSelected(
+        is CharacterSelectionViewAction.TraitSelected -> handleTraitSelected(
             state = state,
             viewAction = viewAction,
         ) to emptyList()
 
-        is GameStartViewAction.TitleReceived -> handleResultReceived(
+        is CharacterSelectionViewAction.TitleReceived -> handleResultReceived(
             state = state,
             viewAction = viewAction,
         )
@@ -45,7 +45,7 @@ fun gameStartFunctionalCore(
 
 fun handleResultReceived(
     state: GameState,
-    viewAction: GameStartViewAction.TitleReceived
+    viewAction: CharacterSelectionViewAction.TitleReceived
 ): FunctionalCoreResult {
     return functionalCoreResult(
         state = state.copy(
@@ -56,14 +56,14 @@ fun handleResultReceived(
 
 fun handleTitleRequested(
     state: GameState,
-    viewAction: GameStartViewAction.Init
+    viewAction: CharacterSelectionViewAction.Init
 ): FunctionalCoreResult {
     return state to listOf(MishaEffect.RequestTitleFromServer)
 }
 
 private fun handleTraitSelected(
     state: GameState,
-    viewAction: GameStartViewAction.TraitSelected,
+    viewAction: CharacterSelectionViewAction.TraitSelected,
 ): GameState {
     val newTrait =
         state.availableTraits.find { it.traitId == viewAction.traitId && it.id == viewAction.id }!!
@@ -85,7 +85,7 @@ private fun handleTraitSelected(
 
 fun handleStartGame(
     state: GameState,
-    viewAction: GameStartViewAction.StartGame
+    viewAction: CharacterSelectionViewAction.StartGame
 ): GameState {
     return state.copy(
         currentScreen = Screen.Main,

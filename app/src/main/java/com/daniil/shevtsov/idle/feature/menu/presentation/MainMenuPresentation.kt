@@ -3,10 +3,10 @@ package com.daniil.shevtsov.idle.feature.menu.presentation
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import kotlinx.collections.immutable.persistentListOf
 
-fun mapMenuViewState(
+fun mapMainMenuViewState(
     state: GameState
-): MenuViewState {
-    return MenuViewState(
+): MainMenuViewState {
+    return MainMenuViewState(
         title = state.gameTitle.toViewState(),
         buttons = persistentListOf(
             MenuButtonModel(id = MenuId.StartGame, title = "Start Game"),

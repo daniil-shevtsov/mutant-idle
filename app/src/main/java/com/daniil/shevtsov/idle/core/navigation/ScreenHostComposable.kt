@@ -12,11 +12,11 @@ import androidx.compose.ui.Modifier
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.theme.chooseThemeForId
 import com.daniil.shevtsov.idle.feature.gamefinish.view.FinishedGameScreen
-import com.daniil.shevtsov.idle.feature.gamestart.view.GameStartScreen
+import com.daniil.shevtsov.idle.feature.gamestart.view.CharacterSelectionScreen
 import com.daniil.shevtsov.idle.feature.main.MainDrawer
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.main.view.MainScreen
-import com.daniil.shevtsov.idle.feature.menu.view.MenuScreen
+import com.daniil.shevtsov.idle.feature.menu.view.MainMenuScreen
 import com.daniil.shevtsov.idle.feature.settings.view.SettingsScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -55,9 +55,9 @@ fun ScreenHostComposable(
             },
             content = {
                 when (val contentViewState = delegatedViewState.contentState) {
-                    is ScreenContentViewState.Menu -> {
+                    is ScreenContentViewState.MainMenu -> {
 //                        SpikeTagScreen(modifier = modifier.fillMaxSize())
-                        MenuScreen(
+                        MainMenuScreen(
                             state = contentViewState.state,
                             onClick = { menuId ->
                                 viewModel.handleAction(
@@ -71,12 +71,12 @@ fun ScreenHostComposable(
                     }
 
                     is ScreenContentViewState.GameStart -> {
-                        GameStartScreen(
+                        CharacterSelectionScreen(
                             state = contentViewState.state,
                             modifier = modifier,
                             onAction = { action ->
                                 viewModel.handleAction(
-                                    ScreenViewAction.Start(
+                                    ScreenViewAction.CharacterSelection(
                                         action
                                     )
                                 )

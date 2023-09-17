@@ -2,7 +2,7 @@ package com.daniil.shevtsov.idle.core.navigation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.daniil.shevtsov.idle.feature.gamestart.presentation.GameStartViewAction
+import com.daniil.shevtsov.idle.feature.gamestart.presentation.CharacterSelectionViewAction
 import com.daniil.shevtsov.idle.feature.main.data.MainImperativeShell
 import com.daniil.shevtsov.idle.feature.menu.domain.GetGameTitleUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -27,7 +27,7 @@ class ScreenHostViewModel @Inject constructor(
 
     init {
         viewActionFlow
-            .onStart { emit(ScreenViewAction.Start(GameStartViewAction.Init)) }
+            .onStart { emit(ScreenViewAction.CharacterSelection(CharacterSelectionViewAction.Init)) }
             .onEach { viewAction ->
                 val (newState, effects) = screenFunctionalCore(
                     state = imperativeShell.getState(),
@@ -61,11 +61,11 @@ class ScreenHostViewModel @Inject constructor(
     private suspend fun requestTitleFromServer() {
         val titleFromServer = getGameTitle()
 
-        val action = GameStartViewAction.TitleReceived(title = titleFromServer)
+        val action = CharacterSelectionViewAction.TitleReceived(title = titleFromServer)
         handleAction(gameStartAction(action))
     }
 
-    private fun gameStartAction(action: GameStartViewAction) = ScreenViewAction.Start(action)
+    private fun gameStartAction(action: CharacterSelectionViewAction) = ScreenViewAction.CharacterSelection(action)
 
     fun handleAction(action: ScreenViewAction) {
         viewModelScope.launch {

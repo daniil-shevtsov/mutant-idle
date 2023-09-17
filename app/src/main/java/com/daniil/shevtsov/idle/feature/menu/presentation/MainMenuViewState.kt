@@ -2,7 +2,7 @@ package com.daniil.shevtsov.idle.feature.menu.presentation
 
 import kotlinx.collections.immutable.ImmutableList
 
-data class MenuViewState(
+data class MainMenuViewState(
     val title: MenuTitleViewState,
     val buttons: ImmutableList<MenuButtonModel>,
 )
