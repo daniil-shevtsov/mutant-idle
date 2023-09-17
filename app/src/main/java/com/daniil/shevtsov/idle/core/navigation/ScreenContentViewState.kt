@@ -10,7 +10,7 @@ sealed class ScreenContentViewState {
     object Loading : ScreenContentViewState()
     data class MainMenu(val state: MainMenuViewState) : ScreenContentViewState()
     data class Settings(val state: SettingsViewState) : ScreenContentViewState()
-    data class GameStart(val state: CharacterSelectionViewState) : ScreenContentViewState()
+    data class CharacterSelection(val state: CharacterSelectionViewState) : ScreenContentViewState()
     data class Main(val state: MainViewState) : ScreenContentViewState()
     data class FinishedGame(val state: FinishedGameViewState) : ScreenContentViewState()
 }

@@ -8,6 +8,6 @@ sealed class ScreenViewAction {
     data class Drawer(val action: DrawerViewAction) : ScreenViewAction()
 
     data class CharacterSelection(val action: CharacterSelectionViewAction) : ScreenViewAction()
-    data class General(val action: GeneralViewAction) : ScreenViewAction()
     data class Main(val action: MainViewAction) : ScreenViewAction()
+    data class General(val action: GeneralViewAction) : ScreenViewAction()
 }

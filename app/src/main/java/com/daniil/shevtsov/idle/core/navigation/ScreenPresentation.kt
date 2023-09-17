@@ -20,7 +20,7 @@ fun screenPresentationFunctionalCore(
     val contentState = when (state.currentScreen) {
         Screen.Menu -> ScreenContentViewState.MainMenu(mapMainMenuViewState(state))
         Screen.Settings -> ScreenContentViewState.Settings(mapSettingsViewState(state))
-        Screen.GameStart -> ScreenContentViewState.GameStart(mapCharacterSelectionViewState(state))
+        Screen.GameStart -> ScreenContentViewState.CharacterSelection(mapCharacterSelectionViewState(state))
         Screen.Main -> ScreenContentViewState.Main(mapMainViewState(state))
         Screen.FinishedGame -> ScreenContentViewState.FinishedGame(mapFinishedGameViewState(state))
     }

@@ -70,7 +70,7 @@ fun ScreenHostComposable(
                         )
                     }
 
-                    is ScreenContentViewState.GameStart -> {
+                    is ScreenContentViewState.CharacterSelection -> {
                         CharacterSelectionScreen(
                             state = contentViewState.state,
                             modifier = modifier,
