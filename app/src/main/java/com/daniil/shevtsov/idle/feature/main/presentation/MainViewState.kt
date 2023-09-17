@@ -12,12 +12,12 @@ sealed class MainViewState {
 
     data class Success(
         val resources: List<ResourceModel>,
-        val ratios: List<RatioModel> = emptyList(),
+        val ratios: List<RatioModel>,
         val plotEntries: List<PlotEntry>,
         val actionState: ActionsState,
         val locationSelectionViewState: LocationSelectionViewState,
         val shop: UpgradesViewState,
-        val sectionCollapse: Map<SectionKey, Boolean> = mapOf(),
+        val sectionCollapse: Map<SectionKey, Boolean>,
         val turnCount: Int,
     ) : MainViewState()
 }
