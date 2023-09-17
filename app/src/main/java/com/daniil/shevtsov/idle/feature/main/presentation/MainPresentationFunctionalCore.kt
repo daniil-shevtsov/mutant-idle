@@ -130,6 +130,7 @@ private fun createMainViewState(state: GameState): MainViewState {
         plotEntries = plotEntries,
         shop = shop,
         sectionCollapse = sectionCollapse,
+        turnCount = state.currentTurn.count,
     )
 }
 

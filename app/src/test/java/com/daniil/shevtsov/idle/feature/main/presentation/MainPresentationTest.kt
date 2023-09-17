@@ -10,6 +10,7 @@ import com.daniil.shevtsov.idle.feature.action.domain.action
 import com.daniil.shevtsov.idle.feature.action.domain.ratioChanges
 import com.daniil.shevtsov.idle.feature.action.presentation.*
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
+import com.daniil.shevtsov.idle.feature.coreshell.domain.turnInfo
 import com.daniil.shevtsov.idle.feature.location.domain.location
 import com.daniil.shevtsov.idle.feature.location.domain.locationSelectionState
 import com.daniil.shevtsov.idle.feature.location.presentation.LocationModel
@@ -946,6 +947,18 @@ class MainPresentationTest {
             .containsExactly(Icons.ShipRepair)
     }
 
+    @Test
+    fun `should display turn count`() {
+        val viewState = mapMainViewState(
+            gameState(
+                currentTurn = turnInfo(count = 5)
+            )
+        )
+
+        assertThat(viewState)
+            .turnCount()
+            .isEqualTo(5)
+    }
 
     private fun Assert<MainViewState>.extractingPlot() = extractingMainState()
         .prop(MainViewState.Success::plotEntries)
@@ -997,6 +1010,10 @@ class MainPresentationTest {
     private fun Assert<MainViewState>.extractingResourceNameAndValues() =
         extractingResources()
             .extracting(ResourceModel::name, ResourceModel::value)
+
+    private fun Assert<MainViewState>.turnCount() =
+        extractingMainState()
+            .prop(MainViewState.Success::turnCount)
 }
 
 fun Assert<MainViewState>.extractingMainState() =

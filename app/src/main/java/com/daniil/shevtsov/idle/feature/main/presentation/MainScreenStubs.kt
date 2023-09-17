@@ -19,6 +19,7 @@ fun mainViewState(
     upgradeState: UpgradesViewState = upgradeViewState(),
     locationSelectionViewState: LocationSelectionViewState = locationSelectionViewState(),
     sectionCollapse: Map<SectionKey, Boolean> = mapOf(),
+    turnCount: Int = 0,
 ) = MainViewState.Success(
     resources = resources,
     ratios = ratios,
@@ -27,6 +28,7 @@ fun mainViewState(
     locationSelectionViewState = locationSelectionViewState,
     shop = upgradeState,
     sectionCollapse = sectionCollapse,
+    turnCount = turnCount,
 )
 
 fun actionsState(
