@@ -220,6 +220,11 @@ fun ContentBody(
                     .statusBarsHeight()
                     .fillMaxWidth()
             )
+            TurnCounter(
+                turnCount = state.turnCount,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier.height(AppTheme.dimensions.paddingSmall))
             PlotComposable(
                 plotEntries = state.plotEntries,
                 modifier = Modifier
@@ -267,4 +272,14 @@ fun ContentBody(
             }
         }
     }
+}
+
+@Composable
+private fun TurnCounter(modifier: Modifier, turnCount: Int) {
+    Text(
+        modifier = modifier,
+        text = "Current turn: $turnCount",
+        style = AppTheme.typography.title,
+        color = AppTheme.colors.textLight
+    )
 }

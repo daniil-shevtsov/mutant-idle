@@ -18,5 +18,6 @@ sealed class MainViewState {
         val locationSelectionViewState: LocationSelectionViewState,
         val shop: UpgradesViewState,
         val sectionCollapse: Map<SectionKey, Boolean> = mapOf(),
+        val turnCount: Int = 0,
     ) : MainViewState()
 }
