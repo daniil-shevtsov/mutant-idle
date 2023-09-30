@@ -24,50 +24,6 @@ import com.daniil.shevtsov.idle.feature.gamefinish.presentation.endingViewState
 import com.daniil.shevtsov.idle.feature.gamefinish.presentation.previewFinishedGameViewState
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 
-@Preview
-@Composable
-fun FinishedGameScreenPreview() {
-    FinishedGameScreen(
-        state = previewFinishedGameViewState(
-            endingState = endingViewState(
-                title = "You have been captured by the government",
-                description = "They won't let you see sunlight again"
-            ),
-            unlocks = listOf(
-                UnlockModel(
-                    title = "New class: Vampire",
-                    subtitle = "You are a bloodsucking immortal creature",
-                    unlockFeatures = listOf(
-                        UnlockFeatureModel(
-                            title = "Can't be in the sun",
-                            subtitle = "Reduced number of available human actions",
-                        ),
-                        UnlockFeatureModel(
-                            title = "Hypnosis",
-                            subtitle = "Can influence humans and gather familiars"
-                        ),
-                    )
-                ),
-                UnlockModel(
-                    title = "New job: Mortician",
-                    subtitle = "You work in a morgue",
-                    unlockFeatures = listOf(
-                        UnlockFeatureModel(
-                            title = "Corpses access",
-                            subtitle = "People bring them TO YOU",
-                        ),
-                        UnlockFeatureModel(
-                            title = "Solitary job",
-                            subtitle = "People don't pay attention as long as the job gets done"
-                        ),
-                    )
-                ),
-            )
-        ),
-        onAction = {},
-    )
-}
-
 @Composable
 fun FinishedGameScreen(
     state: FinishedGameViewState,
@@ -104,59 +60,11 @@ fun FinishedGameScreen(
 
         Cavity(
             mainColor = AppTheme.colors.background,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
         ) {
-            LazyColumn(
-                contentPadding = PaddingValues(AppTheme.dimensions.paddingMedium),
-                verticalArrangement = spacedBy(AppTheme.dimensions.paddingM),
-            ) {
-                items(state.unlocks) { unlock ->
-                    Column {
-                        Column(
-                            modifier = Modifier
-                                .background(AppTheme.colors.backgroundDark)
-                                .padding(AppTheme.dimensions.paddingSmall)
-                                .fillMaxWidth()
-                        ) {
-                            Text(
-                                text = unlock.title,
-                                style = AppTheme.typography.title,
-                                color = AppTheme.colors.textLight,
-                            )
-                            Text(
-                                text = unlock.subtitle,
-                                color = AppTheme.colors.textLight,
-                                style = AppTheme.typography.subtitle,
-                            )
-                        }
-
-                        Column(
-                            modifier = Modifier
-                                .background(AppTheme.colors.backgroundText)
-                                .padding(AppTheme.dimensions.paddingSmall)
-                                .fillMaxWidth(),
-                            verticalArrangement = spacedBy(AppTheme.dimensions.paddingSmall)
-                        ) {
-                            unlock.unlockFeatures.forEach { feature ->
-                                Column {
-                                    Text(
-                                        text = feature.title,
-                                        style = AppTheme.typography.bodyTitle,
-                                        color = AppTheme.colors.textDark,
-                                    )
-                                    if (feature.subtitle.isNotEmpty()) {
-                                        Text(
-                                            text = feature.subtitle,
-                                            style = AppTheme.typography.body,
-                                            color = AppTheme.colors.textDark,
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            Unlocks(unlocks = state.unlocks, modifier = Modifier)
         }
 
         CavityButton(
@@ -168,3 +76,142 @@ fun FinishedGameScreen(
         )
     }
 }
+
+@Composable
+private fun Unlocks(unlocks: List<UnlockModel>, modifier: Modifier = Modifier) {
+    LazyColumn(
+        contentPadding = PaddingValues(AppTheme.dimensions.paddingMedium),
+        verticalArrangement = spacedBy(AppTheme.dimensions.paddingM),
+        modifier = modifier,
+    ) {
+        items(unlocks) { unlock ->
+            Column {
+                Column(
+                    modifier = Modifier
+                        .background(AppTheme.colors.backgroundDark)
+                        .padding(AppTheme.dimensions.paddingSmall)
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = unlock.title,
+                        style = AppTheme.typography.title,
+                        color = AppTheme.colors.textLight,
+                    )
+                    Text(
+                        text = unlock.subtitle,
+                        color = AppTheme.colors.textLight,
+                        style = AppTheme.typography.subtitle,
+                    )
+                }
+
+                Column(
+                    modifier = Modifier
+                        .background(AppTheme.colors.backgroundText)
+                        .padding(AppTheme.dimensions.paddingSmall)
+                        .fillMaxWidth(),
+                    verticalArrangement = spacedBy(AppTheme.dimensions.paddingSmall)
+                ) {
+                    unlock.unlockFeatures.forEach { feature ->
+                        Column {
+                            Text(
+                                text = feature.title,
+                                style = AppTheme.typography.bodyTitle,
+                                color = AppTheme.colors.textDark,
+                            )
+                            if (feature.subtitle.isNotEmpty()) {
+                                Text(
+                                    text = feature.subtitle,
+                                    style = AppTheme.typography.body,
+                                    color = AppTheme.colors.textDark,
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun FinishedGameScreenPreview() {
+    FinishedGameScreen(
+        state = previewData(),
+        onAction = {},
+    )
+}
+
+@Preview(heightDp = 480)
+@Composable
+fun FinishedGameScreenPreviewSmall() {
+    FinishedGameScreen(
+        state = previewData(),
+        onAction = {},
+    )
+}
+
+private fun previewData() = previewFinishedGameViewState(
+    endingState = endingViewState(
+        title = "You have been captured by the government",
+        description = "They won't let you see sunlight again"
+    ),
+    unlocks = listOf(
+        UnlockModel(
+            title = "New class: Vampire",
+            subtitle = "You are a bloodsucking immortal creature",
+            unlockFeatures = listOf(
+                UnlockFeatureModel(
+                    title = "Can't be in the sun",
+                    subtitle = "Reduced number of available human actions",
+                ),
+                UnlockFeatureModel(
+                    title = "Hypnosis",
+                    subtitle = "Can influence humans and gather familiars"
+                ),
+            )
+        ),
+        UnlockModel(
+            title = "New job: Mortician",
+            subtitle = "You work in a morgue",
+            unlockFeatures = listOf(
+                UnlockFeatureModel(
+                    title = "Corpses access",
+                    subtitle = "People bring them TO YOU",
+                ),
+                UnlockFeatureModel(
+                    title = "Solitary job",
+                    subtitle = "People don't pay attention as long as the job gets done"
+                ),
+            )
+        ),
+        UnlockModel(
+            title = "New class: Vampire",
+            subtitle = "You are a bloodsucking immortal creature",
+            unlockFeatures = listOf(
+                UnlockFeatureModel(
+                    title = "Can't be in the sun",
+                    subtitle = "Reduced number of available human actions",
+                ),
+                UnlockFeatureModel(
+                    title = "Hypnosis",
+                    subtitle = "Can influence humans and gather familiars"
+                ),
+            )
+        ),
+        UnlockModel(
+            title = "New job: Mortician",
+            subtitle = "You work in a morgue",
+            unlockFeatures = listOf(
+                UnlockFeatureModel(
+                    title = "Corpses access",
+                    subtitle = "People bring them TO YOU",
+                ),
+                UnlockFeatureModel(
+                    title = "Solitary job",
+                    subtitle = "People don't pay attention as long as the job gets done"
+                ),
+            )
+        ),
+    )
+)
