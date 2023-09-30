@@ -9,14 +9,13 @@ buildscript {
 
     dependencies {
         // keeping this here to allow AS to automatically update
-        classpath("com.android.tools.build:gradle:7.4.2")
+        classpath("com.android.tools.build:gradle:8.0.2")
 
         with(Deps.Gradle) {
             classpath(kotlin)
             classpath(kotlinSerialization)
             classpath(shadow)
             classpath(kotlinter)
-            classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.3.5")
         }
     }
 }

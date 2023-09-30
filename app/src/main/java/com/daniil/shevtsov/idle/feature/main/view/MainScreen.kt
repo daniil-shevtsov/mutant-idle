@@ -47,7 +47,7 @@ import kotlinx.coroutines.launch
 
 @Preview(
     widthDp = 320,
-    heightDp = 1034,
+    heightDp = 480,
 )
 @Composable
 fun MainPreview() {

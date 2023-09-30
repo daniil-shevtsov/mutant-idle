@@ -1,15 +1,15 @@
 object Versions {
     const val androidMinSdk = 21
-    const val androidCompileSdk = 31
+    const val androidCompileSdk = 34
     const val androidTargetSdk = androidCompileSdk
 
     const val assertk = "0.24"
 
     const val accompanist = "0.20.2"
 
-    const val compose = "1.1.1"
+    const val compose = "1.5.0"
 
-    const val dagger = "2.42"
+    const val dagger = "2.48"
 
     const val jupiter = "5.7.2"
     const val junit = "4.13"
@@ -17,8 +17,8 @@ object Versions {
 
     const val kBigNum = "2.2.0"
 
-    const val kotlin = "1.6.10"
-    const val kotlinCoroutines = "1.5.2-native-mt"
+    const val kotlin = "1.9.0"
+    const val kotlinCoroutines = "1.7.3"
     const val koin = "3.1.1"
     const val kotlinterGradle = "3.4.5"
 

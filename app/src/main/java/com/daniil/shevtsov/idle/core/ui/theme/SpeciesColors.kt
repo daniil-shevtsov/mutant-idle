@@ -2,9 +2,9 @@ package com.daniil.shevtsov.idle.core.ui.theme
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.AbsoluteCutCornerShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material.Text
@@ -35,7 +35,7 @@ fun ThemeColorsPreview() {
     val species = createInitialTraits()
         .filter { it.traitId == TraitId.Species }
     LazyVerticalGrid(
-        cells = GridCells.Fixed(2),
+        columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(AppTheme.dimensions.paddingSmall)
     ) {
         items(species) { trait ->
@@ -72,24 +72,31 @@ fun chooseThemeForId(
         Species.Devourer.id -> AppShapes(
             progressBar = RectangleShape,
         )
+
         Species.Vampire.id -> AppShapes(
             progressBar = CutCornerShape(percent = 50),
         )
+
         Species.Shapeshifter.id -> AppShapes(
             progressBar = RectangleShape,
         )
+
         Species.Parasite.id -> AppShapes(
             progressBar = RectangleShape,
         )
+
         Species.Demon.id -> AppShapes(
             progressBar = RectangleShape,
         )
+
         Species.Alien.id -> AppShapes(
             progressBar = RectangleShape,
         )
+
         Species.Android.id -> AppShapes(
             progressBar = AbsoluteCutCornerShape(6.dp),
         )
+
         else -> defaultShapes()
     }
 

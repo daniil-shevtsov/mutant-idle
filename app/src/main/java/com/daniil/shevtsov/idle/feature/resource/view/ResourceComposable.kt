@@ -121,6 +121,7 @@ fun ResourcePane(
     resources: List<ResourceModel>,
     isCollapsed: Boolean,
     modifier: Modifier = Modifier,
+    alternative: Boolean = false,
     onToggleCollapse: () -> Unit,
 ) {
     Collapsable(
@@ -138,6 +139,9 @@ fun ResourcePane(
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingSmall)
             ) {
+//                FlowRow() {
+//
+//                }
                 Row(
                     modifier = Modifier.horizontalScroll(rememberScrollState()),
                     horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingMedium),
@@ -148,7 +152,8 @@ fun ResourcePane(
                                 columnResources.forEach { resource ->
                                     ResourceRow(
                                         resource = resource,
-                                        modifier = Modifier.fillMaxWidth()
+                                        modifier = Modifier.fillMaxWidth(),
+                                        alternative = alternative,
                                     )
                                 }
                             }
@@ -190,6 +195,7 @@ fun RatioRow(
 fun ResourceRow(
     resource: ResourceModel,
     modifier: Modifier = Modifier,
+    alternative: Boolean = false,
 ) {
     Row(
         modifier = modifier
@@ -202,13 +208,15 @@ fun ResourceRow(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text(text = resource.icon, style = AppTheme.typography.icon)
-            Text(
-                modifier = Modifier,
-                text = resource.name,
-                maxLines = 1,
-                style = AppTheme.typography.title,
-                color = AppTheme.colors.textLight,
-            )
+//            if (!alternative) {
+//                Text(
+//                    modifier = Modifier,
+//                    text = resource.name,
+//                    maxLines = 1,
+//                    style = AppTheme.typography.title,
+//                    color = AppTheme.colors.textLight,
+//                )
+//            }
         }
 
         Text(
@@ -225,7 +233,8 @@ fun ResourceRow(
                 )
                 .background(AppTheme.colors.backgroundText)
                 .padding(AppTheme.dimensions.paddingSmall)
-                .width(IntrinsicSize.Max)
+                .weight(1f)
+                //.width(IntrinsicSize.Max)
         )
     }
 }
