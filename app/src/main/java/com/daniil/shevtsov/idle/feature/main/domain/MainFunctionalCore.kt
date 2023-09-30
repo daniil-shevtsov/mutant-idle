@@ -248,15 +248,34 @@ private fun handleActionClicked(
             val winRatio = state.player.mainRatioKey
             val completedRatios = updatedRatios.filter { it.value >= 1.0 }.map(Ratio::key)
             when {
-                completedRatios.isNotEmpty() -> state.copy(
-                    currentEndingId = when {
+                completedRatios.isNotEmpty() -> {
+                    val endingId = when {
                         completedRatios.contains(winRatio) -> 1L
                         completedRatios.contains(loseRatio) -> 0L
                         else -> null
-                    },
-                    currentScreen = Screen.FinishedGame,
-                    screenStack = emptyList(),
-                )
+                    }
+                    state.copy(
+                        currentEndingId = endingId,
+                        currentScreen = Screen.FinishedGame,
+                        screenStack = emptyList(),
+                        unlockState = state.unlockState.let { unlockState ->
+                            val endingUnlocks =
+                                state.allEndings.find { it.id == endingId }?.unlocks.orEmpty()
+                            val endingUnlockIds = endingUnlocks.map { it.id }.toSet()
+
+                            unlockState.copy(traits = unlockState.traits.toList()
+                                .associate { traitList ->
+                                    traitList.first to traitList.second.toList()
+                                        .associate { (id, isUnlocked) ->
+                                            id to when (id) {
+                                                in endingUnlockIds -> true
+                                                else -> isUnlocked
+                                            }
+                                        }
+                                })
+                        }
+                    )
+                }
 
                 else -> state
             }

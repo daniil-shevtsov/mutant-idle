@@ -2,6 +2,7 @@ package com.daniil.shevtsov.idle.feature.main.domain
 
 import assertk.all
 import assertk.assertThat
+import assertk.assertions.contains
 import assertk.assertions.containsAll
 import assertk.assertions.containsExactly
 import assertk.assertions.extracting
@@ -16,6 +17,8 @@ import com.daniil.shevtsov.idle.feature.action.domain.ratioChanges
 import com.daniil.shevtsov.idle.feature.action.domain.ratioChangesWithTags
 import com.daniil.shevtsov.idle.feature.coreshell.domain.GameState
 import com.daniil.shevtsov.idle.feature.coreshell.domain.gameState
+import com.daniil.shevtsov.idle.feature.gamefinish.domain.ending
+import com.daniil.shevtsov.idle.feature.gamefinish.domain.unlock
 import com.daniil.shevtsov.idle.feature.location.domain.LocationSelectionState
 import com.daniil.shevtsov.idle.feature.location.domain.location
 import com.daniil.shevtsov.idle.feature.location.domain.locationSelectionState
@@ -26,7 +29,9 @@ import com.daniil.shevtsov.idle.feature.main.presentation.sectionState
 import com.daniil.shevtsov.idle.feature.menu.presentation.MenuTitleState
 import com.daniil.shevtsov.idle.feature.player.core.domain.Player
 import com.daniil.shevtsov.idle.feature.player.core.domain.player
+import com.daniil.shevtsov.idle.feature.player.job.domain.playerJob
 import com.daniil.shevtsov.idle.feature.player.species.domain.Species
+import com.daniil.shevtsov.idle.feature.player.species.domain.playerSpecies
 import com.daniil.shevtsov.idle.feature.player.trait.domain.TraitId
 import com.daniil.shevtsov.idle.feature.ratio.domain.Ratio
 import com.daniil.shevtsov.idle.feature.ratio.domain.RatioKey
@@ -40,6 +45,8 @@ import com.daniil.shevtsov.idle.feature.resource.domain.resourceChanges
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.TagRelation
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tag
 import com.daniil.shevtsov.idle.feature.tagsystem.domain.tagRelations
+import com.daniil.shevtsov.idle.feature.unlocks.domain.UnlockState
+import com.daniil.shevtsov.idle.feature.unlocks.domain.unlockState
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrade
 import com.daniil.shevtsov.idle.feature.upgrade.domain.UpgradeStatus
 import com.daniil.shevtsov.idle.feature.upgrade.domain.Upgrades
@@ -480,6 +487,71 @@ class MainFunctionalCoreTest {
                 prop(GameState::currentEndingId).isEqualTo(0L)
                 prop(GameState::currentScreen).isEqualTo(Screen.FinishedGame)
                 prop(GameState::screenStack).isEmpty()
+            }
+    }
+
+    @Test
+    fun `should unlock stuff after getting the ending`() {
+        val lockedJob = playerJob(id = 1L, title = "locked job")
+        val unlockedJob = playerJob(id = 2L, title = "unlocked job")
+
+        val lockedSpecies = playerSpecies(id = 3L, title = "locked species")
+        val unlockedSpecies = playerSpecies(id = 4L, title = "unlocked species")
+        val newState = mainFunctionalCore(
+            state = gameState(
+                actions = listOf(
+                    action(id = 1L, ratioChanges = ratioChanges(RatioKey.Suspicion to 0.05))
+                ),
+                ratios = listOf(
+                    ratio(key = RatioKey.Suspicion, value = 0.95),
+                ),
+                availableTraits = listOf(
+                    lockedJob,
+                    unlockedJob,
+                    lockedSpecies,
+                    unlockedSpecies,
+                ),
+                unlockState = unlockState(
+                    traits = mapOf(
+                        TraitId.Job to mapOf(lockedJob.id to false, unlockedJob.id to false),
+                        TraitId.Species to mapOf(lockedSpecies.id to false, unlockedSpecies.id to false),
+                    )
+                ),
+                currentScreen = Screen.Main,
+                screenStack = listOf(Screen.GameStart),
+                gameTitle = MenuTitleState.Result("Mutant Idle"),
+                allEndings = listOf(
+                    ending(id = 0L, title = "lost", unlocks = listOf(
+                        unlock(id = unlockedJob.id),
+                        unlock(id = unlockedSpecies.id),
+                    ))
+                )
+            ),
+            viewAction = MainViewAction.SelectableClicked(id = 1L)
+        )
+
+        assertThat(newState)
+            .all {
+                prop(GameState::currentEndingId).isEqualTo(0L)
+                prop(GameState::currentScreen).isEqualTo(Screen.FinishedGame)
+                prop(GameState::screenStack).isEmpty()
+                prop(GameState::unlockState)
+                    .all {
+                        prop(UnlockState::traits).all {
+                            contains(
+                                TraitId.Job, mapOf(
+                                    lockedJob.id to false,
+                                    unlockedJob.id to true,
+                                )
+                            )
+                            contains(
+                                TraitId.Species, mapOf(
+                                    lockedSpecies.id to false,
+                                    unlockedSpecies.id to true,
+                                )
+                            )
+                        }
+                    }
             }
     }
 
