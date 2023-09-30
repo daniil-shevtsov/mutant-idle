@@ -1,14 +1,14 @@
+@file:OptIn(ExperimentalLayoutApi::class)
+
 package com.daniil.shevtsov.idle.feature.resource.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
@@ -121,7 +121,6 @@ fun ResourcePane(
     resources: List<ResourceModel>,
     isCollapsed: Boolean,
     modifier: Modifier = Modifier,
-    alternative: Boolean = false,
     onToggleCollapse: () -> Unit,
 ) {
     Collapsable(
@@ -139,25 +138,16 @@ fun ResourcePane(
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingSmall)
             ) {
-//                FlowRow() {
-//
-//                }
-                Row(
-                    modifier = Modifier.horizontalScroll(rememberScrollState()),
-                    horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingMedium),
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingSmall),
+                    verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingSmall),
                 ) {
-                    resources.chunked(3)
-                        .forEach { columnResources ->
-                            Column(modifier = Modifier.width(IntrinsicSize.Max)) {
-                                columnResources.forEach { resource ->
-                                    ResourceRow(
-                                        resource = resource,
-                                        modifier = Modifier.fillMaxWidth(),
-                                        alternative = alternative,
-                                    )
-                                }
-                            }
-                        }
+                    resources.forEach { resource ->
+                        ResourceRow(
+                            resource = resource,
+                            modifier = Modifier,
+                        )
+                    }
                 }
                 Column {
                     Row {
@@ -195,7 +185,6 @@ fun RatioRow(
 fun ResourceRow(
     resource: ResourceModel,
     modifier: Modifier = Modifier,
-    alternative: Boolean = false,
 ) {
     Row(
         modifier = modifier
@@ -203,22 +192,7 @@ fun ResourceRow(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Text(text = resource.icon, style = AppTheme.typography.icon)
-//            if (!alternative) {
-//                Text(
-//                    modifier = Modifier,
-//                    text = resource.name,
-//                    maxLines = 1,
-//                    style = AppTheme.typography.title,
-//                    color = AppTheme.colors.textLight,
-//                )
-//            }
-        }
-
+        Text(text = resource.icon, style = AppTheme.typography.icon)
         Text(
             text = resource.value,
             style = AppTheme.typography.body,
@@ -233,8 +207,6 @@ fun ResourceRow(
                 )
                 .background(AppTheme.colors.backgroundText)
                 .padding(AppTheme.dimensions.paddingSmall)
-                .weight(1f)
-                //.width(IntrinsicSize.Max)
         )
     }
 }
