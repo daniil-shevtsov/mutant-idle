@@ -38,6 +38,7 @@ fun LocationSelectionPreview() {
         ),
         onExpandChange = {},
         onLocationSelected = {},
+        slotBeforeLocation = {},
     )
 }
 
@@ -47,6 +48,7 @@ fun LocationSelection(
     onExpandChange: () -> Unit,
     onLocationSelected: (id: Long) -> Unit,
     modifier: Modifier = Modifier,
+    slotBeforeLocation: @Composable () -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingSmall),
@@ -60,12 +62,7 @@ fun LocationSelection(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Text(
-                modifier = Modifier.weight(1f),
-                text = "Current location:",
-                style = AppTheme.typography.title,
-                color = AppTheme.colors.textLight
-            )
+            slotBeforeLocation()
             Box(modifier = Modifier.weight(1f)) {
                 Text(
                     text = state.selectedLocation.title,

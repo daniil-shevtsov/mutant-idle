@@ -1,9 +1,7 @@
 package com.daniil.shevtsov.idle.feature.main.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,11 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetValue
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material.rememberBottomSheetState
@@ -27,13 +22,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.Icons
-import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.upgradeListPreviewStub
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
 import com.daniil.shevtsov.idle.core.ui.widgets.CollapseButton
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
 import com.daniil.shevtsov.idle.feature.action.view.actionComposeStub
+import com.daniil.shevtsov.idle.feature.location.view.LocationSelection
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewAction
 import com.daniil.shevtsov.idle.feature.main.presentation.MainViewState
 import com.daniil.shevtsov.idle.feature.main.presentation.SectionKey
@@ -233,26 +228,11 @@ fun ContentBody(
                     .height(100.dp)
             )
             Spacer(modifier.height(AppTheme.dimensions.paddingSmall))
-//            LocationSelection(
-//                state = state.locationSelectionViewState,
-//                onExpandChange = { onViewAction(MainViewAction.LocationSelectionExpandChange) },
-//                onLocationSelected = { id -> onViewAction(MainViewAction.SelectableClicked(id)) },
-//            )
-            val onExpandChange = { onViewAction(MainViewAction.LocationSelectionExpandChange) }
-            val onLocationSelected =
-                { id: Long -> onViewAction(MainViewAction.SelectableClicked(id)) }
-            Column(
-                verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingSmall),
-                modifier = modifier
-                    .background(AppTheme.colors.background)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(AppTheme.colors.background),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
+            LocationSelection(
+                state = state.locationSelectionViewState,
+                onExpandChange = { onViewAction(MainViewAction.LocationSelectionExpandChange) },
+                onLocationSelected = { id -> onViewAction(MainViewAction.SelectableClicked(id)) },
+                slotBeforeLocation = {
                     TurnCounter(
                         turnCount = state.turnCount,
                         modifier = Modifier
@@ -263,54 +243,8 @@ fun ContentBody(
                         style = AppTheme.typography.title,
                         color = AppTheme.colors.textLight
                     )
-                    Box(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = state.locationSelectionViewState.selectedLocation.title,
-                            style = AppTheme.typography.body,
-                            color = AppTheme.colors.textDark,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .cavitary(
-                                    lightColor = AppTheme.colors.backgroundLight,
-                                    darkColor = AppTheme.colors.backgroundDark
-                                )
-                                .background(AppTheme.colors.backgroundText)
-                                .clickable(onClick = { onExpandChange() })
-                                .padding(AppTheme.dimensions.paddingSmall)
-                        )
-                        DropdownMenu(
-                            expanded = state.locationSelectionViewState.isExpanded,
-                            modifier = Modifier.wrapContentHeight(),
-                            onDismissRequest = { onExpandChange() }) {
-                            state.locationSelectionViewState.locations.forEach { location ->
-                                DropdownMenuItem(
-                                    modifier = Modifier.background(AppTheme.colors.backgroundText),
-                                    onClick = {
-                                        onLocationSelected(location.id)
-                                        onExpandChange()
-                                    }
-                                ) {
-                                    Text(text = location.title, color = AppTheme.colors.textDark)
-                                }
-                            }
-                        }
-                    }
                 }
-                Text(
-                    text = state.locationSelectionViewState.selectedLocation.subtitle,
-                    style = AppTheme.typography.body,
-                    color = AppTheme.colors.textDark,
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .cavitary(
-                            lightColor = AppTheme.colors.backgroundLight,
-                            darkColor = AppTheme.colors.backgroundDark
-                        )
-                        .background(AppTheme.colors.backgroundText)
-                        .clickable(onClick = { onExpandChange() })
-                        .padding(AppTheme.dimensions.paddingSmall)
-                )
-            }
+            )
             Spacer(modifier.size(AppTheme.dimensions.paddingSmall))
             ResourcePane(
                 ratios = state.ratios,
