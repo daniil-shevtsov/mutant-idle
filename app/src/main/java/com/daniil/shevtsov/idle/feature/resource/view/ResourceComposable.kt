@@ -127,8 +127,8 @@ fun ResourcePane(
         title = "Resources and Ratios",
         isCollapsed = isCollapsed,
         collapsedContent = {
-            Column {
-                ResourceRow(resource = resources[0])
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                ResourceLayout(resources = resources.take(4))
                 RatioRow(ratios[0])
             }
         },
@@ -138,17 +138,7 @@ fun ResourcePane(
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingSmall)
             ) {
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingMedium),
-                    verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingSmall),
-                ) {
-                    resources.forEach { resource ->
-                        ResourceRow(
-                            resource = resource,
-                            modifier = Modifier,
-                        )
-                    }
-                }
+                ResourceLayout(resources = resources)
                 Column {
                     Row {
                         ratios.chunked(2)
@@ -165,6 +155,21 @@ fun ResourcePane(
         },
         onToggleCollapse = onToggleCollapse,
     )
+}
+
+@Composable
+private fun ResourceLayout(resources: List<ResourceModel>) {
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingMedium),
+        verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingSmall),
+    ) {
+        resources.forEach { resource ->
+            ResourceRow(
+                resource = resource,
+                modifier = Modifier,
+            )
+        }
+    }
 }
 
 @Composable
