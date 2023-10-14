@@ -4,6 +4,7 @@ package com.daniil.shevtsov.idle.feature.resource.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -17,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.cavitary
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
@@ -139,7 +139,7 @@ fun ResourcePane(
                 verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingSmall)
             ) {
                 FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingSmall),
+                    horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingMedium),
                     verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.paddingSmall),
                 ) {
                     resources.forEach { resource ->
@@ -190,7 +190,7 @@ fun ResourceRow(
         modifier = modifier
             .background(AppTheme.colors.background),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = spacedBy(AppTheme.dimensions.paddingSmall)
     ) {
         Text(text = resource.icon, style = AppTheme.typography.icon)
         Text(
@@ -200,7 +200,6 @@ fun ResourceRow(
             textAlign = TextAlign.Center,
             maxLines = 1,
             modifier = Modifier
-                .padding(start = 10.dp)
                 .cavitary(
                     lightColor = AppTheme.colors.backgroundLight,
                     darkColor = AppTheme.colors.backgroundDark
