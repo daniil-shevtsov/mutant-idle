@@ -25,6 +25,7 @@ import com.daniil.shevtsov.idle.core.ui.Icons
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 import com.daniil.shevtsov.idle.core.ui.upgradeListPreviewStub
 import com.daniil.shevtsov.idle.core.ui.widgets.Cavity
+import com.daniil.shevtsov.idle.core.ui.widgets.Collapsable
 import com.daniil.shevtsov.idle.core.ui.widgets.CollapseButton
 import com.daniil.shevtsov.idle.feature.action.view.ActionSection
 import com.daniil.shevtsov.idle.feature.action.view.actionComposeStub
@@ -101,6 +102,7 @@ fun MainPreview() {
                 SectionKey.Resources to false,
                 SectionKey.Actions to false,
                 SectionKey.Upgrades to false,
+                SectionKey.Plot to false,
             ),
         ),
         onViewAction = {},
@@ -221,12 +223,30 @@ fun ContentBody(
                     .fillMaxWidth()
             )
             Spacer(modifier.height(AppTheme.dimensions.paddingSmall))
-            PlotComposable(
-                plotEntries = state.plotEntries,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp)
+            Collapsable(
+                title = "Lol",
+                isCollapsed = state.sectionCollapse[SectionKey.Plot] ?: false,
+                collapsedContent = {
+                    PlotComposable(
+                        plotEntries = state.plotEntries,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp)
+                    )
+                },
+                expandedContent = {
+                    PlotComposable(
+                        plotEntries = state.plotEntries,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp)
+                    )
+                },
+                onToggleCollapse = {
+                    onViewAction(MainViewAction.ToggleSectionCollapse(SectionKey.Plot))
+                }
             )
+
             Spacer(modifier.height(AppTheme.dimensions.paddingSmall))
             LocationSelection(
                 state = state.locationSelectionViewState,

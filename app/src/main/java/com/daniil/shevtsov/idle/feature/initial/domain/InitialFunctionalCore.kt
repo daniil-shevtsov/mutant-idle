@@ -127,6 +127,7 @@ private fun createInitialSectionState() = listOf(
     SectionState(key = SectionKey.Resources, isCollapsed = false),
     SectionState(key = SectionKey.Actions, isCollapsed = false),
     SectionState(key = SectionKey.Upgrades, isCollapsed = false),
+    SectionState(key = SectionKey.Plot, isCollapsed = false),
 )
 
 private fun createLocationSelectionState() = LocationSelectionState(
