@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -226,20 +227,11 @@ fun ContentBody(
             Collapsable(
                 title = "Lol",
                 isCollapsed = state.sectionCollapse[SectionKey.Plot] ?: false,
-                collapsedContent = {
+                content = {
                     PlotComposable(
                         plotEntries = state.plotEntries,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp)
-                    )
-                },
-                expandedContent = {
-                    PlotComposable(
-                        plotEntries = state.plotEntries,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(100.dp)
+                            .fillMaxSize()
                     )
                 },
                 onToggleCollapse = {

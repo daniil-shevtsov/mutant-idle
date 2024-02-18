@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 
@@ -22,29 +23,43 @@ import com.daniil.shevtsov.idle.core.ui.theme.AppTheme
 @Preview(heightDp = 400)
 @Composable
 fun CollapsablePreview() {
-    Collapsable(
-        title = "Preview",
-        isCollapsed = false,
-        collapsedContent = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(10.dp)
-                    .background(Color.Red)
-            )
-        },
-        expandedContent = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp)
-                    .padding(8.dp)
-                    .background(AppTheme.colors.backgroundText)
-            )
-        },
-        onToggleCollapse = {},
-    )
+    Column {
+        PreviewCollapsable(isCollapsed = true, isKek = false)
+        PreviewCollapsable(isCollapsed = false, isKek = false)
+    }
 }
+
+@Preview(heightDp = 400)
+@Composable
+fun AnotherCollapsablePreview() {
+    Column {
+        PreviewCollapsable(isCollapsed = true, isKek = true)
+        PreviewCollapsable(isCollapsed = false, isKek = true)
+    }
+}
+
+@Composable
+private fun PreviewCollapsable(isCollapsed: Boolean, isKek: Boolean) = Collapsable(
+    title = "Preview",
+    isCollapsed = isCollapsed,
+    collapsedContent = {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp)
+                .background(AppTheme.colors.backgroundText)
+        )
+    },
+    expandedContent = {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(120.dp)
+                .background(AppTheme.colors.backgroundText)
+        )
+    },
+    onToggleCollapse = {},
+)
 
 @Composable
 fun <ElementType, ComposableType> CollapsableColumn(
@@ -71,6 +86,60 @@ fun <ElementType, ComposableType> CollapsableColumn(
         },
         onToggleCollapse = onToggleCollapse,
     )
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun Collapsable(
+    title: String,
+    isCollapsed: Boolean,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+    min: Dp = 50.dp,
+    max: Dp = 100.dp,
+    onToggleCollapse: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        Row(
+            horizontalArrangement = spacedBy(AppTheme.dimensions.paddingSmall),
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = modifier
+                .fillMaxWidth()
+                .background(AppTheme.colors.background)
+                .padding(AppTheme.dimensions.paddingSmall)
+
+        ) {
+            CollapseButton(
+                isCollapsed = isCollapsed,
+                modifier = modifier,
+                onClick = { onToggleCollapse() }
+            )
+            Text(
+                text = title,
+                style = AppTheme.typography.title,
+                color = AppTheme.colors.textLight,
+                modifier = modifier
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .animateContentSize() //TODO: Fix shrinking instantly
+                .fillMaxWidth()
+                .height(
+                    when (isCollapsed) {
+                        true -> min
+                        false -> max
+                    }
+                )
+
+        ) {
+            content()
+        }
+    }
 }
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -137,7 +206,7 @@ fun CollapseButton(
 ) {
     IconButton(
         onClick = onClick, modifier = modifier
-            .size(32.dp)
+            .size(24.dp)
     ) {
         Icon(
             if (isCollapsed) Icons.Filled.ArrowDropDown else Icons.Filled.ArrowDropUp,
